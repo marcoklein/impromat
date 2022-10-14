@@ -1,0 +1,16 @@
+{
+  "name": "impromat",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^6.0.0"
+  },
+  "description": "Impromat Monorepo",
+  "main": "index.js",
+  "author": "Marco Klein <hello@marcoklein.dev>",
+  "license": "MIT"
+}
