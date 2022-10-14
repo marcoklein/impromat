@@ -1,0 +1,5 @@
+{
+  "exec": "yarn codegen",
+  "watch": ["schema"],
+  "ext": "graphql"
+}

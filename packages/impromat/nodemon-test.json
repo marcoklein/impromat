@@ -1,0 +1,5 @@
+{
+  "exec": "yarn test --max-failures 1",
+  "watch": ["src", "test"],
+  "ext": "ts"
+}

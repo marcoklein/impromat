@@ -1,0 +1,3 @@
+.lightLeftBorder {
+  border-left: solid var(--ion-color-medium) 2px;
+}

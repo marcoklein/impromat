@@ -1,0 +1,41 @@
+name: Test and Code Generation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-code-generation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
+      - run: yarn codegen
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: "."
+          message: Code Generation from GitHub Actions
+
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Write SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.IMPROMAT_SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - name: Build Snapshot
+        run: |
+          ./infrastructure/cli.sh remote build snapshot

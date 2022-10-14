@@ -1,0 +1,5 @@
+{
+  "exec": "yarn codegen && yarn start:dev",
+  "watch": ["src", "assets", "schema"],
+  "ext": "ts,graphql"
+}

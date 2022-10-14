@@ -1,0 +1,152 @@
+"""
+Integer holding milliseconds since UNIX epoch start.
+"""
+scalar SafeInt
+
+type Query {
+  """
+  Returns new workshops since last sync.
+  """
+  pullWorkshops(
+    checkpoint: PullCheckpointInput!
+    limit: Int!
+  ): WorkshopPullBulk!
+  """
+  Returns an authentication url for google authentication.
+  """
+  googleAuthUrl: String!
+  """
+  Information about the logged in session.
+  """
+  me: TokenInfo
+  """
+  Version of the application.
+  """
+  version: String!
+}
+
+type Mutation {
+  """
+  Update given workshops.
+  Returns the last of mutated workshops.
+  """
+  pushWorkshops(workshopPushRows: [WorkshopPushRowInput!]!): [Workshop]
+  """
+  Log out from the application.
+  Returns true if the user was logged in and got logged out successfully.
+  Returns undefined, if the user was not logged in.
+  """
+  logout: Boolean!
+}
+
+input PullCheckpointInput {
+  id: ID!
+  updatedAt: SafeInt!
+}
+
+input WorkshopPushRowInput {
+  assumedMasterState: WorkshopInput
+  newDocumentState: WorkshopInput!
+}
+
+input WorkshopInput {
+  id: ID!
+  deleted: Boolean
+  updatedAt: SafeInt
+  name: String
+  description: String
+  sections: [SectionInput]
+}
+
+input SectionInput {
+  id: ID!
+  name: String
+  elements: [ElementInput!]
+  note: String
+  color: String
+  isVisible: Boolean
+  isCollapsed: Boolean
+}
+
+input ElementInput {
+  id: ID!
+  name: String!
+  markdown: String
+  tags: [String!]
+  note: String
+  basedOn: ElementInput
+  languageCode: String
+  sourceUrl: String
+  sourceName: String
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+}
+
+type WorkshopPullBulk {
+  documents: [Workshop!]!
+  checkpoint: PullCheckpoint
+}
+
+type PullCheckpoint {
+  id: String!
+  updatedAt: Float!
+}
+
+type TokenInfo {
+  userId: String!
+}
+
+"""
+An improvisational theatre Workshop that a person can hold for their group.
+"""
+type Workshop {
+  id: ID!
+  updatedAt: SafeInt!
+  """
+  For syncing purposes this flag indicates deleted workshops.
+  """
+  deleted: Boolean
+  name: String!
+  description: String!
+  sections: [Section!]!
+}
+
+"""
+A section groups several elements of a workshop.
+A workshop must always have at least one section.
+"""
+type Section {
+  id: ID!
+  name: String!
+  elements: [Element!]!
+  note: String
+  color: String
+  """
+  If false the section will not be shown.
+  If there are no sections yet there is an invisiable ghost section to hold all elements.
+  """
+  isVisible: Boolean
+  isCollapsed: Boolean
+}
+
+"""
+General element like a exercise or game.
+"""
+type Element {
+  id: ID!
+  name: String!
+  markdown: String!
+  tags: [String!]!
+  """
+  User defined note
+  """
+  note: String!
+  basedOn: Element
+  languageCode: String
+  sourceUrl: String
+  sourceName: String
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+}

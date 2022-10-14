@@ -1,0 +1,10 @@
+generates:
+  ./src/graphql/schema.gen.ts:
+    schema: schema/**/*.graphql
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      contextType: ./graphql-context#GraphQLContext
+      maybeValue: T | null | undefined
+      skipTypename: true

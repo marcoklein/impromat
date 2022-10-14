@@ -1,0 +1,32 @@
+name: Lint and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn code:format
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: Code Format from GitHub Actions
+      - run: mkdir -p ./output
+      - run: yarn test
+      # - uses: EndBug/add-and-commit@v9
+      #   with:
+      #     add: output/*
+      #     message: Generated Output from GitHub Actions

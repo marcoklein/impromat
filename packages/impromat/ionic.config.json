@@ -1,0 +1,7 @@
+{
+  "name": "Impromat",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

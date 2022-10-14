@@ -1,0 +1,6 @@
+{
+  "exec": "yarn test",
+  "watch": ["src", "assets", "test", "schema"],
+  "ignore": "*.gen.*",
+  "ext": "ts,json"
+}

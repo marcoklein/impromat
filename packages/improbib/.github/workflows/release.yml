@@ -1,0 +1,37 @@
+name: Tag main branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  git-tag-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: rm -r .html-cache/*
+      - run: mkdir -p ./output
+      - run: yarn test
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
+      - name: Print version
+        run: echo ${{ steps.extract_version.outputs.version }}
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: Improbib release generation
+          tag: v${{ steps.extract_version.outputs.version }}
+
+      # - name: Create git tag
+      #   id: tag_version
+      #   uses: mathieudutour/github-tag-action@v6.0
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     custom_tag: ${{ steps.extract_version.outputs.version }}
