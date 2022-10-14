@@ -24,6 +24,7 @@ import { AddWorkshopElementPage } from "./pages/AddWorkshopElementPage";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import { HomePage } from "./pages/HomePage";
 import { ImprobibElementPage } from "./pages/ImprobibElementPage";
+import { LegalPage } from "./pages/LegalPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { WorkshopElementPage } from "./pages/WorkshopElementPage";
 import { WorkshopPage } from "./pages/WorkshopPage";
@@ -32,6 +33,7 @@ import {
   routeAbout,
   routeAccount,
   routeHome,
+  routeLegal,
   routePrivacyPolicy,
   routeWorkshop,
   routeWorkshopAddElement,
@@ -88,6 +90,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route path={routePrivacyPolicy()} exact>
                   <PrivacyPolicyPage></PrivacyPolicyPage>
+                </Route>
+                <Route path={routeLegal()} exact>
+                  <LegalPage></LegalPage>
                 </Route>
                 <Route path={routeAccount()} exact>
                   <AccountPage></AccountPage>

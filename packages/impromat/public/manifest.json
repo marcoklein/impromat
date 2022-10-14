@@ -11,7 +11,7 @@
       "src": "assets/icon/icon.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "maskable any"
+      "purpose": "maskable"
     }
   ],
   "start_url": ".",

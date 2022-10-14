@@ -9,7 +9,9 @@ The [Roadmap](./ROADMAP.md) tracks upcoming features.
 
 ## 0.10.0
 
-- Add apple touch icon and web manifest for installable PWA
+- Add privacy policy text
+- Add legal notice (Impressum)
+- Add extra notice to login screen
 
 ## 0.9.0
 

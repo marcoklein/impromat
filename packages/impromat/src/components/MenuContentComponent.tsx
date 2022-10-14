@@ -12,6 +12,7 @@ import {
   IonList,
   IonMenuToggle,
   IonNote,
+  IonRouterLink,
   IonText,
   IonTitle,
   IonToolbar,
@@ -25,7 +26,11 @@ import {
 } from "ionicons/icons";
 import { useLocation } from "react-router";
 import { environment } from "../environment";
-import { routeAbout, routeAccount } from "../routes/shared-routes";
+import {
+  routeAbout,
+  routeAccount,
+  routePrivacyPolicy,
+} from "../routes/shared-routes";
 
 export const MenuContentComponent: React.FC = () => {
   const location = useLocation();
@@ -87,17 +92,34 @@ export const MenuContentComponent: React.FC = () => {
               About
             </IonItem>
             <IonItem
+              routerLink={routePrivacyPolicy()}
+              color={location.pathname === routePrivacyPolicy() ? "light" : ""}
+            >
+              <IonIcon slot="start" icon={information}></IonIcon>
+              Privacy Policy
+            </IonItem>
+            {/* <IonItem
               href="https://github.com/marcoklein/impromat"
               target="_blank"
             >
               <IonIcon slot="start" icon={logoGithub}></IonIcon>
               Source Code
-            </IonItem>
+            </IonItem> */}
           </IonItemGroup>
         </IonList>
       </IonContent>
-      <IonFooter className="ion-no-border ion-padding">
-        <IonNote>Version {environment.VERSION}</IonNote>
+      <IonFooter className="ion-no-border">
+        <IonToolbar>
+          {/* <div className="ion-padding"> */}
+          <IonRouterLink className="ion-padding-horizontal" routerLink="/legal">
+            Legal Notice
+          </IonRouterLink>
+          <IonRouterLink routerLink="/privacy">Data Privacy</IonRouterLink>
+          <IonNote slot="end" className="ion-padding-end">
+            v{environment.VERSION}
+          </IonNote>
+          {/* </div> */}
+        </IonToolbar>
       </IonFooter>
     </>
   );

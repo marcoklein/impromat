@@ -6,6 +6,7 @@ export const routeHome = () => "/home";
 export const routeAbout = () => "/about";
 export const routePrivacyPolicy = () => "/privacy";
 export const routeAccount = () => "/account";
+export const routeLegal = () => "/legal";
 export const routeAccountSignin = () => "/account/signin";
 export const routeWorkshops = () => "/workshop";
 export const routeWorkshop = (workshopId: string = ROUTE_WORKHOP_ID) =>
