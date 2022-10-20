@@ -66,7 +66,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "genversion src/version.gen.ts --es6 && react-scripts build",
     "build:serve": "serve build",
     "test": "playwright test",
     "test:headed": "yarn test --headed",
@@ -101,6 +101,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "4.1.0",
+    "genversion": "^3.1.1",
     "gh-pages": "^4.0.0",
     "json-schema-to-typescript": "^11.0.2",
     "xo": "^0.51.0"

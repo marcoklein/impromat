@@ -9,6 +9,9 @@
   "devDependencies": {
     "lerna": "^6.0.0"
   },
+  "scripts": {
+    "build": "lerna run build"
+  },
   "description": "Impromat Monorepo",
   "main": "index.js",
   "author": "Marco Klein <hello@marcoklein.dev>",

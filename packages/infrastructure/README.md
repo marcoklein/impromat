@@ -1,30 +1,33 @@
 # Infrastructure
 
-## Installation
+Configurations related to deployment and hosting of all packages.
 
-Follow https://dokku.com/docs/getting-started/installation/
+## Usage
 
-```
-wget https://raw.githubusercontent.com/dokku/dokku/v0.28.2/bootstrap.sh
-sudo DOKKU_TAG=v0.28.2 bash bootstrap.sh
-```
+## Persistent Storage
 
-```
-cat ~/.ssh/authorized_keys | dokku ssh-keys:add admin
-dokku domains:set-global impromat.app
-```
+Dokku stores files in `/var/lib/dokku/data/storage`.
 
-```
-sudo dokku plugin:install https://gitlab.com/notpushkin/dokku-monorepo
-sudo dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
+## Installation of Dokku
 
-ssh -t dokku@impromat.app config:set --no-restart --global DOKKU_LETSENCRYPT_EMAIL=hello@marcoklein.dev
-```
+[Installation](./installation.md)
 
-Prepare app
+## Adding an Application
+
+Add the remote connection and push to dokku master branch to build
 
 ```
-ssh -t dokku@impromat.app config:set impromat-app-production NGINX_ROOT=build
-ssh -t dokku@impromat.app domains:set impromat-app-production impromat.app
-ssh -t dokku@impromat.app letsencrypt:enable impromat-app-production
+ssh -t dokku@impromat.app apps:create <app-name>
+git remote add <app-name> dokku@impromat.app:<app-name>
+git push <app-name> <branch-name>:master
+ssh -t dokku@impromat.app domains:set <app-name> <domain>
+ssh -t dokku@impromat.app letsencrypt:enable <app-name>
+```
+
+## Letsencrypt Staging Environment
+
+To validate certification retrieval you should use the Letsencrypt staging server with
+
+```
+ssh -t dokku@impromat.app config:set --no-restart <app-name> DOKKU_LETSENCRYPT_SERVER=staging
 ```
