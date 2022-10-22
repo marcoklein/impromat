@@ -1,4 +1,4 @@
-# Installation
+# Installation of Dokku
 
 Follow https://dokku.com/docs/getting-started/installation/
 

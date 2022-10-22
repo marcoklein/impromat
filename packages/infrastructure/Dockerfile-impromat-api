@@ -6,7 +6,4 @@ COPY . .
 RUN yarn install --frozen-lockfile
 
 WORKDIR /app/packages/impromat-api
-RUN yarn build
-
-CMD ["yarn", "build:serve"]
-EXPOSE 5000
+CMD ["yarn", "start"]
