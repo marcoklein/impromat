@@ -20,6 +20,7 @@ jobs:
       - run: git fetch
       - run: git checkout $BRANCH_NAME
       - run: ls -la
+      - run: git --version
       - name: Write SSH keys
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
@@ -27,8 +28,11 @@ jobs:
           echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - name: Print Branch Name
         run: echo "$BRANCH_NAME"
-      - name: Add remotes
-        run: |
-          git remote add impromat-app-production dokku@impromat.app:impromat-app-production
-          git remote add impromat-api-production dokku@impromat.app:impromat-api-production
-          git push impromat-app-production $BRANCH_MASTER:master
+      - run: git status
+      - run: git remote add impromat-app-production dokku@impromat.app:impromat-app-production
+      - run: git push impromat-app-production $BRANCH_NAME:master
+      # - name: Add remotes
+      #   run: |
+      #     git remote add impromat-app-production dokku@impromat.app:impromat-app-production
+      #     git remote add impromat-api-production dokku@impromat.app:impromat-api-production
+      #     git push impromat-app-production $BRANCH_MASTER:master
