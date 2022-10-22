@@ -25,7 +25,10 @@ function getOAuth2Client() {
     return _oAuth2Client;
   }
 
-  console.log("Retrieving Google auth environment");
+  console.log(
+    `No Google authentication file at ${environment.GOOGLE_AUTH_JSON_PATH} found.`
+  );
+  console.log("Retrieving Google auth from environment variables");
   const CLIENT_ID = environment.GOOGLE_AUTH_CLIENT_ID;
   const CLIENT_SECRET = environment.GOOGLE_AUTH_CLIENT_SECRET;
   const REDIRECT_URL = environment.GOOGLE_AUTH_REDIRECT_URL;

@@ -14,9 +14,9 @@ configureDomain $appName $domain
 log "Ensure Storage"
 dokku storage:ensure-directory impromat-api-store-production
 dokku storage:ensure-directory impromat-api-secrets-production
-dokku storage:mount impromat-api-production impromat-api-store-production:/app/storage
-dokku storage:mount impromat-api-production impromat-api-secrets-production:/app/secrets
+dokku storage:mount impromat-api-production /var/lib/dokku/data/storage/impromat-api-store-production:/mnt/storage
+dokku storage:mount impromat-api-production /var/lib/dokku/data/storage/impromat-api-secrets-production:/mnt/secrets
 
 log "Set App Configuration"
-dokku config:set --no-restart impromat-api-production GOOGLE_AUTH_JSON_PATH=/app/secrets/google_key.secret.json
-dokku config:set --no-restart impromat-api-production STORAGE_PATH=/app/storage
+dokku config:set --no-restart impromat-api-production GOOGLE_AUTH_JSON_PATH=/mnt/secrets/google_key.secret.json
+dokku config:set --no-restart impromat-api-production STORAGE_PATH=/mnt/storage
