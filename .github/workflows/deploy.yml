@@ -9,9 +9,12 @@ env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
-  test-and-deploy:
-    runs-on: ubuntu-latest
+  test:
+    uses: ./.github/workflows/templates/test-job.yml
 
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Write SSH keys
@@ -25,3 +28,20 @@ jobs:
       - run: git remote add impromat-api-production dokku@impromat.app:impromat-api-production
       - run: git push impromat-app-production $BRANCH_NAME:master --force
       - run: git push impromat-api-production $BRANCH_NAME:master --force
+
+  git-tag-main:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
+      - name: Print version
+        run: echo ${{ steps.extract_version.outputs.version }}
+      - name: Create git tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.extract_version.outputs.version }}
