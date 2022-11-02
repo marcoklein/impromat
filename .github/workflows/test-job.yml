@@ -18,10 +18,10 @@ jobs:
         env:
           CI: false
       - run: yarn test
-      - name: Publish test results
+      - name: Publish test report from impromat app
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: playwright-report
-          path: playwright-report/
+          name: packages/impromat/playwright-report
+          path: packages/impromat/playwright-report/
           retention-days: 30
