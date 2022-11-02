@@ -30,10 +30,7 @@ export const WorkshopElementPage: React.FC = () => {
     partId: string;
   }>();
   const database = useRxdbMutations();
-  const { workshopElement: element, isFetching } = useWorkshopElement(
-    workshopId,
-    partId,
-  );
+  const { workshopElement: element } = useWorkshopElement(workshopId, partId);
   const [presentInput] = useInputDialog();
 
   const changeElementName = (newName: string) => {

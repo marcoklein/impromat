@@ -1,6 +1,6 @@
 {
   "name": "impromat",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -8,6 +8,10 @@
   ],
   "devDependencies": {
     "lerna": "^6.0.0"
+  },
+  "scripts": {
+    "test": "lerna run test",
+    "build": "lerna run build"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",

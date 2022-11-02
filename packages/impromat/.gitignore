@@ -25,5 +25,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+src/version.gen.ts
+
 # Optional eslint cache
 .eslintcache

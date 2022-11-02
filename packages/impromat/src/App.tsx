@@ -44,7 +44,7 @@ import { ImpromatRxDatabase, initialize } from "./store/initialize";
 import { Element } from "./store/schema.gen";
 import "./theme/colors.css";
 import "./theme/variables.css";
-import "/node_modules/flag-icons/css/flag-icons.min.css";
+import "../../../node_modules/flag-icons/css/flag-icons.min.css";
 
 setupIonicReact();
 
