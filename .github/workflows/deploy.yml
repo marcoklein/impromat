@@ -30,7 +30,6 @@ jobs:
       - run: git push impromat-api-production $BRANCH_NAME:master --force
 
   git-tag-main:
-    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
