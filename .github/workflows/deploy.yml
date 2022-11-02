@@ -10,7 +10,7 @@ env:
 
 jobs:
   test:
-    uses: ./.github/workflows/templates/test-job.yml
+    uses: ./.github/workflows/test-job.yml
 
   deploy:
     needs: test
