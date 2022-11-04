@@ -5,6 +5,7 @@
   "author": "Marco Klein",
   "type": "module",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "start": "ts-node --transpile-only src/index.ts",
     "start:dev": "ts-node -r dotenv/config src/index.ts",

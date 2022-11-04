@@ -17,13 +17,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {
-  chevronBack,
-  documents,
-  information,
-  logoGithub,
-  person,
-} from "ionicons/icons";
+import { chevronBack, documents, information, person } from "ionicons/icons";
 import { useLocation } from "react-router";
 import { environment } from "../environment";
 import {

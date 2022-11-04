@@ -1,22 +1,4 @@
-import {
-  IonButton,
-  IonButtons,
-  IonIcon,
-  IonItem,
-  IonItemOption,
-  IonItemOptions,
-  IonItemSliding,
-  IonLabel,
-  IonReorder,
-} from "@ionic/react";
-import {
-  chevronForwardOutline,
-  ellipsisVertical,
-  expand,
-  pencilOutline,
-  trashOutline,
-} from "ionicons/icons";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Markdown from "react-markdown";
 import { Element } from "../store/schema.gen";
 import { SlidingItemComponent } from "./SlidingItemComponent";

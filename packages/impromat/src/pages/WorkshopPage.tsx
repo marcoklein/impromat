@@ -19,7 +19,7 @@ import {
 } from "@ionic/react";
 import immer from "immer";
 import { add, barbellOutline, reorderFour } from "ionicons/icons";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useHistory, useParams } from "react-router";
 import { EditableItemComponent } from "../components/EditableItemComponent";
 import {
@@ -50,6 +50,7 @@ export const WorkshopPage: React.FC = () => {
       draft.name = newName;
     });
     database.updateWorkshop(updatedWorkshop);
+    logger("change workshop name to %s", newName);
   };
   const changeWorkshopDescription = (newDescription: string) => {
     if (!database || !workshop) return;
