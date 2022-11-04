@@ -58,6 +58,7 @@ export const WorkshopPage: React.FC = () => {
       draft.description = newDescription;
     });
     database.updateWorkshop(updatedWorkshop);
+    logger("Changed workshop description");
   };
   const changeSections = (sections: Section[]) => {
     if (!database || !workshop) return;
@@ -65,6 +66,7 @@ export const WorkshopPage: React.FC = () => {
       draft.sections = sections;
     });
     database.updateWorkshop(updatedWorkshop);
+    logger("Changed sections");
   };
 
   const onDeleteWorkshop = useCallback(() => {
@@ -73,7 +75,8 @@ export const WorkshopPage: React.FC = () => {
     database.deleteWorkshop(workshop.id).then(() => {
       history.push(routeWorkshops(), { direction: "back" });
     });
-  }, [database, history, workshop]);
+    logger("Deleted workshop");
+  }, [database, history, logger, workshop]);
 
   const onRenameWorkshop = () => {
     if (!workshop) return;
@@ -83,6 +86,7 @@ export const WorkshopPage: React.FC = () => {
       emptyInputMessage: "Please type a workshop name.",
       onAccept: (text) => changeWorkshopName(text),
     });
+    logger("Showing rename Workshop dialog");
   };
 
   const onCreateSection = () => {
@@ -96,6 +100,7 @@ export const WorkshopPage: React.FC = () => {
         database.createNewSection(workshop, text);
       },
     });
+    logger("Showing add section dialog");
   };
 
   const onChangeDescription = () => {
@@ -106,6 +111,7 @@ export const WorkshopPage: React.FC = () => {
       header: "Description",
       onAccept: (text) => changeWorkshopDescription(text),
     });
+    logger("Showing change description dialog");
   };
 
   const handleWorkshopEvent = (event: WorkshopActionTypes) => {

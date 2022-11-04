@@ -12,6 +12,9 @@ export function useComponentLogger(namespace: string) {
 
   useEffect(() => {
     logger("Component initialized.");
+    return () => {
+      logger("Component destroyed.");
+    };
   }, [logger]);
 
   return logger;

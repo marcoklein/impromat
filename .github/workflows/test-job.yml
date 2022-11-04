@@ -1,0 +1,27 @@
+name: Shared Test Job
+
+on: workflow_call
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Use Node.js 18
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+        env:
+          CI: false
+      - run: yarn test
+      - name: Publish test report from impromat app
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: packages/impromat/playwright-report
+          path: packages/impromat/playwright-report/
+          retention-days: 30
