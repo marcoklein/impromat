@@ -9,7 +9,7 @@
     ],
     "nohoist": [
       "**/@types/**",
-      "**/flag-icons"
+      "impromat/**"
     ]
   },
   "devDependencies": {

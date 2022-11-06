@@ -23,6 +23,7 @@ import { environment } from "../environment";
 import {
   routeAbout,
   routeAccount,
+  routeLegal,
   routePrivacyPolicy,
 } from "../routes/shared-routes";
 
@@ -85,34 +86,24 @@ export const MenuContentComponent: React.FC = () => {
               <IonIcon slot="start" icon={information}></IonIcon>
               About
             </IonItem>
-            <IonItem
-              routerLink={routePrivacyPolicy()}
-              color={location.pathname === routePrivacyPolicy() ? "light" : ""}
-            >
-              <IonIcon slot="start" icon={information}></IonIcon>
-              Privacy Policy
-            </IonItem>
-            {/* <IonItem
-              href="https://github.com/marcoklein/impromat"
-              target="_blank"
-            >
-              <IonIcon slot="start" icon={logoGithub}></IonIcon>
-              Source Code
-            </IonItem> */}
           </IonItemGroup>
         </IonList>
       </IonContent>
       <IonFooter className="ion-no-border">
         <IonToolbar>
-          {/* <div className="ion-padding"> */}
-          <IonRouterLink className="ion-padding-horizontal" routerLink="/legal">
+          <IonRouterLink
+            className="ion-padding-horizontal"
+            routerLink={routeLegal()}
+            color="medium"
+          >
             Legal Notice
           </IonRouterLink>
-          <IonRouterLink routerLink="/privacy">Data Privacy</IonRouterLink>
+          <IonRouterLink routerLink={routePrivacyPolicy()} color="medium">
+            Data Privacy
+          </IonRouterLink>
           <IonNote slot="end" className="ion-padding-end">
             v{environment.VERSION}
           </IonNote>
-          {/* </div> */}
         </IonToolbar>
       </IonFooter>
     </>

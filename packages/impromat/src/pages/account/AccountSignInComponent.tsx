@@ -57,9 +57,8 @@ export const AccountSignInComponent: React.FC<ContainerProps> = ({
       <InfoItemComponent>
         <IonNote>
           Please note that the account synchronization is currently under
-          development and only available to dedicated beta testers. Please
-          contact impromat@marcoklein.dev if you want to test the account
-          feature with your Google login.
+          development. Please contact impromat@marcoklein.dev if you have
+          questions.
         </IonNote>
       </InfoItemComponent>
       <IonItem>
@@ -70,8 +69,8 @@ export const AccountSignInComponent: React.FC<ContainerProps> = ({
           ></IonCheckbox>
         </div>
         <IonLabel className="ion-text-wrap">
-          I am aware, that the account feature is still under development and
-          might not be stable yet.
+          I am aware, that the account feature is under development and
+          unstable.
         </IonLabel>
       </IonItem>
       <IonItem>

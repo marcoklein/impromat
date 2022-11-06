@@ -1,5 +1,6 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -9,11 +10,15 @@ import {
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { datenschutzMarkdown } from "../markdown/datenschutz-markdown.md";
+import { privacyPolicyMarkdownDe } from "../markdown/privacy-policy.de.md.gen";
+import { privacyPolicyMarkdownEn } from "../markdown/privacy-policy.en.md.gen";
 
 export const PrivacyPolicyPage: React.FC = () => {
   const router = useIonRouter();
+
+  const [language, setLanguage] = useState<"en" | "de">("en");
 
   return (
     <IonPage>
@@ -29,36 +34,23 @@ export const PrivacyPolicyPage: React.FC = () => {
           <IonTitle>Privacy Policy</IonTitle>
         </IonToolbar>
       </IonHeader>
-
       <IonContent className="ion-padding">
-        <p>We value your privacy and store no personal data.</p>
-        <h2>Notice</h2>
-        <p>
-          As Impromat is currently in early stages and only accessible to a
-          limited list of beta users we will complete the privacy policy if
-          there is a shippable version.
-        </p>
-        <p>
-          Currently, the full version is only available in German but we will
-          provide an English translation for the release version of Impromat.
-        </p>
-        <h2>Offline Version</h2>
-        <p>
-          As long as you do not use the sign in option via Google you are using
-          the offline version of Impromat. The offline version never
-          synchronizes or transmitts any workshop creations or other data.
-        </p>
-
-        <hr></hr>
-        <ReactMarkdown>{datenschutzMarkdown}</ReactMarkdown>
-        <a
-          href="https://datenschutz-generator.de/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Erstellt mit kostenlosem Datenschutz-Generator.de von Dr. Thomas
-          Schwenke
-        </a>
+        {language === "en" && (
+          <>
+            <IonButton onClick={() => setLanguage("de")} fill="outline">
+              Switch to German Version
+            </IonButton>
+            <ReactMarkdown>{privacyPolicyMarkdownEn}</ReactMarkdown>
+          </>
+        )}
+        {language === "de" && (
+          <>
+            <IonButton onClick={() => setLanguage("en")} fill="outline">
+              Switch to English Version
+            </IonButton>
+            <ReactMarkdown>{privacyPolicyMarkdownDe}</ReactMarkdown>
+          </>
+        )}
       </IonContent>
     </IonPage>
   );

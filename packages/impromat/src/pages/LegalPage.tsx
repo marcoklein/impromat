@@ -8,7 +8,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import ReactMarkdown from "react-markdown";
-import { legalMarkdown } from "./legal-markdown";
+import { legalMarkdownEn } from "../markdown/legal.en.md.gen";
 
 export const LegalPage: React.FC = () => {
   return (
@@ -23,7 +23,7 @@ export const LegalPage: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <ReactMarkdown>{legalMarkdown}</ReactMarkdown>
+        <ReactMarkdown>{legalMarkdownEn}</ReactMarkdown>
       </IonContent>
     </IonPage>
   );
