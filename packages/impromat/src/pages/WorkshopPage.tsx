@@ -50,7 +50,7 @@ export const WorkshopPage: React.FC = () => {
       draft.name = newName;
     });
     database.updateWorkshop(updatedWorkshop);
-    logger("Changed workshop name");
+    logger("change workshop name to %s", newName);
   };
   const changeWorkshopDescription = (newDescription: string) => {
     if (!database || !workshop) return;

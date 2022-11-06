@@ -1,5 +1,15 @@
-import { IonNote, IonRouterLink, useIonToast } from "@ionic/react";
+import {
+  IonCheckbox,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonNote,
+  IonRouterLink,
+  useIonToast,
+} from "@ionic/react";
+import { useMemo, useState } from "react";
 import { GoogleSigninButton } from "../../components/GoogleSigninButton";
+import { InfoItemComponent } from "../../components/InfoItemComponent";
 import { routePrivacyPolicy } from "../../routes/shared-routes";
 
 interface ContainerProps {
@@ -10,6 +20,8 @@ export const AccountSignInComponent: React.FC<ContainerProps> = ({
   googleLoginHref,
 }) => {
   const [displayToast] = useIonToast();
+  const [isBetaTester, setIsBetaTester] = useState(false);
+  const [agreesToPrivacyPolicy, setAgreesToPrivacyPolicy] = useState(false);
 
   const loginClick = () => {
     if (!googleLoginHref) {
@@ -22,20 +34,59 @@ export const AccountSignInComponent: React.FC<ContainerProps> = ({
     window.location.href = googleLoginHref;
   };
 
-  return (
-    <div>
-      <h1>Welcome!</h1>
-      <p>Sign in to synchronize your workshops accross all your devices.</p>
-      <div>
-        <GoogleSigninButton onClick={() => loginClick()}></GoogleSigninButton>
-      </div>
+  const allowLogin = useMemo(() => {
+    return isBetaTester && agreesToPrivacyPolicy;
+  }, [isBetaTester, agreesToPrivacyPolicy]);
 
-      <IonNote>
-        By signing in you agree to Impromat's{" "}
-        <IonRouterLink routerLink={routePrivacyPolicy()}>
-          Privacy Policy
-        </IonRouterLink>
-      </IonNote>
-    </div>
+  return (
+    <IonList>
+      <IonItem>
+        <h1>Synchronize your Workshops</h1>
+      </IonItem>
+      <IonItem>
+        <IonLabel className="ion-text-wrap">
+          Sign in to synchronize your workshops across all your devices.
+        </IonLabel>
+      </IonItem>
+      <div className="ion-padding-horizontal">
+        <GoogleSigninButton
+          onClick={() => loginClick()}
+          disabled={!allowLogin}
+        ></GoogleSigninButton>
+      </div>
+      <InfoItemComponent>
+        <IonNote>
+          Please note that the account synchronization is currently under
+          development. Please contact impromat@marcoklein.dev if you have
+          questions.
+        </IonNote>
+      </InfoItemComponent>
+      <IonItem>
+        <div slot="start">
+          <IonCheckbox
+            checked={isBetaTester}
+            onIonChange={(e) => setIsBetaTester(e.detail.checked)}
+          ></IonCheckbox>
+        </div>
+        <IonLabel className="ion-text-wrap">
+          I am aware, that the account feature is under development and
+          unstable.
+        </IonLabel>
+      </IonItem>
+      <IonItem>
+        <div slot="start">
+          <IonCheckbox
+            checked={agreesToPrivacyPolicy}
+            onIonChange={(e) => setAgreesToPrivacyPolicy(e.detail.checked)}
+          ></IonCheckbox>
+        </div>
+        <IonLabel>
+          I agree to the{" "}
+          <IonRouterLink routerLink={routePrivacyPolicy()}>
+            Privacy Policy
+          </IonRouterLink>
+        </IonLabel>
+      </IonItem>
+    </IonList>
   );
 };

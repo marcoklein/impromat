@@ -3,15 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@types/**",
+      "impromat/**"
+    ]
+  },
   "devDependencies": {
     "lerna": "^6.0.0"
   },
   "scripts": {
+    "dev": "lerna run --scope impromat --scope impromat-api dev",
     "test": "lerna run test",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "bootstrap": "lerna bootstrap",
+    "changed": "lerna ls --since main --all",
+    "impromat-api": "lerna run --scope impromat-api"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",

@@ -24,6 +24,7 @@ import { AddWorkshopElementPage } from "./pages/AddWorkshopElementPage";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import { HomePage } from "./pages/HomePage";
 import { ImprobibElementPage } from "./pages/ImprobibElementPage";
+import { LegalPage } from "./pages/LegalPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { WorkshopElementPage } from "./pages/WorkshopElementPage";
 import { WorkshopPage } from "./pages/WorkshopPage";
@@ -32,6 +33,7 @@ import {
   routeAbout,
   routeAccount,
   routeHome,
+  routeLegal,
   routePrivacyPolicy,
   routeWorkshop,
   routeWorkshopAddElement,
@@ -44,7 +46,7 @@ import { ImpromatRxDatabase, initialize } from "./store/initialize";
 import { Element } from "./store/schema.gen";
 import "./theme/colors.css";
 import "./theme/variables.css";
-import "../../../node_modules/flag-icons/css/flag-icons.min.css";
+import "../node_modules/flag-icons/css/flag-icons.min.css";
 
 setupIonicReact();
 
@@ -88,6 +90,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route path={routePrivacyPolicy()} exact>
                   <PrivacyPolicyPage></PrivacyPolicyPage>
+                </Route>
+                <Route path={routeLegal()} exact>
+                  <LegalPage></LegalPage>
                 </Route>
                 <Route path={routeAccount()} exact>
                   <AccountPage></AccountPage>

@@ -26,6 +26,7 @@ yarn-debug.log*
 yarn-error.log*
 
 src/version.gen.ts
+src/markdown/**.gen.*
 
 # Optional eslint cache
 .eslintcache

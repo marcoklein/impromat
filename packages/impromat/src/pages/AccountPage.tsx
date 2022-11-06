@@ -85,7 +85,7 @@ export const AccountPage: React.FC = () => {
           <IonTitle>Account</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent>
         {loggedIn === undefined ? (
           <IonSpinner></IonSpinner>
         ) : loggedIn ? (

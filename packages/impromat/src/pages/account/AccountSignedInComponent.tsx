@@ -34,7 +34,7 @@ export const AccountSignedInComponent: React.FC<ContainerProps> = () => {
   };
 
   return (
-    <div>
+    <div className="ion-padding">
       <h1>Your are signed in!</h1>
       <p>Sign in to synchronize your workshops accross all your devices.</p>
       <IonButton
