@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The [Roadmap](./ROADMAP.md) tracks upcoming features.
 
-## 0.10.0
+## 0.11.0
 
 - Add privacy policy text
 - Add legal notice (Impressum)
 - Add extra notice to login screen
+
+## 0.10.0
+
+- Add apple touch icon and web manifest for installable PWA
 
 ## 0.9.0
 
