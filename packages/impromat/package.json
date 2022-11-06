@@ -84,6 +84,9 @@
     "codegen": "yarn codegen:get-schema-json && yarn codegen:schema-types && yarn codegen:schema-json-ts"
   },
   "eslintConfig": {
+    "ignorePatterns": [
+      "**/*.gen.ts"
+    ],
     "extends": [
       "react-app",
       "react-app/jest"
