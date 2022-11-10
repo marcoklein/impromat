@@ -7,6 +7,8 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import ReactMarkdown from "react-markdown";
+import { aboutMarkdownEn } from "../markdown/about.en.md.gen";
 
 export const AboutPage: React.FC = () => {
   return (
@@ -21,12 +23,7 @@ export const AboutPage: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <h1>Mission</h1>
-        Support improvisers with an easy to use application for planning
-        improvisational theatre workshops using existing exercises and games.
-        <h1>Who made this?</h1>
-        Me. I am Marco and Impromat is a project that brings together my joy in
-        programming and improvisational theatre.
+        <ReactMarkdown>{aboutMarkdownEn}</ReactMarkdown>
       </IonContent>
     </IonPage>
   );

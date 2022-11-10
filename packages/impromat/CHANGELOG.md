@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The [Roadmap](./ROADMAP.md) tracks upcoming features.
 
+## 0.12.0
+
+- Improve the `About Page` content
+- Link to `About Page` from `Workshops Page` if there are no workshops added
+
 ## 0.11.0
 
 - Add privacy policy text

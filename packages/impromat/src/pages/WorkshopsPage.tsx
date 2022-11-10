@@ -13,10 +13,11 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { add, information } from "ionicons/icons";
 import { useCallback } from "react";
 import { useHistory } from "react-router";
 import { useInputDialog } from "../hooks/use-input-dialog";
+import { routeAbout } from "../routes/shared-routes";
 import { useRxdbMutations } from "../store/use-rxdb-mutations";
 import { useWorkshops } from "../store/use-workshops";
 import { useComponentLogger } from "../use-component-logger";
@@ -74,22 +75,21 @@ export const WorkshopsPage: React.FC = () => {
             ))}
           </IonList>
         ) : (
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              height: "100%",
-              alignItems: "center",
-            }}
-            className="ion-padding"
-          >
-            <div style={{ flexGrow: 1 }}>
-              <p>Welcome! Start by creating your first workshop.</p>
-              <IonButton expand="full" onClick={() => createWorkshopClick()}>
-                <IonIcon slot="start" icon={add}></IonIcon>
-                Add Workshop
-              </IonButton>
-            </div>
+          <div className="ion-padding">
+            <h2>Welcome to Impromat</h2>
+            <p>
+              An application for planning improvisational theatre workshops.
+            </p>
+            <p>Create your first workshop:</p>
+            <IonButton expand="full" onClick={() => createWorkshopClick()}>
+              <IonIcon slot="start" icon={add}></IonIcon>
+              Add Workshop
+            </IonButton>
+            <p>Or get some more information about the project:</p>
+            <IonButton fill="solid" expand="full" routerLink={routeAbout()}>
+              <IonIcon slot="start" icon={information}></IonIcon>
+              About the Project
+            </IonButton>
           </div>
         )}
       </IonContent>
