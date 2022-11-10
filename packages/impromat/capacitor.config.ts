@@ -1,7 +1,7 @@
 import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "dev.marcoklein.impromat",
+  appId: "app.impromat",
   appName: "Impromat",
   webDir: "build",
   bundledWebRuntime: false,
