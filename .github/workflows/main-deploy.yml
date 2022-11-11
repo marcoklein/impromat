@@ -38,6 +38,14 @@ jobs:
           versionText='"version": '
           sed -i "s/$versionText\"$packageVersion\",/$versionText\"$newPackageVersion\",/" package.json
           echo "newPackageVersion=$newPackageVersion" >> $GITHUB_OUTPUT
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install changesets
+        run: yarn global add @changesets/cli
+      - name: Generate changelogs
+        run: changeset version
       - uses: EndBug/add-and-commit@v9
         name: Commit tagged version bump
         if: steps.needs-version-bump.outputs.needsVersionBump == 'yes'
@@ -56,6 +64,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Print last commit message
+        run: |
+          lastCommitMessage=$(git log -1 --oneline)
+          echo "lastCommitMessage=$lastCommitMessage"
       - name: Write SSH keys
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
@@ -67,4 +79,3 @@ jobs:
       - run: git remote add impromat-api-production dokku@impromat.app:impromat-api-production
       - run: git push impromat-app-production $BRANCH_NAME:master --force
       - run: git push impromat-api-production $BRANCH_NAME:master --force
-
