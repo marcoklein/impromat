@@ -42,10 +42,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Install changesets
-        run: yarn global add @changesets/cli
+      - name: Install dependencies
+        run: yarn install
       - name: Generate changelogs
-        run: changeset version
+        run: yarn changeset version
       - uses: EndBug/add-and-commit@v9
         name: Commit tagged version bump
         if: steps.needs-version-bump.outputs.needsVersionBump == 'yes'
