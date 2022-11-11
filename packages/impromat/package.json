@@ -1,6 +1,6 @@
 {
   "name": "impromat",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "private": true,
   "homepage": "https://impromat.app",
   "dependencies": {
@@ -68,7 +68,7 @@
     "start": "yarn compile-markdown && react-scripts start",
     "dev": "yarn start",
     "build": "yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",
-    "build:serve": "serve build",
+    "build:serve": "serve --config serve.config.json build",
     "test": "yarn playwright:install && playwright test",
     "test:headed": "yarn test --headed",
     "test:watch": "nodemon --config nodemon-test.json",

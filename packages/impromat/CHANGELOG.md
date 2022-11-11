@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The [Roadmap](./ROADMAP.md) tracks upcoming features.
 
+## 0.13.0
+
+- Add `Cache-Control: max-age=0` to served web page to allow a direct update of the web worker
+
 ## 0.12.0
 
 - Improve the `About Page` content
