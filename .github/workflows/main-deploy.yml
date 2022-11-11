@@ -26,6 +26,7 @@ jobs:
           needsVersionBump=$([[ $? -eq 1 ]] && echo "yes" || echo "no")
           echo "needsVersionBump=$needsVersionBump"
           echo "needsVersionBump=$needsVersionBump" >> $GITHUB_OUTPUT
+          exit 0
       - name: Bump build version
         if: steps.needs-version-bump.outputs.needsVersionBump == 'yes'
         run: |
