@@ -1,6 +1,6 @@
 {
   "name": "impromat",
-  "version": "0.1.0",
+  "version": "1",
   "private": true,
   "type": "module",
   "workspaces": {
@@ -21,6 +21,7 @@
     "build": "lerna run build",
     "bootstrap": "lerna bootstrap",
     "changed": "lerna ls --since main --all",
+    "impromat": "lerna run --scope impromat",
     "impromat-api": "lerna run --scope impromat-api"
   },
   "description": "Impromat Monorepo",
