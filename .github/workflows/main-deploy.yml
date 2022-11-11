@@ -36,7 +36,7 @@ jobs:
           newPackageVersion=$(($packageVersion+1))
           echo "newPackageVersion=$newPackageVersion"
           versionText='"version": '
-          sed -i '' "s/$versionText\"$packageVersion\",/$versionText\"$newPackageVersion\",/" package.json
+          sed -i "s/$versionText\"$packageVersion\",/$versionText\"$newPackageVersion\",/" package.json
       - uses: EndBug/add-and-commit@v9
         name: Commit version bump
         if: steps.needs-version-bump.outputs.needsVersionBump == 'yes'
