@@ -22,7 +22,9 @@ jobs:
         run: |
           lastCommitMessage=$(git log -1 --oneline)
           echo "lastCommitMessage=$lastCommitMessage"
-          result=$(echo "$lastCommitMessage" | grep "\[build version bump\]" --silent)
+          set +e
+          echo "$lastCommitMessage" | grep "\[build version bump\]" --silent
+          set -e
           needsVersionBump=$([[ $? -eq 1 ]] && echo "yes" || echo "no")
           echo "needsVersionBump=$needsVersionBump"
           echo "needsVersionBump=$needsVersionBump" >> $GITHUB_OUTPUT
