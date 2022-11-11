@@ -13,6 +13,10 @@ jobs:
   increase-build-version:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
       - name: Check if build version needs a bump
         id: needs-version-bump
         run: |
