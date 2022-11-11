@@ -15,8 +15,6 @@ jobs:
           node-version: 18
       - run: yarn install --frozen-lockfile
       - run: yarn build
-        env:
-          CI: false
       - run: yarn test
       - name: Publish test report from impromat app
         uses: actions/upload-artifact@v2

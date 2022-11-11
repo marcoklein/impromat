@@ -9,7 +9,35 @@ env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
+  increase-build-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if build version needs a bump
+        id: needs-version-bump
+        run: |
+          lastCommitMessage=$(git log -1 --oneline)
+          echo "lastCommitMessage=$lastCommitMessage"
+          echo "$lastCommitMessage" | grep "\[build version bump\]" --silent
+          needsVersionBump="$?"
+          echo "needsVersionBump=$needsVersionBump"
+          echo "needsVersionBump=$needsVersionBump" >> $GITHUB_OUTPUT
+      - name: Bump build version
+        if: steps.needs-version-bump.outputs.needsVersionBump == '1'
+        run: |
+          packageVersion=$(grep version package.json | awk -F \" '{print $4}')
+          newPackageVersion=$(($packageVersion+1))
+          echo "newPackageVersion=$newPackageVersion"
+          versionText='"version": '
+          sed -i '' "s/$versionText\"$packageVersion\",/$versionText\"$newPackageVersion\",/" package.json
+      - uses: EndBug/add-and-commit@v9
+        name: Commit version bump
+        if: steps.needs-version-bump.outputs.needsVersionBump == '1'
+        with:
+          message: "[build version bump]"
+          tag: v${{ steps.extract_version.outputs.version }}
+
   test:
+    needs: increase-build-version
     uses: ./.github/workflows/test-job.yml
 
   deploy:
@@ -32,6 +60,7 @@ jobs:
       - run: git push impromat-api-production $BRANCH_NAME:master --force
 
   git-tag-main:
+    needs: increase-build-version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -42,7 +71,8 @@ jobs:
         run: echo ${{ steps.extract_version.outputs.version }}
       - name: Create git tag
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
+        uses: mathieudutour/github-tag-action@v6.1
         with:
+          tag_prefix: build-
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ steps.extract_version.outputs.version }}
