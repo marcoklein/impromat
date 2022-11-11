@@ -24,8 +24,9 @@ jobs:
           echo "lastCommitMessage=$lastCommitMessage"
           set +e
           echo "$lastCommitMessage" | grep "\[build version bump\]" --silent
+          returnCode=$?
           set -e
-          needsVersionBump=$([[ $? -eq 1 ]] && echo "yes" || echo "no")
+          needsVersionBump=$([[ $returnCode -eq 1 ]] && echo "yes" || echo "no")
           echo "needsVersionBump=$needsVersionBump"
           echo "needsVersionBump=$needsVersionBump" >> $GITHUB_OUTPUT
       - name: Bump build version
