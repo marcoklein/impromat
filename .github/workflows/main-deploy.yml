@@ -22,11 +22,10 @@ jobs:
         run: |
           lastCommitMessage=$(git log -1 --oneline)
           echo "lastCommitMessage=$lastCommitMessage"
-          echo "$lastCommitMessage" | { grep "\[build version bump\]" --silent || true; }
+          result=$(echo "$lastCommitMessage" | grep "\[build version bump\]" --silent)
           needsVersionBump=$([[ $? -eq 1 ]] && echo "yes" || echo "no")
           echo "needsVersionBump=$needsVersionBump"
           echo "needsVersionBump=$needsVersionBump" >> $GITHUB_OUTPUT
-          exit 0
       - name: Bump build version
         if: steps.needs-version-bump.outputs.needsVersionBump == 'yes'
         run: |
