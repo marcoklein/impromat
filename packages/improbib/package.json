@@ -1,7 +1,7 @@
 {
   "name": "improbib",
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Uniting improvisational theatre games and excercises for easy improv access.",
   "repository": "git@github.com:marcoklein/improbib.git",
   "author": "Marco Klein <hello@marcoklein.dev>",

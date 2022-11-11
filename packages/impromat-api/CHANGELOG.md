@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3
+
+### Patch Changes
+
+- 843ba32: Preparing Changelog for changeset automation
+
 ## 0.4.2
 
 - Fix uninitialized server
