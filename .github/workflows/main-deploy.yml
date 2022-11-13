@@ -71,18 +71,18 @@ jobs:
     needs: increase-build-version
     uses: ./.github/workflows/test-job.yml
     with:
-      commitSha: ${{ needs.increase-build-version.commitSha }}
+      commitSha: ${{ needs.increase-build-version.outputs.commitSha }}
 
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Print commit SHA
-        run: "echo ${{ job.increase-build-version.commitSha }}"
+        run: "echo ${{ job.increase-build-version.outputs.commitSha }}"
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ job.increase-build-version.commitSha }}
+          ref: ${{ job.increase-build-version.outputs.commitSha }}
       - name: Print last commit message
         run: |
           lastCommitMessage=$(git log -1 --oneline)
