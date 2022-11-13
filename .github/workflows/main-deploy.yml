@@ -11,6 +11,8 @@ env:
 jobs:
   increase-build-version:
     runs-on: ubuntu-latest
+    outputs:
+      commit-sha: ${{ steps.commit-sha-output.outputs.commitSha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -47,11 +49,23 @@ jobs:
       - name: Generate changelogs
         run: yarn changeset version
       - uses: EndBug/add-and-commit@v9
+        id: release-commit
         name: Commit tagged version bump
         if: steps.needs-version-bump.outputs.needsVersionBump == 'yes'
         with:
           message: "[build version bump]"
           tag: build-${{ steps.version-bump.outputs.newPackageVersion }}
+      - name: Add Git commit SHA as output
+        id: commit-sha-output
+        run: |
+          if [ "${{ steps.needs-version-bump.outputs.needsVersionBump }}"=="yes" ]
+          then
+            commitSha="${{ steps.release-commit.outputs.commit_sha }}"
+          else
+            commitSha="$GITHUB_SHA"
+          fi
+          echo "commitSha=$commitSha"
+          echo "commitSha=$commitSha" >> $GITHUB_OUTPUT
 
   test:
     needs: increase-build-version
@@ -61,9 +75,12 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - name: Print commit SHA
+        run: "echo ${{ job.increase-build-version.commitSha }}"
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ job.increase-build-version.commitSha }}
       - name: Print last commit message
         run: |
           lastCommitMessage=$(git log -1 --oneline)
