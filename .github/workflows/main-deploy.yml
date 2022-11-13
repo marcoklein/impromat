@@ -71,7 +71,7 @@ jobs:
     needs: increase-build-version
     uses: ./.github/workflows/test-job.yml
     with:
-      commitSha: ${{ job.increase-build-version.commitSha }}
+      commitSha: ${{ needs.increase-build-version.commitSha }}
 
   deploy:
     needs: test
