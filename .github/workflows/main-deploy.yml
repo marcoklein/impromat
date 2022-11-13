@@ -12,7 +12,7 @@ jobs:
   increase-build-version:
     runs-on: ubuntu-latest
     outputs:
-      commit-sha: ${{ steps.commit-sha-output.outputs.commitSha }}
+      commitSha: ${{ steps.commit-sha-output.outputs.commitSha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -70,6 +70,8 @@ jobs:
   test:
     needs: increase-build-version
     uses: ./.github/workflows/test-job.yml
+    with:
+      commitSha: ${{ job.increase-build-version.commitSha }}
 
   deploy:
     needs: test
