@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- 843ba32: Preparing Changelog for changeset automation
+
 ## 0.3.0 [Breaking Change]
 
 - Add automatic release pipeline for main branch

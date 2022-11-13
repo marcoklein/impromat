@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.1
+
+### Patch Changes
+
+- 843ba32: Preparing Changelog for changeset automation
+
 ## 0.13.0
 
 - Add `Cache-Control: max-age=0` to served web page to allow a direct update of the web worker
