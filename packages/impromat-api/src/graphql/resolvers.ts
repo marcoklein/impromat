@@ -1,10 +1,34 @@
 import { SafeIntResolver } from "graphql-scalars";
 import { generateGoogleAuthUrl } from "../authentication/google-auth";
+import { DatabaseUtils } from "../database/database-utils";
 import { environment } from "../environment";
-import { Resolvers } from "./schema.gen";
+import { Element, Resolvers } from "./schema.gen";
 
 export const resolvers: Resolvers = {
   SafeInt: SafeIntResolver,
+  User: {
+    favoriteElements: (root, args, ctx) => {
+      console.log("root id fav el", root.id);
+      const userId = root.id;
+      const ids = ctx.database.getUser(userId).favoriteElementIds;
+      const elements: Element[] = [];
+      const databaseUtils = new DatabaseUtils(ctx.database);
+      for (const elementId of ids) {
+        const element = databaseUtils.getElement(userId, elementId);
+        elements.push(element);
+      }
+      return elements;
+    },
+    id: (root, args, ctx) => {
+      // console.log("id is fetched", root, args, ctx);
+      // return ctx.session.userId;
+      console.log("root id: ", root.id);
+      return root.id;
+    },
+  },
+  // User: (root, args, ctx) => {
+  //   return undefined as any;
+  // },
   Query: {
     version: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
@@ -71,7 +95,14 @@ export const resolvers: Resolvers = {
     me: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       if (ctx.session) {
-        return { userId: ctx.session.userId };
+        return {
+          userId: ctx.session.userId,
+          user: {
+            id: ctx.session.userId,
+            favoriteElements: [],
+            updatedAt: undefined,
+          },
+        };
       }
       return undefined;
     },

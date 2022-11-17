@@ -21,7 +21,3 @@ To apply `nohoist` changes use a forced install:
 ```
 yarn install --force
 ```
-
-## Library Considerations
-
-https://github.com/changesets/changesets/blob/main/packages/cli/README.md

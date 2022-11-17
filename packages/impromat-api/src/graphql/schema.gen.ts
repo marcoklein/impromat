@@ -57,10 +57,21 @@ export type Mutation = {
    */
   logout: Scalars['Boolean'];
   /**
+   * Update the own, logged in, user.
+   * Returns the updated user info.
+   * Throws an error if the user is not logged in.
+   */
+  pushUser?: Maybe<UserPushResult>;
+  /**
    * Update given workshops.
-   * Returns the last of mutated workshops.
+   * Returns conflicting workshops. That means the client has to resolve all workshops that the call returns.
    */
   pushWorkshops?: Maybe<Array<Maybe<Workshop>>>;
+};
+
+
+export type MutationPushUserArgs = {
+  userPushRow: UserPushRowInput;
 };
 
 
@@ -124,7 +135,32 @@ export type SectionInput = {
 };
 
 export type TokenInfo = {
+  user?: Maybe<User>;
   userId: Scalars['String'];
+};
+
+/** Information about a user that uses Impromat. */
+export type User = {
+  favoriteElements: Array<Element>;
+  /** Id of the user. */
+  id: Scalars['ID'];
+  updatedAt: Scalars['SafeInt'];
+};
+
+export type UserInput = {
+  favoriteElements?: InputMaybe<Array<Scalars['ID']>>;
+  id: Scalars['ID'];
+  updatedAt?: InputMaybe<Scalars['SafeInt']>;
+};
+
+export type UserPushResult = {
+  conflict?: Maybe<User>;
+  updatedAt: Scalars['SafeInt'];
+};
+
+export type UserPushRowInput = {
+  assumedMasterState?: InputMaybe<UserInput>;
+  newDocumentState: UserInput;
 };
 
 /** An improvisational theatre Workshop that a person can hold for their group. */
@@ -241,6 +277,10 @@ export type ResolversTypes = {
   SectionInput: SectionInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   TokenInfo: ResolverTypeWrapper<TokenInfo>;
+  User: ResolverTypeWrapper<User>;
+  UserInput: UserInput;
+  UserPushResult: ResolverTypeWrapper<UserPushResult>;
+  UserPushRowInput: UserPushRowInput;
   Workshop: ResolverTypeWrapper<Workshop>;
   WorkshopInput: WorkshopInput;
   WorkshopPullBulk: ResolverTypeWrapper<WorkshopPullBulk>;
@@ -264,6 +304,10 @@ export type ResolversParentTypes = {
   SectionInput: SectionInput;
   String: Scalars['String'];
   TokenInfo: TokenInfo;
+  User: User;
+  UserInput: UserInput;
+  UserPushResult: UserPushResult;
+  UserPushRowInput: UserPushRowInput;
   Workshop: Workshop;
   WorkshopInput: WorkshopInput;
   WorkshopPullBulk: WorkshopPullBulk;
@@ -288,6 +332,7 @@ export type ElementResolvers<ContextType = GraphQLContext, ParentType extends Re
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  pushUser?: Resolver<Maybe<ResolversTypes['UserPushResult']>, ParentType, ContextType, RequireFields<MutationPushUserArgs, 'userPushRow'>>;
   pushWorkshops?: Resolver<Maybe<Array<Maybe<ResolversTypes['Workshop']>>>, ParentType, ContextType, RequireFields<MutationPushWorkshopsArgs, 'workshopPushRows'>>;
 };
 
@@ -320,7 +365,21 @@ export type SectionResolvers<ContextType = GraphQLContext, ParentType extends Re
 };
 
 export type TokenInfoResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['TokenInfo'] = ResolversParentTypes['TokenInfo']> = {
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  favoriteElements?: Resolver<Array<ResolversTypes['Element']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['SafeInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserPushResultResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['UserPushResult'] = ResolversParentTypes['UserPushResult']> = {
+  conflict?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['SafeInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -348,6 +407,8 @@ export type Resolvers<ContextType = GraphQLContext> = {
   SafeInt?: GraphQLScalarType;
   Section?: SectionResolvers<ContextType>;
   TokenInfo?: TokenInfoResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
+  UserPushResult?: UserPushResultResolvers<ContextType>;
   Workshop?: WorkshopResolvers<ContextType>;
   WorkshopPullBulk?: WorkshopPullBulkResolvers<ContextType>;
 };

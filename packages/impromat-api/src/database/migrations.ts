@@ -5,6 +5,18 @@ export const migrations: Record<
   (params: { fromState: any; toVersion: number; fromVersion: number }) => any
 > = {
   /**
+   * Add users information.
+   */
+  2: ({ fromState, toVersion }) => {
+    return {
+      ...fromState,
+      ...{
+        version: toVersion,
+        users: {},
+      },
+    };
+  },
+  /**
    * Add `type` to version and remove all null elements
    */
   1: ({ fromState, toVersion }) => {

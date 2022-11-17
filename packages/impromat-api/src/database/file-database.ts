@@ -3,6 +3,8 @@ import path from "node:path";
 import { environment } from "../environment";
 import { Workshop } from "../graphql/schema.gen";
 import { SchemaValidator } from "../schema-validation/schema-validator";
+import { Database } from "./database";
+import { DatabaseUser } from "./database-user";
 import { migrations } from "./migrations";
 
 interface ValidationError {
@@ -10,14 +12,15 @@ interface ValidationError {
   data: any;
 }
 
-export const DATABASE_VERSION = 1;
+export const DATABASE_VERSION = 2;
 
 export interface DatabaseSchema {
   version: number;
   workshopsOfUsers: Record<string, Workshop[]>;
+  users: Record<string, DatabaseUser>;
 }
 
-export class FileDatabase {
+export class FileDatabase implements Database {
   store: DatabaseSchema | undefined;
 
   constructor(
@@ -62,6 +65,7 @@ export class FileDatabase {
       this.store = {
         version: DATABASE_VERSION,
         workshopsOfUsers: {},
+        users: {},
       };
     }
     const errors = await this.validate();
@@ -156,5 +160,22 @@ export class FileDatabase {
   getWorkshops(userId: string) {
     if (!this.store) throw new Error("Not loaded");
     return this.store.workshopsOfUsers[userId] ?? [];
+  }
+
+  getWorkshop(userId: string, workshopId: string) {
+    const workshops = this.getWorkshops(userId);
+    const workshop = workshops.find((workshop) => workshop.id === workshopId);
+    return workshop;
+  }
+
+  setUser(userId: string, user: DatabaseUser) {
+    if (!this.store) throw new Error("Not loaded");
+    this.store.users[userId] = user;
+    this.save();
+  }
+
+  getUser(userId: string): DatabaseUser {
+    if (!this.store) throw new Error("Not loaded");
+    return this.store.users[userId] ?? {};
   }
 }

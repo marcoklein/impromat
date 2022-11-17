@@ -28,9 +28,15 @@ type Query {
 type Mutation {
   """
   Update given workshops.
-  Returns the last of mutated workshops.
+  Returns conflicting workshops. That means the client has to resolve all workshops that the call returns.
   """
   pushWorkshops(workshopPushRows: [WorkshopPushRowInput!]!): [Workshop]
+  """
+  Update the own, logged in, user.
+  Returns the updated user info.
+  Throws an error if the user is not logged in.
+  """
+  pushUser(userPushRow: UserPushRowInput!): UserPushResult
   """
   Log out from the application.
   Returns true if the user was logged in and got logged out successfully.
@@ -95,6 +101,35 @@ type PullCheckpoint {
 
 type TokenInfo {
   userId: String!
+  user: User
+}
+
+input UserPushRowInput {
+  assumedMasterState: UserInput
+  newDocumentState: UserInput!
+}
+
+type UserPushResult {
+  updatedAt: SafeInt!
+  conflict: User
+}
+
+input UserInput {
+  id: ID!
+  updatedAt: SafeInt
+  favoriteElements: [ID!]
+}
+
+"""
+Information about a user that uses Impromat.
+"""
+type User {
+  """
+  Id of the user.
+  """
+  id: ID!
+  updatedAt: SafeInt!
+  favoriteElements: [Element!]!
 }
 
 """

@@ -32,6 +32,7 @@ import { WorkshopsPage } from "./pages/WorkshopsPage";
 import {
   routeAbout,
   routeAccount,
+  routeFavoriteElements,
   routeHome,
   routeLegal,
   routePrivacyPolicy,
@@ -47,6 +48,7 @@ import { Element } from "./store/schema.gen";
 import "./theme/colors.css";
 import "./theme/variables.css";
 import "../node_modules/flag-icons/css/flag-icons.min.css";
+import { FavoriteElementsPage } from "./pages/FavoriteElementsPage";
 
 setupIonicReact();
 
@@ -102,6 +104,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route path={routeWorkshop()} exact>
                   <WorkshopPage></WorkshopPage>
+                </Route>
+                <Route path={routeFavoriteElements()} exact>
+                  <FavoriteElementsPage></FavoriteElementsPage>
                 </Route>
                 <Route path={routeWorkshopElement()} exact>
                   <WorkshopElementPage></WorkshopElementPage>

@@ -84,5 +84,5 @@ export async function createGraphQLTestContext(
     server.close();
   };
 
-  return { port, client, server, cleanup, changeUser };
+  return { port, client, server, cleanup, changeUser, database };
 }

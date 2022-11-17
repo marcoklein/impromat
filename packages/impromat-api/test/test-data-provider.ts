@@ -5,7 +5,21 @@ export const TEST_DATA = {
     id: "1",
     name: "workshop",
     description: "descriptiO",
-    elements: [],
+    sections: [
+      {
+        id: "section-id",
+        name: "section-name",
+        elements: [
+          {
+            id: "element-id",
+            markdown: "test markdown",
+            name: "element",
+            note: "",
+            tags: ["tag1", "tag2"],
+          },
+        ],
+      },
+    ],
     updatedAt: 0,
     deleted: false,
   }),

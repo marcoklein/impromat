@@ -12,6 +12,7 @@ Tracking tasks for the development that move into the [Changelog](./CHANGELOG.md
 - [ ] Add a skeleton loading page to replace the simple `IonSpinner` component
 - [ ] Move all actions to manipulate a workshop element into the workshop element page (same as for a workshop)
 - [ ] Accept input on `ENTER` key
+- [ ] Add date to workshop
 
 ### App Handling
 
