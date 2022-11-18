@@ -13,7 +13,7 @@ import { WorkshopElementPreviewItemComponent } from "../components/WorkshopEleme
 import { Element } from "../store/schema.gen";
 
 export const FavoriteElementsPage: React.FC = () => {
-  const [favoriteElements, setFavoriteElements] = useState<Element[]>();
+  const [favoriteElements] = useState<Element[]>();
 
   return (
     <IonPage>

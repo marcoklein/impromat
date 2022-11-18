@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 export WORKDIR=$(cd $(dirname $0) && pwd)
-source $WORKDIR/common.sh
 
 function generateMarkdownTypescript {
   inPath="$1"
