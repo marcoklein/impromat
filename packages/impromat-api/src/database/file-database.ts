@@ -4,7 +4,7 @@ import { environment } from "../environment";
 import { Workshop } from "../graphql/schema.gen";
 import { SchemaValidator } from "../schema-validation/schema-validator";
 import { Database } from "./database";
-import { DatabaseUser } from "./database-user";
+import { UserModel } from "./user-model";
 import { migrations } from "./migrations";
 
 interface ValidationError {
@@ -17,7 +17,7 @@ export const DATABASE_VERSION = 2;
 export interface DatabaseSchema {
   version: number;
   workshopsOfUsers: Record<string, Workshop[]>;
-  users: Record<string, DatabaseUser>;
+  users: Record<string, UserModel>;
 }
 
 export class FileDatabase implements Database {
@@ -168,14 +168,22 @@ export class FileDatabase implements Database {
     return workshop;
   }
 
-  setUser(userId: string, user: DatabaseUser) {
+  setUser(userId: string, user: UserModel) {
     if (!this.store) throw new Error("Not loaded");
     this.store.users[userId] = user;
     this.save();
   }
 
-  getUser(userId: string): DatabaseUser {
+  getUser(userId: string): UserModel {
     if (!this.store) throw new Error("Not loaded");
-    return this.store.users[userId] ?? {};
+    const user = this.store.users[userId];
+    if (!user) {
+      return {
+        favoriteElementIds: [],
+        updatedAt: undefined,
+        version: 0,
+      };
+    }
+    return user;
   }
 }

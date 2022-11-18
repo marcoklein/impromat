@@ -1,8 +1,10 @@
 import { SafeIntResolver } from "graphql-scalars";
 import { generateGoogleAuthUrl } from "../authentication/google-auth";
+import { UserModel } from "../database/user-model";
 import { DatabaseUtils } from "../database/database-utils";
 import { environment } from "../environment";
-import { Element, Resolvers } from "./schema.gen";
+import { UserMapper } from "../mappers/user-mapper";
+import { Element, Resolvers, User } from "./schema.gen";
 
 export const resolvers: Resolvers = {
   SafeInt: SafeIntResolver,
@@ -26,9 +28,6 @@ export const resolvers: Resolvers = {
       return root.id;
     },
   },
-  // User: (root, args, ctx) => {
-  //   return undefined as any;
-  // },
   Query: {
     version: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
@@ -93,21 +92,48 @@ export const resolvers: Resolvers = {
       return generateGoogleAuthUrl();
     },
     me: (root, args, ctx) => {
-      if (!ctx.session?.userId) throw new Error("Unauthorized");
-      if (ctx.session) {
-        return {
-          userId: ctx.session.userId,
-          user: {
-            id: ctx.session.userId,
-            favoriteElements: [],
-            updatedAt: undefined,
-          },
-        };
-      }
-      return undefined;
+      const userId = ctx.session?.userId;
+      if (!userId) throw new Error("Unauthorized");
+      return {
+        userId,
+        user: new UserMapper().fromModelToDto(ctx.database.getUser(userId), {
+          userId,
+        }),
+      };
     },
   },
   Mutation: {
+    pushUser: (root, args, ctx) => {
+      const userId = ctx.session?.userId;
+      if (!userId) throw new Error("Unauthorized");
+      const { database } = ctx;
+      const assumedMasterState = args.userPushRow.assumedMasterState;
+      const newDocumentState = args.userPushRow.newDocumentState;
+      const masterState = database.getUser(userId);
+
+      console.log("## received user", args.userPushRow);
+
+      if (
+        assumedMasterState.version !== masterState.version ||
+        newDocumentState.version !== masterState.version + 1
+      ) {
+        console.log("Version Conflict");
+        const userConflict: User = new UserMapper().fromModelToDto(
+          masterState,
+          { userId }
+        );
+        return userConflict;
+      }
+      const newUser: UserModel = {
+        updatedAt: Date.now(),
+        favoriteElementIds:
+          newDocumentState.favoriteElements ?? masterState.favoriteElementIds,
+        version: newDocumentState.version,
+      };
+      database.setUser(userId, newUser);
+      console.log("## set state ", newUser);
+      return undefined;
+    },
     pushWorkshops: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       const { database } = ctx;
@@ -115,10 +141,6 @@ export const resolvers: Resolvers = {
       // console.log(JSON.stringify(args.workshopPushRows, null, 4));
       const pushedRows = args.workshopPushRows;
       let userWorkshops = database.getWorkshops(ctx.session.userId);
-      let lastCheckpoint = {
-        id: "",
-        updatedAt: 0,
-      };
       const conflicts = [];
       const writtenDocs = [];
 
@@ -142,8 +164,6 @@ export const resolvers: Resolvers = {
         // doc.updatedAt = Date.now();
         const updatedWorkshops = userWorkshops.filter((d) => d.id !== doc.id);
         updatedWorkshops.push(doc);
-        lastCheckpoint.id = doc.id;
-        lastCheckpoint.updatedAt = doc.updatedAt;
         writtenDocs.push(doc);
         userWorkshops = updatedWorkshops;
       }

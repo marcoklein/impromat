@@ -1,9 +1,9 @@
 import { Database } from "./database";
-import { DatabaseUser } from "./database-user";
+import { UserModel } from "./user-model";
 
 export class MemoryDatabase implements Database {
   store: Record<string, any[]> = {};
-  userStore: Record<string, DatabaseUser> = {};
+  userStore: Record<string, UserModel> = {};
 
   constructor() {}
 
@@ -30,15 +30,17 @@ export class MemoryDatabase implements Database {
     return workshop;
   }
 
-  setUser(userId: string, user: DatabaseUser) {
+  setUser(userId: string, user: UserModel) {
     this.userStore[userId] = user;
   }
 
-  getUser(userId: string): DatabaseUser {
+  getUser(userId: string): UserModel {
     const user = this.userStore[userId];
     if (!user) {
       return {
         favoriteElementIds: [],
+        updatedAt: undefined,
+        version: 0,
       };
     }
     return user;

@@ -32,11 +32,11 @@ type Mutation {
   """
   pushWorkshops(workshopPushRows: [WorkshopPushRowInput!]!): [Workshop]
   """
-  Update the own, logged in, user.
-  Returns the updated user info.
+  Update user info of the logged in user.
+  Returns current master state if there is a conflict.
   Throws an error if the user is not logged in.
   """
-  pushUser(userPushRow: UserPushRowInput!): UserPushResult
+  pushUser(userPushRow: UserPushRowInput!): User
   """
   Log out from the application.
   Returns true if the user was logged in and got logged out successfully.
@@ -105,18 +105,12 @@ type TokenInfo {
 }
 
 input UserPushRowInput {
-  assumedMasterState: UserInput
+  assumedMasterState: UserInput!
   newDocumentState: UserInput!
 }
 
-type UserPushResult {
-  updatedAt: SafeInt!
-  conflict: User
-}
-
 input UserInput {
-  id: ID!
-  updatedAt: SafeInt
+  version: Int!
   favoriteElements: [ID!]
 }
 
@@ -128,7 +122,10 @@ type User {
   Id of the user.
   """
   id: ID!
-  updatedAt: SafeInt!
+  """
+  Entity version.
+  """
+  version: Int!
   favoriteElements: [Element!]!
 }
 

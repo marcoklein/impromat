@@ -13,9 +13,16 @@ export const TEST_DATA = {
           {
             id: "element-id",
             markdown: "test markdown",
-            name: "element",
+            name: "test element",
             note: "",
             tags: ["tag1", "tag2"],
+          },
+          {
+            id: "second-element-id",
+            markdown: "second test markdown",
+            name: "second test element",
+            note: "",
+            tags: ["tag1", "tag2", "tag3"],
           },
         ],
       },
