@@ -1,6 +1,8 @@
 /node_modules
 /storage
 /dist
+/coverage
+/.nyc_output
 
 # misc
 .DS_Store
