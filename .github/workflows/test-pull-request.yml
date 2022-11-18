@@ -12,4 +12,4 @@ jobs:
   test:
     uses: ./.github/workflows/test-job.yml
     with:
-      commitSha: ${{ env.GITHUB_SHA }}
+      commitSha: ${{ github.sha }}
