@@ -5,6 +5,7 @@ import { DatabaseUtils } from "../database/database-utils";
 import { environment } from "../environment";
 import { UserMapper } from "../mappers/user-mapper";
 import { Element, Resolvers, User } from "./schema.gen";
+import { userPushRowInputHandler } from "./user-resolver";
 
 export const resolvers: Resolvers = {
   SafeInt: SafeIntResolver,
@@ -12,7 +13,7 @@ export const resolvers: Resolvers = {
     favoriteElements: (root, args, ctx) => {
       console.log("root id fav el", root.id);
       const userId = root.id;
-      const ids = ctx.database.getUser(userId).favoriteElementIds;
+      const ids = ctx.database.getUser(userId)?.favoriteElementIds ?? [];
       const elements: Element[] = [];
       const databaseUtils = new DatabaseUtils(ctx.database);
       for (const elementId of ids) {
@@ -32,6 +33,30 @@ export const resolvers: Resolvers = {
     version: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       return environment.VERSION;
+    },
+    pullUsers: (root, args, ctx, info) => {
+      const userId = ctx.session?.userId;
+      if (!userId) throw new Error("Unauthorized");
+      const { database } = ctx;
+      const minUpdatedAt = args.checkpoint ? args.checkpoint.updatedAt : 0;
+
+      const user = database.getUser(userId);
+      if (user && user.updatedAt && user.updatedAt >= minUpdatedAt) {
+        return {
+          documents: [new UserMapper().fromModelToDto(user, { userId })],
+          checkpoint: {
+            id: userId,
+            updatedAt: user.updatedAt,
+          },
+        };
+      }
+      return {
+        documents: [],
+        checkpoint: {
+          id: userId,
+          updatedAt: minUpdatedAt,
+        },
+      };
     },
     pullWorkshops: (root, args, ctx, info) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
@@ -93,10 +118,14 @@ export const resolvers: Resolvers = {
     },
     me: (root, args, ctx) => {
       const userId = ctx.session?.userId;
-      if (!userId) throw new Error("Unauthorized");
+      if (!userId) return undefined;
+      const user = ctx.database.getUser(userId);
+      if (!user) {
+        return { userId };
+      }
       return {
         userId,
-        user: new UserMapper().fromModelToDto(ctx.database.getUser(userId), {
+        user: new UserMapper().fromModelToDto(user, {
           userId,
         }),
       };
@@ -104,35 +133,23 @@ export const resolvers: Resolvers = {
   },
   Mutation: {
     pushUser: (root, args, ctx) => {
-      const userId = ctx.session?.userId;
-      if (!userId) throw new Error("Unauthorized");
-      const { database } = ctx;
-      const assumedMasterState = args.userPushRow.assumedMasterState;
-      const newDocumentState = args.userPushRow.newDocumentState;
-      const masterState = database.getUser(userId);
+      if (!ctx.session?.userId) throw new Error("Unauthorized");
+      return userPushRowInputHandler(args.userPushRow, ctx);
+    },
+    pushUsers: (root, args, ctx) => {
+      if (!ctx.session?.userId) throw new Error("Unauthorized");
 
-      console.log("## received user", args.userPushRow);
-
-      if (
-        assumedMasterState.version !== masterState.version ||
-        newDocumentState.version !== masterState.version + 1
-      ) {
-        console.log("Version Conflict");
-        const userConflict: User = new UserMapper().fromModelToDto(
-          masterState,
-          { userId }
-        );
-        return userConflict;
+      if (!args.userPushRows.length) {
+        return [];
       }
-      const newUser: UserModel = {
-        updatedAt: Date.now(),
-        favoriteElementIds:
-          newDocumentState.favoriteElements ?? masterState.favoriteElementIds,
-        version: newDocumentState.version,
-      };
-      database.setUser(userId, newUser);
-      console.log("## set state ", newUser);
-      return undefined;
+      if (args.userPushRows.length > 1) {
+        throw new Error("Only updates for logged in user allowed.");
+      }
+      const conflict = userPushRowInputHandler(args.userPushRows[0], ctx);
+      if (conflict) {
+        return [conflict];
+      }
+      return [];
     },
     pushWorkshops: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");

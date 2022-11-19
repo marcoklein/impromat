@@ -6,5 +6,5 @@ export interface Database {
   getWorkshop(userId: string, workshopId: string): any;
   getWorkshops(userId: string): any[];
   setUser(userId: string, user: UserModel): void;
-  getUser(userId: string): UserModel;
+  getUser(userId: string): UserModel | undefined;
 }

@@ -1,39 +1,28 @@
-import { RxCollection } from "rxdb";
-import { ImpromatRxDatabase } from "../initialize";
+import { RxCollection, RxCollectionCreator } from "rxdb";
 import { WorkshopSchemaJson } from "../schema-json.gen";
 import { Workshop } from "../schema.gen";
-import { migrationStrategies } from "./migration-strategies";
+import {
+  workshopMigrationStrategies,
+  workshopSchemaVersion,
+} from "./migration-strategies";
 
 export type WorkshopCollection = RxCollection<Workshop>;
 
-export async function addWorkshopCollectionToDatabase(
-  db: ImpromatRxDatabase,
-): Promise<WorkshopCollection> {
+export function createWorkshopCollection(): RxCollectionCreator<Workshop> {
   const workshopProperties = WorkshopSchemaJson.properties;
   // @ts-ignore
   delete workshopProperties.deleted;
-
-  const collection = await db.addCollections({
-    workshops: {
-      // TODO define a conflict resolution
-      // conflictHandler: (input) => {
-      //   console.log("### CONFLICT", JSON.stringify(input, undefined, 2));
-      //   return input.realMasterState;
-      // },
-      // schema: workshopSchemaVersion0,
-      schema: {
-        primaryKey: "id",
-        properties: {
-          ...workshopProperties,
-          id: { type: "string", maxLength: 50 },
-          sections: { type: "array" },
-        },
-        version: 1,
-        type: "object",
+  return {
+    schema: {
+      primaryKey: "id",
+      properties: {
+        ...workshopProperties,
+        id: { type: "string", maxLength: 50 },
+        sections: { type: "array" },
       },
-      migrationStrategies,
+      version: workshopSchemaVersion,
+      type: "object",
     },
-  });
-
-  return collection.workshops;
+    migrationStrategies: workshopMigrationStrategies,
+  };
 }

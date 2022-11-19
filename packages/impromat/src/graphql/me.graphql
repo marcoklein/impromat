@@ -1,0 +1,12 @@
+query me {
+  me {
+    userId
+    user {
+      id
+      version
+      favoriteElements {
+        id
+      }
+    }
+  }
+}

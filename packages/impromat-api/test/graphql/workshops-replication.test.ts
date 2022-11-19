@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { describe } from "mocha";
 import { MutationPushWorkshopsArgs } from "../../src/graphql/schema.gen";
 import { createGraphQLTestContext } from "./graphql-test-utils";
 import {

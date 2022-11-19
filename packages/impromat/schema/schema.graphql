@@ -12,16 +12,11 @@ type Query {
     limit: Int!
   ): WorkshopPullBulk!
   """
-  Returns new users since last sync.
-  """
-  pullUsers(checkpoint: PullCheckpointInput!, limit: Int!): UserPullBulk!
-  """
   Returns an authentication url for google authentication.
   """
   googleAuthUrl: String!
   """
   Information about the logged in session.
-  Null indicates a not logged in user.
   """
   me: TokenInfo
   """
@@ -42,11 +37,6 @@ type Mutation {
   Throws an error if the user is not logged in.
   """
   pushUser(userPushRow: UserPushRowInput!): User
-  """
-  Update given users.
-  Returns conflicting users. That means the client has to resolve all users that the call returns.
-  """
-  pushUsers(userPushRows: [UserPushRowInput!]!): [User]
   """
   Log out from the application.
   Returns true if the user was logged in and got logged out successfully.
@@ -104,11 +94,6 @@ type WorkshopPullBulk {
   checkpoint: PullCheckpoint
 }
 
-type UserPullBulk {
-  documents: [User!]!
-  checkpoint: PullCheckpoint
-}
-
 type PullCheckpoint {
   id: String!
   updatedAt: Float!
@@ -116,11 +101,11 @@ type PullCheckpoint {
 
 type TokenInfo {
   userId: String!
-  user: User
+  user: User!
 }
 
 input UserPushRowInput {
-  assumedMasterState: UserInput
+  assumedMasterState: UserInput!
   newDocumentState: UserInput!
 }
 

@@ -1,0 +1,22 @@
+{
+  "$id": "User",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "number"
+    },
+    "favoriteElements": {
+      "type": "array",
+      "ref": "Element",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["id", "version", "favoriteElements"],
+  "type": "object"
+}

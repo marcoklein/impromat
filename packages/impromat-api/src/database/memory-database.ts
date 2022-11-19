@@ -36,13 +36,6 @@ export class MemoryDatabase implements Database {
 
   getUser(userId: string): UserModel {
     const user = this.userStore[userId];
-    if (!user) {
-      return {
-        favoriteElementIds: [],
-        updatedAt: undefined,
-        version: 0,
-      };
-    }
     return user;
   }
 }
