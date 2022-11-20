@@ -1,0 +1,7 @@
+{
+  "name": "docs",
+  "version": "0.1.0",
+  "description": "Documentation for Impromat",
+  "author": "Marco Klein <hello@marcoklein.dev>",
+  "private": true
+}
