@@ -30,15 +30,17 @@ export function enableMeReplication(
         await onLogout();
       }
       if (!loggedInUser || loggedInUser.user !== userId) {
+        // login
         meCollection.atomicUpsert({
           id: "me",
           user: userId,
           version: 0,
         });
-        logger("Set current user in me collection");
+        // synchronizing latest state
+        logger("User logged in");
       }
       if (loggedInUser && loggedInUser.user === userId) {
-        logger("Log in verified");
+        logger("Existing login verified");
       }
     } catch (e) {
       if (

@@ -9,9 +9,11 @@ export const TEST_DATA = {
       {
         id: "section-id",
         name: "section-name",
+        version: 0,
         elements: [
           {
             id: "element-id",
+            version: 0,
             markdown: "test markdown",
             name: "test element",
             note: "",
@@ -19,6 +21,7 @@ export const TEST_DATA = {
           },
           {
             id: "second-element-id",
+            version: 0,
             markdown: "second test markdown",
             name: "second test element",
             note: "",

@@ -20,7 +20,7 @@ const schemaLiteral = {
     },
     user: {
       type: "string",
-      ref: "Element",
+      ref: "users",
     },
   },
   required: ["id", "version", "user"],

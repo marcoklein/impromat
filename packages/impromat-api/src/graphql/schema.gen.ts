@@ -32,10 +32,12 @@ export type Element = {
   sourceName?: Maybe<Scalars['String']>;
   sourceUrl?: Maybe<Scalars['String']>;
   tags: Array<Scalars['String']>;
+  version: Scalars['Int'];
 };
 
 export type ElementInput = {
-  basedOn?: InputMaybe<ElementInput>;
+  /** Ref with id to other Element. */
+  basedOn?: InputMaybe<Scalars['ID']>;
   id: Scalars['ID'];
   languageCode?: InputMaybe<Scalars['String']>;
   licenseName?: InputMaybe<Scalars['String']>;
@@ -47,6 +49,17 @@ export type ElementInput = {
   sourceName?: InputMaybe<Scalars['String']>;
   sourceUrl?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
+  version: Scalars['Int'];
+};
+
+export type ElementPullBulk = {
+  checkpoint?: Maybe<PullCheckpoint>;
+  documents: Array<Element>;
+};
+
+export type ElementPushRowInput = {
+  assumedMasterState?: InputMaybe<ElementInput>;
+  newDocumentState: ElementInput;
 };
 
 export type Mutation = {
@@ -56,6 +69,16 @@ export type Mutation = {
    * Returns undefined, if the user was not logged in.
    */
   logout: Scalars['Boolean'];
+  /**
+   * Update given elements.
+   * Returns conflicting elements. That means the client has to resolve all elements that the call returns.
+   */
+  pushElements?: Maybe<Array<Maybe<Element>>>;
+  /**
+   * Update given sections.
+   * Returns conflicting sections. That means the client has to resolve all sections that the call returns.
+   */
+  pushSections?: Maybe<Array<Maybe<Section>>>;
   /**
    * Update user info of the logged in user.
    * Returns current master state if there is a conflict.
@@ -72,6 +95,16 @@ export type Mutation = {
    * Returns conflicting workshops. That means the client has to resolve all workshops that the call returns.
    */
   pushWorkshops?: Maybe<Array<Maybe<Workshop>>>;
+};
+
+
+export type MutationPushElementsArgs = {
+  elementPushRows: Array<ElementPushRowInput>;
+};
+
+
+export type MutationPushSectionsArgs = {
+  sectionPushRows: Array<SectionPushRowInput>;
 };
 
 
@@ -107,12 +140,20 @@ export type Query = {
    * Null indicates a not logged in user.
    */
   me?: Maybe<TokenInfo>;
+  /** Returns new elements since last sync. */
+  pullElements: ElementPullBulk;
   /** Returns new users since last sync. */
   pullUsers: UserPullBulk;
   /** Returns new workshops since last sync. */
   pullWorkshops: WorkshopPullBulk;
   /** Version of the application. */
   version: Scalars['String'];
+};
+
+
+export type QueryPullElementsArgs = {
+  checkpoint: PullCheckpointInput;
+  limit: Scalars['Int'];
 };
 
 
@@ -143,6 +184,7 @@ export type Section = {
   isVisible?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   note?: Maybe<Scalars['String']>;
+  version: Scalars['Int'];
 };
 
 export type SectionInput = {
@@ -153,10 +195,21 @@ export type SectionInput = {
   isVisible?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   note?: InputMaybe<Scalars['String']>;
+  version: Scalars['Int'];
+};
+
+export type SectionPullBulk = {
+  checkpoint?: Maybe<PullCheckpoint>;
+  documents: Array<Section>;
+};
+
+export type SectionPushRowInput = {
+  assumedMasterState?: InputMaybe<SectionInput>;
+  newDocumentState: SectionInput;
 };
 
 export type TokenInfo = {
-  user?: Maybe<User>;
+  user: User;
   userId: Scalars['String'];
 };
 
@@ -286,6 +339,8 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Element: ResolverTypeWrapper<Element>;
   ElementInput: ElementInput;
+  ElementPullBulk: ResolverTypeWrapper<ElementPullBulk>;
+  ElementPushRowInput: ElementPushRowInput;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -296,6 +351,8 @@ export type ResolversTypes = {
   SafeInt: ResolverTypeWrapper<Scalars['SafeInt']>;
   Section: ResolverTypeWrapper<Section>;
   SectionInput: SectionInput;
+  SectionPullBulk: ResolverTypeWrapper<SectionPullBulk>;
+  SectionPushRowInput: SectionPushRowInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   TokenInfo: ResolverTypeWrapper<TokenInfo>;
   User: ResolverTypeWrapper<User>;
@@ -313,6 +370,8 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Element: Element;
   ElementInput: ElementInput;
+  ElementPullBulk: ElementPullBulk;
+  ElementPushRowInput: ElementPushRowInput;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
@@ -323,6 +382,8 @@ export type ResolversParentTypes = {
   SafeInt: Scalars['SafeInt'];
   Section: Section;
   SectionInput: SectionInput;
+  SectionPullBulk: SectionPullBulk;
+  SectionPushRowInput: SectionPushRowInput;
   String: Scalars['String'];
   TokenInfo: TokenInfo;
   User: User;
@@ -348,11 +409,20 @@ export type ElementResolvers<ContextType = GraphQLContext, ParentType extends Re
   sourceName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   sourceUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ElementPullBulkResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['ElementPullBulk'] = ResolversParentTypes['ElementPullBulk']> = {
+  checkpoint?: Resolver<Maybe<ResolversTypes['PullCheckpoint']>, ParentType, ContextType>;
+  documents?: Resolver<Array<ResolversTypes['Element']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  pushElements?: Resolver<Maybe<Array<Maybe<ResolversTypes['Element']>>>, ParentType, ContextType, RequireFields<MutationPushElementsArgs, 'elementPushRows'>>;
+  pushSections?: Resolver<Maybe<Array<Maybe<ResolversTypes['Section']>>>, ParentType, ContextType, RequireFields<MutationPushSectionsArgs, 'sectionPushRows'>>;
   pushUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationPushUserArgs, 'userPushRow'>>;
   pushUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, RequireFields<MutationPushUsersArgs, 'userPushRows'>>;
   pushWorkshops?: Resolver<Maybe<Array<Maybe<ResolversTypes['Workshop']>>>, ParentType, ContextType, RequireFields<MutationPushWorkshopsArgs, 'workshopPushRows'>>;
@@ -367,6 +437,7 @@ export type PullCheckpointResolvers<ContextType = GraphQLContext, ParentType ext
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   googleAuthUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes['TokenInfo']>, ParentType, ContextType>;
+  pullElements?: Resolver<ResolversTypes['ElementPullBulk'], ParentType, ContextType, RequireFields<QueryPullElementsArgs, 'checkpoint' | 'limit'>>;
   pullUsers?: Resolver<ResolversTypes['UserPullBulk'], ParentType, ContextType, RequireFields<QueryPullUsersArgs, 'checkpoint' | 'limit'>>;
   pullWorkshops?: Resolver<ResolversTypes['WorkshopPullBulk'], ParentType, ContextType, RequireFields<QueryPullWorkshopsArgs, 'checkpoint' | 'limit'>>;
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -384,11 +455,18 @@ export type SectionResolvers<ContextType = GraphQLContext, ParentType extends Re
   isVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SectionPullBulkResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['SectionPullBulk'] = ResolversParentTypes['SectionPullBulk']> = {
+  checkpoint?: Resolver<Maybe<ResolversTypes['PullCheckpoint']>, ParentType, ContextType>;
+  documents?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type TokenInfoResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['TokenInfo'] = ResolversParentTypes['TokenInfo']> = {
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -424,11 +502,13 @@ export type WorkshopPullBulkResolvers<ContextType = GraphQLContext, ParentType e
 
 export type Resolvers<ContextType = GraphQLContext> = {
   Element?: ElementResolvers<ContextType>;
+  ElementPullBulk?: ElementPullBulkResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   PullCheckpoint?: PullCheckpointResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   SafeInt?: GraphQLScalarType;
   Section?: SectionResolvers<ContextType>;
+  SectionPullBulk?: SectionPullBulkResolvers<ContextType>;
   TokenInfo?: TokenInfoResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserPullBulk?: UserPullBulkResolvers<ContextType>;

@@ -15,6 +15,7 @@ export class UserMapper
       favoriteElements: model.favoriteElementIds.map(
         (favoriteElementId): Element => ({
           id: favoriteElementId,
+          version: 0,
           markdown: "",
           name: "",
           note: "",

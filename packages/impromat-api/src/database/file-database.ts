@@ -1,11 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { environment } from "../environment";
-import { Workshop } from "../graphql/schema.gen";
+import { Element, Workshop } from "../graphql/schema.gen";
 import { SchemaValidator } from "../schema-validation/schema-validator";
 import { Database } from "./database";
 import { UserModel } from "./user-model";
 import { migrations } from "./migrations";
+import { ElementModel } from "./element-model";
+import { SectionModel } from "./section-model";
 
 interface ValidationError {
   location: string;
@@ -17,6 +19,8 @@ export const DATABASE_VERSION = 2;
 export interface DatabaseSchema {
   version: number;
   workshopsOfUsers: Record<string, Workshop[]>;
+  sectionsOfUsers: Record<string, SectionModel[]>;
+  elementsOfUsers: Record<string, ElementModel[]>;
   users: Record<string, UserModel>;
 }
 
@@ -30,6 +34,9 @@ export class FileDatabase implements Database {
 
   addWorkshop(userId: string, workshop: any) {
     if (!this.store) throw new Error("Not loaded");
+    if (!this.store.workshopsOfUsers[userId]) {
+      this.setWorkshops(userId, []);
+    }
     this.store.workshopsOfUsers[userId].push(workshop);
     this.save();
   }
@@ -37,6 +44,12 @@ export class FileDatabase implements Database {
   setWorkshops(userId: string, workshops: any[]) {
     if (!this.store) throw new Error("Not loaded");
     this.store.workshopsOfUsers[userId] = workshops;
+    this.save();
+  }
+
+  setElements(userId: string, elements: ElementModel[]) {
+    if (!this.store) throw new Error("Not loaded");
+    this.store.elementsOfUsers[userId] = elements;
     this.save();
   }
 
@@ -66,6 +79,8 @@ export class FileDatabase implements Database {
         version: DATABASE_VERSION,
         workshopsOfUsers: {},
         users: {},
+        elementsOfUsers: {},
+        sectionsOfUsers: {},
       };
     }
     const errors = await this.validate();
@@ -168,6 +183,16 @@ export class FileDatabase implements Database {
     return workshop;
   }
 
+  getSections(userId: string): SectionModel[] | undefined {
+    if (!this.store) throw new Error("Not loaded");
+    return this.store.sectionsOfUsers[userId] ?? [];
+  }
+
+  getElements(userId: string): ElementModel[] | undefined {
+    if (!this.store) throw new Error("Not loaded");
+    return this.store.elementsOfUsers[userId] ?? [];
+  }
+
   setUser(userId: string, user: UserModel) {
     if (!this.store) throw new Error("Not loaded");
     this.store.users[userId] = user;
@@ -177,13 +202,6 @@ export class FileDatabase implements Database {
   getUser(userId: string): UserModel {
     if (!this.store) throw new Error("Not loaded");
     const user = this.store.users[userId];
-    if (!user) {
-      return {
-        favoriteElementIds: [],
-        updatedAt: undefined,
-        version: 0,
-      };
-    }
     return user;
   }
 }

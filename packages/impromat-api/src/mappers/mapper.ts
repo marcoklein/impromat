@@ -4,8 +4,8 @@
 export interface Mapper<
   DTO_TYPE,
   MODEL_TYPE,
-  DTO_PROPS extends {},
-  MODEL_PROPS extends {}
+  DTO_PROPS = unknown,
+  MODEL_PROPS = unknown
 > {
   fromDtoToModel(dto: DTO_TYPE, props: DTO_PROPS): MODEL_TYPE;
   fromModelToDto(model: MODEL_TYPE, props: MODEL_PROPS): DTO_TYPE;

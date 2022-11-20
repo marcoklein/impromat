@@ -1,5 +1,5 @@
-import "mocha";
 import { expect } from "chai";
+import { describe } from "mocha";
 import { MutationPushWorkshopsArgs } from "../../src/graphql/schema.gen";
 import { createGraphQLTestContext } from "./graphql-test-utils";
 import {
@@ -7,7 +7,7 @@ import {
   PUSH_WORKSHOPS_MUTATION,
 } from "./shared-queries";
 
-describe("Workshop Replication", async () => {
+xdescribe("Sections Replication", async () => {
   const { client, cleanup } = await createGraphQLTestContext();
 
   const updatedAtForInsertion = Date.now() + 10;

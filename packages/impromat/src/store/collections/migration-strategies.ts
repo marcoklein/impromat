@@ -6,6 +6,12 @@ const logger = rootLogger.extend("migration");
 export const meSchemaVersion = 0;
 export const meMigrationStrategies: MigrationStrategies = {};
 
+export const elementSchemaVersion = 0;
+export const elementMigrationStrategies: MigrationStrategies = {};
+
+export const sectionSchemaVersion = 0;
+export const sectionMigrationStrategies: MigrationStrategies = {};
+
 export const userSchemaVersion = 0;
 export const userMigrationStrategies: MigrationStrategies = {};
 

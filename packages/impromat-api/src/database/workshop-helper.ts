@@ -84,6 +84,7 @@ export class WorkshopHelper {
 
     const defaultElement: Element = {
       id: this.generateUniqueId(),
+      version: 0,
       name: "Unnamed",
       markdown: "",
       note: "",
@@ -106,6 +107,7 @@ export class WorkshopHelper {
   pushSection(workshop: Workshop, inputSection: Partial<Section>) {
     const defaultSection: Section = {
       id: this.generateUniqueId(),
+      version: 0,
       elements: [],
       name: "Unnamed",
       isVisible: true,

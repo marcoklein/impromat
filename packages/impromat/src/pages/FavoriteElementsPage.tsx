@@ -8,12 +8,31 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRxCollection } from "rxdb-hooks";
 import { WorkshopElementPreviewItemComponent } from "../components/WorkshopElementPreviewItemComponent";
+import { MeCollection } from "../store/collections/me-collection";
 import { Element } from "../store/schema.gen";
+import { useComponentLogger } from "../use-component-logger";
 
 export const FavoriteElementsPage: React.FC = () => {
   const [favoriteElements] = useState<Element[]>();
+  const meCollection = useRxCollection<MeCollection>("me");
+  const logger = useComponentLogger("FavoriteElementsPage");
+
+  useEffect(() => {
+    if (meCollection) {
+      setTimeout(() => {
+        (async () => {
+          const me = await meCollection.findOne("me").exec();
+          const myUser = await me?.populate("user");
+
+          logger("me %O", me?.toJSON());
+          logger("myUser %O", myUser?.toJSON());
+        })();
+      }, 1000);
+    }
+  }, [meCollection, logger]);
 
   return (
     <IonPage>
@@ -27,6 +46,7 @@ export const FavoriteElementsPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
+        {/* Add Account required... */}
         <IonList>
           {favoriteElements?.map((element) => (
             <WorkshopElementPreviewItemComponent

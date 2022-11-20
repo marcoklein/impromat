@@ -2,17 +2,21 @@ import { addRxPlugin, createRxDatabase, RxDatabase } from "rxdb";
 import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
 import { getRxStorageDexie } from "rxdb/plugins/dexie";
 import { RxDBJsonDumpPlugin } from "rxdb/plugins/json-dump";
+import { getRxStorageMemory } from "rxdb/plugins/memory";
 import { RxDBMigrationPlugin } from "rxdb/plugins/migration";
 import { RxDBReplicationGraphQLPlugin } from "rxdb/plugins/replication-graphql";
 import { RxDBUpdatePlugin } from "rxdb/plugins/update";
 import { GraphQLContextType } from "../graphql/graphql-context";
 import { rootLogger } from "../logger";
+import { elementCollection } from "./collections/element-collection";
 import { MeCollection, meCollection } from "./collections/me-collection";
 import { enableMeReplication } from "./collections/me-replication";
+import { sectionCollection } from "./collections/section-collection";
+import { enableSectionReplication } from "./collections/section-replication";
 import { UserCollection, userCollection } from "./collections/user-collection";
 import { enableUserReplication } from "./collections/user-replication";
 import {
-  createWorkshopCollection,
+  workshopCollection,
   WorkshopCollection,
 } from "./collections/workshop-collection";
 import { enableWorkshopReplication } from "./collections/workshop-replication";
@@ -38,17 +42,23 @@ export const initialize = async (apiContext: GraphQLContextType) => {
   const logger = rootLogger.extend("store-initialize");
   const db = await createRxDatabase<ImpromatRxDatabase>({
     name: "impromat-production",
-    storage: getRxStorageDexie(),
+    storage:
+      process.env.NODE_ENV === "development"
+        ? getRxStorageMemory()
+        : getRxStorageDexie(),
   });
 
   const collections = await db.addCollections({
-    workshops: createWorkshopCollection(),
+    workshops: workshopCollection,
     users: userCollection,
     me: meCollection,
+    elements: elementCollection,
+    sections: sectionCollection,
   });
   enableWorkshopReplication(collections.workshops);
   enableMeReplication(collections.me, apiContext);
   enableUserReplication(collections.users);
+  enableSectionReplication(collections.sections);
 
   logger("initialized");
   return db;

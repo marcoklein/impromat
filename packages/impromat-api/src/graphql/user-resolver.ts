@@ -29,8 +29,10 @@ export function userPushRowInputHandler(
     });
     return userConflict;
   }
+  const createdAt = Date.now();
   const newUser: UserModel = {
-    updatedAt: Date.now(),
+    createdAt,
+    updatedAt: createdAt,
     favoriteElementIds:
       newDocumentState.favoriteElements ??
       masterState?.favoriteElementIds ??

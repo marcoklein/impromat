@@ -6,6 +6,9 @@ import { environment } from "../environment";
 import { UserMapper } from "../mappers/user-mapper";
 import { Element, Resolvers, User } from "./schema.gen";
 import { userPushRowInputHandler } from "./user-resolver";
+import { prepareDocumentsForPull } from "./sort-models";
+import { ElementMapper } from "../mappers/element-mapper";
+import { ElementInputMapper } from "../mappers/element-input-mapper";
 
 export const resolvers: Resolvers = {
   SafeInt: SafeIntResolver,
@@ -41,7 +44,7 @@ export const resolvers: Resolvers = {
       const minUpdatedAt = args.checkpoint ? args.checkpoint.updatedAt : 0;
 
       const user = database.getUser(userId);
-      if (user && user.updatedAt && user.updatedAt >= minUpdatedAt) {
+      if (user && user.updatedAt > minUpdatedAt) {
         return {
           documents: [new UserMapper().fromModelToDto(user, { userId })],
           checkpoint: {
@@ -57,6 +60,12 @@ export const resolvers: Resolvers = {
           updatedAt: minUpdatedAt,
         },
       };
+    },
+    pullElements: (root, args, ctx, info) => {
+      if (!ctx.session?.userId) throw new Error("Unauthorized");
+      const { database } = ctx;
+      const documents = database.getElements(ctx.session.userId) ?? [];
+      return prepareDocumentsForPull(documents, args, new ElementMapper(), {});
     },
     pullWorkshops: (root, args, ctx, info) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
@@ -117,11 +126,28 @@ export const resolvers: Resolvers = {
       return generateGoogleAuthUrl();
     },
     me: (root, args, ctx) => {
+      console.log("Me query.");
       const userId = ctx.session?.userId;
       if (!userId) return undefined;
-      const user = ctx.database.getUser(userId);
+      let user = ctx.database.getUser(userId);
+      console.log("Existing user:", !!user);
       if (!user) {
-        return { userId };
+        console.log(
+          "No user info found for userId %s. Creating a new user info object.",
+          userId
+        );
+        const createdAt = Date.now();
+        const initialUser: UserModel = {
+          favoriteElementIds: [],
+          createdAt: createdAt,
+          updatedAt: createdAt,
+          version: 0,
+        };
+        ctx.database.setUser(userId, initialUser);
+        return {
+          userId,
+          user: new UserMapper().fromModelToDto(initialUser, { userId }),
+        };
       }
       return {
         userId,
@@ -150,6 +176,40 @@ export const resolvers: Resolvers = {
         return [conflict];
       }
       return [];
+    },
+    pushElements: (root, args, ctx) => {
+      if (!ctx.session?.userId) throw new Error("Unauthorized");
+      const { database } = ctx;
+      console.log("## received docs");
+      const pushedRows = args.elementPushRows;
+      let models = database.getElements(ctx.session.userId) ?? [];
+      const conflicts: Element[] = [];
+
+      for (const row of pushedRows) {
+        const docId = row.newDocumentState.id;
+        const docCurrentMaster = models.find((d) => d.id === docId);
+        if (
+          docCurrentMaster &&
+          (row.assumedMasterState?.version !== docCurrentMaster.version ||
+            row.newDocumentState.version !== docCurrentMaster.version + 1)
+        ) {
+          conflicts.push(new ElementMapper().fromModelToDto(docCurrentMaster));
+          continue;
+        }
+
+        const doc = row.newDocumentState;
+        const updatedWorkshops = models.filter((d) => d.id !== doc.id);
+        const docModel = new ElementInputMapper().fromDtoToModel(doc);
+        updatedWorkshops.push(docModel);
+        models = updatedWorkshops;
+      }
+
+      const updatedAt = Date.now();
+      models.forEach((model) => {
+        model.updatedAt = updatedAt;
+      });
+      database.setElements(ctx.session.userId, models);
+      return conflicts;
     },
     pushWorkshops: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");

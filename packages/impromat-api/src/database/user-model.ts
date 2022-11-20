@@ -1,5 +1,6 @@
 export interface UserModel {
   version: number;
-  updatedAt: number | undefined;
+  createdAt: number;
+  updatedAt: number;
   favoriteElementIds: string[];
 }

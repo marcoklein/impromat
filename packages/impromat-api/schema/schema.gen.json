@@ -71,6 +71,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "version": {
+          "type": "number"
         }
       },
       "required": [
@@ -78,7 +81,8 @@
         "markdown",
         "name",
         "note",
-        "tags"
+        "tags",
+        "version"
       ],
       "type": "object"
     },
@@ -122,12 +126,16 @@
             "string",
             "null"
           ]
+        },
+        "version": {
+          "type": "number"
         }
       },
       "required": [
         "elements",
         "id",
-        "name"
+        "name",
+        "version"
       ],
       "type": "object"
     }

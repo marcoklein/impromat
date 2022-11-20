@@ -62,8 +62,10 @@ describe("Schema Validation", async () => {
         {
           id: "123",
           name: "name",
+          version: 0,
           elements: [
             {
+              version: 0,
               id: "123",
               markdown: "",
               name: "name",

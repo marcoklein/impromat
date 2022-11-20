@@ -45,7 +45,7 @@ describe("User Replication", async () => {
     testContext.changeUser(userId);
   });
 
-  it("should return no user info", async () => {
+  it("should return default user info", async () => {
     // given
     const userId = "test-user-id";
     testContext.changeUser(userId);
@@ -54,17 +54,21 @@ describe("User Replication", async () => {
     const data = await testContext.client.request(query);
     // then
     expect(data.me.userId).to.equal(userId);
-    expect(data.me.user).to.be.null;
+    expect(data.me.user.id).to.equal(userId);
+    expect(data.me.user.version).to.equal(0);
+    expect(data.me.user.favoriteElements).to.be.empty;
   });
 
   it("should set favorite element", async () => {
     // given
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {
-      assumedMasterState: undefined,
+      assumedMasterState: {
+        version: 0,
+      },
       newDocumentState: {
         favoriteElements: ["element-id", "second-element-id"],
-        version: 0,
+        version: 1,
       },
     };
     // when
@@ -83,7 +87,7 @@ describe("User Replication", async () => {
     // then
     expect(data.me.userId).to.equal(userId);
     expect(data.me.user.id).to.equal(userId);
-    expect(data.me.user.version).to.equal(0);
+    expect(data.me.user.version).to.equal(1);
     expect(data.me.user.favoriteElements).to.have.lengthOf(2);
     expect(data.me.user.favoriteElements[0].id).to.equal("element-id");
     expect(data.me.user.favoriteElements[0].name).to.equal("test element");
@@ -113,7 +117,7 @@ describe("User Replication", async () => {
     // then
     expect(data.pushUser).not.to.be.null;
     expect(data.pushUser.id).to.equal(userId);
-    expect(data.pushUser.version).to.equal(0);
+    expect(data.pushUser.version).to.equal(1);
     expect(data.pushUser.favoriteElements).to.have.lengthOf(2);
   });
 
@@ -137,7 +141,7 @@ describe("User Replication", async () => {
     // then
     expect(data.pushUser).not.to.be.null;
     expect(data.pushUser.id).to.equal(userId);
-    expect(data.pushUser.version).to.equal(0);
+    expect(data.pushUser.version).to.equal(1);
     expect(data.pushUser.favoriteElements).to.have.lengthOf(2);
   });
 

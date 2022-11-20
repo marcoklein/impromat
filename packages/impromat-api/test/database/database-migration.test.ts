@@ -14,7 +14,7 @@ describe("Schema Migration", async () => {
     await mkdir(".cache/test/database", { recursive: true });
   });
 
-  it("should migrated database file", async () => {
+  xit("should migrated database file", async () => {
     // given
     const schemaValidator = new SchemaValidator();
     await mkdir(".cache/test/database", { recursive: true });

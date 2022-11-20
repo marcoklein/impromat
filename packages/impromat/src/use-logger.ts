@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { rootLogger } from "./logger";
 
 /**
- * Logger to be used in React components or pages.
+ * Base logger.
  *
  * @param namespace
  * @returns
