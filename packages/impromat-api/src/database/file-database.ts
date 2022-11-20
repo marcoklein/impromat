@@ -53,6 +53,12 @@ export class FileDatabase implements Database {
     this.save();
   }
 
+  setSections(userId: string, sections: SectionModel[]) {
+    if (!this.store) throw new Error("Not loaded");
+    this.store.sectionsOfUsers[userId] = sections;
+    this.save();
+  }
+
   async load() {
     if (fs.existsSync(path.join(this.storagePath, "db.json"))) {
       try {

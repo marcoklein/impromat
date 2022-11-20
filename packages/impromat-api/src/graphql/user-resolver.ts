@@ -34,7 +34,7 @@ export function userPushRowInputHandler(
     createdAt,
     updatedAt: createdAt,
     favoriteElementIds:
-      newDocumentState.favoriteElements ??
+      newDocumentState.favoriteElementRefs ??
       masterState?.favoriteElementIds ??
       [],
     version: !masterState ? START_VERSION : newDocumentState.version,

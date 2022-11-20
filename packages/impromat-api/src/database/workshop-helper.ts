@@ -122,14 +122,15 @@ export class WorkshopHelper {
   newWorkshop(
     workshopInput: Partial<Pick<Workshop, "name" | "description">>
   ): Workshop {
-    return {
-      id: this.generateUniqueId(),
-      deleted: false,
-      name: workshopInput.name ?? "Unnamed",
-      description: workshopInput.description ?? "",
-      sections: [],
-      updatedAt: Date.now(),
-    };
+    throw new Error("not implemented");
+    // return {
+    //   id: this.generateUniqueId(),
+    //   deleted: false,
+    //   name: workshopInput.name ?? "Unnamed",
+    //   description: workshopInput.description ?? "",
+    //   sections: [],
+    //   updatedAt: Date.now(),
+    // };
   }
 
   flattenSections(workshop: Workshop) {

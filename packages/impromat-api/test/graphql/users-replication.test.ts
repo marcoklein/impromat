@@ -75,7 +75,7 @@ describe("Users Replication", async () => {
           assumedMasterState: undefined,
           newDocumentState: {
             version: 0,
-            favoriteElements: ["element-id"],
+            favoriteElementRefs: ["element-id"],
           },
         },
       ],
@@ -116,7 +116,7 @@ describe("Users Replication", async () => {
           assumedMasterState: undefined,
           newDocumentState: {
             version: 0,
-            favoriteElements: ["element-id"],
+            favoriteElementRefs: ["element-id"],
           },
         },
       ],
@@ -139,14 +139,14 @@ describe("Users Replication", async () => {
           assumedMasterState: undefined,
           newDocumentState: {
             version: 0,
-            favoriteElements: ["element-id"],
+            favoriteElementRefs: ["element-id"],
           },
         },
         {
           assumedMasterState: undefined,
           newDocumentState: {
             version: 0,
-            favoriteElements: ["element-id"],
+            favoriteElementRefs: ["element-id"],
           },
         },
       ],

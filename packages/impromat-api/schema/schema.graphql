@@ -16,6 +16,10 @@ type Query {
   """
   pullElements(checkpoint: PullCheckpointInput!, limit: Int!): ElementPullBulk!
   """
+  Returns new sections since last sync.
+  """
+  pullSections(checkpoint: PullCheckpointInput!, limit: Int!): SectionPullBulk!
+  """
   Returns new users since last sync.
   """
   pullUsers(checkpoint: PullCheckpointInput!, limit: Int!): UserPullBulk!
@@ -89,20 +93,36 @@ input SectionPushRowInput {
   newDocumentState: SectionInput!
 }
 
+input UserPushRowInput {
+  assumedMasterState: UserInput
+  newDocumentState: UserInput!
+}
+
 input WorkshopInput {
   id: ID!
+  version: Int!
   deleted: Boolean
+
+  """
+  @deprecated("Updated at is only set by the server")
+  """
   updatedAt: SafeInt
   name: String
   description: String
-  sections: [SectionInput]
+  """
+  Reference to sections of workshop.
+  """
+  sectionRefs: [ID!]
 }
 
 input SectionInput {
   id: ID!
   version: Int!
   name: String
-  elements: [ElementInput!]
+  """
+  Reference to section elements.
+  """
+  elementRefs: [ID!]
   note: String
   color: String
   isVisible: Boolean
@@ -126,6 +146,14 @@ input ElementInput {
   sourceBaseUrl: String
   licenseName: String
   licenseUrl: String
+}
+
+input UserInput {
+  version: Int!
+  """
+  Reference to the favorite elements.
+  """
+  favoriteElementRefs: [ID!]
 }
 
 type WorkshopPullBulk {
@@ -158,16 +186,6 @@ type TokenInfo {
   user: User!
 }
 
-input UserPushRowInput {
-  assumedMasterState: UserInput
-  newDocumentState: UserInput!
-}
-
-input UserInput {
-  version: Int!
-  favoriteElements: [ID!]
-}
-
 """
 Information about a user that uses Impromat.
 """
@@ -188,6 +206,7 @@ An improvisational theatre Workshop that a person can hold for their group.
 """
 type Workshop {
   id: ID!
+  version: Int!
   updatedAt: SafeInt!
   """
   For syncing purposes this flag indicates deleted workshops.

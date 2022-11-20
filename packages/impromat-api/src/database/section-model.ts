@@ -1,4 +1,6 @@
 export interface SectionModel {
+  updatedAt: number;
+
   id: string;
   version: number;
   name: string;

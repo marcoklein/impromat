@@ -67,7 +67,7 @@ describe("User Replication", async () => {
         version: 0,
       },
       newDocumentState: {
-        favoriteElements: ["element-id", "second-element-id"],
+        favoriteElementRefs: ["element-id", "second-element-id"],
         version: 1,
       },
     };
@@ -103,10 +103,10 @@ describe("User Replication", async () => {
     const userPushRowInput: UserPushRowInput = {
       assumedMasterState: {
         version: 1,
-        favoriteElements: [],
+        favoriteElementRefs: [],
       },
       newDocumentState: {
-        favoriteElements: ["element-id", "second-element-id"],
+        favoriteElementRefs: ["element-id", "second-element-id"],
         version: 1,
       },
     };
@@ -127,10 +127,10 @@ describe("User Replication", async () => {
     const userPushRowInput: UserPushRowInput = {
       assumedMasterState: {
         version: 0,
-        favoriteElements: [],
+        favoriteElementRefs: [],
       },
       newDocumentState: {
-        favoriteElements: ["element-id", "second-element-id"],
+        favoriteElementRefs: ["element-id", "second-element-id"],
         version: 3,
       },
     };

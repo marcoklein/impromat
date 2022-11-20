@@ -4,7 +4,8 @@ export const TEST_DATA = {
   simpleWorkshop: (): Workshop => ({
     id: "1",
     name: "workshop",
-    description: "descriptiO",
+    version: 0,
+    description: "description",
     sections: [
       {
         id: "section-id",

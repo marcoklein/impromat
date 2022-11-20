@@ -1,14 +1,23 @@
 import { SafeIntResolver } from "graphql-scalars";
 import { generateGoogleAuthUrl } from "../authentication/google-auth";
-import { UserModel } from "../database/user-model";
 import { DatabaseUtils } from "../database/database-utils";
+import { UserModel } from "../database/user-model";
 import { environment } from "../environment";
-import { UserMapper } from "../mappers/user-mapper";
-import { Element, Resolvers, User } from "./schema.gen";
-import { userPushRowInputHandler } from "./user-resolver";
-import { prepareDocumentsForPull } from "./sort-models";
-import { ElementMapper } from "../mappers/element-mapper";
 import { ElementInputMapper } from "../mappers/element-input-mapper";
+import { ElementMapper } from "../mappers/element-mapper";
+import {
+  fromSectionInputDtoToSectionModel,
+  fromSectionModelToSectionDto,
+} from "../mappers/section-mapper";
+import { UserMapper } from "../mappers/user-mapper";
+import {
+  fromWorkshopInputDtoToWorkshopModel,
+  fromWorkshopModelToWorkshopDto,
+} from "../mappers/workshop-mapper";
+import { handlePushRows } from "./handle-push-rows";
+import { Element, Resolvers } from "./schema.gen";
+import { prepareDocumentsForPull } from "./sort-models";
+import { userPushRowInputHandler } from "./user-resolver";
 
 export const resolvers: Resolvers = {
   SafeInt: SafeIntResolver,
@@ -65,62 +74,31 @@ export const resolvers: Resolvers = {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       const { database } = ctx;
       const documents = database.getElements(ctx.session.userId) ?? [];
-      return prepareDocumentsForPull(documents, args, new ElementMapper(), {});
+      return prepareDocumentsForPull(
+        documents,
+        args,
+        new ElementMapper().fromModelToDto
+      );
+    },
+    pullSections: (root, args, ctx, info) => {
+      if (!ctx.session?.userId) throw new Error("Unauthorized");
+      const { database } = ctx;
+      const documents = database.getSections(ctx.session.userId) ?? [];
+      return prepareDocumentsForPull(
+        documents,
+        args,
+        fromSectionModelToSectionDto
+      );
     },
     pullWorkshops: (root, args, ctx, info) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       const { database } = ctx;
-      const limit = args.limit;
-      const lastId = args.checkpoint ? args.checkpoint.id : "";
-      const minUpdatedAt = args.checkpoint ? args.checkpoint.updatedAt : 0;
-
-      const userWorkshops = database.getWorkshops(ctx.session.userId);
-      const sortedDocuments = userWorkshops.sort((a, b) => {
-        if (a.updatedAt === b.updatedAt) {
-          if (a.id > b.id) return 1;
-          if (a.id < b.id) return -1;
-          else return 0;
-        }
-        if (a.updatedAt > b.updatedAt) return 1;
-        return -1; // a.updatedAt < b.updatedAt
-      });
-
-      const filterForMinUpdatedAtAndId = sortedDocuments.filter((doc) => {
-        if (doc.updatedAt < minUpdatedAt) return false;
-        if (doc.updatedAt > minUpdatedAt) return true;
-        if (doc.updatedAt === minUpdatedAt) {
-          if (doc.id > lastId) return true;
-        }
-        return false;
-      });
-
-      const limitedDocuments = filterForMinUpdatedAtAndId.slice(0, limit);
-
-      // use the last document for the checkpoint
-      function getCheckpoint(docs: any[]): {
-        id: string;
-        updatedAt: number;
-      } {
-        if (docs.length > 0) {
-          const lastDoc = docs[docs.length - 1];
-          return {
-            id: lastDoc.id,
-            updatedAt: lastDoc.updatedAt,
-          };
-        }
-        return {
-          id: lastId,
-          updatedAt: minUpdatedAt,
-        };
-      }
-
-      // console.log("## sending documents:");
-      // console.log(JSON.stringify(limitedDocuments, null, 4));
-
-      return {
-        documents: limitedDocuments,
-        checkpoint: getCheckpoint(limitedDocuments),
-      };
+      const documents = database.getWorkshops(ctx.session.userId) ?? [];
+      return prepareDocumentsForPull(
+        documents,
+        args,
+        fromWorkshopModelToWorkshopDto
+      );
     },
     googleAuthUrl: () => {
       return generateGoogleAuthUrl();
@@ -182,79 +160,38 @@ export const resolvers: Resolvers = {
       const { database } = ctx;
       console.log("## received docs");
       const pushedRows = args.elementPushRows;
-      let models = database.getElements(ctx.session.userId) ?? [];
-      const conflicts: Element[] = [];
-
-      for (const row of pushedRows) {
-        const docId = row.newDocumentState.id;
-        const docCurrentMaster = models.find((d) => d.id === docId);
-        if (
-          docCurrentMaster &&
-          (row.assumedMasterState?.version !== docCurrentMaster.version ||
-            row.newDocumentState.version !== docCurrentMaster.version + 1)
-        ) {
-          conflicts.push(new ElementMapper().fromModelToDto(docCurrentMaster));
-          continue;
-        }
-
-        const doc = row.newDocumentState;
-        const updatedWorkshops = models.filter((d) => d.id !== doc.id);
-        const docModel = new ElementInputMapper().fromDtoToModel(doc);
-        updatedWorkshops.push(docModel);
-        models = updatedWorkshops;
-      }
-
-      const updatedAt = Date.now();
-      models.forEach((model) => {
-        model.updatedAt = updatedAt;
+      const inputModels = database.getElements(ctx.session.userId) ?? [];
+      const { models, conflicts } = handlePushRows(inputModels, pushedRows, {
+        fromInputDtoToModel: new ElementInputMapper().fromDtoToModel,
+        fromModelToDto: new ElementMapper().fromModelToDto,
       });
       database.setElements(ctx.session.userId, models);
+      return conflicts;
+    },
+    pushSections: (root, args, ctx) => {
+      if (!ctx.session?.userId) throw new Error("Unauthorized");
+      const { database } = ctx;
+      console.log("## received docs");
+      const pushedRows = args.sectionPushRows;
+      const inputModels = database.getSections(ctx.session.userId) ?? [];
+      const { models, conflicts } = handlePushRows(inputModels, pushedRows, {
+        fromInputDtoToModel: fromSectionInputDtoToSectionModel,
+        fromModelToDto: fromSectionModelToSectionDto,
+      });
+      database.setSections(ctx.session.userId, models);
       return conflicts;
     },
     pushWorkshops: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       const { database } = ctx;
       console.log("## received docs");
-      // console.log(JSON.stringify(args.workshopPushRows, null, 4));
       const pushedRows = args.workshopPushRows;
-      let userWorkshops = database.getWorkshops(ctx.session.userId);
-      const conflicts = [];
-      const writtenDocs = [];
-
-      for (const row of pushedRows) {
-        const docId = row.newDocumentState.id;
-        const docCurrentMaster = userWorkshops.find((d) => d.id === docId);
-        if (
-          docCurrentMaster &&
-          row.assumedMasterState &&
-          docCurrentMaster.updatedAt !== row.assumedMasterState.updatedAt
-        ) {
-          conflicts.push(docCurrentMaster);
-          continue;
-        }
-
-        const doc = row.newDocumentState;
-        if (typeof doc.updatedAt !== "number") {
-          console.error(`updatedAt is not a number ${doc.updatedAt}`);
-          throw new Error(`updatedAt is not a number ${doc.updatedAt}`);
-        }
-        // doc.updatedAt = Date.now();
-        const updatedWorkshops = userWorkshops.filter((d) => d.id !== doc.id);
-        updatedWorkshops.push(doc);
-        writtenDocs.push(doc);
-        userWorkshops = updatedWorkshops;
-      }
-
-      // TODO publish in stream
-
-      // console.log("## current documents:");
-      // console.log(JSON.stringify(userWorkshops, null, 4));
-      if (conflicts.length) {
-        console.log("## conflicts:");
-        console.log(JSON.stringify(conflicts, null, 4));
-      }
-
-      database.setWorkshops(ctx.session.userId, userWorkshops);
+      const inputModels = database.getWorkshops(ctx.session.userId) ?? [];
+      const { models, conflicts } = handlePushRows(inputModels, pushedRows, {
+        fromInputDtoToModel: fromWorkshopInputDtoToWorkshopModel,
+        fromModelToDto: fromWorkshopModelToWorkshopDto,
+      });
+      database.setWorkshops(ctx.session.userId, models);
       return conflicts;
     },
     logout: async (root, args, ctx) => {

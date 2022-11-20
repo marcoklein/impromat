@@ -1,16 +1,12 @@
-import { Mapper } from "../mappers/mapper";
-import { UserMapper } from "../mappers/user-mapper";
 import { PullCheckpointInput } from "./schema.gen";
 
 export function prepareDocumentsForPull<
   ModelType extends { updatedAt: number; id: string },
-  DtoType,
-  Props = never
+  DtoType
 >(
   documents: Array<ModelType>,
   args: { checkpoint: PullCheckpointInput; limit: number },
-  mapper: Mapper<DtoType, ModelType, unknown, Props>,
-  props: Props
+  fromModelToDtoMapper: (model: ModelType) => DtoType
 ) {
   const limit = args.limit;
   const lastId = args.checkpoint ? args.checkpoint.id : "";
@@ -57,7 +53,7 @@ export function prepareDocumentsForPull<
 
   return {
     documents: limitedDocuments.map((document) =>
-      mapper.fromModelToDto(document, props)
+      fromModelToDtoMapper(document)
     ),
     checkpoint: getCheckpoint(limitedDocuments),
   };

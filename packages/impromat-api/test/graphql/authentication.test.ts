@@ -1,5 +1,8 @@
 import { expect } from "chai";
-import { Workshop } from "../../src/graphql/schema.gen";
+import {
+  MutationPushWorkshopsArgs,
+  WorkshopInput,
+} from "../../src/graphql/schema.gen";
 import { createGraphQLTestContext } from "./graphql-test-utils";
 import {
   PULL_WORKSHOPS_QUERY,
@@ -9,20 +12,21 @@ import {
 describe("Workshop Sharing Accross Users", async () => {
   const { client, cleanup, changeUser } = await createGraphQLTestContext();
 
-  const updatedAtForInsertion = Date.now() + 10;
-  const pushedWorkshop: Workshop = {
+  let updatedAtForInsertion = 0;
+  const pushedWorkshop: WorkshopInput = {
     id: "1",
+    version: 0,
     updatedAt: updatedAtForInsertion,
     deleted: false,
     name: "Test",
     description: "Test",
-    sections: [],
+    sectionRefs: [],
   };
 
   it("should add a new workshop for user a", async () => {
     // given
     changeUser("a");
-    const args = {
+    const args: MutationPushWorkshopsArgs = {
       workshopPushRows: [
         {
           newDocumentState: { ...pushedWorkshop },
@@ -46,9 +50,9 @@ describe("Workshop Sharing Accross Users", async () => {
     // then
     const checkpoint = data.pullWorkshops.checkpoint;
     const documents = data.pullWorkshops.documents;
-    expect(documents).to.deep.equal([pushedWorkshop]);
+    expect(documents[0].id).to.equal("1");
     expect(checkpoint.id).to.equal("1");
-    expect(checkpoint.updatedAt).to.equal(updatedAtForInsertion);
+    expect(checkpoint.updatedAt + 1000).to.be.greaterThan(Date.now());
   });
 
   it("should not return workshops to user b", async () => {

@@ -9,6 +9,7 @@ export interface Database {
   getWorkshops(userId: string): any[];
   getElements(userId: string): ElementModel[] | undefined;
   setElements(userId: string, elements: ElementModel[]): void;
+  setSections(userId: string, sections: SectionModel[]): void;
   getSections(userId: string): SectionModel[] | undefined;
   setUser(userId: string, user: UserModel): void;
   getUser(userId: string): UserModel | undefined;

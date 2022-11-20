@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { gql } from "graphql-request";
 import { describe } from "mocha";
 import { MutationPushElementsArgs } from "../../src/graphql/schema.gen";
-import { TEST_DATA } from "../test-data-provider";
 import { createGraphQLTestContext } from "./graphql-test-utils";
 
 const QUERY_FIELDS_FRAGMENT = gql`

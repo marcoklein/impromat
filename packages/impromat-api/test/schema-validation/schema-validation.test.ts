@@ -12,6 +12,7 @@ describe("Schema Validation", async () => {
     );
     const data: Workshop = {
       id: "1",
+      version: 0,
       name: "workshop",
       description: "",
       sections: [],
@@ -56,6 +57,7 @@ describe("Schema Validation", async () => {
     );
     const data: Workshop = {
       id: "1",
+      version: 0,
       name: "workshop",
       description: "",
       sections: [

@@ -142,6 +142,8 @@ export type Query = {
   me?: Maybe<TokenInfo>;
   /** Returns new elements since last sync. */
   pullElements: ElementPullBulk;
+  /** Returns new sections since last sync. */
+  pullSections: SectionPullBulk;
   /** Returns new users since last sync. */
   pullUsers: UserPullBulk;
   /** Returns new workshops since last sync. */
@@ -152,6 +154,12 @@ export type Query = {
 
 
 export type QueryPullElementsArgs = {
+  checkpoint: PullCheckpointInput;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryPullSectionsArgs = {
   checkpoint: PullCheckpointInput;
   limit: Scalars['Int'];
 };
@@ -189,7 +197,8 @@ export type Section = {
 
 export type SectionInput = {
   color?: InputMaybe<Scalars['String']>;
-  elements?: InputMaybe<Array<ElementInput>>;
+  /** Reference to section elements. */
+  elementRefs?: InputMaybe<Array<Scalars['ID']>>;
   id: Scalars['ID'];
   isCollapsed?: InputMaybe<Scalars['Boolean']>;
   isVisible?: InputMaybe<Scalars['Boolean']>;
@@ -223,7 +232,8 @@ export type User = {
 };
 
 export type UserInput = {
-  favoriteElements?: InputMaybe<Array<Scalars['ID']>>;
+  /** Reference to the favorite elements. */
+  favoriteElementRefs?: InputMaybe<Array<Scalars['ID']>>;
   version: Scalars['Int'];
 };
 
@@ -246,6 +256,7 @@ export type Workshop = {
   name: Scalars['String'];
   sections: Array<Section>;
   updatedAt: Scalars['SafeInt'];
+  version: Scalars['Int'];
 };
 
 export type WorkshopInput = {
@@ -253,8 +264,11 @@ export type WorkshopInput = {
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
-  sections?: InputMaybe<Array<InputMaybe<SectionInput>>>;
+  /** Reference to sections of workshop. */
+  sectionRefs?: InputMaybe<Array<Scalars['ID']>>;
+  /** @deprecated("Updated at is only set by the server") */
   updatedAt?: InputMaybe<Scalars['SafeInt']>;
+  version: Scalars['Int'];
 };
 
 export type WorkshopPullBulk = {
@@ -438,6 +452,7 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   googleAuthUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes['TokenInfo']>, ParentType, ContextType>;
   pullElements?: Resolver<ResolversTypes['ElementPullBulk'], ParentType, ContextType, RequireFields<QueryPullElementsArgs, 'checkpoint' | 'limit'>>;
+  pullSections?: Resolver<ResolversTypes['SectionPullBulk'], ParentType, ContextType, RequireFields<QueryPullSectionsArgs, 'checkpoint' | 'limit'>>;
   pullUsers?: Resolver<ResolversTypes['UserPullBulk'], ParentType, ContextType, RequireFields<QueryPullUsersArgs, 'checkpoint' | 'limit'>>;
   pullWorkshops?: Resolver<ResolversTypes['WorkshopPullBulk'], ParentType, ContextType, RequireFields<QueryPullWorkshopsArgs, 'checkpoint' | 'limit'>>;
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -491,6 +506,7 @@ export type WorkshopResolvers<ContextType = GraphQLContext, ParentType extends R
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sections?: Resolver<Array<ResolversTypes['Section']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['SafeInt'], ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

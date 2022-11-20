@@ -1,144 +1,110 @@
 import { expect } from "chai";
+import { gql } from "graphql-request";
 import { describe } from "mocha";
-import { MutationPushWorkshopsArgs } from "../../src/graphql/schema.gen";
+import { MutationPushSectionsArgs } from "../../src/graphql/schema.gen";
 import { createGraphQLTestContext } from "./graphql-test-utils";
-import {
-  PULL_WORKSHOPS_QUERY,
-  PUSH_WORKSHOPS_MUTATION,
-} from "./shared-queries";
 
-xdescribe("Sections Replication", async () => {
-  const { client, cleanup } = await createGraphQLTestContext();
+const QUERY_FIELDS_FRAGMENT = gql`
+  fragment QueryFields on Section {
+    id
+    version
+    name
+    elements {
+      id
+    }
+    note
+    color
+    isVisible
+    isCollapsed
+  }
+`;
 
-  const updatedAtForInsertion = Date.now() + 10;
-  const updatedAtForUpdate = Date.now() + 15;
-  const updatedAtForMasterUpdate = Date.now() + 20;
+const PUSH_MUTATION = gql`
+  mutation PushMutation($sectionPushRows: [SectionPushRowInput!]!) {
+    pushSections(sectionPushRows: $sectionPushRows) {
+      ...QueryFields
+    }
+  }
+  ${QUERY_FIELDS_FRAGMENT}
+`;
 
-  it("should return an empty workshop list", async () => {
+const PULL_QUERY = gql`
+  query PullQuery($checkpoint: PullCheckpointInput!, $limit: Int!) {
+    pullSections(checkpoint: $checkpoint, limit: $limit) {
+      documents {
+        ...QueryFields
+      }
+      checkpoint {
+        id
+        updatedAt
+      }
+    }
+  }
+  ${QUERY_FIELDS_FRAGMENT}
+`;
+
+describe("Sections Replication", async () => {
+  let testContext: Awaited<ReturnType<typeof createGraphQLTestContext>>;
+  const userId = "test-user-id";
+
+  before(async () => {
+    testContext = await createGraphQLTestContext();
+    testContext.changeUser(userId);
+  });
+
+  it("should return an empty sections list", async () => {
     // given
     const args = {
       checkpoint: { id: "", updatedAt: 0 },
       limit: 1,
     };
     // when
-    const data = await client.request(PULL_WORKSHOPS_QUERY, args);
+    const data = await testContext.client.request(PULL_QUERY, args);
     // then
-    const checkpoint = data.pullWorkshops.checkpoint;
-    const documents = data.pullWorkshops.documents;
+    const checkpoint = data.pullSections.checkpoint;
+    const documents = data.pullSections.documents;
     expect(checkpoint.id).to.equal("");
     expect(checkpoint.updatedAt).to.equal(0);
     expect(documents).to.be.empty;
   });
 
-  it("should add a new workshop", async () => {
+  it("should push a new section", async () => {
     // given
-    const args: MutationPushWorkshopsArgs = {
-      workshopPushRows: [
+    const args: MutationPushSectionsArgs = {
+      sectionPushRows: [
         {
+          assumedMasterState: undefined,
           newDocumentState: {
-            id: "1",
-            updatedAt: updatedAtForInsertion,
-            deleted: false,
-            name: "Test",
-            description: "Test",
-            sections: [],
+            id: "test",
+            version: 0,
+            name: "section name",
           },
         },
       ],
     };
     // when
-    const conflicts = await client.request(PUSH_WORKSHOPS_MUTATION, args);
+    const conflicts = await testContext.client.request(PUSH_MUTATION, args);
     // then
-    expect(conflicts.pushWorkshops).to.be.empty;
+    expect(conflicts.pushSections).to.be.empty;
   });
 
-  it("should return the new workshop", async () => {
+  it("should return the new section", async () => {
     // given
     const args = {
       checkpoint: { id: "", updatedAt: 0 },
       limit: 1,
     };
     // when
-    const data = await client.request(PULL_WORKSHOPS_QUERY, args);
+    const data = await testContext.client.request(PULL_QUERY, args);
     // then
-    const checkpoint = data.pullWorkshops.checkpoint;
-    const documents = data.pullWorkshops.documents;
-    expect(checkpoint.id).to.equal("1");
-    expect(checkpoint.updatedAt).to.equal(updatedAtForInsertion);
+    const checkpoint = data.pullSections.checkpoint;
+    const documents = data.pullSections.documents;
     expect(documents).to.have.lengthOf(1);
-    expect(documents[0].id).to.equal("1");
-  });
-
-  it("should update the workshop", async () => {
-    // given
-    const args: MutationPushWorkshopsArgs = {
-      workshopPushRows: [
-        {
-          newDocumentState: {
-            id: "1",
-            updatedAt: updatedAtForUpdate,
-            deleted: false,
-            name: "TestUpdate",
-            description: "Test",
-            sections: [],
-          },
-        },
-      ],
-    };
-    // when
-    const conflicts = await client.request(PUSH_WORKSHOPS_MUTATION, args);
-    // then
-    expect(conflicts.pushWorkshops).to.be.empty;
-  });
-
-  it("should return the updated workshop", async () => {
-    // given
-    const args = {
-      checkpoint: { id: "1", updatedAt: 10 },
-      limit: 1,
-    };
-    // when
-    const data = await client.request(PULL_WORKSHOPS_QUERY, args);
-    // then
-    const checkpoint = data.pullWorkshops.checkpoint;
-    const documents = data.pullWorkshops.documents;
-    expect(checkpoint.id).to.equal("1");
-    expect(checkpoint.updatedAt).to.equal(updatedAtForUpdate);
-    expect(documents).to.have.lengthOf(1);
-    expect(documents[0].id).to.equal("1");
-  });
-
-  it("should update the workshop with assumed master state", async () => {
-    // given
-    const args: MutationPushWorkshopsArgs = {
-      workshopPushRows: [
-        {
-          assumedMasterState: {
-            id: "1",
-            updatedAt: updatedAtForUpdate,
-            deleted: false,
-            name: "TestUpdate",
-            description: "Test",
-            sections: [],
-          },
-          newDocumentState: {
-            id: "1",
-            updatedAt: updatedAtForMasterUpdate,
-            deleted: false,
-            name: "MasterTestUpdate",
-            description: "Test",
-            sections: [],
-          },
-        },
-      ],
-    };
-    // when
-    const conflicts = await client.request(PUSH_WORKSHOPS_MUTATION, args);
-    // then
-    expect(conflicts.pushWorkshops).to.be.empty;
+    expect(checkpoint.id).to.equal("test");
+    expect(checkpoint.updatedAt + 1000).to.be.greaterThan(Date.now());
   });
 
   after(() => {
-    cleanup();
+    testContext.cleanup();
   });
 });

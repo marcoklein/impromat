@@ -10,9 +10,7 @@ import {
 describe("Workshop Replication", async () => {
   const { client, cleanup } = await createGraphQLTestContext();
 
-  const updatedAtForInsertion = Date.now() + 10;
-  const updatedAtForUpdate = Date.now() + 15;
-  const updatedAtForMasterUpdate = Date.now() + 20;
+  let updatedAtForInsertion = 0;
 
   it("should return an empty workshop list", async () => {
     // given
@@ -37,11 +35,11 @@ describe("Workshop Replication", async () => {
         {
           newDocumentState: {
             id: "1",
-            updatedAt: updatedAtForInsertion,
+            version: 0,
             deleted: false,
             name: "Test",
             description: "Test",
-            sections: [],
+            sectionRefs: [],
           },
         },
       ],
@@ -64,7 +62,8 @@ describe("Workshop Replication", async () => {
     const checkpoint = data.pullWorkshops.checkpoint;
     const documents = data.pullWorkshops.documents;
     expect(checkpoint.id).to.equal("1");
-    expect(checkpoint.updatedAt).to.equal(updatedAtForInsertion);
+    expect(checkpoint.updatedAt + 1000).to.be.greaterThan(Date.now());
+    updatedAtForInsertion = checkpoint.updatedAt;
     expect(documents).to.have.lengthOf(1);
     expect(documents[0].id).to.equal("1");
   });
@@ -74,13 +73,17 @@ describe("Workshop Replication", async () => {
     const args: MutationPushWorkshopsArgs = {
       workshopPushRows: [
         {
+          assumedMasterState: {
+            version: 0,
+            id: "1",
+          },
           newDocumentState: {
             id: "1",
-            updatedAt: updatedAtForUpdate,
+            version: 1,
             deleted: false,
             name: "TestUpdate",
             description: "Test",
-            sections: [],
+            sectionRefs: [],
           },
         },
       ],
@@ -103,7 +106,7 @@ describe("Workshop Replication", async () => {
     const checkpoint = data.pullWorkshops.checkpoint;
     const documents = data.pullWorkshops.documents;
     expect(checkpoint.id).to.equal("1");
-    expect(checkpoint.updatedAt).to.equal(updatedAtForUpdate);
+    expect(checkpoint.updatedAt + 1000).to.be.greaterThan(Date.now());
     expect(documents).to.have.lengthOf(1);
     expect(documents[0].id).to.equal("1");
   });
@@ -115,19 +118,19 @@ describe("Workshop Replication", async () => {
         {
           assumedMasterState: {
             id: "1",
-            updatedAt: updatedAtForUpdate,
+            version: 1,
             deleted: false,
             name: "TestUpdate",
             description: "Test",
-            sections: [],
+            sectionRefs: [],
           },
           newDocumentState: {
             id: "1",
-            updatedAt: updatedAtForMasterUpdate,
+            version: 2,
             deleted: false,
             name: "MasterTestUpdate",
             description: "Test",
-            sections: [],
+            sectionRefs: [],
           },
         },
       ],
