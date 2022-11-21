@@ -214,18 +214,18 @@ export class WorkshopHelper {
     };
   }
 
-  async flattenSections(workshop: WorkshopDocument) {
+  flattenSections(sections: SectionDocType[]) {
     const result: Array<
       | { type: "section"; data: SectionDocType }
-      | { type: "element"; data: ElementDocType }
+      | { type: "element"; data: { id: string } }
     > = [];
-    for (const section of await workshop.populateSections()) {
+    for (const section of sections) {
       result.push({ type: "section", data: section });
       result.push(
-        ...(await section.populateElements()).map(
-          (element): { type: "element"; data: ElementDocType } => ({
+        ...section.elements.map(
+          (elementId): { type: "element"; data: { id: string } } => ({
             type: "element",
-            data: element,
+            data: { id: elementId },
           }),
         ),
       );
@@ -233,12 +233,12 @@ export class WorkshopHelper {
     return result;
   }
 
-  async moveItemFromIndexToIndex(
-    workshop: WorkshopDocument,
+  moveItemFromIndexToIndex(
+    sections: SectionDocType[],
     visibleFromIndex: number,
     visibleToIndex: number,
   ) {
-    const flatSections = await this.flattenSections(workshop);
+    const flatSections = this.flattenSections(sections);
     const visibleToGlobalIndex = (visibleIndex: number) => {
       let globalIndex = 0;
       let curVisibleIndex = 0;
@@ -280,51 +280,65 @@ export class WorkshopHelper {
       );
       const indexCorrection = from.globalIndex < to.globalIndex ? 1 : 0;
       flatSections.splice(to.globalIndex + indexCorrection, 0, ...removedItems);
-      await workshop.atomicUpdate((draft) => {
-        draft.sections = [];
-        return draft;
-      });
+
+      // TODO this code block is specific to changing the database and should go into its own function
+      let elementIdsOfSection: string[] = [];
+      let section: SectionDocType | undefined = undefined;
+      const sections: SectionDocType[] = [];
       for (const item of flatSections) {
         if (item.type === "section") {
-          item.data.elements = [];
-          await this.pushSection(workshop, item.data);
+          if (section) {
+            section.elements = elementIdsOfSection;
+            elementIdsOfSection = [];
+            sections.push(section);
+          }
+          section = item.data;
         } else if (item.type === "element") {
-          await this.pushElement(workshop, item.data);
+          elementIdsOfSection.push(item.data.id);
         }
       }
+      if (section) {
+        section.elements = elementIdsOfSection;
+        elementIdsOfSection = [];
+        sections.push(section);
+      }
+      return {
+        sections,
+      };
     } else {
       throw new Error("Reordering error");
     }
   }
 
-  // TODO this should be an observable or stream of data because elements might still be loading
-  async hasContent(workshop: WorkshopDocument) {
+  async hasContent(
+    workshop: WorkshopDocument,
+  ): Promise<"hasContent" | "noContent" | "missingData"> {
     if (!workshop.sections || !workshop.sections.length) {
-      return false;
+      return "noContent";
     }
     logger(
       "hasContent - workshop sections length = %s",
       workshop.sections.length,
     );
     if (workshop.sections.length > 1) {
-      return true;
+      return "hasContent";
     }
     if (workshop.sections.length === 1) {
       const populatedSections = await workshop.populateSections();
       logger("hasContent - populated sections = %O", populatedSections);
 
       if (populatedSections.length !== workshop.sections.length) {
-        logger("hasContent - ERROR - length does not match");
-        console.error(
-          logger.namespace,
-          "workshop-helper data is not sane: workshop sections and actual section object differ",
+        logger(
+          "hasContent - WARN - length does not match. This occurs if the database is still replicating missing documents.",
         );
-        return false;
+        return "missingData";
       }
       const firstSection = populatedSections[0];
-      return firstSection.isVisible || firstSection.elements.length > 0;
+      if (firstSection.isVisible || firstSection.elements.length > 0) {
+        return "hasContent";
+      }
     }
-    return false;
+    return "noContent";
   }
 
   generateUniqueId() {

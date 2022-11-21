@@ -11,7 +11,7 @@ import {
   workshopMigrationStrategies,
   workshopSchemaVersion,
 } from "./migration-strategies";
-import { SectionDocType, SectionDocument } from "./section-collection";
+import { SectionDocument } from "./section-collection";
 
 const schemaLiteral = {
   primaryKey: "id",

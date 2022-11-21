@@ -28,8 +28,6 @@ export function enableSectionReplication(sectionCollection: SectionCollection) {
       batchSize: 5,
       modifier: (doc: any) => {
         logger("Document before modification of push: %O", doc);
-        const currentVersion: number = doc.version ?? -1;
-        doc.version = currentVersion + 1;
         doc.elementRefs = doc.elements;
         delete doc.elements;
         logger("Sending document %O", doc);

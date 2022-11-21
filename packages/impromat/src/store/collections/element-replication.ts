@@ -16,9 +16,15 @@ export function enableElementReplication(elementCollection: ElementCollection) {
       queryBuilder: elementPullQueryBuilder,
       batchSize: 5,
       modifier: (doc: any) => {
-        logger("Retrieved document %O", doc);
+        logger("Retrieved document %o", {
+          ...doc,
+          ...{ markdown: "<omitted>" },
+        });
         doc.basedOn = doc.basedOn?.id;
-        logger("Modified document %O", doc);
+        logger("Modified document %o", {
+          ...doc,
+          ...{ markdown: "<omitted>" },
+        });
         return doc;
       },
     },

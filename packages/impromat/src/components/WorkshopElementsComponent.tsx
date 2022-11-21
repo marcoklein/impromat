@@ -2,6 +2,7 @@ import { IonList, IonReorderGroup, ItemReorderEventDetail } from "@ionic/react";
 import immer from "immer";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { TRANSLATIONS } from "../functions/shared-text";
+import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { ElementDocType } from "../store/collections/element-collection";
 import { SectionDocument } from "../store/collections/section-collection";
@@ -26,14 +27,24 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
   const [reorderWorkshopElements, setReorderWorkshopElements] = useState(false);
   const [sections, setSections] = useState<SectionDocument[]>([]);
   const [presentInputDialog] = useInputDialog();
+  const rxdb = useImpromatRxDb();
 
   useEffect(() => {
     if (workshop) {
+      const subscription = rxdb.collections.sections.$.subscribe(
+        (changeEvent) => {
+          logger("sectionCollection on change", changeEvent);
+          workshop.populateSections().then(setSections);
+        },
+      );
       workshop.populateSections().then(setSections);
+      return () => {
+        subscription.unsubscribe();
+      };
     } else {
       setSections([]);
     }
-  }, [workshop]);
+  }, [workshop, logger, rxdb]);
 
   const elementOnRemoveClick = (element: ElementDocType) => {
     if (!database) return;
@@ -57,20 +68,6 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
   ) => {
     if (!database) return;
     setReorderWorkshopElements(isReordering);
-    // TODO remove this commented code as all ordeings are saved immediately
-    // switch (event) {
-    //   case "start":
-    //     setSectionsBeforeReordering(immer(sections, () => {}));
-    //     break;
-    //   case "save":
-    //     database.updateWorkshop(workshop);
-    //     setSectionsBeforeReordering([]);
-    //     break;
-    //   case "cancel":
-    //     setSections(sectionsBeforeReordering);
-    //     setSectionsBeforeReordering([]);
-    //     break;
-    // }
   };
 
   const workshopSectionHandlers: Pick<

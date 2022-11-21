@@ -27,9 +27,9 @@ import {
   WorkshopActionTypes,
 } from "../components/WorkshopActionSheetComponent";
 import { WorkshopElementsComponent } from "../components/WorkshopElementsComponent";
+import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshops } from "../routes/shared-routes";
-import { SectionDocType } from "../store/collections/section-collection";
 import { useRxdbMutations } from "../store/use-rxdb-mutations";
 import { useWorkshop } from "../store/use-workshop";
 import { WORKSHOP_HELPER } from "../store/workshop-helper";
@@ -37,63 +37,83 @@ import { useComponentLogger } from "../use-component-logger";
 
 export const WorkshopPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const database = useRxdbMutations();
+  const mutations = useRxdbMutations();
   const history = useHistory();
   const { workshop } = useWorkshop(id);
   const logger = useComponentLogger("WorkshopPage");
-  const [workshopHasContent, setWorkshopHasContent] = useState(false);
+  const [workshopHasContent, setWorkshopHasContent] =
+    useState<Awaited<ReturnType<typeof WORKSHOP_HELPER.hasContent>>>(
+      "noContent",
+    );
+  const database = useImpromatRxDb();
   useEffect(() => {
     if (workshop) {
+      const subscription = database.$.subscribe(() => {
+        WORKSHOP_HELPER.hasContent(workshop).then(setWorkshopHasContent);
+      });
       WORKSHOP_HELPER.hasContent(workshop).then(setWorkshopHasContent);
+      return () => {
+        subscription.unsubscribe();
+      };
     }
-  }, [workshop]);
+  }, [workshop, database]);
+
+  useEffect(() => {
+    logger("Workshop has content = %O", workshopHasContent);
+  }, [workshopHasContent, logger]);
+
+  useEffect(() => {
+    logger("Workshop changed to %O", workshop);
+  }, [workshop, logger]);
 
   const [presentInputDialog] = useInputDialog();
 
   const changeWorkshopName = (newName: string) => {
-    if (!database || !workshop) return;
+    if (!mutations || !workshop) return;
     const updatedWorkshop = immer(workshop, (draft) => {
       draft.name = newName;
     });
-    database.updateWorkshop(updatedWorkshop).then(() => {
+    mutations.updateWorkshop(updatedWorkshop).then(() => {
       logger("change workshop name to %s", newName);
     });
   };
   const changeWorkshopDescription = (newDescription: string) => {
-    if (!database || !workshop) return;
+    if (!mutations || !workshop) return;
     const updatedWorkshop = immer(workshop, (draft) => {
       draft.description = newDescription;
     });
-    database.updateWorkshop(updatedWorkshop).then(() => {
+    mutations.updateWorkshop(updatedWorkshop).then(() => {
       logger("Changed workshop description");
     });
   };
   const changeSectionsOrder = (fromIndex: number, toIndex: number) => {
-    if (!database || !workshop) return;
+    if (!mutations || !workshop) return;
 
-    WORKSHOP_HELPER.moveItemFromIndexToIndex(workshop, fromIndex, toIndex);
-
-    // (async () => {
-    //   for (const section of sections) {
-    //     await database.updateWorkshopSection(id, section);
-    //     logger("Updating section of workshop");
-    //   }
-    //   const updatedWorkshop = immer(workshop, (draft) => {
-    //     draft.sections = sections.map((section) => section.id);
-    //   });
-    //   await database.updateWorkshop(updatedWorkshop);
-    //   logger("Changed sections in workshop");
-    // })();
+    (async () => {
+      const populatedSection = await workshop.sections_;
+      const { sections } = WORKSHOP_HELPER.moveItemFromIndexToIndex(
+        populatedSection.map((section) => section.toMutableJSON()),
+        fromIndex,
+        toIndex,
+      );
+      await Promise.all([
+        database.sections.bulkUpsert(sections),
+        workshop.atomicUpdate((draft) => {
+          draft.sections = sections.map(({ id }) => id);
+          return draft;
+        }),
+      ]);
+    })();
   };
 
   const onDeleteWorkshop = useCallback(() => {
-    if (!database || !workshop) return;
+    if (!mutations || !workshop) return;
     // TODO add confirmation dialog
-    database.deleteWorkshop(workshop.id).then(() => {
+    mutations.deleteWorkshop(workshop.id).then(() => {
       history.push(routeWorkshops(), { direction: "back" });
     });
     logger("Deleted workshop");
-  }, [database, history, logger, workshop]);
+  }, [mutations, history, logger, workshop]);
 
   const onRenameWorkshop = () => {
     if (!workshop) return;
@@ -107,14 +127,14 @@ export const WorkshopPage: React.FC = () => {
   };
 
   const onCreateSection = () => {
-    if (!workshop || !database) return;
+    if (!workshop || !mutations) return;
     presentInputDialog({
       header: "Section",
       initialText: "",
       emptyInputMessage: "Please type a section name.",
       placeholder: "e.g. Warmup or Games",
       onAccept: (text) => {
-        database.createNewSection(workshop.id, text);
+        mutations.createNewSection(workshop.id, text);
       },
     });
     logger("Showing add section dialog");
@@ -205,7 +225,9 @@ export const WorkshopPage: React.FC = () => {
               ></EditableItemComponent>
             )}
 
-            {workshopHasContent ? (
+            {workshopHasContent === "missingData" && <IonSpinner></IonSpinner>}
+
+            {workshopHasContent === "hasContent" ? (
               <WorkshopElementsComponent
                 key={workshop.id}
                 workshop={workshop}
