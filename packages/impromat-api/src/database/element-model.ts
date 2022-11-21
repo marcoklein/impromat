@@ -1,5 +1,6 @@
 export interface ElementModel {
   updatedAt: number;
+  deleted: boolean;
 
   id: string;
   version: number;

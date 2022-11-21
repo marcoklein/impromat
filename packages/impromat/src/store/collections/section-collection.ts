@@ -2,12 +2,15 @@ import {
   ExtractDocumentTypeFromTypedRxJsonSchema,
   RxCollection,
   RxCollectionCreator,
+  RxDocument,
   RxJsonSchema,
   toTypedRxJsonSchema,
 } from "rxdb";
+import { ImpromatRxDatabase } from "../initialize";
+import { ElementDocument } from "./element-collection";
 import {
-  sectionSchemaVersion,
   sectionMigrationStrategies,
+  sectionSchemaVersion,
 } from "./migration-strategies";
 
 const schemaLiteral = {
@@ -24,10 +27,8 @@ const schemaLiteral = {
     name: {
       type: "string",
     },
-    markdown: {
-      type: "string",
-    },
-    tags: {
+    elements: {
+      ref: "elements",
       type: "array",
       items: {
         type: "string",
@@ -36,30 +37,17 @@ const schemaLiteral = {
     note: {
       type: "string",
     },
-    basedOn: {
-      ref: "sections",
+    color: {
       type: "string",
     },
-    languageCode: {
-      type: "string",
+    isVisible: {
+      type: "boolean",
     },
-    sourceUrl: {
-      type: "string",
-    },
-    sourceName: {
-      type: "string",
-    },
-    sourceBaseUrl: {
-      type: "string",
-    },
-    licenseName: {
-      type: "string",
-    },
-    licenseUrl: {
-      type: "string",
+    isCollapsed: {
+      type: "boolean",
     },
   },
-  required: ["id", "version", "name", "markdown", "tags", "note"],
+  required: ["id", "version", "name", "elements"],
   type: "object",
 } as const;
 
@@ -67,10 +55,28 @@ export const sectionCollectionSchema = toTypedRxJsonSchema(schemaLiteral);
 export type SectionDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof sectionCollectionSchema
 >;
+export type SectionDocumentMethods = {
+  populateElements: () => Promise<ElementDocument[]>;
+  getDatabase: () => ImpromatRxDatabase;
+};
+export type SectionDocument = RxDocument<
+  SectionDocType,
+  SectionDocumentMethods
+>;
 export type SectionCollection = RxCollection<SectionDocType>;
 export const sectionSchema: RxJsonSchema<SectionDocType> = schemaLiteral;
+
+const documentMethods: SectionDocumentMethods = {
+  async populateElements(this: SectionDocument) {
+    return await this.populate("elements");
+  },
+  getDatabase(this: RxDocument) {
+    return this.collection.database as any as ImpromatRxDatabase;
+  },
+};
 
 export const sectionCollection: RxCollectionCreator<SectionDocType> = {
   schema: sectionSchema,
   migrationStrategies: sectionMigrationStrategies,
+  methods: documentMethods,
 };

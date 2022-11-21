@@ -1,12 +1,12 @@
 import { environment } from "../../environment";
 import { rootLogger } from "../../logger";
-import { MeCollection } from "./me-collection";
+import { ElementCollection } from "./element-collection";
 import {
   elementPullQueryBuilder,
   elementPushQueryBuilder,
 } from "./element-replication-query-builder";
 
-export function enableElementReplication(elementCollection: MeCollection) {
+export function enableElementReplication(elementCollection: ElementCollection) {
   const logger = rootLogger.extend("element-replication");
   const replicationState = elementCollection.syncGraphQL({
     url: {

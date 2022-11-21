@@ -11,12 +11,12 @@ import {
 import { useEffect, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import { WorkshopElementPreviewItemComponent } from "../components/WorkshopElementPreviewItemComponent";
+import { ElementDocType } from "../store/collections/element-collection";
 import { MeCollection } from "../store/collections/me-collection";
-import { Element } from "../store/schema.gen";
 import { useComponentLogger } from "../use-component-logger";
 
 export const FavoriteElementsPage: React.FC = () => {
-  const [favoriteElements] = useState<Element[]>();
+  const [favoriteElements] = useState<ElementDocType[]>();
   const meCollection = useRxCollection<MeCollection>("me");
   const logger = useComponentLogger("FavoriteElementsPage");
 

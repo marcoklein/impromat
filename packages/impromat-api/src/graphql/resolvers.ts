@@ -117,6 +117,7 @@ export const resolvers: Resolvers = {
         const createdAt = Date.now();
         const initialUser: UserModel = {
           favoriteElementIds: [],
+          deleted: false,
           createdAt: createdAt,
           updatedAt: createdAt,
           version: 0,

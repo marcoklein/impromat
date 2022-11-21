@@ -12,11 +12,24 @@ type Query {
     limit: Int!
   ): WorkshopPullBulk!
   """
+  Returns new elements since last sync.
+  """
+  pullElements(checkpoint: PullCheckpointInput!, limit: Int!): ElementPullBulk!
+  """
+  Returns new sections since last sync.
+  """
+  pullSections(checkpoint: PullCheckpointInput!, limit: Int!): SectionPullBulk!
+  """
+  Returns new users since last sync.
+  """
+  pullUsers(checkpoint: PullCheckpointInput!, limit: Int!): UserPullBulk!
+  """
   Returns an authentication url for google authentication.
   """
   googleAuthUrl: String!
   """
   Information about the logged in session.
+  Null indicates a not logged in user.
   """
   me: TokenInfo
   """
@@ -32,11 +45,26 @@ type Mutation {
   """
   pushWorkshops(workshopPushRows: [WorkshopPushRowInput!]!): [Workshop]
   """
+  Update given elements.
+  Returns conflicting elements. That means the client has to resolve all elements that the call returns.
+  """
+  pushElements(elementPushRows: [ElementPushRowInput!]!): [Element]
+  """
+  Update given sections.
+  Returns conflicting sections. That means the client has to resolve all sections that the call returns.
+  """
+  pushSections(sectionPushRows: [SectionPushRowInput!]!): [Section]
+  """
   Update user info of the logged in user.
   Returns current master state if there is a conflict.
   Throws an error if the user is not logged in.
   """
   pushUser(userPushRow: UserPushRowInput!): User
+  """
+  Update given users.
+  Returns conflicting users. That means the client has to resolve all users that the call returns.
+  """
+  pushUsers(userPushRows: [UserPushRowInput!]!): [User]
   """
   Log out from the application.
   Returns true if the user was logged in and got logged out successfully.
@@ -55,19 +83,46 @@ input WorkshopPushRowInput {
   newDocumentState: WorkshopInput!
 }
 
+input ElementPushRowInput {
+  assumedMasterState: ElementInput
+  newDocumentState: ElementInput!
+}
+
+input SectionPushRowInput {
+  assumedMasterState: SectionInput
+  newDocumentState: SectionInput!
+}
+
+input UserPushRowInput {
+  assumedMasterState: UserInput
+  newDocumentState: UserInput!
+}
+
 input WorkshopInput {
   id: ID!
+  version: Int!
   deleted: Boolean
+
+  """
+  @deprecated("Updated at is only set by the server")
+  """
   updatedAt: SafeInt
   name: String
   description: String
-  sections: [SectionInput]
+  """
+  Reference to sections of workshop.
+  """
+  sectionRefs: [ID!]
 }
 
 input SectionInput {
   id: ID!
+  version: Int!
   name: String
-  elements: [ElementInput!]
+  """
+  Reference to section elements.
+  """
+  elementRefs: [ID!]
   note: String
   color: String
   isVisible: Boolean
@@ -76,11 +131,15 @@ input SectionInput {
 
 input ElementInput {
   id: ID!
+  version: Int!
   name: String!
   markdown: String
   tags: [String!]
   note: String
-  basedOn: ElementInput
+  """
+  Ref with id to other Element.
+  """
+  basedOn: ID
   languageCode: String
   sourceUrl: String
   sourceName: String
@@ -89,8 +148,31 @@ input ElementInput {
   licenseUrl: String
 }
 
+input UserInput {
+  version: Int!
+  """
+  Reference to the favorite elements.
+  """
+  favoriteElementRefs: [ID!]
+}
+
 type WorkshopPullBulk {
   documents: [Workshop!]!
+  checkpoint: PullCheckpoint
+}
+
+type ElementPullBulk {
+  documents: [Element!]!
+  checkpoint: PullCheckpoint
+}
+
+type SectionPullBulk {
+  documents: [Section!]!
+  checkpoint: PullCheckpoint
+}
+
+type UserPullBulk {
+  documents: [User!]!
   checkpoint: PullCheckpoint
 }
 
@@ -102,16 +184,6 @@ type PullCheckpoint {
 type TokenInfo {
   userId: String!
   user: User!
-}
-
-input UserPushRowInput {
-  assumedMasterState: UserInput!
-  newDocumentState: UserInput!
-}
-
-input UserInput {
-  version: Int!
-  favoriteElements: [ID!]
 }
 
 """
@@ -134,6 +206,10 @@ An improvisational theatre Workshop that a person can hold for their group.
 """
 type Workshop {
   id: ID!
+  version: Int!
+  """
+  @deprecated use version
+  """
   updatedAt: SafeInt!
   """
   For syncing purposes this flag indicates deleted workshops.
@@ -150,6 +226,7 @@ A workshop must always have at least one section.
 """
 type Section {
   id: ID!
+  version: Int!
   name: String!
   elements: [Element!]!
   note: String
@@ -167,6 +244,7 @@ General element like a exercise or game.
 """
 type Element {
   id: ID!
+  version: Int!
   name: String!
   markdown: String!
   tags: [String!]!

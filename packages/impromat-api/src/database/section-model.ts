@@ -1,6 +1,7 @@
 export interface SectionModel {
   updatedAt: number;
 
+  deleted: boolean;
   id: string;
   version: number;
   name: string;

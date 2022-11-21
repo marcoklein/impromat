@@ -119,6 +119,7 @@ input SectionInput {
   id: ID!
   version: Int!
   name: String
+  deleted: Boolean
   """
   Reference to section elements.
   """
@@ -132,6 +133,7 @@ input SectionInput {
 input ElementInput {
   id: ID!
   version: Int!
+  deleted: Boolean
   name: String!
   markdown: String
   tags: [String!]
@@ -153,6 +155,7 @@ input UserInput {
   """
   Reference to the favorite elements.
   """
+  deleted: Boolean
   favoriteElementRefs: [ID!]
 }
 
@@ -198,6 +201,7 @@ type User {
   Entity version.
   """
   version: Int!
+  deleted: Boolean
   favoriteElements: [Element!]!
 }
 
@@ -207,6 +211,9 @@ An improvisational theatre Workshop that a person can hold for their group.
 type Workshop {
   id: ID!
   version: Int!
+  """
+  @deprecated use version
+  """
   updatedAt: SafeInt!
   """
   For syncing purposes this flag indicates deleted workshops.
@@ -224,6 +231,7 @@ A workshop must always have at least one section.
 type Section {
   id: ID!
   version: Int!
+  deleted: Boolean
   name: String!
   elements: [Element!]!
   note: String
@@ -242,6 +250,7 @@ General element like a exercise or game.
 type Element {
   id: ID!
   version: Int!
+  deleted: Boolean
   name: String!
   markdown: String!
   tags: [String!]!

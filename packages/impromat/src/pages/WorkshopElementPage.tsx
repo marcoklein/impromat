@@ -25,13 +25,16 @@ import { useRxdbMutations } from "../store/use-rxdb-mutations";
 import { useWorkshopElement } from "../store/use-workshop-element";
 
 export const WorkshopElementPage: React.FC = () => {
-  const { id: workshopId, partId } = useParams<{
+  const { id: workshopId, partId: elementId } = useParams<{
     id: string;
     partId: string;
   }>();
   const database = useRxdbMutations();
-  const { workshopElement: element } = useWorkshopElement(workshopId, partId);
   const [presentInput] = useInputDialog();
+  const { workshopElement: element } = useWorkshopElement(elementId);
+  const { workshopElement: basedOnElement } = useWorkshopElement(
+    element?.basedOn,
+  );
 
   const changeElementName = (newName: string) => {
     if (!database || !element) return;
@@ -129,14 +132,14 @@ export const WorkshopElementPage: React.FC = () => {
               </div>
             </IonItem>
 
-            {element.basedOn && (
+            {basedOnElement && (
               <LicenseItemComponent
-                authorName={element.basedOn.sourceName}
-                authorUrl={element.basedOn.sourceBaseUrl}
-                licenseName={element.basedOn.licenseName}
-                licenseUrl={element.basedOn.licenseUrl}
-                name={element.basedOn.name}
-                sourceUrl={element.basedOn.sourceUrl}
+                authorName={basedOnElement.sourceName}
+                authorUrl={basedOnElement.sourceBaseUrl}
+                licenseName={basedOnElement.licenseName}
+                licenseUrl={basedOnElement.licenseUrl}
+                name={basedOnElement.name}
+                sourceUrl={basedOnElement.sourceUrl}
               ></LicenseItemComponent>
             )}
           </IonList>

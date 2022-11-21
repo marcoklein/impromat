@@ -17,6 +17,12 @@
             }
           ]
         },
+        "deleted": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
         "id": {
           "type": "string"
         },
@@ -96,6 +102,12 @@
             "null"
           ]
         },
+        "deleted": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
         "elements": {
           "items": {
             "$ref": "#/definitions/Element"
@@ -164,7 +176,9 @@
       },
       "type": "array"
     },
-    "updatedAt": {},
+    "updatedAt": {
+      "deprecated": "use version"
+    },
     "version": {
       "type": "number"
     }

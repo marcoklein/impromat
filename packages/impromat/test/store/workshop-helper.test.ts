@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { Element } from "../../src/store/schema.gen";
+import { ElementDocType } from "../../src/store/collections/element-collection";
 import { WorkshopHelper } from "../../src/store/workshop-helper";
 
 test.describe("Workshop Helper", () => {
@@ -25,7 +25,7 @@ test.describe("Workshop Helper", () => {
       name: "w",
       description: "d",
     });
-    const element: Partial<Element> = {
+    const element: Partial<ElementDocType> = {
       id: "element1",
     };
     // when

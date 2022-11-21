@@ -14,13 +14,15 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Redirect, Route } from "react-router-dom";
 import { Provider as RxDBProvider } from "rxdb-hooks";
 import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { MenuComponent } from "./components/MenuComponent";
+import { environment } from "./environment";
 import { GraphQLContext } from "./graphql/graphql-context";
+import { getSdk } from "./graphql/schema.gen";
 import { AboutPage } from "./pages/AboutPage";
 import { AccountPage } from "./pages/AccountPage";
 import { AddWorkshopElementPage } from "./pages/AddWorkshopElementPage";
@@ -46,20 +48,18 @@ import {
   routeWorkshopElement,
   routeWorkshops,
 } from "./routes/shared-routes";
+import { ElementDocType } from "./store/collections/element-collection";
 import { ImprovLibraryContext } from "./store/improbib/improv-library-context";
 import { ImpromatRxDatabase, initialize } from "./store/initialize";
-import { Element } from "./store/schema.gen";
 import "./theme/colors.css";
 import "./theme/variables.css";
-import { environment } from "./environment";
-import { getSdk } from "./graphql/schema.gen";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [improvElements, setImprovElements] = useState<Element[] | undefined>(
-    undefined,
-  );
+  const [improvElements, setImprovElements] = useState<
+    ElementDocType[] | undefined
+  >(undefined);
 
   const clientRef = useRef(
     new GraphQLClient(`${environment.API_URL}/graphql`, {
@@ -85,7 +85,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <RxDBProvider db={db}>
+    <RxDBProvider db={db} idAttribute="id">
       <GraphQLContext.Provider
         value={{ client: clientRef.current, sdk: sdkRef.current }}
       >

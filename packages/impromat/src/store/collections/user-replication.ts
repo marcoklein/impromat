@@ -17,8 +17,9 @@ export function enableUserReplication(userCollection: MeCollection) {
       batchSize: 5,
       modifier: (doc: any) => {
         logger("Retrieved document %O", doc);
-        const ids = doc.favoriteElements.map((element: any) => element.id);
-        doc.favoriteElements = ids;
+        // const ids = doc.favoriteElements.map((element: any) => element.id);
+        doc.favoriteElementRefs = doc.favoriteElements;
+        delete doc.favoriteElementRefs;
         logger("Modified document %O", doc);
         return doc;
       },

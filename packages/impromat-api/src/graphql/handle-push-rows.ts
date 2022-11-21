@@ -31,14 +31,15 @@ export function handlePushRows<
   for (const row of pushedRows) {
     const docId = row.newDocumentState.id;
     const docCurrentMaster = inputModels.find((d) => d.id === docId);
-    if (
-      docCurrentMaster &&
-      (row.assumedMasterState?.version !== docCurrentMaster.version ||
-        row.newDocumentState.version !== docCurrentMaster.version + 1)
-    ) {
-      conflicts.push(mappers.fromModelToDto(docCurrentMaster));
-      continue;
-    }
+
+    // if (
+    //   docCurrentMaster &&
+    //   (row.assumedMasterState?.version !== docCurrentMaster.version ||
+    //     row.newDocumentState.version !== docCurrentMaster.version + 1)
+    // ) {
+    //   conflicts.push(mappers.fromModelToDto(docCurrentMaster));
+    //   continue;
+    // }
 
     const doc = row.newDocumentState;
     const updatedWorkshops = inputModels.filter((d) => d.id !== doc.id);

@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { Element } from "../schema.gen";
+import { ElementDocType } from "../collections/element-collection";
 
 export type ImprovLibraryContextType = {
-  improvElements: Element[] | undefined;
+  improvElements: ElementDocType[] | undefined;
   setImprovElements: React.Dispatch<
-    React.SetStateAction<Element[] | undefined>
+    React.SetStateAction<ElementDocType[] | undefined>
   >;
 };
 

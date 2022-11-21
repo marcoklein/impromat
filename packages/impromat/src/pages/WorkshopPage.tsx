@@ -19,7 +19,7 @@ import {
 } from "@ionic/react";
 import immer from "immer";
 import { add, barbellOutline, reorderFour } from "ionicons/icons";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { EditableItemComponent } from "../components/EditableItemComponent";
 import {
@@ -29,7 +29,7 @@ import {
 import { WorkshopElementsComponent } from "../components/WorkshopElementsComponent";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshops } from "../routes/shared-routes";
-import { Section } from "../store/schema.gen";
+import { SectionDocType } from "../store/collections/section-collection";
 import { useRxdbMutations } from "../store/use-rxdb-mutations";
 import { useWorkshop } from "../store/use-workshop";
 import { WORKSHOP_HELPER } from "../store/workshop-helper";
@@ -41,6 +41,12 @@ export const WorkshopPage: React.FC = () => {
   const history = useHistory();
   const { workshop } = useWorkshop(id);
   const logger = useComponentLogger("WorkshopPage");
+  const [workshopHasContent, setWorkshopHasContent] = useState(false);
+  useEffect(() => {
+    if (workshop) {
+      WORKSHOP_HELPER.hasContent(workshop).then(setWorkshopHasContent);
+    }
+  }, [workshop]);
 
   const [presentInputDialog] = useInputDialog();
 
@@ -49,24 +55,35 @@ export const WorkshopPage: React.FC = () => {
     const updatedWorkshop = immer(workshop, (draft) => {
       draft.name = newName;
     });
-    database.updateWorkshop(updatedWorkshop);
-    logger("change workshop name to %s", newName);
+    database.updateWorkshop(updatedWorkshop).then(() => {
+      logger("change workshop name to %s", newName);
+    });
   };
   const changeWorkshopDescription = (newDescription: string) => {
     if (!database || !workshop) return;
     const updatedWorkshop = immer(workshop, (draft) => {
       draft.description = newDescription;
     });
-    database.updateWorkshop(updatedWorkshop);
-    logger("Changed workshop description");
-  };
-  const changeSections = (sections: Section[]) => {
-    if (!database || !workshop) return;
-    const updatedWorkshop = immer(workshop, (draft) => {
-      draft.sections = sections;
+    database.updateWorkshop(updatedWorkshop).then(() => {
+      logger("Changed workshop description");
     });
-    database.updateWorkshop(updatedWorkshop);
-    logger("Changed sections");
+  };
+  const changeSectionsOrder = (fromIndex: number, toIndex: number) => {
+    if (!database || !workshop) return;
+
+    WORKSHOP_HELPER.moveItemFromIndexToIndex(workshop, fromIndex, toIndex);
+
+    // (async () => {
+    //   for (const section of sections) {
+    //     await database.updateWorkshopSection(id, section);
+    //     logger("Updating section of workshop");
+    //   }
+    //   const updatedWorkshop = immer(workshop, (draft) => {
+    //     draft.sections = sections.map((section) => section.id);
+    //   });
+    //   await database.updateWorkshop(updatedWorkshop);
+    //   logger("Changed sections in workshop");
+    // })();
   };
 
   const onDeleteWorkshop = useCallback(() => {
@@ -97,7 +114,7 @@ export const WorkshopPage: React.FC = () => {
       emptyInputMessage: "Please type a section name.",
       placeholder: "e.g. Warmup or Games",
       onAccept: (text) => {
-        database.createNewSection(workshop, text);
+        database.createNewSection(workshop.id, text);
       },
     });
     logger("Showing add section dialog");
@@ -188,11 +205,13 @@ export const WorkshopPage: React.FC = () => {
               ></EditableItemComponent>
             )}
 
-            {WORKSHOP_HELPER.hasContent(workshop) ? (
+            {workshopHasContent ? (
               <WorkshopElementsComponent
                 key={workshop.id}
                 workshop={workshop}
-                onChangeOrder={(elements) => changeSections(elements)}
+                onChangeOrder={(fromIndex, toIndex) =>
+                  changeSectionsOrder(fromIndex, toIndex)
+                }
               ></WorkshopElementsComponent>
             ) : (
               <IonCard>

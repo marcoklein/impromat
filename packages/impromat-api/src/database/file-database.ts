@@ -142,7 +142,7 @@ export class FileDatabase implements Database {
     if (!this.store) throw new Error("Not loaded");
     fs.writeFileSync(
       path.join(this.storagePath, "db.json"),
-      JSON.stringify(this.store)
+      JSON.stringify(this.store, undefined, 2)
     );
   }
 

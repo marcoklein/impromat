@@ -1,12 +1,12 @@
 import { environment } from "../../environment";
 import { rootLogger } from "../../logger";
-import { MeCollection } from "./me-collection";
+import { SectionCollection } from "./section-collection";
 import {
   sectionPullQueryBuilder,
   sectionPushQueryBuilder,
 } from "./section-replication-query-builder";
 
-export function enableSectionReplication(sectionCollection: MeCollection) {
+export function enableSectionReplication(sectionCollection: SectionCollection) {
   const logger = rootLogger.extend("section-replication");
   const replicationState = sectionCollection.syncGraphQL({
     url: {
@@ -27,8 +27,12 @@ export function enableSectionReplication(sectionCollection: MeCollection) {
       queryBuilder: sectionPushQueryBuilder,
       batchSize: 5,
       modifier: (doc: any) => {
+        logger("Document before modification of push: %O", doc);
+        const currentVersion: number = doc.version ?? -1;
+        doc.version = currentVersion + 1;
+        doc.elementRefs = doc.elements;
+        delete doc.elements;
         logger("Sending document %O", doc);
-        delete doc._meta;
         return doc;
       },
     },

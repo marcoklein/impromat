@@ -13,8 +13,8 @@ import {
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { WorkshopElementComponent } from "../components/WorkshopElementComponent";
-import { Element } from "../store/schema.gen";
 import { routeWorkshopAddElement } from "../routes/shared-routes";
+import { ElementDocType } from "../store/collections/element-collection";
 import { useImprobibElements } from "../store/improbib/use-improbib-elements";
 import { useRxdbMutations } from "../store/use-rxdb-mutations";
 
@@ -25,7 +25,7 @@ export const ImprobibElementPage: React.FC = () => {
   }>();
   const database = useRxdbMutations();
   const improbibElements = useImprobibElements();
-  const [improbibElement, setImprobibElement] = useState<Element>();
+  const [improbibElement, setImprobibElement] = useState<ElementDocType>();
   const history = useHistory();
 
   useEffect(() => {

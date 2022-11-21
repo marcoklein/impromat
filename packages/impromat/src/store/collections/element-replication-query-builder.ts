@@ -28,7 +28,7 @@ export const elementPushQueryBuilder: RxGraphQLReplicationPushQueryBuilder = (
 ) => {
   const query = /* GraphQL */ `
     mutation PushMutation($elementPushRows: [ElementPushRowInput!]!) {
-      pushElements(elementPushRows: $workshopPushRows) {
+      pushElements(elementPushRows: $elementPushRows) {
         ...QueryFields
       }
     }

@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
 import Markdown from "react-markdown";
-import { Element } from "../store/schema.gen";
+import { ElementDocument } from "../store/collections/element-collection";
 import { SlidingItemComponent } from "./SlidingItemComponent";
 import "./WorkshopElementItemComponent.css";
 
 interface ContainerProps {
-  workshopElement: Element;
+  workshopElement: ElementDocument;
   routerLink: string;
   isReordering?: boolean;
   onRemoveClick?: () => void;

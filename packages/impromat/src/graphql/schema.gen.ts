@@ -33,10 +33,12 @@ export type Element = {
   sourceName?: Maybe<Scalars['String']>;
   sourceUrl?: Maybe<Scalars['String']>;
   tags: Array<Scalars['String']>;
+  version: Scalars['Int'];
 };
 
 export type ElementInput = {
-  basedOn?: InputMaybe<ElementInput>;
+  /** Ref with id to other Element. */
+  basedOn?: InputMaybe<Scalars['ID']>;
   id: Scalars['ID'];
   languageCode?: InputMaybe<Scalars['String']>;
   licenseName?: InputMaybe<Scalars['String']>;
@@ -48,6 +50,18 @@ export type ElementInput = {
   sourceName?: InputMaybe<Scalars['String']>;
   sourceUrl?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
+  version: Scalars['Int'];
+};
+
+export type ElementPullBulk = {
+  __typename?: 'ElementPullBulk';
+  checkpoint?: Maybe<PullCheckpoint>;
+  documents: Array<Element>;
+};
+
+export type ElementPushRowInput = {
+  assumedMasterState?: InputMaybe<ElementInput>;
+  newDocumentState: ElementInput;
 };
 
 export type Mutation = {
@@ -59,11 +73,26 @@ export type Mutation = {
    */
   logout: Scalars['Boolean'];
   /**
+   * Update given elements.
+   * Returns conflicting elements. That means the client has to resolve all elements that the call returns.
+   */
+  pushElements?: Maybe<Array<Maybe<Element>>>;
+  /**
+   * Update given sections.
+   * Returns conflicting sections. That means the client has to resolve all sections that the call returns.
+   */
+  pushSections?: Maybe<Array<Maybe<Section>>>;
+  /**
    * Update user info of the logged in user.
    * Returns current master state if there is a conflict.
    * Throws an error if the user is not logged in.
    */
   pushUser?: Maybe<User>;
+  /**
+   * Update given users.
+   * Returns conflicting users. That means the client has to resolve all users that the call returns.
+   */
+  pushUsers?: Maybe<Array<Maybe<User>>>;
   /**
    * Update given workshops.
    * Returns conflicting workshops. That means the client has to resolve all workshops that the call returns.
@@ -72,8 +101,23 @@ export type Mutation = {
 };
 
 
+export type MutationPushElementsArgs = {
+  elementPushRows: Array<ElementPushRowInput>;
+};
+
+
+export type MutationPushSectionsArgs = {
+  sectionPushRows: Array<SectionPushRowInput>;
+};
+
+
 export type MutationPushUserArgs = {
   userPushRow: UserPushRowInput;
+};
+
+
+export type MutationPushUsersArgs = {
+  userPushRows: Array<UserPushRowInput>;
 };
 
 
@@ -96,12 +140,39 @@ export type Query = {
   __typename?: 'Query';
   /** Returns an authentication url for google authentication. */
   googleAuthUrl: Scalars['String'];
-  /** Information about the logged in session. */
+  /**
+   * Information about the logged in session.
+   * Null indicates a not logged in user.
+   */
   me?: Maybe<TokenInfo>;
+  /** Returns new elements since last sync. */
+  pullElements: ElementPullBulk;
+  /** Returns new sections since last sync. */
+  pullSections: SectionPullBulk;
+  /** Returns new users since last sync. */
+  pullUsers: UserPullBulk;
   /** Returns new workshops since last sync. */
   pullWorkshops: WorkshopPullBulk;
   /** Version of the application. */
   version: Scalars['String'];
+};
+
+
+export type QueryPullElementsArgs = {
+  checkpoint: PullCheckpointInput;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryPullSectionsArgs = {
+  checkpoint: PullCheckpointInput;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryPullUsersArgs = {
+  checkpoint: PullCheckpointInput;
+  limit: Scalars['Int'];
 };
 
 
@@ -127,16 +198,30 @@ export type Section = {
   isVisible?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   note?: Maybe<Scalars['String']>;
+  version: Scalars['Int'];
 };
 
 export type SectionInput = {
   color?: InputMaybe<Scalars['String']>;
-  elements?: InputMaybe<Array<ElementInput>>;
+  /** Reference to section elements. */
+  elementRefs?: InputMaybe<Array<Scalars['ID']>>;
   id: Scalars['ID'];
   isCollapsed?: InputMaybe<Scalars['Boolean']>;
   isVisible?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   note?: InputMaybe<Scalars['String']>;
+  version: Scalars['Int'];
+};
+
+export type SectionPullBulk = {
+  __typename?: 'SectionPullBulk';
+  checkpoint?: Maybe<PullCheckpoint>;
+  documents: Array<Section>;
+};
+
+export type SectionPushRowInput = {
+  assumedMasterState?: InputMaybe<SectionInput>;
+  newDocumentState: SectionInput;
 };
 
 export type TokenInfo = {
@@ -156,12 +241,19 @@ export type User = {
 };
 
 export type UserInput = {
-  favoriteElements?: InputMaybe<Array<Scalars['ID']>>;
+  /** Reference to the favorite elements. */
+  favoriteElementRefs?: InputMaybe<Array<Scalars['ID']>>;
   version: Scalars['Int'];
 };
 
+export type UserPullBulk = {
+  __typename?: 'UserPullBulk';
+  checkpoint?: Maybe<PullCheckpoint>;
+  documents: Array<User>;
+};
+
 export type UserPushRowInput = {
-  assumedMasterState: UserInput;
+  assumedMasterState?: InputMaybe<UserInput>;
   newDocumentState: UserInput;
 };
 
@@ -174,7 +266,9 @@ export type Workshop = {
   id: Scalars['ID'];
   name: Scalars['String'];
   sections: Array<Section>;
+  /** @deprecated use version */
   updatedAt: Scalars['SafeInt'];
+  version: Scalars['Int'];
 };
 
 export type WorkshopInput = {
@@ -182,8 +276,11 @@ export type WorkshopInput = {
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
-  sections?: InputMaybe<Array<InputMaybe<SectionInput>>>;
+  /** Reference to sections of workshop. */
+  sectionRefs?: InputMaybe<Array<Scalars['ID']>>;
+  /** @deprecated("Updated at is only set by the server") */
   updatedAt?: InputMaybe<Scalars['SafeInt']>;
+  version: Scalars['Int'];
 };
 
 export type WorkshopPullBulk = {

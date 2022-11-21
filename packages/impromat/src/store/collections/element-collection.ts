@@ -2,6 +2,7 @@ import {
   ExtractDocumentTypeFromTypedRxJsonSchema,
   RxCollection,
   RxCollectionCreator,
+  RxDocument,
   RxJsonSchema,
   toTypedRxJsonSchema,
 } from "rxdb";
@@ -67,6 +68,7 @@ export const elementCollectionSchema = toTypedRxJsonSchema(schemaLiteral);
 export type ElementDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof elementCollectionSchema
 >;
+export type ElementDocument = RxDocument<ElementDocType>;
 export type ElementCollection = RxCollection<ElementDocType>;
 export const elementSchema: RxJsonSchema<ElementDocType> = schemaLiteral;
 

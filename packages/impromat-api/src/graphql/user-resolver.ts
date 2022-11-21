@@ -32,6 +32,7 @@ export function userPushRowInputHandler(
   const createdAt = Date.now();
   const newUser: UserModel = {
     createdAt,
+    deleted: false,
     updatedAt: createdAt,
     favoriteElementIds:
       newDocumentState.favoriteElementRefs ??

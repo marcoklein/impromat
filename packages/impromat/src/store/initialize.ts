@@ -8,10 +8,17 @@ import { RxDBReplicationGraphQLPlugin } from "rxdb/plugins/replication-graphql";
 import { RxDBUpdatePlugin } from "rxdb/plugins/update";
 import { GraphQLContextType } from "../graphql/graphql-context";
 import { rootLogger } from "../logger";
-import { elementCollection } from "./collections/element-collection";
+import {
+  ElementCollection,
+  elementCollection,
+} from "./collections/element-collection";
+import { enableElementReplication } from "./collections/element-replication";
 import { MeCollection, meCollection } from "./collections/me-collection";
 import { enableMeReplication } from "./collections/me-replication";
-import { sectionCollection } from "./collections/section-collection";
+import {
+  SectionCollection,
+  sectionCollection,
+} from "./collections/section-collection";
 import { enableSectionReplication } from "./collections/section-replication";
 import { UserCollection, userCollection } from "./collections/user-collection";
 import { enableUserReplication } from "./collections/user-replication";
@@ -35,18 +42,21 @@ export type ImpromatDatabaseCollections = {
   workshops: WorkshopCollection;
   users: UserCollection;
   me: MeCollection;
+  elements: ElementCollection;
+  sections: SectionCollection;
 };
 export type ImpromatRxDatabase = RxDatabase<ImpromatDatabaseCollections>;
 
 export const initialize = async (apiContext: GraphQLContextType) => {
   const logger = rootLogger.extend("store-initialize");
-  const db = await createRxDatabase<ImpromatRxDatabase>({
-    name: "impromat-production",
-    storage:
-      process.env.NODE_ENV === "development"
-        ? getRxStorageMemory()
-        : getRxStorageDexie(),
-  });
+  const db: ImpromatRxDatabase =
+    await createRxDatabase<ImpromatDatabaseCollections>({
+      name: "impromat-production",
+      storage:
+        process.env.NODE_ENV === "development"
+          ? getRxStorageMemory()
+          : getRxStorageDexie(),
+    });
 
   const collections = await db.addCollections({
     workshops: workshopCollection,
@@ -59,6 +69,11 @@ export const initialize = async (apiContext: GraphQLContextType) => {
   enableMeReplication(collections.me, apiContext);
   enableUserReplication(collections.users);
   enableSectionReplication(collections.sections);
+  enableElementReplication(collections.elements);
+
+  db.$.subscribe((changeEvent) => {
+    logger("Database Event: %O", changeEvent);
+  });
 
   logger("initialized");
   return db;

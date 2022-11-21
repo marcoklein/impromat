@@ -71,6 +71,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "version": {
+          "type": "number"
         }
       },
       "required": [
@@ -78,7 +81,8 @@
         "markdown",
         "name",
         "note",
-        "tags"
+        "tags",
+        "version"
       ],
       "type": "object"
     },
@@ -122,12 +126,16 @@
             "string",
             "null"
           ]
+        },
+        "version": {
+          "type": "number"
         }
       },
       "required": [
         "elements",
         "id",
-        "name"
+        "name",
+        "version"
       ],
       "type": "object"
     }
@@ -156,14 +164,20 @@
       },
       "type": "array"
     },
-    "updatedAt": {}
+    "updatedAt": {
+      "deprecated": "use version"
+    },
+    "version": {
+      "type": "number"
+    }
   },
   "required": [
     "description",
     "id",
     "name",
     "sections",
-    "updatedAt"
+    "updatedAt",
+    "version"
   ],
   "type": "object"
 }

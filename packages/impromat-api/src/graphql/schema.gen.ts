@@ -20,6 +20,7 @@ export type Scalars = {
 /** General element like a exercise or game. */
 export type Element = {
   basedOn?: Maybe<Element>;
+  deleted?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   languageCode?: Maybe<Scalars['String']>;
   licenseName?: Maybe<Scalars['String']>;
@@ -38,6 +39,7 @@ export type Element = {
 export type ElementInput = {
   /** Ref with id to other Element. */
   basedOn?: InputMaybe<Scalars['ID']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   languageCode?: InputMaybe<Scalars['String']>;
   licenseName?: InputMaybe<Scalars['String']>;
@@ -182,6 +184,7 @@ export type QueryPullWorkshopsArgs = {
  */
 export type Section = {
   color?: Maybe<Scalars['String']>;
+  deleted?: Maybe<Scalars['Boolean']>;
   elements: Array<Element>;
   id: Scalars['ID'];
   isCollapsed?: Maybe<Scalars['Boolean']>;
@@ -197,6 +200,7 @@ export type Section = {
 
 export type SectionInput = {
   color?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   /** Reference to section elements. */
   elementRefs?: InputMaybe<Array<Scalars['ID']>>;
   id: Scalars['ID'];
@@ -224,6 +228,7 @@ export type TokenInfo = {
 
 /** Information about a user that uses Impromat. */
 export type User = {
+  deleted?: Maybe<Scalars['Boolean']>;
   favoriteElements: Array<Element>;
   /** Id of the user. */
   id: Scalars['ID'];
@@ -233,6 +238,7 @@ export type User = {
 
 export type UserInput = {
   /** Reference to the favorite elements. */
+  deleted?: InputMaybe<Scalars['Boolean']>;
   favoriteElementRefs?: InputMaybe<Array<Scalars['ID']>>;
   version: Scalars['Int'];
 };
@@ -255,6 +261,7 @@ export type Workshop = {
   id: Scalars['ID'];
   name: Scalars['String'];
   sections: Array<Section>;
+  /** @deprecated use version */
   updatedAt: Scalars['SafeInt'];
   version: Scalars['Int'];
 };
@@ -412,6 +419,7 @@ export type ResolversParentTypes = {
 
 export type ElementResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Element'] = ResolversParentTypes['Element']> = {
   basedOn?: Resolver<Maybe<ResolversTypes['Element']>, ParentType, ContextType>;
+  deleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   languageCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   licenseName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -464,6 +472,7 @@ export interface SafeIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTy
 
 export type SectionResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Section'] = ResolversParentTypes['Section']> = {
   color?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   elements?: Resolver<Array<ResolversTypes['Element']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isCollapsed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -487,6 +496,7 @@ export type TokenInfoResolvers<ContextType = GraphQLContext, ParentType extends 
 };
 
 export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  deleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   favoriteElements?: Resolver<Array<ResolversTypes['Element']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;

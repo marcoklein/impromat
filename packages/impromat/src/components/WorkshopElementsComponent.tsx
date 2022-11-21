@@ -3,17 +3,18 @@ import immer from "immer";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { TRANSLATIONS } from "../functions/shared-text";
 import { useInputDialog } from "../hooks/use-input-dialog";
-import { Element, Section, Workshop } from "../store/schema.gen";
+import { ElementDocType } from "../store/collections/element-collection";
+import { SectionDocument } from "../store/collections/section-collection";
+import { WorkshopDocument } from "../store/collections/workshop-collection";
 import { useRxdbMutations } from "../store/use-rxdb-mutations";
-import { WORKSHOP_HELPER } from "../store/workshop-helper";
 import { useComponentLogger } from "../use-component-logger";
-import { WorkshopElementItemComponent } from "./WorkshopElementItemComponent";
+import { SectionElementsComponent } from "./SectionElementsComponent";
 import { WorkshopElementsHeaderComponent } from "./WorkshopElementsHeaderComponent";
 import { WorkshopSectionComponent } from "./WorkshopSectionComponent";
 
 interface ContainerProps {
-  workshop: Workshop;
-  onChangeOrder: (sections: Section[]) => void;
+  workshop: WorkshopDocument;
+  onChangeOrder: (fromIndex: number, toIndex: number) => void;
 }
 
 export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
@@ -23,17 +24,18 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
   const logger = useComponentLogger("WorkshopElementsComponent");
   const database = useRxdbMutations();
   const [reorderWorkshopElements, setReorderWorkshopElements] = useState(false);
-  const [sections, setSections] = useState(workshop.sections);
+  const [sections, setSections] = useState<SectionDocument[]>([]);
   const [presentInputDialog] = useInputDialog();
-  const [sectionsBeforeReordering, setSectionsBeforeReordering] = useState<
-    Section[]
-  >([]);
 
   useEffect(() => {
-    setSections(workshop.sections);
+    if (workshop) {
+      workshop.populateSections().then(setSections);
+    } else {
+      setSections([]);
+    }
   }, [workshop]);
 
-  const elementOnRemoveClick = (element: Element) => {
+  const elementOnRemoveClick = (element: ElementDocType) => {
     if (!database) return;
     database.removePartFromWorkshop(workshop.id, element.id);
   };
@@ -42,21 +44,11 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
     (event: CustomEvent<ItemReorderEventDetail>) => {
       const fromIndex = event.detail.from;
       const toIndex = event.detail.to;
-
-      onChangeOrder(
-        immer(workshop, (draft) => {
-          WORKSHOP_HELPER.moveItemFromIndexToIndex(draft, fromIndex, toIndex);
-
-          // const movedElement = draft[fromIndex];
-          // draft.splice(fromIndex, 1);
-          // const indexCorrection = fromIndex < toIndex ? 1 : 0;
-          // draft.splice(toIndex + indexCorrection, 0, movedElement);
-        }).sections,
-      );
+      onChangeOrder(fromIndex, toIndex);
       // ionic must not reorder DOM nodes
       event.detail.complete(false);
     },
-    [workshop, onChangeOrder],
+    [onChangeOrder],
   );
 
   const onReorderEvent = (
@@ -65,19 +57,20 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
   ) => {
     if (!database) return;
     setReorderWorkshopElements(isReordering);
-    switch (event) {
-      case "start":
-        setSectionsBeforeReordering(immer(sections, () => {}));
-        break;
-      case "save":
-        database.updateWorkshop(workshop);
-        setSectionsBeforeReordering([]);
-        break;
-      case "cancel":
-        setSections(sectionsBeforeReordering);
-        setSectionsBeforeReordering([]);
-        break;
-    }
+    // TODO remove this commented code as all ordeings are saved immediately
+    // switch (event) {
+    //   case "start":
+    //     setSectionsBeforeReordering(immer(sections, () => {}));
+    //     break;
+    //   case "save":
+    //     database.updateWorkshop(workshop);
+    //     setSectionsBeforeReordering([]);
+    //     break;
+    //   case "cancel":
+    //     setSections(sectionsBeforeReordering);
+    //     setSectionsBeforeReordering([]);
+    //     break;
+    // }
   };
 
   const workshopSectionHandlers: Pick<
@@ -100,10 +93,11 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
         placeholder: TRANSLATIONS.inputDialogSectionNamePlaceholder(),
         onAccept: (text) => {
           if (!database) return;
-          database.updateWorkshopSection(workshop, section, (draft) => {
+          const newSection = immer(section, (draft) => {
             draft.name = text;
             return draft;
           });
+          database.updateWorkshopSection(workshop, newSection);
         },
       });
     },
@@ -141,16 +135,12 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
                 isReordering={reorderWorkshopElements}
                 {...workshopSectionHandlers}
               ></WorkshopSectionComponent>
-              {!section.isCollapsed &&
-                section.elements.map((element) => (
-                  <WorkshopElementItemComponent
-                    workshopElement={element}
-                    key={element.id}
-                    routerLink={`/workshop/${workshop.id}/part/${element.id}`}
-                    onRemoveClick={() => elementOnRemoveClick(element)}
-                    isReordering={reorderWorkshopElements}
-                  ></WorkshopElementItemComponent>
-                ))}
+              <SectionElementsComponent
+                workshop={workshop}
+                section={section}
+                onRemoveClick={(element) => elementOnRemoveClick(element)}
+                isReordering={reorderWorkshopElements}
+              ></SectionElementsComponent>
             </Fragment>
           ))}
         </IonReorderGroup>

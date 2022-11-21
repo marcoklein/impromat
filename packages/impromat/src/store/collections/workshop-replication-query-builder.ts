@@ -2,6 +2,10 @@ import {
   RxGraphQLReplicationPullQueryBuilder,
   RxGraphQLReplicationPushQueryBuilder,
 } from "rxdb";
+import {
+  PullCheckpointInput,
+  WorkshopPushRowInput,
+} from "../../graphql/schema.gen";
 
 // TODO generate this query from the generated schema
 // it is fatal if one field is not synced because that yield unpredictable behavior!
@@ -9,49 +13,18 @@ import {
 export const WORKSHOP_FIELDS_FRAGMENT = /* GraphQL */ `
   fragment WorkshopFields on Workshop {
     id
-    updatedAt
+    version
     deleted
     name
     description
     sections {
       id
-      name
-      color
-      isVisible
-      isCollapsed
-      note
-      elements {
-        id
-        name
-        markdown
-        tags
-        note
-        languageCode
-        sourceUrl
-        sourceName
-        sourceBaseUrl
-        licenseName
-        licenseUrl
-        basedOn {
-          id
-          name
-          markdown
-          tags
-          note
-          languageCode
-          sourceUrl
-          sourceName
-          sourceBaseUrl
-          licenseName
-          licenseUrl
-        }
-      }
     }
   }
 `;
 
 export const pushQueryBuilder: RxGraphQLReplicationPushQueryBuilder = (
-  pushRows,
+  pushRows: WorkshopPushRowInput[],
 ) => {
   const query = /* GraphQL */ `
     mutation SetWorkshops($workshopPushRows: [WorkshopPushRowInput!]!) {
@@ -69,10 +42,9 @@ export const pushQueryBuilder: RxGraphQLReplicationPushQueryBuilder = (
   };
 };
 
-export const pullQueryBuilder: RxGraphQLReplicationPullQueryBuilder<number> = (
-  latestPulledCheckpoint,
-  limit,
-) => {
+export const pullQueryBuilder: RxGraphQLReplicationPullQueryBuilder<
+  PullCheckpointInput
+> = (latestPulledCheckpoint, limit) => {
   const query = /* GraphQL */ `
     query FetchWorkshops($checkpoint: PullCheckpointInput!, $limit: Int!) {
       pullWorkshops(checkpoint: $checkpoint, limit: $limit) {
@@ -91,7 +63,7 @@ export const pullQueryBuilder: RxGraphQLReplicationPullQueryBuilder<number> = (
     query,
     variables: {
       limit: limit,
-      checkpoint: latestPulledCheckpoint || { id: "", updatedAt: 0 },
+      checkpoint: latestPulledCheckpoint ?? { id: "", updatedAt: 0 },
     },
   };
 };

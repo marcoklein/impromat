@@ -12,6 +12,7 @@ export class ElementInputMapper
       id: dto.id,
       version: dto.version,
       name: dto.name,
+      deleted: dto.deleted ?? false,
       markdown: dto.markdown ?? "",
       tags: dto.tags ?? [],
       note: dto.note ?? "",

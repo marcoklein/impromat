@@ -9,6 +9,7 @@ export function fromSectionInputDtoToSectionModel(
     color: inputDto.color ?? undefined,
     elements: inputDto.elementRefs ?? [],
     id: inputDto.id,
+    deleted: inputDto.deleted ?? false,
     isCollapsed: inputDto.isCollapsed ?? false,
     isVisible: inputDto.isVisible ?? false,
     name: inputDto.name ?? "",
