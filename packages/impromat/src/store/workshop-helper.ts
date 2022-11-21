@@ -200,9 +200,9 @@ export class WorkshopHelper {
     logger("pushed new section %O into workshop %O", result, workshop);
   }
 
-  async getNewWorkshopDocType(
+  getNewWorkshopDocType(
     workshopInput: Partial<Pick<WorkshopDocument, "name" | "description">>,
-  ): Promise<WorkshopDocType> {
+  ): WorkshopDocType {
     return {
       id: this.generateUniqueId(),
       version: DEFAULT_VERSION,

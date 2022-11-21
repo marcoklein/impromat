@@ -16,7 +16,7 @@ test("create workshop", async ({ page }) => {
   await page.locator('button:has-text("Save")').click();
 
   // verify navigation to new workshop
-  await page.waitForNavigation();
+  // await page.waitForNavigation();
   const workshopId = /[^/]*?$/.exec(page.url())![0];
   await expect(page).toHaveURL(`./workshop/${workshopId}`);
 

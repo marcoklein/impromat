@@ -43,7 +43,7 @@ class RxMutations {
   }
 
   async addWorkshop(name: string, description: string) {
-    const workshop = await WORKSHOP_HELPER.getNewWorkshopDocType({
+    const workshop = WORKSHOP_HELPER.getNewWorkshopDocType({
       name,
       description,
     });
