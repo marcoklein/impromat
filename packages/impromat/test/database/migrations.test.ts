@@ -3,6 +3,7 @@ import { existsSync, readFileSync, removeSync, writeFileSync } from "fs-extra";
 import { createRxDatabase } from "rxdb";
 import { getRxStorageMemory } from "rxdb/plugins/memory";
 import { DatabaseProvider } from "../../src/database/provider/database-provider";
+import { DatabaseProviderMock } from "./database-provider-mock";
 import { workshopSchemaVersion0 } from "./initial-schema-version";
 import { initRxDbPlugins } from "./rx-db-init";
 
@@ -15,7 +16,7 @@ test.describe("Database Provider", () => {
   let databaseProvider: DatabaseProvider;
   test.beforeEach(() => {
     storage = getRxStorageMemory();
-    databaseProvider = new DatabaseProvider(storage, {} as any);
+    databaseProvider = new DatabaseProviderMock(storage, {} as any);
   });
 
   test("should create database migration for database version 0", async () => {

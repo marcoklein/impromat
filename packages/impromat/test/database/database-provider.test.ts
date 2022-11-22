@@ -1,12 +1,13 @@
 import { expect, test } from "@playwright/test";
 import { existsSync, readFileSync, removeSync, writeFileSync } from "fs-extra";
-import { createRxDatabase, RxCollection, RxDatabase } from "rxdb";
+import { createRxDatabase, RxDatabase } from "rxdb";
 import { getRxStorageMemory } from "rxdb/plugins/memory";
 import {
   DatabaseProvider,
   DatabaseVersionProvider,
   DATABASE_VERSION,
 } from "../../src/database/provider/database-provider";
+import { DatabaseProviderMock } from "./database-provider-mock";
 import { workshopSchemaVersion0 } from "./initial-schema-version";
 import { initRxDbPlugins } from "./rx-db-init";
 
@@ -45,19 +46,8 @@ test.describe("Database Provider", () => {
         return true;
       },
     };
-    class DatabaseProviderSpy extends DatabaseProvider {
-      async createDatabaseOfVersion(
-        version: number,
-        options?: { ignoreDuplicate: boolean } | undefined,
-      ): Promise<
-        RxDatabase<{ [key: string]: RxCollection<any, {}, {}, {}> }, any, any>
-      > {
-        return super.createDatabaseOfVersion(version, {
-          ignoreDuplicate: true,
-        });
-      }
-    }
-    const databaseProvider = new DatabaseProviderSpy(storage, versionProvider);
+
+    const databaseProvider = new DatabaseProviderMock(storage, versionProvider);
 
     const version0Data = JSON.parse(
       readFileSync("test/database/inputs/db_input_version_0.json").toString(),
@@ -77,7 +67,7 @@ test.describe("Database Provider", () => {
     await db.importJSON(version0Data);
 
     // when
-    const newDb = await databaseProvider.loadDatabase();
+    const newDb = await databaseProvider.loadDatabase<RxDatabase>();
 
     // then
     const dump = await newDb.exportJSON();

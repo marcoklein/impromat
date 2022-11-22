@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.skip("create workshop", async ({ page }) => {
+test("create workshop", async ({ page }) => {
   // workshop page
   await page.goto("./workshop");
 
@@ -16,10 +16,7 @@ test.skip("create workshop", async ({ page }) => {
   await page.locator('button:has-text("Save")').click();
 
   // verify navigation to new workshop
-  // const workshopPreId = /[^/]*?$/.exec(page.url())![0];
-  // if (page.url() !== `./workshop/${workshopPreId}`) {
-  //   await page.waitForNavigation();
-  // }
+  await page.waitForNavigation();
   const workshopId = /[^/]*?$/.exec(page.url())![0];
   await expect(page).toHaveURL(`./workshop/${workshopId}`);
 

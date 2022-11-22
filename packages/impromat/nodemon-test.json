@@ -1,6 +1,6 @@
 {
-  "exec": "yarn test --max-failures 1",
+  "exec": "yarn test",
   "watch": ["src", "test"],
-  "ignore": ["src/version.gen.ts"],
+  "ignore": ["src/version.gen.ts", "src/markdown/**/*"],
   "ext": "ts"
 }
