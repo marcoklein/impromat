@@ -5,7 +5,7 @@ import {
 import {
   PullCheckpointInput,
   WorkshopPushRowInput,
-} from "../../graphql/schema.gen";
+} from "../../../graphql/schema.gen";
 
 // TODO generate this query from the generated schema
 // it is fatal if one field is not synced because that yield unpredictable behavior!

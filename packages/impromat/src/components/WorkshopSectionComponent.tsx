@@ -1,7 +1,7 @@
 import { IonBadge, IonButton, IonIcon } from "@ionic/react";
 import { chevronDown, chevronUp } from "ionicons/icons";
 import React from "react";
-import { SectionDocType } from "../store/collections/section-collection";
+import { SectionDocType } from "../database/collections/section/section-collection";
 import { SlidingItemComponent } from "./SlidingItemComponent";
 import "./WorkshopElementItemComponent.css";
 

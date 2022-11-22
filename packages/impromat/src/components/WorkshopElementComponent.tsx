@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { ElementDocType } from "../store/collections/element-collection";
+import { ElementDocType } from "../database/collections/element/element-collection";
 import { LicenseItemComponent } from "./LicenseItemComponent";
 import { TagsComponent } from "./TagsComponent";
 

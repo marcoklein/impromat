@@ -6,12 +6,12 @@ import {
   RxJsonSchema,
   toTypedRxJsonSchema,
 } from "rxdb";
-import { ImpromatRxDatabase } from "../initialize";
+import { AppDatabase } from "../../database-type";
+import { SectionDocument } from "../section/section-collection";
 import {
   workshopMigrationStrategies,
   workshopSchemaVersion,
-} from "./migration-strategies";
-import { SectionDocument } from "./section-collection";
+} from "./workshop-migrations";
 
 const schemaLiteral = {
   primaryKey: "id",
@@ -54,7 +54,7 @@ type ReferenceFields = {
 };
 export type WorkshopDocumentMethods = {
   populateSections: () => Promise<SectionDocument[]>;
-  getDatabase: () => ImpromatRxDatabase;
+  getDatabase: () => AppDatabase;
 } & ReferenceFields;
 export type WorkshopDocument = RxDocument<
   WorkshopDocType,
@@ -71,12 +71,12 @@ const documentMethods: Omit<WorkshopDocumentMethods, keyof ReferenceFields> = {
     return this.sections_;
   },
   getDatabase(this: RxDocument) {
-    return this.collection.database as any as ImpromatRxDatabase;
+    return this.collection.database as any as AppDatabase;
   },
 };
 
 export const workshopCollection: RxCollectionCreator<WorkshopDocType> = {
-  schema: workshopSchema,
+  schema: workshopCollectionSchema,
   migrationStrategies: workshopMigrationStrategies,
   methods: documentMethods,
 };

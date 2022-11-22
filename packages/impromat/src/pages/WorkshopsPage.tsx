@@ -18,8 +18,8 @@ import { useCallback } from "react";
 import { useHistory } from "react-router";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeAbout } from "../routes/shared-routes";
-import { useRxdbMutations } from "../store/use-rxdb-mutations";
-import { useWorkshops } from "../store/use-workshops";
+import { useRxdbMutations } from "../database/use-rxdb-mutations";
+import { useWorkshops } from "../database/use-workshops";
 import { useComponentLogger } from "../use-component-logger";
 
 export const WorkshopsPage: React.FC = () => {

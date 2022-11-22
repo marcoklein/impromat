@@ -14,9 +14,9 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { WorkshopElementComponent } from "../components/WorkshopElementComponent";
 import { routeWorkshopAddElement } from "../routes/shared-routes";
-import { ElementDocType } from "../store/collections/element-collection";
-import { useImprobibElements } from "../store/improbib/use-improbib-elements";
-import { useRxdbMutations } from "../store/use-rxdb-mutations";
+import { ElementDocType } from "../database/collections/element/element-collection";
+import { useImprobibElements } from "../database/improbib/use-improbib-elements";
+import { useRxdbMutations } from "../database/use-rxdb-mutations";
 
 export const ImprobibElementPage: React.FC = () => {
   const { id: workshopId, libraryPartId } = useParams<{

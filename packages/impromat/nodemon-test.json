@@ -1,5 +1,6 @@
 {
   "exec": "yarn test --max-failures 1",
   "watch": ["src", "test"],
+  "ignore": ["src/version.gen.ts"],
   "ext": "ts"
 }

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import Markdown from "react-markdown";
-import { ElementDocument } from "../store/collections/element-collection";
+import { ElementDocument } from "../database/collections/element/element-collection";
 import { SlidingItemComponent } from "./SlidingItemComponent";
 import "./WorkshopElementItemComponent.css";
 

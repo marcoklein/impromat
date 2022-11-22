@@ -1,6 +1,6 @@
-import { environment } from "../../environment";
-import { WorkshopInput } from "../../graphql/schema.gen";
-import { rootLogger } from "../../logger";
+import { environment } from "../../../environment";
+import { WorkshopInput } from "../../../graphql/schema.gen";
+import { rootLogger } from "../../../logger";
 import { WorkshopCollection } from "./workshop-collection";
 import {
   pullQueryBuilder,

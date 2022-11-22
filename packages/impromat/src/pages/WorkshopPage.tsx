@@ -30,9 +30,9 @@ import { WorkshopElementsComponent } from "../components/WorkshopElementsCompone
 import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshops } from "../routes/shared-routes";
-import { useRxdbMutations } from "../store/use-rxdb-mutations";
-import { useWorkshop } from "../store/use-workshop";
-import { WORKSHOP_HELPER } from "../store/workshop-helper";
+import { useRxdbMutations } from "../database/use-rxdb-mutations";
+import { useWorkshop } from "../database/use-workshop";
+import { WORKSHOP_HELPER } from "../database/workshop-helper";
 import { useComponentLogger } from "../use-component-logger";
 
 export const WorkshopPage: React.FC = () => {

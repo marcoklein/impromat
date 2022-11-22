@@ -3,12 +3,12 @@ import { rootLogger } from "../logger";
 import {
   ElementDocType,
   ElementDocument,
-} from "./collections/element-collection";
-import { SectionDocType } from "./collections/section-collection";
+} from "./collections/element/element-collection";
+import { SectionDocType } from "./collections/section/section-collection";
 import {
   WorkshopDocType,
   WorkshopDocument,
-} from "./collections/workshop-collection";
+} from "./collections/workshop/workshop-collection";
 
 /**
  * A replication push will increase the version by one and the initial version sent to the server has to be 0.

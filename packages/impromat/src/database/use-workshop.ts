@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
 import { useLogger } from "../use-logger";
-import { WorkshopDocument } from "./collections/workshop-collection";
+import { WorkshopDocument } from "./collections/workshop/workshop-collection";
 
 export function useWorkshop(id: string): {
   workshop: WorkshopDocument;

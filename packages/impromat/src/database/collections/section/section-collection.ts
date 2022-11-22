@@ -6,16 +6,12 @@ import {
   RxJsonSchema,
   toTypedRxJsonSchema,
 } from "rxdb";
-import { ImpromatRxDatabase } from "../initialize";
-import { ElementDocument } from "./element-collection";
-import {
-  sectionMigrationStrategies,
-  sectionSchemaVersion,
-} from "./migration-strategies";
+import { AppDatabase } from "../../database-type";
+import { ElementDocument } from "../element/element-collection";
 
 const schemaLiteral = {
   primaryKey: "id",
-  version: sectionSchemaVersion,
+  version: 0,
   properties: {
     id: {
       type: "string",
@@ -57,7 +53,7 @@ export type SectionDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
 >;
 export type SectionDocumentMethods = {
   populateElements: () => Promise<ElementDocument[]>;
-  getDatabase: () => ImpromatRxDatabase;
+  getDatabase: () => AppDatabase;
 };
 export type SectionDocument = RxDocument<
   SectionDocType,
@@ -71,12 +67,12 @@ const documentMethods: SectionDocumentMethods = {
     return await this.populate("elements");
   },
   getDatabase(this: RxDocument) {
-    return this.collection.database as any as ImpromatRxDatabase;
+    return this.collection.database as any as AppDatabase;
   },
 };
 
 export const sectionCollection: RxCollectionCreator<SectionDocType> = {
   schema: sectionSchema,
-  migrationStrategies: sectionMigrationStrategies,
+  migrationStrategies: {},
   methods: documentMethods,
 };

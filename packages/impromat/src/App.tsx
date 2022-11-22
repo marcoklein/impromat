@@ -48,9 +48,10 @@ import {
   routeWorkshopElement,
   routeWorkshops,
 } from "./routes/shared-routes";
-import { ElementDocType } from "./store/collections/element-collection";
-import { ImprovLibraryContext } from "./store/improbib/improv-library-context";
-import { ImpromatRxDatabase, initialize } from "./store/initialize";
+import { ElementDocType } from "./database/collections/element/element-collection";
+import { AppDatabase } from "./database/database-type";
+import { ImprovLibraryContext } from "./database/improbib/improv-library-context";
+import { initialize } from "./database/initialize";
 import "./theme/colors.css";
 import "./theme/variables.css";
 
@@ -68,7 +69,7 @@ const App: React.FC = () => {
   );
   const sdkRef = useRef(getSdk(clientRef.current));
 
-  const [db, setDb] = useState<ImpromatRxDatabase>();
+  const [db, setDb] = useState<AppDatabase>();
   useEffect(() => {
     // RxDB instantiation can be asynchronous
     initialize({ client: clientRef.current, sdk: sdkRef.current })

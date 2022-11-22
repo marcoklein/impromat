@@ -1,5 +1,5 @@
-import { GraphQLContextType } from "../../graphql/graphql-context";
-import { rootLogger } from "../../logger";
+import { GraphQLContextType } from "../../../graphql/graphql-context";
+import { rootLogger } from "../../../logger";
 import { MeCollection } from "./me-collection";
 
 export function enableMeReplication(

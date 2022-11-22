@@ -15,8 +15,8 @@ import {
   routeWorkshopAddElementCreate,
   routeWorkshopAddElementFromImprobib,
 } from "../routes/shared-routes";
-import { ElementDocType } from "../store/collections/element-collection";
-import { useImprobibElements } from "../store/improbib/use-improbib-elements";
+import { ElementDocType } from "../database/collections/element/element-collection";
+import { useImprobibElements } from "../database/improbib/use-improbib-elements";
 import { InfoItemComponent } from "./InfoItemComponent";
 import { WorkshopElementPreviewItemComponent } from "./WorkshopElementPreviewItemComponent";
 

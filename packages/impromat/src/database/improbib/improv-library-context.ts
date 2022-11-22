@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ElementDocType } from "../collections/element-collection";
+import { ElementDocType } from "../collections/element/element-collection";
 
 export type ImprovLibraryContextType = {
   improvElements: ElementDocType[] | undefined;

@@ -21,8 +21,8 @@ import { useParams } from "react-router";
 import { LicenseItemComponent } from "../components/LicenseItemComponent";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshop } from "../routes/shared-routes";
-import { useRxdbMutations } from "../store/use-rxdb-mutations";
-import { useWorkshopElement } from "../store/use-workshop-element";
+import { useRxdbMutations } from "../database/use-rxdb-mutations";
+import { useWorkshopElement } from "../database/use-workshop-element";
 
 export const WorkshopElementPage: React.FC = () => {
   const { id: workshopId, partId: elementId } = useParams<{

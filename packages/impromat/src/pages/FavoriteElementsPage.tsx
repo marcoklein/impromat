@@ -11,8 +11,8 @@ import {
 import { useEffect, useState } from "react";
 import { useRxCollection } from "rxdb-hooks";
 import { WorkshopElementPreviewItemComponent } from "../components/WorkshopElementPreviewItemComponent";
-import { ElementDocType } from "../store/collections/element-collection";
-import { MeCollection } from "../store/collections/me-collection";
+import { ElementDocType } from "../database/collections/element/element-collection";
+import { MeCollection } from "../database/collections/me/me-collection";
 import { useComponentLogger } from "../use-component-logger";
 
 export const FavoriteElementsPage: React.FC = () => {

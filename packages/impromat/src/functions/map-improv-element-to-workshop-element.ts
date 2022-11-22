@@ -1,5 +1,5 @@
 import { ImprovElement } from "../models/improv-element";
-import { ElementDocType } from "../store/collections/element-collection";
+import { ElementDocType } from "../database/collections/element/element-collection";
 
 export function mapImprovElementToWorkshopElement({
   baseUrl,

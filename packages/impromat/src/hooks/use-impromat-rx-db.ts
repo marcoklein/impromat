@@ -1,7 +1,7 @@
 import { useRxDB } from "rxdb-hooks";
-import { ImpromatRxDatabase } from "../store/initialize";
+import { AppDatabase } from "../database/database-type";
 
 export function useImpromatRxDb() {
   const db = useRxDB();
-  return db as any as ImpromatRxDatabase;
+  return db as any as AppDatabase;
 }

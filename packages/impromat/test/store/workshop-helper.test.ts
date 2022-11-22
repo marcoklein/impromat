@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
-import { ElementDocType } from "../../src/store/collections/element-collection";
-import { WorkshopHelper } from "../../src/store/workshop-helper";
+import { ElementDocType } from "../../src/database/collections/element/element-collection";
+import { WorkshopHelper } from "../../src/database/workshop-helper";
 
 /**
  * Disabled test.

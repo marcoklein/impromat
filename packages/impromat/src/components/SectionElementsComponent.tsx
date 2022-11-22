@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
-import { ElementDocument } from "../store/collections/element-collection";
-import { SectionDocument } from "../store/collections/section-collection";
-import { WorkshopDocument } from "../store/collections/workshop-collection";
+import { ElementDocument } from "../database/collections/element/element-collection";
+import { SectionDocument } from "../database/collections/section/section-collection";
+import { WorkshopDocument } from "../database/collections/workshop/workshop-collection";
 import { WorkshopElementItemComponent } from "./WorkshopElementItemComponent";
 
 interface ContainerProps {

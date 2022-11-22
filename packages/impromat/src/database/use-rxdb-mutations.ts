@@ -3,20 +3,20 @@ import { useRxDB } from "rxdb-hooks";
 import { v4 as uuidv4 } from "uuid";
 import { rootLogger } from "../logger";
 import { AVAILABLE_COLORS } from "../theme/colors";
-import { ElementDocType } from "./collections/element-collection";
-import { SectionDocType } from "./collections/section-collection";
+import { ElementDocType } from "./collections/element/element-collection";
+import { SectionDocType } from "./collections/section/section-collection";
 import {
   WorkshopCollection,
   WorkshopDocType,
   WorkshopDocument,
-} from "./collections/workshop-collection";
-import { ImpromatRxDatabase } from "./initialize";
+} from "./collections/workshop/workshop-collection";
+import { AppDatabase } from "./database-type";
 import { WORKSHOP_HELPER } from "./workshop-helper";
 const logger = rootLogger.extend("use-rxdb-mutations");
 
 class RxMutations {
   private collection: WorkshopCollection;
-  constructor(private database: ImpromatRxDatabase) {
+  constructor(private database: AppDatabase) {
     this.collection = this.database.collections.workshops;
   }
 
@@ -202,7 +202,7 @@ class RxMutations {
 }
 
 export function useRxdbMutations() {
-  const db = useRxDB() as any as ImpromatRxDatabase;
+  const db = useRxDB() as any as AppDatabase;
 
   return useMemo(() => (db ? new RxMutations(db) : undefined), [db]);
 }

@@ -1,5 +1,5 @@
 import { IonBadge, IonItem, IonLabel, IonNote, IonText } from "@ionic/react";
-import { ElementDocType } from "../store/collections/element-collection";
+import { ElementDocType } from "../database/collections/element/element-collection";
 import { TagsComponent } from "./TagsComponent";
 
 interface ContainerProps {

@@ -5,11 +5,10 @@ import {
   RxJsonSchema,
   toTypedRxJsonSchema,
 } from "rxdb";
-import { meMigrationStrategies, meSchemaVersion } from "./migration-strategies";
 
 const schemaLiteral = {
   primaryKey: "id",
-  version: meSchemaVersion,
+  version: 0,
   properties: {
     id: {
       type: "string",
@@ -36,5 +35,5 @@ export type MeCollection = RxCollection<MeDocType>;
 
 export const meCollection: RxCollectionCreator<MeDocType> = {
   schema: meSchema,
-  migrationStrategies: meMigrationStrategies,
+  migrationStrategies: {},
 };

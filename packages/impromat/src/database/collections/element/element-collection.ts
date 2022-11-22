@@ -6,11 +6,8 @@ import {
   RxJsonSchema,
   toTypedRxJsonSchema,
 } from "rxdb";
-import {
-  elementSchemaVersion,
-  elementMigrationStrategies,
-} from "./migration-strategies";
 
+const elementSchemaVersion = 0;
 const schemaLiteral = {
   primaryKey: "id",
   version: elementSchemaVersion,
@@ -74,5 +71,5 @@ export const elementSchema: RxJsonSchema<ElementDocType> = schemaLiteral;
 
 export const elementCollection: RxCollectionCreator<ElementDocType> = {
   schema: elementSchema,
-  migrationStrategies: elementMigrationStrategies,
+  migrationStrategies: {},
 };

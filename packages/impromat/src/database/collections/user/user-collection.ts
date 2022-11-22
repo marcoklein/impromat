@@ -6,14 +6,10 @@ import {
   RxJsonSchema,
   toTypedRxJsonSchema,
 } from "rxdb";
-import {
-  userMigrationStrategies,
-  userSchemaVersion,
-} from "./migration-strategies";
 
 const userSchemaLiteral = {
   primaryKey: "id",
-  version: userSchemaVersion,
+  version: 0,
   properties: {
     id: {
       type: "string",
@@ -44,5 +40,5 @@ export type UserDocument = RxDocument<UserDocType>;
 
 export const userCollection: RxCollectionCreator<UserDocType> = {
   schema: userSchema,
-  migrationStrategies: userMigrationStrategies,
+  migrationStrategies: {},
 };

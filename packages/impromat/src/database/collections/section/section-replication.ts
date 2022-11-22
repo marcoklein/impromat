@@ -1,5 +1,5 @@
-import { environment } from "../../environment";
-import { rootLogger } from "../../logger";
+import { environment } from "../../../environment";
+import { rootLogger } from "../../../logger";
 import { SectionCollection } from "./section-collection";
 import {
   sectionPullQueryBuilder,

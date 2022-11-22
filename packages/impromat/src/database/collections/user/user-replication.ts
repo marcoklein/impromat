@@ -1,12 +1,12 @@
-import { environment } from "../../environment";
-import { rootLogger } from "../../logger";
-import { MeCollection } from "./me-collection";
+import { environment } from "../../../environment";
+import { rootLogger } from "../../../logger";
+import { UserCollection } from "./user-collection";
 import {
   userPullQueryBuilder,
   userPushQueryBuilder,
 } from "./user-replication-query-builder";
 
-export function enableUserReplication(userCollection: MeCollection) {
+export function enableUserReplication(userCollection: UserCollection) {
   const logger = rootLogger.extend("user-replication");
   const replicationState = userCollection.syncGraphQL({
     url: {
