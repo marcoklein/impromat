@@ -1,8 +1,8 @@
-import { FileDatabase } from "./file-database";
+import { FileDatabase } from "../../src/database/file-database";
 
-export class MemoryDatabase extends FileDatabase {
+export class FileDatabaseMock extends FileDatabase {
   constructor() {
-    super("not-used", {} as any);
+    super("not-used");
     this.store = {
       version: 0,
       workshopsOfUsers: {},

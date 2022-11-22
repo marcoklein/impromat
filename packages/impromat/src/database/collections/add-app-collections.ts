@@ -1,17 +1,10 @@
 import { AppDatabase } from "../database-type";
-import { elementCollection } from "./element/element-collection";
-import { meCollection } from "./me/me-collection";
-import { sectionCollection } from "./section/section-collection";
-import { userCollection } from "./user/user-collection";
-import { workshopCollection } from "./workshop/workshop-collection";
+import {
+  DATABASE_VERSION,
+  DATABASE_VERSION_COLLECIONS,
+} from "../provider/database-provider";
 
 export async function addAppCollections(db: AppDatabase) {
-  await db.addCollections({
-    workshops: workshopCollection,
-    users: userCollection,
-    me: meCollection,
-    elements: elementCollection,
-    sections: sectionCollection,
-  });
+  await db.addCollections(DATABASE_VERSION_COLLECIONS[DATABASE_VERSION]);
   return db.collections;
 }

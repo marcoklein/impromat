@@ -19,9 +19,9 @@ import { AppCollections, AppDatabase } from "./database-type";
 addRxPlugin(RxDBReplicationGraphQLPlugin);
 addRxPlugin(RxDBUpdatePlugin);
 addRxPlugin(RxDBMigrationPlugin);
+addRxPlugin(RxDBJsonDumpPlugin);
 if (process.env.NODE_ENV === "development") {
   addRxPlugin(RxDBDevModePlugin);
-  addRxPlugin(RxDBJsonDumpPlugin);
   console.log("RxDB Development initialized");
 }
 console.log("RxDB Plugins initialized");

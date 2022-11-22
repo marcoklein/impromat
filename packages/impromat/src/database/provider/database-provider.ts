@@ -23,18 +23,19 @@ export const DATABASE_VERSION = 1;
 
 type DatabaseCollections = Record<string, RxCollectionCreator>;
 
-const DATABASE_VERSION_COLLECIONS: Record<number, DatabaseCollections> = {
-  1: {
-    workshops: workshopCollection,
-    users: userCollection,
-    me: meCollection,
-    elements: elementCollection,
-    sections: sectionCollection,
-  },
-  0: {
-    workshops: workshopCollection0,
-  },
-};
+export const DATABASE_VERSION_COLLECIONS: Record<number, DatabaseCollections> =
+  {
+    1: {
+      workshops: workshopCollection,
+      users: userCollection,
+      me: meCollection,
+      elements: elementCollection,
+      sections: sectionCollection,
+    },
+    0: {
+      workshops: workshopCollection0,
+    },
+  };
 
 const databaseMigrations: Record<
   number,

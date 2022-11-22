@@ -11,13 +11,11 @@
     "start:dev": "ts-node -r dotenv/config src/index.ts",
     "dev": "concurrently \"nodemon\" \"yarn codegen:watch\"",
     "codegen:graphql": "graphql-codegen",
-    "codegen:json-schema": "ts-json-schema-generator --path 'src/graphql/schema.gen.ts' --type 'Workshop' --out schema/schema.gen.json --no-top-ref --id Workshop",
     "codegen": "yarn codegen:graphql && yarn codegen:json-schema",
     "codegen:watch": "nodemon --config nodemon-codegen.json",
     "test": "yarn codegen:graphql && c8 --reporter=text --reporter=lcov --reporter cobertura mocha --loader=ts-node/esm \"test/**/*.test.ts\"",
     "test:watch": "concurrently \"nodemon --config nodemon-test.json\" \"yarn codegen:watch\"",
-    "infra": "./infrastructure/cli.sh",
-    "infra:install": "./infrastructure/install.sh"
+    "changeset": "yarn --cwd \"../..\" changeset"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.13.1",
@@ -36,7 +34,6 @@
     "graphql-request": "^5.0.0",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
-    "ts-json-schema-generator": "^1.1.2",
     "typescript": "^4.8.3"
   },
   "dependencies": {
@@ -46,7 +43,6 @@
     "@graphql-tools/mock": "^8.7.5",
     "@graphql-tools/schema": "^9.0.3",
     "@graphql-yoga/node": "^2.13.13",
-    "ajv": "^8.11.0",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "express-session": "^1.17.3",

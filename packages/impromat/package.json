@@ -80,8 +80,7 @@
     "compile-markdown": "bash ./scripts/generate-markdown.sh",
     "codegen:graphql": "yarn codegen:get-schema-graphql && graphql-codegen",
     "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql",
-    "codegen:schema-types": "json2ts -i schema/schema.gen.json -o src/store/schema.gen.ts",
-    "codegen": "yarn codegen:get-schema-json && yarn codegen:schema-types && yarn codegen:schema-json-ts && yarn codegen:graphql",
+    "codegen": "yarn codegen:get-schema-json && yarn codegen:graphql",
     "changeset": "yarn --cwd \"../..\" changeset"
   },
   "eslintConfig": {
@@ -114,9 +113,7 @@
     "@types/debug": "^4.1.7",
     "genversion": "^3.1.1",
     "gh-pages": "^4.0.0",
-    "graphql-request": "^5.0.0",
-    "json-schema-to-typescript": "^11.0.2",
-    "xo": "^0.51.0"
+    "graphql-request": "^5.0.0"
   },
   "description": "An Ionic project"
 }

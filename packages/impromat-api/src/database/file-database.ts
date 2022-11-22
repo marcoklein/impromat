@@ -1,20 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
 import { environment } from "../environment";
-import { Element, Workshop } from "../graphql/schema.gen";
-import { SchemaValidator } from "../schema-validation/schema-validator";
+import { Workshop } from "../graphql/schema.gen";
 import { Database } from "./database";
-import { UserModel } from "./user-model";
-import { migrations } from "./migrations";
 import { ElementModel } from "./element-model";
+import { migrations } from "./migrations";
 import { SectionModel } from "./section-model";
+import { UserModel } from "./user-model";
 
 interface ValidationError {
   location: string;
   data: any;
 }
 
-export const DATABASE_VERSION = 2;
+export const DATABASE_VERSION = 3;
 
 export interface DatabaseSchema {
   version: number;
@@ -27,10 +26,7 @@ export interface DatabaseSchema {
 export class FileDatabase implements Database {
   store: DatabaseSchema | undefined;
 
-  constructor(
-    private storagePath: string = environment.STORAGE_PATH,
-    private schemaValidator: SchemaValidator
-  ) {}
+  constructor(private storagePath: string = environment.STORAGE_PATH) {}
 
   addWorkshop(userId: string, workshop: any) {
     if (!this.store) throw new Error("Not loaded");
@@ -90,22 +86,9 @@ export class FileDatabase implements Database {
       };
     }
     const errors = await this.validate();
-    if (errors.errors) {
+    if (!errors.valid) {
       this.store = undefined;
-      console.error(
-        `Database schema invalid. Errors: ${JSON.stringify(
-          errors,
-          undefined,
-          2
-        )}`
-      );
-      throw new Error(
-        `Database is invalid for current schema. Please migrate changes by increasing the version. Errors: ${JSON.stringify(
-          errors,
-          undefined,
-          2
-        )}`
-      );
+      throw new Error(`Database is invalid (version mismatch)`);
     }
     this.save();
   }
@@ -148,28 +131,10 @@ export class FileDatabase implements Database {
 
   async validate(): Promise<{
     valid: boolean;
-    errors?: ValidationError[] | undefined;
   }> {
     if (!this.store) throw new Error("Not loaded");
-    let errors: ValidationError[] = [];
-    for (const workshops of Object.values(this.store.workshopsOfUsers)) {
-      for (const workshop of workshops) {
-        const result = await this.schemaValidator.validate(workshop);
-        if (result.errors) {
-          errors.push(
-            ...result.errors.map(
-              (error): ValidationError => ({
-                location: `Workshopid${workshop.id}`,
-                data: error,
-              })
-            )
-          );
-        }
-      }
-    }
     return {
-      valid: errors.length === 0,
-      errors: errors.length > 0 ? errors : undefined,
+      valid: this.store.version === DATABASE_VERSION,
     };
   }
 

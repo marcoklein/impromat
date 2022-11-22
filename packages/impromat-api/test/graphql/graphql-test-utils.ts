@@ -1,11 +1,11 @@
 import express from "express";
 import { GraphQLClient } from "graphql-request";
 import { createServer, Server } from "node:http";
-import { MemoryDatabase } from "../../src/database/memory-database";
 import {
   createGraphQLServer,
   GraphQLServerConfiguration,
 } from "../../src/graphql/create-graphql-server";
+import { FileDatabaseMock } from "../database/file-database-mock";
 
 let lastPort = 5012;
 let maxPort = 5100;
@@ -22,7 +22,7 @@ export async function createGraphQLTestContext(
   const changeUser = (userId: string) => {
     currentUserId = userId;
   };
-  const database = new MemoryDatabase();
+  const database = new FileDatabaseMock();
 
   const defaultOptions: GraphQLServerConfiguration = {
     isProduction: false,
