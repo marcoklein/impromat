@@ -51,7 +51,7 @@ import {
 import { ElementDocType } from "./database/collections/element/element-collection";
 import { AppDatabase } from "./database/database-type";
 import { ImprovLibraryContext } from "./database/improbib/improv-library-context";
-import { initialize } from "./database/initialize";
+import { createDatabase } from "./database/create-database";
 import "./theme/colors.css";
 import "./theme/variables.css";
 
@@ -72,7 +72,7 @@ const App: React.FC = () => {
   const [db, setDb] = useState<AppDatabase>();
   useEffect(() => {
     // RxDB instantiation can be asynchronous
-    initialize({ client: clientRef.current, sdk: sdkRef.current })
+    createDatabase({ client: clientRef.current, sdk: sdkRef.current })
       .then(setDb)
       .catch((error) => {
         if (error.rxdb && error.code === "DB8") {

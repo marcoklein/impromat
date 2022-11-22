@@ -14,7 +14,7 @@ import { enableMeReplication } from "./collections/me/me-replication";
 import { enableSectionReplication } from "./collections/section/section-replication";
 import { enableUserReplication } from "./collections/user/user-replication";
 import { enableWorkshopReplication } from "./collections/workshop/workshop-replication";
-import { AppDatabase, AppCollections } from "./database-type";
+import { AppCollections, AppDatabase } from "./database-type";
 
 addRxPlugin(RxDBReplicationGraphQLPlugin);
 addRxPlugin(RxDBUpdatePlugin);
@@ -26,8 +26,8 @@ if (process.env.NODE_ENV === "development") {
 }
 console.log("RxDB Plugins initialized");
 
-export const initialize = async (apiContext: GraphQLContextType) => {
-  const logger = rootLogger.extend("store-initialize");
+export const createDatabase = async (apiContext: GraphQLContextType) => {
+  const logger = rootLogger.extend("create-database");
   const db: AppDatabase = await createRxDatabase<AppCollections>({
     name: "impromat-production",
     storage:
