@@ -11,7 +11,7 @@
     "start:dev": "ts-node -r dotenv/config src/index.ts",
     "dev": "concurrently \"nodemon\" \"yarn codegen:watch\"",
     "codegen:graphql": "graphql-codegen",
-    "codegen": "yarn codegen:graphql && yarn codegen:json-schema",
+    "codegen": "yarn codegen:graphql",
     "codegen:watch": "nodemon --config nodemon-codegen.json",
     "test": "yarn codegen:graphql && c8 --reporter=text --reporter=lcov --reporter cobertura mocha --loader=ts-node/esm \"test/**/*.test.ts\"",
     "test:watch": "concurrently \"nodemon --config nodemon-test.json\" \"yarn codegen:watch\"",
