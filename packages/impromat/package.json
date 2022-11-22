@@ -74,7 +74,7 @@
     "test:watch": "nodemon --config nodemon-test.json",
     "test:debug": "yarn test:headed --debug",
     "playwright:codegen": "playwright codegen",
-    "playwright:install": "playwright install chromium --with-deps",
+    "playwright:install": "playwright install chromium",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build",
     "compile-markdown": "bash ./scripts/generate-markdown.sh",

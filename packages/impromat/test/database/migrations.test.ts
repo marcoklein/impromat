@@ -28,6 +28,7 @@ test.describe("Database Provider", () => {
     const db = await createRxDatabase({
       name: "impromat-production",
       storage: storage,
+      ignoreDuplicate: true,
     });
     await db.addCollections({
       workshops: {
@@ -46,8 +47,6 @@ test.describe("Database Provider", () => {
     const dump = await newDb.exportJSON();
     expect(dump).toBeDefined();
     writeFileSync(outPath, JSON.stringify(dump, undefined, 2));
-    await db.remove();
-    await newDb.remove();
   });
 
   test("should create database migration for database version 1", async () => {
@@ -69,7 +68,5 @@ test.describe("Database Provider", () => {
     const dump = await newDb.exportJSON();
     expect(dump).toBeDefined();
     writeFileSync(outPath, JSON.stringify(dump, undefined, 2));
-    await db.remove();
-    await newDb.remove();
   });
 });
