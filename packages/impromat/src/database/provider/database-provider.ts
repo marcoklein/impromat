@@ -75,7 +75,7 @@ export class DatabaseProvider {
     protected databaseVersionProvider: DatabaseVersionProvider,
   ) {}
 
-  async loadDatabase() {
+  async loadDatabase<T extends RxDatabase<any>>(): Promise<T> {
     const currentVersion = this.databaseVersionProvider.getVersion();
     logger(
       "Current database version = %i; should database version = %i",
@@ -87,6 +87,10 @@ export class DatabaseProvider {
       currentVersion !== undefined &&
       currentVersion !== DATABASE_VERSION
     ) {
+      logger(
+        "Creating old database with version %i for migration",
+        currentVersion,
+      );
       let oldDatabase = await this.createDatabaseOfVersion(currentVersion);
       for (
         let version = currentVersion;
@@ -99,13 +103,14 @@ export class DatabaseProvider {
         );
       }
       this.databaseVersionProvider.setVersion(DATABASE_VERSION);
-      return oldDatabase;
+      return oldDatabase as T;
     }
     logger(
       "Returning database with most recent version (%i)",
       DATABASE_VERSION,
     );
-    return this.createDatabaseOfVersion(DATABASE_VERSION);
+    const db = await this.createDatabaseOfVersion(DATABASE_VERSION);
+    return db as T;
   }
 
   async applyNextMigrationToDatabase(version: number, oldDatabase: RxDatabase) {
