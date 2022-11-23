@@ -4,8 +4,8 @@
 
 ### Minor Changes
 
-- ca9bfdd: - Add database migration to version 3.
-  - Remove obsolete json schema validation
+- ca9bfdd: Add database migration to version 3.
+- Remove obsolete json schema validation
 - ca9bfdd: Synchronization of users via the GraphQL `me` query and `pushUsers` mutation.
 
 ### Patch Changes

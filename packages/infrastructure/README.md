@@ -11,6 +11,20 @@ git remote add <app-name> dokku@impromat.app:<app-name>
 git push <app-name> <branch-name>:master
 ```
 
+## Verify Deployments are Working
+
+List all apps
+
+```
+dokku apps:list
+```
+
+Print logs for a specific app
+
+```
+dokku logs <app-name>
+```
+
 ## GitHub Actions
 
 GitHub Actions can deploy a new release version on merge to the main branch.

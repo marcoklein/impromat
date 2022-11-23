@@ -74,11 +74,13 @@ jobs:
       commitSha: ${{ needs.increase-build-version.outputs.commitSha }}
 
   deploy:
-    needs: test
+    needs:
+      - test
+      - increase-build-version
     runs-on: ubuntu-latest
     steps:
       - name: Print commit SHA
-        run: "echo ${{ job.increase-build-version.outputs.commitSha }}"
+        run: "echo ${{ needs.increase-build-version.outputs.commitSha }}"
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
