@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.14.0
+
+### Minor Changes
+
+- ca9bfdd: Split database into four collections, namely `workshop`, `section`, `user`, `me`, and `element`. This is to first of all reflect API changes but also to be better scalable for upcoming features.
+- ca9bfdd: Migration scripts to migrate the complete database.
+
+### Patch Changes
+
+- ca9bfdd: Delete json code generation as all types are generated through GraphQL Codegen.
+
 ## 0.13.1
 
 ### Patch Changes

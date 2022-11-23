@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- ca9bfdd: - Add database migration to version 3.
+  - Remove obsolete json schema validation
+- ca9bfdd: Synchronization of users via the GraphQL `me` query and `pushUsers` mutation.
+
+### Patch Changes
+
+- ca9bfdd: Generate code coverage report for tested files.
+- ca9bfdd: Delete json code generation as all types are generated through GraphQL Codegen.
+
 ## 0.4.3
 
 ### Patch Changes
