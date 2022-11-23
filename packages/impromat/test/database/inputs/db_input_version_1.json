@@ -1,10 +1,10 @@
 {
   "name": "impromat-production",
-  "instanceToken": "lupdimhods",
+  "instanceToken": "cnasaspdie",
   "collections": [
     {
       "name": "workshops",
-      "schemaHash": "vw5xaa",
+      "schemaHash": "jxz03o",
       "docs": [
         {
           "id": "08218e2b-a9ec-4997-b74f-edecd45069dc",
@@ -12,12 +12,12 @@
           "description": "",
           "updatedAt": 1664470915148,
           "_meta": {
-            "lwt": 1669125929089.01
+            "lwt": 1669242842433.01
           },
           "_deleted": false,
           "sections": [
             {
-              "id": "94c44061-fac3-450a-bac4-f8890783209a",
+              "id": "ad8c04f2-4f3e-4c41-b754-55e8ebbb6689",
               "elements": [
                 {
                   "id": "702dbca4-22a9-463f-8be5-b50072cd4c2c",
