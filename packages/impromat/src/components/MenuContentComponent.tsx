@@ -70,6 +70,7 @@ export const MenuContentComponent: React.FC = () => {
               </IonLabel>
             </IonItem>
             <IonItem
+              disabled
               routerLink={routeFavoriteElements()}
               color={
                 location.pathname === routeFavoriteElements() ? "light" : ""
