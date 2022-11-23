@@ -4,6 +4,30 @@ export const migrations: Record<
   number,
   (params: { fromState: any; toVersion: number; fromVersion: number }) => any
 > = {
+  4: ({ fromState }) => {
+    for (let userId in fromState.workshopsOfUsers) {
+      fromState.workshopsOfUsers[userId].forEach((entry: any) => {
+        if (!entry.version) {
+          entry.version = 0;
+        }
+      });
+    }
+    for (let userId in fromState.elementsOfUsers) {
+      fromState.elementsOfUsers[userId].forEach((entry: any) => {
+        if (!entry.version) {
+          entry.version = 0;
+        }
+      });
+    }
+    for (let userId in fromState.sectionsOfUsers) {
+      fromState.sectionsOfUsers[userId].forEach((entry: any) => {
+        if (!entry.version) {
+          entry.version = 0;
+        }
+      });
+    }
+    return fromState;
+  },
   /**
    * Split workshops, elements, and sections
    *
