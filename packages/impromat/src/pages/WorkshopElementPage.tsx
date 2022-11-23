@@ -38,7 +38,7 @@ export const WorkshopElementPage: React.FC = () => {
 
   const changeElementName = (newName: string) => {
     if (!database || !element) return;
-    const newElement = immer(element, (draft) => {
+    const newElement = immer(element.toMutableJSON(), (draft) => {
       draft.name = newName;
     });
     database.updateWorkshopElement(workshopId, newElement);
@@ -47,7 +47,7 @@ export const WorkshopElementPage: React.FC = () => {
   const saveNotesChanges = useCallback(
     (note: string) => {
       if (!database || !element) return;
-      const updatedPart = immer(element, (draft) => {
+      const updatedPart = immer(element.toMutableJSON(), (draft) => {
         draft.note = note;
       });
       database.updateWorkshopElement(workshopId, updatedPart);
