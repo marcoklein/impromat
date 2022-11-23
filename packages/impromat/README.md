@@ -50,6 +50,10 @@ Debug tests by using
 yarn test:debug
 ```
 
+### Page Object Models
+
+Tests are structured using https://playwright.dev/docs/pom.
+
 ## Frameworks
 
 - [open-color](https://github.com/yeun/open-color): for the color palette

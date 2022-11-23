@@ -27,19 +27,20 @@ import {
   WorkshopActionTypes,
 } from "../components/WorkshopActionSheetComponent";
 import { WorkshopElementsComponent } from "../components/WorkshopElementsComponent";
+import { useDocument } from "../database/use-document";
+import { useRxdbMutations } from "../database/use-rxdb-mutations";
+import { WORKSHOP_HELPER } from "../database/workshop-helper";
 import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshops } from "../routes/shared-routes";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import { useWorkshop } from "../database/use-workshop";
-import { WORKSHOP_HELPER } from "../database/workshop-helper";
 import { useComponentLogger } from "../use-component-logger";
 
 export const WorkshopPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const mutations = useRxdbMutations();
   const history = useHistory();
-  const { workshop } = useWorkshop(id);
+  const { document: workshop } = useDocument("workshops", id);
+
   const logger = useComponentLogger("WorkshopPage");
   const [workshopHasContent, setWorkshopHasContent] =
     useState<Awaited<ReturnType<typeof WORKSHOP_HELPER.hasContent>>>(
@@ -47,7 +48,7 @@ export const WorkshopPage: React.FC = () => {
     );
   const database = useImpromatRxDb();
   useEffect(() => {
-    if (workshop) {
+    if (workshop && database) {
       const subscription = database.$.subscribe(() => {
         WORKSHOP_HELPER.hasContent(workshop).then(setWorkshopHasContent);
       });
@@ -70,7 +71,7 @@ export const WorkshopPage: React.FC = () => {
 
   const changeWorkshopName = (newName: string) => {
     if (!mutations || !workshop) return;
-    const updatedWorkshop = immer(workshop, (draft) => {
+    const updatedWorkshop = immer(workshop.toMutableJSON(), (draft) => {
       draft.name = newName;
     });
     mutations.updateWorkshop(updatedWorkshop).then(() => {
@@ -79,7 +80,7 @@ export const WorkshopPage: React.FC = () => {
   };
   const changeWorkshopDescription = (newDescription: string) => {
     if (!mutations || !workshop) return;
-    const updatedWorkshop = immer(workshop, (draft) => {
+    const updatedWorkshop = immer(workshop.toMutableJSON(), (draft) => {
       draft.description = newDescription;
     });
     mutations.updateWorkshop(updatedWorkshop).then(() => {
