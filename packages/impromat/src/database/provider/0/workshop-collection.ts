@@ -12,12 +12,7 @@ const schema = {
       type: "string",
       maxLength: 50,
     },
-    version: {
-      type: "number",
-    },
-    updatedAt: {
-      type: "number",
-    },
+    updatedAt: {},
     name: {
       type: "string",
     },
@@ -26,12 +21,9 @@ const schema = {
     },
     sections: {
       type: "array",
-      items: {
-        type: "object",
-      },
     },
   },
-  required: ["id", "version", "updatedAt", "name", "description", "sections"],
+  required: ["id"],
   type: "object",
 } as const;
 
