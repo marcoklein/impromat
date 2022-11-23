@@ -1,4 +1,3 @@
-import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
 
 pageTest.describe("Workshop Elements Page", () => {
