@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+### Patch Changes
+
+- 47eeef2: Fix migrations by adding version fields to all entries.
+
 ## 0.5.0
 
 ### Minor Changes
