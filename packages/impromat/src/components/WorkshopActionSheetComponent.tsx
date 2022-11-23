@@ -3,10 +3,10 @@ import { close, create, ellipsisVertical, pencil, trash } from "ionicons/icons";
 import { useCallback } from "react";
 import { useHistory } from "react-router";
 import { useHistoryListener } from "../hooks/use-history-listener";
-import { Workshop } from "../store/schema.gen";
+import { WorkshopDocType } from "../database/collections/workshop/workshop-collection";
 
 interface ContainerProps {
-  workshop: Workshop;
+  workshop: WorkshopDocType;
   onEvent: (event: WorkshopActionTypes) => void;
 }
 

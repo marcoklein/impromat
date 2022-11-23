@@ -1,10 +1,10 @@
 import { IonBadge, IonItem, IonLabel, IonNote, IonText } from "@ionic/react";
-import { Element } from "../store/schema.gen";
+import { ElementDocType } from "../database/collections/element/element-collection";
 import { TagsComponent } from "./TagsComponent";
 
 interface ContainerProps {
   routerLink: string;
-  workshopElement: Element;
+  workshopElement: ElementDocType;
 }
 
 /**

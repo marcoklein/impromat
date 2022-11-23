@@ -20,6 +20,14 @@ Publish to GitHub Pages
 yarn deploy
 ```
 
+## Logging
+
+We use `debug` for logging. Enable logging for tests via
+
+```
+DEBUG="impromat:*" yarn test
+```
+
 ## Tests
 
 Playwright executes end-to-end tests.
@@ -41,6 +49,10 @@ Debug tests by using
 ```
 yarn test:debug
 ```
+
+### Page Object Models
+
+Tests are structured using https://playwright.dev/docs/pom.
 
 ## Frameworks
 

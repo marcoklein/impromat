@@ -1,5 +1,13 @@
 # Impromat Monorepo
 
+## Getting started
+
+The `folke.vscode-monorepo-workspace` extension can list all monorepo extensions in the workspace. Use the following command in the command plate after installation to activate them:
+
+```
+>monorepo: Select Workspace Folders
+```
+
 ## Changelog
 
 The project use `changesets` for keeping changelogs and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -21,7 +29,3 @@ To apply `nohoist` changes use a forced install:
 ```
 yarn install --force
 ```
-
-## Library Considerations
-
-https://github.com/changesets/changesets/blob/main/packages/cli/README.md

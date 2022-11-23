@@ -2,31 +2,37 @@ import fs from "node:fs";
 import path from "node:path";
 import { environment } from "../environment";
 import { Workshop } from "../graphql/schema.gen";
-import { SchemaValidator } from "../schema-validation/schema-validator";
+import { Database } from "./database";
+import { ElementModel } from "./element-model";
 import { migrations } from "./migrations";
+import { SectionModel } from "./section-model";
+import { UserModel } from "./user-model";
 
 interface ValidationError {
   location: string;
   data: any;
 }
 
-export const DATABASE_VERSION = 1;
+export const DATABASE_VERSION = 3;
 
 export interface DatabaseSchema {
   version: number;
   workshopsOfUsers: Record<string, Workshop[]>;
+  sectionsOfUsers: Record<string, SectionModel[]>;
+  elementsOfUsers: Record<string, ElementModel[]>;
+  users: Record<string, UserModel>;
 }
 
-export class FileDatabase {
+export class FileDatabase implements Database {
   store: DatabaseSchema | undefined;
 
-  constructor(
-    private storagePath: string = environment.STORAGE_PATH,
-    private schemaValidator: SchemaValidator
-  ) {}
+  constructor(private storagePath: string = environment.STORAGE_PATH) {}
 
   addWorkshop(userId: string, workshop: any) {
     if (!this.store) throw new Error("Not loaded");
+    if (!this.store.workshopsOfUsers[userId]) {
+      this.setWorkshops(userId, []);
+    }
     this.store.workshopsOfUsers[userId].push(workshop);
     this.save();
   }
@@ -34,6 +40,18 @@ export class FileDatabase {
   setWorkshops(userId: string, workshops: any[]) {
     if (!this.store) throw new Error("Not loaded");
     this.store.workshopsOfUsers[userId] = workshops;
+    this.save();
+  }
+
+  setElements(userId: string, elements: ElementModel[]) {
+    if (!this.store) throw new Error("Not loaded");
+    this.store.elementsOfUsers[userId] = elements;
+    this.save();
+  }
+
+  setSections(userId: string, sections: SectionModel[]) {
+    if (!this.store) throw new Error("Not loaded");
+    this.store.sectionsOfUsers[userId] = sections;
     this.save();
   }
 
@@ -62,25 +80,15 @@ export class FileDatabase {
       this.store = {
         version: DATABASE_VERSION,
         workshopsOfUsers: {},
+        users: {},
+        elementsOfUsers: {},
+        sectionsOfUsers: {},
       };
     }
     const errors = await this.validate();
-    if (errors.errors) {
+    if (!errors.valid) {
       this.store = undefined;
-      console.error(
-        `Database schema invalid. Errors: ${JSON.stringify(
-          errors,
-          undefined,
-          2
-        )}`
-      );
-      throw new Error(
-        `Database is invalid for current schema. Please migrate changes by increasing the version. Errors: ${JSON.stringify(
-          errors,
-          undefined,
-          2
-        )}`
-      );
+      throw new Error(`Database is invalid (version mismatch)`);
     }
     this.save();
   }
@@ -117,34 +125,16 @@ export class FileDatabase {
     if (!this.store) throw new Error("Not loaded");
     fs.writeFileSync(
       path.join(this.storagePath, "db.json"),
-      JSON.stringify(this.store)
+      JSON.stringify(this.store, undefined, 2)
     );
   }
 
   async validate(): Promise<{
     valid: boolean;
-    errors?: ValidationError[] | undefined;
   }> {
     if (!this.store) throw new Error("Not loaded");
-    let errors: ValidationError[] = [];
-    for (const workshops of Object.values(this.store.workshopsOfUsers)) {
-      for (const workshop of workshops) {
-        const result = await this.schemaValidator.validate(workshop);
-        if (result.errors) {
-          errors.push(
-            ...result.errors.map(
-              (error): ValidationError => ({
-                location: `Workshopid${workshop.id}`,
-                data: error,
-              })
-            )
-          );
-        }
-      }
-    }
     return {
-      valid: errors.length === 0,
-      errors: errors.length > 0 ? errors : undefined,
+      valid: this.store.version === DATABASE_VERSION,
     };
   }
 
@@ -156,5 +146,33 @@ export class FileDatabase {
   getWorkshops(userId: string) {
     if (!this.store) throw new Error("Not loaded");
     return this.store.workshopsOfUsers[userId] ?? [];
+  }
+
+  getWorkshop(userId: string, workshopId: string) {
+    const workshops = this.getWorkshops(userId);
+    const workshop = workshops.find((workshop) => workshop.id === workshopId);
+    return workshop;
+  }
+
+  getSections(userId: string): SectionModel[] | undefined {
+    if (!this.store) throw new Error("Not loaded");
+    return this.store.sectionsOfUsers[userId] ?? [];
+  }
+
+  getElements(userId: string): ElementModel[] | undefined {
+    if (!this.store) throw new Error("Not loaded");
+    return this.store.elementsOfUsers[userId] ?? [];
+  }
+
+  setUser(userId: string, user: UserModel) {
+    if (!this.store) throw new Error("Not loaded");
+    this.store.users[userId] = user;
+    this.save();
+  }
+
+  getUser(userId: string): UserModel {
+    if (!this.store) throw new Error("Not loaded");
+    const user = this.store.users[userId];
+    return user;
   }
 }

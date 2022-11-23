@@ -1,5 +1,6 @@
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { GraphQLClient } from "graphql-request";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/display.css";
@@ -13,15 +14,20 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Redirect, Route } from "react-router-dom";
 import { Provider as RxDBProvider } from "rxdb-hooks";
+import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { MenuComponent } from "./components/MenuComponent";
+import { environment } from "./environment";
+import { GraphQLContext } from "./graphql/graphql-context";
+import { getSdk } from "./graphql/schema.gen";
 import { AboutPage } from "./pages/AboutPage";
 import { AccountPage } from "./pages/AccountPage";
 import { AddWorkshopElementPage } from "./pages/AddWorkshopElementPage";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
+import { FavoriteElementsPage } from "./pages/FavoriteElementsPage";
 import { HomePage } from "./pages/HomePage";
 import { ImprobibElementPage } from "./pages/ImprobibElementPage";
 import { LegalPage } from "./pages/LegalPage";
@@ -32,6 +38,7 @@ import { WorkshopsPage } from "./pages/WorkshopsPage";
 import {
   routeAbout,
   routeAccount,
+  routeFavoriteElements,
   routeHome,
   routeLegal,
   routePrivacyPolicy,
@@ -41,24 +48,31 @@ import {
   routeWorkshopElement,
   routeWorkshops,
 } from "./routes/shared-routes";
-import { ImprovLibraryContext } from "./store/improbib/improv-library-context";
-import { ImpromatRxDatabase, initialize } from "./store/initialize";
-import { Element } from "./store/schema.gen";
+import { ElementDocType } from "./database/collections/element/element-collection";
+import { AppDatabase } from "./database/database-type";
+import { ImprovLibraryContext } from "./database/improbib/improv-library-context";
+import { createDatabase } from "./database/create-database";
 import "./theme/colors.css";
 import "./theme/variables.css";
-import "../node_modules/flag-icons/css/flag-icons.min.css";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [improvElements, setImprovElements] = useState<Element[] | undefined>(
-    undefined,
-  );
+  const [improvElements, setImprovElements] = useState<
+    ElementDocType[] | undefined
+  >(undefined);
 
-  const [db, setDb] = useState<ImpromatRxDatabase>();
+  const clientRef = useRef(
+    new GraphQLClient(`${environment.API_URL}/graphql`, {
+      credentials: "include",
+    }),
+  );
+  const sdkRef = useRef(getSdk(clientRef.current));
+
+  const [db, setDb] = useState<AppDatabase>();
   useEffect(() => {
     // RxDB instantiation can be asynchronous
-    initialize()
+    createDatabase({ client: clientRef.current, sdk: sdkRef.current })
       .then(setDb)
       .catch((error) => {
         if (error.rxdb && error.code === "DB8") {
@@ -72,51 +86,58 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <RxDBProvider db={db}>
-      <ImprovLibraryContext.Provider
-        value={{ improvElements, setImprovElements }}
+    <RxDBProvider db={db} idAttribute="id">
+      <GraphQLContext.Provider
+        value={{ client: clientRef.current, sdk: sdkRef.current }}
       >
-        <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
-          <IonApp>
-            <IonReactRouter>
-              <MenuComponent></MenuComponent>
-              <IonRouterOutlet id="main">
-                <Redirect from="/" to={routeWorkshops()} exact></Redirect>
-                <Route path={routeHome()} exact>
-                  <HomePage></HomePage>
-                </Route>
-                <Route path={routeAbout()} exact>
-                  <AboutPage></AboutPage>
-                </Route>
-                <Route path={routePrivacyPolicy()} exact>
-                  <PrivacyPolicyPage></PrivacyPolicyPage>
-                </Route>
-                <Route path={routeLegal()} exact>
-                  <LegalPage></LegalPage>
-                </Route>
-                <Route path={routeAccount()} exact>
-                  <AccountPage></AccountPage>
-                </Route>
-                <Route path={routeWorkshops()} exact>
-                  <WorkshopsPage></WorkshopsPage>
-                </Route>
-                <Route path={routeWorkshop()} exact>
-                  <WorkshopPage></WorkshopPage>
-                </Route>
-                <Route path={routeWorkshopElement()} exact>
-                  <WorkshopElementPage></WorkshopElementPage>
-                </Route>
-                <Route path={routeWorkshopAddElementFromImprobib()} exact>
-                  <ImprobibElementPage></ImprobibElementPage>
-                </Route>
-                <Route path={routeWorkshopAddElement()}>
-                  <AddWorkshopElementPage></AddWorkshopElementPage>
-                </Route>
-              </IonRouterOutlet>
-            </IonReactRouter>
-          </IonApp>
-        </ErrorBoundary>
-      </ImprovLibraryContext.Provider>
+        <ImprovLibraryContext.Provider
+          value={{ improvElements, setImprovElements }}
+        >
+          <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
+            <IonApp>
+              <IonReactRouter>
+                <MenuComponent></MenuComponent>
+                <IonRouterOutlet id="main">
+                  <Redirect from="/" to={routeWorkshops()} exact></Redirect>
+                  <Route path={routeHome()} exact>
+                    <HomePage></HomePage>
+                  </Route>
+                  <Route path={routeAbout()} exact>
+                    <AboutPage></AboutPage>
+                  </Route>
+                  <Route path={routePrivacyPolicy()} exact>
+                    <PrivacyPolicyPage></PrivacyPolicyPage>
+                  </Route>
+                  <Route path={routeLegal()} exact>
+                    <LegalPage></LegalPage>
+                  </Route>
+                  <Route path={routeAccount()} exact>
+                    <AccountPage></AccountPage>
+                  </Route>
+                  <Route path={routeWorkshops()} exact>
+                    <WorkshopsPage></WorkshopsPage>
+                  </Route>
+                  <Route path={routeWorkshop()} exact>
+                    <WorkshopPage></WorkshopPage>
+                  </Route>
+                  <Route path={routeFavoriteElements()} exact>
+                    <FavoriteElementsPage></FavoriteElementsPage>
+                  </Route>
+                  <Route path={routeWorkshopElement()} exact>
+                    <WorkshopElementPage></WorkshopElementPage>
+                  </Route>
+                  <Route path={routeWorkshopAddElementFromImprobib()} exact>
+                    <ImprobibElementPage></ImprobibElementPage>
+                  </Route>
+                  <Route path={routeWorkshopAddElement()}>
+                    <AddWorkshopElementPage></AddWorkshopElementPage>
+                  </Route>
+                </IonRouterOutlet>
+              </IonReactRouter>
+            </IonApp>
+          </ErrorBoundary>
+        </ImprovLibraryContext.Provider>
+      </GraphQLContext.Provider>
     </RxDBProvider>
   );
 };

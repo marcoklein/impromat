@@ -84,6 +84,7 @@ export class WorkshopHelper {
 
     const defaultElement: Element = {
       id: this.generateUniqueId(),
+      version: 0,
       name: "Unnamed",
       markdown: "",
       note: "",
@@ -106,6 +107,7 @@ export class WorkshopHelper {
   pushSection(workshop: Workshop, inputSection: Partial<Section>) {
     const defaultSection: Section = {
       id: this.generateUniqueId(),
+      version: 0,
       elements: [],
       name: "Unnamed",
       isVisible: true,
@@ -120,14 +122,15 @@ export class WorkshopHelper {
   newWorkshop(
     workshopInput: Partial<Pick<Workshop, "name" | "description">>
   ): Workshop {
-    return {
-      id: this.generateUniqueId(),
-      deleted: false,
-      name: workshopInput.name ?? "Unnamed",
-      description: workshopInput.description ?? "",
-      sections: [],
-      updatedAt: Date.now(),
-    };
+    throw new Error("not implemented");
+    // return {
+    //   id: this.generateUniqueId(),
+    //   deleted: false,
+    //   name: workshopInput.name ?? "Unnamed",
+    //   description: workshopInput.description ?? "",
+    //   sections: [],
+    //   updatedAt: Date.now(),
+    // };
   }
 
   flattenSections(workshop: Workshop) {

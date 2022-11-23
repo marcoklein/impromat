@@ -19,7 +19,7 @@ import {
 } from "@ionic/react";
 import immer from "immer";
 import { add, barbellOutline, reorderFour } from "ionicons/icons";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { EditableItemComponent } from "../components/EditableItemComponent";
 import {
@@ -27,56 +27,94 @@ import {
   WorkshopActionTypes,
 } from "../components/WorkshopActionSheetComponent";
 import { WorkshopElementsComponent } from "../components/WorkshopElementsComponent";
+import { useDocument } from "../database/use-document";
+import { useRxdbMutations } from "../database/use-rxdb-mutations";
+import { WORKSHOP_HELPER } from "../database/workshop-helper";
+import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshops } from "../routes/shared-routes";
-import { Section } from "../store/schema.gen";
-import { useRxdbMutations } from "../store/use-rxdb-mutations";
-import { useWorkshop } from "../store/use-workshop";
-import { WORKSHOP_HELPER } from "../store/workshop-helper";
 import { useComponentLogger } from "../use-component-logger";
 
 export const WorkshopPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const database = useRxdbMutations();
+  const mutations = useRxdbMutations();
   const history = useHistory();
-  const { workshop } = useWorkshop(id);
+  const { document: workshop } = useDocument("workshops", id);
+
   const logger = useComponentLogger("WorkshopPage");
+  const [workshopHasContent, setWorkshopHasContent] =
+    useState<Awaited<ReturnType<typeof WORKSHOP_HELPER.hasContent>>>(
+      "noContent",
+    );
+  const database = useImpromatRxDb();
+  useEffect(() => {
+    if (workshop && database) {
+      const subscription = database.$.subscribe(() => {
+        WORKSHOP_HELPER.hasContent(workshop).then(setWorkshopHasContent);
+      });
+      WORKSHOP_HELPER.hasContent(workshop).then(setWorkshopHasContent);
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [workshop, database]);
+
+  useEffect(() => {
+    logger("Workshop has content = %O", workshopHasContent);
+  }, [workshopHasContent, logger]);
+
+  useEffect(() => {
+    logger("Workshop changed to %O", workshop);
+  }, [workshop, logger]);
 
   const [presentInputDialog] = useInputDialog();
 
   const changeWorkshopName = (newName: string) => {
-    if (!database || !workshop) return;
-    const updatedWorkshop = immer(workshop, (draft) => {
+    if (!mutations || !workshop) return;
+    const updatedWorkshop = immer(workshop.toMutableJSON(), (draft) => {
       draft.name = newName;
     });
-    database.updateWorkshop(updatedWorkshop);
-    logger("change workshop name to %s", newName);
+    mutations.updateWorkshop(updatedWorkshop).then(() => {
+      logger("change workshop name to %s", newName);
+    });
   };
   const changeWorkshopDescription = (newDescription: string) => {
-    if (!database || !workshop) return;
-    const updatedWorkshop = immer(workshop, (draft) => {
+    if (!mutations || !workshop) return;
+    const updatedWorkshop = immer(workshop.toMutableJSON(), (draft) => {
       draft.description = newDescription;
     });
-    database.updateWorkshop(updatedWorkshop);
-    logger("Changed workshop description");
-  };
-  const changeSections = (sections: Section[]) => {
-    if (!database || !workshop) return;
-    const updatedWorkshop = immer(workshop, (draft) => {
-      draft.sections = sections;
+    mutations.updateWorkshop(updatedWorkshop).then(() => {
+      logger("Changed workshop description");
     });
-    database.updateWorkshop(updatedWorkshop);
-    logger("Changed sections");
+  };
+  const changeSectionsOrder = (fromIndex: number, toIndex: number) => {
+    if (!mutations || !workshop) return;
+
+    (async () => {
+      const populatedSection = await workshop.sections_;
+      const { sections } = WORKSHOP_HELPER.moveItemFromIndexToIndex(
+        populatedSection.map((section) => section.toMutableJSON()),
+        fromIndex,
+        toIndex,
+      );
+      await Promise.all([
+        database.sections.bulkUpsert(sections),
+        workshop.atomicUpdate((draft) => {
+          draft.sections = sections.map(({ id }) => id);
+          return draft;
+        }),
+      ]);
+    })();
   };
 
   const onDeleteWorkshop = useCallback(() => {
-    if (!database || !workshop) return;
+    if (!mutations || !workshop) return;
     // TODO add confirmation dialog
-    database.deleteWorkshop(workshop.id).then(() => {
+    mutations.deleteWorkshop(workshop.id).then(() => {
       history.push(routeWorkshops(), { direction: "back" });
     });
     logger("Deleted workshop");
-  }, [database, history, logger, workshop]);
+  }, [mutations, history, logger, workshop]);
 
   const onRenameWorkshop = () => {
     if (!workshop) return;
@@ -90,14 +128,14 @@ export const WorkshopPage: React.FC = () => {
   };
 
   const onCreateSection = () => {
-    if (!workshop || !database) return;
+    if (!workshop || !mutations) return;
     presentInputDialog({
       header: "Section",
       initialText: "",
       emptyInputMessage: "Please type a section name.",
       placeholder: "e.g. Warmup or Games",
       onAccept: (text) => {
-        database.createNewSection(workshop, text);
+        mutations.createNewSection(workshop.id, text);
       },
     });
     logger("Showing add section dialog");
@@ -188,11 +226,15 @@ export const WorkshopPage: React.FC = () => {
               ></EditableItemComponent>
             )}
 
-            {WORKSHOP_HELPER.hasContent(workshop) ? (
+            {workshopHasContent === "missingData" && <IonSpinner></IonSpinner>}
+
+            {workshopHasContent === "hasContent" ? (
               <WorkshopElementsComponent
                 key={workshop.id}
                 workshop={workshop}
-                onChangeOrder={(elements) => changeSections(elements)}
+                onChangeOrder={(fromIndex, toIndex) =>
+                  changeSectionsOrder(fromIndex, toIndex)
+                }
               ></WorkshopElementsComponent>
             ) : (
               <IonCard>

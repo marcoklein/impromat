@@ -9,6 +9,7 @@ export const routeAccount = () => "/account";
 export const routeLegal = () => "/legal";
 export const routeAccountSignin = () => "/account/signin";
 export const routeWorkshops = () => "/workshop";
+export const routeFavoriteElements = () => "/favorite-elements";
 export const routeWorkshop = (workshopId: string = ROUTE_WORKHOP_ID) =>
   `/workshop/${workshopId}`;
 export const routeWorkshopElement = (

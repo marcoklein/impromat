@@ -113,3 +113,7 @@ If the user authenticates they receive a secure cookie that they must present in
 - graphql-scalars: Common scalars for GraphQL
 - graphql-codegen: GraphQL code generation
 - ts-json-schema-generator: Generate json schema from TypeScript
+
+## Library Considerations
+
+- https://github.com/graphql/dataloader for loading data with GraphQL resolvers

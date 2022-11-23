@@ -11,12 +11,12 @@ import Fuse from "fuse.js";
 import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Element } from "../store/schema.gen";
 import {
   routeWorkshopAddElementCreate,
   routeWorkshopAddElementFromImprobib,
 } from "../routes/shared-routes";
-import { useImprobibElements } from "../store/improbib/use-improbib-elements";
+import { ElementDocType } from "../database/collections/element/element-collection";
+import { useImprobibElements } from "../database/improbib/use-improbib-elements";
 import { InfoItemComponent } from "./InfoItemComponent";
 import { WorkshopElementPreviewItemComponent } from "./WorkshopElementPreviewItemComponent";
 
@@ -27,8 +27,8 @@ export const SearchElementTabComponent: React.FC = () => {
   const improvElements = useImprobibElements();
   const [loadingImprovElements, setLoadingImprovElements] = useState(true);
   const [searchText, setSearchText] = useState("");
-  const [workshopElements, setWorkshopElements] = useState<Element[]>();
-  const [fuse, setFuse] = useState<Fuse<Element>>();
+  const [workshopElements, setWorkshopElements] = useState<ElementDocType[]>();
+  const [fuse, setFuse] = useState<Fuse<ElementDocType>>();
   const [isSearching, setIsSearching] = useState(true);
 
   useEffect(() => {

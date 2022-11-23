@@ -1,4 +1,5 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
+declare const process: any;
 
 const config: PlaywrightTestConfig = {
   webServer: {

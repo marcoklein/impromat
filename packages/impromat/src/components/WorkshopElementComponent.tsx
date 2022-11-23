@@ -1,10 +1,10 @@
-import { Element } from "../store/schema.gen";
+import ReactMarkdown from "react-markdown";
+import { ElementDocType } from "../database/collections/element/element-collection";
 import { LicenseItemComponent } from "./LicenseItemComponent";
 import { TagsComponent } from "./TagsComponent";
-import ReactMarkdown from "react-markdown";
 
 interface ContainerProps {
-  element: Element;
+  element: ElementDocType;
 }
 
 export const WorkshopElementComponent: React.FC<ContainerProps> = ({

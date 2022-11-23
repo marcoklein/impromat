@@ -4,16 +4,12 @@ import { initExpressSessions } from "./authentication/init-session";
 import { FileDatabase } from "./database/file-database";
 import { environment } from "./environment";
 import { createGraphQLServer } from "./graphql/create-graphql-server";
-import { SchemaValidator } from "./schema-validation/schema-validator";
 
 export async function createExpressApp() {
   const app = express();
   initExpressSessions(app);
   initGoogleAuth(app);
-  const database = new FileDatabase(
-    environment.STORAGE_PATH,
-    new SchemaValidator()
-  );
+  const database = new FileDatabase(environment.STORAGE_PATH);
   database.load();
   const isProduction = process.env.NODE_ENV === "production";
   if (isProduction) {

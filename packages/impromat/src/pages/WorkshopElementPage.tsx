@@ -21,21 +21,24 @@ import { useParams } from "react-router";
 import { LicenseItemComponent } from "../components/LicenseItemComponent";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshop } from "../routes/shared-routes";
-import { useRxdbMutations } from "../store/use-rxdb-mutations";
-import { useWorkshopElement } from "../store/use-workshop-element";
+import { useRxdbMutations } from "../database/use-rxdb-mutations";
+import { useWorkshopElement } from "../database/use-workshop-element";
 
 export const WorkshopElementPage: React.FC = () => {
-  const { id: workshopId, partId } = useParams<{
+  const { id: workshopId, partId: elementId } = useParams<{
     id: string;
     partId: string;
   }>();
   const database = useRxdbMutations();
-  const { workshopElement: element } = useWorkshopElement(workshopId, partId);
   const [presentInput] = useInputDialog();
+  const { workshopElement: element } = useWorkshopElement(elementId);
+  const { workshopElement: basedOnElement } = useWorkshopElement(
+    element?.basedOn,
+  );
 
   const changeElementName = (newName: string) => {
     if (!database || !element) return;
-    const newElement = immer(element, (draft) => {
+    const newElement = immer(element.toMutableJSON(), (draft) => {
       draft.name = newName;
     });
     database.updateWorkshopElement(workshopId, newElement);
@@ -44,7 +47,7 @@ export const WorkshopElementPage: React.FC = () => {
   const saveNotesChanges = useCallback(
     (note: string) => {
       if (!database || !element) return;
-      const updatedPart = immer(element, (draft) => {
+      const updatedPart = immer(element.toMutableJSON(), (draft) => {
         draft.note = note;
       });
       database.updateWorkshopElement(workshopId, updatedPart);
@@ -129,14 +132,14 @@ export const WorkshopElementPage: React.FC = () => {
               </div>
             </IonItem>
 
-            {element.basedOn && (
+            {basedOnElement && (
               <LicenseItemComponent
-                authorName={element.basedOn.sourceName}
-                authorUrl={element.basedOn.sourceBaseUrl}
-                licenseName={element.basedOn.licenseName}
-                licenseUrl={element.basedOn.licenseUrl}
-                name={element.basedOn.name}
-                sourceUrl={element.basedOn.sourceUrl}
+                authorName={basedOnElement.sourceName}
+                authorUrl={basedOnElement.sourceBaseUrl}
+                licenseName={basedOnElement.licenseName}
+                licenseUrl={basedOnElement.licenseUrl}
+                name={basedOnElement.name}
+                sourceUrl={basedOnElement.sourceUrl}
               ></LicenseItemComponent>
             )}
           </IonList>

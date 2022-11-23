@@ -1,5 +1,5 @@
 import { ImprovElement } from "../models/improv-element";
-import { Element } from "../store/schema.gen";
+import { ElementDocType } from "../database/collections/element/element-collection";
 
 export function mapImprovElementToWorkshopElement({
   baseUrl,
@@ -12,8 +12,9 @@ export function mapImprovElementToWorkshopElement({
   sourceName,
   sourceUrl,
   tags,
-}: ImprovElement): Element {
+}: ImprovElement): ElementDocType {
   return {
+    version: -1,
     id: identifier,
     languageCode: language,
     licenseName: licenseFullName,

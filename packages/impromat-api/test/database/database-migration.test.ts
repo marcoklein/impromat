@@ -1,12 +1,12 @@
 import { expect } from "chai";
 import { readFileSync, writeFileSync } from "fs";
 import { copyFile, mkdir, rm } from "fs/promises";
+import "mocha";
 import { existsSync } from "node:fs";
 import {
   DATABASE_VERSION,
   FileDatabase,
 } from "../../src/database/file-database";
-import { SchemaValidator } from "../../src/schema-validation/schema-validator";
 
 describe("Schema Migration", async () => {
   beforeEach(async () => {
@@ -14,12 +14,11 @@ describe("Schema Migration", async () => {
     await mkdir(".cache/test/database", { recursive: true });
   });
 
-  it("should migrated database file", async () => {
+  it("should migrate database file", async () => {
     // given
-    const schemaValidator = new SchemaValidator();
     await mkdir(".cache/test/database", { recursive: true });
     await copyFile("test/assets/test_db.json", ".cache/test/database/db.json");
-    const database = new FileDatabase(".cache/test/database", schemaValidator);
+    const database = new FileDatabase(".cache/test/database");
     // when
     await database.load();
     const content = JSON.parse(
@@ -35,13 +34,12 @@ describe("Schema Migration", async () => {
 
   it("should not load database if database file is corrupted", async () => {
     // given
-    const schemaValidator = new SchemaValidator();
     await mkdir(".cache/test/database", { recursive: true });
     await copyFile(
       "test/assets/corrupted_db.json",
       ".cache/test/database/db.json"
     );
-    const database = new FileDatabase(".cache/test/database", schemaValidator);
+    const database = new FileDatabase(".cache/test/database");
     // when
     try {
       await database.load();
@@ -58,8 +56,7 @@ describe("Schema Migration", async () => {
 
   it("should save database state on load", async () => {
     // given
-    const schemaValidator = new SchemaValidator();
-    const database = new FileDatabase(".cache/test/database", schemaValidator);
+    const database = new FileDatabase(".cache/test/database");
     // when
     await database.load();
     // then
