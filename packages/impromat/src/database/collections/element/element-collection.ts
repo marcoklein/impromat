@@ -65,7 +65,11 @@ export const elementCollectionSchema = toTypedRxJsonSchema(schemaLiteral);
 export type ElementDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof elementCollectionSchema
 >;
-export type ElementDocument = RxDocument<ElementDocType>;
+type ReferenceFields = {
+  basedOn_: Promise<ElementDocument | undefined>;
+};
+
+export type ElementDocument = RxDocument<ElementDocType, ReferenceFields>;
 export type ElementCollection = RxCollection<ElementDocType>;
 export const elementSchema: RxJsonSchema<ElementDocType> = schemaLiteral;
 

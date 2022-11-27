@@ -4,6 +4,44 @@ export const migrations: Record<
   number,
   (params: { fromState: any; toVersion: number; fromVersion: number }) => any
 > = {
+  /**
+   * Add updatedAt and extract basedOn of elements into own element.
+   */
+  5: ({ fromState }) => {
+    const now = Date.now();
+    for (let userId in fromState.workshopsOfUsers) {
+      fromState.workshopsOfUsers[userId].forEach((entry: any) => {
+        if (!entry.updatedAt) {
+          entry.updatedAt = now;
+        }
+      });
+    }
+    for (let userId in fromState.elementsOfUsers) {
+      const basedOnElements: any[] = [];
+      fromState.elementsOfUsers[userId].forEach((entry: any) => {
+        if (!entry.updatedAt) {
+          entry.updatedAt = now;
+        }
+        if (entry.basedOn && typeof entry.basedOn === "object") {
+          entry.basedOn.updatedAt = now;
+          entry.basedOn.version = entry.basedOn.version ?? 0;
+          const basedOnId = entry.basedOn.id;
+          basedOnElements.push(entry.basedOn);
+          delete entry.basedOn;
+          entry.basedOn = basedOnId;
+        }
+      });
+      fromState.elementsOfUsers[userId].push(...basedOnElements);
+    }
+    for (let userId in fromState.sectionsOfUsers) {
+      fromState.sectionsOfUsers[userId].forEach((entry: any) => {
+        if (!entry.updatedAt) {
+          entry.updatedAt = now;
+        }
+      });
+    }
+    return fromState;
+  },
   4: ({ fromState }) => {
     for (let userId in fromState.workshopsOfUsers) {
       fromState.workshopsOfUsers[userId].forEach((entry: any) => {

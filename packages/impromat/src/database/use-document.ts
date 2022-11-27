@@ -26,7 +26,7 @@ export function useDocument<
   K = DocumentMappingType<T>,
 >(
   collection: T,
-  id: string,
+  id: string | undefined,
 ): {
   document: K;
   isFetching: boolean;

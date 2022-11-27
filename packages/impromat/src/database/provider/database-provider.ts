@@ -82,6 +82,10 @@ export class DatabaseProvider {
       currentVersion,
       DATABASE_VERSION,
     );
+    logger(
+      "Is database existing=%s",
+      this.databaseVersionProvider.isDatabaseExisting(),
+    );
     if (
       this.databaseVersionProvider.isDatabaseExisting() &&
       currentVersion !== undefined &&

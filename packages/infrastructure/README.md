@@ -25,6 +25,12 @@ Print logs for a specific app
 dokku logs <app-name>
 ```
 
+To directly access logs through SSH use
+
+```
+ssh -t dokku@impromat.app logs impromat-api-production
+```
+
 ## GitHub Actions
 
 GitHub Actions can deploy a new release version on merge to the main branch.

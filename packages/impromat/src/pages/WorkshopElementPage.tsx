@@ -15,44 +15,51 @@ import {
 } from "@ionic/react";
 import immer from "immer";
 import { arrowBack, document, pencil } from "ionicons/icons";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
 import { LicenseItemComponent } from "../components/LicenseItemComponent";
+import { useDocument } from "../database/use-document";
+import { useRxdbMutations } from "../database/use-rxdb-mutations";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshop } from "../routes/shared-routes";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import { useWorkshopElement } from "../database/use-workshop-element";
+import { useComponentLogger } from "../use-component-logger";
 
 export const WorkshopElementPage: React.FC = () => {
+  const logger = useComponentLogger("WorkshopElementPage");
   const { id: workshopId, partId: elementId } = useParams<{
     id: string;
     partId: string;
   }>();
-  const database = useRxdbMutations();
+  const mutations = useRxdbMutations();
   const [presentInput] = useInputDialog();
-  const { workshopElement: element } = useWorkshopElement(elementId);
-  const { workshopElement: basedOnElement } = useWorkshopElement(
+  const { document: element } = useDocument("elements", elementId);
+  const { document: basedOnElement } = useDocument(
+    "elements",
     element?.basedOn,
   );
 
+  useEffect(() => {
+    logger("basedOnElement=%O", basedOnElement);
+  }, [basedOnElement, logger]);
+
   const changeElementName = (newName: string) => {
-    if (!database || !element) return;
+    if (!mutations || !element) return;
     const newElement = immer(element.toMutableJSON(), (draft) => {
       draft.name = newName;
     });
-    database.updateWorkshopElement(workshopId, newElement);
+    mutations.updateWorkshopElement(workshopId, newElement);
   };
 
   const saveNotesChanges = useCallback(
     (note: string) => {
-      if (!database || !element) return;
+      if (!mutations || !element) return;
       const updatedPart = immer(element.toMutableJSON(), (draft) => {
         draft.note = note;
       });
-      database.updateWorkshopElement(workshopId, updatedPart);
+      mutations.updateWorkshopElement(workshopId, updatedPart);
     },
-    [element, workshopId, database],
+    [element, workshopId, mutations],
   );
 
   const onChangeNoteClick = () => {

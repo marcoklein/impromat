@@ -2,6 +2,8 @@ import {
   RxGraphQLReplicationPullQueryBuilder,
   RxGraphQLReplicationPushQueryBuilder,
 } from "rxdb";
+import { rootLogger } from "../../../logger";
+const logger = rootLogger.extend("element-replication-query-builder");
 
 const QUERY_FIELDS_FRAGMENT = /* GraphQL */ `
   fragment QueryFields on Element {
@@ -59,6 +61,7 @@ export const elementPullQueryBuilder: RxGraphQLReplicationPullQueryBuilder<
     }
     ${QUERY_FIELDS_FRAGMENT}
   `;
+  logger("Query: %O, latest checkpoint: %O", query, latestPulledCheckpoint);
   return {
     query,
     variables: {

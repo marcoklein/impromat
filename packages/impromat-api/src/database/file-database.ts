@@ -8,12 +8,7 @@ import { migrations } from "./migrations";
 import { SectionModel } from "./section-model";
 import { UserModel } from "./user-model";
 
-interface ValidationError {
-  location: string;
-  data: any;
-}
-
-export const DATABASE_VERSION = 4;
+export const DATABASE_VERSION = 5;
 
 export interface DatabaseSchema {
   version: number;

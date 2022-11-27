@@ -76,7 +76,7 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
   > = {
     onCollapseClick(section) {
       if (!database || !workshop) return;
-      const updatedSection = immer(section, (draft) => {
+      const updatedSection = immer(section.toMutableJSON(), (draft) => {
         draft.isCollapsed = !draft.isCollapsed;
         console.log("changing collapsed to ", draft.isCollapsed);
       });
@@ -90,7 +90,7 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
         placeholder: TRANSLATIONS.inputDialogSectionNamePlaceholder(),
         onAccept: (text) => {
           if (!database) return;
-          const newSection = immer(section, (draft) => {
+          const newSection = immer(section.toMutableJSON(), (draft) => {
             draft.name = text;
             return draft;
           });
