@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.14.2
+
+### Patch Changes
+
+- 91e45d3: Fix migration of database based on elements.
+- 6c7d6ab: Show based on license in element page.
+- 7c0ea25: Fix basedOn element migration and synchronization.
+
 ## 0.14.1
 
 ### Patch Changes

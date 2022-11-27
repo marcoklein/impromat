@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.2
+
+### Patch Changes
+
+- 7c0ea25: Fix basedOn element migration and synchronization.
+
 ## 0.5.1
 
 ### Patch Changes
