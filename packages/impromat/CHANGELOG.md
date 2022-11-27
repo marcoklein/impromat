@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.14.3
+
+### Patch Changes
+
+- 9a64c02: Reload page on update installation.
+
 ## 0.14.2
 
 ### Patch Changes
