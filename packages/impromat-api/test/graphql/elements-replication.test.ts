@@ -96,6 +96,30 @@ describe("Elements Replication", async () => {
     expect(conflicts.pushElements).to.be.empty;
   });
 
+  it("should push a new element that is based on the previous element", async () => {
+    // given
+    const args: MutationPushElementsArgs = {
+      elementPushRows: [
+        {
+          assumedMasterState: undefined,
+          newDocumentState: {
+            id: "elementWithBasedOn",
+            version: 0,
+            name: "based on other element",
+            basedOn: "test",
+          },
+        },
+      ],
+    };
+    // when
+    const conflicts = await testContext.client.request(
+      PUSH_ELEMENT_MUTATION,
+      args
+    );
+    // then
+    expect(conflicts.pushElements).to.be.empty;
+  });
+
   it("should return the new element", async () => {
     // given
     const args = {
@@ -108,7 +132,9 @@ describe("Elements Replication", async () => {
     const checkpoint = data.pullElements.checkpoint;
     const documents = data.pullElements.documents;
     expect(documents).to.have.lengthOf(1);
-    expect(checkpoint.id).to.equal("test");
+    expect(documents[0].id).to.equal("elementWithBasedOn");
+    expect(documents[0].basedOn.id).to.equal("test");
+    expect(checkpoint.id).to.equal("elementWithBasedOn");
     expect(checkpoint.updatedAt + 1000).to.be.greaterThan(Date.now());
   });
 

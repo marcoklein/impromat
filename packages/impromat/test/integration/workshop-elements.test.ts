@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
 
 pageTest.describe("Workshop Elements Page", () => {
@@ -60,6 +61,21 @@ pageTest.describe("Workshop Elements Page", () => {
       await page.waitForSelector(
         `ion-item[role="listitem"]:has-text("${noteText}Pencil") >> role=paragraph`,
       );
+    },
+  );
+
+  pageTest(
+    "should show license attribution of element",
+    async ({ page, workshopElementPage }) => {
+      // given
+      await workshopElementPage.createAndGoto();
+      // when
+      // then
+      await page.waitForSelector('p:has-text("Based on")');
+      const element = page.getByText(
+        /Based\s+on\s+"Freeze\s+Tag"\s+by\s+improwiki\s+and\s+licensed\s+under\s+CC\s+BY-SA\s+3\.0\s+DE/,
+      );
+      expect(await element.count()).toBe(1);
     },
   );
 });

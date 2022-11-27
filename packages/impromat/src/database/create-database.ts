@@ -14,6 +14,7 @@ import { enableUserReplication } from "./collections/user/user-replication";
 import { enableWorkshopReplication } from "./collections/workshop/workshop-replication";
 import { AppDatabase } from "./database-type";
 import { DatabaseProvider } from "./provider/database-provider";
+import { Dexie } from "dexie";
 
 addRxPlugin(RxDBReplicationGraphQLPlugin);
 addRxPlugin(RxDBUpdatePlugin);
@@ -28,6 +29,10 @@ console.log("RxDB Plugins initialized");
 export const createDatabase = async (apiContext: GraphQLContextType) => {
   const logger = rootLogger.extend("create-database");
   const storage = getRxStorageDexie();
+
+  const dbNames = await Dexie.getDatabaseNames();
+  logger("Db names: %O", dbNames);
+
   const provider = new DatabaseProvider(storage, {
     getVersion() {
       const version = window.localStorage.getItem("impromat-database-version");
@@ -40,7 +45,11 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
       window.localStorage.setItem("impromat-database-version", `${version}`);
     },
     isDatabaseExisting() {
-      return !!window.localStorage.getItem("_pouch_check_localstorage");
+      const existing = !!dbNames.find((name) =>
+        /impromat-production/.test(name),
+      );
+      logger("db existing?", existing);
+      return existing;
     },
   });
   const db: AppDatabase = await provider.loadDatabase();
@@ -55,6 +64,6 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
     logger("Database Event: %O", changeEvent);
   });
 
-  logger("initialized");
+  logger("initialized with collections %O", collections);
   return db;
 };

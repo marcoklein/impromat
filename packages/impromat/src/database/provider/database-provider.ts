@@ -55,14 +55,31 @@ const databaseMigrations: Record<
       workshop.sections.forEach((section: any) => {
         section.elements = section.elements ?? [];
         section.elements.forEach((element: any) => {
+          element.version = 0;
+          if (element.basedOn && typeof element.basedOn === "object") {
+            element.basedOn.version = element.basedOn.version ?? 0;
+            const elementBasedOn = element.basedOn;
+            const basedOnId = element.basedOn.id;
+            delete element.basedOn;
+            element.basedOn = basedOnId;
+            elements.push(elementBasedOn);
+          }
           elements.push(element);
         });
         section.elements = section.elements.map(({ id }: any) => id);
+        section.version = 0;
         sections.push(section);
       });
       workshop.sections = workshop.sections.map(({ id }: any) => id);
+      if (!workshop.version) {
+        workshop.version = 0;
+      }
+      if (!workshop.updatedAt) {
+        workshop.updatedAt = Date.now();
+      }
       workshops.push(workshop);
     });
+    console.log("elements", elements);
     newDb.collections.workshops.bulkUpsert(workshops);
     newDb.collections.elements.bulkUpsert(elements);
     newDb.collections.sections.bulkUpsert(sections);
@@ -81,6 +98,10 @@ export class DatabaseProvider {
       "Current database version = %i; should database version = %i",
       currentVersion,
       DATABASE_VERSION,
+    );
+    logger(
+      "Is database existing=%s",
+      this.databaseVersionProvider.isDatabaseExisting(),
     );
     if (
       this.databaseVersionProvider.isDatabaseExisting() &&

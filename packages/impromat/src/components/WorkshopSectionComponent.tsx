@@ -1,16 +1,16 @@
 import { IonBadge, IonButton, IonIcon } from "@ionic/react";
 import { chevronDown, chevronUp } from "ionicons/icons";
 import React from "react";
-import { SectionDocType } from "../database/collections/section/section-collection";
+import { SectionDocument } from "../database/collections/section/section-collection";
 import { SlidingItemComponent } from "./SlidingItemComponent";
 import "./WorkshopElementItemComponent.css";
 
 interface ContainerProps {
-  workshopSection: SectionDocType;
+  workshopSection: SectionDocument;
   isReordering?: boolean;
-  onEditClick: (section: SectionDocType) => void;
-  onRemoveClick: (section: SectionDocType) => void;
-  onCollapseClick: (section: SectionDocType) => void;
+  onEditClick: (section: SectionDocument) => void;
+  onRemoveClick: (section: SectionDocument) => void;
+  onCollapseClick: (section: SectionDocument) => void;
 }
 
 export const WorkshopSectionComponent: React.FC<ContainerProps> = ({

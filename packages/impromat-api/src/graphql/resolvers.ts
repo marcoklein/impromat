@@ -72,13 +72,17 @@ export const resolvers: Resolvers = {
     },
     pullElements: (root, args, ctx, info) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
+      console.log("-- pull elements", ctx.session.userId);
       const { database } = ctx;
       const documents = database.getElements(ctx.session.userId) ?? [];
-      return prepareDocumentsForPull(
+      console.log("-- existing documents length", documents.length);
+      const result = prepareDocumentsForPull(
         documents,
         args,
         new ElementMapper().fromModelToDto
       );
+      console.log("-- returned documents length", result.documents.length);
+      return result;
     },
     pullSections: (root, args, ctx, info) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
