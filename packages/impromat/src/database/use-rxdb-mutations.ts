@@ -174,7 +174,7 @@ class RxMutations {
     const workshop = await this.findWorkshopById(workshopId);
     if (!workshop) return;
     logger("Workshop=%O", workshop);
-    // await workshop.getDatabase().collections.elements.upsert(improvElement);
+    await workshop.getDatabase().collections.elements.upsert(improvElement);
     await WORKSHOP_HELPER.pushElement(workshop, {
       ...improvElement,
       id: newElementId,
