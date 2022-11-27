@@ -84,7 +84,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ job.increase-build-version.outputs.commitSha }}
+          ref: ${{ needs.increase-build-version.outputs.commitSha }}
       - name: Print last commit message
         run: |
           lastCommitMessage=$(git log -1 --oneline)
