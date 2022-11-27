@@ -17,7 +17,7 @@ serviceWorkerRegistration.register({
     if (window.confirm("New version available. Install now?")) {
       await registration.update();
       console.log("WebWorker: update successful");
-      window.alert("Update installed.");
+      window.location.reload();
     }
   },
 });
