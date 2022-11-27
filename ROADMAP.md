@@ -41,6 +41,11 @@ Tracking tasks for the development that move into the [Changelog](./CHANGELOG.md
 - [ ] Allow editing notes with markdown editor
 - [ ] Allow editing workshop content with a markdown editor
 
+## Testing
+
+- [ ] Add a test that starts with version 1 deployment and then mmigrates to most recent version to verify all database builds
+
 ## Infrastructure
 
 - Unattended Upgrades like https://dokku.com/docs/getting-started/upgrading/?h=update
+- [ ] Backup of database before deployment + regular backups
