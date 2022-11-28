@@ -15,8 +15,4 @@ export class WorkshopsDevPage extends DevPage {
     await expect(page).toHaveURL(`./workshop/${workshopId}`);
     return workshopId;
   }
-
-  async goto() {
-    await this.page.goto("https://playwright.dev");
-  }
 }

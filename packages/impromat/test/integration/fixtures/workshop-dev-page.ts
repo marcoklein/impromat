@@ -27,6 +27,7 @@ export class WorkshopDevPage extends DevPage {
   async addElementFromSearch() {
     const page = this.page;
     const searchText = "freeze";
+    await this.addFirstElementLocator.waitFor();
     await this.addFirstElementLocator.click();
     await page.getByPlaceholder("Search").click();
     await page.getByPlaceholder("Search").fill(searchText);
