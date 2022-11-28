@@ -18,7 +18,7 @@ const config: PlaywrightTestConfig = {
     isMobile: true,
     baseURL: "http://localhost:3000/",
   },
-  timeout: 30 * 1000,
+  timeout: 60 * 1000,
 };
 
 export default config;
