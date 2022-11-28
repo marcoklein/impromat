@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.0
+
+### Minor Changes
+
+- b3254b2: Add apple-touch-icon to allow installation on IOS devices.
+
 ## 0.14.3
 
 ### Patch Changes

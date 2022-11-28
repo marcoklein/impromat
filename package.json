@@ -1,6 +1,6 @@
 {
   "name": "impromat",
-  "version": "17",
+  "version": "18",
   "private": true,
   "type": "module",
   "workspaces": {
