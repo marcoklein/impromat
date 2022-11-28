@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.1
+
+### Patch Changes
+
+- b0d354a: Fix sporadic test timeouts.
+
 ## 0.15.0
 
 ### Minor Changes
