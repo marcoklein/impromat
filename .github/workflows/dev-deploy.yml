@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+  workflow_dispatch:
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
