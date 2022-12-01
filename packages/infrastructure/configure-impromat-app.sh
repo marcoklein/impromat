@@ -29,7 +29,7 @@ if [ $environmentName="development" ]
 then
   packageVersion=$(cd $WORKDIR/../impromat && echo $(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]'))
   echo "packageVersion=$packageVersion"
-  appVersion="$packageVersion-$RANDOM"
+  appVersion="$packageVersion-$(($RANDOM % 999))"
   echo "appVersion=$appVersion"
   dokku docker-options:add $appName build "--build-arg REACT_APP_VERSION=$packageVersion-$RANDOM"
 fi
