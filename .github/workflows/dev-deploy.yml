@@ -30,6 +30,8 @@ jobs:
           echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - name: Print Branch Name
         run: echo "$BRANCH_NAME"
+      - name: Configure Development Enviroment
+        run: bash -e ./packages/infrastructure/configure-dev.sh
       - run: git remote add impromat-app-development dokku@impromat.app:impromat-app-development
       - run: git remote add impromat-api-development dokku@impromat.app:impromat-api-development
       - run: git push impromat-app-development $BRANCH_NAME:main --force

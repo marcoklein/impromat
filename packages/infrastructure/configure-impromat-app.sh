@@ -24,3 +24,12 @@ dokku config:set --no-restart $appName REACT_APP_API_URL=https://$apiUrl
 log "Set Docker Options"
 dokku docker-options:clear $appName build
 dokku docker-options:add $appName build "--build-arg REACT_APP_API_URL=https://$apiUrl"
+
+if [ $environmentName="development" ]
+then
+  packageVersion=$(cd $WORKDIR/../impromat && echo $(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]'))
+  echo "packageVersion=$packageVersion"
+  appVersion="$packageVersion-$RANDOM"
+  echo "appVersion=$appVersion"
+  dokku docker-options:add $appName build "--build-arg REACT_APP_VERSION=$packageVersion-$RANDOM"
+fi
