@@ -10,7 +10,6 @@ env:
 
 jobs:
   test:
-    needs: increase-build-version
     uses: ./.github/workflows/test-job.yml
     with:
       commitSha: ${{ github.sha }}
