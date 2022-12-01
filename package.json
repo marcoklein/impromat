@@ -23,7 +23,8 @@
     "bootstrap": "lerna bootstrap",
     "changed": "lerna ls --since main --all",
     "impromat": "lerna run --scope impromat",
-    "impromat-api": "lerna run --scope impromat-api"
+    "impromat-api": "lerna run --scope impromat-api",
+    "infra:config": "./packages/infrastructure/configure.sh"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",

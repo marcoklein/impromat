@@ -22,4 +22,5 @@ log "Set App Configuration"
 dokku config:set --no-restart $appName REACT_APP_API_URL=https://$apiUrl
 
 log "Set Docker Options"
+dokku docker-options:clear $appName build
 dokku docker-options:add $appName build "--build-arg REACT_APP_API_URL=https://$apiUrl"
