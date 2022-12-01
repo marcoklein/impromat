@@ -1,0 +1,36 @@
+name: Development Deployment
+
+on:
+  push:
+    branches:
+      - dev
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  test:
+    needs: increase-build-version
+    uses: ./.github/workflows/test-job.yml
+    with:
+      commitSha: ${{ github.sha }}
+
+  deploy:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Write SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - name: Print Branch Name
+        run: echo "$BRANCH_NAME"
+      - run: git remote add impromat-app-development dokku@impromat.app:impromat-app-development
+      - run: git remote add impromat-api-development dokku@impromat.app:impromat-api-development
+      - run: git push impromat-app-development $BRANCH_NAME:master --force
+      - run: git push impromat-api-development $BRANCH_NAME:master --force

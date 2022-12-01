@@ -3,20 +3,26 @@
 export WORKDIR=$(cd $(dirname $0) && pwd)
 source $WORKDIR/common.sh
 
-appName=impromat-api-production
-domain="api.impromat.app"
+environmentName=$1
+domain="$2"
+
+appPrefix=impromat-api
+appName=$appPrefix-$environmentName
 dockerfilePath="packages/infrastructure/Dockerfile-impromat-api"
+echo "appPrefix=$appPrefix"
+echo "appName=$appName"
+echo "domain=$domain"
 
 ensureAppExists $appName
 setCommonDockerOptions $appName $dockerfilePath
 configureDomain $appName $domain
 
 log "Ensure Storage"
-dokku storage:ensure-directory impromat-api-store-production
-dokku storage:ensure-directory impromat-api-secrets-production
-dokku storage:mount impromat-api-production /var/lib/dokku/data/storage/impromat-api-store-production:/mnt/storage
-dokku storage:mount impromat-api-production /var/lib/dokku/data/storage/impromat-api-secrets-production:/mnt/secrets
+dokku storage:ensure-directory impromat-api-store-$environmentName
+dokku storage:ensure-directory impromat-api-secrets-$environmentName
+dokku storage:mount impromat-api-$environmentName /var/lib/dokku/data/storage/impromat-api-store-$environmentName:/mnt/storage
+dokku storage:mount impromat-api-$environmentName /var/lib/dokku/data/storage/impromat-api-secrets-$environmentName:/mnt/secrets
 
 log "Set App Configuration"
-dokku config:set --no-restart impromat-api-production GOOGLE_AUTH_JSON_PATH=/mnt/secrets/google_key.secret.json
-dokku config:set --no-restart impromat-api-production STORAGE_PATH=/mnt/storage
+dokku config:set --no-restart impromat-api-$environmentName GOOGLE_AUTH_JSON_PATH=/mnt/secrets/google_key.secret.json
+dokku config:set --no-restart impromat-api-$environmentName STORAGE_PATH=/mnt/storage
