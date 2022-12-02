@@ -9,7 +9,7 @@ import {
 } from "@ionic/react";
 import { useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
+import { useRxdbMutations } from "../../database/use-rxdb-mutations";
 
 export const CreateElementTabComponent: React.FC = () => {
   const { id: workshopId } = useParams<{

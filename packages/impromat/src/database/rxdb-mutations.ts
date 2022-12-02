@@ -183,6 +183,10 @@ export class RxMutations {
     return newElementId;
   }
 
+  async addElement(element: ElementDocType) {
+    return this.database.elements.atomicUpsert(element);
+  }
+
   async toggleFavoriteElementOfUser(user: UserDocument, elementId: string) {
     let isFavoriteNow = false;
     await user.atomicUpdate((user) => {
