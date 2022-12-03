@@ -10,6 +10,7 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonToast,
 } from "@ionic/react";
 import { star, starOutline } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
@@ -29,6 +30,7 @@ export const ImprobibElementPage: React.FC = () => {
   }>();
   const logger = useComponentLogger("ImprobibElementPage");
   const mutations = useRxdbMutations();
+  const [presentToast] = useIonToast();
   const improbibElements = useImprobibElements();
   const [improbibElement, setImprobibElement] = useState<ElementDocType>();
   const history = useHistory();
@@ -56,6 +58,12 @@ export const ImprobibElementPage: React.FC = () => {
   }
 
   function onStarElementClick() {
+    if (!myUser) {
+      // TODO test if the user exists in the database as query
+      // currently, the query is just stuck because isFetching will not switch to `false`
+      presentToast("Login to use the favorite function.", 1000);
+      return;
+    }
     if (
       !mutations ||
       !myUser ||
