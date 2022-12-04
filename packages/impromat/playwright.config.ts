@@ -5,10 +5,10 @@ const config: PlaywrightTestConfig = {
   webServer: {
     command: process.env.CI
       ? // test against production build
-        "yarn build:serve -p 3000"
+        "REACT_APP_TEST=1 yarn build && yarn build:serve -p 3000"
       : "yarn start",
     url: "http://localhost:3000/",
-    timeout: 60 * 1000,
+    timeout: 5 * 60 * 1000,
     reuseExistingServer: !process.env.CI,
   },
   use: {

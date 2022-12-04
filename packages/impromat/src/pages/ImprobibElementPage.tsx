@@ -5,28 +5,40 @@ import {
   IonContent,
   IonFooter,
   IonHeader,
+  IonIcon,
   IonPage,
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonToast,
 } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { star, starOutline } from "ionicons/icons";
+import { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { WorkshopElementComponent } from "../components/WorkshopElementComponent";
-import { routeWorkshopAddElement } from "../routes/shared-routes";
 import { ElementDocType } from "../database/collections/element/element-collection";
 import { useImprobibElements } from "../database/improbib/use-improbib-elements";
+import { useMyUser } from "../database/use-my-user";
 import { useRxdbMutations } from "../database/use-rxdb-mutations";
+import { routeWorkshopAddElement } from "../routes/shared-routes";
+import { useComponentLogger } from "../use-component-logger";
 
 export const ImprobibElementPage: React.FC = () => {
   const { id: workshopId, libraryPartId } = useParams<{
     id: string;
     libraryPartId: string;
   }>();
-  const database = useRxdbMutations();
+  const logger = useComponentLogger("ImprobibElementPage");
+  const mutations = useRxdbMutations();
+  const [presentToast] = useIonToast();
   const improbibElements = useImprobibElements();
   const [improbibElement, setImprobibElement] = useState<ElementDocType>();
   const history = useHistory();
+  const { document: myUser } = useMyUser();
+  const isFavoriteElement = useMemo(
+    () => myUser?.favoriteElements.includes(libraryPartId),
+    [myUser?.favoriteElements, libraryPartId],
+  );
 
   useEffect(() => {
     if (!improbibElements) return;
@@ -37,12 +49,31 @@ export const ImprobibElementPage: React.FC = () => {
   }, [improbibElements, libraryPartId]);
 
   function addToWorkshop() {
-    if (!database || !improbibElement) return;
-    database.addImprovElementToWorkshop(workshopId, improbibElement);
+    if (!mutations || !improbibElement) return;
+    mutations.addImprovElementToWorkshop(workshopId, improbibElement);
     history.push(`/workshop/${workshopId}`, {
       direction: "back",
       newElement: improbibElement.id,
     });
+  }
+
+  function onStarElementClick() {
+    if (!myUser) {
+      // TODO test if the user exists in the database as query
+      // currently, the query is just stuck because isFetching will not switch to `false`
+      presentToast("Login to use the favorite function.", 1000);
+      return;
+    }
+    if (
+      !mutations ||
+      !myUser ||
+      isFavoriteElement === undefined ||
+      !improbibElement
+    )
+      return;
+    logger("onStarElementClick - isFavoriteElement: %s", isFavoriteElement);
+    mutations.addElement(improbibElement);
+    mutations.toggleFavoriteElementOfUser(myUser, libraryPartId);
   }
 
   return (
@@ -55,6 +86,14 @@ export const ImprobibElementPage: React.FC = () => {
             ></IonBackButton>
           </IonButtons>
           <IonTitle>{improbibElement?.name}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={() => onStarElementClick()}>
+              <IonIcon
+                slot="icon-only"
+                icon={isFavoriteElement ? star : starOutline}
+              ></IonIcon>
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 

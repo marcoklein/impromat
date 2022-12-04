@@ -14,11 +14,11 @@ import { useParams } from "react-router";
 import {
   routeWorkshopAddElementCreate,
   routeWorkshopAddElementFromImprobib,
-} from "../routes/shared-routes";
-import { ElementDocType } from "../database/collections/element/element-collection";
-import { useImprobibElements } from "../database/improbib/use-improbib-elements";
-import { InfoItemComponent } from "./InfoItemComponent";
-import { WorkshopElementPreviewItemComponent } from "./WorkshopElementPreviewItemComponent";
+} from "../../routes/shared-routes";
+import { ElementDocType } from "../../database/collections/element/element-collection";
+import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
+import { InfoItemComponent } from "../../components/InfoItemComponent";
+import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
 
 export const SearchElementTabComponent: React.FC = () => {
   const { id: workshopId } = useParams<{

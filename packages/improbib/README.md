@@ -32,7 +32,7 @@ If you refer the either a `Tag` or an `Element` you would call it `Entry`.
 
 # FAQ
 
-## Just ... Why did you do this?
+## Motivation
 
 I am an improviser by myself. I love it. And with growing experience I was running more and more improv workshops and even established my own group. Often I would go to https://improwiki.com or similar sites to look for new workshop inspirations. Then I also started teaching others how to run improv workshops and a colleague of mine pointed me to a "Retromat", where you can create retrospectives with the click of a button. Well, through these events I came up with the idea of programming an Impromat, to help me with preparing workshops and to share my workshop knowledge with other improvisers and other groups.
 

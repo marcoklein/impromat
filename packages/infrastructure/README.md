@@ -2,7 +2,23 @@
 
 Deployment configurations for the monorepo via [Dokku](https://dokku.com).
 
-## Deploying an Application
+## Getting started
+
+### Configuration
+
+Allow execution of configuration script
+
+```
+chmod +x ./configure.sh
+```
+
+Run configuration script via
+
+```
+./configure.sh
+```
+
+### Deploying an Application
 
 Add the remote connection and push to Dokku master branch to build
 
@@ -13,16 +29,18 @@ git push <app-name> <branch-name>:master
 
 ## Verify Deployments are Working
 
+> The following snippets use `ssh -t dokku@impromat.app` as an alternative to the `dokku` command with which you would need to access the cluster before running the command.
+
 List all apps
 
 ```
-dokku apps:list
+ssh -t dokku@impromat.app apps:list
 ```
 
 Print logs for a specific app
 
 ```
-dokku logs <app-name>
+ssh -t dokku@impromat.app logs <app-name>
 ```
 
 To directly access logs through SSH use

@@ -9,9 +9,8 @@ source $WORKDIR/common.sh
 log "Configuring Dokku applications"
 
 log "Configuring impromat-app"
-bash -e $WORKDIR/configure-impromat-app.sh production impromat.app api.impromat.app
 bash -e $WORKDIR/configure-impromat-app.sh development dev.impromat.app api.dev.impromat.app
+ssh -t dokku@impromat.app docker-options:report impromat-app-development
 
 log "Configuring impromat-api"
-bash -e $WORKDIR/configure-impromat-api.sh production api.impromat.app
 bash -e $WORKDIR/configure-impromat-api.sh development api.dev.impromat.app

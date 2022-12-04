@@ -21,7 +21,7 @@ export const userPushQueryBuilder: RxGraphQLReplicationPushQueryBuilder = (
 ) => {
   const query = /* GraphQL */ `
     mutation PushMutation($userPushRows: [UserPushRowInput!]!) {
-      pushUsers(userPushRows: $workshopPushRows) {
+      pushUsers(userPushRows: $userPushRows) {
         ...UserFields
       }
     }
@@ -30,7 +30,7 @@ export const userPushQueryBuilder: RxGraphQLReplicationPushQueryBuilder = (
   return {
     query,
     variables: {
-      workshopPushRows: pushRows,
+      userPushRows: pushRows,
     },
   };
 };
