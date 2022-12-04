@@ -24,7 +24,7 @@ export class WorkshopDevPage extends DevPage {
     await this.page.goto(`./workshop/${workshopId}`);
   }
 
-  async addElementFromSearch() {
+  async gotoElementFromSearch() {
     const page = this.page;
     const searchText = "freeze";
     await this.addFirstElementLocator.waitFor();
@@ -32,6 +32,11 @@ export class WorkshopDevPage extends DevPage {
     await page.getByPlaceholder("Search").click();
     await page.getByPlaceholder("Search").fill(searchText);
     await page.getByText("improwikiDEFreeze TagKettenspieleSwitches").click();
+  }
+
+  async addElementFromSearch() {
+    const page = this.page;
+    await this.gotoElementFromSearch();
     await page
       .locator('ion-button:has-text("Add to Workshop")')
       .getByRole("button")

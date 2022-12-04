@@ -20,6 +20,10 @@ import { Redirect, Route } from "react-router-dom";
 import { Provider as RxDBProvider } from "rxdb-hooks";
 import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { MenuComponent } from "./components/MenuComponent";
+import { ElementDocType } from "./database/collections/element/element-collection";
+import { createDatabase } from "./database/create-database";
+import { AppDatabase } from "./database/database-type";
+import { ImprovLibraryContext } from "./database/improbib/improv-library-context";
 import { environment } from "./environment";
 import { GraphQLContext } from "./graphql/graphql-context";
 import { getSdk } from "./graphql/schema.gen";
@@ -27,7 +31,6 @@ import { AboutPage } from "./pages/AboutPage";
 import { AccountPage } from "./pages/AccountPage";
 import { AddWorkshopElementPage } from "./pages/AddWorkshopElementPage";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
-import { FavoriteElementsPage } from "./pages/FavoriteElementsPage";
 import { HomePage } from "./pages/HomePage";
 import { ImprobibElementPage } from "./pages/ImprobibElementPage";
 import { LegalPage } from "./pages/LegalPage";
@@ -38,7 +41,6 @@ import { WorkshopsPage } from "./pages/WorkshopsPage";
 import {
   routeAbout,
   routeAccount,
-  routeFavoriteElements,
   routeHome,
   routeLegal,
   routePrivacyPolicy,
@@ -48,10 +50,6 @@ import {
   routeWorkshopElement,
   routeWorkshops,
 } from "./routes/shared-routes";
-import { ElementDocType } from "./database/collections/element/element-collection";
-import { AppDatabase } from "./database/database-type";
-import { ImprovLibraryContext } from "./database/improbib/improv-library-context";
-import { createDatabase } from "./database/create-database";
 import "./theme/colors.css";
 import "./theme/variables.css";
 
@@ -119,9 +117,6 @@ const App: React.FC = () => {
                   </Route>
                   <Route path={routeWorkshop()} exact>
                     <WorkshopPage></WorkshopPage>
-                  </Route>
-                  <Route path={routeFavoriteElements()} exact>
-                    <FavoriteElementsPage></FavoriteElementsPage>
                   </Route>
                   <Route path={routeWorkshopElement()} exact>
                     <WorkshopElementPage></WorkshopElementPage>

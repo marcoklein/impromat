@@ -16,7 +16,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add, arrowBack, search } from "ionicons/icons";
+import { add, arrowBack, search, star } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import {
   Redirect,
@@ -27,12 +27,19 @@ import {
   useParams,
   useRouteMatch,
 } from "react-router";
-import { CreateElementTabComponent } from "../components/CreateElementTabComponent";
-import { SearchElementTabComponent } from "../components/SearchElementTabComponent";
 import {
   routeWorkshop,
   routeWorkshopAddElement,
 } from "../routes/shared-routes";
+import { CreateElementTabComponent } from "./add-workshop-element/CreateElementTabComponent";
+import { FavoriteElementsTabComponent } from "./add-workshop-element/FavoriteElementsTabComponent";
+import { SearchElementTabComponent } from "./add-workshop-element/SearchElementTabComponent";
+
+enum Tabs {
+  CREATE = "create",
+  FAVORITES = "favorites",
+  SEARCH = "search",
+}
 
 export const AddWorkshopElementPage: React.FC = () => {
   const { id: workshopId, partId } = useParams<{
@@ -44,12 +51,14 @@ export const AddWorkshopElementPage: React.FC = () => {
   const { path } = routeMatch;
   const location = useLocation();
 
-  const [tab, setTab] = useState("search");
+  const [tab, setTab] = useState(Tabs.SEARCH);
   useEffect(() => {
-    if (location.pathname.endsWith("create")) {
-      setTab("create");
+    if (location.pathname.endsWith(Tabs.CREATE)) {
+      setTab(Tabs.CREATE);
+    } else if (location.pathname.endsWith(Tabs.FAVORITES)) {
+      setTab(Tabs.FAVORITES);
     } else {
-      setTab("search");
+      setTab(Tabs.SEARCH);
     }
   }, [location.pathname]);
 
@@ -76,8 +85,12 @@ export const AddWorkshopElementPage: React.FC = () => {
 
       <IonContent fullscreen>
         <Switch>
-          <Redirect from={`${path}/`} to={`${path}/search`} exact></Redirect>
-          <Route path={`${path}/search`} exact>
+          <Redirect
+            from={`${path}/`}
+            to={`${path}/${Tabs.SEARCH}`}
+            exact
+          ></Redirect>
+          <Route path={`${path}/${Tabs.SEARCH}`} exact>
             <SearchElementTabComponent></SearchElementTabComponent>
           </Route>
           <Route path={`${path}/inspiration`} exact>
@@ -91,7 +104,10 @@ export const AddWorkshopElementPage: React.FC = () => {
               </IonCardContent>
             </IonCard>
           </Route>
-          <Route path={`${path}/create`} exact>
+          <Route path={`${path}/${Tabs.FAVORITES}`} exact>
+            <FavoriteElementsTabComponent></FavoriteElementsTabComponent>
+          </Route>
+          <Route path={`${path}/${Tabs.CREATE}`} exact>
             <CreateElementTabComponent></CreateElementTabComponent>
           </Route>
         </Switch>
@@ -100,18 +116,33 @@ export const AddWorkshopElementPage: React.FC = () => {
         <IonToolbar>
           <IonSegment value={tab}>
             <IonSegmentButton
-              value="search"
+              value={Tabs.SEARCH}
               onClick={() =>
-                history.replace(`${routeWorkshopAddElement(workshopId)}/search`)
+                history.replace(
+                  `${routeWorkshopAddElement(workshopId)}/${Tabs.SEARCH}`,
+                )
               }
             >
               <IonIcon icon={search}></IonIcon>
               <IonLabel>Explore</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton
-              value="create"
+              value={Tabs.FAVORITES}
               onClick={() =>
-                history.replace(`${routeWorkshopAddElement(workshopId)}/create`)
+                history.replace(
+                  `${routeWorkshopAddElement(workshopId)}/${Tabs.FAVORITES}`,
+                )
+              }
+            >
+              <IonIcon icon={star}></IonIcon>
+              <IonLabel>Favorites</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton
+              value={Tabs.CREATE}
+              onClick={() =>
+                history.replace(
+                  `${routeWorkshopAddElement(workshopId)}/${Tabs.CREATE}`,
+                )
               }
             >
               <IonIcon icon={add}></IonIcon>

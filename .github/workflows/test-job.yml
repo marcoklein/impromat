@@ -22,7 +22,6 @@ jobs:
         with:
           node-version: 18
       - run: yarn install --frozen-lockfile
-      - run: yarn build
       - run: yarn test
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0

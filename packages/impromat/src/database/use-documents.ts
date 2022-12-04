@@ -1,6 +1,7 @@
 import { Debugger } from "debug";
-import { useEffect } from "react";
-import { useRxDocument } from "rxdb-hooks";
+import { useCallback, useEffect } from "react";
+import { RxCollection } from "rxdb";
+import { useRxData } from "rxdb-hooks";
 import { ElementDocument } from "./collections/element/element-collection";
 import { MeDocType } from "./collections/me/me-collection";
 import { SectionDocument } from "./collections/section/section-collection";
@@ -20,29 +21,33 @@ type DocumentMappingType<T extends keyof AppCollections> = T extends "users"
   ? MeDocType
   : never;
 
-export function useDocument<
+export function useDocuments<
   T extends keyof AppCollections,
   K = DocumentMappingType<T>,
 >(
-  collection: T,
-  id: string | undefined,
+  collectionName: T,
+  ids: string[] | undefined,
   logger?: Debugger,
 ): {
-  document: K | undefined;
+  documents: K[] | undefined;
   isFetching: boolean;
 } {
-  const { result: document, isFetching } = useRxDocument(collection, id, {
-    json: false,
-  });
+  const { result: documents, isFetching } = useRxData<any[]>(
+    collectionName,
+    useCallback(
+      (collection: RxCollection) => collection.findByIds(ids ?? []),
+      [ids],
+    ),
+  );
 
   useEffect(() => {
     if (logger)
       logger(
         "useDocument - update of collection %s with document %o",
-        collection,
-        document,
+        collectionName,
+        documents,
       );
-  }, [collection, document, logger]);
+  }, [collectionName, documents, logger]);
 
-  return { document: document as K, isFetching };
+  return { documents: documents as K[], isFetching };
 }

@@ -17,19 +17,12 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {
-  chevronBack,
-  documents,
-  information,
-  person,
-  star,
-} from "ionicons/icons";
+import { chevronBack, documents, information, person } from "ionicons/icons";
 import { useLocation } from "react-router";
 import { environment } from "../environment";
 import {
   routeAbout,
   routeAccount,
-  routeFavoriteElements,
   routeLegal,
   routePrivacyPolicy,
 } from "../routes/shared-routes";
@@ -67,31 +60,6 @@ export const MenuContentComponent: React.FC = () => {
                   color={location.pathname === "/workshop" ? "light" : ""}
                 ></IonText>
                 Workshops
-              </IonLabel>
-            </IonItem>
-            <IonItem
-              disabled
-              routerLink={routeFavoriteElements()}
-              color={
-                location.pathname === routeFavoriteElements() ? "light" : ""
-              }
-            >
-              <IonIcon
-                slot="start"
-                icon={star}
-                color={
-                  location.pathname === routeFavoriteElements()
-                    ? "yellow-4"
-                    : ""
-                }
-              ></IonIcon>
-              <IonLabel>
-                <IonText
-                  color={
-                    location.pathname === routeFavoriteElements() ? "light" : ""
-                  }
-                ></IonText>
-                Favorite Elements
               </IonLabel>
             </IonItem>
           </IonItemGroup>

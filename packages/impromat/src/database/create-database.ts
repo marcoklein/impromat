@@ -65,5 +65,19 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
   });
 
   logger("initialized with collections %O", collections);
+
+  if (process.env.NODE_ENV === "development" || process.env.REACT_APP_TEST) {
+    console.warn(
+      "CI or development environment set. Using Continuous Integration version with automatic login.",
+    );
+    try {
+      db.me.insert({ id: "me", user: "test-user", version: 0 });
+      db.users.insert({
+        id: "test-user",
+        version: 0,
+        favoriteElements: [],
+      });
+    } catch {}
+  }
   return db;
 };
