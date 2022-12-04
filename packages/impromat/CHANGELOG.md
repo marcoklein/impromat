@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.16.0
+
+### Minor Changes
+
+- 3cf0bd5: Add favorite elements tab to add element tab.
+- b960f4f: Favorise elements by clicking the star icon in the toolbar
+
+### Patch Changes
+
+- 252b75a: Fix replication of users
+
 ## 0.15.1
 
 ### Patch Changes
