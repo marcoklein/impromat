@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
 
 pageTest.describe("Favorite Elements", () => {
@@ -16,9 +17,12 @@ pageTest.describe("Favorite Elements", () => {
         await page.getByRole("button", { name: "back" }).click();
         await page.getByRole("tab", { name: "Star Favorites" }).click();
         // then
-        await page.waitForSelector(
-          ':has-text("improwikiDEFreeze TagKettenspieleSwitches")',
-        );
+        await expect(
+          page
+            .locator("*")
+            .getByText("improwikiDEFreeze TagKettenspieleSwitches")
+            .first(),
+        ).toBeVisible();
       });
 
       await pageTest.step("should remove a favorite element", async () => {
@@ -35,7 +39,9 @@ pageTest.describe("Favorite Elements", () => {
         await page.getByRole("button", { name: "back" }).click();
         await page.getByRole("tab", { name: "Star Favorites" }).click();
         // then
-        await page.waitForSelector(':has-text("No favorites yet.")');
+        await expect(
+          page.locator("p").getByText("No favorites yet."), //':has-text("No favorites yet.")'),
+        ).toBeVisible();
       });
     },
   );
