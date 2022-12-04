@@ -52,7 +52,7 @@ yarn test:debug
 
 ### Automatic Login
 
-If either the `NODE_ENV=development` or the `CI` environment variables are set, the application simulates an automatic login. This enables integration tests to test all functionalities that require login.
+If either the `NODE_ENV=development` or the `REACT_APP_TEST` environment variables are set, the application simulates an automatic login. This enables integration tests to test all functionalities that require login.
 
 ### Page Object Models
 
