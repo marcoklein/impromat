@@ -68,6 +68,11 @@ function registerValidSW(swUrl: string, config?: Config) {
       );
       registration.waiting?.postMessage({ type: "SKIP_WAITING" });
 
+      setInterval(() => {
+        registration.update();
+        console.log("Service Worker: Checking for an update");
+      }, 1000 * 60 * 5);
+
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
