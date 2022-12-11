@@ -24,7 +24,7 @@ Add the remote connection and push to Dokku master branch to build
 
 ```
 git remote add <app-name> dokku@impromat.app:<app-name>
-git push <app-name> <branch-name>:master
+git push <app-name> <branch-name>:main
 ```
 
 ## Verify Deployments are Working
