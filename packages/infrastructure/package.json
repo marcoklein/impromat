@@ -3,5 +3,8 @@
   "version": "0.1.1",
   "description": "Infrastructure for Impromat",
   "author": "Marco Klein <hello@marcoklein.dev>",
-  "private": true
+  "private": true,
+  "scripts": {
+    "changeset": "yarn --cwd \"../..\" changeset"
+  }
 }
