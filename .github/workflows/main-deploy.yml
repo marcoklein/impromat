@@ -98,5 +98,5 @@ jobs:
         run: echo "$BRANCH_NAME"
       - run: git remote add impromat-app-production dokku@impromat.app:impromat-app-production
       - run: git remote add impromat-api-production dokku@impromat.app:impromat-api-production
-      - run: git push impromat-app-production ${{ needs.increase-build-version.outputs.commitSha }}:main --force
-      - run: git push impromat-api-production ${{ needs.increase-build-version.outputs.commitSha }}:main --force
+      - run: git push impromat-app-production ${{ needs.increase-build-version.outputs.commitSha }}:refs/heads/main --force
+      - run: git push impromat-api-production ${{ needs.increase-build-version.outputs.commitSha }}:refs/heads/main --force
