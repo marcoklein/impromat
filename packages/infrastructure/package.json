@@ -1,6 +1,6 @@
 {
   "name": "infrastructure",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Infrastructure for Impromat",
   "author": "Marco Klein <hello@marcoklein.dev>",
   "private": true,
