@@ -32,6 +32,7 @@ export function handlePushRows<
     const docId = row.newDocumentState.id;
     const docCurrentMaster = inputModels.find((d) => d.id === docId);
 
+    // TODO commented as clients can not handle version conflicts yet
     // if (
     //   docCurrentMaster &&
     //   (row.assumedMasterState?.version !== docCurrentMaster.version ||

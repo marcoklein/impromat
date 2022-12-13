@@ -64,10 +64,12 @@ describe("User Replication", async () => {
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {
       assumedMasterState: {
+        id: "test-user-id",
         version: 0,
       },
       newDocumentState: {
         favoriteElementRefs: ["element-id", "second-element-id"],
+        id: "test-user-id",
         version: 1,
       },
     };
@@ -97,15 +99,18 @@ describe("User Replication", async () => {
     );
   });
 
-  it("should return a conflict for version mismatch", async () => {
+  // disabled as conflicts are not supported by the client yet
+  xit("should return a conflict for version mismatch", async () => {
     // given
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {
       assumedMasterState: {
+        id: "test-user-id",
         version: 1,
         favoriteElementRefs: [],
       },
       newDocumentState: {
+        id: "test-user-id",
         favoriteElementRefs: ["element-id", "second-element-id"],
         version: 1,
       },
@@ -121,15 +126,18 @@ describe("User Replication", async () => {
     expect(data.pushUser.favoriteElements).to.have.lengthOf(2);
   });
 
-  it("should return a conflict for too high version bump", async () => {
+  // disabled as conflicts are not supported by the client yet
+  xit("should return a conflict for too high version bump", async () => {
     // given
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {
       assumedMasterState: {
+        id: "test-user-id",
         version: 0,
         favoriteElementRefs: [],
       },
       newDocumentState: {
+        id: "test-user-id",
         favoriteElementRefs: ["element-id", "second-element-id"],
         version: 3,
       },

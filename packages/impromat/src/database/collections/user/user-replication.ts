@@ -1,6 +1,6 @@
 import { environment } from "../../../environment";
 import { rootLogger } from "../../../logger";
-import { UserCollection } from "./user-collection";
+import { UserCollection } from "./user-collection-types";
 import {
   userPullQueryBuilder,
   userPushQueryBuilder,
@@ -17,19 +17,24 @@ export function enableUserReplication(userCollection: UserCollection) {
       batchSize: 5,
       modifier: (doc: any) => {
         logger("Retrieved document %O", doc);
-        // const ids = doc.favoriteElements.map((element: any) => element.id);
-        doc.favoriteElementRefs = doc.favoriteElements;
-        delete doc.favoriteElementRefs;
+        const ids = doc.favoriteElements.map((element: any) => element.id);
+        doc.favoriteElements = ids;
         logger("Modified document %O", doc);
         return doc;
+      },
+      responseModifier: (response: any) => {
+        logger("Received response %O", response);
+        return response;
       },
     },
     push: {
       queryBuilder: userPushQueryBuilder,
       batchSize: 5,
       modifier: (doc: any) => {
+        doc = { ...doc };
+        doc.favoriteElementRefs = doc.favoriteElements;
+        delete doc.favoriteElements;
         logger("Sending document %O", doc);
-        delete doc._meta;
         return doc;
       },
     },

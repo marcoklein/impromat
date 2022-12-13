@@ -240,6 +240,7 @@ export type UserInput = {
   /** Reference to the favorite elements. */
   deleted?: InputMaybe<Scalars['Boolean']>;
   favoriteElementRefs?: InputMaybe<Array<Scalars['ID']>>;
+  id: Scalars['ID'];
   version: Scalars['Int'];
 };
 

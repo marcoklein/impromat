@@ -8,7 +8,7 @@ const START_VERSION = 0;
 export function userPushRowInputHandler(
   userPushRow: UserPushRowInput,
   ctx: GraphQLContext
-) {
+): User | undefined {
   const userId = ctx.session?.userId;
   if (!userId) throw new Error("Unauthorized");
   const { database } = ctx;
@@ -18,22 +18,24 @@ export function userPushRowInputHandler(
 
   console.log("## received user", userPushRow);
 
-  if (
-    masterState &&
-    (assumedMasterState?.version !== masterState.version ||
-      newDocumentState.version !== masterState.version + 1)
-  ) {
-    console.log("Version Conflict");
-    const userConflict: User = new UserMapper().fromModelToDto(masterState, {
-      userId,
-    });
-    return userConflict;
-  }
-  const createdAt = Date.now();
+  // TODO commented as clients can not handle version conflicts yet
+  // if (
+  //   masterState &&
+  //   (assumedMasterState?.version !== masterState.version ||
+  //     newDocumentState.version !== masterState.version + 1)
+  // ) {
+  //   console.log("Version Conflict");
+  //   const userConflict: User = new UserMapper().fromModelToDto(masterState, {
+  //     userId,
+  //   });
+  //   return userConflict;
+  // }
+
+  const updatedAt = Date.now();
   const newUser: UserModel = {
-    createdAt,
+    createdAt: masterState?.createdAt ?? updatedAt,
     deleted: false,
-    updatedAt: createdAt,
+    updatedAt: updatedAt,
     favoriteElementIds:
       newDocumentState.favoriteElementRefs ??
       masterState?.favoriteElementIds ??
@@ -42,4 +44,5 @@ export function userPushRowInputHandler(
   };
   database.setUser(userId, newUser);
   console.log("## set state ", newUser);
+  return undefined;
 }

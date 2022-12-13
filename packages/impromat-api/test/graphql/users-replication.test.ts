@@ -3,8 +3,6 @@ import { gql } from "graphql-request";
 import { describe } from "mocha";
 import {
   MutationPushUsersArgs,
-  PullCheckpoint,
-  PullCheckpointInput,
   QueryPullUsersArgs,
 } from "../../src/graphql/schema.gen";
 import { TEST_DATA } from "../test-data-provider";
@@ -74,6 +72,7 @@ describe("Users Replication", async () => {
         {
           assumedMasterState: undefined,
           newDocumentState: {
+            id: userId,
             version: 0,
             favoriteElementRefs: ["element-id"],
           },
@@ -108,13 +107,14 @@ describe("Users Replication", async () => {
     expect(documents[0].favoriteElements).to.deep.equal([{ id: "element-id" }]);
   });
 
-  it("should return a conflict for missing assumed master state", async () => {
+  it("should return allow a push with no assumed master state", async () => {
     // given
     const args: MutationPushUsersArgs = {
       userPushRows: [
         {
           assumedMasterState: undefined,
           newDocumentState: {
+            id: userId,
             version: 0,
             favoriteElementRefs: ["element-id"],
           },
@@ -127,8 +127,7 @@ describe("Users Replication", async () => {
       args
     );
     // then
-    expect(conflicts.pushUsers).to.have.lengthOf(1);
-    expect(conflicts.pushUsers[0].id).to.equal(userId);
+    expect(conflicts.pushUsers).to.have.lengthOf(0);
   });
 
   it("should return error for multiple updates", async () => {
@@ -138,6 +137,7 @@ describe("Users Replication", async () => {
         {
           assumedMasterState: undefined,
           newDocumentState: {
+            id: userId,
             version: 0,
             favoriteElementRefs: ["element-id"],
           },
@@ -145,6 +145,7 @@ describe("Users Replication", async () => {
         {
           assumedMasterState: undefined,
           newDocumentState: {
+            id: userId,
             version: 0,
             favoriteElementRefs: ["element-id"],
           },
