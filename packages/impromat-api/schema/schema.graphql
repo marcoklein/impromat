@@ -151,6 +151,7 @@ input ElementInput {
 }
 
 input UserInput {
+  id: ID!
   version: Int!
   """
   Reference to the favorite elements.

@@ -3,7 +3,7 @@ import { rootLogger } from "../logger";
 import { AVAILABLE_COLORS } from "../theme/colors";
 import { ElementDocType } from "./collections/element/element-collection";
 import { SectionDocType } from "./collections/section/section-collection";
-import { UserDocument } from "./collections/user/user-collection";
+import { UserDocument } from "./collections/user/user-collection-types";
 import {
   WorkshopCollection,
   WorkshopDocType,
