@@ -3,8 +3,6 @@ import { gql } from "graphql-request";
 import { describe } from "mocha";
 import {
   MutationPushUsersArgs,
-  PullCheckpoint,
-  PullCheckpointInput,
   QueryPullUsersArgs,
 } from "../../src/graphql/schema.gen";
 import { TEST_DATA } from "../test-data-provider";
@@ -74,6 +72,7 @@ describe("Users Replication", async () => {
         {
           assumedMasterState: undefined,
           newDocumentState: {
+            id: userId,
             version: 0,
             favoriteElementRefs: ["element-id"],
           },
@@ -115,6 +114,7 @@ describe("Users Replication", async () => {
         {
           assumedMasterState: undefined,
           newDocumentState: {
+            id: userId,
             version: 0,
             favoriteElementRefs: ["element-id"],
           },
@@ -138,6 +138,7 @@ describe("Users Replication", async () => {
         {
           assumedMasterState: undefined,
           newDocumentState: {
+            id: userId,
             version: 0,
             favoriteElementRefs: ["element-id"],
           },
@@ -145,6 +146,7 @@ describe("Users Replication", async () => {
         {
           assumedMasterState: undefined,
           newDocumentState: {
+            id: userId,
             version: 0,
             favoriteElementRefs: ["element-id"],
           },
