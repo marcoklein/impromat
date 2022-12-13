@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.1
+
+### Patch Changes
+
+- 459a0a3: Fix wrong route for adding favorite elements.
+- 9426321: Directly install new version of application.
+- 459a0a3: Fix replication of users collection.
+
 ## 0.16.0
 
 ### Minor Changes
