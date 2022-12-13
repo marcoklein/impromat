@@ -64,10 +64,12 @@ describe("User Replication", async () => {
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {
       assumedMasterState: {
+        id: "test-user-id",
         version: 0,
       },
       newDocumentState: {
         favoriteElementRefs: ["element-id", "second-element-id"],
+        id: "test-user-id",
         version: 1,
       },
     };
@@ -102,10 +104,12 @@ describe("User Replication", async () => {
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {
       assumedMasterState: {
+        id: "test-user-id",
         version: 1,
         favoriteElementRefs: [],
       },
       newDocumentState: {
+        id: "test-user-id",
         favoriteElementRefs: ["element-id", "second-element-id"],
         version: 1,
       },
@@ -126,10 +130,12 @@ describe("User Replication", async () => {
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {
       assumedMasterState: {
+        id: "test-user-id",
         version: 0,
         favoriteElementRefs: [],
       },
       newDocumentState: {
+        id: "test-user-id",
         favoriteElementRefs: ["element-id", "second-element-id"],
         version: 3,
       },
