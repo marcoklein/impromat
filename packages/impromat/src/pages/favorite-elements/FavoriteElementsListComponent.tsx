@@ -1,5 +1,6 @@
 import { IonList } from "@ionic/react";
 import { useEffect } from "react";
+import { useParams } from "react-router";
 import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
 import { ElementDocType } from "../../database/collections/element/element-collection";
 import { routeWorkshopAddElementFromImprobib } from "../../routes/shared-routes";
@@ -13,6 +14,9 @@ interface ContainerProps {
 export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
   favoriteElements,
 }) => {
+  const { id: workshopId } = useParams<{
+    id: string;
+  }>();
   const logger = useComponentLogger("FavoriteElementsListComponent");
   useStateChangeLogger(favoriteElements, "favoriteElements", logger);
   useEffect(() => {
@@ -25,7 +29,10 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
         {favoriteElements.map((element) => (
           <WorkshopElementPreviewItemComponent
             key={element.id}
-            routerLink={routeWorkshopAddElementFromImprobib("123", element.id)}
+            routerLink={routeWorkshopAddElementFromImprobib(
+              workshopId,
+              element.id,
+            )}
             workshopElement={element}
           ></WorkshopElementPreviewItemComponent>
         ))}
