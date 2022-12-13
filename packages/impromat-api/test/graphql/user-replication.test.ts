@@ -99,7 +99,8 @@ describe("User Replication", async () => {
     );
   });
 
-  it("should return a conflict for version mismatch", async () => {
+  // disabled as conflicts are not supported by the client yet
+  xit("should return a conflict for version mismatch", async () => {
     // given
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {
@@ -125,7 +126,8 @@ describe("User Replication", async () => {
     expect(data.pushUser.favoriteElements).to.have.lengthOf(2);
   });
 
-  it("should return a conflict for too high version bump", async () => {
+  // disabled as conflicts are not supported by the client yet
+  xit("should return a conflict for too high version bump", async () => {
     // given
     const query = PUSH_USER_MUTATION;
     const userPushRowInput: UserPushRowInput = {

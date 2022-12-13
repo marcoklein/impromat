@@ -107,7 +107,7 @@ describe("Users Replication", async () => {
     expect(documents[0].favoriteElements).to.deep.equal([{ id: "element-id" }]);
   });
 
-  it("should return a conflict for missing assumed master state", async () => {
+  it("should return allow a push with no assumed master state", async () => {
     // given
     const args: MutationPushUsersArgs = {
       userPushRows: [
@@ -127,8 +127,7 @@ describe("Users Replication", async () => {
       args
     );
     // then
-    expect(conflicts.pushUsers).to.have.lengthOf(1);
-    expect(conflicts.pushUsers[0].id).to.equal(userId);
+    expect(conflicts.pushUsers).to.have.lengthOf(0);
   });
 
   it("should return error for multiple updates", async () => {
