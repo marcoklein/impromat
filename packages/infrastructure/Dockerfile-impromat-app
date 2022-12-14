@@ -14,4 +14,7 @@ ENV REACT_APP_VERSION ${REACT_APP_VERSION}
 WORKDIR /app/packages/impromat
 RUN yarn build
 
-CMD ["yarn", "build:serve"]
+# Host with app renderer
+WORKDIR /app/packages/impromat-app-renderer
+
+CMD ["yarn", "start"]
