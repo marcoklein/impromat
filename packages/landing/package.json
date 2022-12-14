@@ -1,0 +1,16 @@
+{
+  "name": "@impromat/landing",
+  "version": "0.1.0",
+  "description": "Landing page for Impromat.",
+  "author": "Marco Klein <hello@marcoklein.dev>",
+  "private": true,
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^1.0.2",
+    "sass": "^1.56.2"
+  },
+  "dependencies": {}
+}
