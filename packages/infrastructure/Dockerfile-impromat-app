@@ -1,4 +1,4 @@
-FROM node-16
+FROM node:16
 
 # Dokku requires bash
 # RUN apt-get install bash
