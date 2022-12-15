@@ -1,4 +1,4 @@
-FROM ghcr.io/puppeteer/puppeteer:latest
+FROM node-16
 
 # Dokku requires bash
 # RUN apt-get install bash
@@ -6,17 +6,17 @@ FROM ghcr.io/puppeteer/puppeteer:latest
 # Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
 # Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
 # installs, work.
-# RUN apt-get update \
-#     && apt-get install -y wget gnupg \
-#     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-#     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-#     && apt-get update \
-#     && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-khmeros fonts-kacst fonts-freefont-ttf libxss1 \
-#       --no-install-recommends \
-#     && rm -rf /var/lib/apt/lists/* \
+RUN apt-get update \
+    && apt-get install -y wget gnupg \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-khmeros fonts-kacst fonts-freefont-ttf libxss1 \
+      --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/* \
 
 
-WORKDIR /home/pptruser
+WORKDIR /app
 COPY . .
 RUN yarn install --frozen-lockfile
 
@@ -24,10 +24,10 @@ ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL ${REACT_APP_API_URL}
 ARG REACT_APP_VERSION
 ENV REACT_APP_VERSION ${REACT_APP_VERSION}
-WORKDIR /home/pptruser/packages/impromat
+WORKDIR /app/packages/impromat
 RUN yarn build
 
 # Host with app renderer
-WORKDIR /home/pptruser/packages/impromat-app-renderer
+WORKDIR /app/packages/impromat-app-renderer
 
 CMD ["yarn", "start"]
