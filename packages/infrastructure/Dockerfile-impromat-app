@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16
 
 # Dokku requires bash
 RUN apk add --no-cache bash
