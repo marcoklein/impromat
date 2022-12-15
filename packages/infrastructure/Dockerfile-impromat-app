@@ -15,12 +15,9 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r myuser && useradd --no-log-init -r -g myuser myuser
-
-RUN mkdir -p /home/myuser
-RUN ls -la /home
-RUN chown -R myuser:myuser /home/myuser
-RUN ls -la /home
+RUN groupadd -r myuser && useradd --no-log-init -r -g myuser myuser -d /home/myuser
+# RUN mkdir -p /home/myuser
+# RUN chown -R myuser:myuser /home/myuser
 USER myuser
 
 WORKDIR /home/myuser
