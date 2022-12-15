@@ -18,6 +18,8 @@ dokku domains:set-global impromat.app
 
 ## Swap File
 
+> Note: the following section describes how to create a swap _file_. You might want to create a swap _partition_ for faster access.
+
 Follow e.g. https://linuxize.com/post/create-a-linux-swap-file/
 
 ```
@@ -43,4 +45,18 @@ or:
 
 ```
 sudo free -h
+```
+
+## Monitoring
+
+Install `htop` with:
+
+```
+sudo apt install htop
+```
+
+Monitor server with:
+
+```
+sudo htop
 ```
