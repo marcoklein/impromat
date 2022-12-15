@@ -28,8 +28,8 @@ async function handlePageRequest(url: string) {
     return cache.get(url);
   }
   const browser = await puppeteer.launch({
-    // TODO run with sandbox https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
-    // args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    // no need for sandbox as we only serve static files from the impromat app
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
   await page.goto(`http://localhost:${clientPort}`, {
