@@ -4,19 +4,22 @@ Tracking tasks for the development that move into the [Changelog](./CHANGELOG.md
 
 ## Impromat App
 
-### 1.0.0 MVP
+### Feature Ideas
 
+- [ ] Add a skeleton loading page to replace the simple `IonSpinner` component
 - [ ] Mark a newly added element if it gets added to the workshop (passed via `newElement` in the history state)
 - [ ] Auto focus on dialog presentation
-- [ ] Add section dividers between elements to divide into workshop parts
-- [ ] Add a skeleton loading page to replace the simple `IonSpinner` component
-- [ ] Move all actions to manipulate a workshop element into the workshop element page (same as for a workshop)
 - [ ] Accept input on `ENTER` key
+- [ ] Move all actions to manipulate a workshop element into the workshop element page (same as for a workshop)
 - [ ] Add date to workshop
+
+### 1.0.0 MVP
+
+- [x] Add section dividers between elements to divide into workshop parts
 
 ### App Handling
 
-- [ ] allow automatic installation of updates
+- [x] allow automatic installation of updates
 
 ### Login Functionality
 
