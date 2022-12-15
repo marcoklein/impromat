@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - dev
+  pull_request:
+    branches:
+      - dev
   workflow_dispatch:
 
 env:
@@ -31,7 +34,7 @@ jobs:
       - name: Print Branch Name
         run: echo "$BRANCH_NAME"
       - name: Configure Development Enviroment
-        run: bash -e ./packages/infrastructure/configure-dev.sh
+        run: bash -e ./packages/infrastructure/configure-development.sh
       - run: git remote add impromat-app-development dokku@impromat.app:impromat-app-development
       - run: git remote add impromat-api-development dokku@impromat.app:impromat-api-development
       - run: git push impromat-app-development $BRANCH_NAME:main --force

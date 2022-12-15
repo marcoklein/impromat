@@ -46,13 +46,16 @@ function ensureAppExists {
 
 function configureDomain {
   local appName=$1
-  local domain=$2
+  local domains=$2
 
-  log "Configure Domain $domain"
-  isDomainSet=$(dokku domains:report $appName --domains-app-vhosts | grep "$domain")
+  log "Configure Domain '$domains'"
+  set +e
+  isDomainSet=$(dokku domains:report $appName --domains-app-vhosts | grep "$domains")
+  log "isDomainSet=$isDomainSet"
+  set -e
   if [ -z "$isDomainSet" ]; then
     log "Set Domain"
-    dokku domains:set $appName $domain
+    dokku domains:set $appName $domains
   else
     log "Domain already set"
   fi
