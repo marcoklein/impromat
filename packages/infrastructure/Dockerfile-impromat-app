@@ -17,10 +17,14 @@ RUN apt-get update \
 
 RUN groupadd -r myuser && useradd --no-log-init -r -g myuser myuser
 
+RUN ls -la /home
+RUN chown -R myuser:myuser /home/myuser
+RUN ls -la /home
 USER myuser
 
 WORKDIR /home/myuser
-COPY --chown=myuser . .
+COPY --chown=myuser:myuser . .
+RUN ls -la
 RUN yarn install --frozen-lockfile
 
 ARG REACT_APP_API_URL
