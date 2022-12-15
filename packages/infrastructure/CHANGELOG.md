@@ -1,5 +1,16 @@
 # infrastructure
 
+## 0.2.0
+
+### Minor Changes
+
+- 55f5f07: Restructure scripts into development and production configurations.
+- fe6bca7: Adjust impromat-app Dockerfile to host with the impromat-app-renderer package.
+
+### Patch Changes
+
+- affa2d4: Add necessary dependencies in Dockerfile to allow Puppeteer installation.
+
 ## 0.1.3
 
 ### Patch Changes
