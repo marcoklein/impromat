@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.3
+
+### Patch Changes
+
+- 459a0a3: Fix replication of users collection.
+
 ## 0.5.2
 
 ### Patch Changes
