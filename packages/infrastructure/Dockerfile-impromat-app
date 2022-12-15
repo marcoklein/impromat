@@ -11,7 +11,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r myuser \
-    && useradd --no-log-init -r -g myuser myuser -d /home/myuser \
+    && useradd --no-log-init -r -g myuser myuser --home-dir /home/myuser --create-home \
     && chown -R myuser:myuser /home/myuser
 
 USER myuser
