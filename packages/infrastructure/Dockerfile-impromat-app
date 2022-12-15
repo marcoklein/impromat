@@ -15,6 +15,7 @@ RUN groupadd -r myuser \
     && chown -R myuser:myuser /home/myuser
 
 # https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#recommended-enable-user-namespace-cloning
+RUN apt-get install systcl -y
 RUN systcl -w kernel.unprivileged_userns_clone=1
 
 USER myuser
