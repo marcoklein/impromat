@@ -17,6 +17,7 @@ RUN apt-get update \
 
 RUN groupadd -r myuser && useradd --no-log-init -r -g myuser myuser
 
+RUN mkdir -p /home/myuser
 RUN ls -la /home
 RUN chown -R myuser:myuser /home/myuser
 RUN ls -la /home
