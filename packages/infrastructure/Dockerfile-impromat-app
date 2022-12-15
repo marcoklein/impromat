@@ -15,19 +15,22 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
+RUN groupadd -r myuser && useradd --no-log-init -r -g myuser myuser
 
-WORKDIR /app
-COPY . .
+USER myuser
+
+WORKDIR /home/myuser
+COPY --chown=myuser . .
 RUN yarn install --frozen-lockfile
 
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL ${REACT_APP_API_URL}
 ARG REACT_APP_VERSION
 ENV REACT_APP_VERSION ${REACT_APP_VERSION}
-WORKDIR /app/packages/impromat
+WORKDIR /home/myuser/packages/impromat
 RUN yarn build
 
 # Host with app renderer
-WORKDIR /app/packages/impromat-app-renderer
+WORKDIR /home/myuser/packages/impromat-app-renderer
 
 CMD ["yarn", "start"]

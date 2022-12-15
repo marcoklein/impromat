@@ -29,7 +29,7 @@ async function handlePageRequest(url: string) {
   }
   const browser = await puppeteer.launch({
     // TODO run with sandbox https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    // args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
   await page.goto(`http://localhost:${clientPort}`, {
