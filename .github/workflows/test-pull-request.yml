@@ -1,7 +1,5 @@
 name: Test Pull Request
 
-on: none
-
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
