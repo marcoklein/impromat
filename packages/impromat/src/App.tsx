@@ -43,6 +43,8 @@ import {
   routeAccount,
   routeHome,
   routeLegal,
+  routeLibrary,
+  routeLibraryElement,
   routePrivacyPolicy,
   routeWorkshop,
   routeWorkshopAddElement,
@@ -52,6 +54,7 @@ import {
 } from "./routes/shared-routes";
 import "./theme/colors.css";
 import "./theme/variables.css";
+import { LibraryPage } from "./pages/LibraryPage";
 
 setupIonicReact();
 
@@ -123,6 +126,12 @@ const App: React.FC = () => {
                   </Route>
                   <Route path={routeWorkshopAddElementFromImprobib()} exact>
                     <ImprobibElementPage></ImprobibElementPage>
+                  </Route>
+                  <Route path={routeLibraryElement()} exact>
+                    <ImprobibElementPage></ImprobibElementPage>
+                  </Route>
+                  <Route path={routeLibrary()}>
+                    <LibraryPage></LibraryPage>
                   </Route>
                   <Route path={routeWorkshopAddElement()}>
                     <AddWorkshopElementPage></AddWorkshopElementPage>

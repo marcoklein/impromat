@@ -28,6 +28,14 @@ We use `debug` for logging. Enable logging for tests via
 DEBUG="impromat:*" yarn test
 ```
 
+## Linter
+
+Run linter with auto fix via:
+
+```
+yarn lint:fix
+```
+
 ## Tests
 
 Playwright executes end-to-end tests.
@@ -50,9 +58,15 @@ Debug tests by using
 yarn test:debug
 ```
 
+Print debug results for webServer config errors:
+
+```
+DEBUG=pw:webserver yarn test
+```
+
 ### Automatic Login
 
-If the `REACT_APP_TEST` environment variable is set, the application simulates an automatic login. This enables integration tests to test all functionalities that require login.
+If the `REACT_APP_AUTO_LOGIN` environment variable is set, the application simulates an automatic login. This enables integration tests to test all functionalities that require login.
 
 ### Page Object Models
 

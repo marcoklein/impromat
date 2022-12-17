@@ -66,7 +66,7 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
 
   logger("initialized with collections %O", collections);
 
-  if (process.env.REACT_APP_TEST) {
+  if (process.env.REACT_APP_AUTO_LOGIN) {
     console.warn(
       "CI or development environment set. Using Continuous Integration version with automatic login.",
     );

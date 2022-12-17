@@ -4,14 +4,13 @@ declare const process: any;
 const config: PlaywrightTestConfig = {
   webServer: {
     command: process.env.CI
-      ? // test against production build
-        "yarn build && yarn build:serve -p 3000"
+      ? "yarn build && yarn build:serve -p 3000"
       : "yarn start",
     env: {
-      REACT_APP_TEST: "1",
+      REACT_APP_AUTO_LOGIN: "1",
     },
-    url: "http://localhost:3000/",
-    timeout: 5 * 60 * 1000,
+    port: 3000,
+    timeout: 2 * 60 * 1000,
     reuseExistingServer: !process.env.CI,
   },
   use: {
