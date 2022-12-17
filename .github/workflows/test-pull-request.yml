@@ -1,10 +1,6 @@
 name: Test Pull Request
 
-on:
-  pull_request:
-    branches:
-      []
-      # - dev
+on: none
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
