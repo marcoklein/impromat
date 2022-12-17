@@ -18,6 +18,7 @@
   },
   "scripts": {
     "dev": "lerna run --scope impromat --scope impromat-api dev",
+    "lint": "lerna run lint",
     "test": "lerna run test",
     "build": "lerna run build",
     "bootstrap": "lerna bootstrap",

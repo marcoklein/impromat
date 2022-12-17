@@ -32,11 +32,7 @@ import { useRxdbMutations } from "../database/use-rxdb-mutations";
 import { WORKSHOP_HELPER } from "../database/workshop-helper";
 import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../hooks/use-input-dialog";
-import {
-  routeLibrary,
-  routePrivacyPolicy,
-  routeWorkshops,
-} from "../routes/shared-routes";
+import { routeWorkshops } from "../routes/shared-routes";
 import { useComponentLogger } from "../use-component-logger";
 
 export const WorkshopPage: React.FC = () => {

@@ -28,6 +28,14 @@ We use `debug` for logging. Enable logging for tests via
 DEBUG="impromat:*" yarn test
 ```
 
+## Linter
+
+Run linter with auto fix via:
+
+```
+yarn lint:fix
+```
+
 ## Tests
 
 Playwright executes end-to-end tests.
@@ -48,6 +56,12 @@ Debug tests by using
 
 ```
 yarn test:debug
+```
+
+Print debug results for webServer config errors:
+
+```
+DEBUG=pw:webserver yarn test
 ```
 
 ### Automatic Login
