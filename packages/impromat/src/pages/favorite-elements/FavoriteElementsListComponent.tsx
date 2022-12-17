@@ -3,7 +3,10 @@ import { useEffect } from "react";
 import { useParams } from "react-router";
 import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
 import { ElementDocType } from "../../database/collections/element/element-collection";
-import { routeWorkshopAddElementFromImprobib } from "../../routes/shared-routes";
+import {
+  routeLibraryElement,
+  routeWorkshopAddElementFromImprobib,
+} from "../../routes/shared-routes";
 import { useComponentLogger } from "../../use-component-logger";
 import { useStateChangeLogger } from "../../use-state-change-logger";
 
@@ -15,7 +18,7 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
   favoriteElements,
 }) => {
   const { id: workshopId } = useParams<{
-    id: string;
+    id?: string;
   }>();
   const logger = useComponentLogger("FavoriteElementsListComponent");
   useStateChangeLogger(favoriteElements, "favoriteElements", logger);
@@ -29,10 +32,11 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
         {favoriteElements.map((element) => (
           <WorkshopElementPreviewItemComponent
             key={element.id}
-            routerLink={routeWorkshopAddElementFromImprobib(
-              workshopId,
-              element.id,
-            )}
+            routerLink={
+              workshopId
+                ? routeWorkshopAddElementFromImprobib(workshopId, element.id)
+                : routeLibraryElement(element.id)
+            }
             workshopElement={element}
           ></WorkshopElementPreviewItemComponent>
         ))}

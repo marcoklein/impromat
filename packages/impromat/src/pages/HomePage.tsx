@@ -1,5 +1,5 @@
 import { IonPage } from "@ionic/react";
-import { MenuContentComponent } from "../components/MenuContentComponent";
+import { MenuContentComponent } from "../components/menu/MenuContentComponent";
 
 export const HomePage: React.FC = () => {
   return (

@@ -8,6 +8,10 @@ export const routePrivacyPolicy = () => "/privacy";
 export const routeAccount = () => "/account";
 export const routeLegal = () => "/legal";
 export const routeAccountSignin = () => "/account/signin";
+export const routeLibrary = () => "/library";
+export const routeLibraryElement = (
+  libraryElementId = ROUTE_IMPROBIB_ELEMENT_ID,
+) => `/library-element/${libraryElementId}`;
 export const routeWorkshops = () => "/workshop";
 export const routeWorkshop = (workshopId: string = ROUTE_WORKHOP_ID) =>
   `/workshop/${workshopId}`;

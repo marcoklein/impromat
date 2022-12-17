@@ -5,7 +5,6 @@ import {
   IonFooter,
   IonHeader,
   IonIcon,
-  IonItem,
   IonItemDivider,
   IonItemGroup,
   IonLabel,
@@ -13,23 +12,28 @@ import {
   IonMenuToggle,
   IonNote,
   IonRouterLink,
-  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { chevronBack, documents, information, person } from "ionicons/icons";
-import { useLocation } from "react-router";
-import { environment } from "../environment";
+import {
+  chevronBack,
+  documents,
+  information,
+  library,
+  person,
+} from "ionicons/icons";
+import { environment } from "../../environment";
 import {
   routeAbout,
   routeAccount,
   routeLegal,
+  routeLibrary,
   routePrivacyPolicy,
-} from "../routes/shared-routes";
+  routeWorkshops,
+} from "../../routes/shared-routes";
+import { MenuItemComponent } from "./MenuItemComponent";
 
 export const MenuContentComponent: React.FC = () => {
-  const location = useLocation();
-
   return (
     <>
       <IonHeader>
@@ -50,42 +54,36 @@ export const MenuContentComponent: React.FC = () => {
             <IonItemDivider>
               <IonLabel>Navigation</IonLabel>
             </IonItemDivider>
-            <IonItem
-              routerLink="/workshop"
-              color={location.pathname === "/workshop" ? "light" : ""}
-            >
-              <IonIcon slot="start" icon={documents}></IonIcon>
-              <IonLabel>
-                <IonText
-                  color={location.pathname === "/workshop" ? "light" : ""}
-                ></IonText>
-                Workshops
-              </IonLabel>
-            </IonItem>
+            <MenuItemComponent
+              routerLink={routeWorkshops()}
+              icon={documents}
+              label="Workshops"
+            ></MenuItemComponent>
+            <MenuItemComponent
+              routerLink={routeLibrary()}
+              icon={library}
+              label="Library"
+            ></MenuItemComponent>
           </IonItemGroup>
           <IonItemGroup>
             <IonItemDivider>
               <IonLabel>Account</IonLabel>
             </IonItemDivider>
-            <IonItem
+            <MenuItemComponent
               routerLink={routeAccount()}
-              color={location.pathname === routeAccount() ? "light" : ""}
-            >
-              <IonIcon slot="start" icon={person}></IonIcon>
-              <IonLabel>Account</IonLabel>
-            </IonItem>
+              icon={person}
+              label="Account"
+            ></MenuItemComponent>
           </IonItemGroup>
           <IonItemGroup>
             <IonItemDivider>
               <IonLabel>More</IonLabel>
             </IonItemDivider>
-            <IonItem
+            <MenuItemComponent
               routerLink={routeAbout()}
-              color={location.pathname === routeAbout() ? "light" : ""}
-            >
-              <IonIcon slot="start" icon={information}></IonIcon>
-              About
-            </IonItem>
+              icon={information}
+              label="About"
+            ></MenuItemComponent>
           </IonItemGroup>
         </IonList>
       </IonContent>

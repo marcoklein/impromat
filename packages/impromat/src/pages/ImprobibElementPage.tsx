@@ -22,13 +22,16 @@ import { useMyUser } from "../database/use-my-user";
 import { useRxdbMutations } from "../database/use-rxdb-mutations";
 import { routeWorkshopAddElement } from "../routes/shared-routes";
 import { useComponentLogger } from "../use-component-logger";
+import { useStateChangeLogger } from "../use-state-change-logger";
 
 export const ImprobibElementPage: React.FC = () => {
   const { id: workshopId, libraryPartId } = useParams<{
-    id: string;
+    id?: string;
     libraryPartId: string;
   }>();
   const logger = useComponentLogger("ImprobibElementPage");
+  useStateChangeLogger(workshopId, "workshopId", logger);
+  useStateChangeLogger(libraryPartId, "libraryPartId", logger);
   const mutations = useRxdbMutations();
   const [presentToast] = useIonToast();
   const improbibElements = useImprobibElements();
@@ -49,7 +52,7 @@ export const ImprobibElementPage: React.FC = () => {
   }, [improbibElements, libraryPartId]);
 
   function addToWorkshop() {
-    if (!mutations || !improbibElement) return;
+    if (!mutations || !improbibElement || !workshopId) return;
     mutations.addImprovElementToWorkshop(workshopId, improbibElement);
     history.push(`/workshop/${workshopId}`, {
       direction: "back",
@@ -106,20 +109,22 @@ export const ImprobibElementPage: React.FC = () => {
           <IonSpinner></IonSpinner>
         )}
       </IonContent>
-      <IonFooter>
-        <IonToolbar>
-          <IonButton
-            onClick={() => {
-              addToWorkshop();
-            }}
-            color="primary"
-            expand="full"
-            fill="solid"
-          >
-            Add to Workshop
-          </IonButton>
-        </IonToolbar>
-      </IonFooter>
+      {workshopId && (
+        <IonFooter>
+          <IonToolbar>
+            <IonButton
+              onClick={() => {
+                addToWorkshop();
+              }}
+              color="primary"
+              expand="full"
+              fill="solid"
+            >
+              Add to Workshop
+            </IonButton>
+          </IonToolbar>
+        </IonFooter>
+      )}
     </IonPage>
   );
 };

@@ -10,20 +10,23 @@ import {
 import Fuse from "fuse.js";
 import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { InfoItemComponent } from "../../components/InfoItemComponent";
+import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
+import { ElementDocType } from "../../database/collections/element/element-collection";
+import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
 import {
+  routeLibraryElement,
   routeWorkshopAddElementCreate,
   routeWorkshopAddElementFromImprobib,
 } from "../../routes/shared-routes";
-import { ElementDocType } from "../../database/collections/element/element-collection";
-import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
-import { InfoItemComponent } from "../../components/InfoItemComponent";
-import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
 
-export const SearchElementTabComponent: React.FC = () => {
-  const { id: workshopId } = useParams<{
-    id: string;
-  }>();
+interface ContainerProps {
+  workshopId?: string;
+}
+
+export const SearchElementTabComponent: React.FC<ContainerProps> = ({
+  workshopId,
+}) => {
   const improvElements = useImprobibElements();
   const [loadingImprovElements, setLoadingImprovElements] = useState(true);
   const [searchText, setSearchText] = useState("");
@@ -112,10 +115,14 @@ export const SearchElementTabComponent: React.FC = () => {
                 {workshopElements?.map((element) => (
                   <WorkshopElementPreviewItemComponent
                     key={element.id}
-                    routerLink={routeWorkshopAddElementFromImprobib(
-                      workshopId,
-                      element.id,
-                    )}
+                    routerLink={
+                      workshopId
+                        ? routeWorkshopAddElementFromImprobib(
+                            workshopId,
+                            element.id,
+                          )
+                        : routeLibraryElement(element.id)
+                    }
                     workshopElement={element}
                   ></WorkshopElementPreviewItemComponent>
                 ))}
