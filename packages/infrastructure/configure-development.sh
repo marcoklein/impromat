@@ -14,12 +14,13 @@ bash -e $WORKDIR/scripts/configure-impromat-app.sh development "dev.impromat.app
 log "Configuring impromat-api"
 bash -e $WORKDIR/scripts/configure-impromat-api.sh development api.dev.impromat.app
 
-if [ "$environmentName" = "development" ]
-then
-  echo "Adding development configuration"
-  packageVersion=$(cd $WORKDIR/../impromat && echo $(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]'))
-  echo "packageVersion=$packageVersion"
-  appVersion="$packageVersion-$(($RANDOM % 999))"
-  echo "appVersion=$appVersion"
-  dokku docker-options:add $appName build "--build-arg REACT_APP_VERSION=$packageVersion-$RANDOM"
-fi
+######################################
+### Development specific configuration
+######################################
+
+echo "Adding development configuration"
+packageVersion=$(cd $WORKDIR/../impromat && echo $(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]'))
+echo "packageVersion=$packageVersion"
+appVersion="$packageVersion-$(($RANDOM % 999))"
+echo "appVersion=$appVersion"
+dokku docker-options:add $appName build "--build-arg REACT_APP_VERSION=$packageVersion-$RANDOM"
