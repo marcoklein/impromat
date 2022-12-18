@@ -11,12 +11,13 @@ import Fuse from "fuse.js";
 import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
+import { Tabs } from "../../components/LibraryContentComponent";
 import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
 import { ElementDocType } from "../../database/collections/element/element-collection";
 import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
 import {
   routeLibraryElement,
-  routeWorkshopAddElementCreate,
+  routeWorkshopAddElement,
   routeWorkshopAddElementFromImprobib,
 } from "../../routes/shared-routes";
 
@@ -102,7 +103,9 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                 <IonLabel>
                   <IonButton
                     expand="full"
-                    routerLink={routeWorkshopAddElementCreate(workshopId)}
+                    routerLink={`${routeWorkshopAddElement(workshopId)}/${
+                      Tabs.SEARCH
+                    }`}
                   >
                     Create Element
                   </IonButton>

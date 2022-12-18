@@ -18,7 +18,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import immer from "immer";
-import { add, barbellOutline, reorderFour } from "ionicons/icons";
+import { add } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { EditableItemComponent } from "../components/EditableItemComponent";
@@ -194,10 +194,10 @@ export const WorkshopPage: React.FC = () => {
               </IonFabButton>
               <IonFabList side="start">
                 <IonButton routerLink={`/workshop/${id}/add-element`}>
-                  <IonIcon icon={barbellOutline} slot="start"></IonIcon>Element
+                  Element
                 </IonButton>
-                <IonButton color="medium" onClick={() => onCreateSection()}>
-                  <IonIcon icon={reorderFour} slot="start"></IonIcon>Section
+                <IonButton color="dark" onClick={() => onCreateSection()}>
+                  Section
                 </IonButton>
               </IonFabList>
             </IonFab>

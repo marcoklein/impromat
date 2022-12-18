@@ -7,7 +7,7 @@ import {
   IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
-import { add, search, star } from "ionicons/icons";
+import { brush, search, star } from "ionicons/icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Redirect,
@@ -22,7 +22,7 @@ import { FavoriteElementsTabComponent } from "../pages/add-workshop-element/Favo
 import { SearchElementTabComponent } from "../pages/add-workshop-element/SearchElementTabComponent";
 import { routeLibrary, routeWorkshopAddElement } from "../routes/shared-routes";
 
-enum Tabs {
+export enum Tabs {
   CREATE = "create",
   FAVORITES = "favorites",
   SEARCH = "search",
@@ -50,11 +50,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
   const [tab, setTab] = useState(Tabs.SEARCH);
   useEffect(() => {
     if (location.pathname.endsWith(Tabs.CREATE)) {
-      if (hasWorkshopContext) {
-        setTab(Tabs.SEARCH);
-      } else {
-        setTab(Tabs.CREATE);
-      }
+      setTab(Tabs.CREATE);
     } else if (location.pathname.endsWith(Tabs.FAVORITES)) {
       setTab(Tabs.FAVORITES);
     } else {
@@ -112,15 +108,13 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
               <IonIcon icon={star}></IonIcon>
               <IonLabel>Favorites</IonLabel>
             </IonSegmentButton>
-            {hasWorkshopContext && (
-              <IonSegmentButton
-                value={Tabs.CREATE}
-                onClick={() => history.replace(createTabsRoute(Tabs.CREATE))}
-              >
-                <IonIcon icon={add}></IonIcon>
-                <IonLabel>Create</IonLabel>
-              </IonSegmentButton>
-            )}
+            <IonSegmentButton
+              value={Tabs.CREATE}
+              onClick={() => history.replace(createTabsRoute(Tabs.CREATE))}
+            >
+              <IonIcon icon={brush}></IonIcon>
+              <IonLabel>Custom</IonLabel>
+            </IonSegmentButton>
           </IonSegment>
         </IonToolbar>
       </IonFooter>

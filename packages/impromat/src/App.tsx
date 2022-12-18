@@ -30,10 +30,12 @@ import { getSdk } from "./graphql/schema.gen";
 import { AboutPage } from "./pages/AboutPage";
 import { AccountPage } from "./pages/AccountPage";
 import { AddWorkshopElementPage } from "./pages/AddWorkshopElementPage";
+import { CreateCustomElementPage } from "./pages/CreateCustomElementPage";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import { HomePage } from "./pages/HomePage";
 import { ImprobibElementPage } from "./pages/ImprobibElementPage";
 import { LegalPage } from "./pages/LegalPage";
+import { LibraryPage } from "./pages/LibraryPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { WorkshopElementPage } from "./pages/WorkshopElementPage";
 import { WorkshopPage } from "./pages/WorkshopPage";
@@ -44,17 +46,18 @@ import {
   routeHome,
   routeLegal,
   routeLibrary,
+  routeLibraryCreateCustomElement,
   routeLibraryElement,
   routePrivacyPolicy,
   routeWorkshop,
   routeWorkshopAddElement,
+  routeWorkshopAddElementCreateCustomElement,
   routeWorkshopAddElementFromImprobib,
   routeWorkshopElement,
   routeWorkshops,
 } from "./routes/shared-routes";
 import "./theme/colors.css";
 import "./theme/variables.css";
-import { LibraryPage } from "./pages/LibraryPage";
 
 setupIonicReact();
 
@@ -127,8 +130,17 @@ const App: React.FC = () => {
                   <Route path={routeWorkshopAddElementFromImprobib()} exact>
                     <ImprobibElementPage></ImprobibElementPage>
                   </Route>
+                  <Route
+                    path={routeWorkshopAddElementCreateCustomElement()}
+                    exact
+                  >
+                    <CreateCustomElementPage></CreateCustomElementPage>
+                  </Route>
                   <Route path={routeLibraryElement()} exact>
                     <ImprobibElementPage></ImprobibElementPage>
+                  </Route>
+                  <Route path={routeLibraryCreateCustomElement()} exact>
+                    <CreateCustomElementPage></CreateCustomElementPage>
                   </Route>
                   <Route path={routeLibrary()}>
                     <LibraryPage></LibraryPage>

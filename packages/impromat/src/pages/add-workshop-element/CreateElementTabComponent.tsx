@@ -1,62 +1,42 @@
+import { IonFab, IonFabButton, IonIcon } from "@ionic/react";
+import { add } from "ionicons/icons";
+import { useEffect } from "react";
+import { useLocation, useParams } from "react-router";
 import {
-  IonButton,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonTextarea,
-  useIonToast,
-} from "@ionic/react";
-import { useState } from "react";
-import { useHistory, useParams } from "react-router";
-import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+  routeLibraryCreateCustomElement,
+  routeWorkshopAddElementCreateCustomElement,
+} from "../../routes/shared-routes";
+import { useComponentLogger } from "../../use-component-logger";
+import { CustomElementsEmptyComponent } from "../custom-elements/CustomElementsEmptyComponent";
 
 export const CreateElementTabComponent: React.FC = () => {
   const { id: workshopId } = useParams<{
-    id: string;
+    id?: string;
   }>();
 
-  const [presentToast] = useIonToast();
-  const [name, setName] = useState("");
-  const [content, setContent] = useState("");
-  const database = useRxdbMutations();
-  const history = useHistory();
+  const location = useLocation();
+  const logger = useComponentLogger("CreateElementTabComponent");
 
-  const onCreateElementClick = () => {
-    if (!database || !name?.length) {
-      presentToast({ message: "Please enter a name", duration: 1500 });
-      return;
-    }
-    database
-      .addNewElementToWorkshop(workshopId, name, content)
-      .then((elementId) => {
-        history.push(`/workshop/${workshopId}`, {
-          direction: "back",
-          newElement: elementId,
-        });
-      });
-  };
+  useEffect(() => {
+    logger("location=%s", location.pathname);
+    logger("state=%O", location.state);
+  }, [location, logger]);
 
   return (
-    <IonList>
-      <IonItem>
-        <IonLabel position="floating">Name</IonLabel>
-        <IonInput
-          maxlength={100}
-          value={name}
-          onIonChange={(event) => setName(event.detail.value!)}
-        ></IonInput>
-      </IonItem>
-      <IonItem>
-        <IonLabel position="floating">Content</IonLabel>
-        <IonTextarea
-          value={content}
-          onIonChange={(event) => setContent(event.detail.value!)}
-        ></IonTextarea>
-      </IonItem>
-      <IonButton expand="full" onClick={onCreateElementClick}>
-        Add Element
-      </IonButton>
-    </IonList>
+    <>
+      <IonFab slot="fixed" vertical="bottom" horizontal="end">
+        <IonFabButton
+          color="primary"
+          routerLink={
+            workshopId
+              ? routeWorkshopAddElementCreateCustomElement(workshopId)
+              : routeLibraryCreateCustomElement()
+          }
+        >
+          <IonIcon icon={add}></IonIcon>
+        </IonFabButton>
+      </IonFab>
+      <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
+    </>
   );
 };
