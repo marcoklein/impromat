@@ -1,13 +1,17 @@
-import { IonFab, IonFabButton, IonIcon } from "@ionic/react";
+import { IonFab, IonFabButton, IonIcon, IonSpinner } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useLocation, useParams } from "react-router";
+import { RxCollection } from "rxdb";
+import { useRxData } from "rxdb-hooks";
+import { ElementDocType } from "../../database/collections/element/element-collection";
 import {
   routeLibraryCreateCustomElement,
   routeWorkshopAddElementCreateCustomElement,
 } from "../../routes/shared-routes";
 import { useComponentLogger } from "../../use-component-logger";
 import { CustomElementsEmptyComponent } from "../custom-elements/CustomElementsEmptyComponent";
+import { CustomElementsListComponent } from "../custom-elements/CustomElementsListComponent";
 
 export const CreateElementTabComponent: React.FC = () => {
   const { id: workshopId } = useParams<{
@@ -16,6 +20,17 @@ export const CreateElementTabComponent: React.FC = () => {
 
   const location = useLocation();
   const logger = useComponentLogger("CreateElementTabComponent");
+
+  const { result: customElements, isFetching } = useRxData<ElementDocType>(
+    "elements",
+    useCallback(
+      (collection: RxCollection) =>
+        collection.find({
+          selector: { basedOn: undefined, sourceName: undefined },
+        }),
+      [],
+    ),
+  );
 
   useEffect(() => {
     logger("location=%s", location.pathname);
@@ -36,7 +51,15 @@ export const CreateElementTabComponent: React.FC = () => {
           <IonIcon icon={add}></IonIcon>
         </IonFabButton>
       </IonFab>
-      <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
+      {isFetching || customElements === undefined ? (
+        <IonSpinner></IonSpinner>
+      ) : !customElements.length ? (
+        <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
+      ) : (
+        <CustomElementsListComponent
+          customElements={customElements}
+        ></CustomElementsListComponent>
+      )}
     </>
   );
 };

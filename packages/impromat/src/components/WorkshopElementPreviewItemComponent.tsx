@@ -8,7 +8,7 @@ interface ContainerProps {
 }
 
 /**
- * Renders a workshop element as an Ion Item to preview general information.
+ * Renders a workshop element as an `IonItem` to preview general information.
  * Use within an `IonList` component.
  */
 export const WorkshopElementPreviewItemComponent: React.FC<ContainerProps> = ({

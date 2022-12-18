@@ -1,6 +1,7 @@
 import { IonList } from "@ionic/react";
 import { useEffect } from "react";
 import { useParams } from "react-router";
+import { RxDocument } from "rxdb";
 import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
 import { ElementDocType } from "../../database/collections/element/element-collection";
 import {
@@ -11,7 +12,7 @@ import { useComponentLogger } from "../../use-component-logger";
 import { useStateChangeLogger } from "../../use-state-change-logger";
 
 interface ContainerProps {
-  customElements: ElementDocType[];
+  customElements: RxDocument<ElementDocType>[];
 }
 
 export const CustomElementsListComponent: React.FC<ContainerProps> = ({
