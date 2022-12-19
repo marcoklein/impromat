@@ -9,14 +9,9 @@
     "@capacitor/haptics": "4.0.1",
     "@capacitor/keyboard": "4.0.1",
     "@capacitor/status-bar": "4.0.1",
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
     "@playwright/test": "^1.26.1",
-    "@remirror/pm": "^2.0.0-beta.15",
-    "@remirror/react": "^2.0.0-beta.15",
-    "@remirror/react-editors": "^1.0.0-beta.15",
     "@types/node": "^12.19.15",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
@@ -36,7 +31,6 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.0",
-    "remirror": "^2.0.0-beta.15",
     "rxdb": "^13.11.1",
     "rxdb-hooks": "^4.0.3",
     "rxjs": "^7.5.6",
@@ -102,6 +96,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/plugin-syntax-flow": "^7.18.6",
+    "@babel/plugin-syntax-import-assertions": "^7.20.0",
+    "@babel/plugin-transform-react-jsx": "^7.19.0",
     "@capacitor/cli": "4.1.0",
     "@graphql-codegen/cli": "^2.13.12",
     "@graphql-codegen/typescript": "^2.8.2",
@@ -111,7 +109,8 @@
     "eslint": "^8.30.0",
     "genversion": "^3.1.1",
     "gh-pages": "^4.0.0",
-    "graphql-request": "^5.0.0"
+    "graphql-request": "^5.0.0",
+    "graphql-tag": "^2.12.6"
   },
   "description": "An Ionic project"
 }
