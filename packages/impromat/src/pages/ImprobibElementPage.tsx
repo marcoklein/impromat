@@ -48,6 +48,7 @@ export const ImprobibElementPage: React.FC = () => {
   useEffect(() => {
     // TODO differentiate between improbib and custom elements
     // TODO cleanest is to synchronize improbib through the database
+    // TODO hybrid approach would be save the improbib element in the database when opening up the page
     if (document) {
       setImprobibElement(document);
     }
