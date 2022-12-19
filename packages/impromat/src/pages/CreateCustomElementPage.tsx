@@ -36,29 +36,39 @@ export const CreateCustomElementPage: React.FC = () => {
   const database = useRxdbMutations();
   const history = useHistory();
 
-  const onCreateElementClick = () => {
-    if (!database || !name?.length) {
+  const validateInputs = () => {
+    if (!name?.length) {
       presentToast({ message: "Please enter a name", duration: 1500 });
       return;
     }
+  };
+
+  const onCreateAndAddToWorkshopClick = () => {
+    if (!database) return;
+    validateInputs();
     database
       .addNewElementToWorkshop(workshopId, name, content)
       .then((elementId) => {
-        if (workshopId) {
-          history.push(routeWorkshop(workshopId), {
-            direction: "back",
-            newElement: elementId,
-          });
-        } else {
-          history.push({
-            pathname: `${routeLibrary()}/${Tabs.CREATE}`,
-            search: `?newElement=${elementId}`,
-          });
-          // history.push(`${routeLibrary()}/${Tabs.CREATE}`, {
-          //   direction: "back",
-          //   newElement: elementId,
-          // });
-        }
+        history.push(routeWorkshop(workshopId), {
+          direction: "back",
+          newElement: elementId,
+        });
+      });
+  };
+
+  const onCreateElementClick = () => {
+    if (!database) return;
+    validateInputs();
+    database
+      .addNewElement({
+        name,
+        markdown: content,
+      })
+      .then((elementId) => {
+        history.push({
+          pathname: `${routeLibrary()}/${Tabs.CREATE}`,
+          search: `?newElement=${elementId}`,
+        });
       });
   };
 
@@ -100,9 +110,15 @@ export const CreateCustomElementPage: React.FC = () => {
         </IonList>
       </IonContent>
       <IonFooter>
-        <IonButton expand="full" onClick={onCreateElementClick}>
-          Add Element
-        </IonButton>
+        {workshopId ? (
+          <IonButton expand="full" onClick={onCreateAndAddToWorkshopClick}>
+            Create and Add to Workshop
+          </IonButton>
+        ) : (
+          <IonButton expand="full" onClick={onCreateElementClick}>
+            Create Element
+          </IonButton>
+        )}
       </IonFooter>
     </IonPage>
   );

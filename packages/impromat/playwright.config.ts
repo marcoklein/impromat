@@ -8,18 +8,26 @@ const config: PlaywrightTestConfig = {
       : "yarn start",
     env: {
       REACT_APP_AUTO_LOGIN: "1",
+      PORT: "3000",
     },
     port: 3000,
     timeout: 2 * 60 * 1000,
     reuseExistingServer: !process.env.CI,
   },
   use: {
+    browserName: "chromium",
     headless: true,
     viewport: { width: 360, height: 800 },
     ignoreHTTPSErrors: true,
     isMobile: true,
     baseURL: "http://localhost:3000/",
+    actionTimeout: 10 * 1000,
   },
+  expect: {
+    timeout: 10 * 1000,
+  },
+  fullyParallel: true,
+  maxFailures: 1,
   timeout: 60 * 1000,
 };
 

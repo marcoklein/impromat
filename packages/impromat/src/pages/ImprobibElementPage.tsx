@@ -86,7 +86,7 @@ export const ImprobibElementPage: React.FC = () => {
     )
       return;
     logger("onStarElementClick - isFavoriteElement: %s", isFavoriteElement);
-    mutations.addElement(improbibElement);
+    mutations.addNewElement(improbibElement);
     mutations.toggleFavoriteElementOfUser(myUser, libraryPartId);
   }
 

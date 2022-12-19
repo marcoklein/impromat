@@ -183,7 +183,8 @@ export class RxMutations {
     return newElementId;
   }
 
-  async addElement(element: ElementDocType) {
+  async addNewElement(elementInput: Partial<ElementDocType>) {
+    const element = WORKSHOP_HELPER.getNewElementDocType(elementInput);
     return this.database.elements.atomicUpsert(element);
   }
 
