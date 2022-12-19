@@ -18,6 +18,7 @@ import { useHistory, useParams } from "react-router";
 import { WorkshopElementComponent } from "../components/WorkshopElementComponent";
 import { ElementDocType } from "../database/collections/element/element-collection";
 import { useImprobibElements } from "../database/improbib/use-improbib-elements";
+import { useDocument } from "../database/use-document";
 import { useMyUser } from "../database/use-my-user";
 import { useRxdbMutations } from "../database/use-rxdb-mutations";
 import { routeWorkshopAddElement } from "../routes/shared-routes";
@@ -43,12 +44,21 @@ export const ImprobibElementPage: React.FC = () => {
     [myUser?.favoriteElements, libraryPartId],
   );
 
+  const { document } = useDocument("elements", libraryPartId);
+  useEffect(() => {
+    // TODO differentiate between improbib and custom elements
+    // TODO cleanest is to synchronize improbib through the database
+    if (document) {
+      setImprobibElement(document);
+    }
+  }, [document]);
+
   useEffect(() => {
     if (!improbibElements) return;
     const result = improbibElements.find(
       (element) => element.id === libraryPartId,
     );
-    setImprobibElement(result);
+    if (result) setImprobibElement(result);
   }, [improbibElements, libraryPartId]);
 
   function addToWorkshop() {
