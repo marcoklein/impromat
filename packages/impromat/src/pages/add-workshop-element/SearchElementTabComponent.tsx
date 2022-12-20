@@ -1,23 +1,13 @@
-import {
-  IonButton,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonSearchbar,
-  IonSpinner,
-  IonText,
-} from "@ionic/react";
+import { IonList, IonSearchbar, IonSpinner, IonText } from "@ionic/react";
 import Fuse from "fuse.js";
 import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
-import { Tabs } from "../../components/LibraryContentComponent";
 import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
 import { ElementDocType } from "../../database/collections/element/element-collection";
 import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
 import {
   routeLibraryElement,
-  routeWorkshopAddElement,
   routeWorkshopAddElementFromImprobib,
 } from "../../routes/shared-routes";
 
@@ -99,18 +89,6 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                 icon={informationCircle}
                 color="warning"
               ></InfoItemComponent>
-              <IonItem lines="none">
-                <IonLabel>
-                  <IonButton
-                    expand="full"
-                    routerLink={`${routeWorkshopAddElement(workshopId)}/${
-                      Tabs.SEARCH
-                    }`}
-                  >
-                    Create Element
-                  </IonButton>
-                </IonLabel>
-              </IonItem>
             </IonList>
           ) : (
             !!workshopElements?.length && (

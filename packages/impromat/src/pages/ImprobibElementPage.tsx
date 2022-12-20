@@ -43,16 +43,16 @@ export const ImprobibElementPage: React.FC = () => {
     () => myUser?.favoriteElements.includes(libraryPartId),
     [myUser?.favoriteElements, libraryPartId],
   );
+  const { document: documentElement } = useDocument("elements", libraryPartId);
 
-  const { document } = useDocument("elements", libraryPartId);
   useEffect(() => {
     // TODO differentiate between improbib and custom elements
     // TODO cleanest is to synchronize improbib through the database
     // TODO hybrid approach would be save the improbib element in the database when opening up the page
-    if (document) {
-      setImprobibElement(document);
+    if (documentElement) {
+      setImprobibElement(documentElement);
     }
-  }, [document]);
+  }, [documentElement]);
 
   useEffect(() => {
     if (!improbibElements) return;
@@ -63,12 +63,22 @@ export const ImprobibElementPage: React.FC = () => {
   }, [improbibElements, libraryPartId]);
 
   function addToWorkshop() {
-    if (!mutations || !improbibElement || !workshopId) return;
-    mutations.addImprovElementToWorkshop(workshopId, improbibElement);
-    history.push(`/workshop/${workshopId}`, {
-      direction: "back",
-      newElement: improbibElement.id,
-    });
+    if (!mutations || !workshopId) return;
+    const element = documentElement
+      ? documentElement.toMutableJSON()
+      : improbibElement;
+    if (!element) return;
+    if (improbibElement && !documentElement) {
+      mutations.ensureElementExists(improbibElement);
+    }
+    mutations
+      .addNewElementToWorkshop(workshopId, element.id, element)
+      .then((elementId) => {
+        history.push(`/workshop/${workshopId}`, {
+          direction: "back",
+          newElement: elementId,
+        });
+      });
   }
 
   function onStarElementClick() {

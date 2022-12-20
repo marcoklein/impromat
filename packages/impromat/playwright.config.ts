@@ -4,13 +4,13 @@ declare const process: any;
 const config: PlaywrightTestConfig = {
   webServer: {
     command: process.env.CI
-      ? "yarn build && yarn build:serve -p 3000"
+      ? "yarn build && yarn build:serve -p 3003"
       : "yarn start",
     env: {
       REACT_APP_AUTO_LOGIN: "1",
-      PORT: "3000",
+      PORT: "3003",
     },
-    port: 3000,
+    port: 3003,
     timeout: 2 * 60 * 1000,
     reuseExistingServer: !process.env.CI,
   },
@@ -20,7 +20,7 @@ const config: PlaywrightTestConfig = {
     viewport: { width: 360, height: 800 },
     ignoreHTTPSErrors: true,
     isMobile: true,
-    baseURL: "http://localhost:3000/",
+    baseURL: "http://localhost:3003/",
     actionTimeout: 15 * 1000,
   },
   expect: {
@@ -28,6 +28,7 @@ const config: PlaywrightTestConfig = {
   },
   reporter: [["list"], ["junit", { outputFile: "junit-results.xml" }]],
   fullyParallel: true,
+  retries: 2,
   timeout: 60 * 1000,
 };
 

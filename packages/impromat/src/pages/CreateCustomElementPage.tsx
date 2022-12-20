@@ -43,33 +43,31 @@ export const CreateCustomElementPage: React.FC = () => {
     }
   };
 
-  const onCreateAndAddToWorkshopClick = () => {
-    if (!database) return;
-    validateInputs();
-    database
-      .addNewElementToWorkshop(workshopId, name, content)
-      .then((elementId) => {
-        history.push(routeWorkshop(workshopId), {
-          direction: "back",
-          newElement: elementId,
-        });
-      });
-  };
-
   const onCreateElementClick = () => {
     if (!database) return;
     validateInputs();
-    database
-      .addNewElement({
+    (async () => {
+      const newElement = await database.addNewElement({
         name,
         markdown: content,
-      })
-      .then((elementId) => {
+      });
+      const newElementId = newElement.id;
+      if (workshopId) {
+        await database.addNewElementToWorkshop(workshopId, newElementId, {
+          name,
+          markdown: content,
+        });
+        history.push(routeWorkshop(workshopId), {
+          direction: "back",
+          newElement: newElementId,
+        });
+      } else {
         history.push({
           pathname: `${routeLibrary()}/${Tabs.CREATE}`,
-          search: `?newElement=${elementId}`,
+          search: `?newElement=${newElementId}`,
         });
-      });
+      }
+    })();
   };
 
   return (
@@ -110,15 +108,9 @@ export const CreateCustomElementPage: React.FC = () => {
         </IonList>
       </IonContent>
       <IonFooter>
-        {workshopId ? (
-          <IonButton expand="full" onClick={onCreateAndAddToWorkshopClick}>
-            Create and Add to Workshop
-          </IonButton>
-        ) : (
-          <IonButton expand="full" onClick={onCreateElementClick}>
-            Create Element
-          </IonButton>
-        )}
+        <IonButton expand="full" onClick={onCreateElementClick}>
+          {workshopId ? "Create and Add to Workshop" : "Create Element"}
+        </IonButton>
       </IonFooter>
     </IonPage>
   );

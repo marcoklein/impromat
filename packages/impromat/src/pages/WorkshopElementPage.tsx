@@ -135,7 +135,9 @@ export const WorkshopElementPage: React.FC = () => {
 
             <IonItem lines="none">
               <div className="ion-text-wrap">
-                <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
+                <ReactMarkdown>
+                  {element.markdown ?? basedOnElement?.markdown ?? ""}
+                </ReactMarkdown>
               </div>
             </IonItem>
 

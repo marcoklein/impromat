@@ -10,6 +10,9 @@ export class LibraryDevPage extends DevPage {
     const searchText = "freeze";
     await page.getByPlaceholder("Search").click();
     await page.getByPlaceholder("Search").fill(searchText);
+    await page.waitForSelector(
+      '*:has-text("improwikiDEFreeze TagKettenspieleSwitches")',
+    );
     await page.getByText("improwikiDEFreeze TagKettenspieleSwitches").click();
   }
 

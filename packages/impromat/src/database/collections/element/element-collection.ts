@@ -6,8 +6,11 @@ import {
   RxJsonSchema,
   toTypedRxJsonSchema,
 } from "rxdb";
+import {
+  elementMigrationStrategies,
+  elementSchemaVersion,
+} from "./element-migrations";
 
-const elementSchemaVersion = 0;
 const schemaLiteral = {
   primaryKey: "id",
   version: elementSchemaVersion,
@@ -57,7 +60,7 @@ const schemaLiteral = {
       type: "string",
     },
   },
-  required: ["id", "version", "name", "markdown", "tags", "note"],
+  required: ["id", "version", "name"],
   type: "object",
 } as const;
 
@@ -75,5 +78,5 @@ export const elementSchema: RxJsonSchema<ElementDocType> = schemaLiteral;
 
 export const elementCollection: RxCollectionCreator<ElementDocType> = {
   schema: elementSchema,
-  migrationStrategies: {},
+  migrationStrategies: elementMigrationStrategies,
 };

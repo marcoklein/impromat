@@ -25,14 +25,14 @@ export type Element = {
   languageCode?: Maybe<Scalars['String']>;
   licenseName?: Maybe<Scalars['String']>;
   licenseUrl?: Maybe<Scalars['String']>;
-  markdown: Scalars['String'];
+  markdown?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   /** User defined note */
-  note: Scalars['String'];
+  note?: Maybe<Scalars['String']>;
   sourceBaseUrl?: Maybe<Scalars['String']>;
   sourceName?: Maybe<Scalars['String']>;
   sourceUrl?: Maybe<Scalars['String']>;
-  tags: Array<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   version: Scalars['Int'];
 };
 
@@ -425,13 +425,13 @@ export type ElementResolvers<ContextType = GraphQLContext, ParentType extends Re
   languageCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   licenseName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   licenseUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  markdown?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  markdown?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  note?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   sourceBaseUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   sourceName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   sourceUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  tags?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

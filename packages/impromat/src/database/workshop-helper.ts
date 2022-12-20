@@ -164,9 +164,9 @@ export class WorkshopHelper {
       id: this.generateUniqueId(),
       version: DEFAULT_VERSION,
       name: "Unnamed",
-      markdown: "",
-      note: "",
-      tags: [],
+      markdown: undefined,
+      note: undefined,
+      tags: undefined,
     };
     const element = {
       ...defaultElement,
