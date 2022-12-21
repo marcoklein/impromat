@@ -3,6 +3,7 @@
   "version": "0.16.1",
   "private": true,
   "homepage": "https://impromat.app",
+  "description": "Application code for Impromat.",
   "dependencies": {
     "@capacitor/app": "4.0.1",
     "@capacitor/core": "4.1.0",
@@ -75,14 +76,6 @@
     "codegen": "yarn codegen:get-schema-json && yarn codegen:graphql",
     "changeset": "yarn --cwd \"../..\" changeset"
   },
-  "eslintConfig": {
-    "ignorePatterns": [
-      "**/*.gen.ts"
-    ],
-    "extends": [
-      "react-app"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -111,6 +104,5 @@
     "gh-pages": "^4.0.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6"
-  },
-  "description": "An Ionic project"
+  }
 }

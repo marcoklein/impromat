@@ -41,7 +41,7 @@ test.describe("Workshop Helper", () => {
     expect(workshop.sections[0].elements[0].id).toBe("element1");
   });
 
-  test.skip("should add a section with two elements", () => {
+  test.skip("should add a section with two elements", async () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.newWorkshop({});
@@ -49,8 +49,8 @@ test.describe("Workshop Helper", () => {
     const firstElementId = "firstelement";
     const secondElementId = "secondelement";
     // when
-    workshopHelper.pushSection(workshop, { id: sectionId });
-    workshopHelper.pushElements(workshop, [
+    await workshopHelper.pushSection(workshop, { id: sectionId });
+    await workshopHelper.pushElements(workshop, [
       { id: firstElementId },
       { id: secondElementId },
     ]);
@@ -63,11 +63,11 @@ test.describe("Workshop Helper", () => {
     expect(workshop.sections[0].elements[1].id).toBe("secondelement");
   });
 
-  test.skip("should flatten all sections", () => {
+  test.skip("should flatten all sections", async () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.newWorkshop({});
-    workshopHelper.pushElements(workshop, [{ id: "e1" }, { id: "e2" }]);
+    await workshopHelper.pushElements(workshop, [{ id: "e1" }, { id: "e2" }]);
     // when
     const flatList = workshopHelper.flattenSections(workshop);
     // then
@@ -79,12 +79,12 @@ test.describe("Workshop Helper", () => {
     expect(flatList[2].data.id).toBe("e2");
   });
 
-  test.skip("should reorder an element", () => {
+  test.skip("should reorder an element", async () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.newWorkshop({});
-    workshopHelper.pushElements(workshop, [{ id: "e1" }, { id: "e2" }]);
-    workshopHelper.pushSection(workshop, { id: "section1" });
+    await workshopHelper.pushElements(workshop, [{ id: "e1" }, { id: "e2" }]);
+    await workshopHelper.pushSection(workshop, { id: "section1" });
     // when
     workshopHelper.moveItemFromIndexToIndex(workshop, 0, 1);
     // then
@@ -94,16 +94,16 @@ test.describe("Workshop Helper", () => {
     expect(workshop.sections[1].elements[0].id).toBe("e1");
   });
 
-  test.skip("should reorder a collapsed section", () => {
+  test.skip("should reorder a collapsed section", async () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.newWorkshop({});
-    workshopHelper.pushSection(workshop, {
+    await workshopHelper.pushSection(workshop, {
       id: "collapsedsection",
       isCollapsed: true,
     });
-    workshopHelper.pushElements(workshop, [{ id: "e1" }, { id: "e2" }]);
-    workshopHelper.pushSection(workshop, { id: "section1" });
+    await workshopHelper.pushElements(workshop, [{ id: "e1" }, { id: "e2" }]);
+    await workshopHelper.pushSection(workshop, { id: "section1" });
     // when
     workshopHelper.moveItemFromIndexToIndex(workshop, 0, 1);
     // then
