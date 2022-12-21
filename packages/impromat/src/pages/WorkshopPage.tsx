@@ -30,16 +30,17 @@ import { WorkshopElementsComponent } from "../components/WorkshopElementsCompone
 import { useDocument } from "../database/use-document";
 import { useRxdbMutations } from "../database/use-rxdb-mutations";
 import { WORKSHOP_HELPER } from "../database/workshop-helper";
+import { useComponentLogger } from "../hooks/use-component-logger";
 import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshops } from "../routes/shared-routes";
-import { useComponentLogger } from "../use-component-logger";
+import { routeLibrary } from "./library/library-routes";
 
 export const WorkshopPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id: workshopId } = useParams<{ id: string }>();
   const mutations = useRxdbMutations();
   const history = useHistory();
-  const { document: workshop } = useDocument("workshops", id);
+  const { document: workshop } = useDocument("workshops", workshopId);
 
   const logger = useComponentLogger("WorkshopPage");
   const [workshopHasContent, setWorkshopHasContent] =
@@ -193,7 +194,7 @@ export const WorkshopPage: React.FC = () => {
                 <IonIcon icon={add}></IonIcon>
               </IonFabButton>
               <IonFabList side="start">
-                <IonButton routerLink={`/workshop/${id}/add-element`}>
+                <IonButton routerLink={routeLibrary({ workshopId })}>
                   Element
                 </IonButton>
                 <IonButton color="dark" onClick={() => onCreateSection()}>
@@ -246,7 +247,7 @@ export const WorkshopPage: React.FC = () => {
                   <IonButton
                     expand="full"
                     fill="clear"
-                    routerLink={`/workshop/${id}/add-element`}
+                    routerLink={routeLibrary({ workshopId })}
                   >
                     Add First Element
                   </IonButton>

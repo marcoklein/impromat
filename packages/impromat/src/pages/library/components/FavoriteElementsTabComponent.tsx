@@ -1,13 +1,19 @@
 import { IonSpinner } from "@ionic/react";
 import { useEffect } from "react";
-import { useDocuments } from "../../database/use-documents";
-import { useMyUser } from "../../database/use-my-user";
-import { useComponentLogger } from "../../use-component-logger";
-import { useStateChangeLogger } from "../../use-state-change-logger";
-import { FavoriteElementsEmptyComponent } from "../favorite-elements/FavoriteElementsEmptyComponent";
-import { FavoriteElementsListComponent } from "../favorite-elements/FavoriteElementsListComponent";
+import { useDocuments } from "../../../database/use-documents";
+import { useMyUser } from "../../../database/use-my-user";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
+import { FavoriteElementsEmptyComponent } from "./FavoriteElementsEmptyComponent";
+import { FavoriteElementsListComponent } from "./FavoriteElementsListComponent";
 
-export const FavoriteElementsTabComponent: React.FC = () => {
+interface ContainerProps {
+  workshopId: string | undefined;
+}
+
+export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
+  workshopId,
+}) => {
   const logger = useComponentLogger("FavoriteElementsTabComponent");
   const { document: myUser } = useMyUser();
   useStateChangeLogger(myUser, "myUser", logger);
@@ -29,6 +35,7 @@ export const FavoriteElementsTabComponent: React.FC = () => {
         <FavoriteElementsEmptyComponent></FavoriteElementsEmptyComponent>
       ) : (
         <FavoriteElementsListComponent
+          workshopId={workshopId}
           favoriteElements={favoriteElements}
         ></FavoriteElementsListComponent>
       )}

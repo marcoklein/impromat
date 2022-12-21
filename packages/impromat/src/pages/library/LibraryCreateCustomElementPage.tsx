@@ -16,19 +16,16 @@ import {
   useIonToast,
 } from "@ionic/react";
 import { useState } from "react";
-import { useHistory, useParams } from "react-router";
-import { Tabs } from "../components/LibraryContentComponent";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import {
-  routeLibrary,
-  routeWorkshop,
-  routeWorkshopAddElement,
-} from "../routes/shared-routes";
+import { useHistory } from "react-router";
+import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { useSearchParam } from "../../hooks/use-search-params";
+import { routeWorkshop } from "../../routes/shared-routes";
+import { Tabs } from "./components/LibraryContentComponent";
+import { routeLibrary } from "./library-routes";
+import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
 
-export const CreateCustomElementPage: React.FC = () => {
-  const { id: workshopId } = useParams<{
-    id: string;
-  }>();
+export const LibraryCreateCustomElementPage: React.FC = () => {
+  const workshopId = useSearchParam(WORKSHOP_CONTEXT_SEARCH_PARAM);
 
   const [presentToast] = useIonToast();
   const [name, setName] = useState("");
@@ -76,11 +73,7 @@ export const CreateCustomElementPage: React.FC = () => {
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton
-              defaultHref={
-                workshopId
-                  ? `${routeWorkshopAddElement(workshopId)}/${Tabs.CREATE}`
-                  : `${routeLibrary()}/${Tabs.CREATE}`
-              }
+              defaultHref={`${routeLibrary({ workshopId })}/${Tabs.CREATE}`}
             ></IonBackButton>
           </IonButtons>
           <IonTitle>Create Custom Element</IonTitle>

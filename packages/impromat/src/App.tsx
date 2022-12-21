@@ -28,14 +28,13 @@ import { environment } from "./environment";
 import { GraphQLContext } from "./graphql/graphql-context";
 import { getSdk } from "./graphql/schema.gen";
 import { AboutPage } from "./pages/AboutPage";
-import { AccountPage } from "./pages/AccountPage";
-import { AddWorkshopElementPage } from "./pages/AddWorkshopElementPage";
-import { CreateCustomElementPage } from "./pages/CreateCustomElementPage";
+import { AccountPage } from "./pages/account/AccountPage";
+import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import { HomePage } from "./pages/HomePage";
-import { ImprobibElementPage } from "./pages/ImprobibElementPage";
+import { LibraryElementPage } from "./pages/library/LibraryElementPage";
 import { LegalPage } from "./pages/LegalPage";
-import { LibraryPage } from "./pages/LibraryPage";
+import { LibraryPage } from "./pages/library/LibraryPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { WorkshopElementPage } from "./pages/WorkshopElementPage";
 import { WorkshopPage } from "./pages/WorkshopPage";
@@ -45,19 +44,18 @@ import {
   routeAccount,
   routeHome,
   routeLegal,
-  routeLibrary,
-  routeLibraryCreateCustomElement,
-  routeLibraryElement,
   routePrivacyPolicy,
   routeWorkshop,
-  routeWorkshopAddElement,
-  routeWorkshopAddElementCreateCustomElement,
-  routeWorkshopAddElementFromImprobib,
   routeWorkshopElement,
   routeWorkshops,
 } from "./routes/shared-routes";
 import "./theme/colors.css";
 import "./theme/variables.css";
+import {
+  routeLibraryElement,
+  routeLibraryCreateCustomElement,
+  routeLibrary,
+} from "./pages/library/library-routes";
 
 setupIonicReact();
 
@@ -127,26 +125,14 @@ const App: React.FC = () => {
                   <Route path={routeWorkshopElement()} exact>
                     <WorkshopElementPage></WorkshopElementPage>
                   </Route>
-                  <Route path={routeWorkshopAddElementFromImprobib()} exact>
-                    <ImprobibElementPage></ImprobibElementPage>
-                  </Route>
-                  <Route
-                    path={routeWorkshopAddElementCreateCustomElement()}
-                    exact
-                  >
-                    <CreateCustomElementPage></CreateCustomElementPage>
-                  </Route>
                   <Route path={routeLibraryElement()} exact>
-                    <ImprobibElementPage></ImprobibElementPage>
+                    <LibraryElementPage></LibraryElementPage>
                   </Route>
                   <Route path={routeLibraryCreateCustomElement()} exact>
-                    <CreateCustomElementPage></CreateCustomElementPage>
+                    <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
                   </Route>
                   <Route path={routeLibrary()}>
                     <LibraryPage></LibraryPage>
-                  </Route>
-                  <Route path={routeWorkshopAddElement()}>
-                    <AddWorkshopElementPage></AddWorkshopElementPage>
                   </Route>
                 </IonRouterOutlet>
               </IonReactRouter>

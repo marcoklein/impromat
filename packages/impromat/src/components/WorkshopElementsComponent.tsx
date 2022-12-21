@@ -8,7 +8,7 @@ import { ElementDocType } from "../database/collections/element/element-collecti
 import { SectionDocument } from "../database/collections/section/section-collection";
 import { WorkshopDocument } from "../database/collections/workshop/workshop-collection";
 import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import { useComponentLogger } from "../use-component-logger";
+import { useComponentLogger } from "../hooks/use-component-logger";
 import { SectionElementsComponent } from "./SectionElementsComponent";
 import { WorkshopElementsHeaderComponent } from "./WorkshopElementsHeaderComponent";
 import { WorkshopSectionComponent } from "./WorkshopSectionComponent";

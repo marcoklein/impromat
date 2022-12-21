@@ -9,9 +9,9 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
-import { environment } from "../environment";
-import { AccountSignedInComponent } from "./account/AccountSignedInComponent";
-import { AccountSignInComponent } from "./account/AccountSignInComponent";
+import { environment } from "../../environment";
+import { AccountSignedInComponent } from "./AccountSignedInComponent";
+import { AccountSignInComponent } from "./AccountSignInComponent";
 
 const backendUrl = `${environment.API_URL}/graphql`;
 

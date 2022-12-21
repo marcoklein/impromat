@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { rootLogger } from "./logger";
+import { rootLogger } from "../logger";
 
 const COMPONENT_NAMESPACE = "component";
 

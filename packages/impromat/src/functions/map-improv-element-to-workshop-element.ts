@@ -1,4 +1,4 @@
-import { ImprovElement } from "../models/improv-element";
+import { ImprovElement } from "./improv-element";
 import { ElementDocType } from "../database/collections/element/element-collection";
 
 export function mapImprovElementToWorkshopElement({

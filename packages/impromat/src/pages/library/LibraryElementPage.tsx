@@ -15,21 +15,23 @@ import {
 import { star, starOutline } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { WorkshopElementComponent } from "../components/WorkshopElementComponent";
-import { ElementDocType } from "../database/collections/element/element-collection";
-import { useImprobibElements } from "../database/improbib/use-improbib-elements";
-import { useDocument } from "../database/use-document";
-import { useMyUser } from "../database/use-my-user";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import { routeWorkshopAddElement } from "../routes/shared-routes";
-import { useComponentLogger } from "../use-component-logger";
-import { useStateChangeLogger } from "../use-state-change-logger";
+import { WorkshopElementComponent } from "../../components/WorkshopElementComponent";
+import { ElementDocType } from "../../database/collections/element/element-collection";
+import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
+import { useDocument } from "../../database/use-document";
+import { useMyUser } from "../../database/use-my-user";
+import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useSearchParam } from "../../hooks/use-search-params";
+import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
+import { routeLibrary } from "./library-routes";
+import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
 
-export const ImprobibElementPage: React.FC = () => {
-  const { id: workshopId, libraryPartId } = useParams<{
-    id?: string;
+export const LibraryElementPage: React.FC = () => {
+  const { libraryPartId } = useParams<{
     libraryPartId: string;
   }>();
+  const workshopId = useSearchParam(WORKSHOP_CONTEXT_SEARCH_PARAM);
   const logger = useComponentLogger("ImprobibElementPage");
   useStateChangeLogger(workshopId, "workshopId", logger);
   useStateChangeLogger(libraryPartId, "libraryPartId", logger);
@@ -106,7 +108,7 @@ export const ImprobibElementPage: React.FC = () => {
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton
-              defaultHref={routeWorkshopAddElement(workshopId)}
+              defaultHref={routeLibrary({ workshopId })}
             ></IonBackButton>
           </IonButtons>
           <IonTitle>{improbibElement?.name}</IonTitle>

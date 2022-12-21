@@ -17,10 +17,12 @@ import {
   useLocation,
   useRouteMatch,
 } from "react-router";
-import { CreateElementTabComponent } from "../pages/add-workshop-element/CreateElementTabComponent";
-import { FavoriteElementsTabComponent } from "../pages/add-workshop-element/FavoriteElementsTabComponent";
-import { SearchElementTabComponent } from "../pages/add-workshop-element/SearchElementTabComponent";
-import { routeLibrary, routeWorkshopAddElement } from "../routes/shared-routes";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
+import { CreateElementTabComponent } from "../components/CreateElementTabComponent";
+import { FavoriteElementsTabComponent } from "../components/FavoriteElementsTabComponent";
+import { routeLibraryTab } from "../library-routes";
+import { SearchElementTabComponent } from "./SearchElementTabComponent";
 
 export enum Tabs {
   CREATE = "create",
@@ -46,9 +48,12 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
   const routeMatch = useRouteMatch();
   const { path } = routeMatch;
   const location = useLocation();
+  const logger = useComponentLogger("LibraryContentComponent");
+  useStateChangeLogger(workshopId, "workshopId", logger);
 
   const [tab, setTab] = useState(Tabs.SEARCH);
   useEffect(() => {
+    console.log("location pathname", location.pathname);
     if (location.pathname.endsWith(Tabs.CREATE)) {
       setTab(Tabs.CREATE);
     } else if (location.pathname.endsWith(Tabs.FAVORITES)) {
@@ -60,13 +65,10 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
 
   const createTabsRoute = useCallback(
     (tab: Tabs) => {
-      if (hasWorkshopContext) {
-        return `${routeWorkshopAddElement(workshopId)}/${tab}`;
-      } else {
-        return `${routeLibrary()}/${tab}`;
-      }
+      logger("createTabsRoute workshopId=%s", workshopId);
+      return routeLibraryTab(tab, { workshopId });
     },
-    [hasWorkshopContext, workshopId],
+    [workshopId, logger],
   );
 
   return (
@@ -75,7 +77,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
         <Switch>
           <Redirect
             from={`${path}/`}
-            to={`${path}/${Tabs.SEARCH}`}
+            to={`${path}/${Tabs.SEARCH}${location.search}`}
             exact
           ></Redirect>
           <Route path={`${path}/${Tabs.SEARCH}`} exact>
@@ -84,10 +86,14 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
             ></SearchElementTabComponent>
           </Route>
           <Route path={`${path}/${Tabs.FAVORITES}`} exact>
-            <FavoriteElementsTabComponent></FavoriteElementsTabComponent>
+            <FavoriteElementsTabComponent
+              workshopId={workshopId}
+            ></FavoriteElementsTabComponent>
           </Route>
           <Route path={`${path}/${Tabs.CREATE}`} exact>
-            <CreateElementTabComponent></CreateElementTabComponent>
+            <CreateElementTabComponent
+              workshopId={workshopId}
+            ></CreateElementTabComponent>
           </Route>
         </Switch>
       </IonContent>

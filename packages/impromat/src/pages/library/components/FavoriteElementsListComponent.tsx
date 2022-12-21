@@ -1,25 +1,20 @@
 import { IonList } from "@ionic/react";
 import { useEffect } from "react";
-import { useParams } from "react-router";
-import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
-import { ElementDocType } from "../../database/collections/element/element-collection";
-import {
-  routeLibraryElement,
-  routeWorkshopAddElementFromImprobib,
-} from "../../routes/shared-routes";
-import { useComponentLogger } from "../../use-component-logger";
-import { useStateChangeLogger } from "../../use-state-change-logger";
+import { WorkshopElementPreviewItemComponent } from "../../../components/WorkshopElementPreviewItemComponent";
+import { ElementDocType } from "../../../database/collections/element/element-collection";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
+import { routeLibraryElement } from "../library-routes";
 
 interface ContainerProps {
   favoriteElements: ElementDocType[];
+  workshopId: string | undefined;
 }
 
 export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
   favoriteElements,
+  workshopId,
 }) => {
-  const { id: workshopId } = useParams<{
-    id?: string;
-  }>();
   const logger = useComponentLogger("FavoriteElementsListComponent");
   useStateChangeLogger(favoriteElements, "favoriteElements", logger);
   useEffect(() => {
@@ -32,11 +27,7 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
         {favoriteElements.map((element) => (
           <WorkshopElementPreviewItemComponent
             key={element.id}
-            routerLink={
-              workshopId
-                ? routeWorkshopAddElementFromImprobib(workshopId, element.id)
-                : routeLibraryElement(element.id)
-            }
+            routerLink={routeLibraryElement(element.id, { workshopId })}
             workshopElement={element}
           ></WorkshopElementPreviewItemComponent>
         ))}

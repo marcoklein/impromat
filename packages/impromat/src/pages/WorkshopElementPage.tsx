@@ -23,7 +23,7 @@ import { useDocument } from "../database/use-document";
 import { useRxdbMutations } from "../database/use-rxdb-mutations";
 import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeWorkshop } from "../routes/shared-routes";
-import { useComponentLogger } from "../use-component-logger";
+import { useComponentLogger } from "../hooks/use-component-logger";
 
 export const WorkshopElementPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopElementPage");

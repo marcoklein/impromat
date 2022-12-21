@@ -2,12 +2,9 @@ import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
 
 pageTest.describe("Library", () => {
-  pageTest.beforeEach(async ({ libraryPage }) => {
+  pageTest("should render the library page", async ({ page, libraryPage }) => {
     // when
     await libraryPage.goto();
-  });
-
-  pageTest("should render the library page", async ({ page, libraryPage }) => {
     // then
     await libraryPage.expectToolbarTextToBe("Element Library");
     await expect(libraryPage.tabLocator("Search Explore")).toBeVisible();
@@ -16,11 +13,22 @@ pageTest.describe("Library", () => {
   });
 
   pageTest("should open an element", async ({ page, libraryPage }) => {
+    // given
+    await libraryPage.goto();
     // when
     await libraryPage.gotoElementFromSearch();
     // then
     expect(page.url()).toContain(
       "/library-element/a74ac20adeba66b0044143630cba90ab",
     );
+  });
+
+  pageTest("should create a custom element", async ({ page, libraryPage }) => {
+    // given
+    const name = "test-custom-element";
+    // when
+    await libraryPage.createCustomElement(name);
+    // then
+    await expect(page.getByText(new RegExp(name))).toBeVisible();
   });
 });

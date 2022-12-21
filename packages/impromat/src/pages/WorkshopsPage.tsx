@@ -20,7 +20,7 @@ import { useInputDialog } from "../hooks/use-input-dialog";
 import { routeAbout } from "../routes/shared-routes";
 import { useRxdbMutations } from "../database/use-rxdb-mutations";
 import { useWorkshops } from "../database/use-workshops";
-import { useComponentLogger } from "../use-component-logger";
+import { useComponentLogger } from "../hooks/use-component-logger";
 
 export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");

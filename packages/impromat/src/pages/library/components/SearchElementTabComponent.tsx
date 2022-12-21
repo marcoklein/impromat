@@ -2,14 +2,11 @@ import { IonList, IonSearchbar, IonSpinner, IonText } from "@ionic/react";
 import Fuse from "fuse.js";
 import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
-import { InfoItemComponent } from "../../components/InfoItemComponent";
-import { WorkshopElementPreviewItemComponent } from "../../components/WorkshopElementPreviewItemComponent";
-import { ElementDocType } from "../../database/collections/element/element-collection";
-import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
-import {
-  routeLibraryElement,
-  routeWorkshopAddElementFromImprobib,
-} from "../../routes/shared-routes";
+import { InfoItemComponent } from "../../../components/InfoItemComponent";
+import { WorkshopElementPreviewItemComponent } from "../../../components/WorkshopElementPreviewItemComponent";
+import { ElementDocType } from "../../../database/collections/element/element-collection";
+import { useImprobibElements } from "../../../database/improbib/use-improbib-elements";
+import { routeLibraryElement } from "../library-routes";
 
 interface ContainerProps {
   workshopId?: string;
@@ -96,14 +93,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                 {workshopElements?.map((element) => (
                   <WorkshopElementPreviewItemComponent
                     key={element.id}
-                    routerLink={
-                      workshopId
-                        ? routeWorkshopAddElementFromImprobib(
-                            workshopId,
-                            element.id,
-                          )
-                        : routeLibraryElement(element.id)
-                    }
+                    routerLink={routeLibraryElement(element.id, { workshopId })}
                     workshopElement={element}
                   ></WorkshopElementPreviewItemComponent>
                 ))}

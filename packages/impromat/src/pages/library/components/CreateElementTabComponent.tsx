@@ -1,23 +1,22 @@
 import { IonFab, IonFabButton, IonIcon, IonSpinner } from "@ionic/react";
 import { add } from "ionicons/icons";
 import { useCallback, useEffect } from "react";
-import { useLocation, useParams } from "react-router";
+import { useLocation } from "react-router";
 import { RxCollection } from "rxdb";
 import { useRxData } from "rxdb-hooks";
-import { ElementDocType } from "../../database/collections/element/element-collection";
-import {
-  routeLibraryCreateCustomElement,
-  routeWorkshopAddElementCreateCustomElement,
-} from "../../routes/shared-routes";
-import { useComponentLogger } from "../../use-component-logger";
-import { CustomElementsEmptyComponent } from "../custom-elements/CustomElementsEmptyComponent";
-import { CustomElementsListComponent } from "../custom-elements/CustomElementsListComponent";
+import { ElementDocType } from "../../../database/collections/element/element-collection";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { routeLibraryCreateCustomElement } from "../library-routes";
+import { CustomElementsEmptyComponent } from "./CustomElementsEmptyComponent";
+import { CustomElementsListComponent } from "./CustomElementsListComponent";
 
-export const CreateElementTabComponent: React.FC = () => {
-  const { id: workshopId } = useParams<{
-    id?: string;
-  }>();
+interface ContainerProps {
+  workshopId: string | undefined;
+}
 
+export const CreateElementTabComponent: React.FC<ContainerProps> = ({
+  workshopId,
+}) => {
   const location = useLocation();
   const logger = useComponentLogger("CreateElementTabComponent");
 
@@ -42,11 +41,7 @@ export const CreateElementTabComponent: React.FC = () => {
       <IonFab slot="fixed" vertical="bottom" horizontal="end">
         <IonFabButton
           color="primary"
-          routerLink={
-            workshopId
-              ? routeWorkshopAddElementCreateCustomElement(workshopId)
-              : routeLibraryCreateCustomElement()
-          }
+          routerLink={routeLibraryCreateCustomElement({ workshopId })}
         >
           <IonIcon icon={add}></IonIcon>
         </IonFabButton>
@@ -57,6 +52,7 @@ export const CreateElementTabComponent: React.FC = () => {
         <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
       ) : (
         <CustomElementsListComponent
+          workshopId={workshopId}
           customElements={customElements}
         ></CustomElementsListComponent>
       )}
