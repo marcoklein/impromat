@@ -8,7 +8,7 @@ export class DevPage {
   }
 
   async expectToolbarTextToBe(text: string) {
-    expect(
+    await expect(
       this.page.locator(`ion-toolbar ion-title:has-text("${text}")`),
     ).toBeVisible();
   }

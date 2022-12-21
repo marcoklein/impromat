@@ -2,8 +2,8 @@ import { IonList, IonSearchbar, IonSpinner, IonText } from "@ionic/react";
 import Fuse from "fuse.js";
 import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
+import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
-import { WorkshopElementPreviewItemComponent } from "../../../components/WorkshopElementPreviewItemComponent";
 import { ElementDocType } from "../../../database/collections/element/element-collection";
 import { useImprobibElements } from "../../../database/improbib/use-improbib-elements";
 import { useCustomElements } from "../../../database/use-custom-elements";
@@ -99,11 +99,11 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
             !!workshopElements?.length && (
               <IonList>
                 {workshopElements?.map((element) => (
-                  <WorkshopElementPreviewItemComponent
+                  <ElementPreviewItemComponent
                     key={element.id}
                     routerLink={routeLibraryElement(element.id, { workshopId })}
                     workshopElement={element}
-                  ></WorkshopElementPreviewItemComponent>
+                  ></ElementPreviewItemComponent>
                 ))}
               </IonList>
             )

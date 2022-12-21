@@ -7,9 +7,7 @@ interface ContainerProps {
   element: ElementDocType;
 }
 
-export const WorkshopElementComponent: React.FC<ContainerProps> = ({
-  element,
-}) => {
+export const ElementComponent: React.FC<ContainerProps> = ({ element }) => {
   return (
     <>
       <TagsComponent tags={element.tags}></TagsComponent>

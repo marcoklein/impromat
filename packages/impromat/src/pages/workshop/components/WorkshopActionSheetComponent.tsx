@@ -2,8 +2,8 @@ import { IonButton, IonIcon, useIonActionSheet } from "@ionic/react";
 import { close, create, ellipsisVertical, pencil, trash } from "ionicons/icons";
 import { useCallback } from "react";
 import { useHistory } from "react-router";
-import { useHistoryListener } from "../hooks/use-history-listener";
-import { WorkshopDocType } from "../database/collections/workshop/workshop-collection";
+import { useHistoryListener } from "../../../hooks/use-history-listener";
+import { WorkshopDocType } from "../../../database/collections/workshop/workshop-collection";
 
 interface ContainerProps {
   workshop: WorkshopDocType;

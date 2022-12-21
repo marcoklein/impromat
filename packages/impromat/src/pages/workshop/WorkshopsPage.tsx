@@ -16,11 +16,11 @@ import {
 import { add, information } from "ionicons/icons";
 import { useCallback } from "react";
 import { useHistory } from "react-router";
-import { useInputDialog } from "../hooks/use-input-dialog";
-import { routeAbout } from "../routes/shared-routes";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import { useWorkshops } from "../database/use-workshops";
-import { useComponentLogger } from "../hooks/use-component-logger";
+import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { useWorkshops } from "../../database/use-workshops";
+import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useInputDialog } from "../../hooks/use-input-dialog";
+import { routeAbout } from "../../routes/shared-routes";
 
 export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");

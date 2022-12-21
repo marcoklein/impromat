@@ -8,9 +8,9 @@ import {
   useIonToast,
 } from "@ionic/react";
 import { useMemo, useState } from "react";
-import { GoogleSigninButton } from "../../components/GoogleSigninButton";
-import { InfoItemComponent } from "../../components/InfoItemComponent";
-import { routePrivacyPolicy } from "../../routes/shared-routes";
+import { GoogleSigninButton } from "../../../components/GoogleSigninButton";
+import { InfoItemComponent } from "../../../components/InfoItemComponent";
+import { routePrivacyPolicy } from "../../../routes/shared-routes";
 
 interface ContainerProps {
   googleLoginHref: string | undefined;

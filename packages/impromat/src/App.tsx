@@ -29,16 +29,21 @@ import { GraphQLContext } from "./graphql/graphql-context";
 import { getSdk } from "./graphql/schema.gen";
 import { AboutPage } from "./pages/AboutPage";
 import { AccountPage } from "./pages/account/AccountPage";
-import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import { HomePage } from "./pages/HomePage";
-import { LibraryElementPage } from "./pages/library/LibraryElementPage";
 import { LegalPage } from "./pages/LegalPage";
+import {
+  routeLibrary,
+  routeLibraryCreateCustomElement,
+  routeLibraryElement,
+} from "./pages/library/library-routes";
+import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
+import { LibraryElementPage } from "./pages/library/LibraryElementPage";
 import { LibraryPage } from "./pages/library/LibraryPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
-import { WorkshopElementPage } from "./pages/WorkshopElementPage";
-import { WorkshopPage } from "./pages/WorkshopPage";
-import { WorkshopsPage } from "./pages/WorkshopsPage";
+import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
+import { WorkshopPage } from "./pages/workshop/WorkshopPage";
+import { WorkshopsPage } from "./pages/workshop/WorkshopsPage";
 import {
   routeAbout,
   routeAccount,
@@ -51,11 +56,6 @@ import {
 } from "./routes/shared-routes";
 import "./theme/colors.css";
 import "./theme/variables.css";
-import {
-  routeLibraryElement,
-  routeLibraryCreateCustomElement,
-  routeLibrary,
-} from "./pages/library/library-routes";
 
 setupIonicReact();
 

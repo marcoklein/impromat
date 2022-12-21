@@ -15,7 +15,7 @@ import {
 import { star, starOutline } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { WorkshopElementComponent } from "../../components/WorkshopElementComponent";
+import { ElementComponent } from "../../components/ElementComponent";
 import { ElementDocType } from "../../database/collections/element/element-collection";
 import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
 import { useDocument } from "../../database/use-document";
@@ -125,9 +125,7 @@ export const LibraryElementPage: React.FC = () => {
 
       <IonContent fullscreen className="ion-padding">
         {improbibElement ? (
-          <WorkshopElementComponent
-            element={improbibElement}
-          ></WorkshopElementComponent>
+          <ElementComponent element={improbibElement}></ElementComponent>
         ) : (
           <IonSpinner></IonSpinner>
         )}

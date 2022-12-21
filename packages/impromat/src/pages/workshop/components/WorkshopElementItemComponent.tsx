@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import Markdown from "react-markdown";
-import { ElementDocument } from "../database/collections/element/element-collection";
-import { SlidingItemComponent } from "./SlidingItemComponent";
+import { SlidingItemComponent } from "../../../components/SlidingItemComponent";
+import { ElementDocument } from "../../../database/collections/element/element-collection";
 import "./WorkshopElementItemComponent.css";
 
 interface ContainerProps {

@@ -10,8 +10,8 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { environment } from "../../environment";
-import { AccountSignedInComponent } from "./AccountSignedInComponent";
-import { AccountSignInComponent } from "./AccountSignInComponent";
+import { AccountSignedInComponent } from "./components/AccountSignedInComponent";
+import { AccountSignInComponent } from "./components/AccountSignInComponent";
 
 const backendUrl = `${environment.API_URL}/graphql`;
 

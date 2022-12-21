@@ -11,7 +11,7 @@ interface ContainerProps {
  * Renders a workshop element as an `IonItem` to preview general information.
  * Use within an `IonList` component.
  */
-export const WorkshopElementPreviewItemComponent: React.FC<ContainerProps> = ({
+export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
   routerLink,
   workshopElement: element,
 }) => (

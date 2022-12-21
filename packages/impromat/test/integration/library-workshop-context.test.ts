@@ -9,7 +9,7 @@ pageTest.describe("Library with Workshop Context", () => {
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // then
-      await libraryPage.expectToolbarTextToBe("Element Library");
+      await libraryPage.expectToolbarTextToBe("Add Element");
       await expect(libraryPage.tabLocator("Search Explore")).toBeVisible();
       await expect(libraryPage.tabLocator("Star Favorites")).toBeVisible();
       await expect(libraryPage.tabLocator(/Custom/)).toBeVisible();

@@ -1,15 +1,15 @@
 import { IonList, IonReorderGroup, ItemReorderEventDetail } from "@ionic/react";
 import immer from "immer";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { TRANSLATIONS } from "../functions/shared-text";
-import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
-import { useInputDialog } from "../hooks/use-input-dialog";
-import { ElementDocType } from "../database/collections/element/element-collection";
-import { SectionDocument } from "../database/collections/section/section-collection";
-import { WorkshopDocument } from "../database/collections/workshop/workshop-collection";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import { useComponentLogger } from "../hooks/use-component-logger";
 import { SectionElementsComponent } from "./SectionElementsComponent";
+import { ElementDocType } from "../../../database/collections/element/element-collection";
+import { SectionDocument } from "../../../database/collections/section/section-collection";
+import { WorkshopDocument } from "../../../database/collections/workshop/workshop-collection";
+import { useRxdbMutations } from "../../../database/use-rxdb-mutations";
+import { TRANSLATIONS } from "../../../functions/shared-text";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
+import { useInputDialog } from "../../../hooks/use-input-dialog";
 import { WorkshopElementsHeaderComponent } from "./WorkshopElementsHeaderComponent";
 import { WorkshopSectionComponent } from "./WorkshopSectionComponent";
 

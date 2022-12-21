@@ -1,11 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { ElementDocType } from "../../src/database/collections/element/element-collection";
 import { WorkshopHelper } from "../../src/database/workshop-helper";
-
-/**
- * Disabled test.
- */
-const xtest: any = () => {};
 
 test.describe("Workshop Helper", () => {
   test("should create a new workshop", () => {
@@ -23,16 +17,16 @@ test.describe("Workshop Helper", () => {
     expect(workshop.description).toBe(description);
   });
 
-  xtest("should add a new element", () => {
+  test.skip("should add a new element", () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.getNewWorkshopDocType({
       name: "w",
       description: "d",
     });
-    const element: Partial<ElementDocType> = {
-      id: "element1",
-    };
+    // const element: Partial<ElementDocType> = {
+    //   id: "element1",
+    // };
     // when
     // TODO adjust the pushElement function to return all entities that need to be upserted
     // const { workshop, sections, elements } = workshopHelper.pushElement(
@@ -47,7 +41,7 @@ test.describe("Workshop Helper", () => {
     expect(workshop.sections[0].elements[0].id).toBe("element1");
   });
 
-  xtest("should add a section with two elements", () => {
+  test.skip("should add a section with two elements", () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.newWorkshop({});
@@ -69,7 +63,7 @@ test.describe("Workshop Helper", () => {
     expect(workshop.sections[0].elements[1].id).toBe("secondelement");
   });
 
-  xtest("should flatten all sections", () => {
+  test.skip("should flatten all sections", () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.newWorkshop({});
@@ -85,7 +79,7 @@ test.describe("Workshop Helper", () => {
     expect(flatList[2].data.id).toBe("e2");
   });
 
-  xtest("should reorder an element", () => {
+  test.skip("should reorder an element", () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.newWorkshop({});
@@ -100,7 +94,7 @@ test.describe("Workshop Helper", () => {
     expect(workshop.sections[1].elements[0].id).toBe("e1");
   });
 
-  xtest("should reorder a collapsed section", () => {
+  test.skip("should reorder a collapsed section", () => {
     // given
     const workshopHelper = new WorkshopHelper();
     const workshop = workshopHelper.newWorkshop({});

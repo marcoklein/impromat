@@ -56,7 +56,7 @@
   },
   "scripts": {
     "start": "yarn compile-markdown && react-scripts start",
-    "lint": "eslint src",
+    "lint": "eslint src test",
     "lint:fix": "eslint src --fix",
     "dev": "yarn start",
     "build": "yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",

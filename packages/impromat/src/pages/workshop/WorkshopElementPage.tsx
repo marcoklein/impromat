@@ -18,12 +18,12 @@ import { arrowBack, document, pencil } from "ionicons/icons";
 import React, { useCallback, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
-import { LicenseItemComponent } from "../components/LicenseItemComponent";
-import { useDocument } from "../database/use-document";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import { useInputDialog } from "../hooks/use-input-dialog";
-import { routeWorkshop } from "../routes/shared-routes";
-import { useComponentLogger } from "../hooks/use-component-logger";
+import { LicenseItemComponent } from "../../components/LicenseItemComponent";
+import { useDocument } from "../../database/use-document";
+import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { useInputDialog } from "../../hooks/use-input-dialog";
+import { routeWorkshop } from "../../routes/shared-routes";
+import { useComponentLogger } from "../../hooks/use-component-logger";
 
 export const WorkshopElementPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopElementPage");

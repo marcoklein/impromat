@@ -21,20 +21,20 @@ import immer from "immer";
 import { add } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { EditableItemComponent } from "../components/EditableItemComponent";
+import { EditableItemComponent } from "../../components/EditableItemComponent";
 import {
   WorkshopActionSheetComponent,
   WorkshopActionTypes,
-} from "../components/WorkshopActionSheetComponent";
-import { WorkshopElementsComponent } from "../components/WorkshopElementsComponent";
-import { useDocument } from "../database/use-document";
-import { useRxdbMutations } from "../database/use-rxdb-mutations";
-import { WORKSHOP_HELPER } from "../database/workshop-helper";
-import { useComponentLogger } from "../hooks/use-component-logger";
-import { useImpromatRxDb } from "../hooks/use-impromat-rx-db";
-import { useInputDialog } from "../hooks/use-input-dialog";
-import { routeWorkshops } from "../routes/shared-routes";
-import { routeLibrary } from "./library/library-routes";
+} from "./components/WorkshopActionSheetComponent";
+import { useDocument } from "../../database/use-document";
+import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { WORKSHOP_HELPER } from "../../database/workshop-helper";
+import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useImpromatRxDb } from "../../hooks/use-impromat-rx-db";
+import { useInputDialog } from "../../hooks/use-input-dialog";
+import { routeWorkshops } from "../../routes/shared-routes";
+import { routeLibrary } from "../library/library-routes";
+import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();

@@ -1,7 +1,7 @@
 import { IonList } from "@ionic/react";
 import { useEffect } from "react";
 import { RxDocument } from "rxdb";
-import { WorkshopElementPreviewItemComponent } from "../../../components/WorkshopElementPreviewItemComponent";
+import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { ElementDocType } from "../../../database/collections/element/element-collection";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
@@ -26,11 +26,11 @@ export const CustomElementsListComponent: React.FC<ContainerProps> = ({
       {/* Add Account required... */}
       <IonList>
         {customElements.map((element) => (
-          <WorkshopElementPreviewItemComponent
+          <ElementPreviewItemComponent
             key={element.id}
             routerLink={routeLibraryElement(element.id, { workshopId })}
             workshopElement={element}
-          ></WorkshopElementPreviewItemComponent>
+          ></ElementPreviewItemComponent>
         ))}
       </IonList>
     </>
