@@ -19,7 +19,7 @@ import {
 } from "react-router";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
-import { CreateElementTabComponent } from "../components/CreateElementTabComponent";
+import { CustomElementsTabComponent } from "./CustomElementsTabComponent";
 import { FavoriteElementsTabComponent } from "../components/FavoriteElementsTabComponent";
 import { routeLibraryTab } from "../library-routes";
 import { SearchElementTabComponent } from "./SearchElementTabComponent";
@@ -91,9 +91,9 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
             ></FavoriteElementsTabComponent>
           </Route>
           <Route path={`${path}/${Tabs.CREATE}`} exact>
-            <CreateElementTabComponent
+            <CustomElementsTabComponent
               workshopId={workshopId}
-            ></CreateElementTabComponent>
+            ></CustomElementsTabComponent>
           </Route>
         </Switch>
       </IonContent>

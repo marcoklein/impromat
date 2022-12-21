@@ -5,11 +5,16 @@ export class LibraryDevPage extends DevPage {
     await this.page.goto(`./library`);
   }
 
+  async searchForElement(searchText: string) {
+    const page = this.page;
+    await page.getByPlaceholder("Search").click();
+    await page.getByPlaceholder("Search").fill(searchText);
+  }
+
   async gotoElementFromSearch() {
     const page = this.page;
     const searchText = "freeze";
-    await page.getByPlaceholder("Search").click();
-    await page.getByPlaceholder("Search").fill(searchText);
+    await this.searchForElement(searchText);
     await page.waitForSelector(
       '*:has-text("improwikiDEFreeze TagKettenspieleSwitches")',
     );

@@ -6,33 +6,41 @@ import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import { WorkshopElementPreviewItemComponent } from "../../../components/WorkshopElementPreviewItemComponent";
 import { ElementDocType } from "../../../database/collections/element/element-collection";
 import { useImprobibElements } from "../../../database/improbib/use-improbib-elements";
+import { useCustomElements } from "../../../database/use-custom-elements";
 import { routeLibraryElement } from "../library-routes";
 
 interface ContainerProps {
   workshopId?: string;
 }
 
+/**
+ * Search for a specific workshop element. Search includes all elements from the improbib and all custom elements.
+ */
 export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
-  const improvElements = useImprobibElements();
+  const improbibElements = useImprobibElements();
   const [loadingImprovElements, setLoadingImprovElements] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [workshopElements, setWorkshopElements] = useState<ElementDocType[]>();
   const [fuse, setFuse] = useState<Fuse<ElementDocType>>();
   const [isSearching, setIsSearching] = useState(true);
+  const { customElements, isFetching: isCustomElementsFetching } =
+    useCustomElements();
 
   useEffect(() => {
-    setLoadingImprovElements(improvElements === undefined);
-    if (improvElements) {
+    setLoadingImprovElements(improbibElements === undefined);
+    if (improbibElements && customElements && !isCustomElementsFetching) {
       setFuse(
-        new Fuse(improvElements, {
+        new Fuse([...improbibElements, ...customElements], {
           keys: ["name", "tags", { name: "markdown", weight: 0.5 }],
           threshold: 0.6,
         }),
       );
+    } else {
+      setFuse(undefined);
     }
-  }, [improvElements]);
+  }, [improbibElements, customElements, isCustomElementsFetching]);
 
   useEffect(() => {
     if (!fuse) return;

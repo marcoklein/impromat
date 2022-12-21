@@ -1,10 +1,8 @@
 import { IonFab, IonFabButton, IonIcon, IonSpinner } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router";
-import { RxCollection } from "rxdb";
-import { useRxData } from "rxdb-hooks";
-import { ElementDocType } from "../../../database/collections/element/element-collection";
+import { useCustomElements } from "../../../database/use-custom-elements";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { routeLibraryCreateCustomElement } from "../library-routes";
 import { CustomElementsEmptyComponent } from "./CustomElementsEmptyComponent";
@@ -14,22 +12,13 @@ interface ContainerProps {
   workshopId: string | undefined;
 }
 
-export const CreateElementTabComponent: React.FC<ContainerProps> = ({
+export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
   const location = useLocation();
-  const logger = useComponentLogger("CreateElementTabComponent");
+  const logger = useComponentLogger("CustomElementsTabComponent");
 
-  const { result: customElements, isFetching } = useRxData<ElementDocType>(
-    "elements",
-    useCallback(
-      (collection: RxCollection) =>
-        collection.find({
-          selector: { basedOn: undefined, sourceName: undefined },
-        }),
-      [],
-    ),
-  );
+  const { customElements, isFetching } = useCustomElements();
 
   useEffect(() => {
     logger("location=%s", location.pathname);

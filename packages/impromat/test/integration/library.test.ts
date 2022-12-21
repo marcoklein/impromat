@@ -31,4 +31,18 @@ pageTest.describe("Library", () => {
     // then
     await expect(page.getByText(new RegExp(name))).toBeVisible();
   });
+
+  pageTest(
+    "should show custom elements in search",
+    async ({ page, libraryPage }) => {
+      // given
+      const name = "test-custom-element";
+      await libraryPage.createCustomElement(name);
+      // when
+      await libraryPage.tabLocator(/Search/).click();
+      await libraryPage.searchForElement(name);
+      // then
+      await expect(page.getByText(new RegExp(name))).toBeVisible();
+    },
+  );
 });
