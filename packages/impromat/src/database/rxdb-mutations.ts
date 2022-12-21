@@ -117,28 +117,20 @@ export class RxMutations {
 
   async addNewElementToWorkshop(
     workshopId: string,
-    name: string,
-    markdown: string,
+    baseElementId: string,
+    elementInput: Partial<ElementDocType>,
   ) {
-    const newElementId = this.generateUniqueId();
+    delete elementInput.id;
+    delete elementInput.markdown;
+    elementInput.basedOn = baseElementId;
     const workshop = await this.findWorkshopById(workshopId);
-    if (!workshop) return;
-    await WORKSHOP_HELPER.pushElement(workshop, {
-      id: newElementId,
-      markdown: markdown,
-      name: name,
-      sourceUrl: undefined,
-      tags: [],
-      note: "",
-      languageCode: undefined,
-      basedOn: undefined,
-      licenseName: undefined,
-      licenseUrl: undefined,
-      sourceBaseUrl: undefined,
-      sourceName: undefined,
-    });
+    if (!workshop) {
+      throw new Error('Workshop with id "' + workshopId + '" not found.');
+    }
+    const document = WORKSHOP_HELPER.getNewElementDocType(elementInput);
+    await WORKSHOP_HELPER.pushElement(workshop, document);
     await this.uncollapseLastWorkshopSection(workshop);
-    return newElementId;
+    return document.id;
   }
 
   async uncollapseLastWorkshopSection(workshop: WorkshopDocument) {
@@ -160,30 +152,12 @@ export class RxMutations {
     }
   }
 
-  async addImprovElementToWorkshop(
-    workshopId: string,
-    improvElement: ElementDocType,
-  ) {
-    logger(
-      "Adding improv element to workshop with id %s. (improvElement = %O)",
-      workshopId,
-      improvElement,
-    );
-    const newElementId = this.generateUniqueId();
-    const workshop = await this.findWorkshopById(workshopId);
-    if (!workshop) return;
-    logger("Workshop=%O", workshop);
-    await workshop.getDatabase().collections.elements.upsert(improvElement);
-    await WORKSHOP_HELPER.pushElement(workshop, {
-      ...improvElement,
-      id: newElementId,
-      basedOn: improvElement.id,
-    });
-    await this.uncollapseLastWorkshopSection(workshop);
-    return newElementId;
+  async ensureElementExists(element: ElementDocType) {
+    await this.database.collections.elements.upsert(element);
   }
 
-  async addElement(element: ElementDocType) {
+  async addNewElement(elementInput: Partial<ElementDocType>) {
+    const element = WORKSHOP_HELPER.getNewElementDocType(elementInput);
     return this.database.elements.atomicUpsert(element);
   }
 

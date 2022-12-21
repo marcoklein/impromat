@@ -1,6 +1,7 @@
 - [Client side Entity Relationships](#client-side-entity-relationships)
   - [Collections](#collections)
   - [Client Authorization](#client-authorization)
+  - [Workshop Elements and Elements](#workshop-elements-and-elements)
 
 # Client side Entity Relationships
 
@@ -11,13 +12,13 @@ erDiagram
     me ||--|| user : references
     me {
     }
-    user ||--o{ workshop : has
+    user ||--o{ workshop : manages
     user ||--o{ element : favorites
     user {
     }
     workshop {
     }
-    workshop ||--|{ element : has
+    workshop ||--|{ element : contains
     element {
     }
 ```
@@ -45,3 +46,30 @@ flowchart TD
 ```
 
 > TODO add process to logout if there has been no connection for a too long timeframe.
+
+## Workshop Elements and Elements
+
+The model holds two types of elements:
+
+1. a **workshop element**, that is an element represented by the workshop. It holds specific information of an element within a workshop, e.g. a note, a title.
+2. a **base element**, that is either from the Improbib or a custom creation. It holds base information about an element, e.g. description and source information.
+
+```mermaid
+erDiagram
+    baseElement ||--o{ workshopElement : "uses and overrides"
+    workshop ||--o{ workshopElement : contains
+    workshop {
+      name string
+    }
+    baseElement {
+      string name
+      string markdown
+      string[] tags
+      bool public
+      string sourceName
+    }
+    workshopElement {
+      string name
+      string note
+    }
+```

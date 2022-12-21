@@ -18,6 +18,7 @@ bash -e $WORKDIR/scripts/configure-impromat-api.sh development api.dev.impromat.
 ### Development specific configuration
 ######################################
 
+appName=impromat-app-development
 echo "Adding development configuration"
 packageVersion=$(cd $WORKDIR/../impromat && echo $(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]'))
 echo "packageVersion=$packageVersion"

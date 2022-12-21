@@ -47,6 +47,6 @@ jobs:
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: packages/impromat/playwright-report
-          path: packages/impromat/playwright-report/
+          name: impromat-junit-results.xml
+          path: packages/impromat/junit-results.xml
           retention-days: 30

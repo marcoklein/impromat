@@ -23,11 +23,11 @@ import {
   person,
 } from "ionicons/icons";
 import { environment } from "../../environment";
+import { routeLibrary } from "../../pages/library/library-routes";
 import {
   routeAbout,
   routeAccount,
   routeLegal,
-  routeLibrary,
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";

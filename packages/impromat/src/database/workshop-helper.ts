@@ -138,18 +138,7 @@ export class WorkshopHelper {
       await this.pushSection(workshop, { isVisible: false });
     }
 
-    const defaultElement: ElementDocType = {
-      id: this.generateUniqueId(),
-      version: DEFAULT_VERSION,
-      name: "Unnamed",
-      markdown: "",
-      note: "",
-      tags: [],
-    };
-    const element = {
-      ...defaultElement,
-      ...inputElement,
-    };
+    const element = this.getNewElementDocType(inputElement);
     const lastSection = (await workshop.populateSections())[
       workshop.sections.length - 1
     ];
@@ -168,6 +157,22 @@ export class WorkshopHelper {
     for (const element of elements) {
       await this.pushElement(workshop, element);
     }
+  }
+
+  getNewElementDocType(inputElement: Partial<ElementDocType>): ElementDocType {
+    const defaultElement: ElementDocType = {
+      id: this.generateUniqueId(),
+      version: DEFAULT_VERSION,
+      name: "Unnamed",
+      markdown: undefined,
+      note: undefined,
+      tags: undefined,
+    };
+    const element = {
+      ...defaultElement,
+      ...inputElement,
+    };
+    return element;
   }
 
   async getNewSectionDocType(

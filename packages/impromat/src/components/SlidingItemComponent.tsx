@@ -16,7 +16,6 @@ import {
   trashOutline,
 } from "ionicons/icons";
 import React, { useEffect, useRef } from "react";
-import "./WorkshopElementItemComponent.css";
 
 interface ContainerProps {
   color?: string;

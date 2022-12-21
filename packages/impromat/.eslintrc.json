@@ -1,0 +1,15 @@
+{
+  "ignorePatterns": ["**/*.gen.ts"],
+  "extends": ["react-app"],
+  "overrides": [
+    {
+      "files": ["test/**/*.ts"],
+      "parserOptions": {
+        "project": "./tsconfig.test.json"
+      },
+      "rules": {
+        "@typescript-eslint/no-floating-promises": "error"
+      }
+    }
+  ]
+}

@@ -253,12 +253,12 @@ type Element {
   version: Int!
   deleted: Boolean
   name: String!
-  markdown: String!
-  tags: [String!]!
+  markdown: String
+  tags: [String]
   """
   User defined note
   """
-  note: String!
+  note: String
   basedOn: Element
   languageCode: String
   sourceUrl: String
