@@ -6,6 +6,11 @@
   "repository": "git@github.com:marcoklein/improbib.git",
   "author": "Marco Klein <hello@marcoklein.dev>",
   "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./src/improbib.d.ts"
+    }
+  },
   "scripts": {
     "start": "ts-node --transpile-only src/index.ts",
     "dev": "nodemon",
