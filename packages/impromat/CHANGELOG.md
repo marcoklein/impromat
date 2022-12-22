@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.0
+
+### Minor Changes
+
+- d817ac0: Add a dedicated library tab to search for improv elements and mark favorites.
+
 ## 0.16.1
 
 ### Patch Changes
