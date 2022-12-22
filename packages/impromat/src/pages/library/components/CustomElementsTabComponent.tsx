@@ -36,7 +36,7 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
     <>
       <InfoItemComponent>
         <IonNote>
-          Custom elements are currently under development and limited in
+          Custom elements are currently under development and have limited
           functionality.
         </IonNote>
       </InfoItemComponent>
