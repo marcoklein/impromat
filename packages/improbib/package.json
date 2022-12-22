@@ -6,9 +6,11 @@
   "repository": "git@github.com:marcoklein/improbib.git",
   "author": "Marco Klein <hello@marcoklein.dev>",
   "license": "MIT",
+  "types": "./src/improbib.d.ts",
   "exports": {
     ".": {
-      "types": "./src/improbib.d.ts"
+      "types": "./src/improbib.d.ts",
+      "import": "./src/improbib.d.ts"
     }
   },
   "scripts": {
