@@ -25,7 +25,6 @@ export async function extractOutgoingLinks<T extends { markdown: string }>(
             titleText = text.value;
           });
         }
-
         outgoingLinks.push({ title: titleText ?? undefined, url });
       });
     })

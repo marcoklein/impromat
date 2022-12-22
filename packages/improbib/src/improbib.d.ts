@@ -5,7 +5,7 @@ export interface Improbib {
    */
   version: string;
   /**
-   * Timestamp this file has been generated.
+   * Timestamp of file generation.
    */
   timestamp: string;
   statistics: {
