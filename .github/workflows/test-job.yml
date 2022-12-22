@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: 18
       - run: yarn install --frozen-lockfile
+      - run: yarn lint
       - run: yarn test
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
@@ -46,6 +47,6 @@ jobs:
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: packages/impromat/playwright-report
-          path: packages/impromat/playwright-report/
+          name: impromat-junit-results.xml
+          path: packages/impromat/junit-results.xml
           retention-days: 30

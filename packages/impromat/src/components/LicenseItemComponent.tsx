@@ -35,9 +35,16 @@ export const LicenseItemComponent: React.FC<ContainerProps> = ({
       <IonIcon icon={information} slot="start"></IonIcon>
       <IonLabel className="ion-text-wrap">
         <p>
-          Based on "{OptionalLink(name, sourceUrl)}" by{" "}
-          {OptionalLink(authorName, authorUrl)} and licensed under{" "}
-          {OptionalLink(licenseName, licenseUrl)}
+          Based on "{OptionalLink(name, sourceUrl)}"
+          {authorName && (
+            <>
+              {" "}
+              by {OptionalLink(authorName, authorUrl)}
+              {licenseName && (
+                <> and licensed under {OptionalLink(licenseName, licenseUrl)}</>
+              )}
+            </>
+          )}
         </p>
       </IonLabel>
     </IonItem>

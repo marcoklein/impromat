@@ -3,20 +3,16 @@
   "version": "0.16.1",
   "private": true,
   "homepage": "https://impromat.app",
+  "description": "Application code for Impromat.",
   "dependencies": {
     "@capacitor/app": "4.0.1",
     "@capacitor/core": "4.1.0",
     "@capacitor/haptics": "4.0.1",
     "@capacitor/keyboard": "4.0.1",
     "@capacitor/status-bar": "4.0.1",
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
     "@playwright/test": "^1.26.1",
-    "@remirror/pm": "^2.0.0-beta.15",
-    "@remirror/react": "^2.0.0-beta.15",
-    "@remirror/react-editors": "^1.0.0-beta.15",
     "@types/node": "^12.19.15",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
@@ -36,7 +32,6 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.0",
-    "remirror": "^2.0.0-beta.15",
     "rxdb": "^13.11.1",
     "rxdb-hooks": "^4.0.3",
     "rxjs": "^7.5.6",
@@ -62,6 +57,8 @@
   },
   "scripts": {
     "start": "yarn compile-markdown && react-scripts start",
+    "lint": "eslint src test",
+    "lint:fix": "eslint src --fix",
     "dev": "yarn start",
     "build": "yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",
     "build:serve": "serve --config serve.config.json build",
@@ -79,14 +76,6 @@
     "codegen": "yarn codegen:get-schema-json && yarn codegen:graphql",
     "changeset": "yarn --cwd \"../..\" changeset"
   },
-  "eslintConfig": {
-    "ignorePatterns": [
-      "**/*.gen.ts"
-    ],
-    "extends": [
-      "react-app"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -100,15 +89,20 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/plugin-syntax-flow": "^7.18.6",
+    "@babel/plugin-syntax-import-assertions": "^7.20.0",
+    "@babel/plugin-transform-react-jsx": "^7.19.0",
     "@capacitor/cli": "4.1.0",
     "@graphql-codegen/cli": "^2.13.12",
     "@graphql-codegen/typescript": "^2.8.2",
     "@graphql-codegen/typescript-graphql-request": "^4.5.8",
     "@graphql-codegen/typescript-operations": "^2.5.7",
     "@types/debug": "^4.1.7",
+    "eslint": "^8.30.0",
     "genversion": "^3.1.1",
     "gh-pages": "^4.0.0",
-    "graphql-request": "^5.0.0"
-  },
-  "description": "An Ionic project"
+    "graphql-request": "^5.0.0",
+    "graphql-tag": "^2.12.6"
+  }
 }

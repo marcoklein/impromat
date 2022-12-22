@@ -29,6 +29,7 @@ src/version.gen.ts
 src/markdown/**.gen.*
 test/database/outputs/*.json
 
+junit-results.xml
 
 # Optional eslint cache
 .eslintcache

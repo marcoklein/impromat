@@ -17,7 +17,7 @@ export class WorkshopDevPage extends DevPage {
   }
 
   async createNew(name: string) {
-    return new WorkshopsDevPage(this.page).addWorkshop(name);
+    return await new WorkshopsDevPage(this.page).addWorkshop(name);
   }
 
   async goto(workshopId: string) {
@@ -47,6 +47,25 @@ export class WorkshopDevPage extends DevPage {
     const workshopId = await this.createNew(name);
     await this.goto(workshopId);
     return workshopId;
+  }
+
+  async openLibrary() {
+    const page = this.page;
+
+    const addElementLocator = page
+      .locator("ion-fab-list")
+      .getByRole("link", { name: "Element" });
+    const addFabButtonToggleLocator = page
+      .getByRole("img")
+      .filter({ hasText: "Add" })
+      .locator("path");
+
+    try {
+      await addElementLocator.click({ timeout: 1000 });
+    } catch {
+      await addFabButtonToggleLocator.click();
+      await addElementLocator.click();
+    }
   }
 
   async rename(newName: string = "Renamed Workshop") {

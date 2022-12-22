@@ -1,4 +1,4 @@
-import { ImprovElement } from "../models/improv-element";
+import { ImprovElement } from "./improv-element";
 
 export async function fetchImprovElements() {
   const result = await fetch("assets/improbib.json");
