@@ -4,6 +4,24 @@ Collecting and merging improvisational exercises and games from various sources.
 
 ## Getting started
 
+Build latest improbib:
+
+```
+yarn build
+```
+
+For development run tests in watch mode:
+
+```
+yarn dev
+```
+
+Run tests
+
+```
+yarn test
+```
+
 ## Architecture
 
 The download always begins on an _entry page_. This is a special page in the wiki that references all meaningful parts.

@@ -61,7 +61,7 @@
     "dev": "yarn start",
     "lint": "eslint src test",
     "lint:fix": "eslint src --fix",
-    "build": "yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",
+    "build": "yarn copy-improbib && yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",
     "build:serve": "serve --config serve.config.json build",
     "test": "yarn playwright:install && playwright test",
     "test:headed": "yarn test --headed",

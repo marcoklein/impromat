@@ -5,6 +5,7 @@ import { createAbsoluteUrls } from "../common-transformers/create-absolute-urls"
 import { extractOutgoingLinks } from "../common-transformers/extract-outgoing-links";
 import { hashIdentifier } from "../common-transformers/hash-identifiers";
 import { removeMarkdownComments } from "../common-transformers/remove-markdown-comments";
+import { removeMarkdownLinks } from "../common-transformers/remove-markdown-links";
 import { trimMarkdown } from "../common-transformers/trim-markdown";
 import { uniqueTagList } from "../common-transformers/unique-tag-list";
 import { ImprovEntry } from "../common/improv-entry";
@@ -74,6 +75,7 @@ export class PipelineAggregator {
       .apply(addBaseUrl)
       .apply(addSourceName)
       .apply(changeImprowikiMarkdown)
+      .apply(removeMarkdownLinks)
       .apply(trimMarkdown)
       .apply(uniqueTagList);
 

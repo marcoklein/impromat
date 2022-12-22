@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "start": "ts-node --transpile-only src/index.ts",
+    "build": "ts-node --transpile-only src/index.ts",
     "dev": "nodemon",
     "test": "mocha --loader=ts-node/esm --require test/root-mocha-hook.ts {test,src}/**/*.test.ts",
     "code:format": "prettier --write .",
