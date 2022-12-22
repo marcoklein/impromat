@@ -1,9 +1,10 @@
 import { environment } from "../../../environment";
 import { rootLogger } from "../../../logger";
+import { replicationErrorLogger } from "../replication-error-logger";
 import { ElementCollection } from "./element-collection";
 import {
   elementPullQueryBuilder,
-  elementPushQueryBuilder,
+  elementPushQueryBuilder
 } from "./element-replication-query-builder";
 
 export function enableElementReplication(elementCollection: ElementCollection) {
@@ -42,6 +43,9 @@ export function enableElementReplication(elementCollection: ElementCollection) {
     retryTime: 5 * 1000,
     autoStart: true, // TODO start if logged in
     credentials: "include",
+  });
+  replicationState.error$.subscribe((error) => {
+    replicationErrorLogger(error, logger);
   });
   setInterval(() => {
     // TODO migrate to GraphQL stream

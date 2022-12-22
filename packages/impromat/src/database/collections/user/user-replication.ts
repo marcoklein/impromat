@@ -1,5 +1,6 @@
 import { environment } from "../../../environment";
 import { rootLogger } from "../../../logger";
+import { replicationErrorLogger } from "../replication-error-logger";
 import { UserCollection } from "./user-collection-types";
 import {
   userPullQueryBuilder,
@@ -44,9 +45,11 @@ export function enableUserReplication(userCollection: UserCollection) {
     autoStart: true, // TODO start if logged in
     credentials: "include",
   });
+  replicationState.error$.subscribe((error) => {
+    replicationErrorLogger(error, logger);
+  });
   setInterval(() => {
-    // TODO migrate to GraphQL stream
-    replicationState.reSync();
     logger("Triggering sync");
+    replicationState.reSync();
   }, 10 * 1000);
 }

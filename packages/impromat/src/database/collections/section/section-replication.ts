@@ -1,5 +1,6 @@
 import { environment } from "../../../environment";
 import { rootLogger } from "../../../logger";
+import { replicationErrorLogger } from "../replication-error-logger";
 import { SectionCollection } from "./section-collection";
 import {
   sectionPullQueryBuilder,
@@ -39,6 +40,9 @@ export function enableSectionReplication(sectionCollection: SectionCollection) {
     retryTime: 5 * 1000,
     autoStart: true, // TODO start if logged in
     credentials: "include",
+  });
+  replicationState.error$.subscribe((error) => {
+    replicationErrorLogger(error, logger);
   });
   setInterval(() => {
     // TODO migrate to GraphQL stream

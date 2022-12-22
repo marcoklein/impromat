@@ -54,7 +54,6 @@ export function enableMeReplication(
       }
     }
   }
-
   setInterval(async () => {
     sync();
   }, 10 * 1000);

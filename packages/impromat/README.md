@@ -14,10 +14,16 @@ Run with
 yarn start
 ```
 
-Publish to GitHub Pages
+Run tests in watch mode for development:
 
+```sh
+yarn test:watch
 ```
-yarn deploy
+
+To develop certain functionalities use `--grep` to limit test execution:
+
+```sh
+yarn test:watch --exec yarn test --grep Account
 ```
 
 ## Logging
@@ -67,6 +73,10 @@ DEBUG=pw:webserver yarn test
 ### Automatic Login
 
 If the `REACT_APP_AUTO_LOGIN` environment variable is set, the application simulates an automatic login. This enables integration tests to test all functionalities that require login.
+
+```sh
+REACT_APP_AUTO_LOGIN=1 yarn start
+```
 
 ### Page Object Models
 

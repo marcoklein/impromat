@@ -71,12 +71,18 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
       "CI or development environment set. Using Continuous Integration version with automatic login.",
     );
     try {
-      db.me.insert({ id: "me", user: "test-user", version: 0 });
-      db.users.insert({
-        id: "test-user",
-        version: 0,
-        favoriteElements: [],
+      db.me.insert({ id: "me", user: "test-user", version: 0 }).catch(() => {
+        logger("Me already exists. Skipping creation.");
       });
+      db.users
+        .insert({
+          id: "test-user",
+          version: 0,
+          favoriteElements: [],
+        })
+        .catch(() => {
+          logger("Test user already exists. Skipping creation.");
+        });
     } catch {}
   }
   return db;

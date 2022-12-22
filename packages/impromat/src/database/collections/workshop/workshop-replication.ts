@@ -1,6 +1,7 @@
 import { environment } from "../../../environment";
 import { WorkshopInput } from "../../../graphql/schema.gen";
 import { rootLogger } from "../../../logger";
+import { replicationErrorLogger } from "../replication-error-logger";
 import { WorkshopCollection } from "./workshop-collection";
 import {
   pullQueryBuilder,
@@ -42,6 +43,9 @@ export function enableWorkshopReplication(workshops: WorkshopCollection) {
     retryTime: 5 * 1000,
     autoStart: true, // TODO start if logged in
     credentials: "include",
+  });
+  replicationState.error$.subscribe((error) => {
+    replicationErrorLogger(error, logger);
   });
   setInterval(() => {
     // TODO migrate to GraphQL stream
