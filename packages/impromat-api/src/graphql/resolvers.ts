@@ -1,6 +1,5 @@
 import { SafeIntResolver } from "graphql-scalars";
 import { generateGoogleAuthUrl } from "../authentication/google-auth";
-import { DatabaseUtils } from "../database/database-utils";
 import { UserModel } from "../database/user-model";
 import { environment } from "../environment";
 import { ElementInputMapper } from "../mappers/element-input-mapper";
@@ -27,10 +26,18 @@ export const resolvers: Resolvers = {
       const userId = root.id;
       const ids = ctx.database.getUser(userId)?.favoriteElementIds ?? [];
       const elements: Element[] = [];
-      const databaseUtils = new DatabaseUtils(ctx.database);
+      const databaseElements = ctx.database.getElements(userId);
       for (const elementId of ids) {
-        const element = databaseUtils.getElement(userId, elementId);
-        elements.push(element);
+        const element = databaseElements?.find((element) => {
+          if (element.id === elementId) {
+            return element;
+          }
+          return undefined;
+        });
+        if (!element) {
+          throw new Error(`Element with id ${elementId} not found.`);
+        }
+        elements.push(new ElementMapper().fromModelToDto(element));
       }
       return elements;
     },
