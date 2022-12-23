@@ -66,24 +66,36 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
 
   logger("initialized with collections %O", collections);
 
+  // TODO refactor this into a separate function
   if (process.env.REACT_APP_AUTO_LOGIN) {
     console.warn(
-      "CI or development environment set. Using Continuous Integration version with automatic login.",
+      "REACT_APP_AUTO_LOGIN local storage: impromat-auto-login",
+      localStorage.getItem("impromat-auto-login"),
     );
-    try {
-      db.me.insert({ id: "me", user: "test-user", version: 0 }).catch(() => {
-        logger("Me already exists. Skipping creation.");
-      });
-      db.users
-        .insert({
-          id: "test-user",
-          version: 0,
-          favoriteElements: [],
-        })
-        .catch(() => {
-          logger("Test user already exists. Skipping creation.");
+    console.warn("REACT_APP_AUTO_LOGIN is set. Auto login is enabled.");
+    if (localStorage.getItem("impromat-auto-login") !== "true") {
+      localStorage.setItem("impromat-auto-login", "true");
+      try {
+        db.me.insert({ id: "me", user: "test-user", version: 0 }).catch(() => {
+          logger("REACT_APP_AUTO_LOGIN: Me already exists. Skipping creation.");
         });
-    } catch {}
+        db.users
+          .insert({
+            id: "test-user",
+            version: 0,
+            favoriteElements: [],
+          })
+          .catch(() => {
+            logger(
+              "REACT_APP_AUTO_LOGIN: Test user already exists. Skipping creation.",
+            );
+          });
+      } catch {}
+    } else {
+      console.warn(
+        "REACT_APP_AUTO_LOGIN: Auto login triggered already. Skipping login.",
+      );
+    }
   }
   return db;
 };

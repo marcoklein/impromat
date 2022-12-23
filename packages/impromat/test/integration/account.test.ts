@@ -10,4 +10,13 @@ pageTest.describe("Account Page", () => {
       await accountPage.expectToolbarTextToBe("Account");
     },
   );
+
+  pageTest("should logout if signed in", async ({ page, accountPage }) => {
+    // given
+    await accountPage.goto();
+    // when
+    await accountPage.logout();
+    // then
+    await accountPage.expectToolbarTextToBe("Account");
+  });
 });
