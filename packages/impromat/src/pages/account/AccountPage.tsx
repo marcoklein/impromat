@@ -9,7 +9,10 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
+import { InfoItemComponent } from "../../components/InfoItemComponent";
+import { useMyUser } from "../../database/use-my-user";
 import { environment } from "../../environment";
+import { useComponentLogger } from "../../hooks/use-component-logger";
 import { AccountSignedInComponent } from "./components/AccountSignedInComponent";
 import { AccountSignInComponent } from "./components/AccountSignInComponent";
 
@@ -19,10 +22,13 @@ export const AccountPage: React.FC = () => {
   const [googleLoginHref, setGoogleLoginHref] = useState<string | undefined>(
     undefined,
   );
-  const [loggedIn, setLoggedIn] = useState<boolean | undefined>(undefined);
+  const [isGoogleLoginHrefFetching, setIsGoogleLoginHrefFetching] =
+    useState(true);
+  const logger = useComponentLogger("AccountPage");
+  const { document: myUser, isFetching: isMyUserFetching } = useMyUser(logger);
   useEffect(() => {
     (async () => {
-      console.log("sending googleAuthRequest");
+      logger("sending googleAuthRequest");
 
       try {
         const response = await fetch(backendUrl, {
@@ -42,38 +48,20 @@ export const AccountPage: React.FC = () => {
         });
         const json = await response.json();
         setGoogleLoginHref(json.data.googleAuthUrl);
+        logger("Set googleLoginHref to %s", json.data.googleAuthUrl);
       } catch (e) {
-        console.error("error while sending request:", e);
+        logger("error while sending request: %o", e);
       }
-
-      const responseMe = await fetch(backendUrl, {
-        method: "POST",
-        body: JSON.stringify({
-          query: /* GraphQL */ `
-            {
-              me {
-                userId
-              }
-            }
-          `,
-        }),
-        headers: {
-          "content-type": "application/json",
-          accept: "application/json",
-        },
-        credentials: "include",
-      });
-      const jsonMe = await responseMe.json();
-      const userId = jsonMe.data?.me?.userId;
-      if (userId) {
-        setLoggedIn(true);
-        console.log("You are logged in");
-      } else {
-        setLoggedIn(false);
-        console.log("You are not logged in");
-      }
+      setIsGoogleLoginHrefFetching(false);
+      logger("GoogleLoginHref fetching is done");
     })();
-  }, []);
+  }, [logger]);
+
+  // TODO fixme wait for isMyUserFetching to be false does not work because isMyUserFetching is always true
+  // quick fix could be to add a timeout
+  const isLoading = isGoogleLoginHrefFetching;
+  const isLoggedIn = !isMyUserFetching && myUser !== undefined;
+  const isNotLoggedIn = !isLoggedIn;
 
   return (
     <IonPage>
@@ -86,15 +74,24 @@ export const AccountPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {loggedIn === undefined ? (
-          <IonSpinner></IonSpinner>
-        ) : loggedIn ? (
+        {isLoading && <IonSpinner></IonSpinner>}
+        {!isLoading && isLoggedIn && (
           <AccountSignedInComponent></AccountSignedInComponent>
-        ) : (
-          <AccountSignInComponent
-            googleLoginHref={googleLoginHref}
-          ></AccountSignInComponent>
         )}
+        {!isLoading &&
+          isNotLoggedIn &&
+          (!googleLoginHref ? (
+            <>
+              <InfoItemComponent
+                color="warning"
+                message="You need an active internet connection to login."
+              ></InfoItemComponent>
+            </>
+          ) : (
+            <AccountSignInComponent
+              googleLoginHref={googleLoginHref}
+            ></AccountSignInComponent>
+          ))}
       </IonContent>
     </IonPage>
   );
