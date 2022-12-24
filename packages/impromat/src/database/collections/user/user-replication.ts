@@ -1,6 +1,5 @@
 import { environment } from "../../../environment";
 import { rootLogger } from "../../../logger";
-import { replicationErrorLogger } from "../replication-error-logger";
 import { ReplicationState } from "../replication-state";
 import { UserCollection } from "./user-collection-types";
 import {
