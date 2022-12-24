@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.18.0
+
+### Minor Changes
+
+- 62a5282: Show synchronization status for logged in account
+- 22ab5fe: Build latest improbib and copy improbib to impromat application
+
+### Patch Changes
+
+- Updated dependencies [22ab5fe]
+- Updated dependencies [22ab5fe]
+  - improbib@0.4.0
+
 ## 0.17.0
 
 ### Minor Changes

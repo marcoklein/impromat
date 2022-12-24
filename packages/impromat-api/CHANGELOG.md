@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.4
+
+### Patch Changes
+
+- 18fb28b: Fix resolver failing to return favorite elements
+
 ## 0.5.3
 
 ### Patch Changes

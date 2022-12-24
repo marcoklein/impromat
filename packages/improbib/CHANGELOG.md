@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- 22ab5fe: Build latest improbib and copy improbib to impromat application
+- 22ab5fe: Remove links from markdown
+
 ## 0.3.1
 
 ### Patch Changes
