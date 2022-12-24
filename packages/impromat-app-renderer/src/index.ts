@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
-import puppeteer from "puppeteer";
-import express from "express";
 import { load } from "cheerio";
+import express, { Request, Response } from "express";
+import puppeteer from "puppeteer";
 
 const port = parseInt(process.env.PORT ?? "3080");
 const clientPort = port + 1;
@@ -49,9 +48,11 @@ app.listen(port, () => {
 });
 
 const appServer = express();
-appServer.use(express.static("../impromat/build"));
+
+appServer.use(express.static("../impromat/build", { cacheControl: false }));
 appServer.get("*", (req, res) => {
   console.log("App Server Request: ", req.url);
+  res.setHeader("Cache-Control", "max-age=0");
   res.sendFile("index.html");
 });
 appServer.listen(clientPort, () => {
