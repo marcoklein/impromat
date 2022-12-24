@@ -1,7 +1,7 @@
 import { environment } from "../../../environment";
 import { WorkshopInput } from "../../../graphql/schema.gen";
 import { rootLogger } from "../../../logger";
-import { replicationErrorLogger } from "../replication-error-logger";
+import { ReplicationState } from "../replication-state";
 import { WorkshopCollection } from "./workshop-collection";
 import {
   pullQueryBuilder,
@@ -10,7 +10,7 @@ import {
 
 export function enableWorkshopReplication(workshops: WorkshopCollection) {
   const logger = rootLogger.extend("workshop-replication");
-  const replicationState = workshops.syncGraphQL({
+  const rxReplicationState = workshops.syncGraphQL({
     url: {
       http: `${environment.API_URL}/graphql`,
     },
@@ -44,12 +44,7 @@ export function enableWorkshopReplication(workshops: WorkshopCollection) {
     autoStart: true, // TODO start if logged in
     credentials: "include",
   });
-  replicationState.error$.subscribe((error) => {
-    replicationErrorLogger(error, logger);
-  });
-  setInterval(() => {
-    // TODO migrate to GraphQL stream
-    replicationState.reSync();
-    logger("Triggering sync");
-  }, 10 * 1000);
+  const replication = new ReplicationState(rxReplicationState);
+  replication.start();
+  return replication;
 }

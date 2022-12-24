@@ -1,6 +1,6 @@
 import { environment } from "../../../environment";
 import { rootLogger } from "../../../logger";
-import { replicationErrorLogger } from "../replication-error-logger";
+import { ReplicationState } from "../replication-state";
 import { SectionCollection } from "./section-collection";
 import {
   sectionPullQueryBuilder,
@@ -9,7 +9,7 @@ import {
 
 export function enableSectionReplication(sectionCollection: SectionCollection) {
   const logger = rootLogger.extend("section-replication");
-  const replicationState = sectionCollection.syncGraphQL({
+  const rxReplicationState = sectionCollection.syncGraphQL({
     url: {
       http: `${environment.API_URL}/graphql`,
     },
@@ -41,12 +41,7 @@ export function enableSectionReplication(sectionCollection: SectionCollection) {
     autoStart: true, // TODO start if logged in
     credentials: "include",
   });
-  replicationState.error$.subscribe((error) => {
-    replicationErrorLogger(error, logger);
-  });
-  setInterval(() => {
-    // TODO migrate to GraphQL stream
-    replicationState.reSync();
-    logger("Triggering sync");
-  }, 10 * 1000);
+  const replication = new ReplicationState(rxReplicationState);
+  replication.start();
+  return replication;
 }

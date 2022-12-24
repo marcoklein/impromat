@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 if (process.env.NODE_ENV === "development") {
-  localStorage.setItem("debug", "*");
+  localStorage.setItem("debug", "impromat:*");
 }
 
 // If you want your app to work offline and load faster, you can change

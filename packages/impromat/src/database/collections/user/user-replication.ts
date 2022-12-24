@@ -1,6 +1,7 @@
 import { environment } from "../../../environment";
 import { rootLogger } from "../../../logger";
 import { replicationErrorLogger } from "../replication-error-logger";
+import { ReplicationState } from "../replication-state";
 import { UserCollection } from "./user-collection-types";
 import {
   userPullQueryBuilder,
@@ -9,7 +10,7 @@ import {
 
 export function enableUserReplication(userCollection: UserCollection) {
   const logger = rootLogger.extend("user-replication");
-  const replicationState = userCollection.syncGraphQL({
+  const rxReplicationState = userCollection.syncGraphQL({
     url: {
       http: `${environment.API_URL}/graphql`,
     },
@@ -45,11 +46,7 @@ export function enableUserReplication(userCollection: UserCollection) {
     autoStart: true, // TODO start if logged in
     credentials: "include",
   });
-  replicationState.error$.subscribe((error) => {
-    replicationErrorLogger(error, logger);
-  });
-  setInterval(() => {
-    logger("Triggering sync");
-    replicationState.reSync();
-  }, 10 * 1000);
+  const replication = new ReplicationState(rxReplicationState);
+  replication.start();
+  return replication;
 }

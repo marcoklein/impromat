@@ -7,7 +7,11 @@ export class AccountDevPage extends DevPage {
 
   async logout() {
     const page = this.page;
-    await page.getByRole("button", { name: "Logout" }).click();
+    await page.locator("ion-item").getByText("Logout").click();
+    await page
+      .locator("ion-alert")
+      .getByRole("button", { name: "Logout" })
+      .click();
     await page.waitForNavigation();
   }
 }

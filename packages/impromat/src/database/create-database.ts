@@ -1,3 +1,4 @@
+import { Dexie } from "dexie";
 import { addRxPlugin } from "rxdb";
 import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
 import { getRxStorageDexie } from "rxdb/plugins/dexie";
@@ -8,13 +9,12 @@ import { RxDBUpdatePlugin } from "rxdb/plugins/update";
 import { GraphQLContextType } from "../graphql/graphql-context";
 import { rootLogger } from "../logger";
 import { enableElementReplication } from "./collections/element/element-replication";
-import { enableMeReplication } from "./collections/me/me-replication";
+import { ReplicationsState } from "./collections/replications-state";
 import { enableSectionReplication } from "./collections/section/section-replication";
 import { enableUserReplication } from "./collections/user/user-replication";
 import { enableWorkshopReplication } from "./collections/workshop/workshop-replication";
 import { AppDatabase } from "./database-type";
 import { DatabaseProvider } from "./provider/database-provider";
-import { Dexie } from "dexie";
 
 addRxPlugin(RxDBReplicationGraphQLPlugin);
 addRxPlugin(RxDBUpdatePlugin);
@@ -54,11 +54,12 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
   });
   const db: AppDatabase = await provider.loadDatabase();
   const collections = db.collections;
-  enableWorkshopReplication(collections.workshops);
-  enableMeReplication(collections.me, apiContext);
-  enableUserReplication(collections.users);
-  enableSectionReplication(collections.sections);
-  enableElementReplication(collections.elements);
+  const replications: ReplicationsState = {
+    workshops: enableWorkshopReplication(collections.workshops),
+    users: enableUserReplication(collections.users),
+    sections: enableSectionReplication(collections.sections),
+    elements: enableElementReplication(collections.elements),
+  };
 
   db.$.subscribe((changeEvent) => {
     logger("Database Event: %O", changeEvent);
@@ -66,36 +67,5 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
 
   logger("initialized with collections %O", collections);
 
-  // TODO refactor this into a separate function
-  if (process.env.REACT_APP_AUTO_LOGIN) {
-    console.warn(
-      "REACT_APP_AUTO_LOGIN local storage: impromat-auto-login",
-      localStorage.getItem("impromat-auto-login"),
-    );
-    console.warn("REACT_APP_AUTO_LOGIN is set. Auto login is enabled.");
-    if (localStorage.getItem("impromat-auto-login") !== "true") {
-      localStorage.setItem("impromat-auto-login", "true");
-      try {
-        db.me.insert({ id: "me", user: "test-user", version: 0 }).catch(() => {
-          logger("REACT_APP_AUTO_LOGIN: Me already exists. Skipping creation.");
-        });
-        db.users
-          .insert({
-            id: "test-user",
-            version: 0,
-            favoriteElements: [],
-          })
-          .catch(() => {
-            logger(
-              "REACT_APP_AUTO_LOGIN: Test user already exists. Skipping creation.",
-            );
-          });
-      } catch {}
-    } else {
-      console.warn(
-        "REACT_APP_AUTO_LOGIN: Auto login triggered already. Skipping login.",
-      );
-    }
-  }
-  return db;
+  return { database: db, replications };
 };
