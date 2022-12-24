@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.2.1
+
+### Patch Changes
+
+- 8722621: Fix development environment configuration script
+
 ## 0.2.0
 
 ### Minor Changes
