@@ -14,33 +14,13 @@ import {
   fromWorkshopModelToWorkshopDto,
 } from "../mappers/workshop-mapper";
 import { handlePushRows } from "./handle-push-rows";
-import { Element, Resolvers } from "./schema.gen";
+import { Resolvers } from "./schema.gen";
 import { prepareDocumentsForPull } from "./sort-models";
 import { userPushRowInputHandler } from "./user-resolver";
 
 export const resolvers: Resolvers = {
   SafeInt: SafeIntResolver,
   User: {
-    favoriteElements: (root, args, ctx) => {
-      console.log("root id fav el", root.id);
-      const userId = root.id;
-      const ids = ctx.database.getUser(userId)?.favoriteElementIds ?? [];
-      const elements: Element[] = [];
-      const databaseElements = ctx.database.getElements(userId);
-      for (const elementId of ids) {
-        const element = databaseElements?.find((element) => {
-          if (element.id === elementId) {
-            return element;
-          }
-          return undefined;
-        });
-        if (!element) {
-          throw new Error(`Element with id ${elementId} not found.`);
-        }
-        elements.push(new ElementMapper().fromModelToDto(element));
-      }
-      return elements;
-    },
     id: (root, args, ctx) => {
       // console.log("id is fetched", root, args, ctx);
       // return ctx.session.userId;

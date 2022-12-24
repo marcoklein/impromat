@@ -1,5 +1,5 @@
 {
-  "exec": "yarn test",
+  "exec": "yarn test:dev",
   "watch": ["src", "assets", "test", "schema"],
   "ignore": "*.gen.*",
   "ext": "ts,json"
