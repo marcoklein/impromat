@@ -44,7 +44,7 @@ export function enableWorkshopReplication(workshops: WorkshopCollection) {
     autoStart: true, // TODO start if logged in
     credentials: "include",
   });
-  const replication = new ReplicationState(rxReplicationState);
+  const replication = new ReplicationState(rxReplicationState, logger);
   replication.start();
   return replication;
 }

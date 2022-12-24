@@ -1,7 +1,6 @@
 import { Debugger } from "debug";
 import { RxReplicationState } from "rxdb/plugins/replication";
 import { BehaviorSubject } from "rxjs";
-import { rootLogger } from "../../logger";
 import { replicationErrorLogger } from "./replication-error-logger";
 
 export enum ReplicationStateEnum {
@@ -34,7 +33,7 @@ export class ReplicationState {
 
   constructor(
     public rxReplicationState: RxReplicationState<any, any>,
-    logger: Debugger = rootLogger,
+    logger: Debugger,
   ) {
     this.logger = logger.extend("ReplicationState");
     rxReplicationState.error$.subscribe((error) => {
