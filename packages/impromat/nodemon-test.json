@@ -2,5 +2,6 @@
   "exec": "yarn lint && yarn test",
   "watch": ["src", "test"],
   "ignore": ["src/version.gen.ts", "src/markdown/**/*"],
-  "ext": "ts,tsx"
+  "ext": "ts,tsx",
+  "delay": "1000"
 }

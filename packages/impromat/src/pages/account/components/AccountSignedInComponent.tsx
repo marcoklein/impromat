@@ -1,49 +1,34 @@
-import { IonButton, useIonToast } from "@ionic/react";
-import { environment } from "../../../environment";
+import { IonIcon, IonItem, IonItemDivider, IonLabel } from "@ionic/react";
+import { logOut } from "ionicons/icons";
+import { REPLICATION_STATE_MAP } from "../../../database/collections/replication-state";
+import { useReplicationState } from "../../../database/use-replication-state";
+import { useLogout } from "../../../hooks/use-logout";
 
 interface ContainerProps {}
 
-const backendUrl = `${environment.API_URL}/graphql`;
 export const AccountSignedInComponent: React.FC<ContainerProps> = () => {
-  const [displayToast] = useIonToast();
-
-  const logoutClick = async () => {
-    try {
-      await fetch(backendUrl, {
-        method: "POST",
-        body: JSON.stringify({
-          query: /* GraphQL */ `
-            mutation {
-              logout
-            }
-          `,
-        }),
-        headers: {
-          "content-type": "application/json",
-          accept: "application/json",
-        },
-        credentials: "include",
-      });
-      displayToast("Logging out...", 1000);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    } catch {
-      displayToast("You can only log out with an internet connection.", 2000);
-    }
-  };
+  const { triggerLogout } = useLogout();
+  const { state } = useReplicationState();
+  const color = REPLICATION_STATE_MAP[state].color;
 
   return (
-    <div className="ion-padding">
-      <h1>Your are signed in!</h1>
-      <p>Sign in to synchronize your workshops accross all your devices.</p>
-      <IonButton
-        onClick={() => {
-          logoutClick();
-        }}
-      >
-        Logout
-      </IonButton>
-    </div>
+    <>
+      <IonItem>
+        <IonLabel className="ion-text-wrap">
+          You are signed in and your workshops and elements synchronize accross
+          your devices.
+        </IonLabel>
+      </IonItem>
+      <IonItemDivider></IonItemDivider>
+      <IonItem>
+        <IonLabel>Synchronization Status</IonLabel>
+        <IonLabel color={color}>{state}</IonLabel>
+      </IonItem>
+      <IonItemDivider></IonItemDivider>
+      <IonItem onClick={triggerLogout} button={true}>
+        <IonIcon icon={logOut} slot="start"></IonIcon>
+        <IonLabel>Logout</IonLabel>
+      </IonItem>
+    </>
   );
 };

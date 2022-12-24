@@ -38,11 +38,12 @@ export function useDocument<
   useEffect(() => {
     if (logger)
       logger(
-        "useDocument - update of collection %s with document %o",
+        "useDocument - update of collection %s with document %o, isFetching %s",
         collection,
         document,
+        isFetching,
       );
-  }, [collection, document, logger]);
+  }, [collection, document, logger, isFetching]);
 
   return { document: document as K, isFetching };
 }

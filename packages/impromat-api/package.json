@@ -13,7 +13,8 @@
     "codegen:graphql": "graphql-codegen",
     "codegen": "yarn codegen:graphql",
     "codegen:watch": "nodemon --config nodemon-codegen.json",
-    "test": "yarn codegen:graphql && c8 --reporter=text --reporter=lcov --reporter cobertura mocha --loader=ts-node/esm \"test/**/*.test.ts\"",
+    "test": "yarn codegen:graphql && c8 --reporter=text --reporter=lcov --reporter cobertura mocha --loader=ts-node/esm \"test/**/*.test.ts\" --reporter mocha-junit-reporter --reporter-options mochaFile=./junit-results.xml",
+    "test:dev": "yarn test --reporter=spec",
     "test:watch": "concurrently \"nodemon --config nodemon-test.json\" \"yarn codegen:watch\"",
     "changeset": "yarn --cwd \"../..\" changeset"
   },
@@ -33,6 +34,7 @@
     "concurrently": "^7.4.0",
     "graphql-request": "^5.0.0",
     "mocha": "^10.0.0",
+    "mocha-junit-reporter": "^2.2.0",
     "nodemon": "^2.0.19",
     "typescript": "^4.8.3"
   },

@@ -1,6 +1,5 @@
 import { SafeIntResolver } from "graphql-scalars";
 import { generateGoogleAuthUrl } from "../authentication/google-auth";
-import { DatabaseUtils } from "../database/database-utils";
 import { UserModel } from "../database/user-model";
 import { environment } from "../environment";
 import { ElementInputMapper } from "../mappers/element-input-mapper";
@@ -15,25 +14,13 @@ import {
   fromWorkshopModelToWorkshopDto,
 } from "../mappers/workshop-mapper";
 import { handlePushRows } from "./handle-push-rows";
-import { Element, Resolvers } from "./schema.gen";
+import { Resolvers } from "./schema.gen";
 import { prepareDocumentsForPull } from "./sort-models";
 import { userPushRowInputHandler } from "./user-resolver";
 
 export const resolvers: Resolvers = {
   SafeInt: SafeIntResolver,
   User: {
-    favoriteElements: (root, args, ctx) => {
-      console.log("root id fav el", root.id);
-      const userId = root.id;
-      const ids = ctx.database.getUser(userId)?.favoriteElementIds ?? [];
-      const elements: Element[] = [];
-      const databaseUtils = new DatabaseUtils(ctx.database);
-      for (const elementId of ids) {
-        const element = databaseUtils.getElement(userId, elementId);
-        elements.push(element);
-      }
-      return elements;
-    },
     id: (root, args, ctx) => {
       // console.log("id is fetched", root, args, ctx);
       // return ctx.session.userId;
