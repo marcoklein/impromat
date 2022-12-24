@@ -12,7 +12,6 @@ export const PUSH_USER_MUTATION = gql`
       version
       favoriteElements {
         id
-        name
       }
     }
   }
@@ -27,7 +26,6 @@ export const PULL_USER_QUERY = gql`
         version
         favoriteElements {
           id
-          name
         }
       }
     }
@@ -92,11 +90,7 @@ describe("User Replication", async () => {
     expect(data.me.user.version).to.equal(1);
     expect(data.me.user.favoriteElements).to.have.lengthOf(2);
     expect(data.me.user.favoriteElements[0].id).to.equal("element-id");
-    expect(data.me.user.favoriteElements[0].name).to.equal("test element");
     expect(data.me.user.favoriteElements[1].id).to.equal("second-element-id");
-    expect(data.me.user.favoriteElements[1].name).to.equal(
-      "second test element"
-    );
   });
 
   // disabled as conflicts are not supported by the client yet

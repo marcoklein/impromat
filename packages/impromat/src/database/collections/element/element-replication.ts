@@ -1,5 +1,6 @@
 import { environment } from "../../../environment";
 import { rootLogger } from "../../../logger";
+import { ReplicationState } from "../replication-state";
 import { ElementCollection } from "./element-collection";
 import {
   elementPullQueryBuilder,
@@ -8,7 +9,7 @@ import {
 
 export function enableElementReplication(elementCollection: ElementCollection) {
   const logger = rootLogger.extend("element-replication");
-  const replicationState = elementCollection.syncGraphQL({
+  const rxReplicationState = elementCollection.syncGraphQL({
     url: {
       http: `${environment.API_URL}/graphql`,
     },
@@ -43,9 +44,7 @@ export function enableElementReplication(elementCollection: ElementCollection) {
     autoStart: true, // TODO start if logged in
     credentials: "include",
   });
-  setInterval(() => {
-    // TODO migrate to GraphQL stream
-    replicationState.reSync();
-    logger("Triggering sync");
-  }, 10 * 1000);
+  const replication = new ReplicationState(rxReplicationState, logger);
+  replication.start();
+  return replication;
 }

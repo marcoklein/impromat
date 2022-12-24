@@ -24,6 +24,7 @@
     "fuse.js": "^6.6.2",
     "graphql": "^16.6.0",
     "immer": "^9.0.15",
+    "improbib": "0.3.1",
     "ionicons": "^5.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -57,10 +58,10 @@
   },
   "scripts": {
     "start": "yarn compile-markdown && react-scripts start",
+    "dev": "yarn start",
     "lint": "eslint src test",
     "lint:fix": "eslint src --fix",
-    "dev": "yarn start",
-    "build": "yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",
+    "build": "yarn copy-improbib && yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",
     "build:serve": "serve --config serve.config.json build",
     "test": "yarn playwright:install && playwright test",
     "test:headed": "yarn test --headed",
@@ -68,8 +69,7 @@
     "test:debug": "yarn test:headed --debug",
     "playwright:codegen": "playwright codegen",
     "playwright:install": "playwright install chromium",
-    "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build",
+    "copy-improbib": "cp ../improbib/output/improbib.json ./public/assets/improbib.json",
     "compile-markdown": "bash ./scripts/generate-markdown.sh",
     "codegen:graphql": "yarn codegen:get-schema-graphql && graphql-codegen",
     "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql",
@@ -101,7 +101,6 @@
     "@types/debug": "^4.1.7",
     "eslint": "^8.30.0",
     "genversion": "^3.1.1",
-    "gh-pages": "^4.0.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6"
   }

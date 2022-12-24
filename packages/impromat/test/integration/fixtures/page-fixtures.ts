@@ -1,4 +1,5 @@
 import { test as base } from "@playwright/test";
+import { AccountDevPage } from "./account-dev-page";
 import { LibraryDevPage } from "./library-dev-page";
 import { WorkshopDevPage } from "./workshop-dev-page";
 import { WorkshopElementDevPage } from "./workshop-element-dev-page";
@@ -9,6 +10,7 @@ type PageFixtures = {
   workshopsPage: WorkshopsDevPage;
   workshopElementPage: WorkshopElementDevPage;
   libraryPage: LibraryDevPage;
+  accountPage: AccountDevPage;
 };
 
 const test = base.extend<PageFixtures>({
@@ -23,6 +25,9 @@ const test = base.extend<PageFixtures>({
   },
   libraryPage: async ({ page }, use) => {
     await use(new LibraryDevPage(page));
+  },
+  accountPage: async ({ page }, use) => {
+    await use(new AccountDevPage(page));
   },
 });
 

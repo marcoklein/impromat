@@ -1,15 +1,14 @@
 import {
-  IonCheckbox,
   IonItem,
   IonLabel,
   IonList,
-  IonNote,
   IonRouterLink,
   useIonToast,
 } from "@ionic/react";
-import { useMemo, useState } from "react";
 import { GoogleSigninButton } from "../../../components/GoogleSigninButton";
-import { InfoItemComponent } from "../../../components/InfoItemComponent";
+import { enableAutoLogin } from "../../../database/enable-auto-login";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
 import { routePrivacyPolicy } from "../../../routes/shared-routes";
 
 interface ContainerProps {
@@ -20,10 +19,11 @@ export const AccountSignInComponent: React.FC<ContainerProps> = ({
   googleLoginHref,
 }) => {
   const [displayToast] = useIonToast();
-  const [isBetaTester, setIsBetaTester] = useState(false);
-  const [agreesToPrivacyPolicy, setAgreesToPrivacyPolicy] = useState(false);
+  const database = useImpromatRxDb();
+  const logger = useComponentLogger("AccountSignInComponent");
 
   const loginClick = () => {
+    logger("loginClick");
     if (!googleLoginHref) {
       displayToast(
         "Please check your internet connection or retry in two minutes.",
@@ -31,17 +31,19 @@ export const AccountSignInComponent: React.FC<ContainerProps> = ({
       );
       return;
     }
-    window.location.href = googleLoginHref;
+    if (process.env.REACT_APP_AUTO_LOGIN) {
+      enableAutoLogin(database, true);
+    } else {
+      window.location.href = googleLoginHref;
+    }
   };
-
-  const allowLogin = useMemo(() => {
-    return isBetaTester && agreesToPrivacyPolicy;
-  }, [isBetaTester, agreesToPrivacyPolicy]);
 
   return (
     <IonList>
       <IonItem>
-        <h1>Synchronize your Workshops</h1>
+        <IonLabel className="ion-text-wrap">
+          <h1>Synchronize and share your improv workshops</h1>
+        </IonLabel>
       </IonItem>
       <IonItem>
         <IonLabel className="ion-text-wrap">
@@ -49,39 +51,11 @@ export const AccountSignInComponent: React.FC<ContainerProps> = ({
         </IonLabel>
       </IonItem>
       <div className="ion-padding-horizontal">
-        <GoogleSigninButton
-          onClick={() => loginClick()}
-          disabled={!allowLogin}
-        ></GoogleSigninButton>
+        <GoogleSigninButton onClick={() => loginClick()}></GoogleSigninButton>
       </div>
-      <InfoItemComponent>
-        <IonNote>
-          Please note that the account synchronization is currently under
-          development. Please contact impromat@marcoklein.dev if you have
-          questions.
-        </IonNote>
-      </InfoItemComponent>
       <IonItem>
-        <div slot="start">
-          <IonCheckbox
-            checked={isBetaTester}
-            onIonChange={(e) => setIsBetaTester(e.detail.checked)}
-          ></IonCheckbox>
-        </div>
-        <IonLabel className="ion-text-wrap">
-          I am aware, that the account feature is under development and
-          unstable.
-        </IonLabel>
-      </IonItem>
-      <IonItem>
-        <div slot="start">
-          <IonCheckbox
-            checked={agreesToPrivacyPolicy}
-            onIonChange={(e) => setAgreesToPrivacyPolicy(e.detail.checked)}
-          ></IonCheckbox>
-        </div>
         <IonLabel>
-          I agree to the{" "}
+          By signing in, you agree to the{" "}
           <IonRouterLink routerLink={routePrivacyPolicy()}>
             Privacy Policy
           </IonRouterLink>

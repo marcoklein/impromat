@@ -42,15 +42,7 @@ pageTest.describe("Library with Workshop Context", () => {
       await workshopPage.openLibrary();
       // when
       await page.getByRole("tab", { name: "Brush Custom" }).click();
-      await page
-        .locator("ion-content")
-        .filter({
-          hasText:
-            "AddCloseYour Individual ElementsYou cannot find the improv exercise or game that",
-        })
-        .locator("path")
-        .nth(1)
-        .click();
+      await page.locator("ion-router-outlet ion-fab-button").last().click();
       await page.getByRole("textbox", { name: "Name" }).click();
       await page.getByRole("textbox", { name: "Name" }).fill("test-element");
       await page

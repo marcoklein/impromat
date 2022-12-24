@@ -10,6 +10,7 @@ export function enableMeReplication(
 
   async function onLogout() {
     logger("Logging out...");
+    console.warn("Logout in me replication not implemented yet");
   }
 
   async function sync() {
@@ -54,7 +55,6 @@ export function enableMeReplication(
       }
     }
   }
-
   setInterval(async () => {
     sync();
   }, 10 * 1000);

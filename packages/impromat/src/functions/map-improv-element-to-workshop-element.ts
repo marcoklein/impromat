@@ -1,23 +1,23 @@
-import { ImprovElement } from "./improv-element";
+import { ImprobibElement } from "improbib";
 import { ElementDocType } from "../database/collections/element/element-collection";
 
 export function mapImprovElementToWorkshopElement({
   baseUrl,
   identifier,
-  language,
-  licenseFullName,
+  languageCode,
+  licenseName,
   licenseUrl,
   markdown,
   name,
   sourceName,
   sourceUrl,
   tags,
-}: ImprovElement): ElementDocType {
+}: ImprobibElement): ElementDocType {
   return {
     version: -1,
     id: identifier,
-    languageCode: language,
-    licenseName: licenseFullName,
+    languageCode: languageCode,
+    licenseName: licenseName,
     licenseUrl,
     markdown,
     name,

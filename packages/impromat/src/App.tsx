@@ -21,9 +21,12 @@ import { Provider as RxDBProvider } from "rxdb-hooks";
 import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { MenuComponent } from "./components/MenuComponent";
 import { ElementDocType } from "./database/collections/element/element-collection";
+import { ReplicationsState } from "./database/collections/replications-state";
 import { createDatabase } from "./database/create-database";
 import { AppDatabase } from "./database/database-type";
+import { enableAutoLogin } from "./database/enable-auto-login";
 import { ImprovLibraryContext } from "./database/improbib/improv-library-context";
+import { ReplicationsContext } from "./database/replications-context";
 import { environment } from "./environment";
 import { GraphQLContext } from "./graphql/graphql-context";
 import { getSdk } from "./graphql/schema.gen";
@@ -63,6 +66,9 @@ const App: React.FC = () => {
   const [improvElements, setImprovElements] = useState<
     ElementDocType[] | undefined
   >(undefined);
+  const [replicationsState, setReplicationsState] = useState<
+    ReplicationsState | undefined
+  >(undefined);
 
   const clientRef = useRef(
     new GraphQLClient(`${environment.API_URL}/graphql`, {
@@ -75,7 +81,11 @@ const App: React.FC = () => {
   useEffect(() => {
     // RxDB instantiation can be asynchronous
     createDatabase({ client: clientRef.current, sdk: sdkRef.current })
-      .then(setDb)
+      .then(({ database, replications }) => {
+        enableAutoLogin(database);
+        setDb(database);
+        setReplicationsState(replications);
+      })
       .catch((error) => {
         if (error.rxdb && error.code === "DB8") {
           console.warn(
@@ -92,53 +102,55 @@ const App: React.FC = () => {
       <GraphQLContext.Provider
         value={{ client: clientRef.current, sdk: sdkRef.current }}
       >
-        <ImprovLibraryContext.Provider
-          value={{ improvElements, setImprovElements }}
-        >
-          <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
-            <IonApp>
-              <IonReactRouter>
-                <MenuComponent></MenuComponent>
-                <IonRouterOutlet id="main">
-                  <Redirect from="/" to={routeWorkshops()} exact></Redirect>
-                  <Route path={routeHome()} exact>
-                    <HomePage></HomePage>
-                  </Route>
-                  <Route path={routeAbout()} exact>
-                    <AboutPage></AboutPage>
-                  </Route>
-                  <Route path={routePrivacyPolicy()} exact>
-                    <PrivacyPolicyPage></PrivacyPolicyPage>
-                  </Route>
-                  <Route path={routeLegal()} exact>
-                    <LegalPage></LegalPage>
-                  </Route>
-                  <Route path={routeAccount()} exact>
-                    <AccountPage></AccountPage>
-                  </Route>
-                  <Route path={routeWorkshops()} exact>
-                    <WorkshopsPage></WorkshopsPage>
-                  </Route>
-                  <Route path={routeWorkshop()} exact>
-                    <WorkshopPage></WorkshopPage>
-                  </Route>
-                  <Route path={routeWorkshopElement()} exact>
-                    <WorkshopElementPage></WorkshopElementPage>
-                  </Route>
-                  <Route path={routeLibraryElement()} exact>
-                    <LibraryElementPage></LibraryElementPage>
-                  </Route>
-                  <Route path={routeLibraryCreateCustomElement()} exact>
-                    <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
-                  </Route>
-                  <Route path={routeLibrary()}>
-                    <LibraryPage></LibraryPage>
-                  </Route>
-                </IonRouterOutlet>
-              </IonReactRouter>
-            </IonApp>
-          </ErrorBoundary>
-        </ImprovLibraryContext.Provider>
+        <ReplicationsContext.Provider value={{ replicationsState }}>
+          <ImprovLibraryContext.Provider
+            value={{ improvElements, setImprovElements }}
+          >
+            <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
+              <IonApp>
+                <IonReactRouter>
+                  <MenuComponent></MenuComponent>
+                  <IonRouterOutlet id="main">
+                    <Redirect from="/" to={routeWorkshops()} exact></Redirect>
+                    <Route path={routeHome()} exact>
+                      <HomePage></HomePage>
+                    </Route>
+                    <Route path={routeAbout()} exact>
+                      <AboutPage></AboutPage>
+                    </Route>
+                    <Route path={routePrivacyPolicy()} exact>
+                      <PrivacyPolicyPage></PrivacyPolicyPage>
+                    </Route>
+                    <Route path={routeLegal()} exact>
+                      <LegalPage></LegalPage>
+                    </Route>
+                    <Route path={routeAccount()} exact>
+                      <AccountPage></AccountPage>
+                    </Route>
+                    <Route path={routeWorkshops()} exact>
+                      <WorkshopsPage></WorkshopsPage>
+                    </Route>
+                    <Route path={routeWorkshop()} exact>
+                      <WorkshopPage></WorkshopPage>
+                    </Route>
+                    <Route path={routeWorkshopElement()} exact>
+                      <WorkshopElementPage></WorkshopElementPage>
+                    </Route>
+                    <Route path={routeLibraryElement()} exact>
+                      <LibraryElementPage></LibraryElementPage>
+                    </Route>
+                    <Route path={routeLibraryCreateCustomElement()} exact>
+                      <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
+                    </Route>
+                    <Route path={routeLibrary()}>
+                      <LibraryPage></LibraryPage>
+                    </Route>
+                  </IonRouterOutlet>
+                </IonReactRouter>
+              </IonApp>
+            </ErrorBoundary>
+          </ImprovLibraryContext.Provider>
+        </ReplicationsContext.Provider>
       </GraphQLContext.Provider>
     </RxDBProvider>
   );

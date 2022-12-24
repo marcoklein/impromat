@@ -2,9 +2,13 @@ import { expect } from "@playwright/test";
 import { DevPage } from "./dev-page";
 
 export class WorkshopsDevPage extends DevPage {
+  async goto() {
+    await this.page.goto(`./workshop`);
+  }
+
   async addWorkshop(name: string = "Test Workshop") {
     const page = this.page;
-    await page.goto("./workshop");
+    await this.goto();
     await page.locator("text=AddAdd Workshop >> button").click();
     await expect(page).toHaveURL("./workshop?dialog");
     await page.locator('input[type="text"]').click();

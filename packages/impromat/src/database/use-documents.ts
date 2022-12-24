@@ -43,7 +43,7 @@ export function useDocuments<
   useEffect(() => {
     if (logger)
       logger(
-        "useDocument - update of collection %s with document %o",
+        "useDocuments - update of collection %s with documents %o",
         collectionName,
         documents,
       );
