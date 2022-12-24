@@ -1,7 +1,7 @@
 import { rootLogger } from "../logger";
 import { AppDatabase } from "./database-type";
 
-export function enableAutoLogin(database: AppDatabase) {
+export function enableAutoLogin(database: AppDatabase, force: boolean = false) {
   const logger = rootLogger.extend("enable-auto-login");
   if (process.env.REACT_APP_AUTO_LOGIN) {
     console.warn(
@@ -9,7 +9,8 @@ export function enableAutoLogin(database: AppDatabase) {
       localStorage.getItem("impromat-auto-login"),
     );
     console.warn("REACT_APP_AUTO_LOGIN is set. Auto login is enabled.");
-    if (localStorage.getItem("impromat-auto-login") !== "true") {
+    if (force || localStorage.getItem("impromat-auto-login") !== "true") {
+      console.warn("REACT_APP_AUTO_LOGIN: Logging in");
       localStorage.setItem("impromat-auto-login", "true");
       try {
         database.me

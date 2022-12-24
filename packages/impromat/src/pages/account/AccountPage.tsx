@@ -13,6 +13,7 @@ import { InfoItemComponent } from "../../components/InfoItemComponent";
 import { useMyUser } from "../../database/use-my-user";
 import { environment } from "../../environment";
 import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { AccountSignedInComponent } from "./components/AccountSignedInComponent";
 import { AccountSignInComponent } from "./components/AccountSignInComponent";
 
@@ -26,6 +27,9 @@ export const AccountPage: React.FC = () => {
     useState(true);
   const logger = useComponentLogger("AccountPage");
   const { document: myUser, isFetching: isMyUserFetching } = useMyUser(logger);
+  useStateChangeLogger(myUser, "myUser", logger);
+  useStateChangeLogger(isMyUserFetching, "isMyUserFetching", logger);
+
   useEffect(() => {
     (async () => {
       logger("sending googleAuthRequest");
@@ -51,6 +55,12 @@ export const AccountPage: React.FC = () => {
         logger("Set googleLoginHref to %s", json.data.googleAuthUrl);
       } catch (e) {
         logger("error while sending request: %o", e);
+        if (process.env.REACT_APP_AUTO_LOGIN) {
+          console.warn(
+            "REACT_APP_AUTO_LOGIN: skip validation of google auth request",
+          );
+          setGoogleLoginHref("react-app-auto-login");
+        }
       }
       setIsGoogleLoginHrefFetching(false);
       logger("GoogleLoginHref fetching is done");

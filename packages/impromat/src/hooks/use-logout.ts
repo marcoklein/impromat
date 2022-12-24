@@ -38,6 +38,7 @@ export function useLogout() {
       logger("Cleared database");
       // reloading at this point is very important to avoid synchronization with the
       // backend database which could potentially sync the deleted database
+      window.stop();
       window.location.reload();
     } catch (e) {
       console.warn(e);
