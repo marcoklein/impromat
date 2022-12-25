@@ -63,15 +63,10 @@ function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
-      console.log(
-        "registerValidSW: skip waiting to install new versions if available",
-      );
-      registration.waiting?.postMessage({ type: "SKIP_WAITING" });
-
       setInterval(() => {
         registration.update();
         console.log("Service Worker: Checking for an update");
-      }, 1000 * 60 * 5);
+      }, 60 * 1000);
 
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
