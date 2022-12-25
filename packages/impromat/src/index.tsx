@@ -13,8 +13,12 @@ if (process.env.NODE_ENV === "development") {
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 serviceWorkerRegistration.register({
-  onSuccess: () => {
+  onSuccess: (registration) => {
     console.log("WebWorker: on success");
+    setInterval(() => {
+      registration.update();
+      console.log("Service Worker: Checking for an update");
+    }, 20 * 1000);
   },
   onUpdate: async (registration) => {
     console.log("WebWorker: on update");

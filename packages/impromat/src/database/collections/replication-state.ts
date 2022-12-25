@@ -43,10 +43,8 @@ export class ReplicationState {
           error.message.includes("NetworkError"),
         )
       ) {
-        logger("Replication network error");
         this.state$.next(ReplicationStateEnum.NO_CONNECTION);
       } else {
-        logger("error %O", error);
         this.state$.next(ReplicationStateEnum.ERROR);
       }
     });
