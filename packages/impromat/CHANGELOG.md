@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.18.1
+
+### Patch Changes
+
+- ee0d911: Fix auto installation of application
+
 ## 0.18.0
 
 ### Minor Changes
