@@ -55,7 +55,7 @@ export const HomePage: React.FC = () => {
                 margin: "0 auto",
               }}
             >
-              <IonImg src="/assets/logo.svg"></IonImg>
+              <IonImg src="/assets/logo.svg" alt="Impromat Logo"></IonImg>
             </div>
             <IonText color="dark">
               <h1 style={{ fontSize: "2rem" }}>Impromat</h1>

@@ -5,33 +5,26 @@ import {
   IonFooter,
   IonHeader,
   IonIcon,
-  IonItemDivider,
+  IonImg,
   IonItemGroup,
-  IonLabel,
-  IonListHeader,
   IonMenuToggle,
   IonNote,
   IonRouterLink,
+  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import {
-  chevronBack,
-  create,
-  globeOutline,
-  heart,
+  albums,
+  close,
   home,
   information,
-  people,
+  library,
   person,
-  search,
 } from "ionicons/icons";
 import { environment } from "../../environment";
 import { Tabs } from "../../pages/library/components/LibraryContentComponent";
-import {
-  routeLibrary,
-  routeLibraryTab,
-} from "../../pages/library/library-routes";
+import { routeLibraryTab } from "../../pages/library/library-routes";
 import {
   routeAbout,
   routeAccount,
@@ -40,6 +33,7 @@ import {
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";
+import { InfoItemComponent } from "../InfoItemComponent";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 export const MenuContentComponent: React.FC = () => {
@@ -47,18 +41,42 @@ export const MenuContentComponent: React.FC = () => {
     <>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonButtons slot="start">
+          <IonTitle>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <IonImg
+                style={{ width: "24px", height: "24px" }}
+                src="/assets/logo.svg"
+                alt="Impromat Logo"
+              ></IonImg>
+              <IonText className="ion-margin-start">Impromat</IonText>
+            </div>
+          </IonTitle>
+          <IonButtons slot="end">
             <IonMenuToggle>
               <IonButton>
-                <IonIcon slot="icon-only" icon={chevronBack}></IonIcon>
+                <IonIcon slot="icon-only" icon={close}></IonIcon>
               </IonButton>
             </IonMenuToggle>
           </IonButtons>
-          <IonTitle>Impromat</IonTitle>
-          <IonButtons slot="end">
-            <IonButton fill="outline">Login</IonButton>
-          </IonButtons>
         </IonToolbar>
+        {/* <IonToolbar>
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>Account</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+              Login to backup and synchronize workshops.
+            </IonCardContent>
+            <IonButton
+              fill="outline"
+              expand="block"
+              routerLink={routeAccount()}
+            >
+              <IonIcon icon={person} slot="start"></IonIcon>
+              Login
+            </IonButton>
+          </IonCard>
+        </IonToolbar> */}
       </IonHeader>
       <IonContent fullscreen>
         <IonItemGroup>
@@ -75,28 +93,33 @@ export const MenuContentComponent: React.FC = () => {
           label="Account"
         ></MenuItemComponent>
         <IonItemGroup>
-          <IonListHeader color="secondary">
+          {/* <IonListHeader color="secondary">
             <IonLabel>Workshops</IonLabel>
-          </IonListHeader>
+          </IonListHeader> */}
           <MenuItemComponent
             routerLink={routeWorkshops()}
-            icon={create}
-            label="Create"
+            icon={albums}
+            label="Workshops"
           ></MenuItemComponent>
-          <MenuItemComponent
+          {/* <MenuItemComponent
             routerLink={routeLibrary()}
             icon={globeOutline}
             label="Explore"
-          ></MenuItemComponent>
-          <MenuItemComponent
+          ></MenuItemComponent> */}
+          {/* <MenuItemComponent
             routerLink={routeLibrary()}
             icon={people}
             label="Share"
-          ></MenuItemComponent>
+          ></MenuItemComponent> */}
         </IonItemGroup>
         <IonItemGroup>
-          <IonItemDivider color="secondary">
-            <IonLabel>Element Library</IonLabel>
+          <MenuItemComponent
+            routerLink={routeLibraryTab(Tabs.SEARCH)}
+            icon={library}
+            label="Exercises & Games"
+          ></MenuItemComponent>
+          {/* <IonItemDivider color="secondary">
+            <IonLabel>Exercises & Games</IonLabel>
           </IonItemDivider>
           <MenuItemComponent
             routerLink={routeLibraryTab(Tabs.SEARCH)}
@@ -112,18 +135,18 @@ export const MenuContentComponent: React.FC = () => {
             routerLink={routeLibraryTab(Tabs.CREATE)}
             icon={create}
             label="Create"
-          ></MenuItemComponent>
+          ></MenuItemComponent> */}
         </IonItemGroup>
         <IonItemGroup>
-          <IonItemDivider color="secondary">
+          {/* <IonItemDivider>
             <IonLabel>More</IonLabel>
-          </IonItemDivider>
+          </IonItemDivider> */}
           <MenuItemComponent
             routerLink={routeAbout()}
             icon={information}
             label="About"
           ></MenuItemComponent>
-          <MenuItemComponent
+          {/* <MenuItemComponent
             routerLink={routeLegal()}
             icon={information}
             label="Legal Notice"
@@ -132,11 +155,24 @@ export const MenuContentComponent: React.FC = () => {
             routerLink={routePrivacyPolicy()}
             icon={information}
             label="Data Privacy"
-          ></MenuItemComponent>
+          ></MenuItemComponent> */}
         </IonItemGroup>
       </IonContent>
       <IonFooter className="ion-no-border">
         <IonToolbar>
+          <InfoItemComponent
+            color="light"
+            message="Impromat is currently under development and not feature complete
+            yet."
+          ></InfoItemComponent>
+        </IonToolbar>
+        <IonToolbar>
+          {/* <IonNote className="ion-padding-horizontal">
+            It is a beautiful day.
+          </IonNote>
+          <IonNote slot="end" className="ion-padding-horizontal">
+            v{environment.VERSION}
+          </IonNote> */}
           <IonRouterLink
             className="ion-padding-horizontal"
             routerLink={routeLegal()}
