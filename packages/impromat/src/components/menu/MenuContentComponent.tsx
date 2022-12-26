@@ -8,7 +8,7 @@ import {
   IonItemDivider,
   IonItemGroup,
   IonLabel,
-  IonList,
+  IonListHeader,
   IonMenuToggle,
   IonNote,
   IonRouterLink,
@@ -17,16 +17,25 @@ import {
 } from "@ionic/react";
 import {
   chevronBack,
-  documents,
+  create,
+  globeOutline,
+  heart,
+  home,
   information,
-  library,
+  people,
   person,
+  search,
 } from "ionicons/icons";
 import { environment } from "../../environment";
-import { routeLibrary } from "../../pages/library/library-routes";
+import { Tabs } from "../../pages/library/components/LibraryContentComponent";
+import {
+  routeLibrary,
+  routeLibraryTab,
+} from "../../pages/library/library-routes";
 import {
   routeAbout,
   routeAccount,
+  routeHome,
   routeLegal,
   routePrivacyPolicy,
   routeWorkshops,
@@ -46,46 +55,84 @@ export const MenuContentComponent: React.FC = () => {
             </IonMenuToggle>
           </IonButtons>
           <IonTitle>Impromat</IonTitle>
+          <IonButtons slot="end">
+            <IonButton fill="outline">Login</IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonList>
-          <IonItemGroup>
-            <IonItemDivider>
-              <IonLabel>Navigation</IonLabel>
-            </IonItemDivider>
-            <MenuItemComponent
-              routerLink={routeWorkshops()}
-              icon={documents}
-              label="Workshops"
-            ></MenuItemComponent>
-            <MenuItemComponent
-              routerLink={routeLibrary()}
-              icon={library}
-              label="Library"
-            ></MenuItemComponent>
-          </IonItemGroup>
-          <IonItemGroup>
-            <IonItemDivider>
-              <IonLabel>Account</IonLabel>
-            </IonItemDivider>
-            <MenuItemComponent
-              routerLink={routeAccount()}
-              icon={person}
-              label="Account"
-            ></MenuItemComponent>
-          </IonItemGroup>
-          <IonItemGroup>
-            <IonItemDivider>
-              <IonLabel>More</IonLabel>
-            </IonItemDivider>
-            <MenuItemComponent
-              routerLink={routeAbout()}
-              icon={information}
-              label="About"
-            ></MenuItemComponent>
-          </IonItemGroup>
-        </IonList>
+        <IonItemGroup>
+          <MenuItemComponent
+            routerLink={routeHome()}
+            icon={home}
+            label="Home"
+          ></MenuItemComponent>
+        </IonItemGroup>
+        <MenuItemComponent
+          routerLink={routeAccount()}
+          icon={person}
+          label="Account"
+        ></MenuItemComponent>
+        <IonItemGroup>
+          <IonListHeader color="secondary">
+            <IonLabel>Workshops</IonLabel>
+          </IonListHeader>
+          <MenuItemComponent
+            routerLink={routeWorkshops()}
+            icon={create}
+            label="Create"
+          ></MenuItemComponent>
+          <MenuItemComponent
+            routerLink={routeLibrary()}
+            icon={globeOutline}
+            label="Explore"
+          ></MenuItemComponent>
+          <MenuItemComponent
+            routerLink={routeLibrary()}
+            icon={people}
+            label="Share"
+          ></MenuItemComponent>
+        </IonItemGroup>
+        <IonItemGroup>
+          <IonItemDivider color="secondary">
+            <IonLabel>Element Library</IonLabel>
+          </IonItemDivider>
+          <MenuItemComponent
+            routerLink={routeLibraryTab(Tabs.SEARCH)}
+            icon={search}
+            label="Explore"
+          ></MenuItemComponent>
+          <MenuItemComponent
+            routerLink={routeLibraryTab(Tabs.FAVORITES)}
+            icon={heart}
+            label="Like"
+          ></MenuItemComponent>
+          <MenuItemComponent
+            routerLink={routeLibraryTab(Tabs.CREATE)}
+            icon={create}
+            label="Create"
+          ></MenuItemComponent>
+        </IonItemGroup>
+        <IonItemGroup>
+          <IonItemDivider color="secondary">
+            <IonLabel>More</IonLabel>
+          </IonItemDivider>
+          <MenuItemComponent
+            routerLink={routeAbout()}
+            icon={information}
+            label="About"
+          ></MenuItemComponent>
+          <MenuItemComponent
+            routerLink={routeLegal()}
+            icon={information}
+            label="Legal Notice"
+          ></MenuItemComponent>
+          <MenuItemComponent
+            routerLink={routePrivacyPolicy()}
+            icon={information}
+            label="Data Privacy"
+          ></MenuItemComponent>
+        </IonItemGroup>
       </IonContent>
       <IonFooter className="ion-no-border">
         <IonToolbar>
