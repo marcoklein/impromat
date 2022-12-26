@@ -16,7 +16,7 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
 import React, { useEffect, useRef, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Redirect, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { Provider as RxDBProvider } from "rxdb-hooks";
 import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { MenuComponent } from "./components/MenuComponent";
@@ -111,7 +111,6 @@ const App: React.FC = () => {
                 <IonReactRouter>
                   <MenuComponent></MenuComponent>
                   <IonRouterOutlet id="main">
-                    <Redirect from="/" to={routeWorkshops()} exact></Redirect>
                     <Route path={routeHome()} exact>
                       <HomePage></HomePage>
                     </Route>

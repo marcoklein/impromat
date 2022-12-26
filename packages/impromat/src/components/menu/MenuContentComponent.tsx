@@ -63,6 +63,7 @@ export const MenuContentComponent: React.FC = () => {
       <IonContent fullscreen>
         <IonItemGroup>
           <MenuItemComponent
+            exact
             routerLink={routeHome()}
             icon={home}
             label="Home"

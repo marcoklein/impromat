@@ -2,7 +2,7 @@ export const ROUTE_WORKHOP_ID = ":id";
 export const ROUTE_WORKHOP_ELEMENT_ID = ":partId";
 export const ROUTE_IMPROBIB_ELEMENT_ID = ":libraryPartId";
 
-export const routeHome = () => "/home";
+export const routeHome = () => "/";
 export const routeAbout = () => "/about";
 export const routePrivacyPolicy = () => "/privacy";
 export const routeAccount = () => "/account";
