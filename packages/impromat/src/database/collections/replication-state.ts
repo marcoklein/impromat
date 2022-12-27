@@ -37,16 +37,19 @@ export class ReplicationState {
   ) {
     this.logger = logger.extend("ReplicationState");
     rxReplicationState.error$.subscribe((error) => {
-      replicationErrorLogger(error, logger);
       if (
         error.parameters.errors?.find((error) =>
           error.message.includes("NetworkError"),
+        ) ||
+        error.parameters.errors?.find((error) =>
+          error.message.includes("Failed to fetch"),
         )
       ) {
         this.state$.next(ReplicationStateEnum.NO_CONNECTION);
       } else {
         this.state$.next(ReplicationStateEnum.ERROR);
       }
+      replicationErrorLogger(error, logger);
     });
   }
 

@@ -22,15 +22,30 @@ export function useReplicationState() {
       workshopsReplication,
     ];
 
-    let resultState = ReplicationStateEnum.INITIALIZING;
-    for (const stateKey in ReplicationStateEnum) {
+    const {
+      ERROR,
+      NO_CONNECTION,
+      WAIT_FOR_LEADER,
+      INITIALIZING,
+      SYNCING,
+      SYNCED,
+    } = ReplicationStateEnum;
+    const replicationStatePrioList: Record<ReplicationStateEnum, unknown> = {
+      ERROR,
+      NO_CONNECTION,
+      WAIT_FOR_LEADER,
+      INITIALIZING,
+      SYNCING,
+      SYNCED,
+    };
+    for (const stateKey of Object.keys(replicationStatePrioList)) {
       const enumState =
         ReplicationStateEnum[stateKey as keyof typeof ReplicationStateEnum];
       if (replicationStates.some((state) => state === enumState)) {
-        resultState = enumState;
+        return enumState;
       }
     }
-    return resultState;
+    return INITIALIZING;
   }, [
     elementsReplication,
     sectionsReplication,
