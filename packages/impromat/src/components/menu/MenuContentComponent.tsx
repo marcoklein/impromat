@@ -26,7 +26,7 @@ import {
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";
-import { AccountCardComponent } from "./AccountCardComponent";
+import { AccountMenuItemComponent } from "./AccountMenuItemComponent";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 export const MenuContentComponent: React.FC = () => {
@@ -54,7 +54,7 @@ export const MenuContentComponent: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <AccountCardComponent></AccountCardComponent>
+        <AccountMenuItemComponent></AccountMenuItemComponent>
         <IonItemGroup>
           <IonItemDivider>
             <IonLabel>Navigation</IonLabel>

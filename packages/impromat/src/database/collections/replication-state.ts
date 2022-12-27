@@ -18,7 +18,7 @@ export const REPLICATION_STATE_MAP: Record<
   { color: string }
 > = {
   [ReplicationStateEnum.ERROR]: { color: "danger" },
-  [ReplicationStateEnum.NO_CONNECTION]: { color: "danger" },
+  [ReplicationStateEnum.NO_CONNECTION]: { color: "warning" },
   [ReplicationStateEnum.WAIT_FOR_LEADER]: { color: "warning" },
   [ReplicationStateEnum.INITIALIZING]: { color: "primary" },
   [ReplicationStateEnum.SYNCING]: { color: "success" },

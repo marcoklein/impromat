@@ -1,18 +1,13 @@
-import { IonItemDivider, IonLabel, IonText } from "@ionic/react";
+import { IonItem, IonItemDivider, IonLabel, IonSpinner } from "@ionic/react";
 import { logIn, person, sync } from "ionicons/icons";
-import { useReplicationState } from "../../database/use-replication-state";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { routeAccount, routeProfile } from "../../routes/shared-routes";
+import { ReplicationStateIconComponent } from "../ReplicationStateIconComponent";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 interface ContainerProps {}
 
-/**
- * Renders an item with a Sliding Option for editing.
- */
-export const AccountCardComponent: React.FC<ContainerProps> = () => {
-  const { state: replicationState, stateColor: replicationStateColor } =
-    useReplicationState();
+export const AccountMenuItemComponent: React.FC<ContainerProps> = () => {
   const isLoggedIn = useIsLoggedIn();
 
   if (isLoggedIn === true) {
@@ -31,9 +26,7 @@ export const AccountCardComponent: React.FC<ContainerProps> = () => {
           label="Synchronization"
           routerLink={routeAccount()}
         >
-          <IonText slot="end" color={replicationStateColor}>
-            {replicationState}
-          </IonText>
+          <ReplicationStateIconComponent></ReplicationStateIconComponent>
         </MenuItemComponent>
       </>
     );
@@ -53,5 +46,14 @@ export const AccountCardComponent: React.FC<ContainerProps> = () => {
       </>
     );
   }
-  return <></>;
+  return (
+    <>
+      <IonItemDivider>
+        <IonLabel>Account</IonLabel>
+      </IonItemDivider>
+      <IonItem>
+        <IonSpinner></IonSpinner>
+      </IonItem>
+    </>
+  );
 };
