@@ -6,7 +6,9 @@ import {
   IonHeader,
   IonIcon,
   IonImg,
+  IonItemDivider,
   IonItemGroup,
+  IonLabel,
   IonMenuToggle,
   IonNote,
   IonRouterLink,
@@ -14,26 +16,17 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {
-  albums,
-  close,
-  home,
-  information,
-  library,
-  person,
-} from "ionicons/icons";
+import { close, documents, home, information, library } from "ionicons/icons";
 import { environment } from "../../environment";
-import { Tabs } from "../../pages/library/components/LibraryContentComponent";
-import { routeLibraryTab } from "../../pages/library/library-routes";
+import { routeLibrary } from "../../pages/library/library-routes";
 import {
   routeAbout,
-  routeAccount,
   routeHome,
   routeLegal,
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";
-import { InfoItemComponent } from "../InfoItemComponent";
+import { AccountCardComponent } from "./AccountCardComponent";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 export const MenuContentComponent: React.FC = () => {
@@ -59,120 +52,45 @@ export const MenuContentComponent: React.FC = () => {
             </IonMenuToggle>
           </IonButtons>
         </IonToolbar>
-        {/* <IonToolbar>
-          <IonCard>
-            <IonCardHeader>
-              <IonCardTitle>Account</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              Login to backup and synchronize workshops.
-            </IonCardContent>
-            <IonButton
-              fill="outline"
-              expand="block"
-              routerLink={routeAccount()}
-            >
-              <IonIcon icon={person} slot="start"></IonIcon>
-              Login
-            </IonButton>
-          </IonCard>
-        </IonToolbar> */}
       </IonHeader>
       <IonContent fullscreen>
+        <AccountCardComponent></AccountCardComponent>
         <IonItemGroup>
+          <IonItemDivider>
+            <IonLabel>Navigation</IonLabel>
+          </IonItemDivider>
+          <MenuItemComponent
+            routerLink={routeWorkshops()}
+            icon={documents}
+            label="Workshops"
+          ></MenuItemComponent>
+        </IonItemGroup>
+        <IonItemGroup>
+          <MenuItemComponent
+            routerLink={routeLibrary()}
+            icon={library}
+            label="Exercises & Games"
+          ></MenuItemComponent>
+        </IonItemGroup>
+        <IonItemGroup>
+          <IonItemDivider>
+            <IonLabel>More</IonLabel>
+          </IonItemDivider>
           <MenuItemComponent
             exact
             routerLink={routeHome()}
             icon={home}
-            label="Home"
+            label="Home Page"
           ></MenuItemComponent>
-        </IonItemGroup>
-        <MenuItemComponent
-          routerLink={routeAccount()}
-          icon={person}
-          label="Account"
-        ></MenuItemComponent>
-        <IonItemGroup>
-          {/* <IonListHeader color="secondary">
-            <IonLabel>Workshops</IonLabel>
-          </IonListHeader> */}
-          <MenuItemComponent
-            routerLink={routeWorkshops()}
-            icon={albums}
-            label="Workshops"
-          ></MenuItemComponent>
-          {/* <MenuItemComponent
-            routerLink={routeLibrary()}
-            icon={globeOutline}
-            label="Explore"
-          ></MenuItemComponent> */}
-          {/* <MenuItemComponent
-            routerLink={routeLibrary()}
-            icon={people}
-            label="Share"
-          ></MenuItemComponent> */}
-        </IonItemGroup>
-        <IonItemGroup>
-          <MenuItemComponent
-            routerLink={routeLibraryTab(Tabs.SEARCH)}
-            icon={library}
-            label="Exercises & Games"
-          ></MenuItemComponent>
-          {/* <IonItemDivider color="secondary">
-            <IonLabel>Exercises & Games</IonLabel>
-          </IonItemDivider>
-          <MenuItemComponent
-            routerLink={routeLibraryTab(Tabs.SEARCH)}
-            icon={search}
-            label="Explore"
-          ></MenuItemComponent>
-          <MenuItemComponent
-            routerLink={routeLibraryTab(Tabs.FAVORITES)}
-            icon={heart}
-            label="Like"
-          ></MenuItemComponent>
-          <MenuItemComponent
-            routerLink={routeLibraryTab(Tabs.CREATE)}
-            icon={create}
-            label="Create"
-          ></MenuItemComponent> */}
-        </IonItemGroup>
-        <IonItemGroup>
-          {/* <IonItemDivider>
-            <IonLabel>More</IonLabel>
-          </IonItemDivider> */}
           <MenuItemComponent
             routerLink={routeAbout()}
             icon={information}
             label="About"
           ></MenuItemComponent>
-          {/* <MenuItemComponent
-            routerLink={routeLegal()}
-            icon={information}
-            label="Legal Notice"
-          ></MenuItemComponent>
-          <MenuItemComponent
-            routerLink={routePrivacyPolicy()}
-            icon={information}
-            label="Data Privacy"
-          ></MenuItemComponent> */}
         </IonItemGroup>
       </IonContent>
       <IonFooter className="ion-no-border">
         <IonToolbar>
-          <InfoItemComponent
-            color="light"
-            message="Impromat is currently under development and not feature complete
-            yet."
-          ></InfoItemComponent>
-        </IonToolbar>
-        <IonToolbar>
-          {/* <IonNote className="ion-padding-horizontal">
-            It is a beautiful day.
-          </IonNote>
-          <IonNote slot="end" className="ion-padding-horizontal">
-            v{environment.VERSION}
-          </IonNote> */}
           <IonRouterLink
             className="ion-padding-horizontal"
             routerLink={routeLegal()}

@@ -1,5 +1,8 @@
 import { useMemo } from "react";
-import { ReplicationStateEnum } from "./collections/replication-state";
+import {
+  ReplicationStateEnum,
+  REPLICATION_STATE_MAP,
+} from "./collections/replication-state";
 import { useReplicationStateOfCollection } from "./use-replication-state-of-collection";
 
 /**
@@ -37,6 +40,7 @@ export function useReplicationState() {
 
   return {
     state,
+    stateColor: REPLICATION_STATE_MAP[state].color,
     elementsReplication,
     sectionsReplication,
     usersReplication,

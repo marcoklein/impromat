@@ -5,6 +5,7 @@ export const ROUTE_IMPROBIB_ELEMENT_ID = ":libraryPartId";
 export const routeHome = () => "/";
 export const routeAbout = () => "/about";
 export const routePrivacyPolicy = () => "/privacy";
+export const routeProfile = () => "/profile";
 export const routeAccount = () => "/account";
 export const routeLegal = () => "/legal";
 export const routeAccountSignin = () => "/account/signin";

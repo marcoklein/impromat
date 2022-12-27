@@ -1,6 +1,5 @@
 import { IonIcon, IonItem, IonItemDivider, IonLabel } from "@ionic/react";
 import { logOut } from "ionicons/icons";
-import { REPLICATION_STATE_MAP } from "../../../database/collections/replication-state";
 import { useReplicationState } from "../../../database/use-replication-state";
 import { useLogout } from "../../../hooks/use-logout";
 
@@ -8,8 +7,7 @@ interface ContainerProps {}
 
 export const AccountSignedInComponent: React.FC<ContainerProps> = () => {
   const { triggerLogout } = useLogout();
-  const { state } = useReplicationState();
-  const color = REPLICATION_STATE_MAP[state].color;
+  const { state, stateColor: color } = useReplicationState();
 
   return (
     <>
@@ -21,8 +19,10 @@ export const AccountSignedInComponent: React.FC<ContainerProps> = () => {
       </IonItem>
       <IonItemDivider></IonItemDivider>
       <IonItem>
-        <IonLabel>Synchronization Status</IonLabel>
-        <IonLabel color={color}>{state}</IonLabel>
+        <IonLabel className="ion-text-wrap">Synchronization Status</IonLabel>
+        <IonLabel slot="end" color={color}>
+          {state}
+        </IonLabel>
       </IonItem>
       <IonItemDivider></IonItemDivider>
       <IonItem onClick={triggerLogout} button={true}>

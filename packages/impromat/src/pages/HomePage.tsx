@@ -82,14 +82,15 @@ export const HomePage: React.FC = () => {
             justifyContent: "center",
           }}
         >
-          <div style={{ maxWidth: "768px" }}>
-            <IonItemDivider></IonItemDivider>
+          <div style={{ maxWidth: "768px" }} className="ion-margin-top">
             <IonText>
               <h2>Made For Improvisers</h2>
             </IonText>
             <IonText color="medium">
-              It is open for everyone who wants to play, is playing, or wants to
-              share knowledge about improvisational theatre.
+              Impromat is made for improv beginners who want to hold improv
+              workshops, established groups that want further inspiration, or
+              regular workshop leaders that look for a one-stop app for managing
+              their improv workshops.
             </IonText>
             <IonText color="dark">
               <h3>Improv Beginners</h3>
@@ -106,9 +107,9 @@ export const HomePage: React.FC = () => {
             </IonText>
             <IonText color="medium">
               <p>
-                Are you playing in an improv group already and you are looking
-                for new inspiration for your next workshops? Impromat helps you
-                with finding new exercices and games around certain topics.
+                Are you playing in an improv group and you are looking for new
+                inspiration for your next workshop? Impromat helps you with
+                finding new exercices and games around certain topics.
               </p>
             </IonText>
             <IonText color="dark">
@@ -129,7 +130,6 @@ export const HomePage: React.FC = () => {
               <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
               Create a Workshop
             </IonButton>
-            <IonItemDivider></IonItemDivider>
             <IonText color="dark">
               <h2>Everything You Need</h2>
             </IonText>
@@ -188,13 +188,12 @@ export const HomePage: React.FC = () => {
               <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
               Open Element Library
             </IonButton>
-            <IonItemDivider></IonItemDivider>
             <IonText color="dark">
               <h3>You Want More?</h3>
             </IonText>
             <IonText color="medium">
               <p>
-                Impromat lives from your workshop and elements contributions. If
+                Impromat lives from your workshop and element contributions. If
                 you do something cool with it, have feedback, or new ideas drop
                 an email at{" "}
                 <a href="mailto:impromat@marcoklein.dev">
