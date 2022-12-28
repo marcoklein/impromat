@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.19.0
+
+### Minor Changes
+
+- 096a05c: Add a new landing page with more information about Impromat.
+- 096a05c: Change primary color.
+- 096a05c: Show synchronization status in menu.
+
 ## 0.18.1
 
 ### Patch Changes
