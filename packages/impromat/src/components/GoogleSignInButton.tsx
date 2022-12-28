@@ -10,16 +10,27 @@ import React from "react";
  * @param props
  * @returns
  */
-export const GoogleSigninButton: React.FC<
+export const GoogleSignInButton: React.FC<
   React.ComponentPropsWithoutRef<typeof IonButton>
 > = (props) => (
-  <IonButton {...props} style={{ "--background": "white" }}>
+  <IonButton
+    {...props}
+    className="google-sign-in-button"
+    style={{ "--background": "#4285F4" }}
+  >
     <div
       slot="start"
-      style={{ width: "18px", height: "18px", marginRight: "24px" }}
+      className="google-logo"
+      style={{
+        padding: "6px",
+        width: "30px",
+        height: "30px",
+        marginRight: "16px",
+        backgroundColor: "#fff",
+      }}
     >
       <img alt="Google Logo" src="assets/google-logo.png"></img>
     </div>
-    <span style={{ color: "#000" }}>Google Sign In</span>
+    <span style={{ color: "#fff" }}>Google Sign In</span>
   </IonButton>
 );

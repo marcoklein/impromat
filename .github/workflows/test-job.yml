@@ -24,6 +24,8 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn lint
       - run: yarn test
+        env:
+          DEBUG: pw:webserver
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         if: github.event_name == 'pull_request'
