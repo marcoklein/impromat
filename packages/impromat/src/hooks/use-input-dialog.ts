@@ -5,6 +5,7 @@ import { useHistoryListener } from "./use-history-listener";
 
 interface DialogProps {
   header: string;
+  message?: string;
   initialText?: string;
   buttonText?: string;
   onAccept: (text: string) => boolean | void | Promise<void>;
@@ -33,6 +34,7 @@ export function useInputDialog() {
     isMultiline,
     buttonText,
     maxlength,
+    message,
     emptyInputMessage,
     placeholder,
   }: DialogProps) => {
@@ -42,6 +44,7 @@ export function useInputDialog() {
     });
     presentAlert({
       header: `${displayName}`,
+      message,
       buttons: [
         {
           text: buttonText ?? "Save",

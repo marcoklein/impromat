@@ -2,10 +2,11 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonNote,
   IonRouterLink,
   useIonToast,
 } from "@ionic/react";
-import { GoogleSigninButton } from "../../../components/GoogleSigninButton";
+import { GoogleSignInButton } from "../../../components/GoogleSignInButton";
 import { enableAutoLogin } from "../../../database/enable-auto-login";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
@@ -40,25 +41,27 @@ export const AccountSignInComponent: React.FC<ContainerProps> = ({
 
   return (
     <IonList>
-      <IonItem>
+      <IonItem lines="none">
         <IonLabel className="ion-text-wrap">
           <h1>Synchronize and share your improv workshops</h1>
         </IonLabel>
       </IonItem>
-      <IonItem>
+      <IonItem lines="none">
         <IonLabel className="ion-text-wrap">
           Sign in to synchronize your workshops across all your devices.
         </IonLabel>
       </IonItem>
       <div className="ion-padding-horizontal">
-        <GoogleSigninButton onClick={() => loginClick()}></GoogleSigninButton>
+        <GoogleSignInButton onClick={() => loginClick()}></GoogleSignInButton>
       </div>
-      <IonItem>
-        <IonLabel>
-          By signing in, you agree to the{" "}
-          <IonRouterLink routerLink={routePrivacyPolicy()}>
-            Privacy Policy
-          </IonRouterLink>
+      <IonItem lines="none">
+        <IonLabel className="ion-text-wrap">
+          <IonNote>
+            By signing in, you agree to the{" "}
+            <IonRouterLink routerLink={routePrivacyPolicy()}>
+              Privacy Policy
+            </IonRouterLink>
+          </IonNote>
         </IonLabel>
       </IonItem>
     </IonList>

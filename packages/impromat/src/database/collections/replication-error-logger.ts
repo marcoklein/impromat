@@ -18,6 +18,7 @@ export function replicationErrorLogger(
   ) {
     logger("Unauthorized error");
   } else {
-    throw error;
+    logger("Unhandled replication error", error);
+    logger("Unhandled replication errors:", error.parameters.errors);
   }
 }

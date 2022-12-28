@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
 
 pageTest.describe("Workshop Page", () => {
@@ -32,6 +33,6 @@ pageTest.describe("Workshop Page", () => {
     // TODO test for confirmation dialog
     // then
     await page.waitForURL("./workshop");
-    await page.waitForSelector('text="Welcome to Impromat"');
+    await expect(page.getByText("Add Workshop")).toBeVisible();
   });
 });

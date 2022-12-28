@@ -59,7 +59,7 @@
   "scripts": {
     "start": "yarn compile-markdown && react-scripts start",
     "dev": "yarn start",
-    "lint": "eslint src test",
+    "lint": "eslint src test --max-warnings 0",
     "lint:fix": "eslint src --fix",
     "build": "yarn copy-improbib && yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",
     "build:serve": "serve --config serve.config.json build",
