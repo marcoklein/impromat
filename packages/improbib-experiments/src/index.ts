@@ -1,72 +1,87 @@
-import * as fs from "fs/promises";
-import { Improbib, ImprobibEntry } from "improbib";
-import { environment } from "./environment";
+import { findSimiliarTags } from "./find-similiar-tags";
+import { loadImprobibFromFile } from "./load-improbib-from-file";
+import { findRecommendationsForElement } from "./recommendations";
+import { TagMatrix } from "./tag-matrix";
+import { findTagsOftenUsedWithOthers } from "./tags-often-used-with-others";
 
-const file = await fs.readFile(`${environment.INPUT_FILE_PATH}`);
-const jsonInput = file.toString();
-const improbib = JSON.parse(jsonInput) as Improbib;
-const improbibEntries = improbib.elements;
-
-// which tags are frequently used together?
-export function mentionTheSameTageInElement() {}
-
-const improwikiDeElements = improbibEntries.filter(
-  (d) =>
-    d.type === "element" &&
-    d.sourceName === "improwiki" &&
-    d.languageCode === "de",
+const improbib = await loadImprobibFromFile();
+const improbibElements = improbib.elements;
+const improwikiDeElements = improbibElements.filter(
+  ({ sourceName, languageCode }) =>
+    sourceName === "improwiki" && languageCode === "de",
 );
 
-const tags = [...new Set(improwikiDeElements.flatMap((d) => d.tags))];
-console.log("number of tags = ", tags.length);
-console.log("tags = ", tags.join(", "));
-const matrix = prepareMatrix(tags.length);
-fillMatrix(matrix, tags, improwikiDeElements);
+const tagMatrix = TagMatrix.fromElements(improwikiDeElements);
 
-const baseTag = "Gruppe";
+console.log("===========");
+console.log("Similiar Tags");
+console.log("===========");
+findSimiliarTags("warmup", tagMatrix);
+
+const meaningfulTags = tagMatrix.frequency.findFrequentlyUsedTags();
+const seldomTags = tagMatrix.frequency.findUnfrequentlyUsedTags();
+
 console.log(
-  'number of elements with tag "Gruppe" = ',
-  improwikiDeElements.filter((d) => d.tags.includes(baseTag)).length,
+  "meaningfulTags = ",
+  meaningfulTags.map((d) => `${d.tag} (${d.count})`).join(", "),
 );
 
-const tagsNearBaseTag = matrix[tags.indexOf(baseTag)];
-console.log("tagsNearBaseTag = ", tagsNearBaseTag.join(", "));
-const similiarTagsDict = tagsNearBaseTag.map((d, i) => ({
-  tag: tags[i],
-  count: d,
-}));
-const similiarTags = similiarTagsDict.sort((a, b) => b.count - a.count);
 console.log(
-  "similiarTags = ",
-  similiarTags.map((d) => `${d.tag} (${d.count})`).join(", "),
+  "seldomTags = ",
+  seldomTags.map((d) => `${d.tag} (${d.count})`).join(", "),
 );
 
-function fillMatrix(
-  matrix: number[][],
-  tags: string[],
-  elements: ImprobibEntry[],
-) {
-  for (const tag of tags) {
-    for (const element of elements) {
-      const tagsOfElement = element.tags;
-      if (tagsOfElement.includes(tag)) {
-        for (const tagOfElement of tagsOfElement) {
-          const index = tags.indexOf(tagOfElement);
-          matrix[tags.indexOf(tag)][index] += 1;
-        }
-      }
-    }
-  }
-}
+const referencedTags = findTagsOftenUsedWithOthers(tagMatrix).sort(
+  (a, b) => b.references - a.references,
+);
+console.log(
+  "frequentlyReferenced = ",
+  referencedTags.map((d) => `${d.tag} (${d.references})`).join(", "),
+);
 
-function prepareMatrix(dimensions: number) {
-  const matrix: number[][] = [];
-  for (let i = 0; i < dimensions; i++) {
-    const row = [];
-    for (let j = 0; j < dimensions; j++) {
-      row.push(0);
-    }
-    matrix.push(row);
-  }
-  return matrix;
+const element = improbib.elements.filter(
+  // ({ name }) => name === "Solo-Dreieck",
+  // ({ name }) => name === "Freeze Tag",
+  // ({ name }) => name === "Promiachterbahn",
+  // ({ name }) => name === "You",
+  ({ name }) => name === "Schnittmuster",
+)[0];
+
+console.log("===========");
+console.log(`Recommendations for ${element.name}`);
+console.log("===========");
+
+const recommendations = findRecommendationsForElement(
+  element,
+  improbib,
+  tagMatrix,
+).slice(0, 20);
+console.log(
+  `recommendations for ${element.name} = \n`,
+  recommendations
+    .map(
+      (d) =>
+        `${d.element.name}\t(${d.distance})\t[reasons: ${d.reasons
+          .map((reason) => `${reason.text} (${reason.distance})}`)
+          .join(", ")}]`,
+    )
+    .join("\n"),
+);
+
+const elementRecommendationMap: Record<string, any> = {};
+for (const element of improwikiDeElements) {
+  const recommendations = findRecommendationsForElement(
+    element,
+    improbib,
+    tagMatrix,
+  );
+  elementRecommendationMap[element.name] = recommendations.map((d) => ({
+    name: d.element.name,
+    distance: d.distance,
+    reasons: d.reasons,
+  }));
 }
+// await writeFile(
+//   "elementRecommendationsMap.json",
+//   JSON.stringify(elementRecommendationMap, undefined, 2),
+// );
