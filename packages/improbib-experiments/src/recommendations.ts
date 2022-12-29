@@ -1,5 +1,5 @@
 import { Improbib, ImprobibElement } from "improbib";
-import { findSimiliarTags } from "./find-similiar-tags";
+import { findSimilarTags } from "./find-similar-tags";
 import { TagMatrix } from "./tag-matrix";
 
 interface Recommendation {
@@ -42,7 +42,7 @@ export function findRecommendationsForElement(
       );
     recommendations.push(...tagRecommendations);
 
-    const similiarTagRecommendations = findSimiliarTags(tag, tagMatrix).flatMap(
+    const similiarTagRecommendations = findSimilarTags(tag, tagMatrix).flatMap(
       (similiarTag) => {
         const { count: similiarTagCount, tag: similiarTagName } = similiarTag;
         if (similiarTagCount === 0) {

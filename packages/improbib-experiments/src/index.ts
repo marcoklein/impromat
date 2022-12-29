@@ -1,4 +1,4 @@
-import { findSimiliarTags } from "./find-similiar-tags";
+import { findSimilarTags } from "./find-similar-tags";
 import { loadImprobibFromFile } from "./load-improbib-from-file";
 import { findRecommendationsForElement } from "./recommendations";
 import { TagMatrix } from "./tag-matrix";
@@ -16,7 +16,7 @@ const tagMatrix = TagMatrix.fromElements(improwikiDeElements);
 console.log("===========");
 console.log("Similiar Tags");
 console.log("===========");
-findSimiliarTags("warmup", tagMatrix);
+findSimilarTags("warmup", tagMatrix);
 
 const meaningfulTags = tagMatrix.frequency.findFrequentlyUsedTags();
 const seldomTags = tagMatrix.frequency.findUnfrequentlyUsedTags();

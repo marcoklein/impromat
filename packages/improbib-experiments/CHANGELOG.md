@@ -2,4 +2,5 @@
 
 ## 0.1.0
 
-- Initial setup
+- Recommendation of similar elements
+- Initial repository
