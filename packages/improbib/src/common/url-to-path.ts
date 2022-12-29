@@ -7,5 +7,8 @@ const REGEX_PATH_NAME = /\w+(\.\w+)+.*/;
  * @returns
  */
 export function urlToPath(url: string) {
-  return new RegExp(REGEX_PATH_NAME).exec(url)?.[0];
+  return new RegExp(REGEX_PATH_NAME)
+    .exec(url)?.[0]
+    .replaceAll("?", "_")
+    .replaceAll(":", "_");
 }
