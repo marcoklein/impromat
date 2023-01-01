@@ -119,7 +119,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
               onClick={() => history.replace(createTabsRoute(Tabs.CREATE))}
             >
               <IonIcon icon={brush}></IonIcon>
-              <IonLabel>Custom</IonLabel>
+              <IonLabel>My Library</IonLabel>
             </IonSegmentButton>
           </IonSegment>
         </IonToolbar>

@@ -69,7 +69,7 @@ export const MenuContentComponent: React.FC = () => {
           <MenuItemComponent
             routerLink={routeLibrary()}
             icon={library}
-            label="Exercises & Games"
+            label="Element Library"
           ></MenuItemComponent>
         </IonItemGroup>
         <IonItemGroup>
