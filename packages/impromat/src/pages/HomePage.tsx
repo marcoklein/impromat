@@ -8,6 +8,11 @@ import {
   IonRouterLink,
   IonText,
   ScrollCustomEvent,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonHeader,
 } from "@ionic/react";
 import { arrowForwardOutline, information, menu } from "ionicons/icons";
 import { useState } from "react";
@@ -43,6 +48,7 @@ export const HomePage: React.FC = () => {
             </IonButton>
           </IonMenuToggle>
         </div>
+
         <div
           style={{
             minHeight: "85%",
@@ -60,11 +66,11 @@ export const HomePage: React.FC = () => {
                 margin: "0 auto",
               }}
             >
-              <IonImg src="/assets/logo.svg" alt="Impromat Logo"></IonImg>
+              <IonImg src="/assets/logo.svg" alt="Impromat Logo" />
             </div>
-            <IonText color="dark">
-              <h1 style={{ fontSize: "2rem" }}>Impromat</h1>
-            </IonText>
+            <IonHeader>
+              <h1 style={{ fontSize: "2rem" }}>Welcome to Impromat</h1>
+            </IonHeader>
             <IonText color="dark">
               <h1>
                 App for planning, giving, and sharing improvisational theatre
@@ -73,6 +79,7 @@ export const HomePage: React.FC = () => {
             </IonText>
           </div>
         </div>
+
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{ maxWidth: "900px" }} className="ion-margin-top">
             <IonText color="dark">
@@ -83,113 +90,135 @@ export const HomePage: React.FC = () => {
               offers all necessary features to plan your upcoming improv
               sessions.
             </IonText>
-            <IonText color="dark">
-              <h3>Improv Workshops</h3>
-            </IonText>
-            <IonText color="dark">
-              <p>
-                <b>Plan and manage</b> your own improvisational theatre
-                workshops, <b>share</b> them with the community or <b>find</b>{" "}
-                inspiring workshops from other improvisers.
-              </p>
-              <IonButton
-                fill="solid"
-                routerLink={routeWorkshops()}
-                className="ion-margin-top"
-              >
-                <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-                Create a Workshop
-              </IonButton>
-              <p>
-                Improv workshops often have an overall <b>topic</b> and are
-                built up by <b>sections</b> (e.g. warm-up), in which different
-                elements (exercises and games) are ordered. You can add your own{" "}
-                <b>notes</b> to the workshop as well as to every single element
-                to adapt the exercises to your workshop topic and style.
-              </p>
-              <p>
-                For optimal time keeping, you can specify the <b>timeframe</b>{" "}
-                of every element in advance and use the <b>presentation mode</b>{" "}
-                during the workshop.
-              </p>
-            </IonText>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>
+                  <h3>Improv Workshops</h3>
+                </IonCardTitle>
+              </IonCardHeader>
 
-            <IonText color="dark">
-              <h3>Improv Library</h3>
-            </IonText>
-            <IonText color="dark">
-              <p>
-                Explore over 1000 existing improv exercises and games in the{" "}
-                <b>Element Library</b>. They have beeen extracted from different{" "}
-                <b>wiki sources</b> in German and English:{" "}
-                <a
-                  href="https://improwiki.com"
-                  target="_blank"
-                  rel="noreferrer"
+              <IonCardContent>
+                <p>
+                  <b>Plan and manage</b> your own improvisational theatre
+                  workshops, <b>share</b> them with the community or <b>find</b>{" "}
+                  inspiring workshops from other improvisers.
+                </p>
+                <IonButton
+                  fill="solid"
+                  routerLink={routeWorkshops()}
+                  className="ion-margin-top"
                 >
-                  Improwiki
-                </a>
-                ,{" "}
-                <a
-                  href="https://www.learnimprov.com"
-                  target="_blank"
-                  rel="noreferrer"
+                  <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+                  Create a Workshop
+                </IonButton>
+              </IonCardContent>
+              <IonCardContent>
+                <p>
+                  Improv workshops often have an overall <b>topic</b> and are
+                  built up by <b>sections</b> (e.g. warm-up), in which different
+                  elements (exercises and games) are ordered. You can add your
+                  own <b>notes</b> to the workshop as well as to every single
+                  element to adapt the exercises to your workshop topic and
+                  style.
+                </p>
+                <p>
+                  For optimal time keeping, you can specify the <b>timeframe</b>{" "}
+                  of every element in advance and use the{" "}
+                  <b>presentation mode</b> during the workshop.
+                </p>
+              </IonCardContent>
+            </IonCard>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>
+                  <h3>Improv Library</h3>
+                </IonCardTitle>
+              </IonCardHeader>
+
+              <IonCardContent>
+                <p>
+                  Explore over 1000 existing improv exercises and games in the{" "}
+                  <b>Element Library</b>. They have beeen extracted from
+                  different <b>wiki sources</b> in German and English:{" "}
+                  <a
+                    href="https://improwiki.com"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Improwiki
+                  </a>
+                  ,{" "}
+                  <a
+                    href="https://www.learnimprov.com"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Learnimprov
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://wiki.improvresourcecenter.com"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Improv resource center
+                  </a>
+                  . Use the <b>Recommendations</b> feature to find similiar
+                  elements to add to your workshop.
+                </p>
+
+                <IonButton
+                  fill="solid"
+                  color="tertiary"
+                  routerLink={routeLibrary()}
                 >
-                  Learnimprov
-                </a>{" "}
-                and{" "}
-                <a
-                  href="https://wiki.improvresourcecenter.com"
-                  target="_blank"
-                  rel="noreferrer"
+                  <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+                  Open Element Library
+                </IonButton>
+              </IonCardContent>
+            </IonCard>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>
+                  <h3>Customize Your Improv</h3>
+                </IonCardTitle>
+              </IonCardHeader>
+
+              <IonCardContent>
+                <p>
+                  For easy access, tag certain elements, e.g. exercises you
+                  commonly use in your workshops, as <b>Favorites</b>. If you
+                  cannot find an exercise or game in the library, <b>create</b>{" "}
+                  your own element and incorporate them in your workshop(s).
+                </p>
+
+                <IonButton
+                  fill="solid"
+                  color="danger"
+                  routerLink={routeLibraryTab(Tabs.FAVORITES)}
                 >
-                  Improv resource center
-                </a>
-                . Use the <b>Recommendations</b> feature to find similiar
-                elements to add to your workshop.
-              </p>
-            </IonText>
-            <IonButton
-              fill="solid"
-              color="tertiary"
-              routerLink={routeLibrary()}
-            >
-              <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-              Open Element Library
-            </IonButton>
-            <IonText color="dark">
-              <h3>Customize Your Improv</h3>
-            </IonText>
-            <IonText color="dark">
-              <p>
-                For easy access, tag certain elements, e.g. exercises you
-                commonly use in your workshops, as <b>Favorites</b>. If you
-                cannot find an exercise or game in the library, <b>create</b>{" "}
-                your own element and incorporate them in your workshop(s).
-              </p>
-            </IonText>
-            <IonButton
-              fill="solid"
-              color="danger"
-              routerLink={routeLibraryTab(Tabs.FAVORITES)}
-            >
-              <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-              Open Favorite Elements
-            </IonButton>
-            <p>
-              The <b>Login</b> via Google account allows you to{" "}
-              <b>synchronize</b> your workshops, favorite elements and
-              personally created elements on all devices. Thus, you can plan a
-              workshop on your computer with the web version of Impromat and use
-              the <b>Desktop app</b> on your smartphone during the workshop.
-              (Don't worry, your improv data is not shared with Google and
-              safely hosted on a server based in Germany — the Impromat server
-              does not store any login or personal information. See our{" "}
-              <IonRouterLink routerLink={routePrivacyPolicy()}>
-                Privacy Policy
-              </IonRouterLink>{" "}
-              for more information.)
-            </p>
+                  <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+                  Open Favorite Elements
+                </IonButton>
+              </IonCardContent>
+              <IonCardContent>
+                <p>
+                  The <b>Login</b> via Google account allows you to{" "}
+                  <b>synchronize</b> your workshops, favorite elements and
+                  personally created elements on all devices. Thus, you can plan
+                  a workshop on your computer with the web version of Impromat
+                  and use the <b>Desktop app</b> on your smartphone during the
+                  workshop. (Don't worry, your improv data is not shared with
+                  Google and safely hosted on a server based in Germany — the
+                  Impromat server does not store any login or personal
+                  information. See our{" "}
+                  <IonRouterLink routerLink={routePrivacyPolicy()}>
+                    Privacy Policy
+                  </IonRouterLink>{" "}
+                  for more information.)
+                </p>
+              </IonCardContent>
+            </IonCard>
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
