@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "dev": "nodemon",
+    "dev": "yarn copy-improbib && nodemon",
     "test": "mocha --loader=ts-node/esm test/**/*.test.ts",
     "copy-improbib": "cp ../improbib/output/improbib.json ./assets/improbib.json"
   },

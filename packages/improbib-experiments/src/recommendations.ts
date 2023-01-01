@@ -60,18 +60,19 @@ export function findRecommendationsForElement(
         }
         return improbib.elements
           .filter((element) => element.tags.includes(similiarTagName))
-          .map(
-            (element): Recommendation => ({
+          .map((element): Recommendation => {
+            const distance = similiarTagCount;
+            return {
               element: element,
-              distance: similiarTagCount,
+              distance,
               reasons: [
                 {
                   text: `${similiarTagName}`,
-                  distance: similiarTagCount,
+                  distance,
                 },
               ],
-            }),
-          );
+            };
+          });
       },
     );
     recommendations.push(...similiarTagRecommendations);
