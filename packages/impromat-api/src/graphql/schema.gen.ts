@@ -185,7 +185,7 @@ export type QueryPullWorkshopsArgs = {
 export type Section = {
   color?: Maybe<Scalars['String']>;
   deleted?: Maybe<Scalars['Boolean']>;
-  elements: Array<Element>;
+  elementRefs: Array<Scalars['ID']>;
   id: Scalars['ID'];
   isCollapsed?: Maybe<Scalars['Boolean']>;
   /**
@@ -474,7 +474,7 @@ export interface SafeIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTy
 export type SectionResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Section'] = ResolversParentTypes['Section']> = {
   color?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   deleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  elements?: Resolver<Array<ResolversTypes['Element']>, ParentType, ContextType>;
+  elementRefs?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isCollapsed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isVisible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;

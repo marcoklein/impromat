@@ -20,7 +20,7 @@ export function enableWorkshopReplication(workshops: WorkshopCollection) {
       modifier: (doc: any) => {
         logger("Retrieved document %O", doc);
         doc.sections = doc.sections.map((item: any) => item.id);
-        doc.version = doc.version += 1;
+        logger("Modified document %O", doc);
         return doc;
       },
     },

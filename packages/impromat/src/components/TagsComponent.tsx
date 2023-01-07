@@ -1,7 +1,7 @@
 import { IonBadge, IonText } from "@ionic/react";
 
 interface ContainerProps {
-  tags: string[] | null | undefined;
+  tags: ReadonlyArray<string> | null | undefined;
 }
 
 /**

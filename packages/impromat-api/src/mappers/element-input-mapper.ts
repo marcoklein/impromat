@@ -1,5 +1,5 @@
 import { ElementModel } from "../database/element-model";
-import { Element, ElementInput } from "../graphql/schema.gen";
+import { ElementInput } from "../graphql/schema.gen";
 import { Mapper } from "./mapper";
 
 export class ElementInputMapper

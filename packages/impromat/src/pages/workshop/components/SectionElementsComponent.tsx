@@ -1,33 +1,92 @@
+import { IonSpinner } from "@ionic/react";
 import { useEffect, useState } from "react";
-import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
-import { ElementDocument } from "../../../database/collections/element/element-collection";
+import { DeepReadonlyObject } from "rxdb";
+import { ElementDocType } from "../../../database/collections/element/element-collection";
 import { SectionDocument } from "../../../database/collections/section/section-collection";
 import { WorkshopDocument } from "../../../database/collections/workshop/workshop-collection";
+import { useDocument } from "../../../database/use-document";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
+import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
 import { WorkshopElementItemComponent } from "./WorkshopElementItemComponent";
 
 interface ContainerProps {
   workshop: WorkshopDocument;
   section: SectionDocument;
-  onRemoveClick: (element: ElementDocument) => void;
+  onRemoveClick: (element: DeepReadonlyObject<ElementDocType>) => void;
   isReordering: boolean;
 }
 
 export const SectionElementsComponent: React.FC<ContainerProps> = ({
   workshop,
-  section,
+  section: sectionInput,
   onRemoveClick,
   isReordering,
 }) => {
   // const { document: section, isFetching } = useDocument("sections", sectionId);
-  const [elements, setElements] = useState<ElementDocument[]>([]);
+  const [elements, setElements] = useState<
+    DeepReadonlyObject<ElementDocType>[]
+  >([]);
+  const { document: section, isFetching: isSectionFetching } = useDocument(
+    "sections",
+    sectionInput.id,
+  );
+  // const { documents: elements, isFetching: isElementsFetching } = useDocuments(
+  //   "elements",
+  //   section?.elements,
+  // );
   const rxdb = useImpromatRxDb();
+  const logger = useComponentLogger("SectionElementsComponent");
+  useEffect(() => {
+    logger(section);
+  }, [section, logger]);
+
+  useStateChangeLogger(section, "section", logger);
+  useStateChangeLogger(isSectionFetching, "isSectionFetching", logger);
+  // useStateChangeLogger(isElementsFetching, "isElementsFetching", logger);
+
   useEffect(() => {
     if (section) {
+      const updateElementsOfSection = () => {
+        console.log("Searching for elements:", section.elements);
+        // const sectionElementIds = (section.elements as any).map(
+        //   (e: any) => e.id,
+        // );
+        const sectionElementIds = section.elements;
+        console.log("Mapped section element ids", sectionElementIds);
+        rxdb.elements
+          .findByIds(sectionElementIds ?? [])
+          .then((sectionElements) => {
+            const fetchedElements: DeepReadonlyObject<ElementDocType>[] = [];
+            for (const elementId of sectionElementIds) {
+              const currentElement = sectionElements.get(elementId);
+              if (!currentElement) {
+                console.warn(
+                  "Could not find element with id",
+                  elementId,
+                  "in section",
+                  section.id,
+                  "elements",
+                );
+                continue;
+              }
+              fetchedElements.push(currentElement.toJSON());
+            }
+            setElements(fetchedElements);
+          })
+          .catch((error) => {
+            console.error(
+              "Could not fetch elements of section",
+              section.id,
+              error,
+            );
+          });
+      };
       // TODO only listen for element ids!
       const subscription = rxdb.$.subscribe(() => {
-        section.populateElements().then(setElements);
+        updateElementsOfSection();
       });
-      section.populateElements().then(setElements);
+      updateElementsOfSection();
       return () => {
         subscription.unsubscribe();
       };
@@ -36,6 +95,9 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
     }
   }, [section, rxdb]);
 
+  if (!section) {
+    return <IonSpinner></IonSpinner>;
+  }
   if (section.isCollapsed || !section.elements || !elements) {
     return <></>;
   }

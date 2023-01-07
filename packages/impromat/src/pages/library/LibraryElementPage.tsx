@@ -66,9 +66,7 @@ export const LibraryElementPage: React.FC = () => {
 
   function addToWorkshop() {
     if (!mutations || !workshopId) return;
-    const element = documentElement
-      ? documentElement.toMutableJSON()
-      : improbibElement;
+    const element = documentElement ? documentElement : improbibElement;
     if (!element) return;
     if (improbibElement && !documentElement) {
       mutations.ensureElementExists(improbibElement);

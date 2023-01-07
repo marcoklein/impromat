@@ -150,7 +150,6 @@ export const resolvers: Resolvers = {
     pushElements: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       const { database } = ctx;
-      console.log("## received docs");
       const pushedRows = args.elementPushRows;
       const inputModels = database.getElements(ctx.session.userId) ?? [];
       const { models, conflicts } = handlePushRows(inputModels, pushedRows, {
@@ -163,7 +162,6 @@ export const resolvers: Resolvers = {
     pushSections: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       const { database } = ctx;
-      console.log("## received docs");
       const pushedRows = args.sectionPushRows;
       const inputModels = database.getSections(ctx.session.userId) ?? [];
       const { models, conflicts } = handlePushRows(inputModels, pushedRows, {
@@ -176,7 +174,6 @@ export const resolvers: Resolvers = {
     pushWorkshops: (root, args, ctx) => {
       if (!ctx.session?.userId) throw new Error("Unauthorized");
       const { database } = ctx;
-      console.log("## received docs");
       const pushedRows = args.workshopPushRows;
       const inputModels = database.getWorkshops(ctx.session.userId) ?? [];
       const { models, conflicts } = handlePushRows(inputModels, pushedRows, {

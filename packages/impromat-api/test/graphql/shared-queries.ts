@@ -16,10 +16,7 @@ export const PULL_WORKSHOPS_QUERY = gql`
         sections {
           id
           name
-          elements {
-            id
-            name
-          }
+          elementRefs
         }
       }
     }
@@ -36,9 +33,7 @@ export const PUSH_WORKSHOPS_MUTATION = gql`
       description
       sections {
         id
-        elements {
-          id
-        }
+        elementRefs
       }
     }
   }

@@ -58,15 +58,19 @@ export class ReplicationState {
     const logger = this.logger;
 
     const runSync = () => {
+      logger("Syncing");
       if (!rxReplicationState.collection.database.isLeader()) {
-        logger("Not leader, skipping replication");
+        logger("Not leader, skipping replication and retrying in 10 seconds");
         this.state$.next(ReplicationStateEnum.WAIT_FOR_LEADER);
+        // this.start(10 * 1000);
         return;
       }
 
       this.state$.next(ReplicationStateEnum.SYNCING);
 
-      logger("Syncing");
+      rxReplicationState.reSync();
+      this.start(10 * 1000);
+      logger("Awaiting in sync");
       rxReplicationState
         .awaitInSync()
         .then(() => {
@@ -77,7 +81,7 @@ export class ReplicationState {
           logger("Sync error %O", error);
         })
         .finally(() => {
-          this.start(10 * 1000);
+          // this.start(10 * 1000);
         });
     };
 

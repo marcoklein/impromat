@@ -148,6 +148,7 @@ export class DatabaseProvider {
   ) {
     const db = await createRxDatabase({
       name: this.getDatabaseNameForVersion(version),
+      eventReduce: false,
       storage: this.storage,
       ignoreDuplicate: options?.ignoreDuplicate,
     });

@@ -234,7 +234,7 @@ type Section {
   version: Int!
   deleted: Boolean
   name: String!
-  elements: [Element!]!
+  elementRefs: [ID!]!
   note: String
   color: String
   """

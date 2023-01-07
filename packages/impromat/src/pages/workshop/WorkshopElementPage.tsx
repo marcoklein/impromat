@@ -45,7 +45,7 @@ export const WorkshopElementPage: React.FC = () => {
 
   const changeElementName = (newName: string) => {
     if (!mutations || !element) return;
-    const newElement = immer(element.toMutableJSON(), (draft) => {
+    const newElement = immer(element, (draft) => {
       draft.name = newName;
     });
     mutations.updateWorkshopElement(workshopId, newElement);
@@ -54,7 +54,7 @@ export const WorkshopElementPage: React.FC = () => {
   const saveNotesChanges = useCallback(
     (note: string) => {
       if (!mutations || !element) return;
-      const updatedPart = immer(element.toMutableJSON(), (draft) => {
+      const updatedPart = immer(element, (draft) => {
         draft.note = note;
       });
       mutations.updateWorkshopElement(workshopId, updatedPart);
