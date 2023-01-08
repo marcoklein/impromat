@@ -38,7 +38,14 @@ export const HomePage: React.FC = () => {
         onIonScroll={onScroll}
         fullscreen
       >
-        <div style={{ position: "fixed", top: "0px", left: "0px" }}>
+        <div
+          style={{
+            position: "fixed",
+            top: "0px",
+            left: "0px",
+            zIndex: 1,
+          }}
+        >
           <IonMenuToggle>
             <IonButton
               fill={scrolled ? "solid" : "clear"}
@@ -106,13 +113,11 @@ export const HomePage: React.FC = () => {
                 <IonButton
                   fill="solid"
                   routerLink={routeWorkshops()}
-                  className="ion-margin-top"
+                  className="ion-margin-vertical"
                 >
                   <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
                   Create a Workshop
                 </IonButton>
-              </IonCardContent>
-              <IonCardContent>
                 <p>
                   Improv workshops often have an overall <b>topic</b> and are
                   built up by <b>sections</b> (e.g. warm-up), in which different
@@ -121,11 +126,11 @@ export const HomePage: React.FC = () => {
                   element to adapt the exercises to your workshop topic and
                   style.
                 </p>
-                <p>
+                {/* <p>
                   For optimal time keeping, you can specify the <b>timeframe</b>{" "}
                   of every element in advance and use the{" "}
                   <b>presentation mode</b> during the workshop.
-                </p>
+                </p> */}
               </IonCardContent>
             </IonCard>
             <IonCard>
@@ -168,8 +173,9 @@ export const HomePage: React.FC = () => {
                 </p>
 
                 <IonButton
+                  className="ion-margin-top"
                   fill="solid"
-                  color="tertiary"
+                  color="pink-4"
                   routerLink={routeLibrary()}
                 >
                   <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
@@ -191,27 +197,25 @@ export const HomePage: React.FC = () => {
                   cannot find an exercise or game in the library, <b>create</b>{" "}
                   your own element and incorporate them in your workshop(s).
                 </p>
-
                 <IonButton
+                  className="ion-margin-vertical"
                   fill="solid"
-                  color="danger"
+                  color="yellow-4"
                   routerLink={routeLibraryTab(Tabs.FAVORITES)}
                 >
                   <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
                   Open Favorite Elements
                 </IonButton>
-              </IonCardContent>
-              <IonCardContent>
                 <p>
                   The <b>Login</b> via Google account allows you to{" "}
                   <b>synchronize</b> your workshops, favorite elements and
                   personally created elements on all devices. Thus, you can plan
-                  a workshop on your computer with the web version of Impromat
-                  and use the <b>Desktop app</b> on your smartphone during the
-                  workshop. (Don't worry, your improv data is not shared with
-                  Google and safely hosted on a server based in Germany — the
-                  Impromat server does not store any login or personal
-                  information. See our{" "}
+                  a workshop on your computer with the desktop version of
+                  Impromat and use the <b>mobile app</b> on your smartphone
+                  during the workshop. (Don't worry, your improv data is not
+                  shared with Google and safely hosted on a server based in
+                  Germany — the Impromat server does not collect personal
+                  information because we value privacy. See our{" "}
                   <IonRouterLink routerLink={routePrivacyPolicy()}>
                     Privacy Policy
                   </IonRouterLink>{" "}
@@ -226,14 +230,18 @@ export const HomePage: React.FC = () => {
             <IonText>
               <h1>Made For Improvisers</h1>
             </IonText>
-
-            <IonText color="dark">
-              Impromat is made for <b>all levels</b>: Improv beginners who want
-              to prepare their first improv workshops, established groups that
-              want further inspiration and experienced workshop leaders who look
-              for a one-stop app for managing their improv workshops.{" "}
-              <b>Try it out!</b>
-            </IonText>
+            <p>
+              <IonText color="dark">
+                Impromat is made for <b>all levels</b>: Improv beginners who
+                want to prepare their first improv workshops, established groups
+                that want further inspiration and experienced workshop leaders
+                who look for a one-stop app for managing their improv workshops.
+              </IonText>
+            </p>
+            <IonButton routerLink={routeWorkshops()}>
+              <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+              Try it out
+            </IonButton>
             <IonText color="dark">
               <h3>Improv Beginners</h3>
             </IonText>
@@ -279,17 +287,13 @@ export const HomePage: React.FC = () => {
                 <b>Let Impromat be your improv tool!</b>
               </p>
             </IonText>
-            <IonButton
-              fill="solid"
-              routerLink={routeWorkshops()}
-              className="ion-margin-top"
-            >
+            <IonButton fill="solid" routerLink={routeWorkshops()}>
               <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
               Open Workshops
             </IonButton>
 
             <IonText color="dark">
-              <h3>You Want More?</h3>
+              <h1>You Want More?</h1>
             </IonText>
             <IonText color="dark">
               <p>
