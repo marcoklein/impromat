@@ -7,9 +7,9 @@ declare const process: any;
 pageTest.describe("Replication", () => {
   pageTest(
     "should replicate data between two sessions",
-    async ({ accountPage, page, browser, workshopPage, workshopsPage }) => {
+    async ({ page, browser, workshopPage, workshopsPage }) => {
       const sessionId = Date.now();
-      const { context, otherContext, otherPage } = await pageTest.step(
+      const { otherPage } = await pageTest.step(
         "prepare open two Impromat sessions in different browsers",
         async () => {
           const cookie = {
