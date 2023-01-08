@@ -75,9 +75,7 @@ export const HomePage: React.FC = () => {
             >
               <IonImg src="/assets/logo.svg" alt="Impromat Logo" />
             </div>
-            <IonHeader>
-              <h1 style={{ fontSize: "2rem" }}>Welcome to Impromat</h1>
-            </IonHeader>
+            <h1 style={{ fontSize: "2.5rem" }}>Welcome to Impromat</h1>
             <IonText color="dark">
               <h1>
                 App for planning, giving, and sharing improvisational theatre
