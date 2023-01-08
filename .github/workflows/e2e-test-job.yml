@@ -13,6 +13,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: yarn
       - run: yarn install --frozen-lockfile
       - name: Run End-to-End Tests
         run: yarn impromat test:e2e
