@@ -27,7 +27,7 @@ yarn-error.log*
 
 src/version.gen.ts
 src/markdown/**.gen.*
-test/database/outputs/*.json
+test/component/database/outputs/*.json
 public/assets/improbib.json
 
 junit-results.xml

@@ -6,7 +6,7 @@ import {
   DatabaseProvider,
   DatabaseVersionProvider,
   DATABASE_VERSION,
-} from "../../src/database/provider/database-provider";
+} from "../../../src/database/provider/database-provider";
 import { DatabaseProviderMock } from "./database-provider-mock";
 import { workshopSchemaVersion0 } from "./initial-schema-version";
 import { initRxDbPlugins } from "./rx-db-init";
@@ -50,10 +50,12 @@ test.describe("Database Provider", () => {
     const databaseProvider = new DatabaseProviderMock(storage, versionProvider);
 
     const version0Data = JSON.parse(
-      readFileSync("test/database/inputs/db_input_version_0.json").toString(),
+      readFileSync(
+        "test/component/database/inputs/db_input_version_0.json",
+      ).toString(),
     );
     const outPath =
-      "test/database/outputs/db_output_complete_migration.gen.json";
+      "test/component/database/outputs/db_output_complete_migration.gen.json";
     if (existsSync(outPath)) removeSync(outPath);
     const db = await createRxDatabase({
       name: "impromat-production",
