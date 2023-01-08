@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-      - run: yarn install --frozen-lockfile
+      - uses: bahmutov/npm-install@v1
       - run: yarn lint
       - run: yarn test
         env:

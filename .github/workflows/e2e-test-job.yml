@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-      - run: yarn install --frozen-lockfile
+      - uses: bahmutov/npm-install@v1
       - name: Run End-to-End Tests
         run: yarn impromat test:e2e
         env:
