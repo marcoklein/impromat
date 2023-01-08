@@ -1,5 +1,5 @@
 import { RxDatabase, RxCollection } from "rxdb";
-import { DatabaseProvider } from "../../src/database/provider/database-provider";
+import { DatabaseProvider } from "../../../src/database/provider/database-provider";
 
 export class DatabaseProviderMock extends DatabaseProvider {
   async createDatabaseOfVersion(
