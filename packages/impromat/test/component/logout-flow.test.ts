@@ -6,7 +6,6 @@ pageTest.describe("Logout Flow", () => {
     "should delete workshops on logout",
     async ({ workshopsPage, accountPage }) => {
       // given
-      await workshopsPage.goto();
       await workshopsPage.addWorkshop("test-workshop");
       await workshopsPage.goto();
       await expect(workshopsPage.page.getByText("test-workshop")).toBeVisible();
