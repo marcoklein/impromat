@@ -26,7 +26,6 @@ const config: PlaywrightTestConfig = {
   expect: {
     timeout: 15 * 1000,
   },
-  testDir: "test/component",
   reporter: [["list"], ["junit", { outputFile: "junit-results.xml" }]],
   fullyParallel: true,
   retries: 2,
