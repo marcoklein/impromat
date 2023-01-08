@@ -13,14 +13,13 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add, information } from "ionicons/icons";
+import { add } from "ionicons/icons";
 import { useCallback } from "react";
 import { useHistory } from "react-router";
 import { useRxdbMutations } from "../../database/use-rxdb-mutations";
 import { useWorkshops } from "../../database/use-workshops";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
-import { routeAbout } from "../../routes/shared-routes";
 
 export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
@@ -31,7 +30,8 @@ export const WorkshopsPage: React.FC = () => {
 
   const createWorkshopClick = useCallback(() => {
     presentInputDialog({
-      header: "New Workshop",
+      header: "Workshop Name",
+      message: "Enter a name for your workshop. You can change it later.",
       emptyInputMessage: "Please enter a name for your workshop.",
       onAccept: async (text) => {
         if (!database) return;
@@ -75,20 +75,20 @@ export const WorkshopsPage: React.FC = () => {
             ))}
           </IonList>
         ) : (
-          <div className="ion-padding">
-            <h2>Welcome to Impromat</h2>
-            <p>
-              An application for planning improvisational theatre workshops.
-            </p>
-            <p>Create your first workshop:</p>
+          <div
+            className="ion-padding"
+            style={{
+              minHeight: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <p>Start by creating your very first workshop:</p>
             <IonButton expand="full" onClick={() => createWorkshopClick()}>
               <IonIcon slot="start" icon={add}></IonIcon>
               Add Workshop
-            </IonButton>
-            <p>Or get some more information about the project:</p>
-            <IonButton fill="solid" expand="full" routerLink={routeAbout()}>
-              <IonIcon slot="start" icon={information}></IonIcon>
-              About the Project
             </IonButton>
           </div>
         )}

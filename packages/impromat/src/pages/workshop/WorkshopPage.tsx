@@ -19,14 +19,13 @@ import {
 } from "@ionic/react";
 import immer from "immer";
 import { add } from "ionicons/icons";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { EditableItemComponent } from "../../components/EditableItemComponent";
 import {
-  WorkshopActionSheetComponent,
-  WorkshopActionTypes,
-} from "./components/WorkshopActionSheetComponent";
-import { useDocument } from "../../database/use-document";
+  WorkshopDocType,
+  WorkshopDocument,
+} from "../../database/collections/workshop/workshop-collection";
 import { useRxdbMutations } from "../../database/use-rxdb-mutations";
 import { WORKSHOP_HELPER } from "../../database/workshop-helper";
 import { useComponentLogger } from "../../hooks/use-component-logger";
@@ -34,13 +33,19 @@ import { useImpromatRxDb } from "../../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { routeWorkshops } from "../../routes/shared-routes";
 import { routeLibrary } from "../library/library-routes";
+import {
+  WorkshopActionSheetComponent,
+  WorkshopActionTypes,
+} from "./components/WorkshopActionSheetComponent";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
   const mutations = useRxdbMutations();
   const history = useHistory();
-  const { document: workshop } = useDocument("workshops", workshopId);
+  // const { document: workshop } = useDocument("workshops", workshopId);
+  const [workshop, setWorkshop] = useState<WorkshopDocument>();
+  const [workshopDoc, setWorkshopDoc] = useState<WorkshopDocType>();
 
   const logger = useComponentLogger("WorkshopPage");
   const [workshopHasContent, setWorkshopHasContent] =
@@ -61,6 +66,37 @@ export const WorkshopPage: React.FC = () => {
   }, [workshop, database]);
 
   useEffect(() => {
+    if (!database) return;
+    function fetchWorkshop() {
+      database.workshops.findByIds([workshopId]).then((result) => {
+        const resultWorkshop = result.get(workshopId);
+        logger(
+          "workshopCollection found workshop with id %s: %O",
+          workshopId,
+          resultWorkshop?.toJSON(),
+        );
+        if (!resultWorkshop) {
+          setWorkshop(undefined);
+          setWorkshopDoc(undefined);
+        } else {
+          setWorkshop(resultWorkshop);
+          setWorkshopDoc(resultWorkshop.toMutableJSON());
+        }
+      });
+    }
+    const subscription = database.collections.workshops.$.subscribe(
+      (changeEvent) => {
+        logger("workshopCollection on change", changeEvent);
+        fetchWorkshop();
+      },
+    );
+    fetchWorkshop();
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [database, workshopId, logger]);
+
+  useEffect(() => {
     logger("Workshop has content = %O", workshopHasContent);
   }, [workshopHasContent, logger]);
 
@@ -68,14 +104,18 @@ export const WorkshopPage: React.FC = () => {
     logger("Workshop changed to %O", workshop);
   }, [workshop, logger]);
 
+  const workshopName = useMemo(() => {
+    logger("workshopName changed to %s", workshopDoc?.name || "");
+    if (workshopDoc) {
+      return workshopDoc.name;
+    } else return "";
+  }, [logger, workshopDoc]);
+
   const [presentInputDialog] = useInputDialog();
 
   const changeWorkshopName = (newName: string) => {
     if (!mutations || !workshop) return;
-    const updatedWorkshop = immer(workshop.toMutableJSON(), (draft) => {
-      draft.name = newName;
-    });
-    mutations.updateWorkshop(updatedWorkshop).then(() => {
+    mutations.updateWorkshopName(workshop.id, newName).then(() => {
       logger("change workshop name to %s", newName);
     });
   };
@@ -136,7 +176,9 @@ export const WorkshopPage: React.FC = () => {
       emptyInputMessage: "Please type a section name.",
       placeholder: "e.g. Warmup or Games",
       onAccept: (text) => {
-        mutations.createNewSection(workshop.id, text);
+        mutations.createNewSection(workshop.id, text).then(() => {
+          logger('Created new section "%s"', text);
+        });
       },
     });
     logger("Showing add section dialog");
@@ -202,10 +244,9 @@ export const WorkshopPage: React.FC = () => {
                 </IonButton>
               </IonFabList>
             </IonFab>
-
             <EditableItemComponent
               disableEditing={true}
-              text={workshop.name}
+              text={workshopName}
               displayName="Workshop Title"
               onChangeText={(newName) => changeWorkshopName(newName)}
               lines="none"
@@ -215,7 +256,6 @@ export const WorkshopPage: React.FC = () => {
                 </IonLabel>
               )}
             ></EditableItemComponent>
-
             {workshop.description && (
               <EditableItemComponent
                 disableEditing={true}
@@ -226,9 +266,7 @@ export const WorkshopPage: React.FC = () => {
                 lines="none"
               ></EditableItemComponent>
             )}
-
             {workshopHasContent === "missingData" && <IonSpinner></IonSpinner>}
-
             {workshopHasContent === "hasContent" ? (
               <WorkshopElementsComponent
                 key={workshop.id}

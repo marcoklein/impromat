@@ -16,9 +16,10 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
 import React, { useEffect, useRef, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Redirect, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { Provider as RxDBProvider } from "rxdb-hooks";
 import "../node_modules/flag-icons/css/flag-icons.min.css";
+import { AuthorizationWrapper as AuthorizationContextComponent } from "./AuthorizationWrapper";
 import { MenuComponent } from "./components/MenuComponent";
 import { ElementDocType } from "./database/collections/element/element-collection";
 import { ReplicationsState } from "./database/collections/replications-state";
@@ -53,6 +54,7 @@ import {
   routeHome,
   routeLegal,
   routePrivacyPolicy,
+  routeProfile,
   routeWorkshop,
   routeWorkshopElement,
   routeWorkshops,
@@ -107,47 +109,51 @@ const App: React.FC = () => {
             value={{ improvElements, setImprovElements }}
           >
             <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
-              <IonApp>
-                <IonReactRouter>
-                  <MenuComponent></MenuComponent>
-                  <IonRouterOutlet id="main">
-                    <Redirect from="/" to={routeWorkshops()} exact></Redirect>
-                    <Route path={routeHome()} exact>
-                      <HomePage></HomePage>
-                    </Route>
-                    <Route path={routeAbout()} exact>
-                      <AboutPage></AboutPage>
-                    </Route>
-                    <Route path={routePrivacyPolicy()} exact>
-                      <PrivacyPolicyPage></PrivacyPolicyPage>
-                    </Route>
-                    <Route path={routeLegal()} exact>
-                      <LegalPage></LegalPage>
-                    </Route>
-                    <Route path={routeAccount()} exact>
-                      <AccountPage></AccountPage>
-                    </Route>
-                    <Route path={routeWorkshops()} exact>
-                      <WorkshopsPage></WorkshopsPage>
-                    </Route>
-                    <Route path={routeWorkshop()} exact>
-                      <WorkshopPage></WorkshopPage>
-                    </Route>
-                    <Route path={routeWorkshopElement()} exact>
-                      <WorkshopElementPage></WorkshopElementPage>
-                    </Route>
-                    <Route path={routeLibraryElement()} exact>
-                      <LibraryElementPage></LibraryElementPage>
-                    </Route>
-                    <Route path={routeLibraryCreateCustomElement()} exact>
-                      <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
-                    </Route>
-                    <Route path={routeLibrary()}>
-                      <LibraryPage></LibraryPage>
-                    </Route>
-                  </IonRouterOutlet>
-                </IonReactRouter>
-              </IonApp>
+              <AuthorizationContextComponent>
+                <IonApp>
+                  <IonReactRouter>
+                    <MenuComponent></MenuComponent>
+                    <IonRouterOutlet id="main">
+                      <Route path={routeHome()} exact>
+                        <HomePage></HomePage>
+                      </Route>
+                      <Route path={routeAbout()} exact>
+                        <AboutPage></AboutPage>
+                      </Route>
+                      <Route path={routePrivacyPolicy()} exact>
+                        <PrivacyPolicyPage></PrivacyPolicyPage>
+                      </Route>
+                      <Route path={routeLegal()} exact>
+                        <LegalPage></LegalPage>
+                      </Route>
+                      <Route path={routeProfile()} exact>
+                        <AccountPage></AccountPage>
+                      </Route>
+                      <Route path={routeAccount()} exact>
+                        <AccountPage></AccountPage>
+                      </Route>
+                      <Route path={routeWorkshops()} exact>
+                        <WorkshopsPage></WorkshopsPage>
+                      </Route>
+                      <Route path={routeWorkshop()} exact>
+                        <WorkshopPage></WorkshopPage>
+                      </Route>
+                      <Route path={routeWorkshopElement()} exact>
+                        <WorkshopElementPage></WorkshopElementPage>
+                      </Route>
+                      <Route path={routeLibraryElement()} exact>
+                        <LibraryElementPage></LibraryElementPage>
+                      </Route>
+                      <Route path={routeLibraryCreateCustomElement()} exact>
+                        <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
+                      </Route>
+                      <Route path={routeLibrary()}>
+                        <LibraryPage></LibraryPage>
+                      </Route>
+                    </IonRouterOutlet>
+                  </IonReactRouter>
+                </IonApp>
+              </AuthorizationContextComponent>
             </ErrorBoundary>
           </ImprovLibraryContext.Provider>
         </ReplicationsContext.Provider>

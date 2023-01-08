@@ -30,6 +30,7 @@ console.log("RxDB Plugins initialized");
 export const createDatabase = async (apiContext: GraphQLContextType) => {
   const logger = rootLogger.extend("create-database");
   const storage = getRxStorageDexie();
+  // const storage = getRxStorageMemory();
 
   const dbNames = await Dexie.getDatabaseNames();
   logger("Db names: %O", dbNames);

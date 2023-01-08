@@ -9,7 +9,7 @@ pageTest.describe("Library", () => {
     await libraryPage.expectToolbarTextToBe("Element Library");
     await expect(libraryPage.tabLocator("Search Explore")).toBeVisible();
     await expect(libraryPage.tabLocator("Star Favorites")).toBeVisible();
-    await expect(libraryPage.tabLocator(/Custom/)).toBeVisible();
+    await expect(libraryPage.tabLocator(/My Library/)).toBeVisible();
   });
 
   pageTest("should open an element", async ({ page, libraryPage }) => {

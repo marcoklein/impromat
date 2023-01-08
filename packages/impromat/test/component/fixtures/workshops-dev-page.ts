@@ -9,7 +9,9 @@ export class WorkshopsDevPage extends DevPage {
   async addWorkshop(name: string = "Test Workshop") {
     const page = this.page;
     await this.goto();
-    await page.locator("text=AddAdd Workshop >> button").click();
+    // press for first time
+    // await page.locator("text=AddAdd Workshop >> button").click();
+    await page.getByRole("button", { name: "Add" }).first().click();
     await expect(page).toHaveURL("./workshop?dialog");
     await page.locator('input[type="text"]').click();
     await page.locator('input[type="text"]').fill(name);

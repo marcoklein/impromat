@@ -44,7 +44,7 @@ yarn lint:fix
 
 ## Tests
 
-Playwright executes end-to-end tests.
+Playwright executes frontend tests.
 
 To run tests start the application and run
 
@@ -69,6 +69,14 @@ Print debug results for webServer config errors:
 ```
 DEBUG=pw:webserver yarn test
 ```
+
+## End-to-End (e2e) Tests
+
+End-to-end tests run directly against a deployed Impromat version (e.g. `dev` or `prod` deployment).
+
+For e2e tests you have to set all environment variables that the `.env.test` env file specifies.
+
+The `COOKIE_SECRET` has to be added to the environment on the server. Session secrets are stored in the `/var/lib/dokku/data/storage` folder - see `infrastructure` package for further details.
 
 ### Automatic Login
 

@@ -1,21 +1,21 @@
 import { Debugger } from "debug";
 import { useEffect } from "react";
 import { useRxDocument } from "rxdb-hooks";
-import { ElementDocument } from "./collections/element/element-collection";
+import { ElementDocType } from "./collections/element/element-collection";
 import { MeDocType } from "./collections/me/me-collection";
-import { SectionDocument } from "./collections/section/section-collection";
-import { UserDocument } from "./collections/user/user-collection-types";
-import { WorkshopDocument } from "./collections/workshop/workshop-collection";
+import { SectionDocType } from "./collections/section/section-collection";
+import { UserDocType } from "./collections/user/user-collection-types";
+import { WorkshopDocType } from "./collections/workshop/workshop-collection";
 import { AppCollections } from "./database-type";
 
 type DocumentMappingType<T extends keyof AppCollections> = T extends "users"
-  ? UserDocument
+  ? UserDocType
   : T extends "workshops"
-  ? WorkshopDocument
+  ? WorkshopDocType
   : T extends "elements"
-  ? ElementDocument
+  ? ElementDocType
   : T extends "sections"
-  ? SectionDocument
+  ? SectionDocType
   : T extends "me"
   ? MeDocType
   : never;
@@ -32,7 +32,7 @@ export function useDocument<
   isFetching: boolean;
 } {
   const { result: document, isFetching } = useRxDocument(collection, id, {
-    json: false,
+    json: true,
   });
 
   useEffect(() => {

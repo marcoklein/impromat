@@ -1,6 +1,6 @@
 {
   "name": "impromat",
-  "version": "0.18.1",
+  "version": "0.19.0",
   "private": true,
   "homepage": "https://impromat.app",
   "description": "Application code for Impromat.",
@@ -59,11 +59,12 @@
   "scripts": {
     "start": "yarn compile-markdown && react-scripts start",
     "dev": "yarn start",
-    "lint": "eslint src test",
+    "lint": "eslint src test --max-warnings 0",
     "lint:fix": "eslint src --fix",
     "build": "yarn copy-improbib && yarn compile-markdown && genversion src/version.gen.ts --es6 && react-scripts build",
     "build:serve": "serve --config serve.config.json build",
     "test": "yarn playwright:install && playwright test",
+    "test:e2e": "yarn playwright:install && playwright test --config playwright-e2e.config.ts",
     "test:headed": "yarn test --headed",
     "test:watch": "nodemon --config nodemon-test.json",
     "test:debug": "yarn test:headed --debug",

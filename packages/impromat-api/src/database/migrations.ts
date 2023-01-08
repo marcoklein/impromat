@@ -1,5 +1,3 @@
-import { WORKSHOP_HELPER } from "./workshop-helper";
-
 export const migrations: Record<
   number,
   (params: { fromState: any; toVersion: number; fromVersion: number }) => any
@@ -125,7 +123,6 @@ export const migrations: Record<
         delete oldWorkshop.elements;
         // add elements into section
         oldWorkshop.sections = [];
-        WORKSHOP_HELPER.pushElements(oldWorkshop, elements);
       });
     });
     return { version: toVersion, workshopsOfUsers: fromState };

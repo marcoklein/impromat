@@ -9,9 +9,7 @@ const QUERY_FIELDS_FRAGMENT = gql`
     id
     version
     name
-    elements {
-      id
-    }
+    elementRefs
     note
     color
     isVisible

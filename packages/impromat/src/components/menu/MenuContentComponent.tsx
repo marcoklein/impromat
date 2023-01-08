@@ -5,32 +5,28 @@ import {
   IonFooter,
   IonHeader,
   IonIcon,
+  IonImg,
   IonItemDivider,
   IonItemGroup,
   IonLabel,
-  IonList,
   IonMenuToggle,
   IonNote,
   IonRouterLink,
+  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {
-  chevronBack,
-  documents,
-  information,
-  library,
-  person,
-} from "ionicons/icons";
+import { close, documents, home, information, library } from "ionicons/icons";
 import { environment } from "../../environment";
 import { routeLibrary } from "../../pages/library/library-routes";
 import {
   routeAbout,
-  routeAccount,
+  routeHome,
   routeLegal,
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";
+import { AccountMenuItemComponent } from "./AccountMenuItemComponent";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 export const MenuContentComponent: React.FC = () => {
@@ -38,54 +34,60 @@ export const MenuContentComponent: React.FC = () => {
     <>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonButtons slot="start">
+          <IonTitle>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <IonImg
+                style={{ width: "24px", height: "24px" }}
+                src="/assets/logo.svg"
+                alt="Impromat Logo"
+              ></IonImg>
+              <IonText className="ion-margin-start">Impromat</IonText>
+            </div>
+          </IonTitle>
+          <IonButtons slot="end">
             <IonMenuToggle>
               <IonButton>
-                <IonIcon slot="icon-only" icon={chevronBack}></IonIcon>
+                <IonIcon slot="icon-only" icon={close}></IonIcon>
               </IonButton>
             </IonMenuToggle>
           </IonButtons>
-          <IonTitle>Impromat</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonList>
-          <IonItemGroup>
-            <IonItemDivider>
-              <IonLabel>Navigation</IonLabel>
-            </IonItemDivider>
-            <MenuItemComponent
-              routerLink={routeWorkshops()}
-              icon={documents}
-              label="Workshops"
-            ></MenuItemComponent>
-            <MenuItemComponent
-              routerLink={routeLibrary()}
-              icon={library}
-              label="Library"
-            ></MenuItemComponent>
-          </IonItemGroup>
-          <IonItemGroup>
-            <IonItemDivider>
-              <IonLabel>Account</IonLabel>
-            </IonItemDivider>
-            <MenuItemComponent
-              routerLink={routeAccount()}
-              icon={person}
-              label="Account"
-            ></MenuItemComponent>
-          </IonItemGroup>
-          <IonItemGroup>
-            <IonItemDivider>
-              <IonLabel>More</IonLabel>
-            </IonItemDivider>
-            <MenuItemComponent
-              routerLink={routeAbout()}
-              icon={information}
-              label="About"
-            ></MenuItemComponent>
-          </IonItemGroup>
-        </IonList>
+        <AccountMenuItemComponent></AccountMenuItemComponent>
+        <IonItemGroup>
+          <IonItemDivider>
+            <IonLabel>Navigation</IonLabel>
+          </IonItemDivider>
+          <MenuItemComponent
+            routerLink={routeWorkshops()}
+            icon={documents}
+            label="Workshops"
+          ></MenuItemComponent>
+        </IonItemGroup>
+        <IonItemGroup>
+          <MenuItemComponent
+            routerLink={routeLibrary()}
+            icon={library}
+            label="Element Library"
+          ></MenuItemComponent>
+        </IonItemGroup>
+        <IonItemGroup>
+          <IonItemDivider>
+            <IonLabel>More</IonLabel>
+          </IonItemDivider>
+          <MenuItemComponent
+            exact
+            routerLink={routeHome()}
+            icon={home}
+            label="Home Page"
+          ></MenuItemComponent>
+          <MenuItemComponent
+            routerLink={routeAbout()}
+            icon={information}
+            label="About"
+          ></MenuItemComponent>
+        </IonItemGroup>
       </IonContent>
       <IonFooter className="ion-no-border">
         <IonToolbar>

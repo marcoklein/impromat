@@ -1,7 +1,7 @@
 import { IonList, IonReorderGroup, ItemReorderEventDetail } from "@ionic/react";
 import immer from "immer";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { SectionElementsComponent } from "./SectionElementsComponent";
+import { combineLatest } from "rxjs";
 import { ElementDocType } from "../../../database/collections/element/element-collection";
 import { SectionDocument } from "../../../database/collections/section/section-collection";
 import { WorkshopDocument } from "../../../database/collections/workshop/workshop-collection";
@@ -10,6 +10,7 @@ import { TRANSLATIONS } from "../../../functions/shared-text";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../../../hooks/use-input-dialog";
+import { SectionElementsComponent } from "./SectionElementsComponent";
 import { WorkshopElementsHeaderComponent } from "./WorkshopElementsHeaderComponent";
 import { WorkshopSectionComponent } from "./WorkshopSectionComponent";
 
@@ -31,12 +32,13 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
 
   useEffect(() => {
     if (workshop) {
-      const subscription = rxdb.collections.sections.$.subscribe(
-        (changeEvent) => {
-          logger("sectionCollection on change", changeEvent);
-          workshop.populateSections().then(setSections);
-        },
-      );
+      const subscription = combineLatest([
+        rxdb.collections.workshops.$,
+        rxdb.collections.sections.$,
+      ]).subscribe((changeEvent) => {
+        logger("sectionCollection on change", changeEvent);
+        workshop.populateSections().then(setSections);
+      });
       workshop.populateSections().then(setSections);
       return () => {
         subscription.unsubscribe();
