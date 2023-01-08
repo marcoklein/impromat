@@ -45,7 +45,7 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: yarn install
+        uses: bahmutov/npm-install@v1
       - name: Generate changelogs
         run: yarn changeset version
       - uses: EndBug/add-and-commit@v9
