@@ -1,5 +1,9 @@
 import {
   IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
   IonContent,
   IonIcon,
   IonImg,
@@ -8,11 +12,6 @@ import {
   IonRouterLink,
   IonText,
   ScrollCustomEvent,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonHeader,
 } from "@ionic/react";
 import { arrowForwardOutline, information, menu } from "ionicons/icons";
 import { useState } from "react";
