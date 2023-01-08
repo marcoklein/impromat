@@ -120,7 +120,7 @@ describe("Elements Replication", async () => {
     expect(conflicts.pushElements).to.be.empty;
   });
 
-  it("should return the new element", async () => {
+  it("should return pushed elements", async () => {
     // given
     const args = {
       checkpoint: { id: "", updatedAt: 0 },

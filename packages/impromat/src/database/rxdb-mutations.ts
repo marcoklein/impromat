@@ -3,7 +3,7 @@ import { rootLogger } from "../logger";
 import { AVAILABLE_COLORS } from "../theme/colors";
 import { ElementDocType } from "./collections/element/element-collection";
 import { SectionDocType } from "./collections/section/section-collection";
-import { UserDocument } from "./collections/user/user-collection-types";
+import { UserDocType } from "./collections/user/user-collection-types";
 import {
   WorkshopCollection,
   WorkshopDocType,
@@ -58,6 +58,12 @@ export class RxMutations {
     // must track references to other workshops
     await workshop.update({ $set: { updatedAt: Date.now() } });
     await workshop.remove();
+  }
+
+  async updateWorkshopName(workshopId: string, newName: string) {
+    const workshop = await this.findWorkshopById(workshopId);
+    if (!workshop) return;
+    await workshop.update({ $set: { name: newName } });
   }
 
   async updateWorkshop(newWorkshop: WorkshopDocType) {
@@ -120,14 +126,15 @@ export class RxMutations {
     baseElementId: string,
     elementInput: Partial<ElementDocType>,
   ) {
-    delete elementInput.id;
-    delete elementInput.markdown;
-    elementInput.basedOn = baseElementId;
+    const elementInputCopy = { ...elementInput };
+    delete elementInputCopy.id;
+    delete elementInputCopy.markdown;
+    elementInputCopy.basedOn = baseElementId;
     const workshop = await this.findWorkshopById(workshopId);
     if (!workshop) {
       throw new Error('Workshop with id "' + workshopId + '" not found.');
     }
-    const document = WORKSHOP_HELPER.getNewElementDocType(elementInput);
+    const document = WORKSHOP_HELPER.getNewElementDocType(elementInputCopy);
     await WORKSHOP_HELPER.pushElement(workshop, document);
     await this.uncollapseLastWorkshopSection(workshop);
     return document.id;
@@ -161,8 +168,15 @@ export class RxMutations {
     return this.database.elements.atomicUpsert(element);
   }
 
-  async toggleFavoriteElementOfUser(user: UserDocument, elementId: string) {
+  async toggleFavoriteElementOfUser(userDoc: UserDocType, elementId: string) {
     let isFavoriteNow = false;
+
+    const users = await this.database.users.findByIds([userDoc.id]);
+    const user = users.get(userDoc.id);
+    if (!user) {
+      console.warn("User not found", userDoc.id);
+      return;
+    }
     await user.atomicUpdate((user) => {
       const index = user.favoriteElements.indexOf(elementId);
       if (index >= 0) {
