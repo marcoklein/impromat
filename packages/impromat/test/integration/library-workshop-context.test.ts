@@ -12,7 +12,7 @@ pageTest.describe("Library with Workshop Context", () => {
       await libraryPage.expectToolbarTextToBe("Add Element");
       await expect(libraryPage.tabLocator("Search Explore")).toBeVisible();
       await expect(libraryPage.tabLocator("Star Favorites")).toBeVisible();
-      await expect(libraryPage.tabLocator(/Custom/)).toBeVisible();
+      await expect(libraryPage.tabLocator(/My Library/)).toBeVisible();
     },
   );
 
@@ -41,7 +41,7 @@ pageTest.describe("Library with Workshop Context", () => {
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // when
-      await page.getByRole("tab", { name: "Brush Custom" }).click();
+      await page.getByRole("tab", { name: "Brush My Library" }).click();
       await page.locator("ion-router-outlet ion-fab-button").last().click();
       await page.getByRole("textbox", { name: "Name" }).click();
       await page.getByRole("textbox", { name: "Name" }).fill("test-element");
@@ -49,7 +49,7 @@ pageTest.describe("Library with Workshop Context", () => {
         .getByRole("button", { name: "Create and Add to Workshop" })
         .click();
       await workshopPage.openLibrary();
-      await page.getByRole("tab", { name: "Brush Custom" }).click();
+      await page.getByRole("tab", { name: "Brush My Library" }).click();
       await page.getByRole("listitem").getByText("test-element").click();
       await page.getByRole("button", { name: "Add to Workshop" }).click();
       // then
