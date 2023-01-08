@@ -36,3 +36,10 @@ jobs:
       - run: git remote add impromat-api-development dokku@impromat.app:impromat-api-development
       - run: git push impromat-app-development $BRANCH_NAME:main --force
       - run: git push impromat-api-development $BRANCH_NAME:main --force
+
+  e2e-test:
+    needs:
+      - deploy
+    uses: ./.github/workflows/e2e-test-job.yml
+    with:
+      commitSha: ${{ github.sha }}
