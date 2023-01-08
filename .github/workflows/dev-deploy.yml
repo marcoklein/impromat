@@ -41,5 +41,3 @@ jobs:
     needs:
       - deploy
     uses: ./.github/workflows/e2e-test-job.yml
-    with:
-      commitSha: ${{ github.sha }}
