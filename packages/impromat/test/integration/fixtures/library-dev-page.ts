@@ -32,7 +32,7 @@ export class LibraryDevPage extends DevPage {
     const libraryPage = this;
     const page = this.page;
     await libraryPage.goto();
-    await libraryPage.tabLocator(/Custom/).click();
+    await libraryPage.tabLocator(/My Library/).click();
     await page.locator("ion-fab-button").click();
     await page.getByRole("textbox", { name: "Name" }).fill(name);
     await page.getByRole("button", { name: "Create Element" }).click();

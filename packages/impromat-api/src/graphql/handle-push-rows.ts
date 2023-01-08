@@ -1,5 +1,3 @@
-import { Mode } from "fs";
-
 interface BaseRow {
   id: string;
   version: number;
@@ -19,7 +17,7 @@ export function handlePushRows<
   DtoType,
   ModelType extends BaseModel
 >(
-  inputModels: ModelType[],
+  existingModelsInDatabase: ModelType[],
   pushedRows: PushRowInput<InputDtoType>[],
   mappers: {
     fromModelToDto: (model: ModelType) => DtoType;
@@ -27,10 +25,15 @@ export function handlePushRows<
   }
 ) {
   const conflicts: DtoType[] = [];
+  let resultModels = existingModelsInDatabase;
 
+  const updatedAt = Date.now();
   for (const row of pushedRows) {
-    const docId = row.newDocumentState.id;
-    const docCurrentMaster = inputModels.find((d) => d.id === docId);
+    const { newDocumentState } = row;
+    const { id: newDocumentStateId } = newDocumentState;
+    const docCurrentMaster = existingModelsInDatabase.find(
+      (d) => d.id === newDocumentStateId
+    );
 
     // TODO commented as clients can not handle version conflicts yet
     // if (
@@ -41,20 +44,20 @@ export function handlePushRows<
     //   conflicts.push(mappers.fromModelToDto(docCurrentMaster));
     //   continue;
     // }
-
-    const doc = row.newDocumentState;
-    const updatedWorkshops = inputModels.filter((d) => d.id !== doc.id);
-    const docModel = mappers.fromInputDtoToModel(doc);
-    updatedWorkshops.push(docModel);
-    inputModels = updatedWorkshops;
+    const modelsWithoutModelFromRow = existingModelsInDatabase.filter(
+      (d) => d.id !== newDocumentState.id
+    );
+    const docModel = mappers.fromInputDtoToModel(newDocumentState);
+    docModel.updatedAt = updatedAt;
+    modelsWithoutModelFromRow.push(docModel);
+    resultModels = modelsWithoutModelFromRow;
   }
+  // resultModels.forEach((model) => {
+  //   model.updatedAt = updatedAt;
+  // });
 
-  const updatedAt = Date.now();
-  inputModels.forEach((model) => {
-    model.updatedAt = updatedAt;
-  });
   return {
     conflicts,
-    models: inputModels,
+    models: resultModels,
   };
 }
