@@ -57,7 +57,7 @@ export const HomePage: React.FC = () => {
 
         <div
           style={{
-            minHeight: "85%",
+            minHeight: "50%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -77,10 +77,14 @@ export const HomePage: React.FC = () => {
             <h1 style={{ fontSize: "2.5rem" }}>Welcome to Impromat</h1>
             <IonText color="dark">
               <h1>
-                App for planning, giving, and sharing improvisational theatre
+                App for planning, giving and sharing improvisational theatre
                 workshops.
               </h1>
             </IonText>
+            <IonButton routerLink={routeWorkshops()}>
+              <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+              Try it out
+            </IonButton>
           </div>
         </div>
 
@@ -94,10 +98,10 @@ export const HomePage: React.FC = () => {
               offers all necessary features to plan your upcoming improv
               sessions.
             </IonText>
-            <IonCard>
+            <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
               <IonCardHeader>
                 <IonCardTitle>
-                  <h3>Improv Workshops</h3>
+                  <h3 style={{ margin: 0 }}>Improv Workshops</h3>
                 </IonCardTitle>
               </IonCardHeader>
 
@@ -130,10 +134,10 @@ export const HomePage: React.FC = () => {
                 </p> */}
               </IonCardContent>
             </IonCard>
-            <IonCard>
+            <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
               <IonCardHeader>
                 <IonCardTitle>
-                  <h3>Improv Library</h3>
+                  <h3 style={{ margin: 0 }}>Improv Library</h3>
                 </IonCardTitle>
               </IonCardHeader>
 
@@ -180,10 +184,10 @@ export const HomePage: React.FC = () => {
                 </IonButton>
               </IonCardContent>
             </IonCard>
-            <IonCard>
+            <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
               <IonCardHeader>
                 <IonCardTitle>
-                  <h3>Customize Your Improv</h3>
+                  <h3 style={{ margin: 0 }}>Customize Your Improv</h3>
                 </IonCardTitle>
               </IonCardHeader>
 

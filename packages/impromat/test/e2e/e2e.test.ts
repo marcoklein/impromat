@@ -29,6 +29,14 @@ pageTest.describe("Replication", () => {
             page.goto("https://dev.impromat.app/account"),
             otherPage.goto("https://dev.impromat.app/account"),
           ]);
+          await expect(
+            page.getByText("You are signed in").first(),
+            "Expected to be signed in",
+          ).toBeVisible();
+          await expect(
+            otherPage.getByText("You are signed in").first(),
+            "Expected to be signed in",
+          ).toBeVisible();
           return { context, otherContext, otherPage };
         },
       );
