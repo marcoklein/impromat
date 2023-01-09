@@ -5,6 +5,9 @@ on:
     branches:
       - dev
   workflow_dispatch:
+    inputs:
+      skip-test:
+        type: boolean
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -14,6 +17,7 @@ jobs:
     uses: ./.github/workflows/test-job.yml
     with:
       commitSha: ${{ github.sha }}
+    if: ${{ !inputs.skip-test }}
 
   deploy:
     needs:
