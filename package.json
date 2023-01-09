@@ -1,6 +1,6 @@
 {
   "name": "impromat-monorepo",
-  "version": "29",
+  "version": "30",
   "private": true,
   "type": "module",
   "workspaces": {
