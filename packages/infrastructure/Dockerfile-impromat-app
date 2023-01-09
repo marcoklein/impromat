@@ -17,17 +17,24 @@ RUN groupadd -r myuser \
 USER myuser
 
 WORKDIR /home/myuser
-COPY --chown=myuser:myuser . .
-RUN ls -la
+COPY package.json yarn.lock .
+COPY packages/improbib/package.json packages/improbib/
+COPY packages/impromat/package.json packages/impromat/
+COPY packages/impromat-app-renderer/package.json packages/impromat-app-renderer/
 RUN yarn install --frozen-lockfile
+
+COPY packages/improbib/ packages/improbib/
+COPY packages/impromat/ packages/impromat/
+COPY packages/impromat-app-renderer/ packages/impromat-app-renderer/
+RUN ls -la packages/improbib/
+
+WORKDIR /home/myuser/packages/improbib
+RUN yarn build
 
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL ${REACT_APP_API_URL}
 ARG REACT_APP_VERSION
 ENV REACT_APP_VERSION ${REACT_APP_VERSION}
-
-WORKDIR /home/myuser/packages/improbib
-RUN yarn build
 
 WORKDIR /home/myuser/packages/impromat
 RUN yarn build

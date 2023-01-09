@@ -4,8 +4,11 @@ FROM node:16-alpine
 RUN apk add --no-cache bash
 
 WORKDIR /app
-COPY . .
+COPY package.json yarn.lock .
+COPY packages/impromat-api/package.json packages/impromat-api/
 RUN yarn install --frozen-lockfile
+
+COPY packages/impromat-api/ packages/impromat-api/
 
 WORKDIR /app/packages/impromat-api
 
