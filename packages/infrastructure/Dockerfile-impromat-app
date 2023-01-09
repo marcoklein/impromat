@@ -17,7 +17,7 @@ RUN groupadd -r myuser \
 USER myuser
 
 WORKDIR /home/myuser
-COPY package.json yarn.lock .
+COPY package.json yarn.lock ./
 COPY packages/improbib/package.json packages/improbib/
 COPY packages/impromat/package.json packages/impromat/
 COPY packages/impromat-app-renderer/package.json packages/impromat-app-renderer/
