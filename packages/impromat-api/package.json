@@ -1,6 +1,6 @@
 {
   "name": "impromat-api",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "GraphQL API for Impromat",
   "author": "Marco Klein",
   "type": "module",
