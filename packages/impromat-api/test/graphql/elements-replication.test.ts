@@ -120,20 +120,21 @@ describe("Elements Replication", async () => {
     expect(conflicts.pushElements).to.be.empty;
   });
 
-  it("should return the new element", async () => {
+  it("should return pushed elements", async () => {
     // given
     const args = {
       checkpoint: { id: "", updatedAt: 0 },
-      limit: 1,
+      limit: 10,
     };
     // when
     const data = await testContext.client.request(PULL_ELEMENT_QUERY, args);
     // then
     const checkpoint = data.pullElements.checkpoint;
     const documents = data.pullElements.documents;
-    expect(documents).to.have.lengthOf(1);
-    expect(documents[0].id).to.equal("elementWithBasedOn");
-    expect(documents[0].basedOn.id).to.equal("test");
+    expect(documents).to.have.lengthOf(2);
+    expect(documents[0].id).to.equal("test");
+    expect(documents[1].id).to.equal("elementWithBasedOn");
+    expect(documents[1].basedOn.id).to.equal("test");
     expect(checkpoint.id).to.equal("elementWithBasedOn");
     expect(checkpoint.updatedAt + 1000).to.be.greaterThan(Date.now());
   });

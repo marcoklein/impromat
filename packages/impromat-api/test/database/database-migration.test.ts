@@ -14,10 +14,13 @@ describe("Schema Migration", async () => {
     await mkdir(".cache/test/database", { recursive: true });
   });
 
-  it("should migrate database file", async () => {
+  it("should migrate database file from version 5", async () => {
     // given
     await mkdir(".cache/test/database", { recursive: true });
-    await copyFile("test/assets/test_db.json", ".cache/test/database/db.json");
+    await copyFile(
+      "test/assets/test_db_v5.json",
+      ".cache/test/database/db.json"
+    );
     const database = new FileDatabase(".cache/test/database");
     // when
     await database.load();
@@ -25,7 +28,7 @@ describe("Schema Migration", async () => {
       readFileSync(".cache/test/database/db.json").toString()
     );
     writeFileSync(
-      "test/assets/current_database_dump_after_migration.gen.ignore.json",
+      "test/assets/test_db_v5_after_migration.gen.json",
       JSON.stringify(content, undefined, 2)
     );
     // then

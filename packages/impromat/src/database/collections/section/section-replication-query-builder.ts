@@ -8,9 +8,7 @@ const QUERY_FIELDS_FRAGMENT = /* GraphQL */ `
     id
     version
     name
-    elements {
-      id
-    }
+    elementRefs
     note
     color
     isVisible

@@ -1,5 +1,5 @@
 import { SectionModel } from "../database/section-model";
-import { Element, Section, SectionInput } from "../graphql/schema.gen";
+import { Section, SectionInput } from "../graphql/schema.gen";
 
 export function fromSectionInputDtoToSectionModel(
   inputDto: SectionInput
@@ -21,8 +21,7 @@ export function fromSectionInputDtoToSectionModel(
 export function fromSectionModelToSectionDto(model: SectionModel): Section {
   return {
     color: model.color ?? undefined,
-    elements:
-      model.elements.map((elementId) => ({ id: elementId } as Element)) ?? [],
+    elementRefs: model.elements ?? [],
     id: model.id,
     isCollapsed: model.isCollapsed ?? false,
     isVisible: model.isVisible ?? false,

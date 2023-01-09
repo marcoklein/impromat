@@ -1,4 +1,5 @@
 import {
+  DeepReadonlyObject,
   ExtractDocumentTypeFromTypedRxJsonSchema,
   RxCollection,
   RxCollectionCreator,
@@ -65,9 +66,11 @@ const schemaLiteral = {
 } as const;
 
 export const elementCollectionSchema = toTypedRxJsonSchema(schemaLiteral);
-export type ElementDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
+type MutableElementDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof elementCollectionSchema
 >;
+export type ElementDocType = DeepReadonlyObject<MutableElementDocType>;
+
 type ReferenceFields = {
   basedOn_: Promise<ElementDocument | undefined>;
 };

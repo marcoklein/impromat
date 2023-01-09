@@ -1,4 +1,4 @@
-import { UserDocument } from "../database/collections/user/user-collection-types";
+import { UserDocType } from "../database/collections/user/user-collection-types";
 
 export type AuthorizationData =
   | LoggedInAuthorizationData
@@ -6,12 +6,12 @@ export type AuthorizationData =
 
 export interface BaseAuthorizationData {
   isLoggedIn: boolean;
-  myUser: UserDocument | undefined;
+  myUser: UserDocType | undefined;
 }
 
 export interface LoggedInAuthorizationData extends BaseAuthorizationData {
   isLoggedIn: true;
-  myUser: UserDocument;
+  myUser: UserDocType;
 }
 export interface LoggedOutAuthorizationData extends BaseAuthorizationData {
   isLoggedIn: false;

@@ -19,13 +19,15 @@ export function prepareDocumentsForPull<
       else return 0;
     }
     if (a.updatedAt > b.updatedAt) return 1;
-    return -1; // a.updatedAt < b.updatedAt
+    if (a.updatedAt < b.updatedAt) return -1;
+    return 0;
   });
 
   const filterForMinUpdatedAtAndId = sortedDocuments.filter((doc) => {
     if (doc.updatedAt < minUpdatedAt) return false;
     if (doc.updatedAt > minUpdatedAt) return true;
     if (doc.updatedAt === minUpdatedAt) {
+      // filter by id because documents are sorted by id
       if (doc.id > lastId) return true;
     }
     return false;
@@ -39,7 +41,7 @@ export function prepareDocumentsForPull<
     updatedAt: number;
   } {
     if (docs.length > 0) {
-      const lastDoc = docs[docs.length - 1];
+      const lastDoc = docs[docs.length - 1]; // TODO change to docs.at(-1)
       return {
         id: lastDoc.id,
         updatedAt: lastDoc.updatedAt,
