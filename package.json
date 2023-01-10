@@ -21,7 +21,6 @@
     "lint": "lerna run lint",
     "test": "lerna run test",
     "build": "lerna run build",
-    "bootstrap": "lerna bootstrap",
     "changed": "lerna ls --since main --all",
     "impromat": "lerna run --scope impromat",
     "impromat-api": "lerna run --scope impromat-api",
