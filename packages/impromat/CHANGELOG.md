@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.20.1
+
+### Patch Changes
+
+- f001bff: Fix replication of element content.
+
 ## 0.20.0
 
 ### Minor Changes
