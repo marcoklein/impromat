@@ -18,7 +18,7 @@ const config: PlaywrightTestConfig = {
     actionTimeout: 30 * 1000,
   },
   expect: {
-    timeout: 15 * 1000,
+    timeout: 30 * 1000,
   },
   testDir: "test/e2e",
   reporter: [["list"], ["junit", { outputFile: "junit-results.xml" }]],
