@@ -1,5 +1,6 @@
 import { expect } from "@playwright/test";
 import { pageTest } from "../component/fixtures/page-fixtures";
+import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page";
 import { WorkshopsDevPage } from "../component/fixtures/workshops-dev-page";
 
 declare const process: any;
@@ -41,26 +42,48 @@ pageTest.describe("Replication", () => {
         },
       );
 
-      const { workshopName } = await pageTest.step(
+      const { workshopName, workshopId } = await pageTest.step(
         "create a workshop",
         async () => {
           const workshopName = `test-${sessionId}`;
-          await workshopPage.createNew(workshopName);
+          const workshopId = await workshopPage.createNew(workshopName);
           await workshopsPage.goto();
           await expect(page.getByText(workshopName)).toBeVisible();
-          return { workshopName };
+          return { workshopName, workshopId };
         },
       );
 
       await pageTest.step(
         "wait for workshop to replicate to other Impromat session",
         async () => {
-          pageTest.setTimeout(15000);
           const otherWorkshopsPage = new WorkshopsDevPage(otherPage);
           await otherWorkshopsPage.goto();
           await expect(otherPage.getByText(workshopName)).toBeVisible();
         },
       );
+
+      await pageTest.step("add an element to the workshop", async () => {
+        await workshopPage.goto(workshopId);
+        await workshopPage.addElementFromSearch();
+      });
+
+      await pageTest.step(
+        "wait for workshop element to replicate to other Impromat session",
+        async () => {
+          const otherWorkshopPage = new WorkshopDevPage(otherPage);
+          await otherWorkshopPage.goto(workshopId);
+          await expect(otherPage.getByText("Freeze")).toBeVisible();
+        },
+      );
+
+      await pageTest.step("should have content in element", async () => {
+        await workshopPage.elementSelector.click();
+        await expect(
+          page.getByText(
+            "Two performers will start a scene and at anytime another performer can yell “freeze” and replace one of the performers in the scene by assuming their frozen pose.",
+          ),
+        ).toBeVisible();
+      });
     },
   );
 });

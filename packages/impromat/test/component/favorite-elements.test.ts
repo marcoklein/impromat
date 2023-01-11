@@ -17,21 +17,14 @@ pageTest.describe("Favorite Elements", () => {
         await page.getByRole("button", { name: "back" }).click();
         await page.getByRole("tab", { name: "Star Favorites" }).click();
         // then
-        await expect(
-          page
-            .locator("*")
-            .getByText("improwikiDEFreeze TagKettenspieleSwitches")
-            .first(),
-        ).toBeVisible();
+        await expect(page.getByText("Freeze").first()).toBeVisible();
       });
 
       await pageTest.step("should remove a favorite element", async () => {
         // given previous step
         // when
         await page.getByRole("tab", { name: "Search Explore" }).click();
-        await page
-          .getByText("improwikiDEFreeze TagKettenspieleSwitches")
-          .click();
+        await page.getByText("Freeze").first().click();
         await page
           .locator('ion-button:has-text("Star")')
           .getByRole("button")
