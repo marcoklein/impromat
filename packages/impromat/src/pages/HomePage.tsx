@@ -6,7 +6,6 @@ import {
   IonCardTitle,
   IonContent,
   IonIcon,
-  IonImg,
   IonMenuToggle,
   IonPage,
   IonRouterLink,
@@ -15,6 +14,8 @@ import {
 } from "@ionic/react";
 import { arrowForwardOutline, information, menu } from "ionicons/icons";
 import { useState } from "react";
+import { ImpromatLogoComponent } from "../components/ImpromatLogoComponent";
+import { MainTitleComponent } from "../components/MainTitleComponent";
 import {
   routeAbout,
   routePrivacyPolicy,
@@ -23,6 +24,10 @@ import {
 import { Tabs } from "./library/components/LibraryContentComponent";
 import { routeLibrary, routeLibraryTab } from "./library/library-routes";
 
+/**
+ * Purpose of the landing/home page is to provide a quick overview of the app and inform the user about all available features.
+ * The user needs to sign in to use the app. Therefore, it should only point to the sign in page.
+ */
 export const HomePage: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const onScroll = (event: ScrollCustomEvent) => {
@@ -63,18 +68,20 @@ export const HomePage: React.FC = () => {
             justifyContent: "center",
           }}
         >
-          <div className="ion-text-center" style={{ maxWidth: "768px" }}>
+          <div
+            className="ion-text-center ion-margin-top"
+            style={{ maxWidth: "768px" }}
+          >
             <div
-              className="ion-padding-top"
               style={{
                 maxHeight: "20%",
                 maxWidth: "128px",
                 margin: "0 auto",
               }}
             >
-              <IonImg src="/assets/logo.svg" alt="Impromat Logo" />
+              <ImpromatLogoComponent></ImpromatLogoComponent>
             </div>
-            <h1 style={{ fontSize: "2.5rem" }}>Welcome to Impromat</h1>
+            <MainTitleComponent>Welcome to Impromat</MainTitleComponent>
             <IonText color="dark">
               <h1>
                 App for planning, giving and sharing improvisational theatre
@@ -83,7 +90,7 @@ export const HomePage: React.FC = () => {
             </IonText>
             <IonButton routerLink={routeWorkshops()}>
               <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-              Try it out
+              Access Impromat
             </IonButton>
           </div>
         </div>
@@ -216,7 +223,7 @@ export const HomePage: React.FC = () => {
                   during the workshop. (Don't worry, your improv data is not
                   shared with Google and safely hosted on a server based in
                   Germany — the Impromat server does not collect personal
-                  information because we value privacy. See our{" "}
+                  information. See our{" "}
                   <IonRouterLink routerLink={routePrivacyPolicy()}>
                     Privacy Policy
                   </IonRouterLink>{" "}

@@ -12,7 +12,9 @@ export class WorkshopDevPage extends DevPage {
     this.optionsLocator = page
       .locator('ion-button:has-text("Ellipsis Vertical")')
       .getByRole("button");
-    this.addFirstElementLocator = page.getByRole("link");
+    this.addFirstElementLocator = page.getByRole("link", {
+      name: "Add First Element",
+    });
     this.elementSelector = page
       .getByRole("heading")
       .getByText("Freeze")
