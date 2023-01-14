@@ -47,6 +47,8 @@ jobs:
       - name: Lint changed packages
         run: yarn lint --since ${{ inputs.testSinceRef }}
         if: ${{ inputs.testSinceRef != 0 }}
+      - name: Build improbib
+        run: yarn improbib build
       - name: Test all packages
         run: yarn test
         env:
