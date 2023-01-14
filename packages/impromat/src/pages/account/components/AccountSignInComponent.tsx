@@ -1,69 +1,57 @@
-import {
-  IonItem,
-  IonLabel,
-  IonList,
-  IonNote,
-  IonRouterLink,
-  useIonToast,
-} from "@ionic/react";
+import { IonButton, IonIcon, IonNote, IonRouterLink } from "@ionic/react";
+import { arrowForward } from "ionicons/icons";
 import { GoogleSignInButton } from "../../../components/GoogleSignInButton";
-import { enableAutoLogin } from "../../../database/enable-auto-login";
-import { useComponentLogger } from "../../../hooks/use-component-logger";
-import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
-import { routePrivacyPolicy } from "../../../routes/shared-routes";
+import { ImpromatLogoComponent } from "../../../components/ImpromatLogoComponent";
+import { MainTitleComponent } from "../../../components/MainTitleComponent";
+import { useGoogleLogin } from "../../../hooks/use-google-login";
+import { routeHome, routePrivacyPolicy } from "../../../routes/shared-routes";
 
-interface ContainerProps {
-  googleLoginHref: string | undefined;
-}
+interface ContainerProps {}
 
-export const AccountSignInComponent: React.FC<ContainerProps> = ({
-  googleLoginHref,
-}) => {
-  const [displayToast] = useIonToast();
-  const database = useImpromatRxDb();
-  const logger = useComponentLogger("AccountSignInComponent");
-
-  const loginClick = () => {
-    logger("loginClick");
-    if (!googleLoginHref) {
-      displayToast(
-        "Please check your internet connection or retry in two minutes.",
-        2000,
-      );
-      return;
-    }
-    if (process.env.REACT_APP_AUTO_LOGIN) {
-      enableAutoLogin(database, true);
-    } else {
-      window.location.href = googleLoginHref;
-    }
-  };
-
+export const AccountSignInComponent: React.FC<ContainerProps> = () => {
+  const login = useGoogleLogin();
   return (
-    <IonList>
-      <IonItem lines="none">
-        <IonLabel className="ion-text-wrap">
-          <h1>Synchronize and share your improv workshops</h1>
-        </IonLabel>
-      </IonItem>
-      <IonItem lines="none">
-        <IonLabel className="ion-text-wrap">
-          Sign in to synchronize your workshops across all your devices.
-        </IonLabel>
-      </IonItem>
-      <div className="ion-padding-horizontal">
-        <GoogleSignInButton onClick={() => loginClick()}></GoogleSignInButton>
-      </div>
-      <IonItem lines="none">
-        <IonLabel className="ion-text-wrap">
+    <div
+      style={{
+        minHeight: "66%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div className="ion-padding ion-text-center">
+        <div
+          style={{
+            maxHeight: "20%",
+            maxWidth: "128px",
+            margin: "0 auto",
+          }}
+        >
+          <ImpromatLogoComponent></ImpromatLogoComponent>
+        </div>
+        <div className="ion-margin-bottom">
+          <MainTitleComponent>Sign In to Access Impromat</MainTitleComponent>
+        </div>
+
+        <div>
+          <GoogleSignInButton onClick={() => login()}></GoogleSignInButton>
+        </div>
+        <p>
           <IonNote>
             By signing in, you agree to the{" "}
             <IonRouterLink routerLink={routePrivacyPolicy()}>
-              Privacy Policy
-            </IonRouterLink>
+              Privacy Policy.
+            </IonRouterLink>{" "}
+            Your improv data is not shared with Google and safely hosted on a
+            server based in Germany.
           </IonNote>
-        </IonLabel>
-      </IonItem>
-    </IonList>
+        </p>
+
+        <IonButton routerLink={routeHome()} fill="outline">
+          <IonIcon slot="start" icon={arrowForward}></IonIcon>
+          Learn More
+        </IonButton>
+      </div>
+    </div>
   );
 };

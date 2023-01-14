@@ -1,14 +1,16 @@
 import {
   IonButton,
   IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
   IonContent,
   IonFooter,
   IonHeader,
   IonIcon,
   IonImg,
-  IonItemDivider,
   IonItemGroup,
-  IonLabel,
   IonMenuToggle,
   IonNote,
   IonRouterLink,
@@ -16,20 +18,21 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { close, documents, home, information, library } from "ionicons/icons";
+import { close, home, information, logIn } from "ionicons/icons";
 import { environment } from "../../environment";
-import { routeLibrary } from "../../pages/library/library-routes";
+import { useGoogleLogin } from "../../hooks/use-google-login";
 import {
   routeAbout,
+  routeAccount,
   routeHome,
   routeLegal,
   routePrivacyPolicy,
-  routeWorkshops,
 } from "../../routes/shared-routes";
-import { AccountMenuItemComponent } from "./AccountMenuItemComponent";
+import { GoogleSignInButton } from "../GoogleSignInButton";
 import { MenuItemComponent } from "./MenuItemComponent";
 
-export const MenuContentComponent: React.FC = () => {
+export const SignInMenuContentComponent: React.FC = () => {
+  const triggerGoogleLogin = useGoogleLogin();
   return (
     <>
       <IonHeader>
@@ -54,32 +57,24 @@ export const MenuContentComponent: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <AccountMenuItemComponent></AccountMenuItemComponent>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Access Impromat</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <GoogleSignInButton
+              onClick={() => triggerGoogleLogin()}
+              expand="block"
+            ></GoogleSignInButton>
+            <IonNote>
+              By signing in, you agree to the{" "}
+              <IonRouterLink routerLink={routePrivacyPolicy()}>
+                Privacy Policy.
+              </IonRouterLink>
+            </IonNote>
+          </IonCardContent>
+        </IonCard>
         <IonItemGroup>
-          <IonItemDivider>
-            <IonLabel>Navigation</IonLabel>
-          </IonItemDivider>
-          <MenuItemComponent
-            routerLink={routeWorkshops()}
-            icon={documents}
-            label="Workshops"
-          >
-            {/* <IonButton slot="end" fill="solid" color="dark">
-              <IonIcon icon={add}></IonIcon>
-            </IonButton> */}
-          </MenuItemComponent>
-        </IonItemGroup>
-        <IonItemGroup>
-          <MenuItemComponent
-            routerLink={routeLibrary()}
-            icon={library}
-            label="Element Library"
-          ></MenuItemComponent>
-        </IonItemGroup>
-        <IonItemGroup>
-          <IonItemDivider>
-            <IonLabel>More</IonLabel>
-          </IonItemDivider>
           <MenuItemComponent
             exact
             routerLink={routeHome()}
@@ -90,6 +85,12 @@ export const MenuContentComponent: React.FC = () => {
             routerLink={routeAbout()}
             icon={information}
             label="About"
+          ></MenuItemComponent>
+          <MenuItemComponent
+            exact
+            routerLink={routeAccount()}
+            icon={logIn}
+            label="Sign In"
           ></MenuItemComponent>
         </IonItemGroup>
       </IonContent>

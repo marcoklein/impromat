@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import Markdown from "react-markdown";
 import { SlidingItemComponent } from "../../../components/SlidingItemComponent";
 import { ElementDocType } from "../../../database/collections/element/element-collection";
+import { useDocument } from "../../../database/use-document";
 import "./WorkshopElementItemComponent.css";
 
 interface ContainerProps {
@@ -22,14 +23,25 @@ export const WorkshopElementItemComponent: React.FC<ContainerProps> = ({
   const [maxHeight] = useState(4);
   const [fadeHeight] = useState(0.5);
 
+  const { document: basedOnElement } = useDocument(
+    "elements",
+    workshopElement.basedOn,
+  );
+
   const noteMarkdown = useCallback(
     () => <Markdown>{workshopElement.note ?? ""}</Markdown>,
     [workshopElement],
   );
 
   const contentMarkdown = useCallback(
-    () => <Markdown>{workshopElement.markdown ?? ""}</Markdown>,
-    [workshopElement],
+    () => (
+      <Markdown>
+        {workshopElement.markdown && workshopElement.markdown !== ""
+          ? workshopElement.markdown
+          : basedOnElement?.markdown ?? ""}
+      </Markdown>
+    ),
+    [workshopElement, basedOnElement],
   );
 
   return (
