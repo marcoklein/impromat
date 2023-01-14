@@ -6,12 +6,6 @@ on:
       commitSha:
         required: true
         type: string
-      testSinceRef:
-        required: false
-        type: string
-      tagTestedCommit:
-        required: false
-        type: string
 
 jobs:
   test:
@@ -21,48 +15,18 @@ jobs:
         run: "echo ${{ inputs.commitSha }}"
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          ref: ${{ inputs.commitSha }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Pull everything
-        run: |
-          git checkout main
-          git pull
-      - name: Checkout ref
-        run: git checkout ${{ inputs.commitSha }}
-      - name: Print git branches
-        run: git branch
-      - name: Fetch main branch
-        run: git fetch origin main
-      - name: Print git branches
-        run: git branch
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: yarn
       - uses: bahmutov/npm-install@v1
-      - name: Lint all packages
-        run: yarn lint
-        if: ${{ inputs.testSinceRef == 0 }}
-      - name: Lint changed packages
-        run: yarn lint --since ${{ inputs.testSinceRef }}
-        if: ${{ inputs.testSinceRef != 0 }}
-      - name: Build improbib
-        run: yarn improbib build
-      - name: Test all packages
-        run: yarn test
+      - run: yarn lint
+      - run: yarn test
         env:
           DEBUG: pw:webserver
-        if: ${{ inputs.testSinceRef == 0 }}
-      - name: Test changed packages
-        run: yarn test --since ${{ inputs.testSinceRef }}
-        env:
-          DEBUG: pw:webserver
-        if: ${{ inputs.testSinceRef != 0 }}
-      - uses: EndBug/latest-tag@latest
-        with:
-          ref: ${{ inputs.tagTestedCommit }}
-        if: ${{ inputs.tagTestedCommit != 0 }}
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         if: github.event_name == 'pull_request'

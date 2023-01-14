@@ -17,8 +17,6 @@ jobs:
     uses: ./.github/workflows/test-job.yml
     with:
       commitSha: ${{ github.sha }}
-      testSinceRef: main
-      tagTestedCommit: tested-development
 
   deploy:
     needs:
