@@ -23,8 +23,18 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull everything
+        run: |
+          git checkout main
+          git pull
       - name: Checkout ref
         run: git checkout ${{ inputs.commitSha }}
+      - name: Print git branches
+        run: git branch
+      - name: Fetch main branch
+        run: git fetch origin main
+      - name: Print git branches
+        run: git branch
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -34,12 +44,6 @@ jobs:
       - name: Lint all packages
         run: yarn lint
         if: ${{ inputs.testSinceRef == 0 }}
-      - name: Print git branches
-        run: git branch
-      - name: Fetch main branch
-        run: git fetch origin main
-      - name: Print git branches
-        run: git branch
       - name: Lint changed packages
         run: yarn lint --since ${{ inputs.testSinceRef }}
         if: ${{ inputs.testSinceRef != 0 }}
