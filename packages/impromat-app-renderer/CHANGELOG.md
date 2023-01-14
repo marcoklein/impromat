@@ -1,5 +1,33 @@
 # impromat-app-renderer
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies [35cb35f]
+- Updated dependencies [35cb35f]
+- Updated dependencies [35cb35f]
+  - impromat@0.21.0
+
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [f001bff]
+  - impromat@0.20.1
+
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [f92384b]
+- Updated dependencies [f2ff6b3]
+- Updated dependencies [a73feea]
+- Updated dependencies [f92384b]
+- Updated dependencies [f2ff6b3]
+- Updated dependencies [d5706cb]
+  - impromat@0.20.0
+
 ## 0.1.3
 
 ### Patch Changes

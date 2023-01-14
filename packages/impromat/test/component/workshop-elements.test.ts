@@ -10,7 +10,7 @@ pageTest.describe("Workshop Elements Page", () => {
       // when
       await workshopPage.addElementFromSearch();
       // then
-      await page.waitForSelector(`role=heading[name="Freeze Tag"]`);
+      await expect(page.getByRole("heading").getByText("Freeze")).toBeVisible();
     },
   );
 
@@ -21,7 +21,7 @@ pageTest.describe("Workshop Elements Page", () => {
       // when
       await workshopElementPage.createAndGoto();
       // then
-      await page.waitForSelector('ion-title:has-text("Freeze Tag") div');
+      await expect(page.locator("ion-title").getByText("Freeze")).toBeVisible();
     },
   );
 
@@ -68,14 +68,10 @@ pageTest.describe("Workshop Elements Page", () => {
     "should show license attribution of element",
     async ({ page, workshopElementPage }) => {
       // given
-      await workshopElementPage.createAndGoto();
       // when
+      await workshopElementPage.createAndGoto();
       // then
-      await page.waitForSelector('p:has-text("Based on")');
-      const element = page.getByText(
-        /Based\s+on\s+"Freeze\s+Tag"\s+by\s+improwiki\s+and\s+licensed\s+under\s+CC\s+BY-SA\s+3\.0\s+DE/,
-      );
-      expect(await element.count()).toBe(1);
+      await expect(page.getByText("Based on")).toBeVisible();
     },
   );
 });

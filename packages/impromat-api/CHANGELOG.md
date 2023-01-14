@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.0
+
+### Minor Changes
+
+- f2ff6b3: Only send element refs for replicated sections.
+
+### Patch Changes
+
+- aa0f7ab: Only set updatedAt for the document that was updated.
+
 ## 0.5.4
 
 ### Patch Changes

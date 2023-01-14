@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.21.0
+
+### Minor Changes
+
+- 35cb35f: Automatically expand the menu on large screens.
+- 35cb35f: Require a signin to access Impromat
+
+### Patch Changes
+
+- 35cb35f: Show preview in workshop elements
+
+## 0.20.1
+
+### Patch Changes
+
+- f001bff: Fix replication of element content.
+
+## 0.20.0
+
+### Minor Changes
+
+- f92384b: Rename menu item from Exercises & Games to Element Library for consistent naming
+- a73feea: Update the Impromat Home Page.
+- f92384b: Show toast if element library could not be fetched
+- f2ff6b3: Only send element refs for replicated sections.
+- d5706cb: Adding an e2e test for the dev environment to test the replication of workshops.
+
+### Patch Changes
+
+- f2ff6b3: Fix replication of sections
+- Updated dependencies [fe732f9]
+  - improbib@0.4.1
+
 ## 0.19.0
 
 ### Minor Changes

@@ -24,10 +24,10 @@ pageTest.describe("Account Page", () => {
   pageTest("should sign in", async ({ page, accountPage }) => {
     // given
     await accountPage.goto();
-    // when
     await accountPage.logout();
+    // when
     await page.waitForTimeout(1000); // timeout necessary due to google sign in button not loading immediately
-    await page.locator("ion-button").last().click();
+    await page.locator("ion-button.google-sign-in-button").last().click();
     // then
     await expect(page.getByText(/You are signed in/)).toBeVisible();
   });

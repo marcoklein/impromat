@@ -15,15 +15,15 @@ import {
 } from "@ionic/react";
 import immer from "immer";
 import { arrowBack, document, pencil } from "ionicons/icons";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
 import { LicenseItemComponent } from "../../components/LicenseItemComponent";
 import { useDocument } from "../../database/use-document";
 import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { routeWorkshop } from "../../routes/shared-routes";
-import { useComponentLogger } from "../../hooks/use-component-logger";
 
 export const WorkshopElementPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopElementPage");
@@ -84,6 +84,13 @@ export const WorkshopElementPage: React.FC = () => {
     });
   };
 
+  const elementMarkdown = useMemo(() => {
+    if (element && element.markdown && element.markdown !== "") {
+      return element.markdown;
+    }
+    return basedOnElement?.markdown ?? "";
+  }, [element, basedOnElement?.markdown]);
+
   return (
     <IonPage>
       <IonHeader>
@@ -135,9 +142,7 @@ export const WorkshopElementPage: React.FC = () => {
 
             <IonItem lines="none">
               <div className="ion-text-wrap">
-                <ReactMarkdown>
-                  {element.markdown ?? basedOnElement?.markdown ?? ""}
-                </ReactMarkdown>
+                <ReactMarkdown>{elementMarkdown}</ReactMarkdown>
               </div>
             </IonItem>
 

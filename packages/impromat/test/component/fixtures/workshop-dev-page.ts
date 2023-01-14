@@ -12,8 +12,13 @@ export class WorkshopDevPage extends DevPage {
     this.optionsLocator = page
       .locator('ion-button:has-text("Ellipsis Vertical")')
       .getByRole("button");
-    this.addFirstElementLocator = page.getByRole("link");
-    this.elementSelector = page.locator('role=heading[name="Freeze Tag"]');
+    this.addFirstElementLocator = page.getByRole("link", {
+      name: "Add First Element",
+    });
+    this.elementSelector = page
+      .getByRole("heading")
+      .getByText("Freeze")
+      .first();
   }
 
   async createNew(name: string) {
@@ -31,7 +36,7 @@ export class WorkshopDevPage extends DevPage {
     await this.addFirstElementLocator.click();
     await page.getByPlaceholder("Search").click();
     await page.getByPlaceholder("Search").fill(searchText);
-    await page.getByText("improwikiDEFreeze TagKettenspieleSwitches").click();
+    await page.getByText("Freeze").first().click();
   }
 
   async addElementFromSearch() {

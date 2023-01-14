@@ -52,6 +52,7 @@ pageTest.describe("Library with Workshop Context", () => {
       await page.getByRole("tab", { name: "Brush My Library" }).click();
       await page.getByRole("listitem").getByText("test-element").click();
       await page.getByRole("button", { name: "Add to Workshop" }).click();
+      await page.waitForTimeout(500); // db has to update
       // then
       expect(
         await page
