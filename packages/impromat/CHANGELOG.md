@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.21.0
+
+### Minor Changes
+
+- 35cb35f: Automatically expand the menu on large screens.
+- 35cb35f: Require a signin to access Impromat
+
+### Patch Changes
+
+- 35cb35f: Show preview in workshop elements
+
 ## 0.20.1
 
 ### Patch Changes
