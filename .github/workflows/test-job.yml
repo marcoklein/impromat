@@ -33,6 +33,10 @@ jobs:
       - name: Lint all packages
         run: yarn lint
         if: ${{ inputs.testSinceRef == 0 }}
+      - name: Print git branches
+        run: git branch
+      - name: Fetch main branch
+        run: git fetch origin main
       - name: Lint changed packages
         run: yarn lint --since ${{ inputs.testSinceRef }}
         if: ${{ inputs.testSinceRef != 0 }}
