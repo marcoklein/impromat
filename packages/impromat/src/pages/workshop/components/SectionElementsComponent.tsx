@@ -23,7 +23,6 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
   onRemoveClick,
   isReordering,
 }) => {
-  // const { document: section, isFetching } = useDocument("sections", sectionId);
   const [elements, setElements] = useState<
     DeepReadonlyObject<ElementDocType>[]
   >([]);
@@ -31,10 +30,6 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
     "sections",
     sectionInput.id,
   );
-  // const { documents: elements, isFetching: isElementsFetching } = useDocuments(
-  //   "elements",
-  //   section?.elements,
-  // );
   const rxdb = useImpromatRxDb();
   const logger = useComponentLogger("SectionElementsComponent");
   useEffect(() => {
@@ -43,17 +38,13 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
 
   useStateChangeLogger(section, "section", logger);
   useStateChangeLogger(isSectionFetching, "isSectionFetching", logger);
-  // useStateChangeLogger(isElementsFetching, "isElementsFetching", logger);
 
   useEffect(() => {
     if (section) {
       const updateElementsOfSection = () => {
-        console.log("Searching for elements:", section.elements);
-        // const sectionElementIds = (section.elements as any).map(
-        //   (e: any) => e.id,
-        // );
+        logger("Searching for elements:", section.elements);
         const sectionElementIds = section.elements;
-        console.log("Mapped section element ids", sectionElementIds);
+        logger("Mapped section element ids", sectionElementIds);
         rxdb.elements
           .findByIds(sectionElementIds ?? [])
           .then((sectionElements) => {
@@ -93,7 +84,7 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
     } else {
       setElements([]);
     }
-  }, [section, rxdb]);
+  }, [section, rxdb, logger]);
 
   if (!section) {
     return <IonSpinner></IonSpinner>;

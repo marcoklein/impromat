@@ -33,6 +33,7 @@ export const MenuItemComponent: React.FC<PropsWithChildren<ContainerProps>> = ({
       color={isRoute ? "light" : undefined}
       lines={isRoute ? "full" : "inset"}
       style={{ "--border-color": isRoute && "var(--ion-color-primary)" }}
+      detail={false}
     >
       <IonIcon
         slot="start"
