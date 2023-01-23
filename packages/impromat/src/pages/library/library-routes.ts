@@ -2,6 +2,8 @@ import { addSearchParamsToUrl } from "../../routes/add-search-params-to-url";
 import { ROUTE_IMPROBIB_ELEMENT_ID } from "../../routes/shared-routes";
 import { Tabs } from "./components/LibraryContentComponent";
 
+export const LIBRARY_ELEMENT_ID_SEARCH_PARAM = "elementId";
+
 export const routeLibrary = (params: { workshopId?: string } = {}) =>
   addSearchParamsToUrl("/library", params);
 export const routeLibraryTab = (
@@ -19,5 +21,12 @@ export const routeLibraryElement = (
 export const routeLibraryCreateCustomElement = (
   params: {
     workshopId?: string;
+  } = {},
+) => addSearchParamsToUrl(`/library-add-custom-element`, params);
+
+export const routeLibraryEditCustomElement = (
+  params: {
+    workshopId?: string;
+    [LIBRARY_ELEMENT_ID_SEARCH_PARAM]?: string;
   } = {},
 ) => addSearchParamsToUrl(`/library-add-custom-element`, params);

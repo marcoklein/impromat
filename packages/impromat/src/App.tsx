@@ -6,6 +6,7 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { GraphQLClient } from "graphql-request";
+import { QueryClient, QueryClientProvider } from "react-query";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/display.css";
@@ -70,6 +71,8 @@ import "./theme/variables.css";
 
 setupIonicReact();
 
+const queryClient = new QueryClient();
+
 const App: React.FC = () => {
   const [improvElements, setImprovElements] = useState<
     ElementDocType[] | undefined
@@ -106,76 +109,81 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <RxDBProvider db={db} idAttribute="id">
-      <GraphQLContext.Provider
-        value={{ client: clientRef.current, sdk: sdkRef.current }}
-      >
-        <ReplicationsContext.Provider value={{ replicationsState }}>
-          <ImprovLibraryContext.Provider
-            value={{ improvElements, setImprovElements }}
-          >
-            <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
-              <AuthorizationContextComponent>
-                <IonApp>
-                  <IonSplitPane when="lg" contentId="main">
-                    <IonReactRouter>
-                      <MenuComponent></MenuComponent>
-                      <IonRouterOutlet id="main">
-                        <Route path={routeHome()} exact>
-                          <HomePage></HomePage>
-                        </Route>
-                        <Route path={routeAbout()} exact>
-                          <AboutPage></AboutPage>
-                        </Route>
-                        <Route path={routePrivacyPolicy()} exact>
-                          <PrivacyPolicyPage></PrivacyPolicyPage>
-                        </Route>
-                        <Route path={routeLegal()} exact>
-                          <LegalPage></LegalPage>
-                        </Route>
-                        <Route path={routeAccount()} exact>
-                          <AccountPage></AccountPage>
-                        </Route>
-                        <ProtectedRouteComponent path={routeProfile()} exact>
-                          <AccountPage></AccountPage>
-                        </ProtectedRouteComponent>
-                        <ProtectedRouteComponent path={routeWorkshops()} exact>
-                          <WorkshopsPage></WorkshopsPage>
-                        </ProtectedRouteComponent>
-                        <ProtectedRouteComponent path={routeWorkshop()} exact>
-                          <WorkshopPage></WorkshopPage>
-                        </ProtectedRouteComponent>
-                        <ProtectedRouteComponent
-                          path={routeWorkshopElement()}
-                          exact
-                        >
-                          <WorkshopElementPage></WorkshopElementPage>
-                        </ProtectedRouteComponent>
-                        <ProtectedRouteComponent
-                          path={routeLibraryElement()}
-                          exact
-                        >
-                          <LibraryElementPage></LibraryElementPage>
-                        </ProtectedRouteComponent>
-                        <ProtectedRouteComponent
-                          path={routeLibraryCreateCustomElement()}
-                          exact
-                        >
-                          <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
-                        </ProtectedRouteComponent>
-                        <ProtectedRouteComponent path={routeLibrary()}>
-                          <LibraryPage></LibraryPage>
-                        </ProtectedRouteComponent>
-                      </IonRouterOutlet>
-                    </IonReactRouter>
-                  </IonSplitPane>
-                </IonApp>
-              </AuthorizationContextComponent>
-            </ErrorBoundary>
-          </ImprovLibraryContext.Provider>
-        </ReplicationsContext.Provider>
-      </GraphQLContext.Provider>
-    </RxDBProvider>
+    <QueryClientProvider client={queryClient}>
+      <RxDBProvider db={db} idAttribute="id">
+        <GraphQLContext.Provider
+          value={{ client: clientRef.current, sdk: sdkRef.current }}
+        >
+          <ReplicationsContext.Provider value={{ replicationsState }}>
+            <ImprovLibraryContext.Provider
+              value={{ improvElements, setImprovElements }}
+            >
+              <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
+                <AuthorizationContextComponent>
+                  <IonApp>
+                    <IonSplitPane when="lg" contentId="main">
+                      <IonReactRouter>
+                        <MenuComponent></MenuComponent>
+                        <IonRouterOutlet id="main">
+                          <Route path={routeHome()} exact>
+                            <HomePage></HomePage>
+                          </Route>
+                          <Route path={routeAbout()} exact>
+                            <AboutPage></AboutPage>
+                          </Route>
+                          <Route path={routePrivacyPolicy()} exact>
+                            <PrivacyPolicyPage></PrivacyPolicyPage>
+                          </Route>
+                          <Route path={routeLegal()} exact>
+                            <LegalPage></LegalPage>
+                          </Route>
+                          <Route path={routeAccount()} exact>
+                            <AccountPage></AccountPage>
+                          </Route>
+                          <ProtectedRouteComponent path={routeProfile()} exact>
+                            <AccountPage></AccountPage>
+                          </ProtectedRouteComponent>
+                          <ProtectedRouteComponent
+                            path={routeWorkshops()}
+                            exact
+                          >
+                            <WorkshopsPage></WorkshopsPage>
+                          </ProtectedRouteComponent>
+                          <ProtectedRouteComponent path={routeWorkshop()} exact>
+                            <WorkshopPage></WorkshopPage>
+                          </ProtectedRouteComponent>
+                          <ProtectedRouteComponent
+                            path={routeWorkshopElement()}
+                            exact
+                          >
+                            <WorkshopElementPage></WorkshopElementPage>
+                          </ProtectedRouteComponent>
+                          <ProtectedRouteComponent
+                            path={routeLibraryElement()}
+                            exact
+                          >
+                            <LibraryElementPage></LibraryElementPage>
+                          </ProtectedRouteComponent>
+                          <ProtectedRouteComponent
+                            path={routeLibraryCreateCustomElement()}
+                            exact
+                          >
+                            <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
+                          </ProtectedRouteComponent>
+                          <ProtectedRouteComponent path={routeLibrary()}>
+                            <LibraryPage></LibraryPage>
+                          </ProtectedRouteComponent>
+                        </IonRouterOutlet>
+                      </IonReactRouter>
+                    </IonSplitPane>
+                  </IonApp>
+                </AuthorizationContextComponent>
+              </ErrorBoundary>
+            </ImprovLibraryContext.Provider>
+          </ReplicationsContext.Provider>
+        </GraphQLContext.Provider>
+      </RxDBProvider>
+    </QueryClientProvider>
   );
 };
 

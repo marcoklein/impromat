@@ -52,7 +52,7 @@ export const WorkshopElementItemComponent: React.FC<ContainerProps> = ({
       routerLink={routerLink}
     >
       <>
-        <h2>{workshopElement.name}</h2>
+        <h2>{basedOnElement?.name}</h2>
         <div
           style={{
             maxHeight: `${maxHeight}rem`,

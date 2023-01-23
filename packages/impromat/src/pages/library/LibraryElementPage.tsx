@@ -121,7 +121,7 @@ export const LibraryElementPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen className="ion-padding">
+      <IonContent fullscreen>
         {improbibElement ? (
           <ElementComponent element={improbibElement}></ElementComponent>
         ) : (

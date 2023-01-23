@@ -1,6 +1,6 @@
 # Improbib
 
-Collecting and merging improvisational exercises and games from various sources.
+Collection of publicly available improvisation theatre exercises and games from various sources.
 
 ## Getting started
 

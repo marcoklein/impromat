@@ -163,6 +163,10 @@ export class RxMutations {
     await this.database.collections.elements.upsert(element);
   }
 
+  async updateElement(element: ElementDocType) {
+    return this.database.elements.atomicUpsert(element);
+  }
+
   async addNewElement(elementInput: Partial<ElementDocType>) {
     const element = WORKSHOP_HELPER.getNewElementDocType(elementInput);
     return this.database.elements.atomicUpsert(element);

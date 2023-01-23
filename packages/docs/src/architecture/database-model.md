@@ -1,9 +1,11 @@
 - [Client side Entity Relationships](#client-side-entity-relationships)
-  - [Collections](#collections)
-  - [Client Authorization](#client-authorization)
+  - [ER-Diagram](#er-diagram)
   - [Workshop Elements and Elements](#workshop-elements-and-elements)
+  - [Custom Elements](#custom-elements)
 
 # Client side Entity Relationships
+
+## ER-Diagram
 
 The following ER-diagram presents an overview of the client-side collections.
 
@@ -23,53 +25,65 @@ erDiagram
     }
 ```
 
-## Collections
-
 - `me`: Contains a single reference to the currently logged in user object.
 - `user`: Stores all users the client needs. This might be friends or the own user object.
 - `workshop`: Stores improv workshops.
 - `element`: Elements might be part of a workshop and represent improv exercises or games.
 
-## Client Authorization
-
-Verify that the user is still logged in.
-
-```mermaid
-flowchart TD
-    S[Start App with logged in User] --> L{Logged In?}
-    L -->|Yes| P[Pull Login Info from Server]
-    P --> C{Connection?}
-    C -->|Yes| V{Login Valid?}
-    V -->|Yes| R
-    C -->|No| R[Retry after x Minutes]
-    V -->|No| O[Logout]
-```
-
-> TODO add process to logout if there has been no connection for a too long timeframe.
-
 ## Workshop Elements and Elements
 
 The model holds two types of elements:
 
-1. a **workshop element**, that is an element represented by the workshop. It holds specific information of an element within a workshop, e.g. a note, a title.
+1. a **workshop element**, that is an element represented by the workshop. It holds specific information of an element within a workshop, e.g. a note or title.
 2. a **base element**, that is either from the Improbib or a custom creation. It holds base information about an element, e.g. description and source information.
 
 ```mermaid
 erDiagram
-    baseElement ||--o{ workshopElement : "uses and overrides"
-    workshop ||--o{ workshopElement : contains
-    workshop {
+    BaseElement ||--o{ WorkshopElement : "uses and overrides"
+    Workshop ||--o{ WorkshopElement : contains
+    Workshop {
       name string
     }
-    baseElement {
+    BaseElement {
       string name
       string markdown
       string[] tags
       bool public
       string sourceName
     }
-    workshopElement {
+    WorkshopElement {
       string name
       string note
     }
+```
+
+## Custom Elements
+
+Users can create their own exercises and games by creating custom elements. Custom elements and elements from the Improbib are the two main sources for workshop elements.
+
+To allow easier reuse of custom elements and to avoid duplications there is always one **Single Source of Truth** element represented by the `basedOn` relationship of the `WorskhopElement`.
+
+The following Domain Model describes the `CustomElement` relationship:
+
+```mermaid
+classDiagram
+  direction LR
+  class WorkshopSection {
+  }
+  class WorkshopElement {
+    name: string
+    note: string
+  }
+  class Element {
+    name: string
+    html: string
+  }
+  class CustomElement {
+  }
+  class ImprobibElement {
+  }
+  WorkshopSection --> WorkshopElement : has
+  WorkshopElement --* Element : basedOn
+  Element <|-- CustomElement : is
+  Element <|-- ImprobibElement : is
 ```
