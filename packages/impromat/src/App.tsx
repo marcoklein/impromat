@@ -68,6 +68,7 @@ import {
 } from "./routes/shared-routes";
 import "./theme/colors.css";
 import "./theme/variables.css";
+import { useLogout } from "./hooks/use-logout";
 
 setupIonicReact();
 
@@ -87,11 +88,18 @@ const App: React.FC = () => {
     }),
   );
   const sdkRef = useRef(getSdk(clientRef.current));
+  const { triggerLogout } = useLogout();
 
   const [db, setDb] = useState<AppDatabase>();
   useEffect(() => {
     // RxDB instantiation can be asynchronous
-    createDatabase({ client: clientRef.current, sdk: sdkRef.current })
+    createDatabase(
+      {
+        client: clientRef.current,
+        sdk: sdkRef.current,
+      },
+      triggerLogout,
+    )
       .then(({ database, replications }) => {
         enableAutoLogin(database);
         setDb(database);
@@ -106,7 +114,7 @@ const App: React.FC = () => {
           console.log(error);
         }
       });
-  }, []);
+  }, [triggerLogout]);
 
   return (
     <QueryClientProvider client={queryClient}>

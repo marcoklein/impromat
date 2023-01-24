@@ -27,7 +27,10 @@ if (process.env.NODE_ENV === "development") {
 }
 console.log("RxDB Plugins initialized");
 
-export const createDatabase = async (apiContext: GraphQLContextType) => {
+export const createDatabase = async (
+  apiContext: GraphQLContextType,
+  triggerLogoutCallback: () => Promise<void>,
+) => {
   const logger = rootLogger.extend("create-database");
   const storage = getRxStorageDexie();
   // const storage = getRxStorageMemory();
@@ -56,7 +59,7 @@ export const createDatabase = async (apiContext: GraphQLContextType) => {
   });
   const db: AppDatabase = await provider.loadDatabase();
   const collections = db.collections;
-  enableMeReplication(collections.me, apiContext);
+  enableMeReplication(collections.me, apiContext, triggerLogoutCallback);
   const replications: ReplicationsState = {
     workshops: enableWorkshopReplication(collections.workshops),
     users: enableUserReplication(collections.users),

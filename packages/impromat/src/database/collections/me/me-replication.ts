@@ -5,12 +5,13 @@ import { MeCollection } from "./me-collection";
 export function enableMeReplication(
   meCollection: MeCollection,
   apiContext: GraphQLContextType,
+  triggerLogoutCallback: () => Promise<void>,
 ) {
   const logger = rootLogger.extend("me-replication");
 
   async function onLogout() {
     logger("Logging out...");
-    console.warn("Logout in me replication not implemented yet");
+    triggerLogoutCallback();
   }
 
   async function sync() {
