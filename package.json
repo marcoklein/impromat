@@ -21,8 +21,8 @@
     "lint": "lerna run lint",
     "test": "lerna run test",
     "build": "lerna run build",
-    "bootstrap": "lerna bootstrap",
     "changed": "lerna ls --since main --all",
+    "improbib": "lerna run --scope improbib",
     "impromat": "lerna run --scope impromat",
     "impromat-api": "lerna run --scope impromat-api",
     "infra:config": "./packages/infrastructure/configure.sh"

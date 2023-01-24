@@ -5,6 +5,9 @@ on:
     branches:
       - dev
   workflow_dispatch:
+    inputs:
+      skip-test:
+        type: boolean
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
