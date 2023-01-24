@@ -1,17 +1,22 @@
-import { GraphQLContextType } from "../../../graphql/graphql-context";
+import { useContext } from "react";
+import { GraphQLContext } from "../../../graphql/graphql-context";
+import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
+import { useInterval } from "../../../hooks/use-interval";
+import { useLogout } from "../../../hooks/use-logout";
 import { rootLogger } from "../../../logger";
-import { MeCollection } from "./me-collection";
 
-export function enableMeReplication(
-  meCollection: MeCollection,
-  apiContext: GraphQLContextType,
-  triggerLogoutCallback: () => Promise<void>,
-) {
+export function useMeReplication() {
+  // TODO store state of me replication in context
+  const apiContext = useContext(GraphQLContext);
+  const { triggerLogout } = useLogout();
+  const { collections } = useImpromatRxDb();
+  const meCollection = collections.me;
+
   const logger = rootLogger.extend("me-replication");
 
   async function onLogout() {
     logger("Logging out...");
-    triggerLogoutCallback();
+    triggerLogout();
   }
 
   async function sync() {
@@ -56,8 +61,6 @@ export function enableMeReplication(
       }
     }
   }
-  setInterval(async () => {
-    sync();
-  }, 10 * 1000);
+  useInterval(sync, 10 * 1000);
   sync();
 }

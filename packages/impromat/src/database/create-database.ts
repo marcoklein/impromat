@@ -6,10 +6,8 @@ import { RxDBJsonDumpPlugin } from "rxdb/plugins/json-dump";
 import { RxDBMigrationPlugin } from "rxdb/plugins/migration";
 import { RxDBReplicationGraphQLPlugin } from "rxdb/plugins/replication-graphql";
 import { RxDBUpdatePlugin } from "rxdb/plugins/update";
-import { GraphQLContextType } from "../graphql/graphql-context";
 import { rootLogger } from "../logger";
 import { enableElementReplication } from "./collections/element/element-replication";
-import { enableMeReplication } from "./collections/me/me-replication";
 import { ReplicationsState } from "./collections/replications-state";
 import { enableSectionReplication } from "./collections/section/section-replication";
 import { enableUserReplication } from "./collections/user/user-replication";
@@ -27,10 +25,7 @@ if (process.env.NODE_ENV === "development") {
 }
 console.log("RxDB Plugins initialized");
 
-export const createDatabase = async (
-  apiContext: GraphQLContextType,
-  triggerLogoutCallback: () => Promise<void>,
-) => {
+export const createDatabase = async () => {
   const logger = rootLogger.extend("create-database");
   const storage = getRxStorageDexie();
   // const storage = getRxStorageMemory();
@@ -59,7 +54,6 @@ export const createDatabase = async (
   });
   const db: AppDatabase = await provider.loadDatabase();
   const collections = db.collections;
-  enableMeReplication(collections.me, apiContext, triggerLogoutCallback);
   const replications: ReplicationsState = {
     workshops: enableWorkshopReplication(collections.workshops),
     users: enableUserReplication(collections.users),

@@ -72,7 +72,7 @@ pageTest.describe("Replication", () => {
         async () => {
           const otherWorkshopPage = new WorkshopDevPage(otherPage);
           await otherWorkshopPage.goto(workshopId);
-          await expect(otherPage.getByText("Freeze")).toBeVisible();
+          await expect(otherPage.getByText("Freeze").first()).toBeVisible();
         },
       );
 
