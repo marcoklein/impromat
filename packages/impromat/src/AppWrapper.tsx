@@ -19,7 +19,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Provider as RxDBProvider } from "rxdb-hooks";
 import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { AuthorizationWrapper as AuthorizationContextComponent } from "./AuthorizationWrapper";
-import { DatabaseInitComponent } from "./components/DatabaseInitComponent";
 import { ElementDocType } from "./database/collections/element/element-collection";
 import { ReplicationsState } from "./database/collections/replications-state";
 import { createDatabase } from "./database/create-database";
