@@ -84,7 +84,7 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
             >
               <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
                 <AuthorizationContextComponent>
-                  {children}
+                  {db && children}
                 </AuthorizationContextComponent>
               </ErrorBoundary>
             </ImprovLibraryContext.Provider>
