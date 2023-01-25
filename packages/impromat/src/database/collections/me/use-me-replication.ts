@@ -16,7 +16,7 @@ export function useMeReplication() {
 
   async function onLogout() {
     logger("Logging out...");
-    triggerLogout();
+    triggerLogout({ force: true });
   }
 
   async function sync() {

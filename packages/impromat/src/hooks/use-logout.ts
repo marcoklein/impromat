@@ -50,7 +50,11 @@ export function useLogout() {
     dismissIonLoading();
   };
 
-  const triggerLogout = async () => {
+  const triggerLogout = async (params?: { force: boolean }) => {
+    if (params?.force) {
+      startLogout();
+      return;
+    }
     presentAlert({
       header: "Logout",
       message:
