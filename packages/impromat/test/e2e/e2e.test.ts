@@ -2,43 +2,29 @@ import { expect } from "@playwright/test";
 import { pageTest } from "../component/fixtures/page-fixtures";
 import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page";
 import { WorkshopsDevPage } from "../component/fixtures/workshops-dev-page";
-
-declare const process: any;
+import { e2ePageTest } from "./e2e-page-fixtures";
 
 pageTest.describe("Replication", () => {
-  pageTest(
+  e2ePageTest(
     "should replicate data between two sessions",
-    async ({ page, browser, workshopPage, workshopsPage }) => {
+    async ({
+      page,
+      browser,
+      workshopPage,
+      workshopsPage,
+      prepareLoggedInSession,
+    }) => {
       const sessionId = Date.now();
       const { otherPage } = await pageTest.step(
         "prepare open two Impromat sessions in different browsers",
         async () => {
-          const cookie = {
-            name: "connect.sid",
-            value: process.env.COOKIE_SECRET,
-            domain: process.env.COOKIE_DOMAIN,
-            httpOnly: true,
-            sameSite: "Strict",
-            path: "/",
-          } as const;
           const otherContext = await browser.newContext();
           const otherPage = await otherContext.newPage();
-          const context = page.context();
-          await context.addCookies([cookie]);
-          await otherContext.addCookies([cookie]);
-          await Promise.all([
-            page.goto("https://dev.impromat.app/account"),
-            otherPage.goto("https://dev.impromat.app/account"),
-          ]);
-          await expect(
-            page.getByText("You are signed in").first(),
-            "Expected to be signed in",
-          ).toBeVisible();
-          await expect(
-            otherPage.getByText("You are signed in").first(),
-            "Expected to be signed in",
-          ).toBeVisible();
-          return { context, otherContext, otherPage };
+
+          await prepareLoggedInSession(page);
+          await prepareLoggedInSession(otherPage);
+
+          return { otherContext, otherPage };
         },
       );
 

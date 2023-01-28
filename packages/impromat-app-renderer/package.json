@@ -7,7 +7,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "ts-node --transpile-only src/index.ts"
+    "start": "ts-node --transpile-only src/index.ts",
+    "app:dev:logs": "ssh -t dokku@impromat.app logs impromat-app-development",
+    "api:dev:logs": "ssh -t dokku@impromat.app logs impromat-api-development"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",

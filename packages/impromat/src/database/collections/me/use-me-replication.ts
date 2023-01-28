@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { GraphQLContext } from "../../../graphql/graphql-context";
 import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
 import { useInterval } from "../../../hooks/use-interval";
+import { useIsLoggedIn } from "../../../hooks/use-is-logged-in";
 import { useLogout } from "../../../hooks/use-logout";
 import { rootLogger } from "../../../logger";
 

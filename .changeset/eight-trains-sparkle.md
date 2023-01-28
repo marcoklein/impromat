@@ -2,4 +2,4 @@
 "impromat": patch
 ---
 
-Automatically log out if there is a authorization error
+Automatically log out if there is an authorization error
