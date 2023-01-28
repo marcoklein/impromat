@@ -8,6 +8,11 @@ on:
     inputs:
       skip-test:
         type: boolean
+  pull_request:
+    branches:
+      - dev
+
+concurrency: development-environment
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}

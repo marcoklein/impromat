@@ -53,7 +53,7 @@ pageTest.describe("Replication", () => {
       await prepareLoggedInSession();
       // when
       // TODO fix synchronization as the workshop does not load without a timeout
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(10000);
       await workshopsPage.goto();
       await workshopsPage
         .getWorkshopWithNameLocator(uniqueWorkshopName)
