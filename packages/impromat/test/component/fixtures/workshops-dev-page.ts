@@ -21,4 +21,12 @@ export class WorkshopsDevPage extends DevPage {
     await expect(page).toHaveURL(`./workshop/${workshopId}`);
     return workshopId;
   }
+
+  async expectToShowWorkshopWithName(name: string) {
+    await expect(this.getWorkshopWithNameLocator(name)).toBeVisible();
+  }
+
+  getWorkshopWithNameLocator(name: string) {
+    return this.page.getByText(name);
+  }
 }

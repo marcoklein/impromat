@@ -27,6 +27,7 @@ pageTest.describe("Library", () => {
     // given
     const name = "test-custom-element";
     // when
+    await libraryPage.goto();
     await libraryPage.createCustomElement(name);
     // then
     await expect(page.getByText(new RegExp(name))).toBeVisible();
@@ -37,6 +38,7 @@ pageTest.describe("Library", () => {
     async ({ page, libraryPage }) => {
       // given
       const name = "test-custom-element";
+      await libraryPage.goto();
       await libraryPage.createCustomElement(name);
       // when
       await libraryPage.tabLocator(/Search/).click();

@@ -24,6 +24,7 @@ import { useDocument } from "../../database/use-document";
 import { useRxdbMutations } from "../../database/use-rxdb-mutations";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeWorkshop } from "../../routes/shared-routes";
 
 export const WorkshopElementPage: React.FC = () => {
@@ -39,6 +40,8 @@ export const WorkshopElementPage: React.FC = () => {
     "elements",
     workshopElement?.basedOn,
   );
+
+  useStateChangeLogger(workshopElement, "workshopElement", logger);
 
   useEffect(() => {
     logger("basedOnElement=%O", basedOnElement);

@@ -2,9 +2,9 @@ import { expect } from "@playwright/test";
 import { pageTest } from "../component/fixtures/page-fixtures";
 import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page";
 import { WorkshopsDevPage } from "../component/fixtures/workshops-dev-page";
-import { e2ePageTest } from "./e2e-page-fixtures";
+import { e2ePageTest } from "./fixtures/e2e-page-fixtures";
 
-pageTest.describe("Replication", () => {
+pageTest.describe("Live Replication", () => {
   e2ePageTest(
     "should replicate data between two sessions",
     async ({
@@ -16,7 +16,7 @@ pageTest.describe("Replication", () => {
     }) => {
       const sessionId = Date.now();
       const { otherPage } = await pageTest.step(
-        "prepare open two Impromat sessions in different browsers",
+        "prepare and open two Impromat sessions in different browsers",
         async () => {
           const otherContext = await browser.newContext();
           const otherPage = await otherContext.newPage();
@@ -34,7 +34,7 @@ pageTest.describe("Replication", () => {
           const workshopName = `test-${sessionId}`;
           const workshopId = await workshopPage.createNew(workshopName);
           await workshopsPage.goto();
-          await expect(page.getByText(workshopName)).toBeVisible();
+          await workshopsPage.expectToShowWorkshopWithName(workshopName);
           return { workshopName, workshopId };
         },
       );

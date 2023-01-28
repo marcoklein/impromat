@@ -47,8 +47,9 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
   const validateInputs = () => {
     if (!name?.length) {
       presentToast({ message: "Please enter a name", duration: 1500 });
-      return;
+      return false;
     }
+    return true;
   };
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
 
   const onCreateElementClick = () => {
     if (!mutations) return;
-    validateInputs();
+    if (!validateInputs()) return;
     (async () => {
       if (editExistingItem) {
         const newElement = await mutations.updateElement({

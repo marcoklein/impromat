@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { pageTest } from "../component/fixtures/page-fixtures";
+import { pageTest } from "../../component/fixtures/page-fixtures";
 import { changePageAuthenticationCookie } from "./change-page-authentication-cookie";
 
 declare const process: { env: Record<string, string | undefined> };
@@ -9,10 +9,10 @@ type E2EPageFixtures = {
 };
 
 const test = pageTest.extend<E2EPageFixtures>({
-  prepareLoggedInSession: async ({ page: originalPage }, use) => {
+  prepareLoggedInSession: async ({ page: originalPage, baseURL }, use) => {
     await use(async (page = originalPage) => {
       await changePageAuthenticationCookie(page, process.env.COOKIE_SECRET);
-      await page.goto("https://dev.impromat.app/account");
+      await page.goto("/account");
       await page.getByText("You are signed in").first().waitFor();
     });
   },

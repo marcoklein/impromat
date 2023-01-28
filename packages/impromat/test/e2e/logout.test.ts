@@ -1,5 +1,5 @@
-import { changePageAuthenticationCookie } from "./change-page-authentication-cookie";
-import { e2ePageTest } from "./e2e-page-fixtures";
+import { changePageAuthenticationCookie } from "./fixtures/change-page-authentication-cookie";
+import { e2ePageTest } from "./fixtures/e2e-page-fixtures";
 
 e2ePageTest.describe("Logout", () => {
   e2ePageTest(
