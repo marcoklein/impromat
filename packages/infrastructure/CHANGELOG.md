@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.3.0
+
+### Minor Changes
+
+- 81ddccb: Optimize Docker build of impromat app.
+
 ## 0.2.1
 
 ### Patch Changes

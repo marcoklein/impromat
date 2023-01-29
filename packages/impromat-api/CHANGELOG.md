@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.1
+
+### Patch Changes
+
+- 81ddccb: Clear session cookie on logout
+
 ## 0.6.0
 
 ### Minor Changes

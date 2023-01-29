@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.22.0
+
+### Minor Changes
+
+- 81ddccb: Add add custom element icon into element library toolbar
+- 81ddccb: Allow editing of custom elements
+
+### Patch Changes
+
+- 81ddccb: Automatically log out if there is an authorization error
+- 81ddccb: Remove serve from impromat tests
+
 ## 0.21.0
 
 ### Minor Changes
