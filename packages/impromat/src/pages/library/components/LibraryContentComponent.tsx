@@ -19,9 +19,9 @@ import {
 } from "react-router";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
-import { CustomElementsTabComponent } from "./CustomElementsTabComponent";
 import { FavoriteElementsTabComponent } from "../components/FavoriteElementsTabComponent";
 import { routeLibraryTab } from "../library-routes";
+import { CustomElementsTabComponent } from "./CustomElementsTabComponent";
 import { SearchElementTabComponent } from "./SearchElementTabComponent";
 
 export enum Tabs {

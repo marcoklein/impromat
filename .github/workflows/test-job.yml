@@ -24,6 +24,7 @@ jobs:
           cache: yarn
       - uses: bahmutov/npm-install@v1
       - run: yarn lint
+      - run: yarn build
       - run: yarn test
         env:
           DEBUG: pw:webserver

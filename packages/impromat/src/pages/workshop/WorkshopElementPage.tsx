@@ -15,14 +15,16 @@ import {
 } from "@ionic/react";
 import immer from "immer";
 import { arrowBack, document, pencil } from "ionicons/icons";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
+import { CustomElementInfoItemComponent } from "../../components/CustomElementInfoItemComponent";
 import { LicenseItemComponent } from "../../components/LicenseItemComponent";
 import { useDocument } from "../../database/use-document";
 import { useRxdbMutations } from "../../database/use-rxdb-mutations";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeWorkshop } from "../../routes/shared-routes";
 
 export const WorkshopElementPage: React.FC = () => {
@@ -33,63 +35,57 @@ export const WorkshopElementPage: React.FC = () => {
   }>();
   const mutations = useRxdbMutations();
   const [presentInput] = useInputDialog();
-  const { document: element } = useDocument("elements", elementId);
-  const { document: basedOnElement } = useDocument(
+  const { document: workshopElement } = useDocument("elements", elementId);
+  const { document: basedOnElementFromDatabase } = useDocument(
     "elements",
-    element?.basedOn,
+    workshopElement?.basedOn,
   );
 
-  useEffect(() => {
-    logger("basedOnElement=%O", basedOnElement);
-  }, [basedOnElement, logger]);
+  const basedOnElement = useMemo(() => {
+    return basedOnElementFromDatabase ?? workshopElement;
+  }, [basedOnElementFromDatabase, workshopElement]);
 
-  const changeElementName = (newName: string) => {
-    if (!mutations || !element) return;
-    const newElement = immer(element, (draft) => {
-      draft.name = newName;
-    });
-    mutations.updateWorkshopElement(workshopId, newElement);
-  };
+  useStateChangeLogger(workshopElement, "workshopElement", logger);
+  useStateChangeLogger(
+    basedOnElementFromDatabase,
+    "basedOnElementFromDatabase",
+    logger,
+  );
+  useStateChangeLogger(basedOnElement, "basedOnElement", logger);
 
   const saveNotesChanges = useCallback(
     (note: string) => {
-      if (!mutations || !element) return;
-      const updatedPart = immer(element, (draft) => {
+      if (!mutations || !workshopElement) return;
+      const updatedPart = immer(workshopElement, (draft) => {
         draft.note = note;
       });
       mutations.updateWorkshopElement(workshopId, updatedPart);
     },
-    [element, workshopId, mutations],
+    [workshopElement, workshopId, mutations],
   );
 
   const onChangeNoteClick = () => {
-    if (!element) return;
+    if (!workshopElement) return;
     presentInput({
       header: "Note",
       isMultiline: true,
       onAccept: (text) => {
         saveNotesChanges(text);
       },
-      initialText: element.note ?? "",
-    });
-  };
-
-  const onRenameElement = () => {
-    if (!element) return;
-    presentInput({
-      header: "Rename Element",
-      emptyInputMessage: "Please type a name.",
-      initialText: element.name,
-      onAccept: (text) => changeElementName(text),
+      initialText: workshopElement.note ?? "",
     });
   };
 
   const elementMarkdown = useMemo(() => {
-    if (element && element.markdown && element.markdown !== "") {
-      return element.markdown;
+    if (
+      workshopElement &&
+      workshopElement.markdown &&
+      workshopElement.markdown !== ""
+    ) {
+      return workshopElement.markdown;
     }
     return basedOnElement?.markdown ?? "";
-  }, [element, basedOnElement?.markdown]);
+  }, [workshopElement, basedOnElement?.markdown]);
 
   return (
     <IonPage>
@@ -103,24 +99,19 @@ export const WorkshopElementPage: React.FC = () => {
               <IonIcon icon={arrowBack} slot="icon-only"></IonIcon>
             </IonButton>
           </IonButtons>
-          <IonTitle>{element?.name}</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={onRenameElement}>
-              <IonIcon slot="icon-only" icon={pencil}></IonIcon>
-            </IonButton>
-          </IonButtons>
+          <IonTitle>{basedOnElement?.name}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
-        {element ? (
+        {workshopElement ? (
           <IonList>
-            <IonCard color="light">
-              <IonItem lines="none" color="light">
-                {element.note ? (
+            <IonCard>
+              <IonItem lines="none">
+                {workshopElement.note ? (
                   <>
                     <IonLabel className="ion-text-wrap">
-                      <ReactMarkdown>{element.note}</ReactMarkdown>
+                      <ReactMarkdown>{workshopElement.note}</ReactMarkdown>
                     </IonLabel>
                     <IonButtons>
                       <IonButton onClick={() => onChangeNoteClick()}>
@@ -146,16 +137,23 @@ export const WorkshopElementPage: React.FC = () => {
               </div>
             </IonItem>
 
-            {basedOnElement && (
-              <LicenseItemComponent
-                authorName={basedOnElement.sourceName}
-                authorUrl={basedOnElement.sourceBaseUrl}
-                licenseName={basedOnElement.licenseName}
-                licenseUrl={basedOnElement.licenseUrl}
-                name={basedOnElement.name}
-                sourceUrl={basedOnElement.sourceUrl}
-              ></LicenseItemComponent>
-            )}
+            {basedOnElement &&
+              (!basedOnElement.basedOn && !basedOnElement.sourceName ? (
+                <CustomElementInfoItemComponent
+                  element={basedOnElement}
+                  workshopId={workshopId}
+                  showElementLink
+                ></CustomElementInfoItemComponent>
+              ) : (
+                <LicenseItemComponent
+                  authorName={basedOnElement.sourceName}
+                  authorUrl={basedOnElement.sourceBaseUrl}
+                  licenseName={basedOnElement.licenseName}
+                  licenseUrl={basedOnElement.licenseUrl}
+                  name={basedOnElement.name}
+                  sourceUrl={basedOnElement.sourceUrl}
+                ></LicenseItemComponent>
+              ))}
           </IonList>
         ) : (
           <IonSpinner></IonSpinner>

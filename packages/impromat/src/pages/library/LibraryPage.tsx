@@ -8,12 +8,13 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { arrowBack } from "ionicons/icons";
+import { add, arrowBack } from "ionicons/icons";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeWorkshop } from "../../routes/shared-routes";
 import { LibraryContentComponent } from "./components/LibraryContentComponent";
+import { routeLibraryCreateCustomElement } from "./library-routes";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
 
 export const LibraryPage: React.FC = () => {
@@ -37,6 +38,13 @@ export const LibraryPage: React.FC = () => {
             )}
           </IonButtons>
           <IonTitle>{workshopId ? "Add Element" : "Element Library"}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton
+              routerLink={routeLibraryCreateCustomElement({ workshopId })}
+            >
+              <IonIcon slot="icon-only" icon={add}></IonIcon>
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 

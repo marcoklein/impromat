@@ -25,7 +25,7 @@ export const AccountSignedInComponent: React.FC<ContainerProps> = () => {
         </IonLabel>
       </IonItem>
       <IonItemDivider></IonItemDivider>
-      <IonItem onClick={triggerLogout} button={true}>
+      <IonItem onClick={() => triggerLogout()} button={true}>
         <IonIcon icon={logOut} slot="start"></IonIcon>
         <IonLabel>Logout</IonLabel>
       </IonItem>

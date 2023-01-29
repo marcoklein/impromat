@@ -1,0 +1,15 @@
+name: Main Test Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  test:
+    uses: ./.github/workflows/test-job.yml
+    with:
+      commitSha: ${{ github.sha }}

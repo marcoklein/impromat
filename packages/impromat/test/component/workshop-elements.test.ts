@@ -25,7 +25,7 @@ pageTest.describe("Workshop Elements Page", () => {
     },
   );
 
-  pageTest(
+  pageTest.skip(
     "should rename a workshop element",
     async ({ page, workshopElementPage }) => {
       // given

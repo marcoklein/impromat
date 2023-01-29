@@ -1,22 +1,24 @@
 import { useIonAlert, useIonLoading, useIonToast } from "@ionic/react";
 import { environment } from "../environment";
 import { useImpromatRxDb } from "./use-impromat-rx-db";
+import { useIsLoggedIn } from "./use-is-logged-in";
 import { useLogger } from "./use-logger";
 
 const backendUrl = `${environment.API_URL}/graphql`;
+
 export function useLogout() {
   const [presentIonLoading, dismissIonLoading] = useIonLoading();
   const [displayToast] = useIonToast();
   const database = useImpromatRxDb();
   const logger = useLogger("useLogout");
   const [presentAlert] = useIonAlert();
+  const isLoggedIn = useIsLoggedIn();
 
   const startLogout = async () => {
     try {
       presentIonLoading("Logging out...");
       // TODO refactor REACT_APP_AUTO_LOGIN functionality into a separate hook
       if (!process.env.REACT_APP_AUTO_LOGIN) {
-        console.warn("REACT_APP_AUTO_LOGIN: Skipping logout request");
         await fetch(backendUrl, {
           method: "POST",
           body: JSON.stringify({
@@ -32,6 +34,8 @@ export function useLogout() {
           },
           credentials: "include",
         });
+      } else {
+        console.warn("REACT_APP_AUTO_LOGIN: Skipping logout request");
       }
       await database.remove();
       await database.destroy();
@@ -50,7 +54,16 @@ export function useLogout() {
     dismissIonLoading();
   };
 
-  const triggerLogout = async () => {
+  const triggerLogout = async (params?: { force: boolean }) => {
+    if (!isLoggedIn) {
+      logger("Will not log out because user is not logged in");
+      return;
+    }
+    if (params?.force) {
+      logger("Forced logout (no confirmation dialog)");
+      startLogout();
+      return;
+    }
     presentAlert({
       header: "Logout",
       message:

@@ -2,43 +2,29 @@ import { expect } from "@playwright/test";
 import { pageTest } from "../component/fixtures/page-fixtures";
 import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page";
 import { WorkshopsDevPage } from "../component/fixtures/workshops-dev-page";
+import { e2ePageTest } from "./fixtures/e2e-page-fixtures";
 
-declare const process: any;
-
-pageTest.describe("Replication", () => {
-  pageTest(
+pageTest.describe("Live Replication", () => {
+  e2ePageTest(
     "should replicate data between two sessions",
-    async ({ page, browser, workshopPage, workshopsPage }) => {
+    async ({
+      page,
+      browser,
+      workshopPage,
+      workshopsPage,
+      prepareLoggedInSession,
+    }) => {
       const sessionId = Date.now();
       const { otherPage } = await pageTest.step(
-        "prepare open two Impromat sessions in different browsers",
+        "prepare and open two Impromat sessions in different browsers",
         async () => {
-          const cookie = {
-            name: "connect.sid",
-            value: process.env.COOKIE_SECRET,
-            domain: process.env.COOKIE_DOMAIN,
-            httpOnly: true,
-            sameSite: "Strict",
-            path: "/",
-          } as const;
           const otherContext = await browser.newContext();
           const otherPage = await otherContext.newPage();
-          const context = page.context();
-          await context.addCookies([cookie]);
-          await otherContext.addCookies([cookie]);
-          await Promise.all([
-            page.goto("https://dev.impromat.app/account"),
-            otherPage.goto("https://dev.impromat.app/account"),
-          ]);
-          await expect(
-            page.getByText("You are signed in").first(),
-            "Expected to be signed in",
-          ).toBeVisible();
-          await expect(
-            otherPage.getByText("You are signed in").first(),
-            "Expected to be signed in",
-          ).toBeVisible();
-          return { context, otherContext, otherPage };
+
+          await prepareLoggedInSession(page);
+          await prepareLoggedInSession(otherPage);
+
+          return { otherContext, otherPage };
         },
       );
 
@@ -48,7 +34,7 @@ pageTest.describe("Replication", () => {
           const workshopName = `test-${sessionId}`;
           const workshopId = await workshopPage.createNew(workshopName);
           await workshopsPage.goto();
-          await expect(page.getByText(workshopName)).toBeVisible();
+          await workshopsPage.expectToShowWorkshopWithName(workshopName);
           return { workshopName, workshopId };
         },
       );
@@ -72,7 +58,7 @@ pageTest.describe("Replication", () => {
         async () => {
           const otherWorkshopPage = new WorkshopDevPage(otherPage);
           await otherWorkshopPage.goto(workshopId);
-          await expect(otherPage.getByText("Freeze")).toBeVisible();
+          await expect(otherPage.getByText("Freeze").first()).toBeVisible();
         },
       );
 

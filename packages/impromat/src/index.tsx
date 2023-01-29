@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
+import { App } from "./App";
+import { AppWrapper } from "./AppWrapper";
 import { rootLogger } from "./logger";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -37,7 +38,9 @@ reportWebVitals(logger);
 const container = document.getElementById("root");
 const root = createRoot(container!);
 root.render(
-  // <React.StrictMode>
-  <App />,
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <AppWrapper>
+      <App />
+    </AppWrapper>
+  </React.StrictMode>,
 );

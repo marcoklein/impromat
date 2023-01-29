@@ -1,14 +1,7 @@
-import {
-  IonFab,
-  IonFabButton,
-  IonIcon,
-  IonNote,
-  IonSpinner,
-} from "@ionic/react";
+import { IonFab, IonFabButton, IonIcon, IonSpinner } from "@ionic/react";
 import { add } from "ionicons/icons";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
-import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import { useCustomElements } from "../../../database/use-custom-elements";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { routeLibraryCreateCustomElement } from "../library-routes";
@@ -34,12 +27,6 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
 
   return (
     <>
-      <InfoItemComponent>
-        <IonNote>
-          Custom elements are currently under development and have limited
-          functionality.
-        </IonNote>
-      </InfoItemComponent>
       <IonFab slot="fixed" vertical="bottom" horizontal="end">
         <IonFabButton
           color="primary"
