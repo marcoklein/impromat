@@ -15,7 +15,7 @@ import {
 } from "@ionic/react";
 import immer from "immer";
 import { arrowBack, document, pencil } from "ionicons/icons";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
 import { CustomElementInfoItemComponent } from "../../components/CustomElementInfoItemComponent";
@@ -36,16 +36,22 @@ export const WorkshopElementPage: React.FC = () => {
   const mutations = useRxdbMutations();
   const [presentInput] = useInputDialog();
   const { document: workshopElement } = useDocument("elements", elementId);
-  const { document: basedOnElement } = useDocument(
+  const { document: basedOnElementFromDatabase } = useDocument(
     "elements",
     workshopElement?.basedOn,
   );
 
-  useStateChangeLogger(workshopElement, "workshopElement", logger);
+  const basedOnElement = useMemo(() => {
+    return basedOnElementFromDatabase ?? workshopElement;
+  }, [basedOnElementFromDatabase, workshopElement]);
 
-  useEffect(() => {
-    logger("basedOnElement=%O", basedOnElement);
-  }, [basedOnElement, logger]);
+  useStateChangeLogger(workshopElement, "workshopElement", logger);
+  useStateChangeLogger(
+    basedOnElementFromDatabase,
+    "basedOnElementFromDatabase",
+    logger,
+  );
+  useStateChangeLogger(basedOnElement, "basedOnElement", logger);
 
   const saveNotesChanges = useCallback(
     (note: string) => {
