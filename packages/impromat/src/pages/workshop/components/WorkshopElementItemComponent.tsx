@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Markdown from "react-markdown";
 import { SlidingItemComponent } from "../../../components/SlidingItemComponent";
 import { ElementDocType } from "../../../database/collections/element/element-collection";
@@ -23,10 +23,14 @@ export const WorkshopElementItemComponent: React.FC<ContainerProps> = ({
   const [maxHeight] = useState(4);
   const [fadeHeight] = useState(0.5);
 
-  const { document: basedOnElement } = useDocument(
+  const { document: basedOnElementFromDatabase } = useDocument(
     "elements",
     workshopElement.basedOn,
   );
+
+  const basedOnElement = useMemo(() => {
+    return basedOnElementFromDatabase ?? workshopElement;
+  }, [basedOnElementFromDatabase, workshopElement]);
 
   const noteMarkdown = useCallback(
     () => <Markdown>{workshopElement.note ?? ""}</Markdown>,
@@ -52,7 +56,7 @@ export const WorkshopElementItemComponent: React.FC<ContainerProps> = ({
       routerLink={routerLink}
     >
       <>
-        <h2>{workshopElement.name}</h2>
+        <h2>{basedOnElement?.name}</h2>
         <div
           style={{
             maxHeight: `${maxHeight}rem`,

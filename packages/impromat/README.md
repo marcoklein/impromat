@@ -78,6 +78,14 @@ For e2e tests you have to set all environment variables that the `.env.test` env
 
 The `COOKIE_SECRET` has to be added to the environment on the server. Session secrets are stored in the `/var/lib/dokku/data/storage` folder - see `infrastructure` package for further details.
 
+For running against a locally running version specify a `.env.test.local` and override the following environment variables:
+
+```
+COOKIE_SECRET=[your session secret]
+COOKIE_DOMAIN=localhost
+BASE_URL=http://localhost:3000/
+```
+
 ### Automatic Login
 
 If the `REACT_APP_AUTO_LOGIN` environment variable is set, the application simulates an automatic login. This enables integration tests to test all functionalities that require login.

@@ -3,9 +3,7 @@ declare const process: any;
 
 const config: PlaywrightTestConfig = {
   webServer: {
-    command: process.env.CI
-      ? "yarn build && yarn build:serve -p 3003"
-      : "yarn start",
+    command: "yarn start",
     env: {
       REACT_APP_AUTO_LOGIN: "1",
       PORT: "3003",

@@ -1,5 +1,6 @@
 import { SafeIntResolver } from "graphql-scalars";
 import { generateGoogleAuthUrl } from "../authentication/google-auth";
+import { SESSION_COOKIE_NAME } from "../authentication/init-session";
 import { UserModel } from "../database/user-model";
 import { environment } from "../environment";
 import { ElementInputMapper } from "../mappers/element-input-mapper";
@@ -184,7 +185,8 @@ export const resolvers: Resolvers = {
       return conflicts;
     },
     logout: async (root, args, ctx) => {
-      if (ctx.session) {
+      ctx.res.clearCookie(SESSION_COOKIE_NAME);
+      if (ctx.req.session) {
         return await new Promise((resolve, reject) => {
           ctx.req.session.destroy((err) => {
             if (err) reject(err);
