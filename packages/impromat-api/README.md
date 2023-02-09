@@ -1,119 +1,73 @@
-# Impromat Api
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+</p>
 
-## Getting started
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-Install dependencies
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-```
-yarn install
-```
+## Description
 
-Start server without watching changes
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-```
-yarn start:dev
-```
-
-Start server with watching changes. Useful for development
-
-```
-yarn dev
-```
-
-Start tests
-
-```
-yarn test
-```
-
-Run a specific test
-
-```bash
-yarn test --fgrep "empty workshop list"
-```
-
-Watch tests
-
-```
-yarn test:watch
-```
-
-## Code Generation
-
-Above scripts run all code generation. See the `codegen` folder for configuration.
-
-## Deployment with Podman
-
-Install via https://podman.io/getting-started/installation
-
-Build an image
-
-```
-podman build .
-```
-
-```
-podman run --latest
-```
-
-## Google OAuth2
-
-https://console.cloud.google.com/apis/credentials
-
-Fill environment variables starting with `GOOGLE_AUTH_` with client id, secret, and redirect url.
-
-About Google Identity: https://developers.google.com/identity/gsi/web/guides/display-button#html
-
-> Impromat will only process your Google Id for verification. We will neither process your email address nor your name.
-
-A Google authentication response contains the following data:
+## Installation
 
 ```bash
-sub # your unique google id
-email # your primary email address
-email_verified # flag, if your email is verified
+$ yarn install
 ```
 
-## GitHub Actions
-
-GitHub Actions can deploy a new release version on merge to the main branch.
-They must be regenerated on a new server installation.
-
-Generate SSH keys running
-
-```
-ssh-keygen
-```
-
-The public key must be added to the `authorized_keys` file on the host.
-
-Add the private key into the `IMPROMAT_SERVER_SSH_PRIVATE_KEY` secret on GitHub Actions.
-
-On the server run
+## Running the app
 
 ```bash
-ssh-keyscan api.impromat.marcoklein.dev
+# development
+$ yarn run start
+
+# watch mode
+$ yarn run start:dev
+
+# production mode
+$ yarn run start:prod
 ```
 
-Copy the output into the `IMPROMAT_SERVER_KNOWN_HOSTS` secret.
+## Test
 
-With this configuration GitHub Action is able to establish an SSH connection to the server.
+```bash
+# unit tests
+$ yarn run test
 
-## Authentication
+# e2e tests
+$ yarn run test:e2e
 
-If the user authenticates they receive a secure cookie that they must present in subsequent calls. Token validation happens on the server side.
+# test coverage
+$ yarn run test:cov
+```
 
-## Frameworks
+## Support
 
-- express: manage all http requests
-- express-sessions: manage sessions with express
-- uuid: Generate session tokens and unique identifiers
-- google-auth-library: allow authentication via Google OAuth2
-- graphql-yoga: GraphQL web server
-- graphql-scalars: Common scalars for GraphQL
-- graphql-codegen: GraphQL code generation
-- ts-json-schema-generator: Generate json schema from TypeScript
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Library Considerations
+## Stay in touch
 
-- https://github.com/graphql/dataloader for loading data with GraphQL resolvers
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](LICENSE).

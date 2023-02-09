@@ -9,7 +9,9 @@
     ],
     "nohoist": [
       "**/@types/**",
-      "impromat/**"
+      "impromat/**",
+      "**/@prisma/**",
+      "@prisma/**"
     ]
   },
   "devDependencies": {

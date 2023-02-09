@@ -1,0 +1,87 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:../dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Element {
+  id        String   @id
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  version   Int
+
+  deleted       Boolean
+  name          String
+  markdown      String
+  tags          ElementTag[]
+  note          String
+  basedOnId     String?      @unique
+  basedOn       Element?     @relation("BasedOn", fields: [basedOnId], references: [id])
+  parentOf      Element[]    @relation("BasedOn")
+  languageCode  String?
+  sourceUrl     String?
+  sourceName    String?
+  sourceBaseUrl String?
+  licenseName   String?
+  licenseUrl    String?
+  User          User?        @relation(fields: [userId], references: [id])
+  userId        String?
+  Section       Section?     @relation(fields: [sectionId], references: [id])
+  sectionId     String?
+}
+
+model ElementTag {
+  id        String   @id
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  version   Int
+
+  name      String
+  Element   Element? @relation(fields: [elementId], references: [id])
+  elementId String?
+}
+
+model User {
+  id        String   @id
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  version   Int
+
+  deleted          Boolean    @default(false)
+  favoriteElements Element[]
+  workshops        Workshop[]
+}
+
+model Workshop {
+  id        String   @id
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  version   Int
+
+  deleted     Boolean
+  name        String
+  description String
+  sections    Section[]
+  User        User?     @relation(fields: [userId], references: [id])
+  userId      String?
+}
+
+model Section {
+  id        String   @id
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  version   Int
+
+  deleted     Boolean
+  name        String
+  elements    Element[] @relation
+  note        String
+  color       String
+  isVisible   Boolean
+  isCollapsed Boolean
+  Workshop    Workshop? @relation(fields: [workshopId], references: [id])
+  workshopId  String?
+}
