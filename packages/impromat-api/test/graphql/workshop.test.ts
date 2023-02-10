@@ -6,9 +6,9 @@ import { UUID4_REGEX } from 'test/common/uuid4-regex';
 import {
   EXISTING_USER_ID,
   prepareTestDatabase,
-} from 'test/component/graphql/prepare-test-database';
+} from 'test/graphql/prepare-test-database';
 import { AppModule } from '../../src/app.module';
-import { injectTestUserSessionMiddleware } from './inject-test-user-session-middleware';
+import { injectTestUserSessionMiddleware } from '../common/inject-test-user-session-middleware';
 
 describe('User Workshops', () => {
   let app: INestApplication;
@@ -63,6 +63,11 @@ describe('User Workshops', () => {
         mutation {
           addWorkshop(workshop: { name: "${testWorkshopName}" }) {
             id
+            version
+            createdAt
+            updatedAt
+            deleted
+
             name
           }
         }
@@ -77,6 +82,14 @@ describe('User Workshops', () => {
       const newWorkshop = response.body.data.addWorkshop;
       expect(newWorkshop.id).toMatch(UUID4_REGEX);
       expect(newWorkshop.name).toBe(testWorkshopName);
+
+      const { id, version, createdAt, updatedAt, deleted } = response.body.data;
+      expect(id).toMatch(UUID4_REGEX);
+      expect(version).toBe(0);
+      expect(createdAt.getTime()).toBeGreaterThan(Date.now() - 1000);
+      expect(updatedAt.getTime()).toBeGreaterThan(Date.now() - 1000);
+      expect(deleted).toBe(false);
+
       newWorkshopId = newWorkshop.id;
     });
 

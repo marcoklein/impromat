@@ -15,6 +15,16 @@ export class MeResolver {
   ) {}
 
   @ResolveField()
+  async elements(@Parent() user: User) {
+    return this.findUserById(user.id).workshops();
+  }
+
+  @ResolveField()
+  async favoriteElements(@Parent() user: User) {
+    return this.findUserById(user.id).workshops();
+  }
+
+  @ResolveField()
   async workshops(@Parent() user: User) {
     return this.findUserById(user.id).workshops();
   }

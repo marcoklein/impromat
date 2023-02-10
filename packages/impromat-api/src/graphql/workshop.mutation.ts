@@ -27,7 +27,6 @@ export class WorkshopMutation {
     @Args('workshop') workshopInput: WorkshopInput,
     @SessionUserId() sessionUserId: string,
   ): Promise<Omit<Workshop, WorkshopRelations>> {
-    console.log('sessionuserid: ', sessionUserId);
     return this.prismaService.$transaction(async (tx) => {
       async function findOrCreate() {
         const user = await tx.user.findUnique({

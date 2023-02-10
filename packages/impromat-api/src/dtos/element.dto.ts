@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Nullable } from 'src/nullish';
+import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
 import { ElementTag } from './element-tag.dto';
 import { User } from './user.dto';

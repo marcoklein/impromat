@@ -81,7 +81,7 @@
     "rootDir": ".",
     "roots": [
       "src",
-      "test/component"
+      "test"
     ],
     "testRegex": ".*\\.test\\.ts$",
     "transform": {
