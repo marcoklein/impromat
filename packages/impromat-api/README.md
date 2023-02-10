@@ -8,12 +8,6 @@ Install dependencies
 yarn install
 ```
 
-Start server without watching changes
-
-```
-yarn start:dev
-```
-
 Start server with watching changes. Useful for development
 
 ```
@@ -36,4 +30,10 @@ Watch tests
 
 ```
 yarn test:watch
+```
+
+Generate Prisma schema changes
+
+```
+yarn prisma:generate
 ```

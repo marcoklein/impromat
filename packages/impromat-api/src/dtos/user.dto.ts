@@ -1,8 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseDto } from './base.dto';
 import { Workshop } from './workshop.dto';
+import { Element } from './element.dto';
 
-export type UserRelations = 'workshops';
+export type UserRelations = 'workshops' | 'elements' | 'favoriteElements';
 
 @ObjectType()
 export class User extends BaseDto {

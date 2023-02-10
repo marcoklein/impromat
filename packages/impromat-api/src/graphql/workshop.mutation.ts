@@ -2,7 +2,7 @@ import { Inject, UseGuards } from '@nestjs/common';
 import { Args, Field, InputType, Mutation, Resolver } from '@nestjs/graphql';
 import { Length, MaxLength } from 'class-validator';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
-import { Workshop } from 'src/dtos/workshop.dto';
+import { Workshop, WorkshopRelations } from 'src/dtos/workshop.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { SessionUserId } from './session-user-id.decorator';
 
@@ -19,14 +19,14 @@ class WorkshopInput {
 
 @Resolver()
 @UseGuards(GraphqlAuthGuard)
-export class WorkshopMutations {
+export class WorkshopMutation {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   @Mutation(() => Workshop)
   async addWorkshop(
     @Args('workshop') workshopInput: WorkshopInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Workshop> {
+  ): Promise<Omit<Workshop, WorkshopRelations>> {
     console.log('sessionuserid: ', sessionUserId);
     return this.prismaService.$transaction(async (tx) => {
       async function findOrCreate() {

@@ -4,6 +4,8 @@ import { BaseDto } from './base.dto';
 import { User } from './user.dto';
 import { WorkshopSection } from './workshop-section.dto';
 
+export type WorkshopRelations = 'owner' | 'sections';
+
 @ObjectType()
 export class Workshop extends BaseDto {
   @Field(() => String)

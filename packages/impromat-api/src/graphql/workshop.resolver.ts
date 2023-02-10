@@ -1,9 +1,8 @@
-import { Inject, Session, UseGuards } from '@nestjs/common';
-import { Context, Query, Resolver } from '@nestjs/graphql';
+import { Inject, UseGuards } from '@nestjs/common';
+import { Query, Resolver } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
-import { Workshop } from 'src/dtos/workshop.dto';
+import { Workshop, WorkshopRelations } from 'src/dtos/workshop.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { UserSessionService } from './services/user-session.service';
 import { SessionUserId } from './session-user-id.decorator';
 
 // @InputType()
@@ -18,10 +17,7 @@ import { SessionUserId } from './session-user-id.decorator';
 @Resolver(Workshop)
 @UseGuards(GraphqlAuthGuard)
 export class WorkshopResolver {
-  constructor(
-    @Inject(PrismaService) private prismaService: PrismaService,
-    private userService: UserSessionService,
-  ) {}
+  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   // @ResolveField()
   // async userWorkshops(
@@ -40,14 +36,11 @@ export class WorkshopResolver {
   @Query(() => [Workshop])
   async userWorkshops(
     @SessionUserId() userId: string,
-    @Context() ctx,
-    @Session() session: Record<string, any>,
-  ): Promise<Workshop[]> {
-    const workshops = await this.prismaService.user
-      .findUnique({
+  ): Promise<Omit<Workshop, WorkshopRelations>[] | null> {
+    return await this.prismaService.user
+      .findUniqueOrThrow({
         where: { id: userId },
       })
       .workshops();
-    return workshops ?? [];
   }
 }

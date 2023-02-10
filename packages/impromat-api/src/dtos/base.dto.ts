@@ -16,7 +16,4 @@ export class BaseDto {
 
   @Field(() => Boolean)
   deleted: boolean;
-
-  @Field(() => Date)
-  deletedAt: Date;
 }

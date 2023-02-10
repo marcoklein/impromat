@@ -14,24 +14,26 @@ model Element {
   version   Int
   deleted   Boolean  @default(false)
 
-  name                String
-  markdown            String?
-  Tags                ElementTag[]
-  note                String
-  basedOnId           String?               @unique
-  BasedOn             Element?              @relation("BasedOn", fields: [basedOnId], references: [id])
-  ParentOf            Element[]             @relation("BasedOn")
-  languageCode        String?
-  sourceUrl           String?
-  sourceName          String?
-  sourceBaseUrl       String?
-  licenseName         String?
-  licenseUrl          String?
-  userId              String?
-  WorkshopSection     WorkshopSection?      @relation(fields: [sectionId], references: [id])
-  sectionId           String?
-  User                User?                 @relation(fields: [userId], references: [id])
-  UserFavoriteElement UserFavoriteElement[]
+  name          String
+  markdown      String?
+  note          String
+  languageCode  String?
+  sourceUrl     String?
+  sourceName    String?
+  sourceBaseUrl String?
+  licenseName   String?
+  licenseUrl    String?
+
+  basedOnId String? @unique
+  userId    String?
+  sectionId String?
+
+  basedOn             Element?              @relation("BasedOn", fields: [basedOnId], references: [id])
+  parentOf            Element[]             @relation("BasedOn")
+  tags                ElementTag[]
+  workshopSection     WorkshopSection?      @relation(fields: [sectionId], references: [id])
+  user                User?                 @relation(fields: [userId], references: [id])
+  userFavoriteElement UserFavoriteElement[]
 }
 
 model ElementTag {
@@ -51,8 +53,9 @@ model UserFavoriteElement {
 
   userId    String
   elementId String
-  Element   Element @relation(fields: [elementId], references: [id])
-  User      User    @relation(fields: [userId], references: [id])
+
+  element Element @relation(fields: [elementId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
 
   @@id([userId, elementId])
 }
@@ -65,10 +68,12 @@ model User {
   deleted   Boolean   @default(false)
   deletedAt DateTime?
 
-  googleSubscriptionId String?               @unique
-  FavoriteElements     UserFavoriteElement[]
-  Workshops            Workshop[]
-  Elements             Element[]
+  name                 String? @unique
+  googleSubscriptionId String? @unique
+
+  favoriteElements UserFavoriteElement[]
+  workshops        Workshop[]
+  elements         Element[]
 }
 
 model Workshop {
@@ -80,9 +85,10 @@ model Workshop {
 
   name        String
   description String?
-  Sections    WorkshopSection[]
-  Owner       User              @relation(fields: [ownerId], references: [id])
   ownerId     String
+
+  sections WorkshopSection[]
+  owner    User              @relation(fields: [ownerId], references: [id])
 }
 
 model WorkshopSection {
@@ -99,6 +105,6 @@ model WorkshopSection {
   isCollapsed Boolean
   workshopId  String?
 
-  Elements Element[]
-  Workshop Workshop? @relation(fields: [workshopId], references: [id])
+  elements Element[]
+  workshop Workshop? @relation(fields: [workshopId], references: [id])
 }

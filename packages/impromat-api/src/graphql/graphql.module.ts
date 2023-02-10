@@ -4,8 +4,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { MeResolver } from './me.resolver';
 import { UserSessionService } from './services/user-session.service';
-import { WorkshopMutations } from './workshop.mutations';
-import { WorkshopResolver } from './workshop.resolvers';
+import { WorkshopMutation } from './workshop.mutation';
+import { WorkshopResolver } from './workshop.resolver';
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { WorkshopResolver } from './workshop.resolvers';
     WorkshopResolver,
     MeResolver,
     UserSessionService,
-    WorkshopMutations,
+    WorkshopMutation,
   ],
 })
 export class GraphqlModule {}
