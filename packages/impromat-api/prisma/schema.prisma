@@ -14,23 +14,24 @@ model Element {
   version   Int
   deleted   Boolean  @default(false)
 
-  name          String
-  markdown      String
-  tags          ElementTag[]
-  note          String
-  basedOnId     String?      @unique
-  basedOn       Element?     @relation("BasedOn", fields: [basedOnId], references: [id])
-  parentOf      Element[]    @relation("BasedOn")
-  languageCode  String?
-  sourceUrl     String?
-  sourceName    String?
-  sourceBaseUrl String?
-  licenseName   String?
-  licenseUrl    String?
-  User          User?        @relation(fields: [userId], references: [id])
-  userId        String?
-  Section       Section?     @relation(fields: [sectionId], references: [id])
-  sectionId     String?
+  name                String
+  markdown            String?
+  Tags                ElementTag[]
+  note                String
+  basedOnId           String?               @unique
+  BasedOn             Element?              @relation("BasedOn", fields: [basedOnId], references: [id])
+  ParentOf            Element[]             @relation("BasedOn")
+  languageCode        String?
+  sourceUrl           String?
+  sourceName          String?
+  sourceBaseUrl       String?
+  licenseName         String?
+  licenseUrl          String?
+  userId              String?
+  WorkshopSection     WorkshopSection?      @relation(fields: [sectionId], references: [id])
+  sectionId           String?
+  User                User?                 @relation(fields: [userId], references: [id])
+  UserFavoriteElement UserFavoriteElement[]
 }
 
 model ElementTag {
@@ -39,21 +40,35 @@ model ElementTag {
   createdAt DateTime @default(now())
   version   Int      @default(0)
 
-  name      String
-  Element   Element? @relation(fields: [elementId], references: [id])
-  elementId String?
+  name     String
+  elements Element[]
 }
 
-model User {
-  id        String   @id @default(uuid())
+model UserFavoriteElement {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   version   Int      @default(0)
-  deleted   Boolean  @default(false)
 
-  googleSubscriptionId String?    @unique
-  favoriteElements     Element[]
-  workshops            Workshop[]
+  userId    String
+  elementId String
+  Element   Element @relation(fields: [elementId], references: [id])
+  User      User    @relation(fields: [userId], references: [id])
+
+  @@id([userId, elementId])
+}
+
+model User {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
+
+  googleSubscriptionId String?               @unique
+  FavoriteElements     UserFavoriteElement[]
+  Workshops            Workshop[]
+  Elements             Element[]
 }
 
 model Workshop {
@@ -65,24 +80,25 @@ model Workshop {
 
   name        String
   description String?
-  sections    Section[]
-  Owner       User      @relation(fields: [ownerId], references: [id])
+  Sections    WorkshopSection[]
+  Owner       User              @relation(fields: [ownerId], references: [id])
   ownerId     String
 }
 
-model Section {
-  id        String   @id @default(uuid())
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-  version   Int      @default(0)
-  deleted   Boolean  @default(false)
+model WorkshopSection {
+  id        String    @id @default(uuid())
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
 
   name        String
-  elements    Element[] @relation
-  note        String
   color       String
   isVisible   Boolean
   isCollapsed Boolean
-  Workshop    Workshop? @relation(fields: [workshopId], references: [id])
   workshopId  String?
+
+  Elements Element[]
+  Workshop Workshop? @relation(fields: [workshopId], references: [id])
 }

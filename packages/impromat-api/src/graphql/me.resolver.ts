@@ -25,14 +25,11 @@ export class MeResolver {
   async me(
     @SessionUserId() userId: string,
   ): Promise<Omit<User, UserRelations> | null> {
-    const user = await this.prismaService.user.findUnique({
-      where: { id: userId },
-    });
-    return user;
+    return await this.findUserById(userId);
   }
 
   private findUserById(userId: string) {
-    return this.prismaService.user.findUnique({
+    return this.prismaService.user.findUniqueOrThrow({
       where: { id: userId },
     });
   }

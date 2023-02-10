@@ -1,19 +1,17 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { BaseDto } from './base.dto';
 import { Workshop } from './workshop.dto';
 
 export type UserRelations = 'workshops';
 
 @ObjectType()
-export class User {
-  @Field(() => ID)
-  id: string;
-
-  @Field(() => Date)
-  createdAt: Date;
-
-  @Field(() => Date)
-  updatedAt: Date;
-
+export class User extends BaseDto {
   @Field(() => [Workshop])
   workshops: Workshop[];
+
+  @Field(() => [Element], { description: 'Elements owned by this user.' })
+  elements: Element[];
+
+  @Field(() => [Element])
+  favoriteElements: Element[];
 }

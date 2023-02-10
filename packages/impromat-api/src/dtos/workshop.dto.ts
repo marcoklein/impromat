@@ -1,20 +1,20 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/nullish';
+import { BaseDto } from './base.dto';
+import { User } from './user.dto';
+import { WorkshopSection } from './workshop-section.dto';
 
 @ObjectType()
-export class Workshop {
-  @Field(() => ID)
-  id: string;
-
-  @Field(() => Date)
-  createdAt: Date;
-
-  @Field(() => Date)
-  updatedAt: Date;
-
+export class Workshop extends BaseDto {
   @Field(() => String)
   name: string;
 
   @Field(() => String, { nullable: true })
   description: Nullable<string>;
+
+  @Field(() => [WorkshopSection])
+  sections: WorkshopSection[];
+
+  @Field(() => User)
+  owner: User;
 }
