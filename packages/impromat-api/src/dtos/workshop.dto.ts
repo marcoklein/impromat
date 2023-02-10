@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Nullable } from 'src/nullish';
 
 @ObjectType()
 export class Workshop {
@@ -10,4 +11,10 @@ export class Workshop {
 
   @Field(() => Date)
   updatedAt: Date;
+
+  @Field(() => String)
+  name: string;
+
+  @Field(() => String, { nullable: true })
+  description: Nullable<string>;
 }

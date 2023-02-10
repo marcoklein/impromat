@@ -1,7 +1,9 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Workshop } from './workshop.dto';
 
-@ObjectType({ description: 'Test' })
+export type UserRelations = 'workshops';
+
+@ObjectType()
 export class User {
   @Field(() => ID)
   id: string;
@@ -13,5 +15,5 @@ export class User {
   updatedAt: Date;
 
   @Field(() => [Workshop])
-  workshop: Workshop[];
+  workshops: Workshop[];
 }

@@ -1,6 +1,6 @@
 datasource db {
   provider = "sqlite"
-  url      = "file:../dev.db"
+  url      = "file:dev.db"
 }
 
 generator client {
@@ -8,12 +8,12 @@ generator client {
 }
 
 model Element {
-  id        String   @id
+  id        String   @id @default(uuid())
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
   version   Int
+  deleted   Boolean  @default(false)
 
-  deleted       Boolean
   name          String
   markdown      String
   tags          ElementTag[]
@@ -34,10 +34,10 @@ model Element {
 }
 
 model ElementTag {
-  id        String   @id
+  id        String   @id @default(uuid())
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
-  version   Int
+  version   Int      @default(0)
 
   name      String
   Element   Element? @relation(fields: [elementId], references: [id])
@@ -45,37 +45,38 @@ model ElementTag {
 }
 
 model User {
-  id        String   @id
-  updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
-  version   Int
+  updatedAt DateTime @updatedAt
+  version   Int      @default(0)
+  deleted   Boolean  @default(false)
 
-  deleted          Boolean    @default(false)
-  favoriteElements Element[]
-  workshops        Workshop[]
+  googleSubscriptionId String?    @unique
+  favoriteElements     Element[]
+  workshops            Workshop[]
 }
 
 model Workshop {
-  id        String   @id
+  id        String   @id @default(uuid())
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
-  version   Int
+  version   Int      @default(0)
+  deleted   Boolean  @default(false)
 
-  deleted     Boolean
   name        String
-  description String
+  description String?
   sections    Section[]
-  User        User?     @relation(fields: [userId], references: [id])
-  userId      String?
+  Owner       User      @relation(fields: [ownerId], references: [id])
+  ownerId     String
 }
 
 model Section {
-  id        String   @id
+  id        String   @id @default(uuid())
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
-  version   Int
+  version   Int      @default(0)
+  deleted   Boolean  @default(false)
 
-  deleted     Boolean
   name        String
   elements    Element[] @relation
   note        String

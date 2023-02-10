@@ -1,16 +1,20 @@
 import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Session } from 'express-session';
+import { PrismaService } from 'src/graphql/services/prisma.service';
 import { GoogleOAuth2ClientService } from './google-oauth2-client-provider';
-import { SessionData } from './session-data';
+import { UserSessionData } from './user-session-data';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private googleOAuth2ClientService: GoogleOAuth2ClientService) {}
+  constructor(
+    private googleOAuth2ClientService: GoogleOAuth2ClientService,
+    private prismaService: PrismaService,
+  ) {}
 
   @Get('google/callback')
   async callback(
-    @Req() req: Request & { session: Session & { data: SessionData } },
+    @Req() req: Request & { session: Session & { data: UserSessionData } },
     @Res() res: Response,
   ) {
     const code = req.query.code as string;
@@ -22,7 +26,7 @@ export class AuthController {
       oAuth2Client.setCredentials(tokens);
 
       const { sub: userGoogleId } = await oAuth2Client.getTokenInfo(
-        tokens.access_token,
+        tokens.access_token!,
       );
 
       if (!userGoogleId) {
@@ -31,7 +35,19 @@ export class AuthController {
         console.error('Token information incomplete.');
         return;
       }
-      req.session.data = { userId: userGoogleId };
+
+      const user = await this.prismaService.$transaction(async (tx) => {
+        const user = await tx.user.findUnique({
+          where: { googleSubscriptionId: userGoogleId },
+        });
+        if (user) return user;
+        // first time login
+        return await tx.user.create({
+          data: { googleSubscriptionId: userGoogleId },
+        });
+      });
+
+      req.session.data = { userId: user.id };
       if (!javascriptOrigin) {
         console.error('No javascript origin found.');
         res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);

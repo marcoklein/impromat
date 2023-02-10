@@ -38,3 +38,5 @@ schema/schema.graphql
 dev.db
 assets
 .env
+storage/*
+*db-journal

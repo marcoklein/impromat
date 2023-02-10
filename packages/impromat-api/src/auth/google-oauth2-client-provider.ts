@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as fs from 'fs';
 import { OAuth2Client } from 'google-auth-library';
 import { environment } from '../environment';
 
 @Injectable()
-export class GoogleOAuth2ClientService {
+export class GoogleOAuth2ClientService implements OnModuleInit {
   private oAuth2Client: OAuth2Client | undefined;
   private javascriptOrigin: string | undefined;
   private googleAuthUrl: string | undefined;
 
-  constructor() {
+  onModuleInit() {
     this.oAuth2Client = this.createNewOAuth2Client();
     this.googleAuthUrl = this.oAuth2Client.generateAuthUrl({
       access_type: 'offline',
@@ -21,14 +21,17 @@ export class GoogleOAuth2ClientService {
   }
 
   getOAuth2Client() {
+    if (!this.oAuth2Client) throw new Error('Module not initialized yet.');
     return this.oAuth2Client;
   }
 
   getGoogleAuthUrl() {
+    if (!this.googleAuthUrl) throw new Error('Module not initialized yet.');
     return this.googleAuthUrl;
   }
 
   getRedirectUrlAfterAuthentication() {
+    if (!this.javascriptOrigin) throw new Error('Module not initialized yet.');
     return this.javascriptOrigin;
   }
 
