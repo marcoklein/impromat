@@ -10,17 +10,19 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "yarn start:dev",
     "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "test": "yarn codegen && yarn test:prepare-db && DATABASE_URL=file:test.db jest",
+    "test:prepare-db": "DATABASE_URL=file:test.db yarn prisma migrate reset --force --skip-generate",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "prisma db push && jest --config ./jest-e2e.json",
-    "test:e2e:watch": "yarn test:e2e --watch"
+    "codegen": "graphql-codegen",
+    "codegen:watch": "yarn codegen --watch"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.2.0",
@@ -43,6 +45,10 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^3.0.0",
+    "@graphql-codegen/client-preset": "^2.0.0",
+    "@graphql-codegen/typed-document-node": "^3.0.0",
+    "@graphql-codegen/typescript-operations": "^3.0.0",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.3.7",

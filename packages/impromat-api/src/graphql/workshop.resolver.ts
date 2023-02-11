@@ -1,37 +1,40 @@
 import { Inject, UseGuards } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
+import { WorkshopSection } from 'src/dtos/workshop-section.dto';
 import { Workshop, WorkshopRelations } from 'src/dtos/workshop.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { SessionUserId } from './session-user-id.decorator';
-
-// @InputType()
-// class UserUniqueInput {
-//   @Field({ nullable: true })
-//   id: number;
-
-//   @Field({ nullable: true })
-//   email: string;
-// }
 
 @Resolver(Workshop)
 @UseGuards(GraphqlAuthGuard)
 export class WorkshopResolver {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
-  // @ResolveField()
-  // async userWorkshops(
-  //   @Root() workshop: WorkshopDto,
-  //   @Context() ctx,
-  // ): Promise<WorkshopDto[]> {
-  //   return this.prismaService.user
-  //     .findUnique({
-  //       where: {
-  //         id: workshop.id,
-  //       },
-  //     })
-  //     .workshops();
-  // }
+  @ResolveField(() => [WorkshopSection])
+  async sections(@Parent() workshop: Workshop) {
+    return this.findWorkshopById(workshop.id).sections();
+  }
+
+  @ResolveField(() => [WorkshopSection])
+  async owner(@Parent() workshop: Workshop) {
+    return this.findWorkshopById(workshop.id).owner();
+  }
+
+  @Query(() => Workshop)
+  async workshop(
+    @SessionUserId() userId: string,
+    @Args('id', { type: () => ID }) id: string,
+  ): Promise<Omit<Workshop, WorkshopRelations> | null> {
+    return this.findWorkshopById(id);
+  }
 
   @Query(() => [Workshop])
   async userWorkshops(
@@ -42,5 +45,11 @@ export class WorkshopResolver {
         where: { id: userId },
       })
       .workshops();
+  }
+
+  private findWorkshopById(id: string) {
+    return this.prismaService.workshop.findUniqueOrThrow({
+      where: { id },
+    });
   }
 }

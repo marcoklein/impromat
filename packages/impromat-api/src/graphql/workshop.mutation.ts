@@ -23,7 +23,7 @@ export class WorkshopMutation {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   @Mutation(() => Workshop)
-  async addWorkshop(
+  async createWorkshop(
     @Args('workshop') workshopInput: WorkshopInput,
     @SessionUserId() sessionUserId: string,
   ): Promise<Omit<Workshop, WorkshopRelations>> {
@@ -38,10 +38,14 @@ export class WorkshopMutation {
         });
       }
       const user = await findOrCreate();
-
-      return tx.workshop.create({
-        data: { ...workshopInput, ownerId: user.id },
+      const workshop = await tx.workshop.create({
+        data: {
+          ...workshopInput,
+          ownerId: user.id,
+          sections: { create: [{}] },
+        },
       });
+      return workshop;
     });
   }
 }

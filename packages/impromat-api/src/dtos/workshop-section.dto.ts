@@ -1,18 +1,16 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
 import { Element } from './element.dto';
 import { Workshop } from './workshop.dto';
 
 @ObjectType()
 export class WorkshopSection extends BaseDto {
-  @Field(() => String)
-  name: string;
+  @Field(() => String, { nullable: true })
+  name: Nullable<string>;
 
-  @Field(() => String)
-  color: string;
-
-  @Field(() => Boolean)
-  isVisible: boolean;
+  @Field(() => String, { nullable: true })
+  color: Nullable<string>;
 
   @Field(() => Boolean)
   isCollapsed: boolean;

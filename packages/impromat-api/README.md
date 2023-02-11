@@ -37,3 +37,11 @@ Generate Prisma schema changes
 ```
 yarn prisma:generate
 ```
+
+## API Design
+
+Naming conventions inspired by the [GitHub API](https://docs.github.com/en/graphql/reference/mutations).
+
+### Mutations
+
+Prefix mutations that create a new resource with `create`. E.g. `createWorkshop`
