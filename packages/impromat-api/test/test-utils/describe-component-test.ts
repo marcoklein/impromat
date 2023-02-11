@@ -4,7 +4,7 @@ import { print, type ExecutionResult } from 'graphql';
 import { AppModule } from 'src/app.module';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import * as request from 'supertest';
-import { injectTestUserSessionMiddleware } from 'test/common/inject-test-user-session-middleware';
+import { injectTestUserSessionMiddleware } from 'test/test-utils/inject-test-user-session-middleware';
 import { prepareTestDatabase } from './prepare-test-database';
 import { TestDatabase } from './test-database';
 

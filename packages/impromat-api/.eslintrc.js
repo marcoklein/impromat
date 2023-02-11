@@ -23,4 +23,12 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-floating-promises': 'error',
   },
+  overrides: [
+    {
+      files: ['test/**/*.test.ts'],
+      rules: {
+        '@typescript-eslint/no-non-null-assertion': 'off',
+      },
+    },
+  ],
 };

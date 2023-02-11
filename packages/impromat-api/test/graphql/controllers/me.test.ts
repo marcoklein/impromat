@@ -1,6 +1,9 @@
 import { graphql } from 'test/graphql-client/gql';
-import { NON_EXISTING_USER_ID } from 'test/graphql/prepare-test-database';
-import { ApiTestSession, initApiTestSession } from './describe-component-test';
+import { NON_EXISTING_USER_ID } from 'test/test-utils/prepare-test-database';
+import {
+  ApiTestSession,
+  initApiTestSession,
+} from '../../test-utils/describe-component-test';
 
 describe('me', () => {
   let api: ApiTestSession;

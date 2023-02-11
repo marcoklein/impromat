@@ -2,10 +2,10 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { MeResolver } from './me.resolver';
+import { MeResolver } from './controllers/me.controller';
+import { WorkshopController } from './controllers/workshop.controller';
+import { WorkshopService } from './controllers/workshop.service';
 import { UserSessionService } from './services/user-session.service';
-import { WorkshopMutation } from './workshop.mutation';
-import { WorkshopResolver } from './workshop.resolver';
 
 @Module({
   imports: [
@@ -27,10 +27,10 @@ import { WorkshopResolver } from './workshop.resolver';
   controllers: [],
   providers: [
     PrismaService,
-    WorkshopResolver,
+    WorkshopController,
     MeResolver,
     UserSessionService,
-    WorkshopMutation,
+    WorkshopService,
   ],
 })
 export class GraphqlModule {}

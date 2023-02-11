@@ -3,8 +3,8 @@ import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { User, UserRelations } from 'src/dtos/user.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { UserSessionService } from './services/user-session.service';
-import { SessionUserId } from './session-user-id.decorator';
+import { UserSessionService } from '../services/user-session.service';
+import { SessionUserId } from '../../decorators/session-user-id.decorator';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)

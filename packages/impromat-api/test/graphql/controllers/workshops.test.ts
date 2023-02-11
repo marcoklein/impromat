@@ -1,8 +1,11 @@
-import { UUID4_REGEX } from 'test/common/uuid4-regex';
-import { ApiTestSession, initApiTestSession } from './describe-component-test';
+import { UUID4_REGEX } from 'test/test-utils/uuid4-regex';
 import {
-  addWorkshopQuery,
+  ApiTestSession,
+  initApiTestSession,
+} from '../../test-utils/describe-component-test';
+import {
   addWorskshopWithEmptyNameQuery,
+  createWorkshopMutation,
   userWorkshopsQuery,
 } from './workshop-queries';
 
@@ -26,13 +29,13 @@ describe('User Workshops', () => {
       const response = await api.graphqlRequest(query);
       // then
       expect(response.errors).toBeUndefined();
-      expect(response.data!.userWorkshops).toEqual([]);
+      expect(response.data!.workshops).toEqual([]);
     });
 
     it('should add a new workshop', async () => {
       // given
       const testWorkshopName = 'test-workshop';
-      const query = addWorkshopQuery;
+      const query = createWorkshopMutation;
       // when
       const response = await api.graphqlRequest(query, {
         name: testWorkshopName,
@@ -60,10 +63,10 @@ describe('User Workshops', () => {
       const response = await api.graphqlRequest(query);
       // then
       expect(response.errors).toBeUndefined();
-      expect(response.data!.userWorkshops).toHaveLength(1);
-      expect(response.data!.userWorkshops[0].id).toBe(newWorkshopId);
-      expect(response.data!.userWorkshops[0].sections).toBeDefined();
-      expect(response.data!.userWorkshops[0].owner.id).toBe(api.userId);
+      expect(response.data!.workshops).toHaveLength(1);
+      expect(response.data!.workshops[0].id).toBe(newWorkshopId);
+      expect(response.data!.workshops[0].sections).toBeDefined();
+      expect(response.data!.workshops[0].owner.id).toBe(api.userId);
     });
   });
 
