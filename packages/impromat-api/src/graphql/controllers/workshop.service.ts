@@ -19,30 +19,23 @@ export class WorkshopService {
     });
   }
 
-  createWorkshop(
+  async createWorkshop(
     sessionUserId: string,
     createWorkshopInput: CreateWorkshopInput,
   ) {
-    return this.prismaService.$transaction(async (tx) => {
-      async function findOrCreate() {
-        const user = await tx.user.findUniqueOrThrow({
-          where: { id: sessionUserId },
-        });
-        if (user) return user;
-        return await tx.user.create({
-          data: { id: sessionUserId },
-        });
-      }
-      const user = await findOrCreate();
-      const workshop = await tx.workshop.create({
-        data: {
-          ...createWorkshopInput,
-          ownerId: user.id,
-          sections: { create: [{}] },
-        },
-      });
-      return workshop;
+    const user = await this.prismaService.user.upsert({
+      create: { id: sessionUserId },
+      update: {},
+      where: { id: sessionUserId },
     });
+    const workshop = await this.prismaService.workshop.create({
+      data: {
+        ...createWorkshopInput,
+        ownerId: user.id,
+        sections: { create: [{}] },
+      },
+    });
+    return workshop;
   }
 
   updateWorkshop(
@@ -50,12 +43,45 @@ export class WorkshopService {
     updateWorkshopInput: UpdateWorkshopInput,
   ) {
     return this.prismaService.$transaction(async (tx) => {
-      await tx.workshop.findFirstOrThrow({
+      const existingWorkshop = await tx.workshop.findFirstOrThrow({
         where: { id: updateWorkshopInput.id, ownerId: sessionUserId },
+        include: { sections: true },
       });
+      if (updateWorkshopInput.sections) {
+        const newSections = updateWorkshopInput.sections;
+        const existingSections = existingWorkshop.sections;
+        for (const section of updateWorkshopInput.sections) {
+          if (section.id) {
+            if (!existingSections.find(({ id }) => id === section.id)) {
+              throw new Error('Cannot create new section with id.');
+            }
+            // update
+            await tx.workshopSection.update({
+              where: { id: section.id },
+              data: section,
+            });
+          } else {
+            // create
+            await tx.workshopSection.create({
+              data: { ...section, ...{ workshopId: existingWorkshop.id } },
+            });
+          }
+        }
+        // delete
+        const itemsToDelete = existingSections
+          .filter(
+            (x) => !newSections.find((newSection) => newSection.id === x.id),
+          )
+          .map(({ id }) => id);
+        await tx.workshopSection.deleteMany({
+          where: { id: { in: itemsToDelete } },
+        });
+      }
+
       const workshop = await tx.workshop.update({
         data: {
           ...updateWorkshopInput,
+          ...{ sections: undefined },
         },
         where: {
           id: updateWorkshopInput.id,

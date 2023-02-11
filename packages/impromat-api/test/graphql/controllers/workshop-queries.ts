@@ -12,7 +12,20 @@ export const workshopFieldsFragment = graphql(`
     description
     sections {
       id
+      version
+      createdAt
+      updatedAt
+      deleted
+
       name
+      color
+      isCollapsed
+      elements {
+        id
+      }
+      workshop {
+        id
+      }
     }
     owner {
       id

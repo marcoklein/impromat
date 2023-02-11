@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { MeResolver } from './controllers/me.controller';
+import { WorkshopSectionController } from './controllers/workshop-section.controller';
 import { WorkshopController } from './controllers/workshop.controller';
 import { WorkshopService } from './controllers/workshop.service';
 import { UserSessionService } from './services/user-session.service';
@@ -28,6 +29,7 @@ import { UserSessionService } from './services/user-session.service';
   providers: [
     PrismaService,
     WorkshopController,
+    WorkshopSectionController,
     MeResolver,
     UserSessionService,
     WorkshopService,

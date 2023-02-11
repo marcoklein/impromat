@@ -35,7 +35,7 @@ export class MeResolver {
   async me(
     @SessionUserId() userId: string,
   ): Promise<Omit<User, UserRelations> | null> {
-    return await this.findUserById(userId);
+    return this.findUserById(userId);
   }
 
   private findUserById(userId: string) {
