@@ -48,53 +48,81 @@ export class WorkshopService {
           where: { id: updateWorkshopInput.id, ownerId: sessionUserId },
           include: { sections: true },
         });
-        if (updateWorkshopInput.sections) {
-          const newSections = updateWorkshopInput.sections;
-          const existingSections = existingWorkshop.sections;
-          for (
-            let orderIndex = 0;
-            orderIndex < updateWorkshopInput.sections.length;
-            orderIndex++
-          ) {
-            const section = updateWorkshopInput.sections[orderIndex];
 
-            if (section.id) {
-              if (!existingSections.find(({ id }) => id === section.id)) {
-                throw new Error(
-                  'Cannot create new section with id section=' +
-                    JSON.stringify(section),
-                );
-              }
-              // update
-              await tx.workshopSection.update({
-                where: { id: section.id },
-                data: { ...section, ...{ orderIndex } },
-              });
-            } else {
-              // create
-              await tx.workshopSection.create({
-                data: {
-                  ...section,
-                  ...{ orderIndex, workshopId: existingWorkshop.id },
-                },
-              });
-            }
+        // TODO normalize orderIndex
+        // TODO verify inputs that they really belong to user
+
+        const existingSections: { id?: string; orderIndex?: number }[] =
+          existingWorkshop.sections;
+
+        const withoutDeleted = existingSections.filter(
+          (existingSection) =>
+            !updateWorkshopInput.sections?.delete?.find(
+              (input) => input.id === existingSection.id,
+            ),
+        );
+        const withUpdates = withoutDeleted.map((section) => {
+          const updatedSection = updateWorkshopInput.sections?.update?.find(
+            ({ id }) =>
+              id !== undefined && section.id !== undefined && id === section.id,
+          );
+          if (updatedSection?.orderIndex !== undefined) {
+            section.orderIndex = updatedSection.orderIndex;
           }
-          // delete
-          const itemsToDelete = existingSections
-            .filter(
-              (x) => !newSections.find((newSection) => newSection.id === x.id),
-            )
-            .map(({ id }) => id);
-          await tx.workshopSection.deleteMany({
-            where: { id: { in: itemsToDelete } },
-          });
-        }
+          return section;
+        });
+        const withCreated = withUpdates.concat(
+          ...(updateWorkshopInput.sections?.create ?? []),
+        );
+        const sorted = withCreated.sort(
+          (a, b) =>
+            (a.orderIndex ?? Number.MAX_SAFE_INTEGER) -
+            (b.orderIndex ?? Number.MAX_SAFE_INTEGER),
+        );
+        sorted.forEach((section, index) => {
+          section.orderIndex = index;
+        });
+
+        const update =
+          updateWorkshopInput.sections?.update?.map((section) => ({
+            where: { id: section.id },
+            data: {
+              ...section,
+              ...{
+                elements: {
+                  create: [],
+                },
+              },
+            },
+          })) ?? [];
+
+        const create =
+          updateWorkshopInput.sections?.create?.map((section, index) => {
+            const orderIndex =
+              section.orderIndex ?? existingSections.length + index;
+            return {
+              ...section,
+              ...{
+                orderIndex,
+                elements: undefined,
+                // elements: {
+                //   create: [],
+                // },
+                // workshopId: existingWorkshop.id,
+              },
+            };
+          }) ?? [];
 
         const workshop = await tx.workshop.update({
           data: {
             ...updateWorkshopInput,
-            ...{ sections: undefined },
+            ...{
+              sections: {
+                update,
+                create,
+                delete: updateWorkshopInput.sections?.delete,
+              },
+            },
           },
           where: {
             id: updateWorkshopInput.id,

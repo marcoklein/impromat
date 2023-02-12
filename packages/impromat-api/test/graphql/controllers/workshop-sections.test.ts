@@ -25,7 +25,8 @@ describe('Workshop Sections', () => {
     return createdWorkshop;
   }
 
-  describe('update workshop', () => {
+  describe('update workshop sections flow', () => {
+    let newSectionId: string | undefined;
     it('should update workshop sections', async () => {
       // given
       const workshop = await ensureTestWorkshop();
@@ -34,14 +35,20 @@ describe('Workshop Sections', () => {
         input: {
           id: workshop.id,
           name: 'super name',
-          sections: [
-            {
-              id: workshop.sections[0].id,
-            },
-            {
-              name: 'new section',
-            },
-          ],
+          sections: {
+            update: [
+              {
+                id: workshop.sections[0].id,
+                orderIndex: 0,
+              },
+            ],
+            create: [
+              {
+                name: 'new section',
+                orderIndex: 1,
+              },
+            ],
+          },
         },
       });
       // then
@@ -53,6 +60,8 @@ describe('Workshop Sections', () => {
       expect(result.sections[0].orderIndex).toBe(0);
       expect(result.sections[1].name).toBe('new section');
       expect(result.sections[1].orderIndex).toBe(1);
+
+      newSectionId = result.sections[1].id;
     });
 
     it('should read updated workshop', async () => {
@@ -68,6 +77,25 @@ describe('Workshop Sections', () => {
       expect(response.data?.workshop.name).toBe('super name');
     });
 
+    it('should delete section', async () => {
+      // given
+      const sectionId = newSectionId;
+      if (!sectionId) throw new Error('Requires previous test');
+      const workshop = await ensureTestWorkshop();
+      // when
+      const response = await api.graphqlRequest(updateWorkshopMutation, {
+        input: {
+          id: workshop.id,
+          name: 'super name',
+          sections: {
+            delete: [{ id: sectionId }],
+          },
+        },
+      });
+      // then
+      expect(response.errors).toBeUndefined();
+    });
+
     it('should reorder sections', async () => {
       // given
       const workshop = await ensureTestWorkshop();
@@ -76,18 +104,25 @@ describe('Workshop Sections', () => {
         input: {
           id: workshop.id,
           name: 'super name',
-          sections: [
-            {
-              name: 'first',
-            },
-            {
-              name: 'second',
-            },
-            {
-              id: workshop.sections[0].id,
-              name: 'third',
-            },
-          ],
+          sections: {
+            create: [
+              {
+                name: 'first',
+                orderIndex: 0,
+              },
+              {
+                name: 'second',
+                orderIndex: 1,
+              },
+            ],
+            update: [
+              {
+                id: workshop.sections[0].id,
+                name: 'third',
+                orderIndex: 2,
+              },
+            ],
+          },
         },
       });
       // then
@@ -102,6 +137,37 @@ describe('Workshop Sections', () => {
       expect(result.sections[2].orderIndex).toBe(2);
       expect(result.sections[2].name).toBe('third');
     });
+
+    it('should append new sections in the end per default', async () => {
+      // given
+      const workshop = await ensureTestWorkshop();
+      // when
+      const response = await api.graphqlRequest(updateWorkshopMutation, {
+        input: {
+          id: workshop.id,
+          name: 'super name',
+          sections: {
+            create: [
+              {
+                name: 'keep',
+              },
+              {
+                name: 'order',
+              },
+            ],
+          },
+        },
+      });
+      // then
+      expect(response.errors).toBeUndefined();
+      expect(response.data?.updateWorkshop.name).toBe('super name');
+      const result = response.data!.updateWorkshop;
+      expect(result.sections).toHaveLength(5);
+      expect(result.sections[3].orderIndex).toBe(3);
+      expect(result.sections[3].name).toBe('keep');
+      expect(result.sections[4].orderIndex).toBe(4);
+      expect(result.sections[4].name).toBe('order');
+    });
   });
 
   describe('unhappy', () => {
@@ -112,11 +178,13 @@ describe('Workshop Sections', () => {
       const response = await api.graphqlRequest(updateWorkshopMutation, {
         input: {
           id: workshop.id,
-          sections: [
-            {
-              id: 'new id',
-            },
-          ],
+          sections: {
+            update: [
+              {
+                id: 'new id',
+              },
+            ],
+          },
         },
       });
       // then

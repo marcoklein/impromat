@@ -1,9 +1,9 @@
 import { UseGuards } from '@nestjs/common';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
-import { Element } from 'src/dtos/element.dto';
-import { WorkshopSection } from 'src/dtos/workshop-section.dto';
-import { Workshop } from 'src/dtos/workshop.dto';
+import { Element } from 'src/dtos/types/element.dto';
+import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
+import { Workshop } from 'src/dtos/types/workshop.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { PrismaService } from '../services/prisma.service';
 

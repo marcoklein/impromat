@@ -1,22 +1,15 @@
 import {
   Field,
-  ID,
   InputType,
   IntersectionType,
   PartialType,
 } from '@nestjs/graphql';
-import { IsUUID, Length, MaxLength } from 'class-validator';
-
-@InputType()
-export class CreateWorkshopSectionInput {
-  @Field(() => ID, { nullable: true })
-  @IsUUID()
-  id?: string;
-
-  @Field(() => String, { nullable: true })
-  @MaxLength(500)
-  name?: string;
-}
+import { Length, MaxLength } from 'class-validator';
+import { IdInput } from 'src/dtos/inputs/id-input';
+import {
+  WorkshopSectionListCreateInput,
+  WorkshopSectionListInput,
+} from 'src/dtos/inputs/workshop-section-input';
 
 @InputType()
 export class CreateWorkshopInput {
@@ -28,19 +21,15 @@ export class CreateWorkshopInput {
   @MaxLength(10000)
   description?: string;
 
-  @Field(() => [CreateWorkshopSectionInput], { nullable: true })
-  sections?: CreateWorkshopSectionInput[];
-}
-
-@InputType()
-class WorkshopIdInput {
-  @Field(() => ID)
-  @IsUUID()
-  id: string;
+  @Field(() => WorkshopSectionListCreateInput, { nullable: true })
+  sections?: WorkshopSectionListCreateInput;
 }
 
 @InputType()
 export class UpdateWorkshopInput extends IntersectionType(
   PartialType(CreateWorkshopInput),
-  WorkshopIdInput,
-) {}
+  IdInput,
+) {
+  @Field(() => WorkshopSectionListInput, { nullable: true })
+  sections?: WorkshopSectionListInput;
+}
