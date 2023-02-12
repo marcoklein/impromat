@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
 import { Element } from './element.dto';
@@ -20,4 +20,7 @@ export class WorkshopSection extends BaseDto {
 
   @Field(() => Workshop)
   workshop: Workshop;
+
+  @Field(() => Int)
+  orderIndex: number;
 }

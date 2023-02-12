@@ -32,7 +32,7 @@ export class WorkshopService {
       data: {
         ...createWorkshopInput,
         ownerId: user.id,
-        sections: { create: [{}] },
+        sections: { create: [{ orderIndex: 0 }] },
       },
     });
     return workshop;
@@ -42,52 +42,69 @@ export class WorkshopService {
     sessionUserId: string,
     updateWorkshopInput: UpdateWorkshopInput,
   ) {
-    return this.prismaService.$transaction(async (tx) => {
-      const existingWorkshop = await tx.workshop.findFirstOrThrow({
-        where: { id: updateWorkshopInput.id, ownerId: sessionUserId },
-        include: { sections: true },
-      });
-      if (updateWorkshopInput.sections) {
-        const newSections = updateWorkshopInput.sections;
-        const existingSections = existingWorkshop.sections;
-        for (const section of updateWorkshopInput.sections) {
-          if (section.id) {
-            if (!existingSections.find(({ id }) => id === section.id)) {
-              throw new Error('Cannot create new section with id.');
-            }
-            // update
-            await tx.workshopSection.update({
-              where: { id: section.id },
-              data: section,
-            });
-          } else {
-            // create
-            await tx.workshopSection.create({
-              data: { ...section, ...{ workshopId: existingWorkshop.id } },
-            });
-          }
-        }
-        // delete
-        const itemsToDelete = existingSections
-          .filter(
-            (x) => !newSections.find((newSection) => newSection.id === x.id),
-          )
-          .map(({ id }) => id);
-        await tx.workshopSection.deleteMany({
-          where: { id: { in: itemsToDelete } },
+    return this.prismaService.$transaction(
+      async (tx) => {
+        const existingWorkshop = await tx.workshop.findFirstOrThrow({
+          where: { id: updateWorkshopInput.id, ownerId: sessionUserId },
+          include: { sections: true },
         });
-      }
+        if (updateWorkshopInput.sections) {
+          const newSections = updateWorkshopInput.sections;
+          const existingSections = existingWorkshop.sections;
+          for (
+            let orderIndex = 0;
+            orderIndex < updateWorkshopInput.sections.length;
+            orderIndex++
+          ) {
+            const section = updateWorkshopInput.sections[orderIndex];
 
-      const workshop = await tx.workshop.update({
-        data: {
-          ...updateWorkshopInput,
-          ...{ sections: undefined },
-        },
-        where: {
-          id: updateWorkshopInput.id,
-        },
-      });
-      return workshop;
-    });
+            if (section.id) {
+              if (!existingSections.find(({ id }) => id === section.id)) {
+                throw new Error(
+                  'Cannot create new section with id section=' +
+                    JSON.stringify(section),
+                );
+              }
+              // update
+              await tx.workshopSection.update({
+                where: { id: section.id },
+                data: { ...section, ...{ orderIndex } },
+              });
+            } else {
+              // create
+              await tx.workshopSection.create({
+                data: {
+                  ...section,
+                  ...{ orderIndex, workshopId: existingWorkshop.id },
+                },
+              });
+            }
+          }
+          // delete
+          const itemsToDelete = existingSections
+            .filter(
+              (x) => !newSections.find((newSection) => newSection.id === x.id),
+            )
+            .map(({ id }) => id);
+          await tx.workshopSection.deleteMany({
+            where: { id: { in: itemsToDelete } },
+          });
+        }
+
+        const workshop = await tx.workshop.update({
+          data: {
+            ...updateWorkshopInput,
+            ...{ sections: undefined },
+          },
+          where: {
+            id: updateWorkshopInput.id,
+          },
+        });
+        return workshop;
+      },
+      // this transactions query used to result in timeouts
+      // therefore, the timeout and maxWait got increased
+      { timeout: 1000, maxWait: 500 },
+    );
   }
 }

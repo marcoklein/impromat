@@ -27,7 +27,11 @@ export class WorkshopController {
   ) {
     return this.workshopService
       .findWorkshopById(userSessionId, workshop.id)
-      .sections();
+      .sections({
+        orderBy: {
+          orderIndex: 'asc',
+        },
+      });
   }
 
   @ResolveField(() => [WorkshopSection])
@@ -72,7 +76,7 @@ export class WorkshopController {
     @Args('input') updateWorkshopInput: UpdateWorkshopInput,
     @SessionUserId() sessionUserId: string,
   ): Promise<Omit<Workshop, WorkshopRelations>> {
-    return this.workshopService.updateWorkshop(
+    return await this.workshopService.updateWorkshop(
       sessionUserId,
       updateWorkshopInput,
     );

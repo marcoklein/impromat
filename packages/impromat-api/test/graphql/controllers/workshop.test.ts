@@ -48,6 +48,7 @@ describe('Workshop', () => {
       expect(response.data?.workshop.id).toBe(createdWorkshopId);
       expect(response.data?.workshop.sections).toHaveLength(1);
       expect(response.data?.workshop.sections[0].name).toBeNull();
+      expect(response.data?.workshop.sections[0].orderIndex).toBe(0);
       expect(response.data?.workshop.owner.id).toBe(api.userId);
     });
   });

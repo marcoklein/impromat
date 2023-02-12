@@ -17,9 +17,11 @@ export const workshopFieldsFragment = graphql(`
       updatedAt
       deleted
 
+      orderIndex
       name
       color
       isCollapsed
+
       elements {
         id
       }
