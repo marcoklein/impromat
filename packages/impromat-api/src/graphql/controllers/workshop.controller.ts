@@ -12,8 +12,11 @@ import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { Workshop, WorkshopRelations } from 'src/dtos/types/workshop.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
-import { CreateWorkshopInput, UpdateWorkshopInput } from './workshop.inputs';
-import { WorkshopService } from './workshop.service';
+import {
+  CreateWorkshopInput,
+  UpdateWorkshopInput,
+} from '../../dtos/inputs/workshop.inputs';
+import { WorkshopService } from '../services/workshop.service';
 
 @Resolver(Workshop)
 @UseGuards(GraphqlAuthGuard)

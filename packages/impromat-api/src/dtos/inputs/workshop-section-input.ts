@@ -8,10 +8,7 @@ import {
 } from '@nestjs/graphql';
 import { MaxLength } from 'class-validator';
 import { IdInput } from './id-input';
-import {
-  WorkshopElementListCreateInput,
-  WorkshopElementListInput,
-} from './workshop-element-input';
+import { WorkshopElementListInput } from './workshop-element-input';
 
 @InputType()
 export class CreateWorkshopSectionInput {
@@ -22,8 +19,8 @@ export class CreateWorkshopSectionInput {
   @Field(() => Float, { nullable: true })
   orderIndex?: number;
 
-  @Field(() => WorkshopElementListCreateInput, { nullable: true })
-  elements?: WorkshopElementListCreateInput;
+  // @Field(() => WorkshopElementListCreateInput, { nullable: true })
+  // elements?: WorkshopElementListCreateInput;
 }
 
 @InputType()

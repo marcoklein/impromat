@@ -3,9 +3,8 @@ import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
 import { ElementTag } from './element-tag.dto';
 import { User } from './user.dto';
-import { WorkshopSection } from './workshop-section.dto';
 
-export type ElementRelations = 'workshops';
+export type ElementRelations = 'tags' | 'usedBy' | 'owner';
 
 @ObjectType()
 export class Element extends BaseDto {
@@ -18,14 +17,8 @@ export class Element extends BaseDto {
   @Field(() => [ElementTag])
   tags: ElementTag[];
 
-  @Field(() => String, { nullable: true })
-  note: Nullable<string>;
-
-  @Field(() => Element, { nullable: true })
-  basedOn: Nullable<Element>;
-
   @Field(() => [Element])
-  parentOf: Element[];
+  usedBy: Element[];
 
   @Field(() => String, { nullable: true })
   languageCode: Nullable<string>;
@@ -47,7 +40,4 @@ export class Element extends BaseDto {
 
   @Field(() => User, { nullable: true })
   owner: Nullable<User>;
-
-  @Field(() => WorkshopSection, { nullable: true })
-  section: Nullable<WorkshopSection>;
 }

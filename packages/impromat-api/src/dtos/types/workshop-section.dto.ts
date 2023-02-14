@@ -1,7 +1,7 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
-import { Element } from './element.dto';
+import { WorkshopElement } from './workshop-element.dto';
 import { Workshop } from './workshop.dto';
 
 @ObjectType()
@@ -15,8 +15,8 @@ export class WorkshopSection extends BaseDto {
   @Field(() => Boolean)
   isCollapsed: boolean;
 
-  @Field(() => [Element])
-  elements: Element[];
+  @Field(() => [WorkshopElement])
+  elements: WorkshopElement[];
 
   @Field(() => Workshop)
   workshop: Workshop;

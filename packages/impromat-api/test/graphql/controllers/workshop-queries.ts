@@ -24,6 +24,9 @@ export const workshopFieldsFragment = graphql(`
 
       elements {
         id
+        basedOn {
+          name
+        }
       }
       workshop {
         id

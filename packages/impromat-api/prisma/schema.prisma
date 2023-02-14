@@ -11,12 +11,11 @@ model Element {
   id        String   @id @default(uuid())
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
-  version   Int
+  version   Int      @default(0)
   deleted   Boolean  @default(false)
 
   name          String
   markdown      String?
-  note          String
   languageCode  String?
   sourceUrl     String?
   sourceName    String?
@@ -24,16 +23,12 @@ model Element {
   licenseName   String?
   licenseUrl    String?
 
-  basedOnId String? @unique
-  userId    String?
-  sectionId String?
+  ownerId String?
 
-  basedOn             Element?              @relation("BasedOn", fields: [basedOnId], references: [id])
-  parentOf            Element[]             @relation("BasedOn")
   tags                ElementTag[]
-  workshopSection     WorkshopSection?      @relation(fields: [sectionId], references: [id])
-  user                User?                 @relation(fields: [userId], references: [id])
+  owner               User?                 @relation(fields: [ownerId], references: [id])
   userFavoriteElement UserFavoriteElement[]
+  workshopElements    WorkshopElement[]
 }
 
 model ElementTag {
@@ -103,9 +98,29 @@ model WorkshopSection {
   name        String?
   color       String?
   isCollapsed Boolean @default(false)
+  orderIndex  Float   @default(-1)
 
   workshopId String
 
-  elements Element[]
-  workshop Workshop  @relation(fields: [workshopId], references: [id])
+  elements WorkshopElement[]
+  workshop Workshop          @relation(fields: [workshopId], references: [id])
+}
+
+model WorkshopElement {
+  id        String    @id @default(uuid())
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
+
+  note       String?
+  color      String?
+  orderIndex Int     @default(-1)
+
+  basedOnId         String
+  workshopSectionId String
+
+  basedOn         Element         @relation(fields: [basedOnId], references: [id])
+  workshopSection WorkshopSection @relation(fields: [workshopSectionId], references: [id])
 }

@@ -6,17 +6,29 @@ import {
   IntersectionType,
   PartialType,
 } from '@nestjs/graphql';
-import { MaxLength } from 'class-validator';
+import { IsUUID } from 'class-validator';
 import { IdInput } from './id-input';
 
 @InputType()
+export class BasedOnElementConnectInput {
+  @Field(() => IdInput)
+  connect: IdInput;
+}
+
+@InputType()
 export class CreateWorkshopElementInput {
-  @Field(() => String)
-  @MaxLength(500)
-  name: string;
+  @Field(() => BasedOnElementConnectInput)
+  @IsUUID(4)
+  basedOn: BasedOnElementConnectInput;
 
   @Field(() => Int, { nullable: true })
   orderIndex?: number;
+}
+
+@InputType()
+export class DeleteWorkshopElementInput {
+  @Field(() => ID)
+  id: string;
 }
 
 @InputType()
@@ -38,13 +50,16 @@ export class WorkshopElementListUpdateInput {
 }
 
 @InputType()
-export class ListDeleteInput {
-  @Field(() => ID, { nullable: true })
-  delete?: string[];
+export class WorkshopElementListDeleteInput {
+  @Field(() => [DeleteWorkshopElementInput], { nullable: true })
+  delete?: DeleteWorkshopElementInput[];
 }
 
 @InputType()
 export class WorkshopElementListInput extends IntersectionType(
   WorkshopElementListCreateInput,
-  IntersectionType(WorkshopElementListUpdateInput, ListDeleteInput),
+  IntersectionType(
+    WorkshopElementListUpdateInput,
+    WorkshopElementListDeleteInput,
+  ),
 ) {}

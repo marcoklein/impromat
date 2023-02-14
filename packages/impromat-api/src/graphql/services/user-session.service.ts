@@ -1,10 +1,14 @@
-import { Inject } from '@nestjs/common';
-import { Context } from '@nestjs/graphql';
-import { SessionUserId } from '../../decorators/session-user-id.decorator';
-import { PrismaService } from './prisma.service';
+import { Inject, Injectable, Scope } from '@nestjs/common';
+import { CONTEXT, GqlExecutionContext } from '@nestjs/graphql';
+import { UserSessionData } from 'src/auth/user-session-data';
 
+@Injectable({ scope: Scope.REQUEST })
 export class UserSessionService {
-  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+  constructor(@Inject(CONTEXT) private context: GqlExecutionContext) {}
 
-  async getActiveUser() {}
+  getActiveUserId() {
+    const req: { session: { data: UserSessionData } } =
+      this.context.getContext().req;
+    return req.session.data.userId;
+  }
 }
