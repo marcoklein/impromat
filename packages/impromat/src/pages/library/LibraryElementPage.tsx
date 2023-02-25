@@ -5,14 +5,11 @@ import {
   IonContent,
   IonFooter,
   IonHeader,
-  IonIcon,
   IonPage,
   IonSpinner,
   IonTitle,
   IonToolbar,
-  useIonToast,
 } from "@ionic/react";
-import { star, starOutline } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
@@ -60,7 +57,7 @@ export const LibraryElementPage: React.FC = () => {
   useStateChangeLogger(workshopId, "workshopId", logger);
   useStateChangeLogger(libraryPartId, "libraryPartId", logger);
 
-  const [elementQueryResult, reexecute] = useQuery({
+  const [elementQueryResult] = useQuery({
     query: LibraryElementQuery,
     variables: {
       id: libraryPartId,
@@ -73,22 +70,11 @@ export const LibraryElementPage: React.FC = () => {
     },
     pause: !workshopId,
   });
-  const [addToWorkshopMutationResult, addToWorkshopMutation] = useMutation(
-    AddToWorkshopMutation,
-  );
+  const [, addToWorkshopMutation] = useMutation(AddToWorkshopMutation);
   const element = elementQueryResult.data?.element;
-  const [presentToast] = useIonToast();
   const history = useHistory();
 
-  // const isFavoriteElement = useMemo(
-  //   () => myUser?.favoriteElements.includes(libraryPartId),
-  //   [myUser?.favoriteElements, libraryPartId],
-  // );
-
-  const isFavoriteElement = false;
-
   function addToWorkshop() {
-    logger("Not implement yet");
     if (!element) return;
     if (!workshopId) throw new Error("no workshop id");
     if (!workshopQueryResult.data) throw new Error("workshop not found");
@@ -125,26 +111,6 @@ export const LibraryElementPage: React.FC = () => {
     });
   }
 
-  function onStarElementClick() {
-    logger("not implemented yet");
-    // if (!myUser) {
-    //   // TODO test if the user exists in the database as query
-    //   // currently, the query is just stuck because isFetching will not switch to `false`
-    //   presentToast("Login to use the favorite function.", 1000);
-    //   return;
-    // }
-    // if (
-    //   !mutations ||
-    //   !myUser ||
-    //   isFavoriteElement === undefined ||
-    //   !improbibElement
-    // )
-    //   return;
-    // logger("onStarElementClick - isFavoriteElement: %s", isFavoriteElement);
-    // mutations.addNewElement(improbibElement);
-    // mutations.toggleFavoriteElementOfUser(myUser, libraryPartId);
-  }
-
   return (
     <IonPage>
       <IonHeader>
@@ -155,14 +121,14 @@ export const LibraryElementPage: React.FC = () => {
             ></IonBackButton>
           </IonButtons>
           <IonTitle>{element?.name}</IonTitle>
-          <IonButtons slot="end">
+          {/* <IonButtons slot="end">
             <IonButton onClick={() => onStarElementClick()}>
               <IonIcon
                 slot="icon-only"
                 icon={isFavoriteElement ? star : starOutline}
               ></IonIcon>
             </IonButton>
-          </IonButtons>
+          </IonButtons> */}
         </IonToolbar>
       </IonHeader>
 

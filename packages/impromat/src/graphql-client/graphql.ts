@@ -72,6 +72,17 @@ export type Element = {
   version: Scalars['Int'];
 };
 
+export type ElementSearchInput = {
+  limit?: Scalars['Int'];
+  text?: InputMaybe<Scalars['String']>;
+};
+
+export type ElementSearchResult = {
+  __typename?: 'ElementSearchResult';
+  element: Element;
+  score: Scalars['Float'];
+};
+
 export type ElementTag = {
   __typename?: 'ElementTag';
   createdAt: Scalars['DateTime'];
@@ -128,7 +139,7 @@ export type Query = {
   googleAuthUrl: Scalars['String'];
   /** Get information about the current user. */
   me: User;
-  searchElements: Array<Element>;
+  searchElements: Array<ElementSearchResult>;
   workshop: Workshop;
   workshopElement: WorkshopElement;
   workshops: Array<Workshop>;
@@ -141,7 +152,7 @@ export type QueryElementArgs = {
 
 
 export type QuerySearchElementsArgs = {
-  input: SearchElementsInput;
+  input: ElementSearchInput;
 };
 
 
@@ -152,10 +163,6 @@ export type QueryWorkshopArgs = {
 
 export type QueryWorkshopElementArgs = {
   id: Scalars['ID'];
-};
-
-export type SearchElementsInput = {
-  text: Scalars['String'];
 };
 
 export type UpdateElementInput = {
@@ -374,14 +381,14 @@ export type MyUserQuery = (
 );
 
 export type SearchElementsQueryVariables = Exact<{
-  input: SearchElementsInput;
+  input: ElementSearchInput;
 }>;
 
 
-export type SearchElementsQuery = { __typename?: 'Query', searchElements: Array<(
-    { __typename?: 'Element', id: string }
-    & { ' $fragmentRefs'?: { 'ElementPreviewItem_ElementFragment': ElementPreviewItem_ElementFragment } }
-  )> };
+export type SearchElementsQuery = { __typename?: 'Query', searchElements: Array<{ __typename?: 'ElementSearchResult', element: (
+      { __typename?: 'Element', id: string }
+      & { ' $fragmentRefs'?: { 'ElementPreviewItem_ElementFragment': ElementPreviewItem_ElementFragment } }
+    ) }> };
 
 export type WorkshopElementPageQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -484,7 +491,7 @@ export const WorkshopSectionsQueryDocument = {"kind":"Document","definitions":[{
 export const AddToWorkhopMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddToWorkhopMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateWorkshopInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateWorkshop"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AddToWorkhopMutationMutation, AddToWorkhopMutationMutationVariables>;
 export const CustomElementsTab_QueryDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CustomElementsTab_Query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CustomElementsTab_WorkshopFragment"}}]}}]}},...CustomElementsTab_WorkshopFragmentFragmentDoc.definitions]} as unknown as DocumentNode<CustomElementsTab_QueryQuery, CustomElementsTab_QueryQueryVariables>;
 export const MyUserDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MyUser_Query"}}]}},...MyUser_QueryFragmentDoc.definitions]} as unknown as DocumentNode<MyUserQuery, MyUserQueryVariables>;
-export const SearchElementsDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchElements"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchElementsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchElements"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ElementPreviewItem_Element"}}]}}]}},...ElementPreviewItem_ElementFragmentDoc.definitions]} as unknown as DocumentNode<SearchElementsQuery, SearchElementsQueryVariables>;
+export const SearchElementsDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchElements"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ElementSearchInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchElements"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ElementPreviewItem_Element"}}]}}]}}]}},...ElementPreviewItem_ElementFragmentDoc.definitions]} as unknown as DocumentNode<SearchElementsQuery, SearchElementsQueryVariables>;
 export const WorkshopElementPageDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WorkshopElementPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workshopElement"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"basedOn"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"markdown"}},{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"sourceName"}},{"kind":"Field","name":{"kind":"Name","value":"sourceBaseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"licenseName"}},{"kind":"Field","name":{"kind":"Name","value":"licenseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"owner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CustomElement_Element"}}]}}]}}]}},...CustomElement_ElementFragmentDoc.definitions]} as unknown as DocumentNode<WorkshopElementPageQuery, WorkshopElementPageQueryVariables>;
 export const WorkshopByIdQueryDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WorkshopByIdQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workshop"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WorkshopPage_Workshop"}}]}}]}},...WorkshopPage_WorkshopFragmentDoc.definitions]} as unknown as DocumentNode<WorkshopByIdQueryQuery, WorkshopByIdQueryQueryVariables>;
 export const DeleteWorkshopMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteWorkshopMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteWorkshop"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteWorkshopMutationMutation, DeleteWorkshopMutationMutationVariables>;

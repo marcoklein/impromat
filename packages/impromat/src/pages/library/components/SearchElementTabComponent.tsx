@@ -9,10 +9,12 @@ import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { routeLibraryElement } from "../library-routes";
 
 const SearchElementTabQuery = graphql(`
-  query SearchElements($input: SearchElementsInput!) {
+  query SearchElements($input: ElementSearchInput!) {
     searchElements(input: $input) {
-      id
-      ...ElementPreviewItem_Element
+      element {
+        id
+        ...ElementPreviewItem_Element
+      }
     }
   }
 `);
@@ -66,11 +68,13 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
     if (!!queryResult.data?.searchElements.length) {
       return (
         <IonList>
-          {queryResult.data.searchElements.map((element) => (
+          {queryResult.data.searchElements.map((searchResult) => (
             <ElementPreviewItemComponent
-              key={element.id}
-              routerLink={routeLibraryElement(element.id, { workshopId })}
-              workshopElementFragment={element}
+              key={searchResult.element.id}
+              routerLink={routeLibraryElement(searchResult.element.id, {
+                workshopId,
+              })}
+              workshopElementFragment={searchResult.element}
             ></ElementPreviewItemComponent>
           ))}
         </IonList>

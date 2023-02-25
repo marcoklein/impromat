@@ -1,21 +1,29 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
-import { SearchElementsInput } from 'src/dtos/inputs/search-element-input';
-import { Element, ElementRelations } from 'src/dtos/types/element.dto';
+import { ElementSearchInput } from 'src/dtos/inputs/element-search-input.ts';
+import { ElementSearchResult } from 'src/dtos/types/element-search-result.dto';
+import { Element } from 'src/dtos/types/element.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
-import { ElementService } from '../services/element.service';
+import { ElementSearchService } from '../services/element-search.service';
 
 @Resolver(Element)
 @UseGuards(GraphqlAuthGuard)
 export class ElementSearchController {
-  constructor(private userElementService: ElementService) {}
-  @Query(() => [Element])
+  constructor(private elementSearchService: ElementSearchService) {}
+  @Query(() => [ElementSearchResult])
   async searchElements(
     @Args('input')
-    searchElementsInput: SearchElementsInput,
+    searchElementsInput: ElementSearchInput,
     @SessionUserId() userId: string,
-  ): Promise<Omit<Element, ElementRelations>[] | null> {
-    return this.userElementService.findElementsFromUser(userId);
+  ): Promise<ElementSearchResult[]> {
+    const elements = await this.elementSearchService.searchElements(
+      userId,
+      searchElementsInput,
+    );
+    return elements.map((result) => ({
+      element: result.element as any,
+      score: result.score,
+    }));
   }
 }

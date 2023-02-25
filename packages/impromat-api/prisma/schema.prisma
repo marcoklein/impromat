@@ -22,6 +22,7 @@ model Element {
   sourceBaseUrl String?
   licenseName   String?
   licenseUrl    String?
+  visibility    ElementVisibility @default(PRIVATE)
 
   ownerId String?
 
@@ -29,6 +30,11 @@ model Element {
   owner               User?                 @relation(fields: [ownerId], references: [id])
   userFavoriteElement UserFavoriteElement[]
   workshopElements    WorkshopElement[]
+}
+
+enum ElementVisibility {
+  PRIVATE
+  PUBLIC
 }
 
 model ElementTag {

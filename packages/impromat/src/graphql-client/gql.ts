@@ -32,7 +32,7 @@ const documents = {
     "\n  fragment FavoriteElements_User on User {\n    favoriteElements {\n      id\n      ...ElementPreviewItem_Element\n    }\n  }\n": types.FavoriteElements_UserFragmentDoc,
     "\n  fragment MyUser_Query on Query {\n    me {\n      id\n      favoriteElements {\n        id\n      }\n      ...FavoriteElements_User\n    }\n  }\n": types.MyUser_QueryFragmentDoc,
     "\n  query MyUser {\n    ...MyUser_Query\n  }\n": types.MyUserDocument,
-    "\n  query SearchElements($input: SearchElementsInput!) {\n    searchElements(input: $input) {\n      id\n      ...ElementPreviewItem_Element\n    }\n  }\n": types.SearchElementsDocument,
+    "\n  query SearchElements($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n": types.SearchElementsDocument,
     "\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n\n        ...CustomElement_Element\n      }\n    }\n  }\n": types.WorkshopElementPageDocument,
     "\n  fragment WorkshopPage_Workshop on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n    name\n    description\n    sections {\n      name\n      elements {\n        id\n      }\n      ...WorkshopElementsComponent_WorkshopSection\n    }\n    ...WorkshopActionSheet_Workshop\n  }\n": types.WorkshopPage_WorkshopFragmentDoc,
     "\n  query WorkshopByIdQuery($id: ID!) {\n    workshop(id: $id) {\n      ...WorkshopPage_Workshop\n    }\n  }\n": types.WorkshopByIdQueryDocument,
@@ -141,7 +141,7 @@ export function graphql(source: "\n  query MyUser {\n    ...MyUser_Query\n  }\n"
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query SearchElements($input: SearchElementsInput!) {\n    searchElements(input: $input) {\n      id\n      ...ElementPreviewItem_Element\n    }\n  }\n"): (typeof documents)["\n  query SearchElements($input: SearchElementsInput!) {\n    searchElements(input: $input) {\n      id\n      ...ElementPreviewItem_Element\n    }\n  }\n"];
+export function graphql(source: "\n  query SearchElements($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n"): (typeof documents)["\n  query SearchElements($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express';
-import * as session from 'express-session';
+import session from 'express-session';
 import { SessionOptions } from 'express-session';
-import * as path from 'node:path';
-import * as sessionFileStore from 'session-file-store';
+import path from 'node:path';
+import sessionFileStore from 'session-file-store';
 import { v4 as uuidv4 } from 'uuid';
 import { environment } from './environment';
 const FileStore = sessionFileStore(session);

@@ -8,6 +8,7 @@ import { MeResolver } from './controllers/me.controller';
 import { WorkshopElementController } from './controllers/workshop-element.controller';
 import { WorkshopSectionController } from './controllers/workshop-section.controller';
 import { WorkshopController } from './controllers/workshop.controller';
+import { ElementSearchService } from './services/element-search.service';
 import { ElementService } from './services/element.service';
 import { UserSessionService } from './services/user-session.service';
 import { WorkshopElementService } from './services/workshop-element.service';
@@ -44,6 +45,7 @@ import { WorkshopService } from './services/workshop.service';
     MeResolver,
     UserSessionService,
     WorkshopService,
+    ElementSearchService,
   ],
 })
 export class GraphqlModule {}

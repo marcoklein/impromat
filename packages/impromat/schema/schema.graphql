@@ -85,9 +85,14 @@ type Element {
   owner: User
 }
 
+type ElementSearchResult {
+  element: Element!
+  score: Float!
+}
+
 type Query {
   googleAuthUrl: String!
-  searchElements(input: SearchElementsInput!): [Element!]!
+  searchElements(input: ElementSearchInput!): [ElementSearchResult!]!
   workshop(id: ID!): Workshop!
   workshops: [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
@@ -98,8 +103,9 @@ type Query {
   me: User!
 }
 
-input SearchElementsInput {
-  text: String!
+input ElementSearchInput {
+  text: String
+  limit: Int! = 20
 }
 
 type Mutation {

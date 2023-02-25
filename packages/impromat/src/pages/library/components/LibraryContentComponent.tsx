@@ -7,7 +7,7 @@ import {
   IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
-import { brush, search, star } from "ionicons/icons";
+import { brush, search } from "ionicons/icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Redirect,
@@ -19,7 +19,6 @@ import {
 } from "react-router";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
-import { FavoriteElementsTabComponent } from "../components/FavoriteElementsTabComponent";
 import { routeLibraryTab } from "../library-routes";
 import { CustomElementsTabComponent } from "./CustomElementsTabComponent";
 import { SearchElementTabComponent } from "./SearchElementTabComponent";
@@ -85,11 +84,11 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
               workshopId={workshopId}
             ></SearchElementTabComponent>
           </Route>
-          <Route path={`${path}/${Tabs.FAVORITES}`} exact>
+          {/* <Route path={`${path}/${Tabs.FAVORITES}`} exact>
             <FavoriteElementsTabComponent
               workshopId={workshopId}
             ></FavoriteElementsTabComponent>
-          </Route>
+          </Route> */}
           <Route path={`${path}/${Tabs.CREATE}`} exact>
             <CustomElementsTabComponent
               workshopId={workshopId}
@@ -107,13 +106,13 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
               <IonIcon icon={search}></IonIcon>
               <IonLabel>Explore</IonLabel>
             </IonSegmentButton>
-            <IonSegmentButton
+            {/* <IonSegmentButton
               value={Tabs.FAVORITES}
               onClick={() => history.replace(createTabsRoute(Tabs.FAVORITES))}
             >
               <IonIcon icon={star}></IonIcon>
               <IonLabel>Favorites</IonLabel>
-            </IonSegmentButton>
+            </IonSegmentButton> */}
             <IonSegmentButton
               value={Tabs.CREATE}
               onClick={() => history.replace(createTabsRoute(Tabs.CREATE))}
