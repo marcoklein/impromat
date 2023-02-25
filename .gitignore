@@ -2,3 +2,4 @@
 node_modules/
 junit-results.xml
 *.log
+packages/impromat-api-old/**/*

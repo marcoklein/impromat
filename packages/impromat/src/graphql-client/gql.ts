@@ -23,7 +23,7 @@ const documents = {
     "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      markdown\n    }\n  }\n": types.LibraryCreateCustomElement_QueryDocument,
     "\n  mutation UpdateElementMutation($input: UpdateElementInput!) {\n    updateElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateElementMutationDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      id\n    }\n  }\n": types.CreateElementMutationDocument,
-    "\n  mutation CreateWorkshopElementMutation($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      id\n    }\n  }\n": types.CreateWorkshopElementMutationDocument,
+    "\n      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {\n        workshop(id: $id) {\n          sections {\n            id\n          }\n        }\n      }\n    ": types.LibraryCreateCustomElementWorkshopQueryDocument,
     "\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      ...Element_Element\n    }\n  }\n": types.LibraryElementQueryDocument,
     "\n  query WorkshopSectionsQuery($id: ID!) {\n    workshop(id: $id) {\n      sections {\n        id\n      }\n    }\n  }\n": types.WorkshopSectionsQueryDocument,
     "\n  mutation AddToWorkhopMutation($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      id\n    }\n  }\n": types.AddToWorkhopMutationDocument,
@@ -105,7 +105,7 @@ export function graphql(source: "\n  mutation CreateElementMutation($input: Crea
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CreateWorkshopElementMutation($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateWorkshopElementMutation($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      id\n    }\n  }\n"];
+export function graphql(source: "\n      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {\n        workshop(id: $id) {\n          sections {\n            id\n          }\n        }\n      }\n    "): (typeof documents)["\n      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {\n        workshop(id: $id) {\n          sections {\n            id\n          }\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

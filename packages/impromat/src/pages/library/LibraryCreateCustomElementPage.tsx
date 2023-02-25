@@ -23,6 +23,7 @@ import { InfoItemComponent } from "../../components/InfoItemComponent";
 import { graphql } from "../../graphql-client";
 import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
+import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshop } from "../../routes/shared-routes";
 import { Tabs } from "./components/LibraryContentComponent";
 import {
@@ -57,14 +58,6 @@ const CreateElementMutation = graphql(`
   }
 `);
 
-const CreateWorkshopElementMutation = graphql(`
-  mutation CreateWorkshopElementMutation($input: UpdateWorkshopInput!) {
-    updateWorkshop(input: $input) {
-      id
-    }
-  }
-`);
-
 /**
  * TODO split into CreateOrEditCustomElementPage
  */
@@ -72,26 +65,37 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
   const workshopId = useSearchParam(WORKSHOP_CONTEXT_SEARCH_PARAM);
   const elementId = useSearchParam(LIBRARY_ELEMENT_ID_SEARCH_PARAM);
 
-  const [{ data, fetching: isFetching, error }, reexicuteQuery] = useQuery({
+  const [existingElementQueryResult] = useQuery({
     query: LibraryCreateCustomElement_Query,
     variables: {
       id: elementId ?? "",
     },
-    pause: elementId !== undefined,
+    pause: elementId === undefined,
   });
   const [mutationResult, executeMutation] = useMutation(UpdateElementMutation);
   const [createElementMutationResult, executeElementMutationResult] =
     useMutation(CreateElementMutation);
+  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
+  const [workshopQueryResult] = useQuery({
+    query: graphql(`
+      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {
+        workshop(id: $id) {
+          sections {
+            id
+          }
+        }
+      }
+    `),
+    variables: { id: workshopId ?? "" },
+    pause: workshopId === undefined,
+  });
 
-  // const user = getFragmentData(LibraryCreateCustomElement_QueryFragment, data);
-
-  const existingElement = data?.element;
+  const existingElement = existingElementQueryResult.data?.element;
   const editExistingItem = !!existingElement;
 
   const [presentToast] = useIonToast();
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  // const mutations = useRxdbMutations();
   const history = useHistory();
   const logger = useLogger("LibraryCreateCustomElementPage");
 
@@ -148,11 +152,27 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
           return;
         }
         if (workshopId) {
-          // TODO
-          // await mutations.addNewElementToWorkshop(workshopId, newElementId, {
-          //   name,
-          //   markdown: content,
-          // });
+          logger("Last section result=%o", workshopQueryResult);
+          const lastSectionId =
+            workshopQueryResult.data?.workshop.sections.at(-1)?.id;
+          if (!lastSectionId) {
+            throw new Error("no last section");
+          }
+          updateWorkshopMutation({
+            input: {
+              id: workshopId,
+              sections: {
+                update: [
+                  {
+                    id: lastSectionId,
+                    elements: {
+                      create: [{ basedOn: { connect: { id: newElement.id } } }],
+                    },
+                  },
+                ],
+              },
+            },
+          });
           history.push(routeWorkshop(workshopId), {
             direction: "back",
             newElement: newElement.id,
