@@ -1,12 +1,29 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Markdown from "react-markdown";
 import { SlidingItemComponent } from "../../../components/SlidingItemComponent";
-import { ElementDocType } from "../../../database/collections/element/element-collection";
-import { useDocument } from "../../../database/use-document";
+import {
+  FragmentType,
+  getFragmentData,
+  graphql,
+} from "../../../graphql-client";
 import "./WorkshopElementItemComponent.css";
 
+const WorkshopElementItemComponent_WorkshopElement = graphql(`
+  fragment WorkshopElementItemComponent_WorkshopElement on WorkshopElement {
+    id
+    note
+    basedOn {
+      id
+      name
+      markdown
+    }
+  }
+`);
+
 interface ContainerProps {
-  workshopElement: ElementDocType;
+  workshopElementFragment: FragmentType<
+    typeof WorkshopElementItemComponent_WorkshopElement
+  >;
   routerLink: string;
   isReordering?: boolean;
   onRemoveClick?: () => void;
@@ -14,39 +31,23 @@ interface ContainerProps {
 }
 
 export const WorkshopElementItemComponent: React.FC<ContainerProps> = ({
-  workshopElement,
+  workshopElementFragment,
   routerLink,
   isReordering,
   onRemoveClick,
   onEditClick,
 }) => {
+  const workshopElement = getFragmentData(
+    WorkshopElementItemComponent_WorkshopElement,
+    workshopElementFragment,
+  );
   const [maxHeight] = useState(4);
   const [fadeHeight] = useState(0.5);
-
-  const { document: basedOnElementFromDatabase } = useDocument(
-    "elements",
-    workshopElement.basedOn,
-  );
+  const basedOnElementFromDatabase = workshopElement.basedOn;
 
   const basedOnElement = useMemo(() => {
     return basedOnElementFromDatabase ?? workshopElement;
   }, [basedOnElementFromDatabase, workshopElement]);
-
-  const noteMarkdown = useCallback(
-    () => <Markdown>{workshopElement.note ?? ""}</Markdown>,
-    [workshopElement],
-  );
-
-  const contentMarkdown = useCallback(
-    () => (
-      <Markdown>
-        {workshopElement.markdown && workshopElement.markdown !== ""
-          ? workshopElement.markdown
-          : basedOnElement?.markdown ?? ""}
-      </Markdown>
-    ),
-    [workshopElement, basedOnElement],
-  );
 
   return (
     <SlidingItemComponent
@@ -74,11 +75,11 @@ export const WorkshopElementItemComponent: React.FC<ContainerProps> = ({
                     paddingLeft: "4px",
                   }}
                 >
-                  {noteMarkdown()}
+                  <Markdown>{workshopElement.note ?? ""}</Markdown>
                 </div>
               </div>
             )}
-            {contentMarkdown()}
+            <Markdown>{basedOnElement.markdown ?? ""}</Markdown>
           </div>
           <div
             style={{

@@ -16,6 +16,7 @@ export class CreateElementInput {
   name: string;
 
   @Field(() => String, { nullable: true })
+  @MaxLength(10000)
   markdown: Nullable<string>;
 
   @Field(() => Int, { nullable: true })

@@ -4,6 +4,7 @@ import {
   initApiTestSession,
 } from '../../test-utils/describe-component-test';
 import {
+  createTestWorkshopMutation,
   createWorkshopMutation,
   updateWorkshopMutation,
   workshopByIdQuery,
@@ -25,7 +26,7 @@ describe('Workshop Sections', () => {
     return createdWorkshop;
   }
 
-  describe('update workshop sections flow', () => {
+  describe('flow', () => {
     let newSectionId: string | undefined;
     it('should update workshop sections', async () => {
       // given
@@ -167,6 +168,65 @@ describe('Workshop Sections', () => {
       expect(result.sections[3].name).toBe('keep');
       expect(result.sections[4].orderIndex).toBe(4);
       expect(result.sections[4].name).toBe('order');
+    });
+  });
+
+  describe('happy', () => {
+    it('should create a new section if there is only one section after delete', async () => {
+      // given
+      const testWorkshopResponse = await api.graphqlRequest(
+        createTestWorkshopMutation,
+      );
+      const workshopId = testWorkshopResponse.data!.createWorkshop.id;
+      const firstSectionId =
+        testWorkshopResponse.data!.createWorkshop.sections.at(0)!.id;
+      // when
+      const response = await api.graphqlRequest(updateWorkshopMutation, {
+        input: {
+          id: workshopId,
+          name: 'super name',
+          sections: {
+            delete: [{ id: firstSectionId }],
+          },
+        },
+      });
+      // then
+      expect(response.data?.updateWorkshop.sections).toHaveLength(1);
+      expect(response.data?.updateWorkshop.sections.at(0)?.id).not.toBe(
+        firstSectionId,
+      );
+    });
+
+    it('should delete a section', async () => {
+      // given
+      const testWorkshopResponse = await api.graphqlRequest(
+        createTestWorkshopMutation,
+      );
+      const workshopId = testWorkshopResponse.data!.createWorkshop.id;
+      const firstSectionId =
+        testWorkshopResponse.data!.createWorkshop.sections.at(0)!.id;
+      await api.graphqlRequest(updateWorkshopMutation, {
+        input: {
+          id: workshopId,
+          sections: {
+            create: [{ name: 'second' }, { name: 'third' }],
+          },
+        },
+      });
+      // when
+      const response = await api.graphqlRequest(updateWorkshopMutation, {
+        input: {
+          id: workshopId,
+          sections: {
+            delete: [{ id: firstSectionId }],
+          },
+        },
+      });
+      // then
+      expect(response.errors).toBeUndefined();
+      expect(response.data?.updateWorkshop.sections).toHaveLength(2);
+      // TODO test if order index is correct
+      // expect(response.data?.updateWorkshop.sections[])
     });
   });
 

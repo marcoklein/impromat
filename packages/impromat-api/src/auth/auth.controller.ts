@@ -1,6 +1,8 @@
-import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Query, Req, Res } from '@nestjs/common';
+import { sign } from 'cookie-signature';
 import { Request, Response } from 'express';
 import { Session } from 'express-session';
+import { environment } from 'src/environment';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { GoogleOAuth2ClientService } from './google-oauth2-client-provider';
 import { UserSessionData } from './user-session-data';
@@ -56,6 +58,36 @@ export class AuthController {
       res.redirect(javascriptOrigin);
     } else {
       res.sendStatus(HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get('testlogin')
+  async testLogin(
+    @Query() { redirectUrl }: { redirectUrl: string | undefined },
+    @Req() req: Request & { session: Session & { data: UserSessionData } },
+    @Res() res: Response,
+  ) {
+    const userGoogleId = 'test-user-id';
+
+    const user = await this.prismaService.$transaction(async (tx) => {
+      const user = await tx.user.findUnique({
+        where: { googleSubscriptionId: userGoogleId },
+      });
+      if (user) return user;
+      // first time login
+      return await tx.user.create({
+        data: { googleSubscriptionId: userGoogleId },
+      });
+    });
+
+    req.session.data = { userId: user.id };
+    if (redirectUrl) {
+      res.redirect(redirectUrl);
+    } else {
+      req.session.save(() => {
+        const signedSession = sign(req.session.id, environment.SESSION_SECRET);
+        res.send(signedSession);
+      });
     }
   }
 }

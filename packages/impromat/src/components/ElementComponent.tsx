@@ -1,23 +1,54 @@
 import ReactMarkdown from "react-markdown";
-import { ElementDocType } from "../database/collections/element/element-collection";
+import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { CustomElementInfoItemComponent } from "./CustomElementInfoItemComponent";
 import { LicenseItemComponent } from "./LicenseItemComponent";
 import { TagsComponent } from "./TagsComponent";
 
+const Element_ElementFragment = graphql(`
+  fragment Element_Element on Element {
+    id
+    createdAt
+    updatedAt
+    version
+    deleted
+    name
+    markdown
+    tags {
+      name
+    }
+    usedBy {
+      id
+    }
+    languageCode
+    sourceUrl
+    sourceName
+    sourceBaseUrl
+    licenseName
+    licenseUrl
+    owner {
+      id
+    }
+    ...CustomElement_Element
+  }
+`);
+
 interface ContainerProps {
-  element: ElementDocType;
+  elementFragment: FragmentType<typeof Element_ElementFragment>;
 }
 
-export const ElementComponent: React.FC<ContainerProps> = ({ element }) => {
+export const ElementComponent: React.FC<ContainerProps> = ({
+  elementFragment,
+}) => {
+  const element = getFragmentData(Element_ElementFragment, elementFragment);
   return (
     <>
       <div className="ion-padding">
-        <TagsComponent tags={element.tags}></TagsComponent>
+        <TagsComponent tags={element.tags.map((t) => t.name)}></TagsComponent>
         <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
       </div>
-      {!element.basedOn && !element.sourceName ? (
+      {element.owner && !element.sourceName ? (
         <CustomElementInfoItemComponent
-          element={element}
+          elementFragment={element}
         ></CustomElementInfoItemComponent>
       ) : (
         <LicenseItemComponent

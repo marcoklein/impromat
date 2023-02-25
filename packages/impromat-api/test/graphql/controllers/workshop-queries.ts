@@ -24,6 +24,7 @@ export const workshopFieldsFragment = graphql(`
 
       elements {
         id
+        note
         basedOn {
           name
         }
@@ -48,8 +49,16 @@ export const userWorkshopsQuery = graphql(`
 
 export const workshopByIdQuery = graphql(`
   query WorkshopQuery($workshopId: ID!) {
-    workshop(workshopId: $workshopId) {
+    workshop(id: $workshopId) {
       ...WorkshopFields
+    }
+  }
+`);
+
+export const deleteWorkshopMutation = graphql(`
+  mutation DeleteWorkshop($id: ID!) {
+    deleteWorkshop(id: $id) {
+      id
     }
   }
 `);
@@ -65,6 +74,14 @@ export const addWorskshopWithEmptyNameQuery = graphql(`
 export const createWorkshopMutation = graphql(`
   mutation AddWorkshop($name: String!) {
     createWorkshop(input: { name: $name }) {
+      ...WorkshopFields
+    }
+  }
+`);
+
+export const createTestWorkshopMutation = graphql(`
+  mutation AddTestWorkshop {
+    createWorkshop(input: { name: "test-workshop" }) {
       ...WorkshopFields
     }
   }

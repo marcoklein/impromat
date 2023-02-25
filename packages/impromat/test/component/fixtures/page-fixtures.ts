@@ -29,6 +29,13 @@ const test = base.extend<PageFixtures>({
   accountPage: async ({ page }, use) => {
     await use(new AccountDevPage(page));
   },
+  async page({ page, context, request }, use) {
+    await page.goto(
+      // "http://localhost:8080/auth/testlogin?redirectUrl=http://localhost:3003",
+      "http://localhost:8080/auth/testlogin?redirectUrl=http://localhost:3000",
+    );
+    await use(page);
+  },
 });
 
 export { test as pageTest };

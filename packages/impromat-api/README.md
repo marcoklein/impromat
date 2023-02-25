@@ -1,5 +1,10 @@
 # Impromat API
 
+## Prerequisites
+
+- NodeJs
+- PostgresSQL for running tests
+
 ## Getting started
 
 Install dependencies
@@ -8,13 +13,15 @@ Install dependencies
 yarn install
 ```
 
-Start server with watching changes. Useful for development
+Start server with watching changes. Useful for development.
 
 ```
 yarn dev
 ```
 
 Start tests
+
+> Requires PostgreSQL
 
 ```
 yarn test
@@ -46,4 +53,8 @@ yarn prisma:generate
 
 ### Mutations
 
-Prefix mutations that create a new resource with `create`. E.g. `createWorkshop`
+Use `CRUD` verbs:
+
+- `create` (e.g. `createWorkshop`)
+- `update` (e.g. `updateWorkshop`)
+- `delete` (e.g. `deleteWorkshop`)

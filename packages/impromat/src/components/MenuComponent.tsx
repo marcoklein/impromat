@@ -7,7 +7,7 @@ import { SignInMenuContentComponent } from "./menu/SignInMenuContentComponent";
 
 export const MenuComponent: React.FC = () => {
   const menuRef = useRef<any>();
-  const isLoggedIn = useIsLoggedIn();
+  const { isLoggedIn } = useIsLoggedIn();
 
   useHistoryListener(
     useCallback(() => {

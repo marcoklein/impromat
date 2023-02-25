@@ -3,8 +3,8 @@ import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { User, UserRelations } from 'src/dtos/types/user.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { UserSessionService } from '../services/user-session.service';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
+import { UserSessionService } from '../services/user-session.service';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
@@ -16,12 +16,12 @@ export class MeResolver {
 
   @ResolveField()
   async elements(@Parent() user: User) {
-    return this.findUserById(user.id).workshops();
+    return this.findUserById(user.id).elements();
   }
 
   @ResolveField()
   async favoriteElements(@Parent() user: User) {
-    return this.findUserById(user.id).workshops();
+    return this.findUserById(user.id).favoriteElements();
   }
 
   @ResolveField()

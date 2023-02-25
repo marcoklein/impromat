@@ -4,7 +4,7 @@ import { BaseDto } from './base.dto';
 import { Element } from './element.dto';
 import { WorkshopSection } from './workshop-section.dto';
 
-export type WorkshopElementRelations = 'workshops';
+export type WorkshopElementRelations = 'section' | 'basedOn';
 
 @ObjectType()
 export class WorkshopElement extends BaseDto {

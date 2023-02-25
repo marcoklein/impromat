@@ -1,12 +1,12 @@
 import {
   Field,
+  Float,
   ID,
   InputType,
-  Int,
   IntersectionType,
   PartialType,
 } from '@nestjs/graphql';
-import { IsUUID } from 'class-validator';
+import { IsUUID, MaxLength } from 'class-validator';
 import { IdInput } from './id-input';
 
 @InputType()
@@ -17,11 +17,15 @@ export class BasedOnElementConnectInput {
 
 @InputType()
 export class CreateWorkshopElementInput {
+  @Field(() => String, { nullable: true })
+  @MaxLength(10000)
+  note?: string;
+
   @Field(() => BasedOnElementConnectInput)
   @IsUUID(4)
   basedOn: BasedOnElementConnectInput;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Float, { nullable: true })
   orderIndex?: number;
 }
 

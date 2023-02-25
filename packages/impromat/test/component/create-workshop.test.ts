@@ -1,7 +1,8 @@
-import { test, expect } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { pageTest } from "./fixtures/page-fixtures";
 import { WorkshopsDevPage } from "./fixtures/workshops-dev-page";
 
-test("create workshop", async ({ page }) => {
+pageTest("create workshop", async ({ page }) => {
   const workshopsPage = new WorkshopsDevPage(page);
   const workshopId = await workshopsPage.addWorkshop("testworkshop");
 
@@ -11,6 +12,9 @@ test("create workshop", async ({ page }) => {
   await expect(page).toHaveURL("./workshop");
 
   // click on workshop to open it again
-  await page.locator("#main > div > ion-content > ion-list > ion-item").click();
+  await page
+    .locator("#main > div > ion-content > ion-list > ion-item")
+    .first()
+    .click();
   await expect(page).toHaveURL(`./workshop/${workshopId}`);
 });

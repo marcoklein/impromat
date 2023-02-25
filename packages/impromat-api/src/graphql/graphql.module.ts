@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaService } from 'src/graphql/services/prisma.service';
+import { ElementSearchController } from './controllers/element-search.controller';
 import { ElementController } from './controllers/element.controller';
 import { MeResolver } from './controllers/me.controller';
 import { WorkshopElementController } from './controllers/workshop-element.controller';
@@ -15,6 +16,7 @@ import { WorkshopService } from './services/workshop.service';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      context: ({ req, res }) => ({ req, res }),
       driver: ApolloDriver,
       autoSchemaFile: 'schema/schema.graphql',
       installSubscriptionHandlers: true,
@@ -25,13 +27,14 @@ import { WorkshopService } from './services/workshop.service';
       },
       cors: {
         credentials: true,
-        // origin: true
+        origin: true,
       },
     }),
   ],
   controllers: [],
   providers: [
     PrismaService,
+    ElementSearchController,
     WorkshopController,
     WorkshopSectionController,
     WorkshopElementController,

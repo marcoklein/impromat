@@ -8,6 +8,7 @@ export class WorkshopsDevPage extends DevPage {
 
   async addWorkshop(name: string = "Test Workshop") {
     const page = this.page;
+
     await this.goto();
     // press for first time
     // await page.locator("text=AddAdd Workshop >> button").click();
@@ -18,7 +19,7 @@ export class WorkshopsDevPage extends DevPage {
     await page.locator('button:has-text("Save")').click();
     await page.waitForSelector(`text="${name}"`);
     const workshopId = /[^/]*?$/.exec(page.url())![0];
-    await expect(page).toHaveURL(`./workshop/${workshopId}`);
+    await expect(page).toHaveURL(`./workshop/${workshopId}`, { timeout: 5000 });
     return workshopId;
   }
 

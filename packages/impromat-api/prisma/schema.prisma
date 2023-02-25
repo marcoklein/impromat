@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -103,7 +103,7 @@ model WorkshopSection {
   workshopId String
 
   elements WorkshopElement[]
-  workshop Workshop          @relation(fields: [workshopId], references: [id])
+  workshop Workshop          @relation(fields: [workshopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model WorkshopElement {
@@ -122,5 +122,5 @@ model WorkshopElement {
   workshopSectionId String
 
   basedOn         Element         @relation(fields: [basedOnId], references: [id])
-  workshopSection WorkshopSection @relation(fields: [workshopSectionId], references: [id])
+  workshopSection WorkshopSection @relation(fields: [workshopSectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

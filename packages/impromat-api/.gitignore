@@ -38,8 +38,12 @@ schema/schema.graphql
 dev.db
 test.db
 assets
-.env
 storage/*
 *db-journal
 *.gen.*
 /test/graphql-client
+
+.env.local
+.env.test.local
+TODO.md
+prisma/migrations

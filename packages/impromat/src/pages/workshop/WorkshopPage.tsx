@@ -17,19 +17,13 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import immer from "immer";
 import { add } from "ionicons/icons";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
+import { useMutation, useQuery } from "urql";
 import { EditableItemComponent } from "../../components/EditableItemComponent";
-import {
-  WorkshopDocType,
-  WorkshopDocument,
-} from "../../database/collections/workshop/workshop-collection";
-import { useRxdbMutations } from "../../database/use-rxdb-mutations";
-import { WORKSHOP_HELPER } from "../../database/workshop-helper";
+import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { useImpromatRxDb } from "../../hooks/use-impromat-rx-db";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { routeWorkshops } from "../../routes/shared-routes";
 import { routeLibrary } from "../library/library-routes";
@@ -39,123 +33,117 @@ import {
 } from "./components/WorkshopActionSheetComponent";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 
+const WorkshopPage_Workshop = graphql(`
+  fragment WorkshopPage_Workshop on Workshop {
+    id
+    version
+    createdAt
+    updatedAt
+    deleted
+    name
+    description
+    sections {
+      name
+      elements {
+        id
+      }
+      ...WorkshopElementsComponent_WorkshopSection
+    }
+    ...WorkshopActionSheet_Workshop
+  }
+`);
+
+const WorkshopByIdQuery = graphql(`
+  query WorkshopByIdQuery($id: ID!) {
+    workshop(id: $id) {
+      ...WorkshopPage_Workshop
+    }
+  }
+`);
+
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
-  const mutations = useRxdbMutations();
   const history = useHistory();
-  // const { document: workshop } = useDocument("workshops", workshopId);
-  const [workshop, setWorkshop] = useState<WorkshopDocument>();
-  const [workshopDoc, setWorkshopDoc] = useState<WorkshopDocType>();
+
+  const [workshopResult] = useQuery({
+    query: WorkshopByIdQuery,
+    variables: {
+      id: workshopId,
+    },
+  });
+  const workshop = getFragmentData(
+    WorkshopPage_Workshop,
+    workshopResult.data?.workshop,
+  );
+
+  const [, deleteWorkshopMutation] = useMutation(
+    graphql(`
+      mutation DeleteWorkshopMutation($id: ID!) {
+        deleteWorkshop(id: $id) {
+          id
+        }
+      }
+    `),
+  );
+
+  const [, updateWorkshopMutation] = useMutation(
+    graphql(`
+      mutation UpdateWorkshop($input: UpdateWorkshopInput!) {
+        updateWorkshop(input: $input) {
+          id
+        }
+      }
+    `),
+  );
 
   const logger = useComponentLogger("WorkshopPage");
-  const [workshopHasContent, setWorkshopHasContent] =
-    useState<Awaited<ReturnType<typeof WORKSHOP_HELPER.hasContent>>>(
-      "noContent",
-    );
-  const database = useImpromatRxDb();
-  useEffect(() => {
-    if (workshop && database) {
-      const subscription = database.$.subscribe(() => {
-        WORKSHOP_HELPER.hasContent(workshop).then(setWorkshopHasContent);
-      });
-      WORKSHOP_HELPER.hasContent(workshop).then(setWorkshopHasContent);
-      return () => {
-        subscription.unsubscribe();
-      };
-    }
-  }, [workshop, database]);
-
-  useEffect(() => {
-    if (!database) return;
-    function fetchWorkshop() {
-      database.workshops.findByIds([workshopId]).then((result) => {
-        const resultWorkshop = result.get(workshopId);
-        logger(
-          "workshopCollection found workshop with id %s: %O",
-          workshopId,
-          resultWorkshop?.toJSON(),
-        );
-        if (!resultWorkshop) {
-          setWorkshop(undefined);
-          setWorkshopDoc(undefined);
-        } else {
-          setWorkshop(resultWorkshop);
-          setWorkshopDoc(resultWorkshop.toMutableJSON());
-        }
-      });
-    }
-    const subscription = database.collections.workshops.$.subscribe(
-      (changeEvent) => {
-        logger("workshopCollection on change", changeEvent);
-        fetchWorkshop();
-      },
-    );
-    fetchWorkshop();
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [database, workshopId, logger]);
-
-  useEffect(() => {
-    logger("Workshop has content = %O", workshopHasContent);
-  }, [workshopHasContent, logger]);
 
   useEffect(() => {
     logger("Workshop changed to %O", workshop);
   }, [workshop, logger]);
 
-  const workshopName = useMemo(() => {
-    logger("workshopName changed to %s", workshopDoc?.name || "");
-    if (workshopDoc) {
-      return workshopDoc.name;
-    } else return "";
-  }, [logger, workshopDoc]);
-
   const [presentInputDialog] = useInputDialog();
 
   const changeWorkshopName = (newName: string) => {
-    if (!mutations || !workshop) return;
-    mutations.updateWorkshopName(workshop.id, newName).then(() => {
-      logger("change workshop name to %s", newName);
-    });
+    if (!workshop) return;
+    updateWorkshopMutation({ input: { id: workshop.id, name: newName } });
   };
   const changeWorkshopDescription = (newDescription: string) => {
-    if (!mutations || !workshop) return;
-    const updatedWorkshop = immer(workshop.toMutableJSON(), (draft) => {
-      draft.description = newDescription;
-    });
-    mutations.updateWorkshop(updatedWorkshop).then(() => {
-      logger("Changed workshop description");
+    if (!workshop) return;
+    updateWorkshopMutation({
+      input: { id: workshop.id, description: newDescription },
     });
   };
   const changeSectionsOrder = (fromIndex: number, toIndex: number) => {
-    if (!mutations || !workshop) return;
+    throw new Error("not implemented");
+    // if (!mutations || !workshop) return;
+    // TODO implement sorting
 
-    (async () => {
-      const populatedSection = await workshop.sections_;
-      const { sections } = WORKSHOP_HELPER.moveItemFromIndexToIndex(
-        populatedSection.map((section) => section.toMutableJSON()),
-        fromIndex,
-        toIndex,
-      );
-      await Promise.all([
-        database.sections.bulkUpsert(sections),
-        workshop.atomicUpdate((draft) => {
-          draft.sections = sections.map(({ id }) => id);
-          return draft;
-        }),
-      ]);
-    })();
+    // (async () => {
+    //   const populatedSection = await workshop.sections_;
+    //   const { sections } = WORKSHOP_HELPER.moveItemFromIndexToIndex(
+    //     populatedSection.map((section) => section.toMutableJSON()),
+    //     fromIndex,
+    //     toIndex,
+    //   );
+    //   await Promise.all([
+    //     database.sections.bulkUpsert(sections),
+    //     workshop.atomicUpdate((draft) => {
+    //       draft.sections = sections.map(({ id }) => id);
+    //       return draft;
+    //     }),
+    //   ]);
+    // })();
   };
 
   const onDeleteWorkshop = useCallback(() => {
-    if (!mutations || !workshop) return;
+    logger("not implemented");
     // TODO add confirmation dialog
-    mutations.deleteWorkshop(workshop.id).then(() => {
+    deleteWorkshopMutation({ id: workshopId }).then(() => {
       history.push(routeWorkshops(), { direction: "back" });
+      logger("Deleted workshop");
     });
-    logger("Deleted workshop");
-  }, [mutations, history, logger, workshop]);
+  }, [deleteWorkshopMutation, history, logger, workshopId]);
 
   const onRenameWorkshop = () => {
     if (!workshop) return;
@@ -169,14 +157,18 @@ export const WorkshopPage: React.FC = () => {
   };
 
   const onCreateSection = () => {
-    if (!workshop || !mutations) return;
+    logger("not implemented");
+
+    if (!workshop) return;
     presentInputDialog({
       header: "Section",
       initialText: "",
       emptyInputMessage: "Please type a section name.",
       placeholder: "e.g. Warmup or Games",
       onAccept: (text) => {
-        mutations.createNewSection(workshop.id, text).then(() => {
+        updateWorkshopMutation({
+          input: { id: workshop.id, sections: { create: [{ name: text }] } },
+        }).then(() => {
           logger('Created new section "%s"', text);
         });
       },
@@ -185,9 +177,10 @@ export const WorkshopPage: React.FC = () => {
   };
 
   const onChangeDescription = () => {
+    logger("not implemented");
     if (!workshop) return;
     presentInputDialog({
-      initialText: workshop.description,
+      initialText: workshop.description ?? "",
       isMultiline: true,
       header: "Description",
       onAccept: (text) => changeWorkshopDescription(text),
@@ -220,7 +213,7 @@ export const WorkshopPage: React.FC = () => {
           <IonButtons slot="end">
             {workshop && (
               <WorkshopActionSheetComponent
-                workshop={workshop}
+                workshopFragment={workshop}
                 onEvent={(event) => handleWorkshopEvent(event)}
               ></WorkshopActionSheetComponent>
             )}
@@ -229,7 +222,7 @@ export const WorkshopPage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        {workshop !== undefined ? (
+        {workshop ? (
           <>
             <IonFab slot="fixed" vertical="bottom" horizontal="end">
               <IonFabButton>
@@ -246,7 +239,7 @@ export const WorkshopPage: React.FC = () => {
             </IonFab>
             <EditableItemComponent
               disableEditing={true}
-              text={workshopName}
+              text={workshop.name}
               displayName="Workshop Title"
               onChangeText={(newName) => changeWorkshopName(newName)}
               lines="none"
@@ -266,16 +259,10 @@ export const WorkshopPage: React.FC = () => {
                 lines="none"
               ></EditableItemComponent>
             )}
-            {workshopHasContent === "missingData" && <IonSpinner></IonSpinner>}
-            {workshopHasContent === "hasContent" ? (
-              <WorkshopElementsComponent
-                key={workshop.id}
-                workshop={workshop}
-                onChangeOrder={(fromIndex, toIndex) =>
-                  changeSectionsOrder(fromIndex, toIndex)
-                }
-              ></WorkshopElementsComponent>
-            ) : (
+
+            {workshop.sections.length === 1 &&
+            workshop.sections[0].elements.length === 0 &&
+            !workshop.sections[0].name ? (
               <IonCard>
                 <IonCardContent className="ion-padding">
                   <IonText>
@@ -291,6 +278,15 @@ export const WorkshopPage: React.FC = () => {
                   </IonButton>
                 </IonCardContent>
               </IonCard>
+            ) : (
+              <WorkshopElementsComponent
+                key={workshop.id}
+                workshopId={workshopId}
+                workshopSectionsFragment={workshop.sections}
+                onChangeOrder={(fromIndex, toIndex) =>
+                  changeSectionsOrder(fromIndex, toIndex)
+                }
+              ></WorkshopElementsComponent>
             )}
           </>
         ) : (

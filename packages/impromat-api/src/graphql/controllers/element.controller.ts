@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
+  ID,
   Mutation,
   Parent,
   Query,
@@ -52,6 +53,14 @@ export class ElementController {
     return this.userElementService
       .findElementById(userSessionId, element.id)
       .workshopElements();
+  }
+
+  @Query(() => Element)
+  async element(
+    @SessionUserId() userId: string,
+    @Args('id', { type: () => ID }) id: string,
+  ): Promise<Omit<Element, ElementRelations> | null> {
+    return this.userElementService.findElementById(userId, id);
   }
 
   @Query(() => [Element])

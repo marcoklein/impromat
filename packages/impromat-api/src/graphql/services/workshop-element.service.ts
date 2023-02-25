@@ -12,7 +12,12 @@ export class WorkshopElementService {
   findWorkshopElementById(userRequestId: string, id: string) {
     // const userRequestId = this.userSessionService.getActiveUserId();
     return this.prismaService.workshopElement.findFirstOrThrow({
-      where: { workshopSection: { workshop: { ownerId: userRequestId } }, id },
+      where: {
+        workshopSection: {
+          workshop: { ownerId: userRequestId },
+        },
+        id,
+      },
     });
   }
 }

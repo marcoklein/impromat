@@ -5,6 +5,7 @@ import {
 import {
   addWorskshopWithEmptyNameQuery,
   createWorkshopMutation,
+  deleteWorkshopMutation,
   updateWorkshopMutation,
   workshopByIdQuery,
 } from './workshop-queries';
@@ -91,6 +92,30 @@ describe('Workshop', () => {
       // then
       expect(response.errors).toBeUndefined();
       expect(response.data?.workshop.name).toBe('super name');
+    });
+
+    it('should delete workshop', async () => {
+      // given
+      const query = deleteWorkshopMutation;
+      // when
+      const response = await api.graphqlRequest(query, {
+        id: createdWorkshopId,
+      });
+      // then
+      expect(response.errors).toBeUndefined();
+      expect(response.data?.deleteWorkshop.id).toBe(createdWorkshopId);
+    });
+
+    it('should not delete workshop twice', async () => {
+      // given
+      const query = deleteWorkshopMutation;
+      // when
+      const response = await api.graphqlRequest(query, {
+        id: createdWorkshopId,
+      });
+      // then
+      expect(response.errors).toBeUndefined();
+      expect(response.data?.deleteWorkshop).toBeNull();
     });
   });
 

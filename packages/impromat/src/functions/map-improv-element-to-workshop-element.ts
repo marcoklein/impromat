@@ -1,5 +1,4 @@
 import { ImprobibElement } from "improbib";
-import { ElementDocType } from "../database/collections/element/element-collection";
 
 export function mapImprovElementToWorkshopElement({
   baseUrl,
@@ -12,7 +11,8 @@ export function mapImprovElementToWorkshopElement({
   sourceName,
   sourceUrl,
   tags,
-}: ImprobibElement): ElementDocType {
+}: ImprobibElement) {
+  // TODO adjust with new types from new API
   return {
     version: -1,
     id: identifier,

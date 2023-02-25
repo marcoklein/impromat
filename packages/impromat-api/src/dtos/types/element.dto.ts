@@ -3,6 +3,7 @@ import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
 import { ElementTag } from './element-tag.dto';
 import { User } from './user.dto';
+import { WorkshopElement } from './workshop-element.dto';
 
 export type ElementRelations = 'tags' | 'usedBy' | 'owner';
 
@@ -17,8 +18,8 @@ export class Element extends BaseDto {
   @Field(() => [ElementTag])
   tags: ElementTag[];
 
-  @Field(() => [Element])
-  usedBy: Element[];
+  @Field(() => [WorkshopElement])
+  usedBy: WorkshopElement[];
 
   @Field(() => String, { nullable: true })
   languageCode: Nullable<string>;

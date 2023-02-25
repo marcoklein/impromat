@@ -13,7 +13,7 @@ export class WorkshopService {
 
   // TODO all function take the userSessionId => could this also be injected for specific requests?
   findWorkshopById(userSessionId: string, id: string) {
-    return this.prismaService.workshop.findFirstOrThrow({
+    return this.prismaService.workshop.findFirst({
       where: { id, ownerId: userSessionId },
     });
   }
@@ -24,13 +24,25 @@ export class WorkshopService {
     });
   }
 
+  async deleteWorkshop(userSessionId: string, workshopId: string) {
+    const existingWorkshop = await this.findWorkshopById(
+      userSessionId,
+      workshopId,
+    );
+    if (!existingWorkshop) {
+      return null;
+    }
+    const result = await this.prismaService.workshop.delete({
+      where: { id: workshopId },
+    });
+    return result;
+  }
+
   async createWorkshop(
     sessionUserId: string,
     createWorkshopInput: CreateWorkshopInput,
   ) {
-    const user = await this.prismaService.user.upsert({
-      create: { id: sessionUserId },
-      update: {},
+    const user = await this.prismaService.user.findFirstOrThrow({
       where: { id: sessionUserId },
     });
     const workshop = await this.prismaService.workshop.create({
@@ -94,7 +106,7 @@ export class WorkshopService {
       },
     );
 
-    // TODO verify inputs that they really belong to user
+    // TODO verify that inputs really belong to user
 
     this.updateSortedEntities(
       existingWorkshop.sections,
@@ -139,21 +151,35 @@ export class WorkshopService {
       (section) => section,
     );
 
-    const workshop = await this.prismaService.workshop.update({
-      data: {
-        ...updateWorkshopInput,
-        ...{
-          sections: {
-            update,
-            create,
-            delete: updateWorkshopInput.sections?.delete,
+    await this.prismaService.$transaction(async (tx) => {
+      await tx.workshop.update({
+        data: {
+          ...updateWorkshopInput,
+          ...{
+            sections: {
+              update,
+              create,
+              delete: updateWorkshopInput.sections?.delete,
+            },
           },
         },
-      },
-      where: {
-        id: updateWorkshopInput.id,
-      },
+        where: {
+          id: updateWorkshopInput.id,
+        },
+      });
+      const sections = await tx.workshop
+        .findUniqueOrThrow({
+          where: { id: updateWorkshopInput.id },
+        })
+        .sections();
+      if (!sections || !sections.length) {
+        await tx.workshopSection.create({
+          data: { workshopId: updateWorkshopInput.id },
+        });
+      }
     });
-    return workshop;
+    return this.prismaService.workshop.findUniqueOrThrow({
+      where: { id: updateWorkshopInput.id },
+    });
   }
 }

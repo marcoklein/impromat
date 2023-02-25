@@ -36,7 +36,7 @@ describe('Workshop Elements', () => {
     return createdWorkshop;
   }
 
-  it('should create a workshop element for a certain section', async () => {
+  it('should create a workshop element', async () => {
     // given
     if (!createdElementId) throw new Error('Element required for test.');
     const workshop = await ensureTestWorkshop();

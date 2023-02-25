@@ -19,6 +19,9 @@ export class CreateWorkshopSectionInput {
   @Field(() => Float, { nullable: true })
   orderIndex?: number;
 
+  @Field(() => Boolean, { nullable: true })
+  isCollapsed?: boolean;
+
   // @Field(() => WorkshopElementListCreateInput, { nullable: true })
   // elements?: WorkshopElementListCreateInput;
 }

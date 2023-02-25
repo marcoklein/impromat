@@ -50,7 +50,7 @@ export class WorkshopController {
   @Query(() => Workshop)
   async workshop(
     @SessionUserId() userId: string,
-    @Args('workshopId', { type: () => ID }) id: string,
+    @Args('id', { type: () => ID }) id: string,
   ): Promise<Omit<Workshop, WorkshopRelations> | null> {
     return this.workshopService.findWorkshopById(userId, id);
   }
@@ -83,5 +83,13 @@ export class WorkshopController {
       sessionUserId,
       updateWorkshopInput,
     );
+  }
+
+  @Mutation(() => Workshop, { nullable: true })
+  async deleteWorkshop(
+    @SessionUserId() userId: string,
+    @Args('id', { type: () => ID }) id: string,
+  ): Promise<Pick<Workshop, 'id'> | null> {
+    return this.workshopService.deleteWorkshop(userId, id);
   }
 }
