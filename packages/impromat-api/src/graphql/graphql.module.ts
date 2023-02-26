@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaService } from 'src/graphql/services/prisma.service';
+import { ImprobibService } from 'src/improbib/improbib.service';
 import { ElementSearchController } from './controllers/element-search.controller';
 import { ElementController } from './controllers/element.controller';
 import { MeResolver } from './controllers/me.controller';
@@ -46,6 +47,8 @@ import { WorkshopService } from './services/workshop.service';
     UserSessionService,
     WorkshopService,
     ElementSearchService,
+    // TODO create separate database module
+    ImprobibService,
   ],
 })
 export class GraphqlModule {}

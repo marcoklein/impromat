@@ -40,9 +40,11 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.userElementService
-      .findElementById(userSessionId, element.id)
-      .tags();
+    return (
+      this.userElementService
+        .findElementById(userSessionId, element.id)
+        .tags() ?? []
+    );
   }
 
   @ResolveField(() => [WorkshopElement])

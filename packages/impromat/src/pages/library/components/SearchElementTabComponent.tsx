@@ -1,6 +1,6 @@
 import { IonList, IonSearchbar, IonSpinner } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "urql";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
@@ -30,19 +30,23 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
   const logger = useComponentLogger("SearchElementTabComponent");
+  const test = useRef<HTMLIonSearchbarElement>(null);
   const [searchText, setSearchText] = useState("");
   const [queryResult] = useQuery({
     query: SearchElementTabQuery,
-    variables: { input: { text: searchText } },
+    variables: { input: { text: searchText, limit: 20 } },
   });
 
   useEffect(() => {
-    const lastSearch = window.localStorage.getItem("lastSearch");
-    if (lastSearch) {
-      setSearchText(lastSearch);
-      logger("loaded last search: %s", lastSearch);
+    if (test.current) {
+      const lastSearch = window.localStorage.getItem("lastSearch");
+      // Known issue with the search bar: sometimes inputs "hang up" if you type too fast.
+      // Therefore, a `ref` is used to set the initial value only.
+      if (lastSearch) {
+        test.current.value = lastSearch;
+      }
     }
-  }, [logger]);
+  }, []);
 
   useEffect(() => {
     window.localStorage.setItem("lastSearch", searchText);
@@ -94,8 +98,8 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   return (
     <>
       <IonSearchbar
-        debounce={500}
-        value={searchText}
+        ref={test}
+        debounce={200}
         onIonChange={(e) => {
           setSearchText(e.detail.value ?? "");
         }}

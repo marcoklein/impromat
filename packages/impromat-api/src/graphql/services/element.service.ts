@@ -11,7 +11,12 @@ export class ElementService {
 
   findElementById(userRequestId: string, id: string) {
     return this.prismaService.element.findFirstOrThrow({
-      where: { ownerId: userRequestId, id },
+      where: {
+        OR: [
+          { ownerId: userRequestId, id },
+          { id, visibility: 'PUBLIC' },
+        ],
+      },
     });
   }
 

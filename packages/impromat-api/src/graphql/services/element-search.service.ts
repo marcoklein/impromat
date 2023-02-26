@@ -27,11 +27,13 @@ export class ElementSearchService {
       },
     });
     if (!searchElementsInput.text) {
-      return elementsToSearch.map((element) => ({
-        element,
-        score: 1,
-        matches: [],
-      }));
+      return elementsToSearch
+        .map((element) => ({
+          element,
+          score: 0,
+          matches: [],
+        }))
+        .slice(0, searchElementsInput.limit);
     }
     const fuse = new Fuse(elementsToSearch, {
       keys: ['name'],
@@ -39,11 +41,13 @@ export class ElementSearchService {
       includeMatches: true,
     });
 
-    return fuse.search(searchElementsInput.text).map((fuseResult) => ({
-      element: fuseResult.item,
-      score: fuseResult.score ?? 1,
-      matches: fuseResult.matches as any,
-      // fuseResult.matches?.map((match) => ({ key: match.key ?? '' })) ?? [],
-    }));
+    return fuse
+      .search(searchElementsInput.text, { limit: searchElementsInput.limit })
+      .map((fuseResult) => ({
+        element: fuseResult.item,
+        score: fuseResult.score ?? 1,
+        matches:
+          fuseResult.matches?.map((match) => ({ key: match.key ?? '' })) ?? [],
+      }));
   }
 }

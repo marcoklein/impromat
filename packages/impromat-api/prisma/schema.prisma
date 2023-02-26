@@ -14,15 +14,16 @@ model Element {
   version   Int      @default(0)
   deleted   Boolean  @default(false)
 
-  name          String
-  markdown      String?
-  languageCode  String?
-  sourceUrl     String?
-  sourceName    String?
-  sourceBaseUrl String?
-  licenseName   String?
-  licenseUrl    String?
-  visibility    ElementVisibility @default(PRIVATE)
+  name               String
+  markdown           String?
+  languageCode       String?
+  sourceUrl          String?
+  sourceName         String?
+  sourceBaseUrl      String?
+  licenseName        String?
+  licenseUrl         String?
+  visibility         ElementVisibility @default(PRIVATE)
+  improbibIdentifier String?           @unique
 
   ownerId String?
 
@@ -43,7 +44,7 @@ model ElementTag {
   createdAt DateTime @default(now())
   version   Int      @default(0)
 
-  name     String
+  name     String    @unique
   elements Element[]
 }
 

@@ -6,13 +6,13 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "yarn copy-improbib && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "yarn start:dev",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev": "yarn copy-improbib && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -23,7 +23,8 @@
     "test:cov": "yarn test --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "codegen": "graphql-codegen",
-    "codegen:watch": "yarn codegen --watch"
+    "codegen:watch": "yarn codegen --watch",
+    "copy-improbib": "cp ../improbib/output/improbib.json ./assets/improbib.json"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.2.0",
@@ -45,7 +46,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "session-file-store": "^1.5.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "improbib": "0.4.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^3.0.0",
