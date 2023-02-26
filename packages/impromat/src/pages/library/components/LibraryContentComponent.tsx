@@ -7,7 +7,7 @@ import {
   IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
-import { brush, search } from "ionicons/icons";
+import { brush, search, star } from "ionicons/icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Redirect,
@@ -107,13 +107,13 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
               <IonIcon icon={search}></IonIcon>
               <IonLabel>Explore</IonLabel>
             </IonSegmentButton>
-            {/* <IonSegmentButton
+            <IonSegmentButton
               value={Tabs.FAVORITES}
               onClick={() => history.replace(createTabsRoute(Tabs.FAVORITES))}
             >
               <IonIcon icon={star}></IonIcon>
               <IonLabel>Favorites</IonLabel>
-            </IonSegmentButton> */}
+            </IonSegmentButton>
             <IonSegmentButton
               value={Tabs.CREATE}
               onClick={() => history.replace(createTabsRoute(Tabs.CREATE))}

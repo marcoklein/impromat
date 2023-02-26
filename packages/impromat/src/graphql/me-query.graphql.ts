@@ -7,7 +7,9 @@ export const meQuery = graphql(`
       id
       version
       favoriteElements {
-        id
+        element {
+          id
+        }
       }
     }
   }

@@ -16,6 +16,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type UserFavoriteElement {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  element: Element!
+}
+
 type WorkshopElement {
   id: ID!
   createdAt: DateTime!
@@ -63,7 +69,7 @@ type User {
 
   """Elements owned by this user."""
   elements: [Element!]!
-  favoriteElements: [Element!]!
+  favoriteElements: [UserFavoriteElement!]!
 }
 
 type Element {
@@ -83,6 +89,9 @@ type Element {
   licenseName: String
   licenseUrl: String
   owner: User
+
+  """Set if the element is called from a user context."""
+  isFavorite: Boolean
 }
 
 type ElementSearchResult {
@@ -96,8 +105,8 @@ type Query {
   workshop(id: ID!): Workshop!
   workshops: [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
-  element(id: ID!): Element!
-  elements: [Element!]!
+  element(id: ID!): Element
+  elements: [Element!]
 
   """Get information about the current user."""
   me: User!
@@ -110,11 +119,17 @@ input ElementSearchInput {
 
 type Mutation {
   logout: Boolean!
+  updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Boolean!
   createWorkshop(input: CreateWorkshopInput!): Workshop!
   updateWorkshop(input: UpdateWorkshopInput!): Workshop!
   deleteWorkshop(id: ID!): Workshop
   createElement(input: CreateElementInput!): Element!
   updateElement(input: UpdateElementInput!): Element!
+}
+
+input UpdateUserFavoriteElementInput {
+  elementId: ID!
+  isFavorite: Boolean!
 }
 
 input CreateWorkshopInput {

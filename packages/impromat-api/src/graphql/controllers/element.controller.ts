@@ -25,6 +25,21 @@ import { ElementService } from '../services/element.service';
 export class ElementController {
   constructor(private userElementService: ElementService) {}
 
+  @ResolveField(() => Boolean)
+  async isFavorite(
+    @Parent() element: Element,
+    @SessionUserId() userSessionId: string,
+  ) {
+    const elementFavoriteRelations = await this.userElementService
+      .findElementById(userSessionId, element.id)
+      .userFavoriteElement({
+        where: {
+          userId: userSessionId,
+        },
+      });
+    return elementFavoriteRelations.length > 0;
+  }
+
   @ResolveField(() => [User])
   async owner(
     @Parent() element: Element,
@@ -57,18 +72,16 @@ export class ElementController {
       .workshopElements();
   }
 
-  @Query(() => Element)
+  @Query(() => Element, { nullable: true })
   async element(
     @SessionUserId() userId: string,
     @Args('id', { type: () => ID }) id: string,
-  ): Promise<Omit<Element, ElementRelations> | null> {
+  ) {
     return this.userElementService.findElementById(userId, id);
   }
 
-  @Query(() => [Element])
-  async elements(
-    @SessionUserId() userId: string,
-  ): Promise<Omit<Element, ElementRelations>[] | null> {
+  @Query(() => [Element], { nullable: true })
+  async elements(@SessionUserId() userId: string) {
     return this.userElementService.findElementsFromUser(userId);
   }
 
@@ -77,7 +90,7 @@ export class ElementController {
     @Args('input')
     createWorkshopInput: CreateElementInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<Element, ElementRelations>> {
+  ) {
     return this.userElementService.createElement(
       sessionUserId,
       createWorkshopInput,
@@ -88,7 +101,7 @@ export class ElementController {
   async updateElement(
     @Args('input') updateElementInput: UpdateElementInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<Element, ElementRelations>> {
+  ) {
     return await this.userElementService.updateElement(
       sessionUserId,
       updateElementInput,

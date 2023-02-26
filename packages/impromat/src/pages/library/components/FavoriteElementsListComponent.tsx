@@ -13,8 +13,10 @@ import { routeLibraryElement } from "../library-routes";
 const FavoriteElements_UserFragment = graphql(`
   fragment FavoriteElements_User on User {
     favoriteElements {
-      id
-      ...ElementPreviewItem_Element
+      element {
+        id
+        ...ElementPreviewItem_Element
+      }
     }
   }
 `);
@@ -42,7 +44,7 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
     <>
       {/* Add Account required... */}
       <IonList>
-        {favoriteElements.map((element) => (
+        {favoriteElements.map(({ element }) => (
           <ElementPreviewItemComponent
             key={element.id}
             routerLink={routeLibraryElement(element.id, { workshopId })}

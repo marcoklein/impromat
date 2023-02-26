@@ -10,7 +10,9 @@ const MyUser_QueryFragment = graphql(`
     me {
       id
       favoriteElements {
-        id
+        element {
+          id
+        }
       }
       ...FavoriteElements_User
     }
@@ -32,6 +34,7 @@ export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
 }) => {
   const [{ data, fetching: isFetching, error }] = useQuery({
     query: MyUser_Query,
+    requestPolicy: "cache-and-network",
   });
   const user = getFragmentData(MyUser_QueryFragment, data);
   const favoriteElements = user?.me.favoriteElements;

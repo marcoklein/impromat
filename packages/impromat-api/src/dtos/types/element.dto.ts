@@ -41,4 +41,11 @@ export class Element extends BaseDto {
 
   @Field(() => User, { nullable: true })
   owner: Nullable<User>;
+
+  // TODO separate types to add a element with me context fields?
+  @Field(() => Boolean, {
+    nullable: true,
+    description: 'Set if the element is called from a user context.',
+  })
+  isFavorite: Nullable<boolean>;
 }

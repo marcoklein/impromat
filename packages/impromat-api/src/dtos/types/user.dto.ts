@@ -14,6 +14,7 @@ export class User extends BaseDto {
   @Field(() => [Element], { description: 'Elements owned by this user.' })
   elements: Element[];
 
+  // TODO add count? (e.g. favoriteElementsCount)
   @Field(() => [UserFavoriteElementDto])
   favoriteElements: UserFavoriteElementDto[];
 }

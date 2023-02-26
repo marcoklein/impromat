@@ -32,6 +32,35 @@ describe('User Favorite Elements', () => {
 
   let createdElementId: string;
 
+  it('should not return isFavorite for element', async () => {
+    // given
+    const createElementResponse = await api.graphqlRequest(
+      createElementMutation,
+      {
+        input: {
+          name: 'my-improv-game',
+          markdown: 'test element',
+        },
+      },
+    );
+    // when
+    const response = await api.graphqlRequest(
+      graphql(`
+        query ElementIsFavorite($id: ID!) {
+          element(id: $id) {
+            isFavorite
+          }
+        }
+      `),
+      {
+        id: createElementResponse.data!.createElement.id,
+      },
+    );
+    // then
+    expect(response.errors).toBeUndefined();
+    expect(response.data?.element?.isFavorite).toBe(false);
+  });
+
   it('should mark element as favorite', async () => {
     // given
     const createElementResponse = await api.graphqlRequest(
@@ -71,6 +100,27 @@ describe('User Favorite Elements', () => {
     expect(response.data?.me.favoriteElements[0].element.id).toBe(
       createdElementId,
     );
+  });
+
+  it('should return isFavorite for element', async () => {
+    // given
+    assert(createdElementId, 'requires previous test');
+    // when
+    const response = await api.graphqlRequest(
+      graphql(`
+        query ElementIsFavorite($id: ID!) {
+          element(id: $id) {
+            isFavorite
+          }
+        }
+      `),
+      {
+        id: createdElementId,
+      },
+    );
+    // then
+    expect(response.errors).toBeUndefined();
+    expect(response.data?.element?.isFavorite).toBe(true);
   });
 
   it('should remove element from favorites', async () => {

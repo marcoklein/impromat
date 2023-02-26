@@ -5,11 +5,13 @@ import {
   IonContent,
   IonFooter,
   IonHeader,
+  IonIcon,
   IonPage,
   IonSpinner,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { star, starOutline } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
@@ -25,6 +27,7 @@ const LibraryElementQuery = graphql(`
     element(id: $id) {
       id
       name
+      isFavorite
       ...Element_Element
     }
   }
@@ -48,6 +51,12 @@ const AddToWorkshopMutation = graphql(`
   }
 `);
 
+const UpdateUserFavoriteElementMutation = graphql(`
+  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
+    updateUserFavoriteElement(input: $input)
+  }
+`);
+
 export const LibraryElementPage: React.FC = () => {
   const { libraryPartId } = useParams<{
     libraryPartId: string;
@@ -57,7 +66,7 @@ export const LibraryElementPage: React.FC = () => {
   useStateChangeLogger(workshopId, "workshopId", logger);
   useStateChangeLogger(libraryPartId, "libraryPartId", logger);
 
-  const [elementQueryResult] = useQuery({
+  const [elementQueryResult, reexecuteElementQuery] = useQuery({
     query: LibraryElementQuery,
     variables: {
       id: libraryPartId,
@@ -73,6 +82,26 @@ export const LibraryElementPage: React.FC = () => {
   const [, addToWorkshopMutation] = useMutation(AddToWorkshopMutation);
   const element = elementQueryResult.data?.element;
   const history = useHistory();
+
+  const [, updateUserFavoriteElementMutation] = useMutation(
+    UpdateUserFavoriteElementMutation,
+  );
+
+  function onStarElementClick() {
+    if (element?.isFavorite === true) {
+      updateUserFavoriteElementMutation({
+        input: { elementId: element.id, isFavorite: false },
+      }).then(() => {
+        reexecuteElementQuery({ requestPolicy: "network-only" });
+      });
+    } else if (element?.isFavorite === false) {
+      updateUserFavoriteElementMutation({
+        input: { elementId: element.id, isFavorite: true },
+      }).then(() => {
+        reexecuteElementQuery({ requestPolicy: "network-only" });
+      });
+    }
+  }
 
   function addToWorkshop() {
     if (!element) return;
@@ -121,14 +150,14 @@ export const LibraryElementPage: React.FC = () => {
             ></IonBackButton>
           </IonButtons>
           <IonTitle>{element?.name}</IonTitle>
-          {/* <IonButtons slot="end">
+          <IonButtons slot="end">
             <IonButton onClick={() => onStarElementClick()}>
               <IonIcon
                 slot="icon-only"
-                icon={isFavoriteElement ? star : starOutline}
+                icon={element?.isFavorite ? star : starOutline}
               ></IonIcon>
             </IonButton>
-          </IonButtons> */}
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 
