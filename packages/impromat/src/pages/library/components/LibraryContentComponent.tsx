@@ -21,6 +21,7 @@ import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
 import { routeLibraryTab } from "../library-routes";
 import { CustomElementsTabComponent } from "./CustomElementsTabComponent";
+import { FavoriteElementsTabComponent } from "./FavoriteElementsTabComponent";
 import { SearchElementTabComponent } from "./SearchElementTabComponent";
 
 export enum Tabs {
@@ -84,11 +85,11 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
               workshopId={workshopId}
             ></SearchElementTabComponent>
           </Route>
-          {/* <Route path={`${path}/${Tabs.FAVORITES}`} exact>
+          <Route path={`${path}/${Tabs.FAVORITES}`} exact>
             <FavoriteElementsTabComponent
               workshopId={workshopId}
             ></FavoriteElementsTabComponent>
-          </Route> */}
+          </Route>
           <Route path={`${path}/${Tabs.CREATE}`} exact>
             <CustomElementsTabComponent
               workshopId={workshopId}

@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import * as fs from 'fs';
+import fs from 'fs';
 import { OAuth2Client } from 'google-auth-library';
 import { environment } from '../environment';
 

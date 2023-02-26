@@ -103,7 +103,7 @@ describe('Workshop', () => {
       });
       // then
       expect(response.errors).toBeUndefined();
-      expect(response.data?.deleteWorkshop.id).toBe(createdWorkshopId);
+      expect(response.data?.deleteWorkshop?.id).toBe(createdWorkshopId);
     });
 
     it('should not delete workshop twice', async () => {

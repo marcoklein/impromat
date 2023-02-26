@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
-import { ElementSearchInput } from 'src/dtos/inputs/element-search-input.ts';
+import { ElementSearchInput } from 'src/dtos/inputs/element-search-input';
 import { ElementSearchResult } from 'src/dtos/types/element-search-result.dto';
 import { Element } from 'src/dtos/types/element.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
@@ -11,6 +11,7 @@ import { ElementSearchService } from '../services/element-search.service';
 @UseGuards(GraphqlAuthGuard)
 export class ElementSearchController {
   constructor(private elementSearchService: ElementSearchService) {}
+
   @Query(() => [ElementSearchResult])
   async searchElements(
     @Args('input')

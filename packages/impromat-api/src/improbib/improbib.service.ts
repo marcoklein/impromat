@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import PrismaClient from '@prisma/client';
 import { Improbib } from 'improbib';
 import fs from 'node:fs/promises';
+import { environment } from 'src/environment';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 
 @Injectable()
@@ -9,6 +10,7 @@ export class ImprobibService implements OnModuleInit {
   constructor(private prismaService: PrismaService) {}
 
   async onModuleInit() {
+    if (environment.SKIP_IMPROBIB_POPULATION) return;
     console.log('initialized');
 
     const improbibJson = await fs.readFile('assets/improbib.json');

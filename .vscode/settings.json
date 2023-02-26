@@ -1,0 +1,3 @@
+{
+  "jest.disabledWorkspaceFolders": ["impromat-monorepo", "packages"]
+}

@@ -29,7 +29,6 @@ interface ContainerProps {
 
 export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
   workshopId,
-  // myUserFragment,
 }) => {
   const [{ data, fetching: isFetching, error }] = useQuery({
     query: MyUser_Query,

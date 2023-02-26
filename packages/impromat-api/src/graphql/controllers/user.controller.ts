@@ -1,17 +1,18 @@
 import { Inject, UseGuards } from '@nestjs/common';
 import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
+import { UserFavoriteElementDto } from 'src/dtos/types/user-favorite-element.dto';
 import { User, UserRelations } from 'src/dtos/types/user.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
+import { UserFavoriteElementsService } from 'src/graphql/services/user-favorite-elements.service';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
-import { UserSessionService } from '../services/user-session.service';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
 export class MeResolver {
   constructor(
     @Inject(PrismaService) private prismaService: PrismaService,
-    private userSessionService: UserSessionService,
+    private userFavoriteElementsService: UserFavoriteElementsService,
   ) {}
 
   @ResolveField()
@@ -19,7 +20,7 @@ export class MeResolver {
     return this.findUserById(user.id).elements();
   }
 
-  @ResolveField()
+  @ResolveField(() => [UserFavoriteElementDto])
   async favoriteElements(@Parent() user: User) {
     return this.findUserById(user.id).favoriteElements();
   }

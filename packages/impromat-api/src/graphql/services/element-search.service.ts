@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Element as PrismaElement } from '@prisma/client';
 import Fuse from 'fuse.js';
-import { ElementSearchInput } from 'src/dtos/inputs/element-search-input.ts';
+import { ElementSearchInput } from 'src/dtos/inputs/element-search-input';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
