@@ -30,28 +30,28 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
   const logger = useComponentLogger("SearchElementTabComponent");
-  const test = useRef<HTMLIonSearchbarElement>(null);
-  const [searchText, setSearchText] = useState("");
+
+  // Known issue with the search bar: sometimes inputs "hang up" if you type too fast.
+  // Therefore, a `ref` is used to set the initial value only.
+  const searchInputRef = useRef<HTMLIonSearchbarElement>(null);
+  const [searchText, setSearchText] = useState(
+    window.localStorage.getItem("lastSearch") ?? "",
+  );
   const [queryResult] = useQuery({
     query: SearchElementTabQuery,
     variables: { input: { text: searchText, limit: 20 } },
   });
 
   useEffect(() => {
-    if (test.current) {
-      const lastSearch = window.localStorage.getItem("lastSearch");
-      // Known issue with the search bar: sometimes inputs "hang up" if you type too fast.
-      // Therefore, a `ref` is used to set the initial value only.
-      if (lastSearch) {
-        test.current.value = lastSearch;
-      }
+    if (searchInputRef.current) {
+      searchInputRef.current.value =
+        window.localStorage.getItem("lastSearch") ?? "";
     }
   }, []);
 
   useEffect(() => {
     window.localStorage.setItem("lastSearch", searchText);
-    logger("stored search: %s", searchText);
-  }, [searchText, logger]);
+  }, [searchText]);
 
   function SearchContent() {
     if (
@@ -98,8 +98,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   return (
     <>
       <IonSearchbar
-        ref={test}
-        debounce={200}
+        ref={searchInputRef}
         onIonChange={(e) => {
           setSearchText(e.detail.value ?? "");
         }}
