@@ -2,14 +2,21 @@ FROM node:16-alpine
 
 # Dokku requires bash
 RUN apk add --no-cache bash
+RUN apk add --no-cache curl
 
 WORKDIR /app
 COPY package.json yarn.lock ./
 COPY packages/impromat-api/package.json packages/impromat-api/
-RUN yarn install --frozen-lockfile
 
+COPY packages/improbib/ packages/improbib/
 COPY packages/impromat-api/ packages/impromat-api/
 
+RUN yarn install --immutable
+
+WORKDIR /app/packages/improbib
+RUN yarn build
+
 WORKDIR /app/packages/impromat-api
+RUN yarn build
 
 CMD ["yarn", "start"]

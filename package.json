@@ -6,12 +6,6 @@
   "workspaces": {
     "packages": [
       "packages/*"
-    ],
-    "nohoist": [
-      "**/@types/**",
-      "impromat/**",
-      "**/@prisma/**",
-      "@prisma/**"
     ]
   },
   "devDependencies": {
@@ -32,5 +26,9 @@
   "description": "Impromat Monorepo",
   "main": "index.js",
   "author": "Marco Klein <hello@marcoklein.dev>",
-  "license": "MIT"
+  "license": "MIT",
+  "packageManager": "yarn@3.4.1",
+  "resolutions": {
+    "improbib": "portal:/Users/mkle/Documents/GitHub/impromat-monorepo/packages/improbib"
+  }
 }

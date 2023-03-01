@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+  api:
+    depends_on:
+      - database
+    build:
+      context: ../../
+      dockerfile: packages/infrastructure/Dockerfile-impromat-api
+    expose:
+      - 12345
+    ports:
+      - 12345:8080
+    networks:
+      - postgres-network
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres?schema=impromat-api-docker-compose
+      # SKIP_IMPROBIB_POPULATION: "1"
+    command: [ "bash", "-c", 'yarn prisma db push && yarn start' ]
+    healthcheck:
+      # disable: true
+      # test: |
+      #   # curl http://localhost:8080/graphql -f -X POST -H "Content-Type: application/json" --data '{"query":"{googleAuthUrl}"}' || exit 1
+      test: curl --fail http://localhost:8080/auth/testlogin || exit 1
+        # [
+        #   "CMD",
+        #   "curl",
+        #   "-f",
+        #   "http://localhost:8080/auth/testlogin"
+        # ]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+      # healthcheck:
+      #   test: ["CMD", "curl", "-f", "http://localhost"]
+
+      # interval: 1m30s
+      # timeout: 30s
+      # retries: 5
+      # start_period: 30s
+
+  database:
+    image: postgres:latest
+    networks:
+      - postgres-network
+    ports:
+      - 12346:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+networks:
+  postgres-network:
+    driver: bridge

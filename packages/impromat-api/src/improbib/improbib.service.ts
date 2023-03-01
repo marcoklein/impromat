@@ -15,11 +15,6 @@ export class ImprobibService implements OnModuleInit {
 
     const improbibJson = await fs.readFile('assets/improbib.json');
     const improbib = JSON.parse(improbibJson.toString('utf8')) as Improbib;
-    await this.prismaService.element.deleteMany({
-      where: {
-        improbibIdentifier: { not: null },
-      },
-    });
 
     for (const {
       baseUrl,
