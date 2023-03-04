@@ -10,7 +10,12 @@ export class AuthResolver {
 
   @Query(() => String)
   googleAuthUrl(): string {
-    return this.googleOAuth2ClientService.getGoogleAuthUrl();
+    // TODO make this configurable in environment
+    return 'http://localhost:12345/auth/testlogin?redirectUrl=http://localhost:3003';
+
+    //   this.context.getContext().req;
+    // return req.session.data.userId;
+    // return this.googleOAuth2ClientService.getGoogleAuthUrl();
   }
 
   @Mutation(() => Boolean)

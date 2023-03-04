@@ -63,11 +63,15 @@ export class AuthController {
 
   @Get('testlogin')
   async testLogin(
-    @Query() { redirectUrl }: { redirectUrl: string | undefined },
+    @Query()
+    {
+      redirectUrl,
+      testUserId,
+    }: { testUserId; redirectUrl: string | undefined },
     @Req() req: Request & { session: Session & { data: UserSessionData } },
     @Res() res: Response,
   ) {
-    const userGoogleId = 'test-user-id';
+    const userGoogleId = testUserId ?? 'test-user-id';
 
     const user = await this.prismaService.$transaction(async (tx) => {
       const user = await tx.user.findUnique({

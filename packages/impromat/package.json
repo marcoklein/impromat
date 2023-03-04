@@ -31,7 +31,6 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.0",
-    "rxdb-hooks": "^4.0.3",
     "rxjs": "^7.5.6",
     "typescript": "^4.1.3",
     "urql": "^3.0.3",
@@ -72,7 +71,8 @@
     "codegen:graphql": "yarn codegen:get-schema-graphql && graphql-codegen",
     "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql",
     "codegen": "yarn codegen:graphql",
-    "changeset": "yarn --cwd \"../..\" changeset"
+    "changeset": "yarn workspace impromat-monorepo run changeset",
+    "docker-compose": "yarn workspace infrastructure run docker-compose"
   },
   "browserslist": {
     "production": [
@@ -98,6 +98,8 @@
     "@graphql-codegen/typescript-operations": "^3.0.0",
     "@types/debug": "^4.1.7",
     "concurrently": "^7.6.0",
+    "dotenv": "^16.0.3",
+    "dotenv-cli": "^7.0.0",
     "eslint": "^8.30.0",
     "genversion": "^3.1.1"
   }

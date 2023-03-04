@@ -16,12 +16,7 @@ export function useGoogleLogin() {
       );
       return;
     }
-    if (process.env.REACT_APP_AUTO_LOGIN) {
-      // enableAutoLogin(database, true);
-      // TODO store login in local storage? (=> login is stored in cookies?)
-    } else {
-      window.location.href = googleLoginHref;
-    }
+    window.location.href = googleLoginHref;
   };
 
   return loginClick;

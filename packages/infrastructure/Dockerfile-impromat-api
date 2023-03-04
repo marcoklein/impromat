@@ -2,6 +2,7 @@ FROM node:16-alpine
 
 # Dokku requires bash
 RUN apk add --no-cache bash
+# curl for healthchecks
 RUN apk add --no-cache curl
 
 WORKDIR /app

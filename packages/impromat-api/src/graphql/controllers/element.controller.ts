@@ -14,7 +14,7 @@ import {
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
-import { Element, ElementRelations } from 'src/dtos/types/element.dto';
+import { Element } from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';

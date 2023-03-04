@@ -22,7 +22,6 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
 import React, { PropsWithChildren, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import "../node_modules/flag-icons/css/flag-icons.min.css";
 import { environment } from "./environment";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import "./theme/colors.css";

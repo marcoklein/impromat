@@ -7,6 +7,7 @@
     "graphql.vscode-graphql-syntax",
     "bierner.markdown-mermaid",
     "yzhang.markdown-all-in-one",
-    "prisma.prisma"
+    "prisma.prisma",
+    "arcanis.vscode-zipfs"
   ]
 }

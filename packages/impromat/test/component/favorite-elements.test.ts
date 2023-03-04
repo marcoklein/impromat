@@ -4,9 +4,10 @@ import { pageTest } from "./fixtures/page-fixtures";
 pageTest.describe("Favorite Elements", () => {
   pageTest(
     "should verify favorites process",
-    async ({ page, workshopPage }) => {
+    async ({ page, auth, workshopPage }) => {
       await pageTest.step("should add a favorite element", async () => {
         // given
+        await auth.loginAsRandomUser();
         await workshopPage.createAndGoto();
         await workshopPage.gotoElementFromSearch();
         // when

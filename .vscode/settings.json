@@ -1,3 +1,10 @@
 {
-  "jest.disabledWorkspaceFolders": ["impromat-monorepo", "packages"]
+  "jest.disabledWorkspaceFolders": [
+    "impromat-monorepo",
+    "packages"
+  ],
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  }
 }

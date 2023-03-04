@@ -6,12 +6,12 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "start": "node dist/src/main.js",
     "build": "yarn prisma:generate && yarn copy-improbib && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "yarn start:dev",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "start": "nest start",
     "start:dev": "yarn copy-improbib && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",

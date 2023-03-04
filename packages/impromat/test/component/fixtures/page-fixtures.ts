@@ -1,5 +1,6 @@
 import { test as base } from "@playwright/test";
 import { AccountDevPage } from "./account-dev-page";
+import { AuthFixture } from "./auth-fixture";
 import { LibraryDevPage } from "./library-dev-page";
 import { WorkshopDevPage } from "./workshop-dev-page";
 import { WorkshopElementDevPage } from "./workshop-element-dev-page";
@@ -11,6 +12,7 @@ type PageFixtures = {
   workshopElementPage: WorkshopElementDevPage;
   libraryPage: LibraryDevPage;
   accountPage: AccountDevPage;
+  auth: AuthFixture;
 };
 
 const test = base.extend<PageFixtures>({
@@ -29,12 +31,8 @@ const test = base.extend<PageFixtures>({
   accountPage: async ({ page }, use) => {
     await use(new AccountDevPage(page));
   },
-  async page({ page, context, request }, use) {
-    await page.goto(
-      // "http://localhost:8080/auth/testlogin?redirectUrl=http://localhost:3003",
-      "http://localhost:8080/auth/testlogin?redirectUrl=http://localhost:3000",
-    );
-    await use(page);
+  auth: async ({ page }, use) => {
+    await use(new AuthFixture(page));
   },
 });
 

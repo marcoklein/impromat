@@ -1,9 +1,9 @@
 import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
-import { WorkshopsDevPage } from "./fixtures/workshops-dev-page";
 
-pageTest("create workshop", async ({ page }) => {
-  const workshopsPage = new WorkshopsDevPage(page);
+pageTest("create workshop", async ({ page, accountPage, workshopsPage }) => {
+  // given
+  await accountPage.login();
   const workshopId = await workshopsPage.addWorkshop("testworkshop");
 
   // go back to workshop overview through menu
@@ -14,7 +14,7 @@ pageTest("create workshop", async ({ page }) => {
   // click on workshop to open it again
   await page
     .locator("#main > div > ion-content > ion-list > ion-item")
-    .first()
+    .last()
     .click();
   await expect(page).toHaveURL(`./workshop/${workshopId}`);
 });

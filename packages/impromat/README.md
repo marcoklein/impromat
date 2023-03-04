@@ -86,14 +86,6 @@ COOKIE_DOMAIN=localhost
 BASE_URL=http://localhost:3000/
 ```
 
-### Automatic Login
-
-If the `REACT_APP_AUTO_LOGIN` environment variable is set, the application simulates an automatic login. This enables integration tests to test all functionalities that require login.
-
-```sh
-REACT_APP_AUTO_LOGIN=1 yarn start
-```
-
 ### Page Object Models
 
 Tests are structured using https://playwright.dev/docs/pom.

@@ -18,6 +18,7 @@ export class WorkshopsDevPage extends DevPage {
     await page.locator('input[type="text"]').fill(name);
     await page.locator('button:has-text("Save")').click();
     await page.waitForSelector(`text="${name}"`);
+    await page.waitForTimeout(1000);
     const workshopId = /[^/]*?$/.exec(page.url())![0];
     await expect(page).toHaveURL(`./workshop/${workshopId}`, { timeout: 5000 });
     return workshopId;

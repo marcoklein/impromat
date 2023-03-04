@@ -36,12 +36,6 @@ export function useGoogleLoginHref() {
       } catch (e) {
         logger("error while sending request: %o", e);
         console.warn(e);
-        if (process.env.REACT_APP_AUTO_LOGIN) {
-          console.warn(
-            "REACT_APP_AUTO_LOGIN: skip validation of google auth request",
-          );
-          setGoogleLoginHref("react-app-auto-login");
-        }
       }
       setIsGoogleLoginHrefFetching(false);
       logger("GoogleLoginHref fetching is done");
