@@ -87,7 +87,7 @@ describe('User Favorite Elements', () => {
     );
     // then
     expect(response.errors).toBeUndefined();
-    expect(response.data?.updateUserFavoriteElement.id).toBe(
+    expect(response.data?.updateUserFavoriteElement?.id).toBe(
       createElementResponse.data.createElement.id,
     );
     createdElementId = createElementResponse.data.createElement.id;
@@ -142,7 +142,9 @@ describe('User Favorite Elements', () => {
     );
     // then
     expect(response.errors).toBeUndefined();
-    expect(response.data?.updateUserFavoriteElement).toBe(true);
+    expect(response.data?.updateUserFavoriteElement).toEqual({
+      id: createdElementId,
+    });
   });
 
   it('should return an empty favorites list', async () => {

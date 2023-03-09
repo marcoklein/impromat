@@ -18,4 +18,8 @@ export const environment = {
   GOOGLE_AUTH_CLIENT_SECRET: process.env.GOOGLE_AUTH_CLIENT_SECRET,
   GOOGLE_AUTH_CLIENT_ID: process.env.GOOGLE_AUTH_CLIENT_ID,
   GOOGLE_AUTH_REDIRECT_URL: process.env.GOOGLE_AUTH_REDIRECT_URL,
+  ENABLE_TESTLOGIN: process.env.ENABLE_TESTLOGIN === '1',
+  TEST_GOOGLE_AUTH_URL:
+    process.env.TEST_GOOGLE_AUTH_URL ??
+    'http://localhost:12345/auth/testlogin?redirectUrl=http://localhost:3003',
 };

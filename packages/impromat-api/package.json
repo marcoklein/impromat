@@ -9,7 +9,7 @@
     "start": "node dist/src/main.js",
     "build": "yarn prisma:generate && yarn copy-improbib && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "dev": "yarn start:dev",
+    "dev": "dotenv -c development -- yarn start:dev",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "start:dev": "yarn copy-improbib && nest start --watch",
@@ -17,8 +17,8 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test:load-env": "dotenv -c test --",
-    "test": "yarn codegen && yarn test:prepare-db && yarn test:load-env jest",
-    "test:prepare-db": "yarn test:load-env yarn prisma migrate reset --force --skip-generate",
+    "test": "yarn codegen && yarn test:load-env jest",
+    "test:prepare-db": "yarn test:load-env yarn prisma db push --skip-generate",
     "test:watch": "yarn test --watch",
     "test:cov": "yarn test --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -86,30 +86,5 @@
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "<rootDir>"
-    ],
-    "rootDir": ".",
-    "roots": [
-      "src",
-      "test"
-    ],
-    "testRegex": ".*\\.test\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }

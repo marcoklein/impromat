@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { print, type ExecutionResult } from 'graphql';
 import { AppModule } from 'src/app.module';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { ImprobibService } from 'src/improbib/improbib.service';
 import request from 'supertest';
 import { injectTestUserSessionMiddleware } from 'test/test-utils/inject-test-user-session-middleware';
 import { prepareTestDatabase } from './prepare-test-database';

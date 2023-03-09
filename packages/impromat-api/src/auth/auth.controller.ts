@@ -60,35 +60,4 @@ export class AuthController {
       res.sendStatus(HttpStatus.BAD_REQUEST);
     }
   }
-
-  @Get('testlogin')
-  async testLogin(
-    @Query()
-    { redirectUrl, userId }: { userId; redirectUrl: string | undefined },
-    @Req() req: Request & { session: Session & { data: UserSessionData } },
-    @Res() res: Response,
-  ) {
-    const userGoogleId = userId ?? 'test-user-id';
-
-    const user = await this.prismaService.$transaction(async (tx) => {
-      const user = await tx.user.findUnique({
-        where: { googleSubscriptionId: userGoogleId },
-      });
-      if (user) return user;
-      // first time login
-      return await tx.user.create({
-        data: { googleSubscriptionId: userGoogleId },
-      });
-    });
-
-    req.session.data = { userId: user.id };
-    if (redirectUrl) {
-      res.redirect(redirectUrl);
-    } else {
-      req.session.save(() => {
-        const signedSession = sign(req.session.id, environment.SESSION_SECRET);
-        res.send(signedSession);
-      });
-    }
-  }
 }
