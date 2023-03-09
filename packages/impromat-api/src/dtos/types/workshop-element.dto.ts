@@ -14,6 +14,6 @@ export class WorkshopElement extends BaseDto {
   @Field(() => Element)
   basedOn: Element;
 
-  @Field(() => WorkshopSection, { nullable: true })
-  section: Nullable<WorkshopSection>;
+  @Field(() => WorkshopSection)
+  section: WorkshopSection;
 }

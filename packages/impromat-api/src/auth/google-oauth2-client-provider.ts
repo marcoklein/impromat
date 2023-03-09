@@ -6,7 +6,7 @@ import { environment } from '../environment';
 @Injectable()
 export class GoogleOAuth2ClientService implements OnModuleInit {
   private oAuth2Client: OAuth2Client | undefined;
-  private javascriptOrigin: string | undefined;
+  private redirectUrlAfterAuthentication: string | undefined;
   private googleAuthUrl: string | undefined;
 
   onModuleInit() {
@@ -15,8 +15,15 @@ export class GoogleOAuth2ClientService implements OnModuleInit {
       access_type: 'offline',
       scope: ['https://www.googleapis.com/auth/userinfo.email'],
     });
-    const OAuth2Data = this.loadOAuthConfiguration();
-    this.javascriptOrigin = OAuth2Data.web.javascript_origins[0];
+    try {
+      const OAuth2Data = this.loadOAuthConfiguration();
+      this.redirectUrlAfterAuthentication =
+        OAuth2Data.web.javascript_origins[0];
+    } catch {
+      console.warn(
+        'GoogleOAuth2ClientService: No Redirection URL for google auth set.',
+      );
+    }
     console.log('GoogleOAuth2ClientService instantiated');
   }
 
@@ -31,8 +38,9 @@ export class GoogleOAuth2ClientService implements OnModuleInit {
   }
 
   getRedirectUrlAfterAuthentication() {
-    if (!this.javascriptOrigin) throw new Error('Module not initialized yet.');
-    return this.javascriptOrigin;
+    if (!this.redirectUrlAfterAuthentication)
+      throw new Error('Module not initialized yet.');
+    return this.redirectUrlAfterAuthentication;
   }
 
   private loadOAuthConfiguration() {

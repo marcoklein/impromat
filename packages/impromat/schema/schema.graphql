@@ -30,7 +30,7 @@ type WorkshopElement {
   deleted: Boolean!
   note: String
   basedOn: Element!
-  section: WorkshopSection
+  section: WorkshopSection!
 }
 
 type WorkshopSection {
@@ -119,7 +119,9 @@ input ElementSearchInput {
 
 type Mutation {
   logout: Boolean!
-  updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Boolean!
+
+  """Change the favorite state for element of the logged in user."""
+  updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Element
   createWorkshop(input: CreateWorkshopInput!): Workshop!
   updateWorkshop(input: UpdateWorkshopInput!): Workshop!
   deleteWorkshop(id: ID!): Workshop

@@ -2,8 +2,9 @@ import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
 
 pageTest.describe("Workshop Elements Page", () => {
-  pageTest("should add a custom element", async ({ workshopPage }) => {
+  pageTest("should add a custom element", async ({ auth, workshopPage }) => {
     // given
+    await auth.loginAsRandomUser();
     await workshopPage.createAndGoto("workshop name");
     // when
     const libraryPage = await workshopPage.openLibrary();

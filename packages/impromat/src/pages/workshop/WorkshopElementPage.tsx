@@ -17,7 +17,7 @@ import { arrowBack, document, pencil } from "ionicons/icons";
 import React, { useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
-import { useQuery } from "urql";
+import { useMutation, useQuery } from "urql";
 import { CustomElementInfoItemComponent } from "../../components/CustomElementInfoItemComponent";
 import { LicenseItemComponent } from "../../components/LicenseItemComponent";
 import { graphql } from "../../graphql-client";
@@ -29,6 +29,7 @@ import { routeWorkshop } from "../../routes/shared-routes";
 const WorkshopElementPageQuery = graphql(`
   query WorkshopElementPage($id: ID!) {
     workshopElement(id: $id) {
+      id
       note
       basedOn {
         id
@@ -44,6 +45,9 @@ const WorkshopElementPageQuery = graphql(`
         }
 
         ...CustomElement_Element
+      }
+      section {
+        id
       }
     }
   }
@@ -63,19 +67,42 @@ export const WorkshopElementPage: React.FC = () => {
   const workshopElement = workshopElementQueryResult.data?.workshopElement;
   const basedOnElement = workshopElement?.basedOn;
   const [presentInput] = useInputDialog();
+  const [, updateWorkshop] = useMutation(
+    graphql(`
+      mutation UpdateWorkshopWithElement($input: UpdateWorkshopInput!) {
+        updateWorkshop(input: $input) {
+          id
+          sections {
+            elements {
+              id
+            }
+          }
+        }
+      }
+    `),
+  );
 
   useStateChangeLogger(workshopElement, "workshopElement", logger);
   useStateChangeLogger(basedOnElement, "basedOnElement", logger);
 
   const saveNotesChanges = useCallback(
     (note: string) => {
-      // if (!mutations || !workshopElement) return;
-      // const updatedPart = immer(workshopElement, (draft) => {
-      //   draft.note = note;
-      // });
-      // mutations.updateWorkshopElement(workshopId, updatedPart);
+      if (!workshopElement) return;
+      updateWorkshop({
+        input: {
+          id: workshopId,
+          sections: {
+            update: [
+              {
+                id: workshopElement.section.id,
+                elements: { update: [{ id: workshopElement.id, note }] },
+              },
+            ],
+          },
+        },
+      });
     },
-    [workshopElement, workshopId],
+    [updateWorkshop, workshopElement, workshopId],
   );
 
   const onChangeNoteClick = () => {

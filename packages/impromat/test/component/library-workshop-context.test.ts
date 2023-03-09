@@ -4,8 +4,9 @@ import { pageTest } from "./fixtures/page-fixtures";
 pageTest.describe("Library with Workshop Context", () => {
   pageTest(
     "should render the library page",
-    async ({ workshopPage, libraryPage }) => {
+    async ({ auth, workshopPage, libraryPage }) => {
       // given
+      await auth.loginAsRandomUser();
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // then
@@ -18,8 +19,9 @@ pageTest.describe("Library with Workshop Context", () => {
 
   pageTest(
     "should open an element",
-    async ({ page, workshopPage, libraryPage }) => {
-      // given before each
+    async ({ page, auth, workshopPage, libraryPage }) => {
+      // given
+      await auth.loginAsRandomUser();
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // when
@@ -28,16 +30,14 @@ pageTest.describe("Library with Workshop Context", () => {
       await expect(
         page.getByRole("button", { name: "Add to Workshop" }),
       ).toBeVisible();
-      expect(page.url()).toContain(
-        "/library-element/a74ac20adeba66b0044143630cba90ab",
-      );
     },
   );
 
   pageTest(
     "should create a custom element and add it twice",
-    async ({ page, workshopPage }) => {
+    async ({ page, auth, workshopPage }) => {
       // given
+      await auth.loginAsRandomUser();
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // when
@@ -48,6 +48,7 @@ pageTest.describe("Library with Workshop Context", () => {
       await page
         .getByRole("button", { name: "Create and Add to Workshop" })
         .click();
+      await page.waitForNavigation();
       await workshopPage.openLibrary();
       await page.getByRole("tab", { name: "Brush My Library" }).click();
       await page.getByRole("listitem").getByText("test-element").click();

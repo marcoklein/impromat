@@ -1,8 +1,8 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { environment } from 'src/environment';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { ImprobibService } from 'src/improbib/improbib.service';
 import { ElementSearchController } from './controllers/element-search.controller';
 import { ElementController } from './controllers/element.controller';
 import { UserFavoriteElementController } from './controllers/user-favorite-element.controller';
@@ -23,7 +23,7 @@ import { WorkshopService } from './services/workshop.service';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       context: ({ req, res }) => ({ req, res }),
       driver: ApolloDriver,
-      autoSchemaFile: 'schema/schema.graphql',
+      autoSchemaFile: environment.GRAPHQL_SCHEMA_GENERATION_PATH,
       installSubscriptionHandlers: true,
       playground: {
         settings: {
@@ -53,8 +53,6 @@ import { WorkshopService } from './services/workshop.service';
     UserSessionService,
     WorkshopService,
     ElementSearchService,
-    // TODO create separate database module
-    ImprobibService,
   ],
 })
 export class GraphqlModule {}

@@ -2,17 +2,22 @@ import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
 
 pageTest.describe("Workshop Page", () => {
-  pageTest("should rename a new workshop", async ({ page, workshopPage }) => {
-    // given
-    await workshopPage.createAndGoto("workshop name");
-    // when
-    await workshopPage.rename("renamed workshop name");
-    // then
-    await page.waitForSelector('text="renamed workshop name"');
-  });
+  pageTest(
+    "should rename a new workshop",
+    async ({ page, auth, workshopPage }) => {
+      // given
+      await auth.loginAsRandomUser();
+      await workshopPage.createAndGoto("workshop name");
+      // when
+      await workshopPage.rename("renamed workshop name");
+      // then
+      await page.waitForSelector('text="renamed workshop name"');
+    },
+  );
 
-  pageTest("should add a description", async ({ page, workshopPage }) => {
+  pageTest("should add a description", async ({ page, auth, workshopPage }) => {
     // given
+    await auth.loginAsRandomUser();
     await workshopPage.createAndGoto("workshop name");
     const description = "testing description";
     // when
@@ -24,8 +29,9 @@ pageTest.describe("Workshop Page", () => {
     await page.waitForSelector('text="testing description"');
   });
 
-  pageTest("should remove a workshop", async ({ page, workshopPage }) => {
+  pageTest("should remove a workshop", async ({ page, auth, workshopPage }) => {
     // given
+    await auth.loginAsRandomUser();
     await workshopPage.createAndGoto("workshop name");
     // when
     await workshopPage.optionsLocator.click();

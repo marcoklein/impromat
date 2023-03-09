@@ -11,11 +11,11 @@ export const environment = {
   /**
    * Path to the JSON file holding authentication information for Google authentication.
    */
+  GRAPHQL_SCHEMA_GENERATION_PATH:
+    process.env.GRAPHQL_SCHEMA_GENERATION_PATH || 'schema/schema.graphql',
   GOOGLE_AUTH_JSON_PATH:
     process.env.GOOGLE_AUTH_JSON_PATH ?? 'assets/google.auth.json',
   GOOGLE_AUTH_CLIENT_SECRET: process.env.GOOGLE_AUTH_CLIENT_SECRET,
   GOOGLE_AUTH_CLIENT_ID: process.env.GOOGLE_AUTH_CLIENT_ID,
   GOOGLE_AUTH_REDIRECT_URL: process.env.GOOGLE_AUTH_REDIRECT_URL,
-  SKIP_IMPROBIB_POPULATION:
-    process.env.SKIP_IMPROBIB_POPULATION === '1' ? true : false,
 };

@@ -8,7 +8,9 @@ import { createElementMutation } from './element-queries';
 
 const updateUserFavoriteElementMutation = graphql(`
   mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
-    updateUserFavoriteElement(input: $input)
+    updateUserFavoriteElement(input: $input) {
+      id
+    }
   }
 `);
 
@@ -85,7 +87,9 @@ describe('User Favorite Elements', () => {
     );
     // then
     expect(response.errors).toBeUndefined();
-    expect(response.data?.updateUserFavoriteElement).toBe(true);
+    expect(response.data?.updateUserFavoriteElement.id).toBe(
+      createElementResponse.data.createElement.id,
+    );
     createdElementId = createElementResponse.data.createElement.id;
   });
 

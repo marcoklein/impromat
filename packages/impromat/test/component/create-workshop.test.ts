@@ -1,9 +1,9 @@
 import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
 
-pageTest("create workshop", async ({ page, accountPage, workshopsPage }) => {
+pageTest("create workshop", async ({ page, auth, workshopsPage }) => {
   // given
-  await accountPage.login();
+  await auth.loginAsRandomUser();
   const workshopId = await workshopsPage.addWorkshop("testworkshop");
 
   // go back to workshop overview through menu

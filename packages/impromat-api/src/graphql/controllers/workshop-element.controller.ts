@@ -12,6 +12,7 @@ import {
   WorkshopElement,
   WorkshopElementRelations,
 } from 'src/dtos/types/workshop-element.dto';
+import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { WorkshopElementService } from '../services/workshop-element.service';
 
@@ -20,7 +21,7 @@ import { WorkshopElementService } from '../services/workshop-element.service';
 export class WorkshopElementController {
   constructor(private workshopElementService: WorkshopElementService) {}
 
-  @ResolveField(() => [WorkshopElement])
+  @ResolveField(() => WorkshopSection)
   async section(
     @Parent() element: WorkshopElement,
     @SessionUserId() userSessionId: string,
@@ -30,7 +31,7 @@ export class WorkshopElementController {
       .workshopSection();
   }
 
-  @ResolveField(() => [WorkshopElement])
+  @ResolveField(() => WorkshopElement)
   async basedOn(
     @Parent() element: WorkshopElement,
     @SessionUserId() userSessionId: string,

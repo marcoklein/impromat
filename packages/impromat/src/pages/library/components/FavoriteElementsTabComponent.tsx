@@ -1,4 +1,5 @@
 import { IonSpinner } from "@ionic/react";
+import { useMemo } from "react";
 import { useQuery } from "urql";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
@@ -32,9 +33,10 @@ interface ContainerProps {
 export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
+  const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
   const [{ data, fetching: isFetching, error }] = useQuery({
     query: MyUser_Query,
-    requestPolicy: "cache-and-network",
+    context,
   });
   const user = getFragmentData(MyUser_QueryFragment, data);
   const favoriteElements = user?.me.favoriteElements;

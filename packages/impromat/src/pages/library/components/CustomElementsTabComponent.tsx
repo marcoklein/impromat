@@ -6,7 +6,7 @@ import {
   IonSpinner,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
 import { useClient, useQuery } from "urql";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
@@ -47,8 +47,10 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
   const location = useLocation();
   const logger = useComponentLogger("CustomElementsTabComponent");
 
+  const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
   const [{ data, fetching: isFetching, error }] = useQuery({
     query: MyUser_Query,
+    context,
   });
 
   const user = getFragmentData(CustomElementsTab_WorkshopFragment, data?.me);

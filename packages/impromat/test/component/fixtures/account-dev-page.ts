@@ -9,14 +9,15 @@ export class AccountDevPage extends DevPage {
   }
 
   async goto() {
-    if (!this.page.url.name.endsWith("/account")) {
-      await this.page.goto(`./account`);
-    }
+    await this.page.goto(`./account`);
   }
 
   async login() {
     await this.goto();
-    await this.page.locator("ion-button.google-sign-in-button").last().click();
+    await this.page
+      .locator("ion-button.google-sign-in-button")
+      .last()
+      .click({ timeout: 30000 });
   }
 
   async logout() {

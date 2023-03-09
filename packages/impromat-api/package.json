@@ -24,7 +24,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "codegen": "graphql-codegen",
     "codegen:watch": "yarn codegen --watch",
-    "copy-improbib": "cp ../improbib/output/improbib.json ./assets/improbib.json"
+    "copy-improbib": "mkdir -p assets && cp ../improbib/output/improbib.json ./assets/improbib.json",
+    "docker-compose": "yarn workspace infrastructure docker-compose"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.2.0",
@@ -80,7 +81,11 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.1.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "webpack": "^5.75.0"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "jest": {
     "moduleFileExtensions": [

@@ -14,7 +14,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { getFragmentData, graphql } from "../../graphql-client";
@@ -52,8 +52,10 @@ const CreateWorkshopMutation = graphql(`
 export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
 
+  const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
   const [workshopsQueryResult] = useQuery({
     query: WorkshopsQuery,
+    context,
   });
   const [, createWorkshopMutation] = useMutation(CreateWorkshopMutation);
 

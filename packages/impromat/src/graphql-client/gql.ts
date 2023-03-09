@@ -27,14 +27,15 @@ const documents = {
     "\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      isFavorite\n      ...Element_Element\n    }\n  }\n": types.LibraryElementQueryDocument,
     "\n  query WorkshopSectionsQuery($id: ID!) {\n    workshop(id: $id) {\n      sections {\n        id\n      }\n    }\n  }\n": types.WorkshopSectionsQueryDocument,
     "\n  mutation AddToWorkhopMutation($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      id\n    }\n  }\n": types.AddToWorkhopMutationDocument,
-    "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input)\n  }\n": types.UpdateUserFavoriteElementDocument,
+    "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateUserFavoriteElementDocument,
     "\n  fragment CustomElementsTab_WorkshopFragment on User {\n    elements {\n      id\n      name\n      ...ElementPreviewItem_Element\n    }\n  }\n": types.CustomElementsTab_WorkshopFragmentFragmentDoc,
     "\n  query CustomElementsTab_Query {\n    me {\n      ...CustomElementsTab_WorkshopFragment\n    }\n  }\n": types.CustomElementsTab_QueryDocument,
     "\n  fragment FavoriteElements_User on User {\n    favoriteElements {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n": types.FavoriteElements_UserFragmentDoc,
     "\n  fragment MyUser_Query on Query {\n    me {\n      id\n      favoriteElements {\n        element {\n          id\n        }\n      }\n      ...FavoriteElements_User\n    }\n  }\n": types.MyUser_QueryFragmentDoc,
     "\n  query MyUser {\n    ...MyUser_Query\n  }\n": types.MyUserDocument,
     "\n  query SearchElements($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n": types.SearchElementsDocument,
-    "\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n\n        ...CustomElement_Element\n      }\n    }\n  }\n": types.WorkshopElementPageDocument,
+    "\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      id\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n\n        ...CustomElement_Element\n      }\n      section {\n        id\n      }\n    }\n  }\n": types.WorkshopElementPageDocument,
+    "\n      mutation UpdateWorkshopWithElement($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n          sections {\n            elements {\n              id\n            }\n          }\n        }\n      }\n    ": types.UpdateWorkshopWithElementDocument,
     "\n  fragment WorkshopPage_Workshop on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n    name\n    description\n    sections {\n      name\n      elements {\n        id\n      }\n      ...WorkshopElementsComponent_WorkshopSection\n    }\n    ...WorkshopActionSheet_Workshop\n  }\n": types.WorkshopPage_WorkshopFragmentDoc,
     "\n  query WorkshopByIdQuery($id: ID!) {\n    workshop(id: $id) {\n      ...WorkshopPage_Workshop\n    }\n  }\n": types.WorkshopByIdQueryDocument,
     "\n      mutation DeleteWorkshopMutation($id: ID!) {\n        deleteWorkshop(id: $id) {\n          id\n        }\n      }\n    ": types.DeleteWorkshopMutationDocument,
@@ -122,7 +123,7 @@ export function graphql(source: "\n  mutation AddToWorkhopMutation($input: Updat
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input)\n  }\n"): (typeof documents)["\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input)\n  }\n"];
+export function graphql(source: "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -150,7 +151,11 @@ export function graphql(source: "\n  query SearchElements($input: ElementSearchI
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n\n        ...CustomElement_Element\n      }\n    }\n  }\n"): (typeof documents)["\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n\n        ...CustomElement_Element\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      id\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n\n        ...CustomElement_Element\n      }\n      section {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      id\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n\n        ...CustomElement_Element\n      }\n      section {\n        id\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateWorkshopWithElement($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n          sections {\n            elements {\n              id\n            }\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateWorkshopWithElement($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n          sections {\n            elements {\n              id\n            }\n          }\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

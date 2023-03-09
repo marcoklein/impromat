@@ -10,6 +10,7 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonLoading,
 } from "@ionic/react";
 import { star, starOutline } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
@@ -53,7 +54,9 @@ const AddToWorkshopMutation = graphql(`
 
 const UpdateUserFavoriteElementMutation = graphql(`
   mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
-    updateUserFavoriteElement(input: $input)
+    updateUserFavoriteElement(input: $input) {
+      id
+    }
   }
 `);
 
@@ -88,13 +91,17 @@ export const LibraryElementPage: React.FC = () => {
   );
 
   function onStarElementClick() {
-    if (element?.isFavorite === true) {
+    if (!element) {
+      return;
+    }
+
+    if (element.isFavorite === true) {
       updateUserFavoriteElementMutation({
         input: { elementId: element.id, isFavorite: false },
       }).then(() => {
         reexecuteElementQuery({ requestPolicy: "network-only" });
       });
-    } else if (element?.isFavorite === false) {
+    } else {
       updateUserFavoriteElementMutation({
         input: { elementId: element.id, isFavorite: true },
       }).then(() => {

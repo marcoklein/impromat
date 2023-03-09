@@ -10,12 +10,19 @@ services:
       - 12344:3080
     networks:
       - api-network
+    profiles:
+      - frontend
   api:
     depends_on:
-      - database
+      seed-database:
+        condition: service_completed_successfully
     build:
       context: ../../
       dockerfile: packages/infrastructure/Dockerfile-impromat-api
+    command: yarn dev
+    volumes:
+      # allows restarting with new api sources
+      - ../impromat-api/src:/app/packages/impromat-api/src:ro
     ports:
       - 12345:8080
     networks:
@@ -23,18 +30,30 @@ services:
       - postgres-network
     environment:
       DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres?schema=impromat-api-docker-compose
-      # SKIP_IMPROBIB_POPULATION: "1"
-    command: [ "bash", "-c", 'yarn prisma db push && yarn start' ]
+    profiles:
+      - backend
+  seed-database:
+    depends_on:
+      database:
+        condition: service_healthy
+    build:
+      context: ../../
+      dockerfile: packages/infrastructure/Dockerfile-impromat-api
+    command:
+      [
+        "bash",
+        "-c",
+        'time yarn prisma db push && time yarn prisma db seed'
+      ]
     healthcheck:
-      # disable: true
-      # test: |
-      test: |
-        curl http://localhost:8080/graphql -f -X POST -H "Content-Type: application/json" --data '{"query":"{googleAuthUrl}"}' || exit 1
-      # test: curl --fail http://localhost:8080/auth/testlogin || exit 1
-      interval: 10s
-      timeout: 10s
-      retries: 20
-      start_period: 10s
+      disable: true
+    networks:
+      - api-network
+      - postgres-network
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres?schema=impromat-api-docker-compose
+    profiles:
+      - backend
   database:
     image: postgres:latest
     networks:
@@ -43,7 +62,17 @@ services:
       - 12346:5432
     environment:
       POSTGRES_PASSWORD: postgres
-
+    profiles:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "sh -c 'pg_isready -U postgres -d postgres'"
+        ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
 networks:
   postgres-network:
     driver: bridge
