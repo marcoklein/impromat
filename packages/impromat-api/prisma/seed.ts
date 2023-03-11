@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { Prisma, PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import { Improbib } from 'improbib';

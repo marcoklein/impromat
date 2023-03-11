@@ -5,6 +5,7 @@ junit-results.xml
 
 .env.local
 .env.test.local
+.env.*.local
 
 # not for zero-installs
 .pnp.*
@@ -14,6 +15,8 @@ junit-results.xml
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+*.ignore.*
 
 # for zero-installs cache folder is commited
 # .yarn/*
