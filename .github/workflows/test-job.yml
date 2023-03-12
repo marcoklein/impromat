@@ -11,6 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - run: apt upgrade --yes
       - name: docker compose version
         run: docker-compose --version
       - name: Print commit SHA
