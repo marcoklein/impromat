@@ -73,26 +73,24 @@ describe('WorkshopService', () => {
     // then
     expect(existingWorkshopMock.calls).toHaveLength(1);
     expect(updateTransationMock.calls).toHaveLength(1);
-    expect(result).toStrictEqual({
-      sections: [
-        {
-          id: 'section-0',
-          orderIndex: 0,
-          elements: [
-            { id: 'section-0-element-0', orderIndex: 0 },
-            { id: 'section-0-element-2', orderIndex: 1 },
-          ],
-        },
-        {
-          id: 'section-1',
-          orderIndex: 1,
-          elements: [
-            { id: 'section-0-element-1', orderIndex: 0 },
-            { id: 'section-1-element-0', orderIndex: 1 },
-            { id: 'section-1-element-1', orderIndex: 2 },
-          ],
-        },
-      ],
-    });
+    expect(result.sections).toStrictEqual([
+      {
+        id: 'section-0',
+        orderIndex: 0,
+        elements: [
+          { id: 'section-0-element-0', orderIndex: 0 },
+          { id: 'section-0-element-2', orderIndex: 1 },
+        ],
+      },
+      {
+        id: 'section-1',
+        orderIndex: 1,
+        elements: [
+          { id: 'section-0-element-1', orderIndex: 0 },
+          { id: 'section-1-element-0', orderIndex: 1 },
+          { id: 'section-1-element-1', orderIndex: 2 },
+        ],
+      },
+    ]);
   });
 });

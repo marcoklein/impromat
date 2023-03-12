@@ -33,6 +33,8 @@ pageTest.describe("Library", () => {
       // when
       await libraryPage.goto();
       await libraryPage.createCustomElement(name);
+      // TODO remove timeout
+      await page.waitForTimeout(500);
       // then
       await expect(page.getByText(new RegExp(name))).toBeVisible();
     },

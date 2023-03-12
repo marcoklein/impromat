@@ -22,7 +22,7 @@ const config: PlaywrightTestConfig = {
   use: {
     browserName: "chromium",
     headless: true,
-    viewport: { width: 360, height: 800 },
+    viewport: { width: 360, height: 600 },
     ignoreHTTPSErrors: true,
     isMobile: true,
     baseURL: `http://localhost:${PORT}/`,
