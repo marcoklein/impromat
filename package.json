@@ -9,8 +9,7 @@
     ]
   },
   "devDependencies": {
-    "@changesets/cli": "^2.25.2",
-    "lerna": "^6.0.0"
+    "@changesets/cli": "^2.25.2"
   },
   "scripts": {
     "dev": "yarn foreach --from '{impromat,impromat-api}' run dev",
@@ -19,7 +18,7 @@
     "build": "yarn foreach run build",
     "docker-compose": "yarn workspace infrastructure docker-compose",
     "infra:config": "./packages/infrastructure/configure.sh",
-    "foreach": "yarn workspaces foreach --parallel --topological --verbose"
+    "foreach": "yarn workspaces foreach --parallel --verbose --interlaced --exclude impromat-monorepo"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",
