@@ -33,7 +33,7 @@ jobs:
           cache: yarn
       - run: pwd
       - run: ls
-      - run: docker compose -f /home/runner/work/impromat-monorepo/impromat-monorepo/packages/infrastructure/docker-compose.yaml up --wait
+      - run: docker compose -f ./packages/infrastructure/docker-compose.yaml up --wait
       - uses: bahmutov/npm-install@v1
       # - run: yarn docker-compose --profile backend up -d
       - run: yarn lint
