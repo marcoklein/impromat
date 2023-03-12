@@ -14,7 +14,6 @@
     "prisma:migrate": "prisma migrate dev",
     "start:dev": "yarn copy-improbib && nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test:load-env": "dotenv -c test --",
     "test": "yarn codegen && yarn test:load-env jest",

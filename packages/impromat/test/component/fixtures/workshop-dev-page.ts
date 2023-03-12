@@ -98,7 +98,7 @@ export class WorkshopDevPage extends DevPage {
   async rename(newName: string = "Renamed Workshop") {
     const page = this.page;
     await this.optionsLocator.click();
-    await page.getByRole("button", { name: "Pencil Rename" }).click();
+    await page.getByRole("button", { name: "Rename" }).click();
     await page.locator('input[type="text"]').fill(newName);
     await page.getByRole("button", { name: "Save" }).click();
   }

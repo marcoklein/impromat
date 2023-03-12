@@ -23,3 +23,7 @@ export const environment = {
     process.env.TEST_GOOGLE_AUTH_URL ??
     'http://localhost:12345/auth/testlogin?redirectUrl=http://localhost:3003',
 };
+if (environment.ENABLE_TESTLOGIN) {
+  console.log('ENABLE_TESTLOGIN is activated');
+  console.log('TEST_GOOGLE_AUTH_URL = ', environment.TEST_GOOGLE_AUTH_URL);
+}

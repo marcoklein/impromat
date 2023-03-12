@@ -11,8 +11,8 @@ pageTest.describe("Library with Workshop Context", () => {
       await workshopPage.openLibrary();
       // then
       await libraryPage.expectToolbarTextToBe("Add Element");
-      await expect(libraryPage.tabLocator("Search Explore")).toBeVisible();
-      await expect(libraryPage.tabLocator("Star Favorites")).toBeVisible();
+      await expect(libraryPage.tabLocator(/Explore/)).toBeVisible();
+      await expect(libraryPage.tabLocator(/Favorites/)).toBeVisible();
       await expect(libraryPage.tabLocator(/My Library/)).toBeVisible();
     },
   );
@@ -35,13 +35,13 @@ pageTest.describe("Library with Workshop Context", () => {
 
   pageTest(
     "should create a custom element and add it twice",
-    async ({ page, auth, workshopPage }) => {
+    async ({ page, auth, workshopPage, libraryPage }) => {
       // given
       await auth.loginAsRandomUser();
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // when
-      await page.getByRole("tab", { name: "Brush My Library" }).click();
+      await libraryPage.libraryTabLocator().click();
       await page.locator("ion-router-outlet ion-fab-button").last().click();
       await page.getByRole("textbox", { name: "Name" }).click();
       await page.getByRole("textbox", { name: "Name" }).fill("test-element");
@@ -50,7 +50,7 @@ pageTest.describe("Library with Workshop Context", () => {
         .click();
       await page.waitForNavigation();
       await workshopPage.openLibrary();
-      await page.getByRole("tab", { name: "Brush My Library" }).click();
+      await libraryPage.libraryTabLocator().click();
       await page.getByRole("listitem").getByText("test-element").click();
       await page.getByRole("button", { name: "Add to Workshop" }).click();
       await page.waitForTimeout(500); // db has to update

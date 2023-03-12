@@ -19,7 +19,7 @@ services:
     build:
       context: ../../
       dockerfile: packages/infrastructure/Dockerfile-impromat-api
-    command: yarn dev
+    command: yarn dotenv -c test -- yarn start:dev
     volumes:
       # allows restarting with new api sources
       - ../impromat-api/src:/app/packages/impromat-api/src:ro
@@ -30,6 +30,7 @@ services:
       - postgres-network
     environment:
       DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres?schema=impromat-api-docker-compose
+      ENABLE_TESTLOGIN: 1
     profiles:
       - backend
   seed-database:

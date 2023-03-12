@@ -22,7 +22,7 @@ pageTest.describe("Workshop Page", () => {
     const description = "testing description";
     // when
     await workshopPage.optionsLocator.click();
-    await page.getByRole("button", { name: "Create Add Description" }).click();
+    await page.getByRole("button", { name: "Add Description" }).click();
     await page.locator("textarea").fill(description);
     await page.getByRole("button", { name: "Save" }).click();
     // then
@@ -35,7 +35,7 @@ pageTest.describe("Workshop Page", () => {
     await workshopPage.createAndGoto("workshop name");
     // when
     await workshopPage.optionsLocator.click();
-    await page.getByRole("button", { name: "Trash Delete" }).click();
+    await page.getByRole("button", { name: "Delete" }).click();
     // TODO test for confirmation dialog
     // then
     await page.waitForURL("./workshop");

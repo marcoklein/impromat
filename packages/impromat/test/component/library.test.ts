@@ -9,8 +9,8 @@ pageTest.describe("Library", () => {
     await libraryPage.goto();
     // then
     await libraryPage.expectToolbarTextToBe("Element Library");
-    await expect(libraryPage.tabLocator("Search Explore")).toBeVisible();
-    await expect(libraryPage.tabLocator("Star Favorites")).toBeVisible();
+    await expect(libraryPage.tabLocator(/Explore/)).toBeVisible();
+    await expect(libraryPage.tabLocator(/Favorites/)).toBeVisible();
     await expect(libraryPage.tabLocator(/My Library/)).toBeVisible();
   });
 
@@ -47,7 +47,7 @@ pageTest.describe("Library", () => {
       await libraryPage.goto();
       await libraryPage.createCustomElement(name);
       // when
-      await libraryPage.tabLocator(/Search/).click();
+      await libraryPage.searchTabLocator().click();
       await libraryPage.searchForElement(name);
       // then
       await expect(page.getByText(new RegExp(name))).toBeVisible();

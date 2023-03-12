@@ -7,7 +7,7 @@ pageTest("create workshop", async ({ page, auth, workshopsPage }) => {
   const workshopId = await workshopsPage.addWorkshop("testworkshop");
 
   // go back to workshop overview through menu
-  await page.locator('button:has-text("Menu")').click();
+  await page.getByRole("button", { name: "menu" }).click();
   await page.locator('ion-menu ion-item[router-link="/workshop"]').click();
   await expect(page).toHaveURL("./workshop");
 

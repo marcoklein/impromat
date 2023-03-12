@@ -11,7 +11,7 @@
     "api:dev:logs": "ssh -t dokku@impromat.app logs impromat-api-development",
     "app:prod:logs": "ssh -t dokku@impromat.app logs impromat-app-production",
     "api:prod:logs": "ssh -t dokku@impromat.app logs impromat-api-production",
-    "docker-compose": "dotenv -c -- docker compose"
+    "docker-compose": "dotenv -c -- docker-compose"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
