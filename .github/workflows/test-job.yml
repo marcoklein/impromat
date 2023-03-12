@@ -25,6 +25,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: yarn lint
       - run: yarn build
+      - run: yarn docker-compose --profile backend up --wait
       - run: yarn test
         env:
           DEBUG: pw:webserver
