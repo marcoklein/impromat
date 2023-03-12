@@ -19,7 +19,7 @@
     "build": "yarn foreach run build",
     "docker-compose": "yarn workspace infrastructure docker-compose",
     "infra:config": "./packages/infrastructure/configure.sh",
-    "foreach": "yarn workspaces foreach --parallel --topological --verbose --interlaced"
+    "foreach": "yarn workspaces foreach --parallel --topological --verbose"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",
