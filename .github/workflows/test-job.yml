@@ -37,6 +37,7 @@ jobs:
       - run: yarn build
       - name: Alias docker-compose to docker compose
         run: alias docker-compose="docker compose"
+      - run: docker-compose version
       - name: Start infrastructure for e2e tests
         run: docker compose --profile backend up --wait
         working-directory: ./packages/infrastructure/

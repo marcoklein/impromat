@@ -13,13 +13,13 @@
     "lerna": "^6.0.0"
   },
   "scripts": {
-    "dev": "lerna run --scope impromat --scope impromat-api dev",
-    "lint": "lerna run lint",
-    "test": "lerna run test",
-    "build": "lerna run build",
-    "changed": "lerna ls --since main --all",
+    "dev": "yarn foreach --from '{impromat,impromat-api}' run dev",
+    "lint": "yarn foreach run lint",
+    "test": "yarn foreach run test",
+    "build": "yarn foreach run build",
+    "docker-compose": "yarn workspace infrastructure docker-compose",
     "infra:config": "./packages/infrastructure/configure.sh",
-    "docker-compose": "yarn workspace infrastructure docker-compose"
+    "foreach": "yarn workspaces foreach --parallel --topological --verbose --interlaced"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",
