@@ -11,15 +11,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # - run: /home/linuxbrew/.linuxbrew/bin/brew install docker-compose
-      - run: docker-compose version
-      - run: docker compose version
-      # - run: sudo apt update
-      # - name: docker compose version
-      #   run: docker-compose --version
-      # - run: sudo apt install docker-compose-plugin
-      # - name: docker compose version
-      #   run: docker-compose --version
       - name: Print commit SHA
         run: "echo ${{ inputs.commitSha }}"
       - uses: actions/checkout@v3
@@ -31,13 +22,22 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-      - run: pwd
-      - run: ls
-      - run: docker compose -f ./packages/infrastructure/docker-compose.yml up database --wait
-      - uses: bahmutov/npm-install@v1
-      # - run: yarn docker-compose --profile backend up -d
+      - name: Restore .yarn cache
+        uses: actions/cache/restore@v3
+        with:
+          path: ./.yarn/cache
+          key: yarn-cache
+      - run: yarn install --immutable
+      - name: Save .yarn cache
+        uses: actions/cache/save@v3
+        with:
+          path: ./.yarn/cache
+          key: yarn-cache
       - run: yarn lint
       - run: yarn build
+      - name: Start infrastructure for e2e tests
+        run: docker compose docker-compose.yml --profile backend up --wait
+        working-directory: ./packages/infrastructure/
       - run: yarn test
         env:
           DEBUG: pw:webserver
