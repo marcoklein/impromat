@@ -21,7 +21,7 @@ export class WorkshopSectionController {
       .findFirstOrThrow({
         where: { id: sectionDto.id, workshop: { ownerId: userSessionId } },
       })
-      .elements();
+      .elements({ orderBy: { orderIndex: 'asc' } });
   }
 
   @ResolveField(() => [Workshop])

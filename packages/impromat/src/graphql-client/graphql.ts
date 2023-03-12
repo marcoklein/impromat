@@ -109,6 +109,7 @@ export type Mutation = {
   /** Change the favorite state for element of the logged in user. */
   updateUserFavoriteElement?: Maybe<Element>;
   updateWorkshop: Workshop;
+  updateWorkshopItemOrder: Workshop;
 };
 
 
@@ -139,6 +140,11 @@ export type MutationUpdateUserFavoriteElementArgs = {
 
 export type MutationUpdateWorkshopArgs = {
   input: UpdateWorkshopInput;
+};
+
+
+export type MutationUpdateWorkshopItemOrderArgs = {
+  input: UpdateWorkshopItemOrder;
 };
 
 export type Query = {
@@ -198,6 +204,15 @@ export type UpdateWorkshopInput = {
   id: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
   sections?: InputMaybe<WorkshopSectionListInput>;
+};
+
+/** Moves a workshop item (section or element) within a workshop considering collapsed sections. */
+export type UpdateWorkshopItemOrder = {
+  /** From position. */
+  fromPosition: Scalars['Int'];
+  /** To position. */
+  toPosition: Scalars['Int'];
+  workshopId: Scalars['ID'];
 };
 
 export type UpdateWorkshopSectionInput = {
@@ -467,6 +482,13 @@ export type UpdateWorkshopMutationVariables = Exact<{
 
 export type UpdateWorkshopMutation = { __typename?: 'Mutation', updateWorkshop: { __typename?: 'Workshop', id: string } };
 
+export type UpdateWorkshopItemOrderMutationVariables = Exact<{
+  input: UpdateWorkshopItemOrder;
+}>;
+
+
+export type UpdateWorkshopItemOrderMutation = { __typename?: 'Mutation', updateWorkshopItemOrder: { __typename?: 'Workshop', id: string } };
+
 export type WorkshopFields_WorkshopFragment = { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null } & { ' $fragmentName'?: 'WorkshopFields_WorkshopFragment' };
 
 export type WorkshopsQueryQueryVariables = Exact<{ [key: string]: never; }>;
@@ -533,5 +555,6 @@ export const UpdateWorkshopWithElementDocument = {"kind":"Document","definitions
 export const WorkshopByIdQueryDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WorkshopByIdQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workshop"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WorkshopPage_Workshop"}}]}}]}},...WorkshopPage_WorkshopFragmentDoc.definitions]} as unknown as DocumentNode<WorkshopByIdQueryQuery, WorkshopByIdQueryQueryVariables>;
 export const DeleteWorkshopMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteWorkshopMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteWorkshop"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteWorkshopMutationMutation, DeleteWorkshopMutationMutationVariables>;
 export const UpdateWorkshopDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateWorkshop"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateWorkshopInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateWorkshop"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateWorkshopMutation, UpdateWorkshopMutationVariables>;
+export const UpdateWorkshopItemOrderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateWorkshopItemOrder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateWorkshopItemOrder"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateWorkshopItemOrder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UpdateWorkshopItemOrderMutation, UpdateWorkshopItemOrderMutationVariables>;
 export const WorkshopsQueryDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WorkshopsQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workshops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WorkshopFields_Workshop"}}]}}]}},...WorkshopFields_WorkshopFragmentDoc.definitions]} as unknown as DocumentNode<WorkshopsQueryQuery, WorkshopsQueryQueryVariables>;
 export const CreateWorkshopMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateWorkshopMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateWorkshopInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createWorkshop"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateWorkshopMutationMutation, CreateWorkshopMutationMutationVariables>;

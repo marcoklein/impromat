@@ -1,11 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
 import { UpdateWorkshopSectionInput } from 'src/dtos/inputs/workshop-section-input';
-import { PrismaService } from './prisma.service';
 import {
   CreateWorkshopInput,
   UpdateWorkshopInput,
 } from '../../dtos/inputs/workshop.inputs';
+import { moveItemFromIndexToIndex } from './move-item-position';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class WorkshopService {
@@ -181,5 +183,63 @@ export class WorkshopService {
     return this.prismaService.workshop.findUniqueOrThrow({
       where: { id: updateWorkshopInput.id },
     });
+  }
+
+  async updateWorkshopItemOrder(
+    userId: string,
+    updateWorkshopItemOrder: UpdateWorkshopItemOrder,
+  ) {
+    const workshop = await this.prismaService.workshop.findFirstOrThrow({
+      where: { id: updateWorkshopItemOrder.workshopId, ownerId: userId },
+      include: {
+        sections: {
+          orderBy: {
+            orderIndex: 'asc',
+          },
+          select: {
+            id: true,
+            orderIndex: true,
+            elements: {
+              orderBy: {
+                orderIndex: 'asc',
+              },
+              select: {
+                id: true,
+                orderIndex: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const result = moveItemFromIndexToIndex(
+      workshop.sections,
+      updateWorkshopItemOrder.fromPosition,
+      updateWorkshopItemOrder.toPosition,
+    );
+
+    await this.prismaService.$transaction(async (tx) => {
+      for (const section of result.sections) {
+        await tx.workshopSection.update({
+          data: {
+            orderIndex: section.orderIndex,
+          },
+          where: {
+            id: section.id,
+          },
+        });
+        for (const element of section.elements) {
+          await tx.workshopElement.update({
+            data: {
+              orderIndex: element.orderIndex,
+              workshopSectionId: section.id,
+            },
+            where: { id: element.id },
+          });
+        }
+      }
+    });
+    return result;
   }
 }

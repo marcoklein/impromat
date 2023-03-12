@@ -125,6 +125,7 @@ type Mutation {
   createWorkshop(input: CreateWorkshopInput!): Workshop!
   updateWorkshop(input: UpdateWorkshopInput!): Workshop!
   deleteWorkshop(id: ID!): Workshop
+  updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
   createElement(input: CreateElementInput!): Element!
   updateElement(input: UpdateElementInput!): Element!
 }
@@ -204,6 +205,19 @@ input DeleteWorkshopElementInput {
 
 input DeleteWorkshopSectionInput {
   id: ID!
+}
+
+"""
+Moves a workshop item (section or element) within a workshop considering collapsed sections.
+"""
+input UpdateWorkshopItemOrder {
+  workshopId: ID!
+
+  """From position."""
+  fromPosition: Int!
+
+  """To position."""
+  toPosition: Int!
 }
 
 input CreateElementInput {

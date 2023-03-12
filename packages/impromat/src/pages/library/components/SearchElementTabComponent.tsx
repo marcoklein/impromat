@@ -5,7 +5,6 @@ import { useQuery } from "urql";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import { graphql } from "../../../graphql-client";
-import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { routeLibraryElement } from "../library-routes";
 
 const SearchElementTabQuery = graphql(`
@@ -29,8 +28,6 @@ interface ContainerProps {
 export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
-  const logger = useComponentLogger("SearchElementTabComponent");
-
   // Known issue with the search bar: sometimes inputs "hang up" if you type too fast.
   // Therefore, a `ref` is used to set the initial value only.
   const searchInputRef = useRef<HTMLIonSearchbarElement>(null);

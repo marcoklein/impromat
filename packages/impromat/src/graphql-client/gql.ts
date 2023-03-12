@@ -40,6 +40,7 @@ const documents = {
     "\n  query WorkshopByIdQuery($id: ID!) {\n    workshop(id: $id) {\n      ...WorkshopPage_Workshop\n    }\n  }\n": types.WorkshopByIdQueryDocument,
     "\n      mutation DeleteWorkshopMutation($id: ID!) {\n        deleteWorkshop(id: $id) {\n          id\n        }\n      }\n    ": types.DeleteWorkshopMutationDocument,
     "\n      mutation UpdateWorkshop($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateWorkshopDocument,
+    "\n      mutation UpdateWorkshopItemOrder($input: UpdateWorkshopItemOrder!) {\n        updateWorkshopItemOrder(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateWorkshopItemOrderDocument,
     "\n  fragment WorkshopFields_Workshop on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n    name\n    description\n  }\n": types.WorkshopFields_WorkshopFragmentDoc,
     "\n  query WorkshopsQuery {\n    workshops {\n      ...WorkshopFields_Workshop\n    }\n  }\n": types.WorkshopsQueryDocument,
     "\n  mutation CreateWorkshopMutation($input: CreateWorkshopInput!) {\n    createWorkshop(input: $input) {\n      id\n    }\n  }\n": types.CreateWorkshopMutationDocument,
@@ -172,6 +173,10 @@ export function graphql(source: "\n      mutation DeleteWorkshopMutation($id: ID
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      mutation UpdateWorkshop($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateWorkshop($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation UpdateWorkshopItemOrder($input: UpdateWorkshopItemOrder!) {\n        updateWorkshopItemOrder(input: $input) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateWorkshopItemOrder($input: UpdateWorkshopItemOrder!) {\n        updateWorkshopItemOrder(input: $input) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

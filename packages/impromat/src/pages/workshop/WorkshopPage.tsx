@@ -1,4 +1,5 @@
 import {
+  IonBackdrop,
   IonButton,
   IonButtons,
   IonCard,
@@ -12,13 +13,14 @@ import {
   IonLabel,
   IonMenuButton,
   IonPage,
+  IonProgressBar,
   IonSpinner,
   IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { EditableItemComponent } from "../../components/EditableItemComponent";
@@ -32,6 +34,7 @@ import {
   WorkshopActionTypes,
 } from "./components/WorkshopActionSheetComponent";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
+import "./WorkshopPage.css";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -75,6 +78,7 @@ export const WorkshopPage: React.FC = () => {
     WorkshopPage_Workshop,
     workshopResult.data?.workshop,
   );
+  const [isReorderingElements, setIsReorderingElements] = useState(false);
 
   const [, deleteWorkshopMutation] = useMutation(
     graphql(`
@@ -90,6 +94,15 @@ export const WorkshopPage: React.FC = () => {
     graphql(`
       mutation UpdateWorkshop($input: UpdateWorkshopInput!) {
         updateWorkshop(input: $input) {
+          id
+        }
+      }
+    `),
+  );
+  const [, updateWorkshopOrder] = useMutation(
+    graphql(`
+      mutation UpdateWorkshopItemOrder($input: UpdateWorkshopItemOrder!) {
+        updateWorkshopItemOrder(input: $input) {
           id
         }
       }
@@ -115,25 +128,26 @@ export const WorkshopPage: React.FC = () => {
     });
   };
   const changeSectionsOrder = (fromIndex: number, toIndex: number) => {
-    throw new Error("not implemented");
-    // if (!mutations || !workshop) return;
-    // TODO implement sorting
-
-    // (async () => {
-    //   const populatedSection = await workshop.sections_;
-    //   const { sections } = WORKSHOP_HELPER.moveItemFromIndexToIndex(
-    //     populatedSection.map((section) => section.toMutableJSON()),
-    //     fromIndex,
-    //     toIndex,
-    //   );
-    //   await Promise.all([
-    //     database.sections.bulkUpsert(sections),
-    //     workshop.atomicUpdate((draft) => {
-    //       draft.sections = sections.map(({ id }) => id);
-    //       return draft;
-    //     }),
-    //   ]);
-    // })();
+    if (!workshop) return;
+    logger("Change section order from %d to %d", fromIndex, toIndex);
+    // presentIonLoading({
+    //   message: "Reordering",
+    //   showBackdrop: true,
+    //   // TODO save window scroll position and apply on dismiss
+    //   // keyboardClose: true,
+    //   // backdropDismiss: true,
+    // }).then(() => {
+    setIsReorderingElements(true);
+    updateWorkshopOrder({
+      input: { fromPosition: fromIndex, toPosition: toIndex, workshopId },
+    }).finally(() => {
+      setTimeout(() => {
+        setIsReorderingElements(false);
+        // dismissIonLoading();
+      }, 2000);
+    });
+    // });
+    return true;
   };
 
   const onDeleteWorkshop = useCallback(() => {
@@ -203,96 +217,102 @@ export const WorkshopPage: React.FC = () => {
   };
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton></IonMenuButton>
-          </IonButtons>
-          <IonTitle>Workshop</IonTitle>
-          <IonButtons slot="end">
-            {workshop && (
-              <WorkshopActionSheetComponent
-                workshopFragment={workshop}
-                onEvent={(event) => handleWorkshopEvent(event)}
-              ></WorkshopActionSheetComponent>
+    <>
+      <IonBackdrop></IonBackdrop>
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonMenuButton></IonMenuButton>
+            </IonButtons>
+            <IonTitle>Workshop</IonTitle>
+            {isReorderingElements && (
+              <IonProgressBar type="indeterminate"></IonProgressBar>
             )}
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent fullscreen>
-        {workshop ? (
-          <>
-            <IonFab slot="fixed" vertical="bottom" horizontal="end">
-              <IonFabButton>
-                <IonIcon icon={add}></IonIcon>
-              </IonFabButton>
-              <IonFabList side="start">
-                <IonButton routerLink={routeLibrary({ workshopId })}>
-                  Element
-                </IonButton>
-                <IonButton color="dark" onClick={() => onCreateSection()}>
-                  Section
-                </IonButton>
-              </IonFabList>
-            </IonFab>
-            <EditableItemComponent
-              disableEditing={true}
-              text={workshop.name}
-              displayName="Workshop Title"
-              onChangeText={(newName) => changeWorkshopName(newName)}
-              lines="none"
-              renderText={(text) => (
-                <IonLabel className="ion-text-wrap">
-                  <h1 style={{ padding: 0, margin: 0 }}>{text}</h1>
-                </IonLabel>
+            <IonButtons slot="end">
+              {workshop && (
+                <WorkshopActionSheetComponent
+                  workshopFragment={workshop}
+                  onEvent={(event) => handleWorkshopEvent(event)}
+                ></WorkshopActionSheetComponent>
               )}
-            ></EditableItemComponent>
-            {workshop.description && (
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+
+        <IonContent fullscreen>
+          {workshop ? (
+            <>
+              <IonFab slot="fixed" vertical="bottom" horizontal="end">
+                <IonFabButton>
+                  <IonIcon icon={add}></IonIcon>
+                </IonFabButton>
+                <IonFabList side="start">
+                  <IonButton routerLink={routeLibrary({ workshopId })}>
+                    Element
+                  </IonButton>
+                  <IonButton color="dark" onClick={() => onCreateSection()}>
+                    Section
+                  </IonButton>
+                </IonFabList>
+              </IonFab>
               <EditableItemComponent
                 disableEditing={true}
-                displayName="Workshop Description"
-                text={workshop.description}
-                isMultiline={true}
-                onChangeText={(text) => changeWorkshopDescription(text)}
+                text={workshop.name}
+                displayName="Workshop Title"
+                onChangeText={(newName) => changeWorkshopName(newName)}
                 lines="none"
+                renderText={(text) => (
+                  <IonLabel className="ion-text-wrap">
+                    <h1 style={{ padding: 0, margin: 0 }}>{text}</h1>
+                  </IonLabel>
+                )}
               ></EditableItemComponent>
-            )}
+              {workshop.description && (
+                <EditableItemComponent
+                  disableEditing={true}
+                  displayName="Workshop Description"
+                  text={workshop.description}
+                  isMultiline={true}
+                  onChangeText={(text) => changeWorkshopDescription(text)}
+                  lines="none"
+                ></EditableItemComponent>
+              )}
 
-            {workshop.sections.length === 1 &&
-            workshop.sections[0].elements.length === 0 &&
-            !workshop.sections[0].name ? (
-              <IonCard>
-                <IonCardContent className="ion-padding">
-                  <IonText>
-                    Use the bottom right button to add elements. Enjoy designing
-                    your workshop!
-                  </IonText>
-                  <IonButton
-                    expand="full"
-                    fill="clear"
-                    routerLink={routeLibrary({ workshopId })}
-                  >
-                    Add First Element
-                  </IonButton>
-                </IonCardContent>
-              </IonCard>
-            ) : (
-              <WorkshopElementsComponent
-                key={workshop.id}
-                workshopId={workshopId}
-                workshopSectionsFragment={workshop.sections}
-                onChangeOrder={(fromIndex, toIndex) =>
-                  changeSectionsOrder(fromIndex, toIndex)
-                }
-              ></WorkshopElementsComponent>
-            )}
-          </>
-        ) : (
-          <IonSpinner></IonSpinner>
-        )}
-      </IonContent>
-    </IonPage>
+              {workshop.sections.length === 1 &&
+              workshop.sections[0].elements.length === 0 &&
+              !workshop.sections[0].name ? (
+                <IonCard>
+                  <IonCardContent className="ion-padding">
+                    <IonText>
+                      Use the bottom right button to add elements. Enjoy
+                      designing your workshop!
+                    </IonText>
+                    <IonButton
+                      expand="full"
+                      fill="clear"
+                      routerLink={routeLibrary({ workshopId })}
+                    >
+                      Add First Element
+                    </IonButton>
+                  </IonCardContent>
+                </IonCard>
+              ) : (
+                <WorkshopElementsComponent
+                  key={workshop.id}
+                  workshopId={workshopId}
+                  workshopSectionsFragment={workshop.sections}
+                  onChangeOrder={(fromIndex, toIndex) =>
+                    changeSectionsOrder(fromIndex, toIndex)
+                  }
+                ></WorkshopElementsComponent>
+              )}
+            </>
+          ) : (
+            <IonSpinner></IonSpinner>
+          )}
+        </IonContent>
+      </IonPage>
+    </>
   );
 };

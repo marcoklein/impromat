@@ -2,7 +2,6 @@ import { IonSpinner } from "@ionic/react";
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import { getFragmentData, graphql } from "../../../graphql-client";
-import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { FavoriteElementsEmptyComponent } from "./FavoriteElementsEmptyComponent";
 import { FavoriteElementsListComponent } from "./FavoriteElementsListComponent";
 
@@ -40,7 +39,6 @@ export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
   });
   const user = getFragmentData(MyUser_QueryFragment, data);
   const favoriteElements = user?.me.favoriteElements;
-  const logger = useComponentLogger("FavoriteElementsTabComponent");
 
   if (error) {
     return <div>Error: {error.toString()}</div>;

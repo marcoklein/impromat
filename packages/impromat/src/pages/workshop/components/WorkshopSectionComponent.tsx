@@ -53,8 +53,11 @@ export const WorkshopSectionComponent: React.FC<ContainerProps> = ({
       itemProps={{
         lines: "none",
         button: true,
-        onClick: () =>
-          onCollapseClick(workshopSection.id, workshopSection.isCollapsed),
+        onClick: (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          onCollapseClick(workshopSection.id, workshopSection.isCollapsed);
+        },
       }}
       startSlot={
         <IonBadge color="medium">{workshopSection.elements.length}</IonBadge>

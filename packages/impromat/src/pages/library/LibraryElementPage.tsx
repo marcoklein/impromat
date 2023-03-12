@@ -10,7 +10,6 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
-  useIonLoading,
 } from "@ionic/react";
 import { star, starOutline } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";

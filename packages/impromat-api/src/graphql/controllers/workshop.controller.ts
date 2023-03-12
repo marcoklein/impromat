@@ -9,6 +9,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
+import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { Workshop, WorkshopRelations } from 'src/dtos/types/workshop.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
@@ -91,5 +92,20 @@ export class WorkshopController {
     @Args('id', { type: () => ID }) id: string,
   ): Promise<Pick<Workshop, 'id'> | null> {
     return this.workshopService.deleteWorkshop(userId, id);
+  }
+
+  @Mutation(() => Workshop)
+  async updateWorkshopItemOrder(
+    @SessionUserId() userId: string,
+    @Args('input') updateWorkshopItemOrder: UpdateWorkshopItemOrder,
+  ) {
+    await this.workshopService.updateWorkshopItemOrder(
+      userId,
+      updateWorkshopItemOrder,
+    );
+    return this.workshopService.findWorkshopById(
+      userId,
+      updateWorkshopItemOrder.workshopId,
+    );
   }
 }

@@ -72,9 +72,8 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
     },
     pause: elementId === undefined,
   });
-  const [mutationResult, executeMutation] = useMutation(UpdateElementMutation);
-  const [createElementMutationResult, executeElementMutationResult] =
-    useMutation(CreateElementMutation);
+  const [, executeMutation] = useMutation(UpdateElementMutation);
+  const [, executeElementMutationResult] = useMutation(CreateElementMutation);
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const [workshopQueryResult] = useQuery({
     query: graphql(`

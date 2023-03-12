@@ -8,7 +8,7 @@ import {
 import { add } from "ionicons/icons";
 import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
-import { useClient, useQuery } from "urql";
+import { useQuery } from "urql";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
@@ -48,7 +48,7 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
   const logger = useComponentLogger("CustomElementsTabComponent");
 
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
-  const [{ data, fetching: isFetching, error }] = useQuery({
+  const [{ data, fetching: isFetching }] = useQuery({
     query: MyUser_Query,
     context,
   });

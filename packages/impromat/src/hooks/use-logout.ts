@@ -1,11 +1,8 @@
 import { useIonAlert, useIonLoading, useIonToast } from "@ionic/react";
 import { useMutation } from "urql";
-import { environment } from "../environment";
 import { graphql } from "../graphql-client";
 import { useIsLoggedIn } from "./use-is-logged-in";
 import { useLogger } from "./use-logger";
-
-const backendUrl = `${environment.API_URL}/graphql`;
 
 export function useLogout() {
   const [presentIonLoading, dismissIonLoading] = useIonLoading();
