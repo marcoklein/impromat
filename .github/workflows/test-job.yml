@@ -35,8 +35,10 @@ jobs:
           key: yarn-cache
       - run: yarn lint
       - run: yarn build
+      - name: Alias docker-compose to docker compose
+        run: alias docker-compose="docker compose"
       - name: Start infrastructure for e2e tests
-        run: docker compose docker-compose.yml --profile backend up --wait
+        run: docker compose --profile backend up --wait
         working-directory: ./packages/infrastructure/
       - run: yarn test
         env:
