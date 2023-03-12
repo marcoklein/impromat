@@ -11,10 +11,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: docker-compose version
-      - run: sudo apt install docker-compose-plugin
-      - name: docker compose version
-        run: docker-compose --version
+      # - run: /home/linuxbrew/.linuxbrew/bin/brew install docker-compose
+      - run: docker-compose version
+      - run: docker compose version
+      # - run: sudo apt update
+      # - name: docker compose version
+      #   run: docker-compose --version
+      # - run: sudo apt install docker-compose-plugin
+      # - name: docker compose version
+      #   run: docker-compose --version
       - name: Print commit SHA
         run: "echo ${{ inputs.commitSha }}"
       - uses: actions/checkout@v3
@@ -26,8 +31,9 @@ jobs:
         with:
           node-version: 18
           cache: yarn
+      - run: docker compose -f packages/infrastructure/docker-compose.yaml up --wait
       - uses: bahmutov/npm-install@v1
-      - run: yarn docker-compose --profile backend up -d
+      # - run: yarn docker-compose --profile backend up -d
       - run: yarn lint
       - run: yarn build
       - run: yarn test
