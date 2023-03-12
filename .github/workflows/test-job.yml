@@ -11,6 +11,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: docker compose version
+        run: docker-compose --version
       - name: Print commit SHA
         run: "echo ${{ inputs.commitSha }}"
       - uses: actions/checkout@v3
@@ -23,9 +25,9 @@ jobs:
           node-version: 18
           cache: yarn
       - uses: bahmutov/npm-install@v1
+      - run: yarn docker-compose --profile backend up -d
       - run: yarn lint
       - run: yarn build
-      - run: yarn docker-compose --profile backend up --wait
       - run: yarn test
         env:
           DEBUG: pw:webserver

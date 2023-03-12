@@ -34,7 +34,7 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-schema/schema.graphql
+# schema/schema.graphql
 dev.db
 test.db
 assets
