@@ -34,7 +34,7 @@ pageTest.describe("Library", () => {
       await libraryPage.goto();
       await libraryPage.createCustomElement(name);
       await libraryPage.goto();
-      await libraryPage.libraryTabLocator();
+      await libraryPage.libraryTabLocator().click();
       // then
       await expect(page.getByText(new RegExp(name))).toBeVisible();
     },
