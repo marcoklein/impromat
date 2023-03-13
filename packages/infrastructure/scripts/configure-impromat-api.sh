@@ -17,6 +17,10 @@ ensureAppExists $appName
 setCommonDockerOptions $appName $dockerfilePath
 configureDomain $appName $domain
 
+dbName="impromat-db-$environmentName"
+ensurePostgresDatabaseExists $dbName
+ensurePostgresDatabaseIsLinked $dbName $appName
+
 log "Ensure Storage"
 dokku storage:ensure-directory impromat-api-store-$environmentName
 dokku storage:ensure-directory impromat-api-secrets-$environmentName

@@ -16,6 +16,14 @@ cat ~/.ssh/authorized_keys | dokku ssh-keys:add admin
 dokku domains:set-global impromat.app
 ```
 
+### Setup PostgreSQL plugin
+
+Following the [official PostgreSQL plugin](https://github.com/dokku/dokku-postgres) for Dokku:
+
+```
+sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
+```
+
 ## Swap File
 
 > Note: the following section describes how to create a swap _file_. You might want to create a swap _partition_ for faster access.

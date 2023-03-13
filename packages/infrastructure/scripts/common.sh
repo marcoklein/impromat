@@ -44,6 +44,29 @@ function ensureAppExists {
   fi
 }
 
+function ensurePostgresDatabaseExists {
+  local dbName=$1
+
+  log "Ensure Postgres Database Exists"
+  dokku postgres:exists $dbName
+  if [ ! $? -eq 0 ]; then
+    log "Creating database $dbName"
+    dokku postgres:create $dbName
+  fi
+}
+
+function ensurePostgresDatabaseIsLinked {
+  local dbName=$1
+  local appName=$2
+
+  log "Ensure Postgres is linked"
+  dokku postgres:linked $dbName $appName
+  if [ ! $? -eq 0 ]; then
+    log "Linking database $dbName"
+    dokku postgres:link $dbName $appName
+  fi
+}
+
 function configureDomain {
   local appName=$1
   local domains=$2
