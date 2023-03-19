@@ -3,9 +3,11 @@
     "folke.vscode-monorepo-workspace",
     "esbenp.prettier-vscode",
     "markis.code-coverage",
-    "GraphQL.vscode-graphql",
-    "GraphQL.vscode-graphql-syntax",
+    "graphql.vscode-graphql",
+    "graphql.vscode-graphql-syntax",
     "bierner.markdown-mermaid",
-    "yzhang.markdown-all-in-one"
+    "yzhang.markdown-all-in-one",
+    "prisma.prisma",
+    "arcanis.vscode-zipfs"
   ]
 }

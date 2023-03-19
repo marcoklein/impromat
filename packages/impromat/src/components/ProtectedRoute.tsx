@@ -1,3 +1,4 @@
+import { IonSpinner } from "@ionic/react";
 import { PropsWithChildren } from "react";
 import { Route } from "react-router";
 import { useIsLoggedIn } from "../hooks/use-is-logged-in";
@@ -17,7 +18,16 @@ export const ProtectedRouteComponent: React.FC<ContainerProps> = ({
   exact,
   children,
 }) => {
-  const isLoggedIn = useIsLoggedIn();
+  const { fetching, isLoggedIn } = useIsLoggedIn();
+
+  if (fetching) {
+    return (
+      <span>
+        {/* TODO show in center of page */}
+        <IonSpinner></IonSpinner> Validating Login
+      </span>
+    );
+  }
 
   return (
     <Route path={path} exact={exact}>

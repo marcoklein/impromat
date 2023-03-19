@@ -4,8 +4,9 @@ import { pageTest } from "./fixtures/page-fixtures";
 pageTest.describe("Logout Flow", () => {
   pageTest(
     "should delete workshops on logout",
-    async ({ workshopsPage, accountPage }) => {
+    async ({ auth, workshopsPage, accountPage }) => {
       // given
+      await auth.loginAsRandomUser();
       await workshopsPage.addWorkshop("test-workshop");
       await workshopsPage.goto();
       await expect(workshopsPage.page.getByText("test-workshop")).toBeVisible();

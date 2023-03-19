@@ -16,9 +16,7 @@ import { AccountSignInComponent } from "./components/AccountSignInComponent";
 
 export const AccountPage: React.FC = () => {
   const { googleLoginHref, isGoogleLoginHrefFetching } = useGoogleLoginHref();
-  // TODO fixme wait for isMyUserFetching to be false does not work because isMyUserFetching is always true
-  // quick fix could be to add a timeout
-  const isLoggedIn = useIsLoggedIn();
+  const { isLoggedIn } = useIsLoggedIn();
 
   const isLoading = isGoogleLoginHrefFetching;
   const isNotLoggedIn = !isLoggedIn;

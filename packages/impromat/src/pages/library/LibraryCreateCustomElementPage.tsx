@@ -18,11 +18,12 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { useMutation, useQuery } from "urql";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
-import { useDocument } from "../../database/use-document";
-import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { graphql } from "../../graphql-client";
 import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
+import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshop } from "../../routes/shared-routes";
 import { Tabs } from "./components/LibraryContentComponent";
 import {
@@ -31,16 +32,69 @@ import {
 } from "./library-routes";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
 
+const LibraryCreateCustomElement_Query = graphql(`
+  query LibraryCreateCustomElement_Query($id: ID!) {
+    element(id: $id) {
+      id
+      name
+      markdown
+    }
+  }
+`);
+
+const UpdateElementMutation = graphql(`
+  mutation UpdateElementMutation($input: UpdateElementInput!) {
+    updateElement(input: $input) {
+      id
+    }
+  }
+`);
+
+const CreateElementMutation = graphql(`
+  mutation CreateElementMutation($input: CreateElementInput!) {
+    createElement(input: $input) {
+      id
+    }
+  }
+`);
+
+/**
+ * TODO split into CreateOrEditCustomElementPage
+ */
 export const LibraryCreateCustomElementPage: React.FC = () => {
   const workshopId = useSearchParam(WORKSHOP_CONTEXT_SEARCH_PARAM);
   const elementId = useSearchParam(LIBRARY_ELEMENT_ID_SEARCH_PARAM);
-  const { document: existingElement } = useDocument("elements", elementId);
+
+  const [existingElementQueryResult] = useQuery({
+    query: LibraryCreateCustomElement_Query,
+    variables: {
+      id: elementId ?? "",
+    },
+    pause: elementId === undefined,
+  });
+  const [, executeMutation] = useMutation(UpdateElementMutation);
+  const [, executeElementMutationResult] = useMutation(CreateElementMutation);
+  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
+  const [workshopQueryResult] = useQuery({
+    query: graphql(`
+      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {
+        workshop(id: $id) {
+          sections {
+            id
+          }
+        }
+      }
+    `),
+    variables: { id: workshopId ?? "" },
+    pause: workshopId === undefined,
+  });
+
+  const existingElement = existingElementQueryResult.data?.element;
   const editExistingItem = !!existingElement;
 
   const [presentToast] = useIonToast();
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const mutations = useRxdbMutations();
   const history = useHistory();
   const logger = useLogger("LibraryCreateCustomElementPage");
 
@@ -61,15 +115,17 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
   }, [existingElement, logger]);
 
   const onCreateElementClick = () => {
-    if (!mutations) return;
     if (!validateInputs()) return;
     (async () => {
       if (editExistingItem) {
-        const newElement = await mutations.updateElement({
-          ...existingElement,
-          ...{ name, markdown: content },
+        const newElement = await executeMutation({
+          input: { id: existingElement.id, name, markdown: content },
         });
-        const newElementId = newElement.id;
+        const newElementId = newElement.data?.updateElement.id;
+        if (!newElementId) {
+          console.error("Could not create element");
+          return;
+        }
         if (workshopId) {
           history.push(routeWorkshop(workshopId), {
             direction: "back",
@@ -86,25 +142,45 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
           }
         }
       } else {
-        const newElement = await mutations.addNewElement({
-          name,
-          markdown: content,
+        const result = await executeElementMutationResult({
+          input: { name, markdown: content },
         });
-        const newElementId = newElement.id;
+        const newElement = result.data?.createElement;
+        if (!newElement?.id) {
+          console.error("Could not create element");
+          return;
+        }
         if (workshopId) {
-          await mutations.addNewElementToWorkshop(workshopId, newElementId, {
-            name,
-            markdown: content,
+          logger("Last section result=%o", workshopQueryResult);
+          const lastSectionId =
+            workshopQueryResult.data?.workshop.sections.at(-1)?.id;
+          if (!lastSectionId) {
+            throw new Error("no last section");
+          }
+          updateWorkshopMutation({
+            input: {
+              id: workshopId,
+              sections: {
+                update: [
+                  {
+                    id: lastSectionId,
+                    elements: {
+                      create: [{ basedOn: { connect: { id: newElement.id } } }],
+                    },
+                  },
+                ],
+              },
+            },
           });
           history.push(routeWorkshop(workshopId), {
             direction: "back",
-            newElement: newElementId,
+            newElement: newElement.id,
           });
         } else {
           history.push(
             {
               pathname: `${routeLibrary()}/${Tabs.CREATE}`,
-              search: `?newElement=${newElementId}`,
+              search: `?newElement=${newElement.id}`,
             },
             { direction: "back" },
           );

@@ -2,20 +2,34 @@ import { IonButton, IonIcon, useIonActionSheet } from "@ionic/react";
 import { close, create, ellipsisVertical, pencil, trash } from "ionicons/icons";
 import { useCallback } from "react";
 import { useHistory } from "react-router";
+import {
+  FragmentType,
+  getFragmentData,
+  graphql,
+} from "../../../graphql-client";
 import { useHistoryListener } from "../../../hooks/use-history-listener";
-import { WorkshopDocType } from "../../../database/collections/workshop/workshop-collection";
+
+const WorkshopActionSheet_Workshop = graphql(`
+  fragment WorkshopActionSheet_Workshop on Workshop {
+    description
+  }
+`);
 
 interface ContainerProps {
-  workshop: WorkshopDocType;
+  workshopFragment: FragmentType<typeof WorkshopActionSheet_Workshop>;
   onEvent: (event: WorkshopActionTypes) => void;
 }
 
 export type WorkshopActionTypes = "delete" | "rename" | "changeDescription";
 
 export const WorkshopActionSheetComponent: React.FC<ContainerProps> = ({
-  workshop,
+  workshopFragment,
   onEvent,
 }) => {
+  const workshop = getFragmentData(
+    WorkshopActionSheet_Workshop,
+    workshopFragment,
+  );
   const [presentActionSheet, dismissActionSheet] = useIonActionSheet();
   const history = useHistory();
   useHistoryListener(
@@ -48,7 +62,9 @@ export const WorkshopActionSheetComponent: React.FC<ContainerProps> = ({
         },
         {
           icon: create,
-          text: `${workshop.description.length ? "Change" : "Add"} Description`,
+          text: `${
+            workshop.description?.length ? "Change" : "Add"
+          } Description`,
           handler: () => {
             onEvent("changeDescription");
           },
@@ -60,7 +76,7 @@ export const WorkshopActionSheetComponent: React.FC<ContainerProps> = ({
         },
       ],
     });
-  }, [history, presentActionSheet, workshop.description.length, onEvent]);
+  }, [history, presentActionSheet, workshop.description?.length, onEvent]);
 
   return (
     <IonButton onClick={() => openMenu()}>

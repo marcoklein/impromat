@@ -1,0 +1,133 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Element {
+  id        String   @id @default(uuid())
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  version   Int      @default(0)
+  deleted   Boolean  @default(false)
+
+  name               String
+  markdown           String?
+  languageCode       String?
+  sourceUrl          String?
+  sourceName         String?
+  sourceBaseUrl      String?
+  licenseName        String?
+  licenseUrl         String?
+  visibility         ElementVisibility @default(PRIVATE)
+  improbibIdentifier String?           @unique
+
+  ownerId String?
+
+  tags                ElementTag[]
+  owner               User?                 @relation(fields: [ownerId], references: [id])
+  userFavoriteElement UserFavoriteElement[]
+  workshopElements    WorkshopElement[]
+}
+
+enum ElementVisibility {
+  PRIVATE
+  PUBLIC
+}
+
+model ElementTag {
+  id        String   @id @default(uuid())
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  version   Int      @default(0)
+
+  name     String    @unique
+  elements Element[]
+}
+
+model UserFavoriteElement {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  version   Int      @default(0)
+
+  userId    String
+  elementId String
+
+  element Element @relation(fields: [elementId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@id([userId, elementId])
+}
+
+model User {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
+
+  name                 String? @unique
+  googleSubscriptionId String? @unique
+
+  favoriteElements UserFavoriteElement[]
+  workshops        Workshop[]
+  elements         Element[]
+}
+
+model Workshop {
+  id        String   @id @default(uuid())
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  version   Int      @default(0)
+  deleted   Boolean  @default(false)
+
+  name        String
+  description String?
+
+  ownerId String
+
+  sections WorkshopSection[]
+  owner    User              @relation(fields: [ownerId], references: [id])
+}
+
+model WorkshopSection {
+  id        String    @id @default(uuid())
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
+
+  name        String?
+  color       String?
+  isCollapsed Boolean @default(false)
+  orderIndex  Float   @default(-1)
+
+  workshopId String
+
+  elements WorkshopElement[]
+  workshop Workshop          @relation(fields: [workshopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model WorkshopElement {
+  id        String    @id @default(uuid())
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
+  version   Int       @default(0)
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
+
+  note       String?
+  color      String?
+  orderIndex Int     @default(-1)
+
+  basedOnId         String
+  workshopSectionId String
+
+  basedOn         Element         @relation(fields: [basedOnId], references: [id])
+  workshopSection WorkshopSection @relation(fields: [workshopSectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}

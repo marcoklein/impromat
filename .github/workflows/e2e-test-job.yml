@@ -16,7 +16,7 @@ jobs:
           cache: yarn
       - uses: bahmutov/npm-install@v1
       - name: Run End-to-End Tests
-        run: yarn impromat test:e2e
+        run: yarn workspace impromat test:e2e
         env:
           BASE_URL: https://dev.impromat.app/
           COOKIE_DOMAIN: api.dev.impromat.app

@@ -1,14 +1,13 @@
 import { IonItem, IonItemDivider, IonLabel, IonSpinner } from "@ionic/react";
-import { logIn, person, sync } from "ionicons/icons";
+import { logIn, person } from "ionicons/icons";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { routeAccount, routeProfile } from "../../routes/shared-routes";
-import { ReplicationStateIconComponent } from "../ReplicationStateIconComponent";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 interface ContainerProps {}
 
 export const AccountMenuItemComponent: React.FC<ContainerProps> = () => {
-  const isLoggedIn = useIsLoggedIn();
+  const { isLoggedIn } = useIsLoggedIn();
 
   if (isLoggedIn === true) {
     return (
@@ -21,13 +20,6 @@ export const AccountMenuItemComponent: React.FC<ContainerProps> = () => {
           label="Profile"
           routerLink={routeProfile()}
         ></MenuItemComponent>
-        <MenuItemComponent
-          icon={sync}
-          label="Synchronization"
-          routerLink={routeAccount()}
-        >
-          <ReplicationStateIconComponent></ReplicationStateIconComponent>
-        </MenuItemComponent>
       </>
     );
   }

@@ -1,18 +1,17 @@
 import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { MenuComponent } from "./components/MenuComponent";
 import { ProtectedRouteComponent } from "./components/ProtectedRoute";
-import { useMeReplication } from "./database/collections/me/use-me-replication";
 import { AboutPage } from "./pages/AboutPage";
 import { AccountPage } from "./pages/account/AccountPage";
 import { HomePage } from "./pages/HomePage";
 import { LegalPage } from "./pages/LegalPage";
 import {
-  routeLibrary,
-  routeLibraryCreateCustomElement,
   routeLibraryElement,
+  routeLibraryCreateCustomElement,
+  routeLibrary,
 } from "./pages/library/library-routes";
 import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
 import { LibraryElementPage } from "./pages/library/LibraryElementPage";
@@ -34,7 +33,6 @@ import {
 } from "./routes/shared-routes";
 
 export const App: React.FC = () => {
-  useMeReplication();
   return (
     <IonApp>
       <IonSplitPane when="lg" contentId="main">

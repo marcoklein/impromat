@@ -1,0 +1,81 @@
+version: "3.9"
+services:
+  app:
+    depends_on:
+      - api
+    build:
+      context: ../../
+      dockerfile: packages/infrastructure/Dockerfile-impromat-app
+    ports:
+      - 12344:3080
+    networks:
+      - api-network
+    profiles:
+      - frontend
+  api:
+    depends_on:
+      seed-database:
+        condition: service_completed_successfully
+    build:
+      context: ../../
+      dockerfile: packages/infrastructure/Dockerfile-impromat-api
+    command: yarn dotenv -c test -- yarn start:dev
+    volumes:
+      # allows restarting with new api sources
+      - ../impromat-api/src:/app/packages/impromat-api/src:ro
+    ports:
+      - 12345:8080
+    networks:
+      - api-network
+      - postgres-network
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres?schema=impromat-api-docker-compose
+      ENABLE_TESTLOGIN: 1
+    profiles:
+      - backend
+  seed-database:
+    depends_on:
+      database:
+        condition: service_healthy
+    build:
+      context: ../../
+      dockerfile: packages/infrastructure/Dockerfile-impromat-api
+    command:
+      [
+        "bash",
+        "-c",
+        'time yarn prisma db push && time yarn prisma db seed'
+      ]
+    healthcheck:
+      disable: true
+    networks:
+      - api-network
+      - postgres-network
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres?schema=impromat-api-docker-compose
+    profiles:
+      - backend
+  database:
+    image: postgres:latest
+    networks:
+      - postgres-network
+    ports:
+      - 12346:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    profiles:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "sh -c 'pg_isready -U postgres -d postgres'"
+        ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+networks:
+  postgres-network:
+    driver: bridge
+  api-network:
+    driver: bridge

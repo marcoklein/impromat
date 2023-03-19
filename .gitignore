@@ -2,3 +2,27 @@
 node_modules/
 junit-results.xml
 *.log
+
+.env.local
+.env.test.local
+.env.*.local
+
+# not for zero-installs
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+*.ignore.*
+
+# for zero-installs cache folder is commited
+# .yarn/*
+# !.yarn/cache
+# !.yarn/patches
+# !.yarn/plugins
+# !.yarn/releases
+# !.yarn/sdks
+# !.yarn/versions

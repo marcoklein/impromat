@@ -13,55 +13,96 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import immer from "immer";
 import { arrowBack, document, pencil } from "ionicons/icons";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
+import { useMutation, useQuery } from "urql";
 import { CustomElementInfoItemComponent } from "../../components/CustomElementInfoItemComponent";
 import { LicenseItemComponent } from "../../components/LicenseItemComponent";
-import { useDocument } from "../../database/use-document";
-import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeWorkshop } from "../../routes/shared-routes";
 
+const WorkshopElementPageQuery = graphql(`
+  query WorkshopElementPage($id: ID!) {
+    workshopElement(id: $id) {
+      id
+      note
+      basedOn {
+        id
+        name
+        markdown
+        sourceUrl
+        sourceName
+        sourceBaseUrl
+        licenseName
+        licenseUrl
+        owner {
+          id
+        }
+
+        ...CustomElement_Element
+      }
+      section {
+        id
+      }
+    }
+  }
+`);
+
 export const WorkshopElementPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopElementPage");
-  const { id: workshopId, partId: elementId } = useParams<{
+  const { id: workshopId, partId: workshopElementId } = useParams<{
     id: string;
     partId: string;
   }>();
-  const mutations = useRxdbMutations();
+  const [workshopElementQueryResult] = useQuery({
+    query: WorkshopElementPageQuery,
+    // TODO pass in workshop id
+    variables: { id: workshopElementId },
+  });
+  const workshopElement = workshopElementQueryResult.data?.workshopElement;
+  const basedOnElement = workshopElement?.basedOn;
   const [presentInput] = useInputDialog();
-  const { document: workshopElement } = useDocument("elements", elementId);
-  const { document: basedOnElementFromDatabase } = useDocument(
-    "elements",
-    workshopElement?.basedOn,
+  const [, updateWorkshop] = useMutation(
+    graphql(`
+      mutation UpdateWorkshopWithElement($input: UpdateWorkshopInput!) {
+        updateWorkshop(input: $input) {
+          id
+          sections {
+            elements {
+              id
+            }
+          }
+        }
+      }
+    `),
   );
-
-  const basedOnElement = useMemo(() => {
-    return basedOnElementFromDatabase ?? workshopElement;
-  }, [basedOnElementFromDatabase, workshopElement]);
 
   useStateChangeLogger(workshopElement, "workshopElement", logger);
-  useStateChangeLogger(
-    basedOnElementFromDatabase,
-    "basedOnElementFromDatabase",
-    logger,
-  );
   useStateChangeLogger(basedOnElement, "basedOnElement", logger);
 
   const saveNotesChanges = useCallback(
     (note: string) => {
-      if (!mutations || !workshopElement) return;
-      const updatedPart = immer(workshopElement, (draft) => {
-        draft.note = note;
+      if (!workshopElement) return;
+      updateWorkshop({
+        input: {
+          id: workshopId,
+          sections: {
+            update: [
+              {
+                id: workshopElement.section.id,
+                elements: { update: [{ id: workshopElement.id, note }] },
+              },
+            ],
+          },
+        },
       });
-      mutations.updateWorkshopElement(workshopId, updatedPart);
     },
-    [workshopElement, workshopId, mutations],
+    [updateWorkshop, workshopElement, workshopId],
   );
 
   const onChangeNoteClick = () => {
@@ -75,17 +116,6 @@ export const WorkshopElementPage: React.FC = () => {
       initialText: workshopElement.note ?? "",
     });
   };
-
-  const elementMarkdown = useMemo(() => {
-    if (
-      workshopElement &&
-      workshopElement.markdown &&
-      workshopElement.markdown !== ""
-    ) {
-      return workshopElement.markdown;
-    }
-    return basedOnElement?.markdown ?? "";
-  }, [workshopElement, basedOnElement?.markdown]);
 
   return (
     <IonPage>
@@ -133,14 +163,15 @@ export const WorkshopElementPage: React.FC = () => {
 
             <IonItem lines="none">
               <div className="ion-text-wrap">
-                <ReactMarkdown>{elementMarkdown}</ReactMarkdown>
+                <ReactMarkdown>{basedOnElement?.markdown ?? ""}</ReactMarkdown>
               </div>
             </IonItem>
 
             {basedOnElement &&
-              (!basedOnElement.basedOn && !basedOnElement.sourceName ? (
+              // TODO verify if the user owns this element
+              (basedOnElement.owner && !basedOnElement.sourceName ? (
                 <CustomElementInfoItemComponent
-                  element={basedOnElement}
+                  elementFragment={basedOnElement}
                   workshopId={workshopId}
                   showElementLink
                 ></CustomElementInfoItemComponent>

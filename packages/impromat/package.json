@@ -21,23 +21,19 @@
     "@types/uuid": "^8.3.4",
     "debug": "^4.3.4",
     "flag-icons": "^6.6.6",
-    "fuse.js": "^6.6.2",
     "graphql": "^16.6.0",
     "immer": "^9.0.15",
-    "improbib": "0.4.1",
     "ionicons": "^5.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
     "react-markdown": "^8.0.3",
-    "react-query": "^3.39.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.0",
-    "rxdb": "^13.11.1",
-    "rxdb-hooks": "^4.0.3",
     "rxjs": "^7.5.6",
     "typescript": "^4.1.3",
+    "urql": "^3.0.3",
     "uuid": "^9.0.0",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
@@ -53,12 +49,9 @@
     "workbox-strategies": "^5.1.4",
     "workbox-streams": "^5.1.4"
   },
-  "resolutions": {
-    "nth-check": "2.0.1"
-  },
   "scripts": {
     "start": "yarn compile-markdown && react-scripts start",
-    "dev": "yarn start",
+    "dev": "concurrently \"yarn start\" \"yarn codegen --watch\"",
     "lint": "eslint src test --max-warnings 0",
     "lint:fix": "eslint src --fix",
     "build": "yarn build:prepare && react-scripts build",
@@ -68,14 +61,17 @@
     "test:headed": "yarn test --headed",
     "test:watch": "nodemon --config nodemon-test.json",
     "test:debug": "yarn test:headed --debug",
+    "test:backend-up": "yarn docker-compose --profile backend up --wait",
+    "test:backend-down": "yarn docker-compose down",
     "playwright:codegen": "playwright codegen",
     "playwright:install": "playwright install chromium",
     "copy-improbib": "cp ../improbib/output/improbib.json ./public/assets/improbib.json",
     "compile-markdown": "bash ./scripts/generate-markdown.sh",
     "codegen:graphql": "yarn codegen:get-schema-graphql && graphql-codegen",
     "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql",
-    "codegen": "yarn codegen:get-schema-json && yarn codegen:graphql",
-    "changeset": "yarn --cwd \"../..\" changeset"
+    "codegen": "yarn codegen:graphql",
+    "changeset": "yarn workspace impromat-monorepo run changeset",
+    "docker-compose": "yarn workspace infrastructure run docker-compose"
   },
   "browserslist": {
     "production": [
@@ -95,14 +91,15 @@
     "@babel/plugin-syntax-import-assertions": "^7.20.0",
     "@babel/plugin-transform-react-jsx": "^7.19.0",
     "@capacitor/cli": "4.1.0",
-    "@graphql-codegen/cli": "^2.13.12",
-    "@graphql-codegen/typescript": "^2.8.2",
-    "@graphql-codegen/typescript-graphql-request": "^4.5.8",
-    "@graphql-codegen/typescript-operations": "^2.5.7",
+    "@graphql-codegen/cli": "^3.0.0",
+    "@graphql-codegen/client-preset": "^2.0.0",
+    "@graphql-codegen/typescript": "^3.0.0",
+    "@graphql-codegen/typescript-operations": "^3.0.0",
     "@types/debug": "^4.1.7",
+    "concurrently": "^7.6.0",
+    "dotenv": "^16.0.3",
+    "dotenv-cli": "^7.0.0",
     "eslint": "^8.30.0",
-    "genversion": "^3.1.1",
-    "graphql-request": "^5.0.0",
-    "graphql-tag": "^2.12.6"
+    "genversion": "^3.1.1"
   }
 }

@@ -3,5 +3,6 @@ node_modules
 *.log
 output/*
 !output/.gitkeep
+!output/improbib.json
 
 *-ignore

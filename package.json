@@ -1,34 +1,30 @@
 {
-  "name": "impromat-monorepo",
+  "name": "root",
   "version": "32",
   "private": true,
   "type": "module",
   "workspaces": {
     "packages": [
       "packages/*"
-    ],
-    "nohoist": [
-      "**/@types/**",
-      "impromat/**"
     ]
   },
   "devDependencies": {
-    "@changesets/cli": "^2.25.2",
-    "lerna": "^6.0.0"
+    "@changesets/cli": "^2.25.2"
   },
   "scripts": {
-    "dev": "lerna run --scope impromat --scope impromat-api dev",
-    "lint": "lerna run lint",
-    "test": "lerna run test",
-    "build": "lerna run build",
-    "changed": "lerna ls --since main --all",
-    "improbib": "lerna run --scope improbib",
-    "impromat": "lerna run --scope impromat",
-    "impromat-api": "lerna run --scope impromat-api",
-    "infra:config": "./packages/infrastructure/configure.sh"
+    "dev": "yarn foreach --from '{impromat,impromat-api}' run dev",
+    "workspace:dev": "yarn foreach run dev",
+    "workspace:lint": "yarn foreach run lint",
+    "workspace:test": "yarn workspace impromat test:backend-up --no-recreate && yarn foreach run test",
+    "workspace:build": "yarn foreach run build",
+    "build": "yarn workspace:build",
+    "docker-compose": "yarn workspace infrastructure docker-compose",
+    "infra:config": "./packages/infrastructure/configure.sh",
+    "foreach": "yarn workspaces foreach --parallel --verbose --interlaced --exclude root"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",
   "author": "Marco Klein <hello@marcoklein.dev>",
-  "license": "MIT"
+  "license": "MIT",
+  "packageManager": "yarn@3.4.1"
 }

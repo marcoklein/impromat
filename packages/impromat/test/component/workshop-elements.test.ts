@@ -4,8 +4,9 @@ import { pageTest } from "./fixtures/page-fixtures";
 pageTest.describe("Workshop Elements Page", () => {
   pageTest(
     "should add an element from the search",
-    async ({ page, workshopPage }) => {
+    async ({ page, auth, workshopPage }) => {
       // given
+      await auth.loginAsRandomUser();
       await workshopPage.createAndGoto("workshop name");
       // when
       await workshopPage.addElementFromSearch();
@@ -16,8 +17,9 @@ pageTest.describe("Workshop Elements Page", () => {
 
   pageTest(
     "should have element title in toolbar",
-    async ({ page, workshopElementPage }) => {
+    async ({ page, auth, workshopElementPage }) => {
       // given
+      await auth.loginAsRandomUser();
       // when
       await workshopElementPage.createAndGoto();
       // then
@@ -25,28 +27,11 @@ pageTest.describe("Workshop Elements Page", () => {
     },
   );
 
-  pageTest.skip(
-    "should rename a workshop element",
-    async ({ page, workshopElementPage }) => {
-      // given
-      const newTitle = "Renamed Element";
-      await workshopElementPage.createAndGoto();
-      // when
-      await page
-        .locator('ion-button:has-text("Pencil")')
-        .getByRole("button")
-        .click();
-      await page.locator('input[type="text"]').fill(newTitle);
-      await page.getByRole("button", { name: "Save" }).click();
-      // then
-      await page.waitForSelector(`ion-title:has-text("${newTitle}") div`);
-    },
-  );
-
   pageTest(
-    "should add note to workshop element",
-    async ({ page, workshopElementPage }) => {
+    "should add a note to a workshop element",
+    async ({ page, auth, workshopElementPage }) => {
       // given
+      await auth.loginAsRandomUser();
       const noteText = "My Note";
       await workshopElementPage.createAndGoto();
       // when
@@ -66,8 +51,9 @@ pageTest.describe("Workshop Elements Page", () => {
 
   pageTest(
     "should show license attribution of element",
-    async ({ page, workshopElementPage }) => {
+    async ({ page, auth, workshopElementPage }) => {
       // given
+      await auth.loginAsRandomUser();
       // when
       await workshopElementPage.createAndGoto();
       // then
