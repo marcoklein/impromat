@@ -46,4 +46,3 @@ storage/*
 .env.local
 .env.test.local
 TODO.md
-prisma/migrations

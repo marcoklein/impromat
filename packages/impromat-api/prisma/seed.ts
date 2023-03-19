@@ -72,7 +72,8 @@ async function main() {
     data: elementList,
     skipDuplicates: true,
   });
-  await Promise.all(
+
+  await prisma.$transaction(
     elementTagList.map((item) =>
       prisma.element.update({
         where: { improbibIdentifier: item.improbibIdentifier },
@@ -82,6 +83,25 @@ async function main() {
       }),
     ),
   );
+  // for (const item of elementTagList) {
+  //   await prisma.element.update({
+  //     where: { improbibIdentifier: item.improbibIdentifier },
+  //     data: {
+  //       tags: { connect: item.tags.map((tagName) => ({ name: tagName })) },
+  //     },
+  //   });
+  // }
+  // }
+  // await Promise.all(
+  //   elementTagList.map((item) =>
+  //     prisma.element.update({
+  //       where: { improbibIdentifier: item.improbibIdentifier },
+  //       data: {
+  //         tags: { connect: item.tags.map((tagName) => ({ name: tagName })) },
+  //       },
+  //     }),
+  //   ),
+  // );
   console.log(`added improbib entries in ${Date.now() - startTime} ms`);
 }
 

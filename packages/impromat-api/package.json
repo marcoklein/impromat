@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "start": "node dist/src/main.js",
+    "start": "yarn db:migrate && node dist/src/main.js",
+    "db:migrate": "prisma migrate deploy",
     "build": "yarn prisma:generate && yarn copy-improbib && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "dev": "dotenv -c development -- yarn start:dev",

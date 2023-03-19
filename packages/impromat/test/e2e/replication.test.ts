@@ -22,7 +22,8 @@ async function verifySampleWorkshop(workshopPage: WorkshopDevPage) {
   ).toBeVisible();
 }
 
-pageTest.describe("Replication", () => {
+// TODO login functionality for e2e test is not implemented yet
+pageTest.skip("Replication", () => {
   e2ePageTest(
     "should create a base workshop with some sections and elements",
     async ({ workshopPage, libraryPage, prepareLoggedInSession }) => {

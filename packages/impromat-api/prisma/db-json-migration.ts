@@ -160,6 +160,14 @@ async function main() {
             isVisible,
             version,
           } = legacySection;
+          if (
+            !isVisible &&
+            !legacySectionElements.length &&
+            legacySections.length > 1
+          ) {
+            console.log('skipping invisible workshop section without elements');
+            continue;
+          }
           console.log('adding workshop section with id', id);
           await prisma.workshopSection.create({
             data: {

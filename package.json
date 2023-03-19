@@ -15,9 +15,9 @@
     "dev": "yarn foreach --from '{impromat,impromat-api}' run dev",
     "workspace:dev": "yarn foreach run dev",
     "workspace:lint": "yarn foreach run lint",
-    "lint": "yarn foreach run lint",
-    "test": "yarn foreach run test",
-    "build": "yarn foreach run build",
+    "workspace:test": "yarn workspace impromat test:backend-up --no-recreate && yarn foreach run test",
+    "workspace:build": "yarn foreach run build",
+    "build": "yarn workspace:build",
     "docker-compose": "yarn workspace infrastructure docker-compose",
     "infra:config": "./packages/infrastructure/configure.sh",
     "foreach": "yarn workspaces foreach --parallel --verbose --interlaced --exclude root"

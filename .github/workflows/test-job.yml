@@ -13,6 +13,12 @@ jobs:
     steps:
       - name: Print commit SHA
         run: "echo ${{ inputs.commitSha }}"
+      - run: |
+          unalias -a docker-compose
+          alias docker-compose="docker compose"
+          docker-compose version
+      - run: |
+          which docker-compose
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.commitSha }}
@@ -33,15 +39,13 @@ jobs:
         with:
           path: ./.yarn/cache
           key: yarn-cache
-      - run: yarn lint
-      - run: yarn build
-      - run: |
-          alias docker-compose="docker compose"
-          docker-compose version
+      - run: yarn workspace:lint
+      - run: yarn workspace:build
       - name: Start infrastructure for e2e tests
         run: docker compose --profile backend up --wait
         working-directory: ./packages/infrastructure/
-      - run: yarn test
+      - name: Run tests for all packages
+        run: yarn workspace:test
         env:
           DEBUG: pw:webserver
       - name: Publish Test Report

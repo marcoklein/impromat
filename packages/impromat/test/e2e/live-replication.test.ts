@@ -4,7 +4,9 @@ import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page";
 import { WorkshopsDevPage } from "../component/fixtures/workshops-dev-page";
 import { e2ePageTest } from "./fixtures/e2e-page-fixtures";
 
-pageTest.describe("Live Replication", () => {
+// TODO login functionality for e2e test is not implemented yet
+// e.g. see https://docs.cypress.io/guides/end-to-end-testing/google-authentication#Google-Project-and-Application-Setup
+pageTest.skip("Live Replication", () => {
   e2ePageTest(
     "should replicate data between two sessions",
     async ({
