@@ -14,8 +14,12 @@ jobs:
       - name: Print commit SHA
         run: "echo ${{ inputs.commitSha }}"
       - run: |
+          sudo rm /usr/local/bin/docker-compose
+          alias "docker-compose"='docker compose'
+          docker-compose version
+      - run: |
           # sudo rm /usr/local/bin/docker-compose
-          alias docker-compose='docker compose'
+          alias "docker-compose"='docker compose'
           docker-compose version
       - run: |
           which docker-compose
