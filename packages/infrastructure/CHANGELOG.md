@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.3.0
+
+### Minor Changes
+
+- 0df9714: Optimize Docker build of impromat app.
+
 ## 0.2.1
 
 ### Patch Changes
