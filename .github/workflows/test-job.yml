@@ -14,15 +14,7 @@ jobs:
       - name: Print commit SHA
         run: "echo ${{ inputs.commitSha }}"
       - run: |
-          sudo rm /usr/local/bin/docker-compose
-          alias "docker-compose"='docker compose'
           docker-compose version
-      - run: |
-          # sudo rm /usr/local/bin/docker-compose
-          alias "docker-compose"='docker compose'
-          docker-compose version
-      - run: |
-          which docker-compose
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.commitSha }}
@@ -49,7 +41,11 @@ jobs:
         run: docker compose --profile backend up --wait
         working-directory: ./packages/infrastructure/
       - name: Run tests for all packages
-        run: yarn workspace:test
+        run: |
+          shopt -s expand_aliases
+          alias docker-compose="docker compose"
+          docker-compose version
+          yarn workspace:test
         env:
           DEBUG: pw:webserver
       - name: Publish Test Report
