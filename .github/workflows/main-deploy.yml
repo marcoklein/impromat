@@ -46,7 +46,7 @@ jobs:
           node-version: 18
           cache: yarn
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: yarn install --immutable
       - name: Generate changelogs
         run: yarn changeset version
       - uses: EndBug/add-and-commit@v9
