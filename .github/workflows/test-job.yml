@@ -37,6 +37,8 @@ jobs:
           key: yarn-cache
       - run: yarn workspace:lint
       - run: yarn workspace:build
+      # FIXME e2e infrastructure is not started with the yarn workspace:test
+      # command because the alias is not working
       - name: Start infrastructure for e2e tests
         run: docker compose --profile backend up --wait
         working-directory: ./packages/infrastructure/
