@@ -15,7 +15,6 @@ jobs:
         run: "echo ${{ inputs.commitSha }}"
       - run: |
           sudo rm /usr/local/bin/docker-compose
-          unalias -a docker-compose
           alias docker-compose="docker compose"
           docker-compose version
       - run: |
