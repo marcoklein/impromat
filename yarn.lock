@@ -8441,6 +8441,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"demonstrators@workspace:packages/demonstrators":
+  version: 0.0.0-use.local
+  resolution: "demonstrators@workspace:packages/demonstrators"
+  languageName: unknown
+  linkType: soft
+
 "depd@npm:2.0.0, depd@npm:^2.0.0, depd@npm:~2.0.0":
   version: 2.0.0
   resolution: "depd@npm:2.0.0"

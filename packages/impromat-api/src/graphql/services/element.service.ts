@@ -37,7 +37,10 @@ export class ElementService {
         where: { id: userRequestId },
       }),
       this.prismaService.element.create({
-        data: { ...createElementInput, ownerId: userRequestId },
+        data: {
+          ...createElementInput,
+          ownerId: userRequestId,
+        },
       }),
     ]);
     return element;

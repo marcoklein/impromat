@@ -4,11 +4,8 @@ import { UserSessionData } from 'src/auth/user-session-data';
 
 export const SessionUserId = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
-    // const req: { session: { data: UserSessionData } } = context
-    //   .switchToHttp()
-    //   .getRequest();
     const ctx = GqlExecutionContext.create(context);
     const req: { session: { data: UserSessionData } } = ctx.getContext().req;
-    return req.session.data.userId;
+    return req.session?.data?.userId;
   },
 );

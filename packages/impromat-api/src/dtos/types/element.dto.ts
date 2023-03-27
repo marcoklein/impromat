@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
 import { ElementTag } from './element-tag.dto';
+import { ElementVisibility } from './element-visibility.dto';
 import { User } from './user.dto';
 import { WorkshopElement } from './workshop-element.dto';
 
@@ -42,7 +43,10 @@ export class Element extends BaseDto {
   @Field(() => User, { nullable: true })
   owner: Nullable<User>;
 
-  // TODO separate types to add a element with me context fields?
+  @Field(() => ElementVisibility)
+  visibility: ElementVisibility;
+
+  // TODO separate types to add an element with me context fields?
   @Field(() => Boolean, {
     nullable: true,
     description: 'Set if the element is called from a user context.',
