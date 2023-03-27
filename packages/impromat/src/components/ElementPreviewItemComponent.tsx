@@ -1,5 +1,14 @@
-import { IonBadge, IonItem, IonLabel, IonNote, IonText } from "@ionic/react";
+import {
+  IonBadge,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonNote,
+  IonText,
+} from "@ionic/react";
+import { eye } from "ionicons/icons";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
+import { ElementVisibility } from "../graphql-client/graphql";
 import { TagsComponent } from "./TagsComponent";
 
 const ElementPreviewItem_ElementFragment = graphql(`
@@ -23,6 +32,7 @@ const ElementPreviewItem_ElementFragment = graphql(`
     sourceBaseUrl
     licenseName
     licenseUrl
+    visibility
     owner {
       id
     }
@@ -32,6 +42,10 @@ const ElementPreviewItem_ElementFragment = graphql(`
 
 interface ContainerProps {
   routerLink: string;
+  /**
+   * If true, shows an extra icon to depict elements with a PUBLIC visibility.
+   */
+  showVisibility?: boolean;
   workshopElementFragment: FragmentType<
     typeof ElementPreviewItem_ElementFragment
   >;
@@ -42,6 +56,7 @@ interface ContainerProps {
  * Use within an `IonList` component.
  */
 export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
+  showVisibility,
   routerLink,
   workshopElementFragment,
 }) => {
@@ -51,6 +66,9 @@ export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
   );
   return (
     <IonItem routerLink={routerLink}>
+      {showVisibility && element.visibility === ElementVisibility.Public && (
+        <IonIcon slot="start" icon={eye} color="tertiary"></IonIcon>
+      )}
       <IonLabel className="ion-text-wrap">
         <IonText color="medium" style={{ float: "right" }}>
           <IonNote>{element.sourceName}</IonNote>

@@ -13,14 +13,14 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  fragment CustomElement_Element on Element {\n    id\n    name\n  }\n": types.CustomElement_ElementFragmentDoc,
+    "\n  fragment CustomElement_Element on Element {\n    id\n    name\n    visibility\n  }\n": types.CustomElement_ElementFragmentDoc,
     "\n  fragment Element_Element on Element {\n    id\n    createdAt\n    updatedAt\n    version\n    deleted\n    name\n    markdown\n    tags {\n      name\n    }\n    usedBy {\n      id\n    }\n    languageCode\n    sourceUrl\n    sourceName\n    sourceBaseUrl\n    licenseName\n    licenseUrl\n    owner {\n      id\n    }\n    ...CustomElement_Element\n  }\n": types.Element_ElementFragmentDoc,
-    "\n  fragment ElementPreviewItem_Element on Element {\n    id\n    createdAt\n    updatedAt\n    version\n    deleted\n    name\n    markdown\n    tags {\n      name\n    }\n    usedBy {\n      id\n    }\n    languageCode\n    sourceUrl\n    sourceName\n    sourceBaseUrl\n    licenseName\n    licenseUrl\n    owner {\n      id\n    }\n    ...CustomElement_Element\n  }\n": types.ElementPreviewItem_ElementFragmentDoc,
+    "\n  fragment ElementPreviewItem_Element on Element {\n    id\n    createdAt\n    updatedAt\n    version\n    deleted\n    name\n    markdown\n    tags {\n      name\n    }\n    usedBy {\n      id\n    }\n    languageCode\n    sourceUrl\n    sourceName\n    sourceBaseUrl\n    licenseName\n    licenseUrl\n    visibility\n    owner {\n      id\n    }\n    ...CustomElement_Element\n  }\n": types.ElementPreviewItem_ElementFragmentDoc,
     "\n  query Me {\n    me {\n      id\n      version\n      favoriteElements {\n        element {\n          id\n        }\n      }\n    }\n  }\n": types.MeDocument,
     "\n  query IsLoggedIn {\n    me {\n      id\n    }\n  }\n": types.IsLoggedInDocument,
     "\n      mutation LogoutMutation {\n        logout\n      }\n    ": types.LogoutMutationDocument,
     "\n      mutation UpdateWorkshopMutation($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateWorkshopMutationDocument,
-    "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      markdown\n    }\n  }\n": types.LibraryCreateCustomElement_QueryDocument,
+    "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n    }\n  }\n": types.LibraryCreateCustomElement_QueryDocument,
     "\n  mutation UpdateElementMutation($input: UpdateElementInput!) {\n    updateElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateElementMutationDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      id\n    }\n  }\n": types.CreateElementMutationDocument,
     "\n      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {\n        workshop(id: $id) {\n          sections {\n            id\n          }\n        }\n      }\n    ": types.LibraryCreateCustomElementWorkshopQueryDocument,
@@ -68,7 +68,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment CustomElement_Element on Element {\n    id\n    name\n  }\n"): (typeof documents)["\n  fragment CustomElement_Element on Element {\n    id\n    name\n  }\n"];
+export function graphql(source: "\n  fragment CustomElement_Element on Element {\n    id\n    name\n    visibility\n  }\n"): (typeof documents)["\n  fragment CustomElement_Element on Element {\n    id\n    name\n    visibility\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -76,7 +76,7 @@ export function graphql(source: "\n  fragment Element_Element on Element {\n    
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ElementPreviewItem_Element on Element {\n    id\n    createdAt\n    updatedAt\n    version\n    deleted\n    name\n    markdown\n    tags {\n      name\n    }\n    usedBy {\n      id\n    }\n    languageCode\n    sourceUrl\n    sourceName\n    sourceBaseUrl\n    licenseName\n    licenseUrl\n    owner {\n      id\n    }\n    ...CustomElement_Element\n  }\n"): (typeof documents)["\n  fragment ElementPreviewItem_Element on Element {\n    id\n    createdAt\n    updatedAt\n    version\n    deleted\n    name\n    markdown\n    tags {\n      name\n    }\n    usedBy {\n      id\n    }\n    languageCode\n    sourceUrl\n    sourceName\n    sourceBaseUrl\n    licenseName\n    licenseUrl\n    owner {\n      id\n    }\n    ...CustomElement_Element\n  }\n"];
+export function graphql(source: "\n  fragment ElementPreviewItem_Element on Element {\n    id\n    createdAt\n    updatedAt\n    version\n    deleted\n    name\n    markdown\n    tags {\n      name\n    }\n    usedBy {\n      id\n    }\n    languageCode\n    sourceUrl\n    sourceName\n    sourceBaseUrl\n    licenseName\n    licenseUrl\n    visibility\n    owner {\n      id\n    }\n    ...CustomElement_Element\n  }\n"): (typeof documents)["\n  fragment ElementPreviewItem_Element on Element {\n    id\n    createdAt\n    updatedAt\n    version\n    deleted\n    name\n    markdown\n    tags {\n      name\n    }\n    usedBy {\n      id\n    }\n    languageCode\n    sourceUrl\n    sourceName\n    sourceBaseUrl\n    licenseName\n    licenseUrl\n    visibility\n    owner {\n      id\n    }\n    ...CustomElement_Element\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -96,7 +96,7 @@ export function graphql(source: "\n      mutation UpdateWorkshopMutation($input:
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      markdown\n    }\n  }\n"): (typeof documents)["\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      markdown\n    }\n  }\n"];
+export function graphql(source: "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n    }\n  }\n"): (typeof documents)["\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

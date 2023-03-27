@@ -89,9 +89,18 @@ type Element {
   licenseName: String
   licenseUrl: String
   owner: User
+  visibility: ElementVisibility!
 
   """Set if the element is called from a user context."""
   isFavorite: Boolean
+}
+
+enum ElementVisibility {
+  """Element is only visible to its owning user."""
+  PRIVATE
+
+  """Element is publicly shared with the whole community."""
+  PUBLIC
 }
 
 type ElementSearchResult {
@@ -222,12 +231,14 @@ input UpdateWorkshopItemOrder {
 
 input CreateElementInput {
   name: String!
+  visibility: ElementVisibility! = PRIVATE
   markdown: String
   orderIndex: Int
 }
 
 input UpdateElementInput {
   name: String
+  visibility: ElementVisibility = PRIVATE
   markdown: String
   orderIndex: Int
   id: ID!

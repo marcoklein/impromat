@@ -7,6 +7,7 @@ import {
 } from '@nestjs/graphql';
 import { MaxLength } from 'class-validator';
 import { Nullable } from 'src/utils/nullish';
+import { ElementVisibility } from '../types/element-visibility.dto';
 import { IdInput } from './id-input';
 
 @InputType()
@@ -14,6 +15,9 @@ export class CreateElementInput {
   @Field(() => String)
   @MaxLength(500)
   name: string;
+
+  @Field(() => ElementVisibility, { defaultValue: ElementVisibility.PRIVATE })
+  visibility: ElementVisibility;
 
   @Field(() => String, { nullable: true })
   @MaxLength(10000)

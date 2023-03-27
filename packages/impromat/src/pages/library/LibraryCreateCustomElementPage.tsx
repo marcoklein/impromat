@@ -2,9 +2,11 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
+  IonCheckbox,
   IonContent,
   IonFooter,
   IonHeader,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -16,11 +18,13 @@ import {
   IonToolbar,
   useIonToast,
 } from "@ionic/react";
+import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
 import { graphql } from "../../graphql-client";
+import { ElementVisibility } from "../../graphql-client/graphql";
 import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
@@ -37,6 +41,7 @@ const LibraryCreateCustomElement_Query = graphql(`
     element(id: $id) {
       id
       name
+      visibility
       markdown
     }
   }
@@ -95,6 +100,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
   const [presentToast] = useIonToast();
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
   const history = useHistory();
   const logger = useLogger("LibraryCreateCustomElementPage");
 
@@ -111,6 +117,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
       logger("Loaded existing element");
       setName(existingElement.name);
       setContent(existingElement.markdown ?? "");
+      setIsPublic(existingElement.visibility === ElementVisibility.Public);
     }
   }, [existingElement, logger]);
 
@@ -119,7 +126,14 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
     (async () => {
       if (editExistingItem) {
         const newElement = await executeMutation({
-          input: { id: existingElement.id, name, markdown: content },
+          input: {
+            id: existingElement.id,
+            name,
+            visibility: isPublic
+              ? ElementVisibility.Public
+              : ElementVisibility.Private,
+            markdown: content,
+          },
         });
         const newElementId = newElement.data?.updateElement.id;
         if (!newElementId) {
@@ -143,7 +157,13 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
         }
       } else {
         const result = await executeElementMutationResult({
-          input: { name, markdown: content },
+          input: {
+            name,
+            visibility: isPublic
+              ? ElementVisibility.Public
+              : ElementVisibility.Private,
+            markdown: content,
+          },
         });
         const newElement = result.data?.createElement;
         if (!newElement?.id) {
@@ -233,12 +253,45 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
                   </div>
                   <div>
                     If you want to change name or content for an individual
-                    workshop you should create a new element.
+                    workshop you should create a new element or add a note in
+                    the workshop.
                   </div>
                 </IonNote>
               </>
             </InfoItemComponent>
           )}
+          <IonItem
+            style={{
+              "--border-color": isPublic
+                ? "var(--ion-color-tertiary)"
+                : undefined,
+              "--border-width": "1px",
+            }}
+            lines="none"
+          >
+            <IonCheckbox
+              slot="start"
+              checked={isPublic}
+              onClick={() => setIsPublic((value) => !value)}
+            ></IonCheckbox>
+            <IonLabel className="ion-text-wrap">
+              Share Element with Community
+              <IonNote>
+                <div>
+                  Contribute to the Impromat community with your individual
+                  improv element creations.
+                </div>
+                <div>
+                  Shared elements are publicly visible and allows others to copy
+                  them and add them to own workshops.
+                </div>
+                <div>
+                  <IonIcon icon={informationCircle}></IonIcon> Attribution and
+                  licensing for shared elements is under development.
+                </div>
+              </IonNote>
+            </IonLabel>
+          </IonItem>
         </IonList>
       </IonContent>
       <IonFooter>

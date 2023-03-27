@@ -31,6 +31,16 @@ export const userElementsQuery = graphql(`
   }
 `);
 
+export const searchElementsQuery = graphql(`
+  query SearchElementsQuery($input: ElementSearchInput!) {
+    searchElements(input: $input) {
+      element {
+        ...ElementFields
+      }
+    }
+  }
+`);
+
 export const createElementMutation = graphql(`
   mutation AddElementQuery($input: CreateElementInput!) {
     createElement(input: $input) {

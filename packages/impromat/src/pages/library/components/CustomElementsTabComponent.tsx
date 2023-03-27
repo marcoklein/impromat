@@ -47,7 +47,7 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
   const location = useLocation();
   const logger = useComponentLogger("CustomElementsTabComponent");
 
-  const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
+  const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
   const [{ data, fetching: isFetching }] = useQuery({
     query: MyUser_Query,
     context,
@@ -86,6 +86,7 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
         <IonList>
           {customElements.map((element) => (
             <ElementPreviewItemComponent
+              showVisibility={true}
               key={element.id}
               routerLink={routeLibraryElement(element.id, { workshopId })}
               workshopElementFragment={element}
