@@ -18,6 +18,7 @@ import {
   IonToolbar,
   useIonToast,
 } from "@ionic/react";
+import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
@@ -34,7 +35,6 @@ import {
   routeLibrary,
 } from "./library-routes";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
-import { information, informationCircle } from "ionicons/icons";
 
 const LibraryCreateCustomElement_Query = graphql(`
   query LibraryCreateCustomElement_Query($id: ID!) {
