@@ -43,6 +43,13 @@ export class Element extends BaseDto {
   @Field(() => User, { nullable: true })
   owner: Nullable<User>;
 
+  @Field(() => Boolean, {
+    nullable: true,
+    description:
+      'Convenience field to determine if the owner of the element is the logged in user.',
+  })
+  isOwnerMe: Nullable<boolean>;
+
   @Field(() => ElementVisibility)
   visibility: ElementVisibility;
 

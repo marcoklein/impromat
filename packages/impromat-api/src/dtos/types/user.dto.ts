@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
 import { Element } from './element.dto';
 import { UserFavoriteElementDto } from './user-favorite-element.dto';
@@ -17,4 +18,10 @@ export class User extends BaseDto {
   // TODO add count? (e.g. favoriteElementsCount)
   @Field(() => [UserFavoriteElementDto])
   favoriteElements: UserFavoriteElementDto[];
+
+  @Field(() => String, {
+    nullable: true,
+    description: 'Public display name of the user.',
+  })
+  name: Nullable<string>;
 }

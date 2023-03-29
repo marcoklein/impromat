@@ -20,6 +20,7 @@ export const elementFieldsFragment = graphql(`
     owner {
       id
     }
+    isOwnerMe
   }
 `);
 

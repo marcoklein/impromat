@@ -22,4 +22,5 @@ pageTest.describe("Shared Elements", () => {
       await expect(page.getByText(randomElementName)).toBeVisible();
     },
   );
+  // TODO test cases: what happens when user unshares? What happens if other user has it in workshop already and the author unpublishes?
 });

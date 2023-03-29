@@ -18,7 +18,7 @@ model Element {
   markdown           String?
   languageCode       String?
   sourceUrl          String?
-  sourceName         String?
+  sourceName         String
   sourceBaseUrl      String?
   licenseName        String?
   licenseUrl         String?

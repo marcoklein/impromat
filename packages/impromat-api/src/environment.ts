@@ -26,4 +26,11 @@ export const environment = {
 if (environment.ENABLE_TESTLOGIN) {
   console.log('ENABLE_TESTLOGIN is activated');
   console.log('TEST_GOOGLE_AUTH_URL = ', environment.TEST_GOOGLE_AUTH_URL);
+  console.log(`-----------------------`);
+  console.log(`Use Login as a specific user e.g.`);
+  console.log(`testUserA`);
+  console.log(`${environment.TEST_GOOGLE_AUTH_URL}&userId=testuserA`);
+  console.log(`testUserB`);
+  console.log(`${environment.TEST_GOOGLE_AUTH_URL}&userId=testuserB`);
+  console.log(`-----------------------`);
 }

@@ -38,13 +38,14 @@ describe('Sharing Workshop Elements', () => {
     expect(elements.data?.searchElements?.at(0)?.element.name).toBe(
       uniqueElementName,
     );
+    expect(elements.data?.searchElements?.at(0)?.element.isOwnerMe).toBe(true);
     expect(
       elementsFromOtherUser.data?.searchElements?.at(0)?.element.name ===
         uniqueElementName,
     ).toBeFalsy();
   });
 
-  it('should return publically shared element', async () => {
+  it('should return publically shared element with correct owner settings', async () => {
     // given
     const apiWithPublishedUserElement = await initApiTestSession();
     const apiWithoutUserElement = await initApiTestSession();
@@ -68,9 +69,13 @@ describe('Sharing Workshop Elements', () => {
     expect(elements.data?.searchElements?.at(0)?.element.name).toBe(
       uniqueElementName,
     );
+    expect(elements.data?.searchElements?.at(0)?.element.isOwnerMe).toBe(true);
     expect(
       elementsFromOtherUser.data?.searchElements?.at(0)?.element.name,
     ).toBe(uniqueElementName);
+    expect(
+      elementsFromOtherUser.data?.searchElements?.at(0)?.element.isOwnerMe,
+    ).toBe(false);
   });
 
   it.skip('should return all published elements of a user', async () => {
