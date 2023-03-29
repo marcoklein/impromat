@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "version": "35",
+  "version": "36",
   "private": true,
   "type": "module",
   "workspaces": {
