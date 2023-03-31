@@ -21,7 +21,8 @@
     "docker-compose": "yarn workspace infrastructure docker-compose",
     "infra:config": "./packages/infrastructure/configure.sh",
     "foreach": "yarn workspaces foreach --parallel --verbose --interlaced --exclude root",
-    "codegen": "yarn workspaces foreach run codegen"
+    "codegen": "yarn workspaces foreach run codegen",
+    "generate:changeset": "yarn run changeset"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",

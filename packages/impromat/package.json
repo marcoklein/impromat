@@ -70,7 +70,6 @@
     "codegen:graphql": "yarn codegen:get-schema-graphql && graphql-codegen",
     "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql",
     "codegen": "yarn codegen:graphql",
-    "changeset": "yarn workspace impromat-monorepo run changeset",
     "docker-compose": "yarn workspace infrastructure run docker-compose"
   },
   "browserslist": {
