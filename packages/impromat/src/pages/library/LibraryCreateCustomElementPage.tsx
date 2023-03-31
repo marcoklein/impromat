@@ -231,7 +231,8 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             <IonInput
               maxlength={200}
               value={name}
-              onIonChange={(event) => setName(event.detail.value!)}
+              type="text"
+              onIonInput={(event) => setName(event.detail.value!.toString())}
             ></IonInput>
           </IonItem>
           <IonItem>
@@ -239,7 +240,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             <IonTextarea
               rows={10}
               value={content}
-              onIonChange={(event) => setContent(event.detail.value!)}
+              onIonInput={(event) => setContent(event.detail.value!)}
             ></IonTextarea>
           </IonItem>
           {editExistingItem && (
@@ -272,7 +273,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             <IonCheckbox
               slot="start"
               checked={isPublic}
-              onClick={() => setIsPublic((value) => !value)}
+              onIonChange={(e) => setIsPublic(e.detail.checked)}
             ></IonCheckbox>
             <IonLabel className="ion-text-wrap">
               Share Element with Community

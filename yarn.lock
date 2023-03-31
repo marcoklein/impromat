@@ -3030,43 +3030,43 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ionic/core@npm:6.6.1":
-  version: 6.6.1
-  resolution: "@ionic/core@npm:6.6.1"
+"@ionic/core@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@ionic/core@npm:7.0.0"
   dependencies:
-    "@stencil/core": ^2.18.0
-    ionicons: ^6.1.3
+    "@stencil/core": ^3.1.0
+    ionicons: ^7.1.0
     tslib: ^2.1.0
-  checksum: 72b39541d3a4c77df62e7269bdea6b697272aa67b559cda133a2a7b3be4fd6ceed5eb107f83d7529b9b1f9d1469f804103535c0259e447bd326b8054f98fd3cc
+  checksum: 6e627d30b30b5ba65feb92657f023ea6145d29e4511092fd9f93a8f69bef14f61e368dfca469d4c043b7eea59315aee4c598f418a6c28a1ba51c4ddeb2f662bf
   languageName: node
   linkType: hard
 
-"@ionic/react-router@npm:^6.0.0":
-  version: 6.6.1
-  resolution: "@ionic/react-router@npm:6.6.1"
+"@ionic/react-router@npm:7":
+  version: 7.0.0
+  resolution: "@ionic/react-router@npm:7.0.0"
   dependencies:
-    "@ionic/react": 6.6.1
+    "@ionic/react": 7.0.0
     tslib: "*"
   peerDependencies:
     react: ">=16.8.6"
     react-dom: ">=16.8.6"
     react-router: ^5.0.1
     react-router-dom: ^5.0.1
-  checksum: 6c205ed50e7f247b0138bb6853f74f2c74d8c38ad22c0d94a5834148429d088e67bf873593386af39c8d48084f978781dcc9d0f25ccd785dc65c0075b4113fa9
+  checksum: 62558bd55503990663e55c0ae768b554ce7e83fa8d0e86ca8fb5854184f8fe7227e6d75643b25a742deaed2d2afb7ebea2f3e8c5399591016c1135084d6feb1a
   languageName: node
   linkType: hard
 
-"@ionic/react@npm:6.6.1, @ionic/react@npm:^6.0.0":
-  version: 6.6.1
-  resolution: "@ionic/react@npm:6.6.1"
+"@ionic/react@npm:7, @ionic/react@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@ionic/react@npm:7.0.0"
   dependencies:
-    "@ionic/core": 6.6.1
-    ionicons: ^6.1.3
+    "@ionic/core": 7.0.0
+    ionicons: ^7.0.0
     tslib: "*"
   peerDependencies:
     react: ">=16.8.6"
     react-dom: ">=16.8.6"
-  checksum: f8858d64a9bca713ea1fd69cd8105c5f45ceeb137959e0fbcde72b474baad764204540879cc8376984ecca561c0ab36bad13b4a439efc531fcc1495d106c2d60
+  checksum: 93a7f61d398791f8c1c4741945207ade8c677c3b38131a3227cebbf8803b9c0a6f60c8ede9e0b680310dfd96864190585deb5bc88a17e085fd8e1c3c3287ac2d
   languageName: node
   linkType: hard
 
@@ -4416,6 +4416,15 @@ __metadata:
   bin:
     stencil: bin/stencil
   checksum: 139a7b63b81c7eaa5026e76e1c947a402f58d0a6d1d353a34883995ea7e480fa6991e71c0c3d812f7046d395b99d0f7f7b11af9277f04a3c62aba96cda18dd5d
+  languageName: node
+  linkType: hard
+
+"@stencil/core@npm:^3.1.0":
+  version: 3.2.0
+  resolution: "@stencil/core@npm:3.2.0"
+  bin:
+    stencil: bin/stencil
+  checksum: b211857ebe929600b87d63f918345d4bee678fd4ac4a965a2de8dc16c3cc9bd46ed2c586f189c0c76fe927d0a4dd0d3026111b2f84b62b744391acefdfff3fa2
   languageName: node
   linkType: hard
 
@@ -11422,13 +11431,13 @@ __metadata:
     "@types/express": ^4.17.15
     cheerio: ^1.0.0-rc.12
     express: ^4.18.2
-    impromat: 0.22.0
+    impromat: 0.23.0
     puppeteer: ^19.4.0
     ts-node: ^10.9.1
   languageName: unknown
   linkType: soft
 
-"impromat@0.22.0, impromat@workspace:packages/impromat":
+"impromat@0.23.0, impromat@workspace:packages/impromat":
   version: 0.0.0-use.local
   resolution: "impromat@workspace:packages/impromat"
   dependencies:
@@ -11446,8 +11455,8 @@ __metadata:
     "@graphql-codegen/client-preset": ^2.0.0
     "@graphql-codegen/typescript": ^3.0.0
     "@graphql-codegen/typescript-operations": ^3.0.0
-    "@ionic/react": ^6.0.0
-    "@ionic/react-router": ^6.0.0
+    "@ionic/react": 7
+    "@ionic/react-router": 7
     "@playwright/test": ^1.26.1
     "@types/debug": ^4.1.7
     "@types/node": ^12.19.15
@@ -11678,12 +11687,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ionicons@npm:^6.1.3":
-  version: 6.1.3
-  resolution: "ionicons@npm:6.1.3"
+"ionicons@npm:^7.0.0, ionicons@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "ionicons@npm:7.1.0"
   dependencies:
     "@stencil/core": ^2.18.0
-  checksum: c63aa3e0f83129129a836f97f07547b6c53a244e84a41f838a70b4eb17ddc9d926526e1fdee63f897a32300523192fe0c0889aa38617b9df01d15c62e9cb3a37
+  checksum: 66e05b7d7c9625085cad9640ff2e1bb2e7737fa25855911bd2e516b50f1cf441761cec6e894dfbc2a9770e577f1d83d851d1453cb210d6bb0064ad15fa484e9c
   languageName: node
   linkType: hard
 
