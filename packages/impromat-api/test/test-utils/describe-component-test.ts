@@ -41,6 +41,7 @@ export async function initApiTestSession(): Promise<ApiTestSession> {
   ): Promise<ExecutionResult<TResult>> {
     const response = await request(app.getHttpServer())
       .post('/graphql')
+      .set('Content-type', 'application/json')
       .send({ query: print(operation), variables: variables ?? undefined });
     return response.body;
   }

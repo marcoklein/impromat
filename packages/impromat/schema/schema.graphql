@@ -70,6 +70,9 @@ type User {
   """Elements owned by this user."""
   elements: [Element!]!
   favoriteElements: [UserFavoriteElement!]!
+
+  """Public display name of the user."""
+  name: String
 }
 
 type Element {
@@ -89,6 +92,11 @@ type Element {
   licenseName: String
   licenseUrl: String
   owner: User
+
+  """
+  Convenience field to determine if the owner of the element is the logged in user.
+  """
+  isOwnerMe: Boolean
   visibility: ElementVisibility!
 
   """Set if the element is called from a user context."""

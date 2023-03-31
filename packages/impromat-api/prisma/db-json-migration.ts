@@ -1,5 +1,9 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-// script to migrate from legacy db.json into PostgreSQL
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// eslint-disable @typescript-eslint/no-floating-promises
+
+// Script to migrate from legacy db.json to PostgreSQL.
+
 import { ElementVisibility, PrismaClient } from '@prisma/client';
 import * as fs from 'fs';
 
