@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.23.0
+
+### Minor Changes
+
+- 36f0455: Allow sharing of custom element.
+
+### Patch Changes
+
+- 36f0455: show owner of public element
+
 ## 0.22.0
 
 ### Minor Changes
