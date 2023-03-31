@@ -39,10 +39,26 @@ Watch tests
 yarn test:watch
 ```
 
-Generate Prisma schema changes
+## Database Schema
+
+We manage our database schema with Prisma.
+
+To get general information about Prisma CLI capabilities:
+
+```
+yarn prisma --help
+```
+
+Generate Prisma artifacts (database client):
 
 ```
 yarn prisma:generate
+```
+
+Generate a new migration script without applying it:
+
+```
+yarn prisma migrate dev --create-only
 ```
 
 ## API Design

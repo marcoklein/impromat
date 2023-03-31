@@ -5,6 +5,8 @@ import {
 } from 'src/dtos/inputs/element-input';
 import { PrismaService } from './prisma.service';
 
+const IMPROMAT_SOURCE_NAME = 'impromat';
+
 @Injectable()
 export class ElementService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
@@ -39,6 +41,7 @@ export class ElementService {
       this.prismaService.element.create({
         data: {
           ...createElementInput,
+          sourceName: IMPROMAT_SOURCE_NAME,
           ownerId: userRequestId,
         },
       }),

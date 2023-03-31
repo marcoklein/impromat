@@ -3,6 +3,8 @@ import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { CustomElementInfoItemComponent } from "./CustomElementInfoItemComponent";
 import { LicenseItemComponent } from "./LicenseItemComponent";
 import { TagsComponent } from "./TagsComponent";
+import { InfoItemComponent } from "./InfoItemComponent";
+import { warning } from "ionicons/icons";
 
 const Element_ElementFragment = graphql(`
   fragment Element_Element on Element {
@@ -27,7 +29,9 @@ const Element_ElementFragment = graphql(`
     licenseUrl
     owner {
       id
+      name
     }
+    isOwnerMe
     ...CustomElement_Element
   }
 `);
@@ -46,10 +50,23 @@ export const ElementComponent: React.FC<ContainerProps> = ({
         <TagsComponent tags={element.tags.map((t) => t.name)}></TagsComponent>
         <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
       </div>
-      {element.owner && !element.sourceName ? (
+      {element.isOwnerMe ? (
         <CustomElementInfoItemComponent
           elementFragment={element}
         ></CustomElementInfoItemComponent>
+      ) : element.sourceName === "impromat" ? (
+        <>
+          <InfoItemComponent
+            message={`Created by ${
+              element.owner?.name ?? "a user"
+            } in impromat`}
+          ></InfoItemComponent>
+          <InfoItemComponent
+            icon={warning}
+            color="warning"
+            message="Sharing of elements is under development"
+          ></InfoItemComponent>
+        </>
       ) : (
         <LicenseItemComponent
           authorName={element.sourceName}

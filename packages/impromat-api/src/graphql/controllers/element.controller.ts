@@ -50,6 +50,17 @@ export class ElementController {
       .owner();
   }
 
+  @ResolveField(() => Boolean)
+  async isOwnerMe(
+    @Parent() element: Element,
+    @SessionUserId() userSessionId: string,
+  ) {
+    const owner = await this.userElementService
+      .findElementById(userSessionId, element.id)
+      .owner();
+    return owner.id === userSessionId;
+  }
+
   @ResolveField(() => [ElementTag])
   async tags(
     @Parent() element: Element,
