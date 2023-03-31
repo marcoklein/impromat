@@ -3041,7 +3041,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ionic/react-router@npm:7":
+"@ionic/react-router@npm:^7.0.0":
   version: 7.0.0
   resolution: "@ionic/react-router@npm:7.0.0"
   dependencies:
@@ -3056,7 +3056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ionic/react@npm:7, @ionic/react@npm:7.0.0":
+"@ionic/react@npm:7.0.0, @ionic/react@npm:^7.0.0":
   version: 7.0.0
   resolution: "@ionic/react@npm:7.0.0"
   dependencies:
@@ -11455,8 +11455,8 @@ __metadata:
     "@graphql-codegen/client-preset": ^2.0.0
     "@graphql-codegen/typescript": ^3.0.0
     "@graphql-codegen/typescript-operations": ^3.0.0
-    "@ionic/react": 7
-    "@ionic/react-router": 7
+    "@ionic/react": ^7.0.0
+    "@ionic/react-router": ^7.0.0
     "@playwright/test": ^1.26.1
     "@types/debug": ^4.1.7
     "@types/node": ^12.19.15
