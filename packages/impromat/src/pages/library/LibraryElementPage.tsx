@@ -161,6 +161,11 @@ export const LibraryElementPage: React.FC = () => {
               <IonIcon
                 slot="icon-only"
                 icon={element?.isFavorite ? star : starOutline}
+                aria-label={
+                  element?.isFavorite
+                    ? "Remove from favorites."
+                    : "Add to favorites."
+                }
               ></IonIcon>
             </IonButton>
           </IonButtons>

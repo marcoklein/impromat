@@ -24,5 +24,26 @@ pageTest.describe("Shared Elements", () => {
       ).toBeVisible();
     },
   );
-  // TODO test cases: what happens when user unshares? What happens if other user has it in workshop already and the author unpublishes?
+
+  pageTest(
+    "should favorise a user created element",
+    async ({ page, auth, libraryPage, favoriteElementsPage, workshopPage }) => {
+      // given
+      await auth.loginAsRandomUser();
+      const uniqueElementName = randomUUID();
+      // when
+      await libraryPage.goto();
+      await libraryPage.createCustomElement(uniqueElementName, {
+        isPublic: true,
+      });
+      await auth.loginAsRandomUser();
+      await libraryPage.goto();
+      await libraryPage.searchForElement(uniqueElementName);
+      await page.getByText(uniqueElementName).click();
+      await workshopPage.addToFavoriteElements();
+      await favoriteElementsPage.goto();
+      // then
+      await expect(page.getByText(uniqueElementName)).toBeVisible();
+    },
+  );
 });

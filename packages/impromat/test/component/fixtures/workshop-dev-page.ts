@@ -81,6 +81,16 @@ export class WorkshopDevPage extends DevPage {
     return this.page.getByRole("heading", { name });
   }
 
+  async addToFavoriteElements() {
+    const page = this.page;
+    await page.getByRole("button", { name: "Add to favorites." }).click();
+  }
+
+  async removeFromFavoriteElements() {
+    const page = this.page;
+    await page.getByRole("button", { name: "Remove from favorites." }).click();
+  }
+
   async createAndGoto(name: string = "Test Workshop") {
     const workshopId = await this.createNew(name);
     await this.goto(workshopId);
