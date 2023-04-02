@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { DevPage } from "./dev-page";
 
 /**
@@ -5,7 +6,7 @@ import { DevPage } from "./dev-page";
  */
 export class AuthFixture extends DevPage {
   async loginAsRandomUser() {
-    const randomUserName = `user-${Date.now()}-${Math.random() % 1000}`;
+    const randomUserName = randomUUID();
     await this.loginAsUser(randomUserName);
     return randomUserName;
   }

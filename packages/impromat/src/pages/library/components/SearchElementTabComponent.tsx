@@ -96,7 +96,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
     <>
       <IonSearchbar
         ref={searchInputRef}
-        onIonChange={(e) => {
+        onIonInput={(e) => {
           setSearchText(e.detail.value ?? "");
         }}
       ></IonSearchbar>
