@@ -18,8 +18,7 @@ import React, { useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
-import { CustomElementInfoItemComponent } from "../../components/CustomElementInfoItemComponent";
-import { LicenseItemComponent } from "../../components/LicenseItemComponent";
+import { ElementComponent } from "../../components/ElementComponent";
 import { graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
@@ -43,8 +42,9 @@ const WorkshopElementPageQuery = graphql(`
         owner {
           id
         }
-
+        isOwnerMe
         ...CustomElement_Element
+        ...Element_Element
       }
       section {
         id
@@ -161,30 +161,9 @@ export const WorkshopElementPage: React.FC = () => {
               </IonItem>
             </IonCard>
 
-            <IonItem lines="none">
-              <div className="ion-text-wrap">
-                <ReactMarkdown>{basedOnElement?.markdown ?? ""}</ReactMarkdown>
-              </div>
-            </IonItem>
-
-            {basedOnElement &&
-              // TODO verify if the user owns this element
-              (basedOnElement.owner && !basedOnElement.sourceName ? (
-                <CustomElementInfoItemComponent
-                  elementFragment={basedOnElement}
-                  workshopId={workshopId}
-                  showElementLink
-                ></CustomElementInfoItemComponent>
-              ) : (
-                <LicenseItemComponent
-                  authorName={basedOnElement.sourceName}
-                  authorUrl={basedOnElement.sourceBaseUrl}
-                  licenseName={basedOnElement.licenseName}
-                  licenseUrl={basedOnElement.licenseUrl}
-                  name={basedOnElement.name}
-                  sourceUrl={basedOnElement.sourceUrl}
-                ></LicenseItemComponent>
-              ))}
+            <ElementComponent
+              elementFragment={workshopElement.basedOn}
+            ></ElementComponent>
           </IonList>
         ) : (
           <IonSpinner></IonSpinner>

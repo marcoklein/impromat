@@ -44,6 +44,12 @@ yarn lint:fix
 
 ## Tests
 
+Start test infrastructure via
+
+```sh
+yarn test:backend-up
+```
+
 Playwright executes frontend tests.
 
 To run tests start the application and run
@@ -89,6 +95,18 @@ BASE_URL=http://localhost:3000/
 ### Page Object Models
 
 Tests are structured using https://playwright.dev/docs/pom.
+
+## Dependency Cruiser
+
+For visualizations you have to install `graphviz`:
+
+```
+brew install graphviz
+```
+
+```
+yarn deps:visualize
+```
 
 ## Frameworks
 
