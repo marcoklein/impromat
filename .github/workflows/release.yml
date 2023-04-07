@@ -41,10 +41,11 @@ jobs:
         with:
           title: Release Impromat
           version: yarn ci:version
-          publish: yarn ci:publish
+          publish: echo "Publishing..." && yarn ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish
-        if: steps.changesets.outputs.published == 'true'
+        if: steps.changesets.outputs.hasChangesets == 'true'
         run: echo "Published"
+      # TODO set output of this job to trigger production deployment job if there are no changesets

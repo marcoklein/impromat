@@ -1,0 +1,36 @@
+name: Shared Deployment Job
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+      - name: Write SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - name: Print Branch Name
+        run: echo "$BRANCH_NAME"
+      - name: Configure Enviroment
+        run: bash -e ./packages/infrastructure/configure-${{ inputs.environment }}.sh
+      - run: git remote add impromat-app-${{ inputs.environment }} dokku@impromat.app:impromat-app-${{ inputs.environment }}
+      - run: git remote add impromat-api-${{ inputs.environment }} dokku@impromat.app:impromat-api-${{ inputs.environment }}
+      - run: git push impromat-app-${{ inputs.environment }} ${{ github.sha }}:main --force
+      - uses: EndBug/latest-tag@latest
+        with:
+          ref: impromat-app-${{ inputs.environment }}
+      - run: git push impromat-api-${{ inputs.environment }} ${{ github.sha }}:main --force
+      - uses: EndBug/latest-tag@latest
+        with:
+          ref: impromat-api-${{ inputs.environment }}

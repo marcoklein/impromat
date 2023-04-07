@@ -12,8 +12,6 @@ if (!PORT) throw new Error("PORT environment variable undefined.");
 
 const config: PlaywrightTestConfig = {
   webServer: {
-    //yarn docker-compose up api database --wait &&
-    // yarn docker-compose --profile backend up --no-recreate --wait
     command: "yarn start",
     port: PORT,
     timeout: 4 * 60 * 1000,
