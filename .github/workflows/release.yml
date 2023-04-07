@@ -28,7 +28,7 @@ jobs:
           key: yarn-release-cache
 
       - name: Install Dependencies
-        run: yarn
+        run: yarn install
 
       - name: Save .yarn release cache
         uses: actions/cache/save@v3
@@ -39,7 +39,6 @@ jobs:
       - name: Create Release Pull Request
         uses: changesets/action@v1
         with:
-          # support pnp with yarn
-          version: yarn changeset version
+          version: yarn changeset version && yarn install --mode=update-lockfile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
