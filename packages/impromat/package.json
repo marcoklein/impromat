@@ -52,7 +52,8 @@
   "scripts": {
     "start": "yarn compile-markdown && react-scripts start",
     "dev": "concurrently \"yarn start\" \"yarn codegen --watch\"",
-    "lint": "eslint src test --max-warnings 0",
+    "lint": "eslint src test --max-warnings 0 && yarn lint:deps",
+    "lint:deps": "yarn depcruise src",
     "lint:fix": "eslint src --fix",
     "build": "yarn build:prepare && react-scripts build",
     "build:prepare": "yarn copy-improbib && yarn compile-markdown && genversion src/version.gen.ts --es6",
@@ -70,7 +71,8 @@
     "codegen:graphql": "yarn codegen:get-schema-graphql && graphql-codegen",
     "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql",
     "codegen": "yarn codegen:graphql",
-    "docker-compose": "yarn workspace infrastructure run docker-compose"
+    "docker-compose": "yarn workspace infrastructure run docker-compose",
+    "deps:visualize": "yarn depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg"
   },
   "browserslist": {
     "production": [
@@ -96,6 +98,7 @@
     "@graphql-codegen/typescript-operations": "^3.0.0",
     "@types/debug": "^4.1.7",
     "concurrently": "^7.6.0",
+    "dependency-cruiser": "^12.11.1",
     "dotenv": "^16.0.3",
     "dotenv-cli": "^7.0.0",
     "eslint": "^8.30.0",
