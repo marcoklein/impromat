@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.24.1
+
+### Patch Changes
+
+- e1c6d7d: Show edit button for custom elements.
+
 ## 0.24.0
 
 ### Minor Changes
