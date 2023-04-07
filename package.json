@@ -13,6 +13,7 @@
   },
   "scripts": {
     "ci:version": "yarn changeset version && yarn install --mode=update-lockfile",
+    "ci:publish": "yarn changeset publish",
     "dev": "yarn foreach --from '{impromat,impromat-api}' run dev",
     "workspace:dev": "yarn foreach run dev",
     "workspace:lint": "yarn foreach run lint",
