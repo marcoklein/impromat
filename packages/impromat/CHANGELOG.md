@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.24.0
+
+### Minor Changes
+
+- cd4e79e: Upgrade to Ionic 7.
+
 ## 0.23.0
 
 ### Minor Changes
