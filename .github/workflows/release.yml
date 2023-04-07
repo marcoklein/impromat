@@ -34,8 +34,8 @@ jobs:
       - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
-        title: Release Impromat
         with:
+          title: Release Impromat
           version: yarn ci:version
           publish: yarn ci:publish
         env:
