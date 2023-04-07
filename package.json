@@ -12,6 +12,7 @@
     "@changesets/cli": "^2.25.2"
   },
   "scripts": {
+    "ci:version": "yarn changeset version && yarn install --mode=update-lockfile",
     "dev": "yarn foreach --from '{impromat,impromat-api}' run dev",
     "workspace:dev": "yarn foreach run dev",
     "workspace:lint": "yarn foreach run lint",
