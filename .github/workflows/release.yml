@@ -50,7 +50,7 @@ jobs:
         if: steps.changesets.outputs.hasChangesets == 'false'
 
   deploy-production:
-    if: needs.release.triggerDeployment == 'true'
+    if: needs.release.outputs.triggerDeployment == 'true'
     needs:
       - release
     uses: ./.github/workflows/shared-deploy-job.yml
