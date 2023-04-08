@@ -16,18 +16,18 @@ env:
 
 jobs:
   test:
-    uses: ./.github/workflows/test-job.yml
+    uses: ./.github/workflows/shared-test-job.yml
 
-  deploy:
+  deploy-development:
     needs:
       - test
-    uses: ./.github/workflows/deploy-job.yml
+    uses: ./.github/workflows/shared-deploy-job.yml
     secrets: inherit
     with:
       environment: development
 
   e2e-test:
     needs:
-      - deploy
-    uses: ./.github/workflows/e2e-test-job.yml
+      - deploy-development
+    uses: ./.github/workflows/shared-e2e-test-job.yml
     secrets: inherit

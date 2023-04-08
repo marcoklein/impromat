@@ -45,7 +45,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish
-        if: steps.changesets.outputs.hasChangesets == 'true'
-        run: echo "Published"
-      # TODO set output of this job to trigger production deployment job if there are no changesets
+      - name: Set output publish
+        run: echo "triggerDeployment=true" >> $GITHUB_OUTPUT
+        if: steps.changesets.outputs.hasChangesets == 'false'
+
+  deploy-production:
+    if: needs.release.triggerDeployment == 'true'
+    needs:
+      - release
+    uses: ./.github/workflows/shared-deploy-job.yml
+    secrets: inherit
+    with:
+      environment: production
