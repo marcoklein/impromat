@@ -10,6 +10,15 @@ brew install colima
 brew install docker-compose
 ```
 
+Install docker compose (e.g. if `docker compose` is not working) follow [this documentation](https://docs.docker.com/compose/install/linux/#install-the-plugin-manually).
+In summary, create a symlink to the dockes-compose plugin:
+
+```
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p $DOCKER_CONFIG/cli-plugins
+ln ln /usr/local/bin/docker-compose
+```
+
 Start the environment:
 
 ```
