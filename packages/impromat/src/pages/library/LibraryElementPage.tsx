@@ -10,22 +10,54 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
-  useIonToast,
 } from "@ionic/react";
 import { star, starOutline } from "ionicons/icons";
-import { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
+import { useMutation, useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
-import { ElementDocType } from "../../database/collections/element/element-collection";
-import { useImprobibElements } from "../../database/improbib/use-improbib-elements";
-import { useDocument } from "../../database/use-document";
-import { useMyUser } from "../../database/use-my-user";
-import { useRxdbMutations } from "../../database/use-rxdb-mutations";
+import { graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeLibrary } from "./library-routes";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
+
+const LibraryElementQuery = graphql(`
+  query LibraryElementQuery($id: ID!) {
+    element(id: $id) {
+      id
+      name
+      isFavorite
+      ...Element_Element
+    }
+  }
+`);
+
+const WorkshopQuery = graphql(`
+  query WorkshopSectionsQuery($id: ID!) {
+    workshop(id: $id) {
+      sections {
+        id
+      }
+    }
+  }
+`);
+
+const AddToWorkshopMutation = graphql(`
+  mutation AddToWorkhopMutation($input: UpdateWorkshopInput!) {
+    updateWorkshop(input: $input) {
+      id
+    }
+  }
+`);
+
+const UpdateUserFavoriteElementMutation = graphql(`
+  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
+    updateUserFavoriteElement(input: $input) {
+      id
+    }
+  }
+`);
 
 export const LibraryElementPage: React.FC = () => {
   const { libraryPartId } = useParams<{
@@ -35,69 +67,83 @@ export const LibraryElementPage: React.FC = () => {
   const logger = useComponentLogger("ImprobibElementPage");
   useStateChangeLogger(workshopId, "workshopId", logger);
   useStateChangeLogger(libraryPartId, "libraryPartId", logger);
-  const mutations = useRxdbMutations();
-  const [presentToast] = useIonToast();
-  const improbibElements = useImprobibElements();
-  const [improbibElement, setImprobibElement] = useState<ElementDocType>();
+
+  const [elementQueryResult, reexecuteElementQuery] = useQuery({
+    query: LibraryElementQuery,
+    variables: {
+      id: libraryPartId,
+    },
+  });
+  const [workshopQueryResult] = useQuery({
+    query: WorkshopQuery,
+    variables: {
+      id: workshopId ?? "",
+    },
+    pause: !workshopId,
+  });
+  const [, addToWorkshopMutation] = useMutation(AddToWorkshopMutation);
+  const element = elementQueryResult.data?.element;
   const history = useHistory();
-  const { document: myUser } = useMyUser();
-  const isFavoriteElement = useMemo(
-    () => myUser?.favoriteElements.includes(libraryPartId),
-    [myUser?.favoriteElements, libraryPartId],
+
+  const [, updateUserFavoriteElementMutation] = useMutation(
+    UpdateUserFavoriteElementMutation,
   );
-  const { document: documentElement } = useDocument("elements", libraryPartId);
-
-  useEffect(() => {
-    // TODO differentiate between improbib and custom elements
-    // TODO cleanest is to synchronize improbib through the database
-    // TODO hybrid approach would be save the improbib element in the database when opening up the page
-    if (documentElement) {
-      setImprobibElement(documentElement);
-    }
-  }, [documentElement]);
-
-  useEffect(() => {
-    if (!improbibElements) return;
-    const result = improbibElements.find(
-      (element) => element.id === libraryPartId,
-    );
-    if (result) setImprobibElement(result);
-  }, [improbibElements, libraryPartId]);
-
-  function addToWorkshop() {
-    if (!mutations || !workshopId) return;
-    const element = documentElement ? documentElement : improbibElement;
-    if (!element) return;
-    if (improbibElement && !documentElement) {
-      mutations.ensureElementExists(improbibElement);
-    }
-    mutations
-      .addNewElementToWorkshop(workshopId, element.id, element)
-      .then((elementId) => {
-        history.push(`/workshop/${workshopId}`, {
-          direction: "back",
-          newElement: elementId,
-        });
-      });
-  }
 
   function onStarElementClick() {
-    if (!myUser) {
-      // TODO test if the user exists in the database as query
-      // currently, the query is just stuck because isFetching will not switch to `false`
-      presentToast("Login to use the favorite function.", 1000);
+    if (!element) {
       return;
     }
-    if (
-      !mutations ||
-      !myUser ||
-      isFavoriteElement === undefined ||
-      !improbibElement
-    )
-      return;
-    logger("onStarElementClick - isFavoriteElement: %s", isFavoriteElement);
-    mutations.addNewElement(improbibElement);
-    mutations.toggleFavoriteElementOfUser(myUser, libraryPartId);
+
+    if (element.isFavorite === true) {
+      updateUserFavoriteElementMutation({
+        input: { elementId: element.id, isFavorite: false },
+      }).then(() => {
+        reexecuteElementQuery({ requestPolicy: "network-only" });
+      });
+    } else {
+      updateUserFavoriteElementMutation({
+        input: { elementId: element.id, isFavorite: true },
+      }).then(() => {
+        reexecuteElementQuery({ requestPolicy: "network-only" });
+      });
+    }
+  }
+
+  function addToWorkshop() {
+    if (!element) return;
+    if (!workshopId) throw new Error("no workshop id");
+    if (!workshopQueryResult.data) throw new Error("workshop not found");
+    const lastSectionId = workshopQueryResult.data.workshop.sections.at(-1)?.id;
+    if (!lastSectionId) throw new Error("no last section id");
+
+    addToWorkshopMutation({
+      input: {
+        id: workshopId,
+        sections: {
+          update: [
+            {
+              id: lastSectionId,
+              elements: {
+                create: [
+                  {
+                    basedOn: {
+                      connect: {
+                        id: element.id,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    }).then(() => {
+      history.push(`/workshop/${workshopId}`, {
+        direction: "back",
+        newElement: "last",
+      });
+    });
   }
 
   return (
@@ -109,21 +155,26 @@ export const LibraryElementPage: React.FC = () => {
               defaultHref={routeLibrary({ workshopId })}
             ></IonBackButton>
           </IonButtons>
-          <IonTitle>{improbibElement?.name}</IonTitle>
+          <IonTitle>{element?.name}</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={() => onStarElementClick()}>
               <IonIcon
                 slot="icon-only"
-                icon={isFavoriteElement ? star : starOutline}
+                icon={element?.isFavorite ? star : starOutline}
+                aria-label={
+                  element?.isFavorite
+                    ? "Remove from favorites."
+                    : "Add to favorites."
+                }
               ></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen className="ion-padding">
-        {improbibElement ? (
-          <ElementComponent element={improbibElement}></ElementComponent>
+      <IonContent fullscreen>
+        {element ? (
+          <ElementComponent elementFragment={element}></ElementComponent>
         ) : (
           <IonSpinner></IonSpinner>
         )}

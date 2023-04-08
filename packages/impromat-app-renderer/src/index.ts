@@ -42,7 +42,6 @@ async function handlePageRequest(url: string) {
   await browser.close();
   return html;
 }
-
 app.listen(port, () => {
   console.log(`Listening on port http://localhost:${port}`);
 });

@@ -44,6 +44,12 @@ yarn lint:fix
 
 ## Tests
 
+Start test infrastructure via
+
+```sh
+yarn test:backend-up
+```
+
 Playwright executes frontend tests.
 
 To run tests start the application and run
@@ -78,17 +84,29 @@ For e2e tests you have to set all environment variables that the `.env.test` env
 
 The `COOKIE_SECRET` has to be added to the environment on the server. Session secrets are stored in the `/var/lib/dokku/data/storage` folder - see `infrastructure` package for further details.
 
-### Automatic Login
+For running against a locally running version specify a `.env.test.local` and override the following environment variables:
 
-If the `REACT_APP_AUTO_LOGIN` environment variable is set, the application simulates an automatic login. This enables integration tests to test all functionalities that require login.
-
-```sh
-REACT_APP_AUTO_LOGIN=1 yarn start
+```
+COOKIE_SECRET=[your session secret]
+COOKIE_DOMAIN=localhost
+BASE_URL=http://localhost:3000/
 ```
 
 ### Page Object Models
 
 Tests are structured using https://playwright.dev/docs/pom.
+
+## Dependency Cruiser
+
+For visualizations you have to install `graphviz`:
+
+```
+brew install graphviz
+```
+
+```
+yarn deps:visualize
+```
 
 ## Frameworks
 

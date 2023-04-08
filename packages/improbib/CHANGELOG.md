@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1
+
+### Patch Changes
+
+- fe732f9: Change cache URLs to support windows.
+
 ## 0.4.0
 
 ### Minor Changes

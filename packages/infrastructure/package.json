@@ -1,10 +1,20 @@
 {
   "name": "infrastructure",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "description": "Infrastructure for Impromat",
   "author": "Marco Klein <hello@marcoklein.dev>",
   "private": true,
   "scripts": {
-    "changeset": "yarn --cwd \"../..\" changeset"
+    "changeset": "yarn --cwd \"../..\" changeset",
+    "dokku": "ssh -t dokku@impromat.app",
+    "app:dev:logs": "ssh -t dokku@impromat.app logs impromat-app-development",
+    "api:dev:logs": "ssh -t dokku@impromat.app logs impromat-api-development",
+    "app:prod:logs": "ssh -t dokku@impromat.app logs impromat-app-production",
+    "api:prod:logs": "ssh -t dokku@impromat.app logs impromat-api-production",
+    "docker-compose": "dotenv -c -- docker compose"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "dotenv-cli": "^7.0.0"
   }
 }

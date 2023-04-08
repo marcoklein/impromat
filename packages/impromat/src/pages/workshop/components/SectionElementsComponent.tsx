@@ -1,104 +1,50 @@
-import { IonSpinner } from "@ionic/react";
-import { useEffect, useState } from "react";
-import { DeepReadonlyObject } from "rxdb";
-import { ElementDocType } from "../../../database/collections/element/element-collection";
-import { SectionDocument } from "../../../database/collections/section/section-collection";
-import { WorkshopDocument } from "../../../database/collections/workshop/workshop-collection";
-import { useDocument } from "../../../database/use-document";
+import {
+  FragmentType,
+  getFragmentData,
+  graphql,
+} from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
-import { useImpromatRxDb } from "../../../hooks/use-impromat-rx-db";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
 import { WorkshopElementItemComponent } from "./WorkshopElementItemComponent";
 
+const SectionElementsComponent_WorkshopSection = graphql(`
+  fragment SectionElementsComponent_WorkshopSection on WorkshopSection {
+    id
+    name
+    isCollapsed
+    orderIndex
+    elements {
+      id
+      ...WorkshopElementItemComponent_WorkshopElement
+    }
+  }
+`);
+
 interface ContainerProps {
-  workshop: WorkshopDocument;
-  section: SectionDocument;
-  onRemoveClick: (element: DeepReadonlyObject<ElementDocType>) => void;
+  workshopId: string;
+  sectionFragment: FragmentType<
+    typeof SectionElementsComponent_WorkshopSection
+  >;
+  onRemoveClick: (elementId: string) => void;
   isReordering: boolean;
 }
 
 export const SectionElementsComponent: React.FC<ContainerProps> = ({
-  workshop,
-  section: sectionInput,
+  workshopId,
+  sectionFragment,
   onRemoveClick,
   isReordering,
 }) => {
-  // const { document: section, isFetching } = useDocument("sections", sectionId);
-  const [elements, setElements] = useState<
-    DeepReadonlyObject<ElementDocType>[]
-  >([]);
-  const { document: section, isFetching: isSectionFetching } = useDocument(
-    "sections",
-    sectionInput.id,
-  );
-  // const { documents: elements, isFetching: isElementsFetching } = useDocuments(
-  //   "elements",
-  //   section?.elements,
-  // );
-  const rxdb = useImpromatRxDb();
   const logger = useComponentLogger("SectionElementsComponent");
-  useEffect(() => {
-    logger(section);
-  }, [section, logger]);
+  const section = getFragmentData(
+    SectionElementsComponent_WorkshopSection,
+    sectionFragment,
+  );
+  const elements = section.elements;
 
   useStateChangeLogger(section, "section", logger);
-  useStateChangeLogger(isSectionFetching, "isSectionFetching", logger);
-  // useStateChangeLogger(isElementsFetching, "isElementsFetching", logger);
 
-  useEffect(() => {
-    if (section) {
-      const updateElementsOfSection = () => {
-        console.log("Searching for elements:", section.elements);
-        // const sectionElementIds = (section.elements as any).map(
-        //   (e: any) => e.id,
-        // );
-        const sectionElementIds = section.elements;
-        console.log("Mapped section element ids", sectionElementIds);
-        rxdb.elements
-          .findByIds(sectionElementIds ?? [])
-          .then((sectionElements) => {
-            const fetchedElements: DeepReadonlyObject<ElementDocType>[] = [];
-            for (const elementId of sectionElementIds) {
-              const currentElement = sectionElements.get(elementId);
-              if (!currentElement) {
-                console.warn(
-                  "Could not find element with id",
-                  elementId,
-                  "in section",
-                  section.id,
-                  "elements",
-                );
-                continue;
-              }
-              fetchedElements.push(currentElement.toJSON());
-            }
-            setElements(fetchedElements);
-          })
-          .catch((error) => {
-            console.error(
-              "Could not fetch elements of section",
-              section.id,
-              error,
-            );
-          });
-      };
-      // TODO only listen for element ids!
-      const subscription = rxdb.$.subscribe(() => {
-        updateElementsOfSection();
-      });
-      updateElementsOfSection();
-      return () => {
-        subscription.unsubscribe();
-      };
-    } else {
-      setElements([]);
-    }
-  }, [section, rxdb]);
-
-  if (!section) {
-    return <IonSpinner></IonSpinner>;
-  }
-  if (section.isCollapsed || !section.elements || !elements) {
+  if (section.isCollapsed || !section.elements.length) {
     return <></>;
   }
 
@@ -106,10 +52,10 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
     <>
       {elements.map((element) => (
         <WorkshopElementItemComponent
-          workshopElement={element}
+          workshopElementFragment={element}
           key={element.id}
-          routerLink={`/workshop/${workshop.id}/part/${element.id}`}
-          onRemoveClick={() => onRemoveClick(element)}
+          routerLink={`/workshop/${workshopId}/part/${element.id}`}
+          onRemoveClick={() => onRemoveClick(element.id)}
           isReordering={isReordering}
         ></WorkshopElementItemComponent>
       ))}

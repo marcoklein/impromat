@@ -95,3 +95,9 @@ To validate certification retrieval you should use the Letsencrypt staging serve
 ```
 ssh -t dokku@impromat.app config:set --no-restart <app-name> DOKKU_LETSENCRYPT_SERVER=staging
 ```
+
+For auto-renewing all apps run
+
+```
+ssh -t dokku@impromat.app letsencrypt:auto-renew
+```

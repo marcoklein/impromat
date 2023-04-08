@@ -39,9 +39,9 @@ export const LicenseItemComponent: React.FC<ContainerProps> = ({
           {authorName && (
             <>
               {" "}
-              by {OptionalLink(authorName, authorUrl)}
+              from {OptionalLink(authorName, authorUrl)}
               {licenseName && (
-                <> and licensed under {OptionalLink(licenseName, licenseUrl)}</>
+                <>, licensed under {OptionalLink(licenseName, licenseUrl)}</>
               )}
             </>
           )}

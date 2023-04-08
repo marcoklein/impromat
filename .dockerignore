@@ -1,2 +1,9 @@
+.git
+.DS_Store
 node_modules
 *.secret*
+*.auth.json
+*.local
+
+packages/impromat-api/dist
+packages/impromat-api/assets

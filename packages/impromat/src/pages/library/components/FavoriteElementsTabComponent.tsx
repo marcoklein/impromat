@@ -1,11 +1,29 @@
 import { IonSpinner } from "@ionic/react";
-import { useEffect } from "react";
-import { useDocuments } from "../../../database/use-documents";
-import { useMyUser } from "../../../database/use-my-user";
-import { useComponentLogger } from "../../../hooks/use-component-logger";
-import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
+import { useMemo } from "react";
+import { useQuery } from "urql";
+import { getFragmentData, graphql } from "../../../graphql-client";
 import { FavoriteElementsEmptyComponent } from "./FavoriteElementsEmptyComponent";
 import { FavoriteElementsListComponent } from "./FavoriteElementsListComponent";
+
+const MyUser_QueryFragment = graphql(`
+  fragment MyUser_Query on Query {
+    me {
+      id
+      favoriteElements {
+        element {
+          id
+        }
+      }
+      ...FavoriteElements_User
+    }
+  }
+`);
+
+const MyUser_Query = graphql(`
+  query MyUser {
+    ...MyUser_Query
+  }
+`);
 
 interface ContainerProps {
   workshopId: string | undefined;
@@ -14,31 +32,28 @@ interface ContainerProps {
 export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
-  const logger = useComponentLogger("FavoriteElementsTabComponent");
-  const { document: myUser } = useMyUser();
-  useStateChangeLogger(myUser, "myUser", logger);
-  const { documents: favoriteElements, isFetching } = useDocuments(
-    "elements",
-    myUser?.favoriteElements,
-    logger,
-  );
+  const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
+  const [{ data, fetching: isFetching, error }] = useQuery({
+    query: MyUser_Query,
+    context,
+  });
+  const user = getFragmentData(MyUser_QueryFragment, data);
+  const favoriteElements = user?.me.favoriteElements;
 
-  useEffect(() => {
-    logger("myUser favElements=%O", myUser?.favoriteElements);
-  }, [myUser, logger]);
+  if (error) {
+    return <div>Error: {error.toString()}</div>;
+  }
 
+  if (!user || isFetching) {
+    return <IonSpinner></IonSpinner>;
+  }
+  if (!favoriteElements?.length) {
+    return <FavoriteElementsEmptyComponent></FavoriteElementsEmptyComponent>;
+  }
   return (
-    <>
-      {isFetching || favoriteElements === undefined ? (
-        <IonSpinner></IonSpinner>
-      ) : !favoriteElements.length ? (
-        <FavoriteElementsEmptyComponent></FavoriteElementsEmptyComponent>
-      ) : (
-        <FavoriteElementsListComponent
-          workshopId={workshopId}
-          favoriteElements={favoriteElements}
-        ></FavoriteElementsListComponent>
-      )}
-    </>
+    <FavoriteElementsListComponent
+      workshopId={workshopId}
+      favoriteElementsFragment={user.me}
+    ></FavoriteElementsListComponent>
   );
 };

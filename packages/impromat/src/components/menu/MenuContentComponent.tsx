@@ -63,7 +63,11 @@ export const MenuContentComponent: React.FC = () => {
             routerLink={routeWorkshops()}
             icon={documents}
             label="Workshops"
-          ></MenuItemComponent>
+          >
+            {/* <IonButton slot="end" fill="solid" color="dark">
+              <IonIcon icon={add}></IonIcon>
+            </IonButton> */}
+          </MenuItemComponent>
         </IonItemGroup>
         <IonItemGroup>
           <MenuItemComponent

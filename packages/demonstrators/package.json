@@ -1,0 +1,7 @@
+{
+  "name": "demonstrators",
+  "description": "Impromat Monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "author": "Marco Klein <hello@marcoklein.dev>"
+}

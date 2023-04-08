@@ -1,262 +1,253 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ElementTag {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean!
+  name: String!
+}
+
 """
-Integer holding milliseconds since UNIX epoch start.
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
-scalar SafeInt
+scalar DateTime
+
+type UserFavoriteElement {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  element: Element!
+}
+
+type WorkshopElement {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean!
+  note: String
+  basedOn: Element!
+  section: WorkshopSection!
+}
+
+type WorkshopSection {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean!
+  name: String
+  color: String
+  isCollapsed: Boolean!
+  elements: [WorkshopElement!]!
+  workshop: Workshop!
+  orderIndex: Float!
+}
+
+type Workshop {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean!
+  name: String!
+  description: String
+  sections: [WorkshopSection!]!
+  owner: User!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean!
+  workshops: [Workshop!]!
+
+  """Elements owned by this user."""
+  elements: [Element!]!
+  favoriteElements: [UserFavoriteElement!]!
+
+  """Public display name of the user."""
+  name: String
+}
+
+type Element {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean!
+  name: String!
+  markdown: String
+  tags: [ElementTag!]!
+  usedBy: [WorkshopElement!]!
+  languageCode: String
+  sourceUrl: String
+  sourceName: String
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+  owner: User
+
+  """
+  Convenience field to determine if the owner of the element is the logged in user.
+  """
+  isOwnerMe: Boolean
+  visibility: ElementVisibility!
+
+  """Set if the element is called from a user context."""
+  isFavorite: Boolean
+}
+
+enum ElementVisibility {
+  """Element is only visible to its owning user."""
+  PRIVATE
+
+  """Element is publicly shared with the whole community."""
+  PUBLIC
+}
+
+type ElementSearchResult {
+  element: Element!
+  score: Float!
+}
 
 type Query {
-  """
-  Returns new workshops since last sync.
-  """
-  pullWorkshops(
-    checkpoint: PullCheckpointInput!
-    limit: Int!
-  ): WorkshopPullBulk!
-  """
-  Returns new elements since last sync.
-  """
-  pullElements(checkpoint: PullCheckpointInput!, limit: Int!): ElementPullBulk!
-  """
-  Returns new sections since last sync.
-  """
-  pullSections(checkpoint: PullCheckpointInput!, limit: Int!): SectionPullBulk!
-  """
-  Returns new users since last sync.
-  """
-  pullUsers(checkpoint: PullCheckpointInput!, limit: Int!): UserPullBulk!
-  """
-  Returns an authentication url for google authentication.
-  """
   googleAuthUrl: String!
-  """
-  Information about the logged in session.
-  Null indicates a not logged in user.
-  """
-  me: TokenInfo
-  """
-  Version of the application.
-  """
-  version: String!
+  searchElements(input: ElementSearchInput!): [ElementSearchResult!]!
+  workshop(id: ID!): Workshop!
+  workshops: [Workshop!]!
+  workshopElement(id: ID!): WorkshopElement!
+  element(id: ID!): Element
+  elements: [Element!]
+
+  """Get information about the current user."""
+  me: User!
+}
+
+input ElementSearchInput {
+  text: String
+  limit: Int! = 20
 }
 
 type Mutation {
-  """
-  Update given workshops.
-  Returns conflicting workshops. That means the client has to resolve all workshops that the call returns.
-  """
-  pushWorkshops(workshopPushRows: [WorkshopPushRowInput!]!): [Workshop]
-  """
-  Update given elements.
-  Returns conflicting elements. That means the client has to resolve all elements that the call returns.
-  """
-  pushElements(elementPushRows: [ElementPushRowInput!]!): [Element]
-  """
-  Update given sections.
-  Returns conflicting sections. That means the client has to resolve all sections that the call returns.
-  """
-  pushSections(sectionPushRows: [SectionPushRowInput!]!): [Section]
-  """
-  Update user info of the logged in user.
-  Returns current master state if there is a conflict.
-  Throws an error if the user is not logged in.
-  """
-  pushUser(userPushRow: UserPushRowInput!): User
-  """
-  Update given users.
-  Returns conflicting users. That means the client has to resolve all users that the call returns.
-  """
-  pushUsers(userPushRows: [UserPushRowInput!]!): [User]
-  """
-  Log out from the application.
-  Returns true if the user was logged in and got logged out successfully.
-  Returns undefined, if the user was not logged in.
-  """
   logout: Boolean!
+
+  """Change the favorite state for element of the logged in user."""
+  updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Element
+  createWorkshop(input: CreateWorkshopInput!): Workshop!
+  updateWorkshop(input: UpdateWorkshopInput!): Workshop!
+  deleteWorkshop(id: ID!): Workshop
+  updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
+  createElement(input: CreateElementInput!): Element!
+  updateElement(input: UpdateElementInput!): Element!
 }
 
-input PullCheckpointInput {
-  id: ID!
-  updatedAt: SafeInt!
+input UpdateUserFavoriteElementInput {
+  elementId: ID!
+  isFavorite: Boolean!
 }
 
-input WorkshopPushRowInput {
-  assumedMasterState: WorkshopInput
-  newDocumentState: WorkshopInput!
+input CreateWorkshopInput {
+  name: String!
+  description: String
+  sections: WorkshopSectionListCreateInput
 }
 
-input ElementPushRowInput {
-  assumedMasterState: ElementInput
-  newDocumentState: ElementInput!
+input WorkshopSectionListCreateInput {
+  create: [CreateWorkshopSectionInput!]
 }
 
-input SectionPushRowInput {
-  assumedMasterState: SectionInput
-  newDocumentState: SectionInput!
+input CreateWorkshopSectionInput {
+  name: String!
+  orderIndex: Float
+  isCollapsed: Boolean
 }
 
-input UserPushRowInput {
-  assumedMasterState: UserInput
-  newDocumentState: UserInput!
-}
-
-input WorkshopInput {
-  id: ID!
-  version: Int!
-  deleted: Boolean
-
-  """
-  @deprecated("Updated at is only set by the server")
-  """
-  updatedAt: SafeInt
+input UpdateWorkshopInput {
   name: String
   description: String
-  """
-  Reference to sections of workshop.
-  """
-  sectionRefs: [ID!]
+  sections: WorkshopSectionListInput
+  id: ID!
 }
 
-input SectionInput {
-  id: ID!
-  version: Int!
+input WorkshopSectionListInput {
+  create: [CreateWorkshopSectionInput!]
+  update: [UpdateWorkshopSectionInput!]
+  delete: [DeleteWorkshopSectionInput!]
+}
+
+input UpdateWorkshopSectionInput {
   name: String
-  """
-  Reference to section elements.
-  """
-  elementRefs: [ID!]
-  note: String
-  color: String
-  isVisible: Boolean
+  orderIndex: Float
   isCollapsed: Boolean
+  id: ID!
+  elements: WorkshopElementListInput
 }
 
-input ElementInput {
+input WorkshopElementListInput {
+  create: [CreateWorkshopElementInput!]
+  update: [UpdateWorkshopElementInput!]
+  delete: [DeleteWorkshopElementInput!]
+}
+
+input CreateWorkshopElementInput {
+  note: String
+  basedOn: BasedOnElementConnectInput!
+  orderIndex: Float
+}
+
+input BasedOnElementConnectInput {
+  connect: IdInput!
+}
+
+input IdInput {
   id: ID!
-  version: Int!
+}
+
+input UpdateWorkshopElementInput {
+  note: String
+  basedOn: BasedOnElementConnectInput
+  orderIndex: Float
+  id: ID!
+}
+
+input DeleteWorkshopElementInput {
+  id: ID!
+}
+
+input DeleteWorkshopSectionInput {
+  id: ID!
+}
+
+"""
+Moves a workshop item (section or element) within a workshop considering collapsed sections.
+"""
+input UpdateWorkshopItemOrder {
+  workshopId: ID!
+
+  """From position."""
+  fromPosition: Int!
+
+  """To position."""
+  toPosition: Int!
+}
+
+input CreateElementInput {
   name: String!
+  visibility: ElementVisibility! = PRIVATE
   markdown: String
-  tags: [String!]
-  note: String
-  """
-  Ref with id to other Element.
-  """
-  basedOn: ID
-  languageCode: String
-  sourceUrl: String
-  sourceName: String
-  sourceBaseUrl: String
-  licenseName: String
-  licenseUrl: String
+  orderIndex: Int
 }
 
-input UserInput {
-  version: Int!
-  """
-  Reference to the favorite elements.
-  """
-  favoriteElementRefs: [ID!]
-}
-
-type WorkshopPullBulk {
-  documents: [Workshop!]!
-  checkpoint: PullCheckpoint
-}
-
-type ElementPullBulk {
-  documents: [Element!]!
-  checkpoint: PullCheckpoint
-}
-
-type SectionPullBulk {
-  documents: [Section!]!
-  checkpoint: PullCheckpoint
-}
-
-type UserPullBulk {
-  documents: [User!]!
-  checkpoint: PullCheckpoint
-}
-
-type PullCheckpoint {
-  id: String!
-  updatedAt: Float!
-}
-
-type TokenInfo {
-  userId: String!
-  user: User!
-}
-
-"""
-Information about a user that uses Impromat.
-"""
-type User {
-  """
-  Id of the user.
-  """
+input UpdateElementInput {
+  name: String
+  visibility: ElementVisibility = PRIVATE
+  markdown: String
+  orderIndex: Int
   id: ID!
-  """
-  Entity version.
-  """
-  version: Int!
-  favoriteElements: [Element!]!
-}
-
-"""
-An improvisational theatre Workshop that a person can hold for their group.
-"""
-type Workshop {
-  id: ID!
-  version: Int!
-  """
-  @deprecated use version
-  """
-  updatedAt: SafeInt!
-  """
-  For syncing purposes this flag indicates deleted workshops.
-  """
-  deleted: Boolean
-  name: String!
-  description: String!
-  sections: [Section!]!
-}
-
-"""
-A section groups several elements of a workshop.
-A workshop must always have at least one section.
-"""
-type Section {
-  id: ID!
-  version: Int!
-  name: String!
-  elements: [Element!]!
-  note: String
-  color: String
-  """
-  If false the section will not be shown.
-  If there are no sections yet there is an invisiable ghost section to hold all elements.
-  """
-  isVisible: Boolean
-  isCollapsed: Boolean
-}
-
-"""
-General element like a exercise or game.
-"""
-type Element {
-  id: ID!
-  version: Int!
-  name: String!
-  markdown: String!
-  tags: [String!]!
-  """
-  User defined note
-  """
-  note: String!
-  basedOn: Element
-  languageCode: String
-  sourceUrl: String
-  sourceName: String
-  sourceBaseUrl: String
-  licenseName: String
-  licenseUrl: String
 }

@@ -1,13 +1,22 @@
-import { IonList, IonSearchbar, IonSpinner, IonText } from "@ionic/react";
-import Fuse from "fuse.js";
+import { IonList, IonSearchbar, IonSpinner } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useQuery } from "urql";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
-import { ElementDocType } from "../../../database/collections/element/element-collection";
-import { useImprobibElements } from "../../../database/improbib/use-improbib-elements";
-import { useCustomElements } from "../../../database/use-custom-elements";
+import { graphql } from "../../../graphql-client";
 import { routeLibraryElement } from "../library-routes";
+
+const SearchElementTabQuery = graphql(`
+  query SearchElements($input: ElementSearchInput!) {
+    searchElements(input: $input) {
+      element {
+        id
+        ...ElementPreviewItem_Element
+      }
+    }
+  }
+`);
 
 interface ContainerProps {
   workshopId?: string;
@@ -19,47 +28,21 @@ interface ContainerProps {
 export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
-  const improbibElements = useImprobibElements();
-  const [loadingImprovElements, setLoadingImprovElements] = useState(true);
-  const [searchText, setSearchText] = useState("");
-  const [workshopElements, setWorkshopElements] = useState<ElementDocType[]>();
-  const [fuse, setFuse] = useState<Fuse<ElementDocType>>();
-  const [isSearching, setIsSearching] = useState(true);
-  const { customElements, isFetching: isCustomElementsFetching } =
-    useCustomElements();
+  // Known issue with the search bar: sometimes inputs "hang up" if you type too fast.
+  // Therefore, a `ref` is used to set the initial value only.
+  const searchInputRef = useRef<HTMLIonSearchbarElement>(null);
+  const [searchText, setSearchText] = useState(
+    window.localStorage.getItem("lastSearch") ?? "",
+  );
+  const [queryResult] = useQuery({
+    query: SearchElementTabQuery,
+    variables: { input: { text: searchText, limit: 20 } },
+  });
 
   useEffect(() => {
-    setLoadingImprovElements(improbibElements === undefined);
-    if (improbibElements && customElements && !isCustomElementsFetching) {
-      setFuse(
-        new Fuse([...improbibElements, ...customElements], {
-          keys: ["name", "tags", { name: "markdown", weight: 0.5 }],
-          threshold: 0.6,
-        }),
-      );
-    } else {
-      setFuse(undefined);
-    }
-  }, [improbibElements, customElements, isCustomElementsFetching]);
-
-  useEffect(() => {
-    if (!fuse) return;
-
-    (async () => {
-      setWorkshopElements(
-        fuse
-          .search(searchText)
-          .map((result) => result.item)
-          .slice(0, 20),
-      );
-    })();
-    setIsSearching(false);
-  }, [searchText, fuse]);
-
-  useEffect(() => {
-    const lastSearch = window.localStorage.getItem("lastSearch");
-    if (lastSearch) {
-      setSearchText(lastSearch);
+    if (searchInputRef.current) {
+      searchInputRef.current.value =
+        window.localStorage.getItem("lastSearch") ?? "";
     }
   }, []);
 
@@ -67,57 +50,57 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
     window.localStorage.setItem("lastSearch", searchText);
   }, [searchText]);
 
+  function SearchContent() {
+    if (
+      !queryResult.fetching &&
+      !queryResult.data?.searchElements.length &&
+      searchText.length
+    ) {
+      return (
+        <IonList>
+          <InfoItemComponent
+            message="No matching elements found."
+            icon={informationCircle}
+            color="warning"
+          ></InfoItemComponent>
+        </IonList>
+      );
+    }
+    if (!!queryResult.data?.searchElements.length) {
+      return (
+        <IonList>
+          {queryResult.data.searchElements.map((searchResult) => (
+            <ElementPreviewItemComponent
+              key={searchResult.element.id}
+              routerLink={routeLibraryElement(searchResult.element.id, {
+                workshopId,
+              })}
+              workshopElementFragment={searchResult.element}
+            ></ElementPreviewItemComponent>
+          ))}
+        </IonList>
+      );
+    }
+    if (!queryResult.data?.searchElements.length && !searchText.length) {
+      return (
+        <InfoItemComponent
+          message={"Use the search bar to find elements from various sources."}
+          icon={informationCircle}
+        ></InfoItemComponent>
+      );
+    }
+    return <IonSpinner></IonSpinner>;
+  }
+
   return (
     <>
       <IonSearchbar
-        debounce={500}
-        disabled={loadingImprovElements}
-        value={searchText}
-        onIonChange={(e) => {
-          setIsSearching(true);
+        ref={searchInputRef}
+        onIonInput={(e) => {
           setSearchText(e.detail.value ?? "");
         }}
       ></IonSearchbar>
-      {loadingImprovElements ? (
-        <div className="ion-padding" style={{ textAlign: "center" }}>
-          <IonSpinner></IonSpinner>
-          <p>
-            <IonText>Loading Improv Database</IonText>
-          </p>
-        </div>
-      ) : (
-        <>
-          {!isSearching && !workshopElements?.length && searchText.length ? (
-            <IonList>
-              <InfoItemComponent
-                message="No matching elements found."
-                icon={informationCircle}
-                color="warning"
-              ></InfoItemComponent>
-            </IonList>
-          ) : (
-            !!workshopElements?.length && (
-              <IonList>
-                {workshopElements?.map((element) => (
-                  <ElementPreviewItemComponent
-                    key={element.id}
-                    routerLink={routeLibraryElement(element.id, { workshopId })}
-                    workshopElement={element}
-                  ></ElementPreviewItemComponent>
-                ))}
-              </IonList>
-            )
-          )}
-          {!workshopElements?.length && !searchText.length && (
-            <InfoItemComponent
-              message={
-                "Use the search bar to find elements from various sources."
-              }
-              icon={informationCircle}
-            ></InfoItemComponent>
-          )}
-        </>
-      )}
+      <SearchContent></SearchContent>
     </>
   );
 };

@@ -1,56 +1,47 @@
 import { useIonAlert, useIonLoading, useIonToast } from "@ionic/react";
-import { environment } from "../environment";
-import { useImpromatRxDb } from "./use-impromat-rx-db";
+import { useMutation } from "urql";
+import { graphql } from "../graphql-client";
+import { useIsLoggedIn } from "./use-is-logged-in";
 import { useLogger } from "./use-logger";
 
-const backendUrl = `${environment.API_URL}/graphql`;
 export function useLogout() {
   const [presentIonLoading, dismissIonLoading] = useIonLoading();
   const [displayToast] = useIonToast();
-  const database = useImpromatRxDb();
   const logger = useLogger("useLogout");
   const [presentAlert] = useIonAlert();
+  const { isLoggedIn, retriggerLogInQuery } = useIsLoggedIn();
+
+  const [, logoutMutation] = useMutation(
+    graphql(`
+      mutation LogoutMutation {
+        logout
+      }
+    `),
+  );
 
   const startLogout = async () => {
-    try {
-      presentIonLoading("Logging out...");
-      // TODO refactor REACT_APP_AUTO_LOGIN functionality into a separate hook
-      if (!process.env.REACT_APP_AUTO_LOGIN) {
-        console.warn("REACT_APP_AUTO_LOGIN: Skipping logout request");
-        await fetch(backendUrl, {
-          method: "POST",
-          body: JSON.stringify({
-            query: /* GraphQL */ `
-              mutation {
-                logout
-              }
-            `,
-          }),
-          headers: {
-            "content-type": "application/json",
-            accept: "application/json",
-          },
-          credentials: "include",
-        });
-      }
-      await database.remove();
-      await database.destroy();
-      logger("Cleared database");
-      // reloading at this point is very important to avoid synchronization with the
-      // backend database which could potentially sync the deleted database
-      window.stop();
-      window.location.reload();
-    } catch (e) {
-      console.warn(e);
+    presentIonLoading("Logging out...");
+    const result = await logoutMutation({});
+    if (result.error?.networkError) {
       displayToast(
-        "You can only log out with an active internet connection.",
+        "An active internet connection is required for logout.",
         2000,
       );
     }
+    retriggerLogInQuery();
     dismissIonLoading();
   };
 
-  const triggerLogout = async () => {
+  const triggerLogout = async (params?: { force: boolean }) => {
+    if (!isLoggedIn) {
+      logger("Will not log out because user is not logged in");
+      return;
+    }
+    if (params?.force) {
+      logger("Forced logout (no confirmation dialog)");
+      startLogout();
+      return;
+    }
     presentAlert({
       header: "Logout",
       message:

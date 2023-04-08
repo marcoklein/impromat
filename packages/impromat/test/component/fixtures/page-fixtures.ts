@@ -1,5 +1,7 @@
 import { test as base } from "@playwright/test";
 import { AccountDevPage } from "./account-dev-page";
+import { AuthFixture } from "./auth-fixture";
+import { FavoriteElementsDevPage } from "./favorite-elements-dev-page";
 import { LibraryDevPage } from "./library-dev-page";
 import { WorkshopDevPage } from "./workshop-dev-page";
 import { WorkshopElementDevPage } from "./workshop-element-dev-page";
@@ -10,7 +12,9 @@ type PageFixtures = {
   workshopsPage: WorkshopsDevPage;
   workshopElementPage: WorkshopElementDevPage;
   libraryPage: LibraryDevPage;
+  favoriteElementsPage: FavoriteElementsDevPage;
   accountPage: AccountDevPage;
+  auth: AuthFixture;
 };
 
 const test = base.extend<PageFixtures>({
@@ -20,6 +24,9 @@ const test = base.extend<PageFixtures>({
   workshopsPage: async ({ page }, use) => {
     await use(new WorkshopsDevPage(page));
   },
+  favoriteElementsPage: async ({ page }, use) => {
+    await use(new FavoriteElementsDevPage(page));
+  },
   workshopElementPage: async ({ page }, use) => {
     await use(new WorkshopElementDevPage(page));
   },
@@ -28,6 +35,9 @@ const test = base.extend<PageFixtures>({
   },
   accountPage: async ({ page }, use) => {
     await use(new AccountDevPage(page));
+  },
+  auth: async ({ page }, use) => {
+    await use(new AuthFixture(page));
   },
 });
 

@@ -2,32 +2,41 @@ FROM node:16
 
 # install required packages for puppeteer
 RUN apt-get update \
-    && apt-get install -y wget gnupg \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-khmeros fonts-kacst fonts-freefont-ttf libxss1 \
-      --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+  && apt-get install -y wget gnupg \
+  && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+  && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+  && apt-get update \
+  && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-khmeros fonts-kacst fonts-freefont-ttf libxss1 \
+  --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r myuser \
-    && useradd --no-log-init -r -g myuser myuser --home-dir /home/myuser --create-home \
-    && chown -R myuser:myuser /home/myuser
+  && useradd --no-log-init -r -g myuser myuser --home-dir /home/myuser --create-home \
+  && chown -R myuser:myuser /home/myuser
+
+RUN apt-get install -y curl
 
 USER myuser
 
 WORKDIR /home/myuser
-COPY --chown=myuser:myuser . .
-RUN ls -la
-RUN yarn install --frozen-lockfile
+COPY --chown=myuser package.json yarn.lock ./
+COPY --chown=myuser packages/improbib/package.json packages/improbib/
+COPY --chown=myuser packages/impromat/package.json packages/impromat/
+COPY --chown=myuser packages/impromat-app-renderer/package.json packages/impromat-app-renderer/
+RUN yarn install --immutable
+
+COPY --chown=myuser packages/improbib/ packages/improbib/
+COPY --chown=myuser packages/impromat/ packages/impromat/
+COPY --chown=myuser packages/impromat-app-renderer/ packages/impromat-app-renderer/
+RUN ls -la packages/improbib/
+
+WORKDIR /home/myuser/packages/improbib
+RUN yarn build
 
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL ${REACT_APP_API_URL}
 ARG REACT_APP_VERSION
 ENV REACT_APP_VERSION ${REACT_APP_VERSION}
-
-WORKDIR /home/myuser/packages/improbib
-RUN yarn build
 
 WORKDIR /home/myuser/packages/impromat
 RUN yarn build
