@@ -12,7 +12,6 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     outputs:
-      # TODO how to negate the output value?
       triggerDeployment: ${{ steps.changesets.outputs.hasChangesets == 'false' }}
     steps:
       - name: Checkout Repo
