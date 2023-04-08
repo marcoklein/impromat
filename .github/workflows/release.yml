@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       # TODO how to negate the output value?
-      skipDeployment: ${{ steps.changesets.outputs.hasChangesets }}
+      triggerDeployment: ${{ steps.changesets.outputs.hasChangesets == 'false' }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -49,7 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-production:
-    if: needs.release.outputs.skipDeployment == 'false'
+    if: needs.release.outputs.triggerDeployment
     needs:
       - release
     uses: ./.github/workflows/shared-deploy-job.yml
