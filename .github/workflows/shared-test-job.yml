@@ -27,6 +27,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - run: yarn install --mode=update-lockfile
       - run: yarn install
 
       - run: yarn workspace:lint
