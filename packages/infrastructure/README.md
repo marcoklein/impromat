@@ -88,6 +88,12 @@ Dokku stores files in `/var/lib/dokku/data/storage`.
 
 [Installation](./installation.md)
 
+## Upgrading of Dokku
+
+```
+sudo apt upgrade
+```
+
 ## Letsencrypt Staging Environment
 
 To validate certification retrieval you should use the Letsencrypt staging server with
