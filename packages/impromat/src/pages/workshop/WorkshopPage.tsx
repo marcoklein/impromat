@@ -26,6 +26,7 @@ import { useMutation, useQuery } from "urql";
 import { EditableItemComponent } from "../../components/EditableItemComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useDeleteWorkshopMutation } from "../../hooks/use-delete-workshop-mutation";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { routeWorkshops } from "../../routes/shared-routes";
 import { routeLibrary } from "../library/library-routes";
@@ -34,7 +35,6 @@ import {
   WorkshopActionTypes,
 } from "./components/WorkshopActionSheetComponent";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
-import "./WorkshopPage.css";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -80,15 +80,7 @@ export const WorkshopPage: React.FC = () => {
   );
   const [isReorderingElements, setIsReorderingElements] = useState(false);
 
-  const [, deleteWorkshopMutation] = useMutation(
-    graphql(`
-      mutation DeleteWorkshopMutation($id: ID!) {
-        deleteWorkshop(id: $id) {
-          id
-        }
-      }
-    `),
-  );
+  const [, deleteWorkshopMutation] = useDeleteWorkshopMutation();
 
   const [, updateWorkshopMutation] = useMutation(
     graphql(`

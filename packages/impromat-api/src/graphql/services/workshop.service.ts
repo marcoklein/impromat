@@ -23,6 +23,7 @@ export class WorkshopService {
   findWorkshopsFromUser(userSessionId: string) {
     return this.prismaService.workshop.findMany({
       where: { ownerId: userSessionId },
+      orderBy: { updatedAt: 'desc' },
     });
   }
 

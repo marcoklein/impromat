@@ -29,6 +29,6 @@ export class WorkshopsDevPage extends DevPage {
   }
 
   getWorkshopWithNameLocator(name: string) {
-    return this.page.getByText(name);
+    return this.page.getByRole("heading", { name });
   }
 }
