@@ -7,6 +7,7 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonContent,
   IonIcon,
   IonItem,
   IonList,
@@ -75,7 +76,23 @@ export const WorkshopPreviewItemComponent: React.FC<ContainerProps> = ({
       </IonCardHeader>
       <IonCardContent>
         <IonNote>
-          <IonIcon icon={calendar}></IonIcon> {workshopDateText}
+          <IonButton
+            fill="clear"
+            size="small"
+            color="medium"
+            id="hover-trigger"
+          >
+            <IonIcon icon={calendar} slot="start"></IonIcon>
+            {workshopDateText}
+          </IonButton>
+          <IonPopover trigger="hover-trigger" triggerAction="click">
+            <IonContent class="ion-padding">
+              <IonIcon icon={calendar}></IonIcon> {workshopDateText} (updated)
+            </IonContent>
+            <IonContent class="ion-padding">
+              <IonIcon icon={calendar}></IonIcon> {workshopDateText} (created)
+            </IonContent>
+          </IonPopover>
         </IonNote>
       </IonCardContent>
       <IonButton
