@@ -30,8 +30,12 @@ export class ElementSearchService {
     if (!searchElementsInput.text) {
       return elementsToSearch
         .map((element) => ({
-          element,
-          tags: (element.tags ?? []).map((elementTag) => elementTag.name),
+          element: {
+            ...element,
+            ...{
+              tags: (element.tags ?? []).map((elementTag) => elementTag.name),
+            },
+          },
           score: 0,
           matches: [],
         }))
