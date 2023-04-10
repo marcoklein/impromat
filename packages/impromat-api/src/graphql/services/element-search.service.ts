@@ -31,7 +31,7 @@ export class ElementSearchService {
       return elementsToSearch
         .map((element) => ({
           element,
-          tags: element.tags.map((elementTag) => elementTag.name),
+          tags: (element.tags ?? []).map((elementTag) => elementTag.name),
           score: 0,
           matches: [],
         }))
