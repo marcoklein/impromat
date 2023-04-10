@@ -1,14 +1,14 @@
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
   IonMenuButton,
   IonPage,
+  IonRow,
   IonSpinner,
   IonTitle,
   IonToolbar,
@@ -20,16 +20,12 @@ import { useMutation, useQuery } from "urql";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { WorkshopPreviewItemComponent } from "./components/WorkshopPreviewItemComponent";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
     id
-    version
-    createdAt
-    updatedAt
-    deleted
-    name
-    description
+    ...WorkshopPreviewItem_Workshop
   }
 `);
 
@@ -108,16 +104,24 @@ export const WorkshopsPage: React.FC = () => {
         {workshopsQueryResult.fetching || !availableWorkshops ? (
           <IonSpinner></IonSpinner>
         ) : availableWorkshops.length ? (
-          <IonList>
-            {availableWorkshops.map((workshop) => (
-              <IonItem
-                key={workshop.id}
-                routerLink={`/workshop/${workshop.id}`}
-              >
-                <IonLabel>{workshop.name}</IonLabel>
-              </IonItem>
-            ))}
-          </IonList>
+          <IonGrid>
+            <IonRow>
+              {availableWorkshops.map((workshop) => (
+                <IonCol
+                  key={workshop.id}
+                  size="12"
+                  sizeSm="6"
+                  sizeMd="6"
+                  sizeLg="6"
+                  sizeXl="4"
+                >
+                  <WorkshopPreviewItemComponent
+                    workshopFragment={workshop}
+                  ></WorkshopPreviewItemComponent>
+                </IonCol>
+              ))}
+            </IonRow>
+          </IonGrid>
         ) : (
           <div
             className="ion-padding"
