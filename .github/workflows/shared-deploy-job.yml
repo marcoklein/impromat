@@ -25,8 +25,8 @@ jobs:
       - name: Configure Enviroment
         run: bash -e ./packages/infrastructure/configure-${{ inputs.environment }}.sh
         env:
-          DEBUG_TRACE: 1
           DEBUG: 1
+          # DEBUG_TRACE: 1
       - run: git remote add impromat-app-${{ inputs.environment }} dokku@impromat.app:impromat-app-${{ inputs.environment }}
       - run: git remote add impromat-api-${{ inputs.environment }} dokku@impromat.app:impromat-api-${{ inputs.environment }}
       - run: git push impromat-app-${{ inputs.environment }} ${{ github.sha }}:main --force

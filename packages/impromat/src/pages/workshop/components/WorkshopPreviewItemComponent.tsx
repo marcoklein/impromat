@@ -47,8 +47,12 @@ export const WorkshopPreviewItemComponent: React.FC<ContainerProps> = ({
     WorkshopPreviewItem_WorkshopFragment,
     workshopFragment,
   );
-  const workshopDateText = useMemo(
+  const workshopCreatedAtText = useMemo(
     () => new Date(workshop.createdAt).toLocaleDateString(),
+    [workshop],
+  );
+  const workshopUpdatedAtText = useMemo(
+    () => new Date(workshop.updatedAt).toLocaleDateString(),
     [workshop],
   );
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState(false);
@@ -80,17 +84,22 @@ export const WorkshopPreviewItemComponent: React.FC<ContainerProps> = ({
             fill="clear"
             size="small"
             color="medium"
-            id="hover-trigger"
+            id={`updated-and-created-popover-${workshop.id}`}
           >
             <IonIcon icon={calendar} slot="start"></IonIcon>
-            {workshopDateText}
+            {workshopUpdatedAtText}
           </IonButton>
-          <IonPopover trigger="hover-trigger" triggerAction="click">
+          <IonPopover
+            trigger={`updated-and-created-popover-${workshop.id}`}
+            triggerAction="click"
+          >
             <IonContent class="ion-padding">
-              <IonIcon icon={calendar}></IonIcon> {workshopDateText} (updated)
+              <IonIcon icon={calendar}></IonIcon> {workshopUpdatedAtText}{" "}
+              (updated)
             </IonContent>
             <IonContent class="ion-padding">
-              <IonIcon icon={calendar}></IonIcon> {workshopDateText} (created)
+              <IonIcon icon={calendar}></IonIcon> {workshopCreatedAtText}{" "}
+              (created)
             </IonContent>
           </IonPopover>
         </IonNote>
