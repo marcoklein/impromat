@@ -12,9 +12,6 @@ pageTest("create workshop", async ({ page, auth, workshopsPage }) => {
   await expect(page).toHaveURL("./workshop");
 
   // click on workshop to open it again
-  await page
-    .locator("#main > div > ion-content > ion-list > ion-item")
-    .last()
-    .click();
+  await page.getByRole("link", { name: "Open" }).last().click();
   await expect(page).toHaveURL(`./workshop/${workshopId}`);
 });

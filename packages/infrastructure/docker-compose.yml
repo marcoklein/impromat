@@ -55,6 +55,7 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres?schema=impromat-api-docker-compose
     profiles:
       - backend
+      - database
   database:
     image: postgres:latest
     networks:
@@ -65,6 +66,7 @@ services:
       POSTGRES_PASSWORD: postgres
     profiles:
       - backend
+      - database
     healthcheck:
       test:
         [
