@@ -62,7 +62,7 @@
     "test:headed": "yarn test --headed",
     "test:watch": "nodemon --config nodemon-test.json",
     "test:debug": "yarn test:headed --debug",
-    "test:backend-up": "yarn docker-compose --profile backend up --wait",
+    "test:backend-up": "yarn docker-compose --profile backend up --wait --no-restart",
     "test:backend-down": "yarn docker-compose down",
     "playwright:codegen": "playwright codegen",
     "playwright:install": "playwright install chromium",
