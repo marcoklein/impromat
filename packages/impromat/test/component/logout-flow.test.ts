@@ -9,7 +9,7 @@ pageTest.describe("Logout Flow", () => {
       await auth.loginAsRandomUser();
       await workshopsPage.addWorkshop("test-workshop");
       await workshopsPage.goto();
-      await expect(workshopsPage.page.getByText("test-workshop")).toBeVisible();
+      await workshopsPage.expectToShowWorkshopWithName("test-workshop");
       // when
       await accountPage.goto();
       await accountPage.logout();
