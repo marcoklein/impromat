@@ -29,8 +29,8 @@ describe('ElementSearchService', () => {
     // then
     expect(result).toHaveLength(2);
     expect(result).toEqual([
-      { element: { id: '1', tags: [] }, score: 0, matches: [] },
-      { element: { id: '2', tags: [] }, score: 0, matches: [] },
+      { element: { id: '1' }, score: 0, matches: [] },
+      { element: { id: '2' }, score: 0, matches: [] },
     ]);
   });
 

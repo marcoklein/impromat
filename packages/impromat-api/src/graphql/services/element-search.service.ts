@@ -27,22 +27,18 @@ export class ElementSearchService {
       },
       include: { tags: true },
     });
+
     if (!searchElementsInput.text) {
       return elementsToSearch
         .map((element) => ({
-          element: {
-            ...element,
-            ...{
-              tags: (element.tags ?? []).map((elementTag) => elementTag.name),
-            },
-          },
+          element,
           score: 0,
           matches: [],
         }))
         .slice(0, searchElementsInput.limit);
     }
     const fuse = new Fuse(elementsToSearch, {
-      keys: ['name', 'tags'],
+      keys: ['name', 'tags.name'],
       includeScore: true,
       includeMatches: true,
     });
