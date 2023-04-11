@@ -3,12 +3,17 @@ import { NON_EXISTING_USER_ID } from 'test/test-utils/prepare-test-database';
 import {
   ApiTestSession,
   initApiTestSession,
-} from '../../test-utils/describe-component-test';
+} from '../../test-utils/init-api-test-session';
 
 describe('me', () => {
   let api: ApiTestSession;
+
   beforeAll(async () => {
     api = await initApiTestSession();
+  });
+
+  afterAll(async () => {
+    await api.destroy();
   });
 
   const meQuery = graphql(`

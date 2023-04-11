@@ -11,6 +11,7 @@ import { TestDatabase } from './test-database';
 export interface ApiTestSession {
   impersonateUser: (userId: string) => void;
   impersonateActiveUser: () => void;
+  impersonateOtherActiveUser: () => void;
   testDb: TestDatabase;
   /**
    * Randomly generated user id for this test session.
@@ -21,6 +22,7 @@ export interface ApiTestSession {
     operation: TypedDocumentNode<TResult, TVariables>,
     ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
   ): Promise<ExecutionResult<TResult>>;
+  destroy: () => Promise<void>;
 }
 
 export async function initApiTestSession(): Promise<ApiTestSession> {
@@ -50,13 +52,22 @@ export async function initApiTestSession(): Promise<ApiTestSession> {
     impersonateUser(testDatabase.userIdOfDbSession);
   }
 
+  function impersonateOtherActiveUser() {
+    impersonateUser(testDatabase.userIdBOfDbSession);
+  }
+
   impersonateActiveUser();
 
   return {
     impersonateUser,
+    impersonateOtherActiveUser,
     impersonateActiveUser,
     testDb: testDatabase,
     userId: testDatabase.userIdOfDbSession,
     graphqlRequest: sendGraphqlQuery,
+    destroy: async () => {
+      // TODO destroy api session in individual tests
+      await app.close();
+    },
   };
 }

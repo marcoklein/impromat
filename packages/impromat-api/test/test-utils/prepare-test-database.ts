@@ -8,10 +8,12 @@ export async function prepareTestDatabase(
   prismaClient: PrismaClient,
 ): Promise<TestDatabase> {
   const { id } = await prismaClient.user.create({ data: {} });
+  const { id: idUserB } = await prismaClient.user.create({ data: {} });
 
   console.log('Test database prepared');
 
   return {
     userIdOfDbSession: id,
+    userIdBOfDbSession: idUserB,
   };
 }

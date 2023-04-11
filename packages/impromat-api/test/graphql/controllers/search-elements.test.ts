@@ -2,7 +2,7 @@ import { AddWorkshopMutation } from 'test/graphql-client/graphql';
 import {
   ApiTestSession,
   initApiTestSession,
-} from '../../test-utils/describe-component-test';
+} from '../../test-utils/init-api-test-session';
 import { createElementMutation } from './element-queries';
 import {
   createWorkshopMutation,
@@ -11,8 +11,13 @@ import {
 
 describe('Workshop Elements', () => {
   let api: ApiTestSession;
+
   beforeAll(async () => {
     api = await initApiTestSession();
+  });
+
+  afterAll(async () => {
+    await api.destroy();
   });
 
   let createdElementId: string | undefined;

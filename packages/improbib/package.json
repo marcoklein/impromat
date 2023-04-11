@@ -4,7 +4,6 @@
   "version": "0.4.1",
   "private": true,
   "description": "Uniting improvisational theatre games and excercises for easy improv access.",
-  "repository": "git@github.com:marcoklein/improbib.git",
   "author": "Marco Klein <hello@marcoklein.dev>",
   "license": "MIT",
   "types": "./src/improbib.d.ts",

@@ -2,13 +2,17 @@ import { UUID4_REGEX } from 'test/test-utils/uuid4-regex';
 import {
   ApiTestSession,
   initApiTestSession,
-} from '../../test-utils/describe-component-test';
+} from '../../test-utils/init-api-test-session';
 import { createElementMutation } from './element-queries';
 
 describe('User Elements', () => {
   let api: ApiTestSession;
   beforeAll(async () => {
     api = await initApiTestSession();
+  });
+
+  afterAll(async () => {
+    await api.destroy();
   });
 
   describe('update elements', () => {

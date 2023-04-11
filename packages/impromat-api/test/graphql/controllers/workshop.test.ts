@@ -1,7 +1,7 @@
 import {
   ApiTestSession,
   initApiTestSession,
-} from '../../test-utils/describe-component-test';
+} from '../../test-utils/init-api-test-session';
 import {
   addWorskshopWithEmptyNameQuery,
   createWorkshopMutation,
@@ -12,9 +12,15 @@ import {
 
 describe('Workshop', () => {
   let api: ApiTestSession;
+
   beforeAll(async () => {
     api = await initApiTestSession();
   });
+
+  afterAll(async () => {
+    await api.destroy();
+  });
+
   let createdWorkshopId: string;
 
   describe('create workshop', () => {

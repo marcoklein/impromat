@@ -23,7 +23,7 @@ yarn dev
 Explore project graph:
 
 ```
-yarn nx graph
+yarn dlx nx graph
 ```
 
 ## Changelog

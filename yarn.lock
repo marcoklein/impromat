@@ -11468,13 +11468,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"improbib@link:../improbib::locator=impromat-api%40workspace%3Apackages%2Fimpromat-api":
-  version: 0.0.0-use.local
-  resolution: "improbib@link:../improbib::locator=impromat-api%40workspace%3Apackages%2Fimpromat-api"
-  languageName: node
-  linkType: soft
-
-"impromat-api@workspace:packages/impromat-api":
+"impromat-api@0.1.0, impromat-api@workspace:packages/impromat-api":
   version: 0.0.0-use.local
   resolution: "impromat-api@workspace:packages/impromat-api"
   dependencies:
@@ -11514,7 +11508,7 @@ __metadata:
     fuse.js: ^6.6.2
     google-auth-library: ^8.7.0
     graphql: ^16.6.0
-    improbib: "link:../improbib"
+    improbib: 0.4.1
     jest: 29.3.1
     jest-mock-extended: ^3.0.2
     prettier: ^2.3.2
@@ -11585,6 +11579,7 @@ __metadata:
     genversion: ^3.1.1
     graphql: ^16.6.0
     immer: ^9.0.15
+    impromat-api: 0.1.0
     ionicons: ^5.4.0
     react: ^18.2.0
     react-dom: ^18.2.0

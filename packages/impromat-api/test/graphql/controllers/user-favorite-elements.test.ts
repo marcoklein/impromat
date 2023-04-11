@@ -3,7 +3,7 @@ import { graphql } from 'test/graphql-client';
 import {
   ApiTestSession,
   initApiTestSession,
-} from '../../test-utils/describe-component-test';
+} from '../../test-utils/init-api-test-session';
 import { createElementMutation } from './element-queries';
 
 const updateUserFavoriteElementMutation = graphql(`
@@ -28,8 +28,13 @@ const meFavoriteElementsQuery = graphql(`
 
 describe('User Favorite Elements', () => {
   let api: ApiTestSession;
+
   beforeAll(async () => {
     api = await initApiTestSession();
+  });
+
+  afterAll(async () => {
+    await api.destroy();
   });
 
   let createdElementId: string;
