@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.25.0
+
+### Minor Changes
+
+- 778bce3: Sort workshops by updatedAt.
+- 3294c39: Change workshops overview to card layout.
+- 3294c39: Show date of creation in workshop preview.
+- 3294c39: Add options menu to workshop cards in overview page.
+- 778bce3: Show updated at and created at in workshop cards.
+
+### Patch Changes
+
+- 5ba8d11: Add dependencies for monorepo packages.
+- Updated dependencies [5ba8d11]
+- Updated dependencies [778bce3]
+- Updated dependencies [c9e7663]
+- Updated dependencies [5ba8d11]
+  - impromat-api@0.2.0
+
 ## 0.24.1
 
 ### Patch Changes
