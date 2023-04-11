@@ -25,7 +25,9 @@ export class ElementSearchService {
           },
         ],
       },
+      include: { tags: true },
     });
+
     if (!searchElementsInput.text) {
       return elementsToSearch
         .map((element) => ({
@@ -36,7 +38,7 @@ export class ElementSearchService {
         .slice(0, searchElementsInput.limit);
     }
     const fuse = new Fuse(elementsToSearch, {
-      keys: ['name'],
+      keys: ['name', 'tags.name'],
       includeScore: true,
       includeMatches: true,
     });
