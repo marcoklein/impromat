@@ -10,10 +10,11 @@ import {
   IonPage,
   IonRow,
   IonSpinner,
+  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { add, reload } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
@@ -49,7 +50,7 @@ export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
 
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
-  const [workshopsQueryResult] = useQuery({
+  const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: WorkshopsQuery,
     context,
   });
@@ -101,11 +102,41 @@ export const WorkshopsPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        {workshopsQueryResult.fetching || !availableWorkshops ? (
-          <IonSpinner></IonSpinner>
+        {!availableWorkshops ? (
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {workshopsQueryResult.fetching && <IonSpinner></IonSpinner>}
+            {!workshopsQueryResult.fetching && workshopsQueryResult.error && (
+              <>
+                <div>
+                  <div>
+                    {workshopsQueryResult.error.networkError ? (
+                      <IonText>Network is not reachable.</IonText>
+                    ) : (
+                      <IonText>
+                        Unknown error: {workshopsQueryResult.error.message}
+                      </IonText>
+                    )}
+                  </div>
+                  <IonButton
+                    expand="full"
+                    onClick={() => reexecuteWorkshopsQuery()}
+                  >
+                    <IonIcon icon={reload} slot="start"></IonIcon> Retry
+                  </IonButton>
+                </div>
+              </>
+            )}
+          </div>
         ) : availableWorkshops.length ? (
           <IonGrid>
-            <IonRow>
+            <IonRow className="ion-align-items-start">
               {availableWorkshops.map((workshop) => (
                 <IonCol
                   key={workshop.id}

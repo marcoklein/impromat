@@ -1,5 +1,4 @@
 import {
-  IonBackdrop,
   IonButton,
   IonButtons,
   IonCard,
@@ -210,7 +209,6 @@ export const WorkshopPage: React.FC = () => {
 
   return (
     <>
-      <IonBackdrop></IonBackdrop>
       <IonPage>
         <IonHeader>
           <IonToolbar>
