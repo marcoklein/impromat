@@ -22,6 +22,7 @@ import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { WorkshopPreviewItemComponent } from "./components/WorkshopPreviewItemComponent";
+import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -102,75 +103,52 @@ export const WorkshopsPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        {!availableWorkshops ? (
-          <div
-            style={{
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {workshopsQueryResult.fetching && <IonSpinner></IonSpinner>}
-            {!workshopsQueryResult.fetching && workshopsQueryResult.error && (
-              <>
-                <div>
-                  <div>
-                    {workshopsQueryResult.error.networkError ? (
-                      <IonText>Network is not reachable.</IonText>
-                    ) : (
-                      <IonText>
-                        Unknown error: {workshopsQueryResult.error.message}
-                      </IonText>
-                    )}
-                  </div>
-                  <IonButton
-                    expand="full"
-                    onClick={() => reexecuteWorkshopsQuery()}
+        <PageContentLoaderComponent
+          queryResult={workshopsQueryResult}
+          onRetryClick={() =>
+            reexecuteWorkshopsQuery({
+              requestPolicy: "network-only",
+            })
+          }
+        >
+          {availableWorkshops?.length ? (
+            <IonGrid>
+              <IonRow className="ion-align-items-start">
+                {availableWorkshops.map((workshop) => (
+                  <IonCol
+                    key={workshop.id}
+                    size="12"
+                    sizeSm="6"
+                    sizeMd="6"
+                    sizeLg="6"
+                    sizeXl="4"
                   >
-                    <IonIcon icon={reload} slot="start"></IonIcon> Retry
-                  </IonButton>
-                </div>
-              </>
-            )}
-          </div>
-        ) : availableWorkshops.length ? (
-          <IonGrid>
-            <IonRow className="ion-align-items-start">
-              {availableWorkshops.map((workshop) => (
-                <IonCol
-                  key={workshop.id}
-                  size="12"
-                  sizeSm="6"
-                  sizeMd="6"
-                  sizeLg="6"
-                  sizeXl="4"
-                >
-                  <WorkshopPreviewItemComponent
-                    workshopFragment={workshop}
-                  ></WorkshopPreviewItemComponent>
-                </IonCol>
-              ))}
-            </IonRow>
-          </IonGrid>
-        ) : (
-          <div
-            className="ion-padding"
-            style={{
-              minHeight: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <p>Start by creating your very first workshop:</p>
-            <IonButton expand="full" onClick={() => createWorkshopClick()}>
-              <IonIcon slot="start" icon={add}></IonIcon>
-              Add Workshop
-            </IonButton>
-          </div>
-        )}
+                    <WorkshopPreviewItemComponent
+                      workshopFragment={workshop}
+                    ></WorkshopPreviewItemComponent>
+                  </IonCol>
+                ))}
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <div
+              className="ion-padding"
+              style={{
+                minHeight: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <p>Start by creating your very first workshop:</p>
+              <IonButton expand="full" onClick={() => createWorkshopClick()}>
+                <IonIcon slot="start" icon={add}></IonIcon>
+                Add Workshop
+              </IonButton>
+            </div>
+          )}
+        </PageContentLoaderComponent>
       </IonContent>
     </IonPage>
   );
