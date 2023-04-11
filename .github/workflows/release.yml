@@ -48,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-production:
-    if: needs.release.outputs.triggerDeployment
+    if: needs.release.outputs.triggerDeployment == 'true'
     needs:
       - release
     uses: ./.github/workflows/shared-deploy-job.yml
