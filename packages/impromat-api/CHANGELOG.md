@@ -1,5 +1,19 @@
 # impromat-api
 
+## 0.2.0
+
+### Minor Changes
+
+- 778bce3: Sort workshops by updatedAt.
+- c9e7663: Include tags in the search result for elements.
+
+### Patch Changes
+
+- 5ba8d11: Add dependencies for monorepo packages.
+- 5ba8d11: Refactor tests to close api test session.
+- Updated dependencies [5ba8d11]
+  - improbib@0.4.2
+
 ## 0.1.0
 
 ### Minor Changes

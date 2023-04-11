@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.2
+
+### Patch Changes
+
+- 5ba8d11: Add dependencies for monorepo packages.
+
 ## 0.4.1
 
 ### Patch Changes
