@@ -55,10 +55,17 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    const owner = await this.userElementService
-      .findElementById(userSessionId, element.id)
-      .owner();
-    return owner.id === userSessionId;
+    if (userSessionId) {
+      const owner = await this.userElementService
+        .findElementById(userSessionId, element.id)
+        .owner();
+      if (owner) {
+        return owner.id === userSessionId;
+      } else {
+        return false;
+      }
+    }
+    return null;
   }
 
   @ResolveField(() => [ElementTag])

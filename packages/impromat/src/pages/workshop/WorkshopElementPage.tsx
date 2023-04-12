@@ -137,11 +137,7 @@ export const WorkshopElementPage: React.FC = () => {
       <IonContent fullscreen>
         <PageContentLoaderComponent
           queryResult={workshopElementQueryResult}
-          onRetryClick={() =>
-            reexecuteWorkshopElementQueryResult({
-              requestPolicy: "network-only",
-            })
-          }
+          reexecuteQuery={reexecuteWorkshopElementQueryResult}
         >
           {workshopElement && (
             <IonList>

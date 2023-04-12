@@ -9,20 +9,18 @@ import {
   IonMenuButton,
   IonPage,
   IonRow,
-  IonSpinner,
-  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add, reload } from "ionicons/icons";
+import { add } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
+import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { WorkshopPreviewItemComponent } from "./components/WorkshopPreviewItemComponent";
-import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -105,11 +103,7 @@ export const WorkshopsPage: React.FC = () => {
       <IonContent>
         <PageContentLoaderComponent
           queryResult={workshopsQueryResult}
-          onRetryClick={() =>
-            reexecuteWorkshopsQuery({
-              requestPolicy: "network-only",
-            })
-          }
+          reexecuteQuery={reexecuteWorkshopsQuery}
         >
           {availableWorkshops?.length ? (
             <IonGrid>

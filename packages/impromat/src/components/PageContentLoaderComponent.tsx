@@ -8,11 +8,19 @@ import {
 } from "@ionic/react";
 import { reload } from "ionicons/icons";
 import { PropsWithChildren } from "react";
-import { UseQueryState } from "urql";
+import { OperationContext, UseQueryState } from "urql";
 
 interface ContainerProps extends PropsWithChildren {
-  queryResult: UseQueryState;
-  onRetryClick: () => void;
+  /**
+   * One or multiple query results.
+   */
+  queryResult: UseQueryState | Array<UseQueryState>;
+  /**
+   * One or many reexecution functions for queries.
+   */
+  reexecuteQuery:
+    | ((opts?: Partial<OperationContext>) => void)
+    | Array<(opts?: Partial<OperationContext>) => void>;
 }
 
 /**
@@ -22,15 +30,27 @@ interface ContainerProps extends PropsWithChildren {
  */
 export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
   queryResult,
-  onRetryClick,
+  reexecuteQuery,
   children,
 }) => {
+  if (!Array.isArray(queryResult)) {
+    queryResult = [queryResult];
+  }
+  function reexecuteQueries() {
+    if (Array.isArray(reexecuteQuery)) {
+      for (const fn of reexecuteQuery) {
+        fn({ requestPolicy: "network-only" });
+      }
+    } else {
+      reexecuteQuery({ requestPolicy: "network-only" });
+    }
+  }
   function renderRefresher() {
     return (
       <IonRefresher
         slot="fixed"
         onIonRefresh={(event) => {
-          onRetryClick();
+          reexecuteQueries();
           setTimeout(() => {
             event.detail.complete();
           }, 500);
@@ -40,7 +60,16 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
       </IonRefresher>
     );
   }
-  if (queryResult.data) {
+
+  const allHaveData = queryResult.every((result) => result.data);
+  const fetching = queryResult.some((result) => result.fetching);
+  const networkError = queryResult.some((result) => result.error?.networkError);
+  const nonNetworkError = queryResult.find(
+    (result) => !result.error?.networkError,
+  );
+  const error = networkError || nonNetworkError;
+
+  if (allHaveData) {
     return (
       <>
         {renderRefresher()}
@@ -59,18 +88,20 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
           alignItems: "center",
         }}
       >
-        {queryResult.fetching && <IonSpinner></IonSpinner>}
-        {!queryResult.fetching && queryResult.error && (
+        {fetching && <IonSpinner></IonSpinner>}
+        {!fetching && error && (
           <>
             <div>
               <div>
-                {queryResult.error.networkError ? (
+                {networkError ? (
                   <IonText>Network is not reachable.</IonText>
                 ) : (
-                  <IonText>Unknown error: {queryResult.error.message}</IonText>
+                  <IonText>
+                    Unknown error: {nonNetworkError?.error?.message}
+                  </IonText>
                 )}
               </div>
-              <IonButton expand="full" onClick={() => onRetryClick()}>
+              <IonButton expand="full" onClick={() => reexecuteQueries()}>
                 <IonIcon icon={reload} slot="start"></IonIcon> Retry
               </IonButton>
             </div>

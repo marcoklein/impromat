@@ -46,6 +46,7 @@ export const ElementComponent: React.FC<ContainerProps> = ({
   const element = getFragmentData(Element_ElementFragment, elementFragment);
   return (
     <>
+      <h1 className="ion-padding-horizontal">{element.name}</h1>
       <div className="ion-padding">
         <TagsComponent tags={element.tags.map((t) => t.name)}></TagsComponent>
         <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
