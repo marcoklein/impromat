@@ -19,17 +19,11 @@ RUN apt-get install -y curl
 USER myuser
 
 WORKDIR /home/myuser
-COPY --chown=myuser package.json yarn.lock .yarnrc.yml ./
-COPY --chown=myuser .yarn/ .yarn/
-COPY --chown=myuser packages/improbib/package.json packages/improbib/
-COPY --chown=myuser packages/impromat/package.json packages/impromat/
-COPY --chown=myuser packages/impromat-app-renderer/package.json packages/impromat-app-renderer/
-RUN yarn install --immutable
 
-COPY --chown=myuser packages/improbib/ packages/improbib/
-COPY --chown=myuser packages/impromat/ packages/impromat/
-COPY --chown=myuser packages/impromat-app-renderer/ packages/impromat-app-renderer/
-RUN ls -la packages/improbib/
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn/ .yarn/
+COPY . .
+RUN yarn install --immutable
 
 WORKDIR /home/myuser/packages/improbib
 RUN yarn build
