@@ -9,7 +9,6 @@ import {
   IonMenuButton,
   IonPage,
   IonRow,
-  IonSpinner,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -17,6 +16,7 @@ import { add } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
+import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
@@ -49,7 +49,7 @@ export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
 
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
-  const [workshopsQueryResult] = useQuery({
+  const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: WorkshopsQuery,
     context,
   });
@@ -101,45 +101,48 @@ export const WorkshopsPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        {workshopsQueryResult.fetching || !availableWorkshops ? (
-          <IonSpinner></IonSpinner>
-        ) : availableWorkshops.length ? (
-          <IonGrid>
-            <IonRow>
-              {availableWorkshops.map((workshop) => (
-                <IonCol
-                  key={workshop.id}
-                  size="12"
-                  sizeSm="6"
-                  sizeMd="6"
-                  sizeLg="6"
-                  sizeXl="4"
-                >
-                  <WorkshopPreviewItemComponent
-                    workshopFragment={workshop}
-                  ></WorkshopPreviewItemComponent>
-                </IonCol>
-              ))}
-            </IonRow>
-          </IonGrid>
-        ) : (
-          <div
-            className="ion-padding"
-            style={{
-              minHeight: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <p>Start by creating your very first workshop:</p>
-            <IonButton expand="full" onClick={() => createWorkshopClick()}>
-              <IonIcon slot="start" icon={add}></IonIcon>
-              Add Workshop
-            </IonButton>
-          </div>
-        )}
+        <PageContentLoaderComponent
+          queryResult={workshopsQueryResult}
+          reexecuteQuery={reexecuteWorkshopsQuery}
+        >
+          {availableWorkshops?.length ? (
+            <IonGrid>
+              <IonRow className="ion-align-items-start">
+                {availableWorkshops.map((workshop) => (
+                  <IonCol
+                    key={workshop.id}
+                    size="12"
+                    sizeSm="6"
+                    sizeMd="6"
+                    sizeLg="6"
+                    sizeXl="4"
+                  >
+                    <WorkshopPreviewItemComponent
+                      workshopFragment={workshop}
+                    ></WorkshopPreviewItemComponent>
+                  </IonCol>
+                ))}
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <div
+              className="ion-padding"
+              style={{
+                minHeight: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <p>Start by creating your very first workshop:</p>
+              <IonButton expand="full" onClick={() => createWorkshopClick()}>
+                <IonIcon slot="start" icon={add}></IonIcon>
+                Add Workshop
+              </IonButton>
+            </div>
+          )}
+        </PageContentLoaderComponent>
       </IonContent>
     </IonPage>
   );

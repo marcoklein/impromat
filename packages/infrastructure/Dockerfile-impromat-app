@@ -10,28 +10,16 @@ RUN apt-get update \
   --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r myuser \
-  && useradd --no-log-init -r -g myuser myuser --home-dir /home/myuser --create-home \
-  && chown -R myuser:myuser /home/myuser
-
 RUN apt-get install -y curl
 
-USER myuser
+WORKDIR /app
 
-WORKDIR /home/myuser
-COPY --chown=myuser package.json yarn.lock .yarnrc.yml ./
-COPY --chown=myuser .yarn/ .yarn/
-COPY --chown=myuser packages/improbib/package.json packages/improbib/
-COPY --chown=myuser packages/impromat/package.json packages/impromat/
-COPY --chown=myuser packages/impromat-app-renderer/package.json packages/impromat-app-renderer/
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn/ .yarn/
+COPY . .
 RUN yarn install --immutable
 
-COPY --chown=myuser packages/improbib/ packages/improbib/
-COPY --chown=myuser packages/impromat/ packages/impromat/
-COPY --chown=myuser packages/impromat-app-renderer/ packages/impromat-app-renderer/
-RUN ls -la packages/improbib/
-
-WORKDIR /home/myuser/packages/improbib
+WORKDIR /app/packages/improbib
 RUN yarn build
 
 ARG REACT_APP_API_URL
@@ -39,10 +27,10 @@ ENV REACT_APP_API_URL ${REACT_APP_API_URL}
 ARG REACT_APP_VERSION
 ENV REACT_APP_VERSION ${REACT_APP_VERSION}
 
-WORKDIR /home/myuser/packages/impromat
+WORKDIR /app/packages/impromat
 RUN yarn build
 
 # Host with app renderer
-WORKDIR /home/myuser/packages/impromat-app-renderer
+WORKDIR /app/packages/impromat-app-renderer
 
 CMD ["yarn", "start"]

@@ -1,4 +1,5 @@
 import { setupIonicReact } from "@ionic/react";
+import { retryExchange } from "@urql/exchange-retry";
 import {
   cacheExchange,
   createClient as createUrqlClient,
@@ -42,6 +43,13 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
             console.error("GraphQL Error:", error);
           },
         }),
+        retryExchange({
+          initialDelayMs: 1000,
+          maxDelayMs: 15000,
+          maxNumberAttempts: 2,
+          randomDelay: false,
+          retryIf: (err: any) => !!(err && err.networkError),
+        }) as any,
         fetchExchange,
       ],
     }),

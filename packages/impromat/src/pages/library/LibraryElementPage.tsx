@@ -6,8 +6,8 @@ import {
   IonFooter,
   IonHeader,
   IonIcon,
+  IonLabel,
   IonPage,
-  IonSpinner,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -15,6 +15,7 @@ import { star, starOutline } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
+import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
@@ -74,7 +75,7 @@ export const LibraryElementPage: React.FC = () => {
       id: libraryPartId,
     },
   });
-  const [workshopQueryResult] = useQuery({
+  const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
     query: WorkshopQuery,
     variables: {
       id: workshopId ?? "",
@@ -155,7 +156,9 @@ export const LibraryElementPage: React.FC = () => {
               defaultHref={routeLibrary({ workshopId })}
             ></IonBackButton>
           </IonButtons>
-          <IonTitle>{element?.name}</IonTitle>
+          <IonTitle>
+            <IonLabel className="ion-text-wrap">{element?.name}</IonLabel>
+          </IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={() => onStarElementClick()}>
               <IonIcon
@@ -171,15 +174,23 @@ export const LibraryElementPage: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-
-      <IonContent fullscreen>
-        {element ? (
-          <ElementComponent elementFragment={element}></ElementComponent>
-        ) : (
-          <IonSpinner></IonSpinner>
-        )}
+      <IonContent>
+        <PageContentLoaderComponent
+          queryResult={[
+            elementQueryResult,
+            ...(workshopId ? [workshopQueryResult] : []),
+          ]}
+          reexecuteQuery={[
+            reexecuteElementQuery,
+            ...(workshopId ? [reexecuteWorkshopQuery] : []),
+          ]}
+        >
+          {element && (
+            <ElementComponent elementFragment={element}></ElementComponent>
+          )}
+        </PageContentLoaderComponent>
       </IonContent>
-      {workshopId && (
+      {elementQueryResult.data && workshopQueryResult.data && workshopId && (
         <IonFooter>
           <IonToolbar>
             <IonButton

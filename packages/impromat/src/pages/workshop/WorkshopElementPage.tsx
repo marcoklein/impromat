@@ -9,7 +9,6 @@ import {
   IonLabel,
   IonList,
   IonPage,
-  IonSpinner,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -19,6 +18,7 @@ import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
+import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
@@ -59,11 +59,12 @@ export const WorkshopElementPage: React.FC = () => {
     id: string;
     partId: string;
   }>();
-  const [workshopElementQueryResult] = useQuery({
-    query: WorkshopElementPageQuery,
-    // TODO pass in workshop id
-    variables: { id: workshopElementId },
-  });
+  const [workshopElementQueryResult, reexecuteWorkshopElementQueryResult] =
+    useQuery({
+      query: WorkshopElementPageQuery,
+      // TODO pass in workshop id
+      variables: { id: workshopElementId },
+    });
   const workshopElement = workshopElementQueryResult.data?.workshopElement;
   const basedOnElement = workshopElement?.basedOn;
   const [presentInput] = useInputDialog();
@@ -134,40 +135,43 @@ export const WorkshopElementPage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        {workshopElement ? (
-          <IonList>
-            <IonCard>
-              <IonItem lines="none">
-                {workshopElement.note ? (
-                  <>
-                    <IonLabel className="ion-text-wrap">
-                      <ReactMarkdown>{workshopElement.note}</ReactMarkdown>
-                    </IonLabel>
-                    <IonButtons>
-                      <IonButton onClick={() => onChangeNoteClick()}>
-                        <IonIcon size="small" icon={pencil}></IonIcon>
-                      </IonButton>
-                    </IonButtons>
-                  </>
-                ) : (
-                  <IonButton
-                    fill="clear"
-                    onClick={onChangeNoteClick}
-                    color="primary"
-                  >
-                    <IonIcon icon={document} slot="start"></IonIcon>Add Note
-                  </IonButton>
-                )}
-              </IonItem>
-            </IonCard>
+        <PageContentLoaderComponent
+          queryResult={workshopElementQueryResult}
+          reexecuteQuery={reexecuteWorkshopElementQueryResult}
+        >
+          {workshopElement && (
+            <IonList>
+              <IonCard>
+                <IonItem lines="none">
+                  {workshopElement.note ? (
+                    <>
+                      <IonLabel className="ion-text-wrap">
+                        <ReactMarkdown>{workshopElement.note}</ReactMarkdown>
+                      </IonLabel>
+                      <IonButtons>
+                        <IonButton onClick={() => onChangeNoteClick()}>
+                          <IonIcon size="small" icon={pencil}></IonIcon>
+                        </IonButton>
+                      </IonButtons>
+                    </>
+                  ) : (
+                    <IonButton
+                      fill="clear"
+                      onClick={onChangeNoteClick}
+                      color="primary"
+                    >
+                      <IonIcon icon={document} slot="start"></IonIcon>Add Note
+                    </IonButton>
+                  )}
+                </IonItem>
+              </IonCard>
 
-            <ElementComponent
-              elementFragment={workshopElement.basedOn}
-            ></ElementComponent>
-          </IonList>
-        ) : (
-          <IonSpinner></IonSpinner>
-        )}
+              <ElementComponent
+                elementFragment={workshopElement.basedOn}
+              ></ElementComponent>
+            </IonList>
+          )}
+        </PageContentLoaderComponent>
       </IonContent>
     </IonPage>
   );

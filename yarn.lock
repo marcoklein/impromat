@@ -5,6 +5,18 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@0no-co/graphql.web@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@0no-co/graphql.web@npm:1.0.0"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  peerDependenciesMeta:
+    graphql:
+      optional: true
+  checksum: 54e5651dd1c3806ced064b6e0bba5b6bc958b69898a1c3fbe0c96c5a0fb7189de9f479946159dd2e20d39a1b3b655de11da0b8b2dc92761132b61949872c7277
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.2.0
   resolution: "@ampproject/remapping@npm:2.2.0"
@@ -4132,19 +4144,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.26.1":
-  version: 1.31.2
-  resolution: "@playwright/test@npm:1.31.2"
+"@playwright/test@npm:^1.32.3":
+  version: 1.32.3
+  resolution: "@playwright/test@npm:1.32.3"
   dependencies:
     "@types/node": "*"
     fsevents: 2.3.2
-    playwright-core: 1.31.2
+    playwright-core: 1.32.3
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 5459ee0ce15b9a54337f4c26e2ee2d29c11e67e6207c167158eb180a4bea6659c988a2897f51dbebf591fc879f0d81f417e70936b9d8a001448c957939882588
+  checksum: f248e5851d04183954ec6f3a5f2c8e3b0ea0085a83e0e695068c5c2eb6acd4dddb16829a429829a4eb9fe0a4518f6a5594890cf9bf4259255c9e07a5964be625
   languageName: node
   linkType: hard
 
@@ -5454,6 +5466,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@urql/core@npm:>=4.0.0":
+  version: 4.0.4
+  resolution: "@urql/core@npm:4.0.4"
+  dependencies:
+    "@0no-co/graphql.web": ^1.0.0
+    wonka: ^6.3.0
+  checksum: 35b2bfe9c8516a600028465f6a1cd40c3b2cba5b497a3550410ce563de2017d4e875d0627bb8ba284179f0c03eb4ed6d69313c66e5f482e14ee17d8e65a304a3
+  languageName: node
+  linkType: hard
+
 "@urql/core@npm:^3.2.0":
   version: 3.2.2
   resolution: "@urql/core@npm:3.2.2"
@@ -5462,6 +5484,16 @@ __metadata:
   peerDependencies:
     graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: 5e8d90c77ce76b1bb273ba38072b688c31bd2761f2484748dbf4106170eb4ef86bcaf683858e6d97f67d13e3a2503938de70dbd6deafa8925c5c6b534f657e85
+  languageName: node
+  linkType: hard
+
+"@urql/exchange-retry@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@urql/exchange-retry@npm:1.1.0"
+  dependencies:
+    "@urql/core": ">=4.0.0"
+    wonka: ^6.3.0
+  checksum: 8927d451694dd0761b7e001a0d98ef5baf49d31fe9501da24c4ed0adaf2b0a49f847e6d74868b544ee584ec0bc0f183cc14cd2d2052fa2a88f129b86b2053f75
   languageName: node
   linkType: hard
 
@@ -11561,7 +11593,7 @@ __metadata:
     "@graphql-codegen/typescript-operations": ^3.0.0
     "@ionic/react": ^7.0.0
     "@ionic/react-router": ^7.0.0
-    "@playwright/test": ^1.26.1
+    "@playwright/test": ^1.32.3
     "@types/debug": ^4.1.7
     "@types/node": ^12.19.15
     "@types/react": ^18.0.18
@@ -11569,6 +11601,7 @@ __metadata:
     "@types/react-router": ^5.1.11
     "@types/react-router-dom": ^5.1.7
     "@types/uuid": ^8.3.4
+    "@urql/exchange-retry": ^1.1.0
     concurrently: ^7.6.0
     debug: ^4.3.4
     dependency-cruiser: ^12.11.1
@@ -16032,12 +16065,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.31.2":
-  version: 1.31.2
-  resolution: "playwright-core@npm:1.31.2"
+"playwright-core@npm:1.32.3":
+  version: 1.32.3
+  resolution: "playwright-core@npm:1.32.3"
   bin:
     playwright: cli.js
-  checksum: bf1257b7d80b9d027c99cbfa7ab9d47a2110ec804422b3e3d623bbb3c43e06df7bec4764ca1d852a6d62c76e35c8776efb19941f42ce738db9bc92e7f1b6281c
+  checksum: 7ea091c41a7d1bb97b445bc541a85b123ffcf167bcc00fb7e13e9079f06c92f59fd27caf9d1c1d7e0054f2b5765d1a16d198833c2be7266cebb9dbb916cd90f4
   languageName: node
   linkType: hard
 
@@ -21109,6 +21142,13 @@ __metadata:
   version: 6.2.4
   resolution: "wonka@npm:6.2.4"
   checksum: bc52cce55e675341367fce6a218cb02804349fe65e16b77ed73059551976d11781ef2fb0405aaf89711703b5ae18ee8aeec088b00cd80134b32097a689c146a2
+  languageName: node
+  linkType: hard
+
+"wonka@npm:^6.3.0":
+  version: 6.3.1
+  resolution: "wonka@npm:6.3.1"
+  checksum: 8748d5c8ce5ff4cdb69d61ce64ed19bd007a7c65d46dbb11ddd2271091c51c7241cb36642a2c32dd31bfcf5841f4c370a81b3be746b118c26bb30ba21b2b8c29
   languageName: node
   linkType: hard
 

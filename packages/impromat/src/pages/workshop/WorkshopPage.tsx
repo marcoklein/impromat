@@ -1,5 +1,4 @@
 import {
-  IonBackdrop,
   IonButton,
   IonButtons,
   IonCard,
@@ -14,7 +13,6 @@ import {
   IonMenuButton,
   IonPage,
   IonProgressBar,
-  IonSpinner,
   IonText,
   IonTitle,
   IonToolbar,
@@ -24,6 +22,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { EditableItemComponent } from "../../components/EditableItemComponent";
+import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useDeleteWorkshopMutation } from "../../hooks/use-delete-workshop-mutation";
@@ -68,7 +67,7 @@ export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
   const history = useHistory();
 
-  const [workshopResult] = useQuery({
+  const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
     query: WorkshopByIdQuery,
     variables: {
       id: workshopId,
@@ -76,7 +75,7 @@ export const WorkshopPage: React.FC = () => {
   });
   const workshop = getFragmentData(
     WorkshopPage_Workshop,
-    workshopResult.data?.workshop,
+    workshopQueryResult.data?.workshop,
   );
   const [isReorderingElements, setIsReorderingElements] = useState(false);
 
@@ -122,20 +121,12 @@ export const WorkshopPage: React.FC = () => {
   const changeSectionsOrder = (fromIndex: number, toIndex: number) => {
     if (!workshop) return;
     logger("Change section order from %d to %d", fromIndex, toIndex);
-    // presentIonLoading({
-    //   message: "Reordering",
-    //   showBackdrop: true,
-    //   // TODO save window scroll position and apply on dismiss
-    //   // keyboardClose: true,
-    //   // backdropDismiss: true,
-    // }).then(() => {
     setIsReorderingElements(true);
     updateWorkshopOrder({
       input: { fromPosition: fromIndex, toPosition: toIndex, workshopId },
     }).finally(() => {
       setTimeout(() => {
         setIsReorderingElements(false);
-        // dismissIonLoading();
       }, 2000);
     });
     // });
@@ -210,7 +201,6 @@ export const WorkshopPage: React.FC = () => {
 
   return (
     <>
-      <IonBackdrop></IonBackdrop>
       <IonPage>
         <IonHeader>
           <IonToolbar>
@@ -233,76 +223,79 @@ export const WorkshopPage: React.FC = () => {
         </IonHeader>
 
         <IonContent fullscreen>
-          {workshop ? (
-            <>
-              <IonFab slot="fixed" vertical="bottom" horizontal="end">
-                <IonFabButton>
-                  <IonIcon icon={add}></IonIcon>
-                </IonFabButton>
-                <IonFabList side="start">
-                  <IonButton routerLink={routeLibrary({ workshopId })}>
-                    Element
-                  </IonButton>
-                  <IonButton color="dark" onClick={() => onCreateSection()}>
-                    Section
-                  </IonButton>
-                </IonFabList>
-              </IonFab>
-              <EditableItemComponent
-                disableEditing={true}
-                text={workshop.name}
-                displayName="Workshop Title"
-                onChangeText={(newName) => changeWorkshopName(newName)}
-                lines="none"
-                renderText={(text) => (
-                  <IonLabel className="ion-text-wrap">
-                    <h1 style={{ padding: 0, margin: 0 }}>{text}</h1>
-                  </IonLabel>
-                )}
-              ></EditableItemComponent>
-              {workshop.description && (
+          <PageContentLoaderComponent
+            queryResult={workshopQueryResult}
+            reexecuteQuery={reexecuteWorkshopQuery}
+          >
+            {workshop && (
+              <>
+                <IonFab slot="fixed" vertical="bottom" horizontal="end">
+                  <IonFabButton>
+                    <IonIcon icon={add}></IonIcon>
+                  </IonFabButton>
+                  <IonFabList side="start">
+                    <IonButton routerLink={routeLibrary({ workshopId })}>
+                      Element
+                    </IonButton>
+                    <IonButton color="dark" onClick={() => onCreateSection()}>
+                      Section
+                    </IonButton>
+                  </IonFabList>
+                </IonFab>
                 <EditableItemComponent
                   disableEditing={true}
-                  displayName="Workshop Description"
-                  text={workshop.description}
-                  isMultiline={true}
-                  onChangeText={(text) => changeWorkshopDescription(text)}
+                  text={workshop.name}
+                  displayName="Workshop Title"
+                  onChangeText={(newName) => changeWorkshopName(newName)}
                   lines="none"
+                  renderText={(text) => (
+                    <IonLabel className="ion-text-wrap">
+                      <h1 style={{ padding: 0, margin: 0 }}>{text}</h1>
+                    </IonLabel>
+                  )}
                 ></EditableItemComponent>
-              )}
+                {workshop.description && (
+                  <EditableItemComponent
+                    disableEditing={true}
+                    displayName="Workshop Description"
+                    text={workshop.description}
+                    isMultiline={true}
+                    onChangeText={(text) => changeWorkshopDescription(text)}
+                    lines="none"
+                  ></EditableItemComponent>
+                )}
 
-              {workshop.sections.length === 1 &&
-              workshop.sections[0].elements.length === 0 &&
-              !workshop.sections[0].name ? (
-                <IonCard>
-                  <IonCardContent className="ion-padding">
-                    <IonText>
-                      Use the bottom right button to add elements. Enjoy
-                      designing your workshop!
-                    </IonText>
-                    <IonButton
-                      expand="full"
-                      fill="clear"
-                      routerLink={routeLibrary({ workshopId })}
-                    >
-                      Add First Element
-                    </IonButton>
-                  </IonCardContent>
-                </IonCard>
-              ) : (
-                <WorkshopElementsComponent
-                  key={workshop.id}
-                  workshopId={workshopId}
-                  workshopSectionsFragment={workshop.sections}
-                  onChangeOrder={(fromIndex, toIndex) =>
-                    changeSectionsOrder(fromIndex, toIndex)
-                  }
-                ></WorkshopElementsComponent>
-              )}
-            </>
-          ) : (
-            <IonSpinner></IonSpinner>
-          )}
+                {workshop.sections.length === 1 &&
+                workshop.sections[0].elements.length === 0 &&
+                !workshop.sections[0].name ? (
+                  <IonCard>
+                    <IonCardContent className="ion-padding">
+                      <IonText>
+                        Use the bottom right button to add elements. Enjoy
+                        designing your workshop!
+                      </IonText>
+                      <IonButton
+                        expand="full"
+                        fill="clear"
+                        routerLink={routeLibrary({ workshopId })}
+                      >
+                        Add First Element
+                      </IonButton>
+                    </IonCardContent>
+                  </IonCard>
+                ) : (
+                  <WorkshopElementsComponent
+                    key={workshop.id}
+                    workshopId={workshopId}
+                    workshopSectionsFragment={workshop.sections}
+                    onChangeOrder={(fromIndex, toIndex) =>
+                      changeSectionsOrder(fromIndex, toIndex)
+                    }
+                  ></WorkshopElementsComponent>
+                )}
+              </>
+            )}
+          </PageContentLoaderComponent>
         </IonContent>
       </IonPage>
     </>
