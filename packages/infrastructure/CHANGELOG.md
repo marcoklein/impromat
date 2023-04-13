@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.4.0
+
+### Minor Changes
+
+- b7eb73a: Install complete workspace for impromat-app.
+
 ## 0.3.1
 
 ### Patch Changes
