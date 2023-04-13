@@ -6,6 +6,7 @@ import {
   IonFooter,
   IonHeader,
   IonIcon,
+  IonLabel,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -155,7 +156,9 @@ export const LibraryElementPage: React.FC = () => {
               defaultHref={routeLibrary({ workshopId })}
             ></IonBackButton>
           </IonButtons>
-          <IonTitle>Element</IonTitle>
+          <IonTitle>
+            <IonLabel className="ion-text-wrap">{element?.name}</IonLabel>
+          </IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={() => onStarElementClick()}>
               <IonIcon
