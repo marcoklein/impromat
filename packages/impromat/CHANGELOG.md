@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.26.0
+
+### Minor Changes
+
+- b7eb73a: Add retry button for network errors on page load.
+
 ## 0.25.0
 
 ### Minor Changes
