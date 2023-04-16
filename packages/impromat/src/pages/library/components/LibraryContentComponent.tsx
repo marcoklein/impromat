@@ -73,30 +73,32 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
 
   return (
     <>
-      <IonContent fullscreen>
-        <Switch>
-          <Redirect
-            from={`${path}/`}
-            to={`${path}/${Tabs.SEARCH}${location.search}`}
-            exact
-          ></Redirect>
-          <Route path={`${path}/${Tabs.SEARCH}`} exact>
-            <SearchElementTabComponent
-              workshopId={workshopId}
-            ></SearchElementTabComponent>
-          </Route>
-          <Route path={`${path}/${Tabs.FAVORITES}`} exact>
+      <Switch>
+        <Redirect
+          from={`${path}/`}
+          to={`${path}/${Tabs.SEARCH}${location.search}`}
+          exact
+        ></Redirect>
+        <Route path={`${path}/${Tabs.SEARCH}`} exact>
+          <SearchElementTabComponent
+            workshopId={workshopId}
+          ></SearchElementTabComponent>
+        </Route>
+        <Route path={`${path}/${Tabs.FAVORITES}`} exact>
+          <IonContent>
             <FavoriteElementsTabComponent
               workshopId={workshopId}
             ></FavoriteElementsTabComponent>
-          </Route>
-          <Route path={`${path}/${Tabs.CREATE}`} exact>
+          </IonContent>
+        </Route>
+        <Route path={`${path}/${Tabs.CREATE}`} exact>
+          <IonContent>
             <CustomElementsTabComponent
               workshopId={workshopId}
             ></CustomElementsTabComponent>
-          </Route>
-        </Switch>
-      </IonContent>
+          </IonContent>
+        </Route>
+      </Switch>
       <IonFooter>
         <IonToolbar>
           <IonSegment value={tab}>

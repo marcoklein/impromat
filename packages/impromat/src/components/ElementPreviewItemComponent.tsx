@@ -1,14 +1,15 @@
 import {
-  IonBadge,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonNote,
-  IonText,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
 } from "@ionic/react";
-import { eye } from "ionicons/icons";
+import { brush, eye, star } from "ionicons/icons";
+import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
+import { IconInfoList, IconInfoListItem } from "./IconInfoList";
 import { TagsComponent } from "./TagsComponent";
 
 const ElementPreviewItem_ElementFragment = graphql(`
@@ -33,10 +34,13 @@ const ElementPreviewItem_ElementFragment = graphql(`
     licenseName
     licenseUrl
     visibility
+    isFavorite
     owner {
       id
     }
+    isOwnerMe
     ...CustomElement_Element
+    ...ElementFavoriteIcon_Element
   }
 `);
 
@@ -51,10 +55,6 @@ interface ContainerProps {
   >;
 }
 
-/**
- * Renders a workshop element as an `IonItem` to preview general information.
- * Use within an `IonList` component.
- */
 export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
   showVisibility,
   routerLink,
@@ -64,27 +64,59 @@ export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
     ElementPreviewItem_ElementFragment,
     workshopElementFragment,
   );
+
+  const infoList = useMemo<IconInfoListItem[]>(() => {
+    const resultList: IconInfoListItem[] = [];
+
+    if (element.isFavorite)
+      resultList.push({
+        ionicIcon: star,
+        color: "yellow-5",
+        displayText: "favorite",
+      });
+    if (element.isOwnerMe && element.visibility === ElementVisibility.Public)
+      resultList.push({
+        ionicIcon: eye,
+        color: "tertiary",
+        displayText: "public",
+      });
+    if (element.isOwnerMe)
+      resultList.push({
+        ionicIcon: brush,
+        color: "primary",
+        displayText: "my element",
+      });
+    if (element.sourceName && !element.isOwnerMe)
+      resultList.push({
+        tablerIcon: "license",
+        displayText: element.sourceName,
+      });
+    if (element.languageCode)
+      resultList.push({
+        tablerIcon: "language",
+        displayText: element.languageCode.toUpperCase(),
+      });
+    return resultList;
+  }, [element]);
+
   return (
-    <IonItem routerLink={routerLink}>
-      {showVisibility && element.visibility === ElementVisibility.Public && (
-        <IonIcon slot="start" icon={eye} color="tertiary"></IonIcon>
-      )}
-      <IonLabel className="ion-text-wrap">
-        <IonText color="medium" style={{ float: "right" }}>
-          <IonNote>{element.sourceName}</IonNote>
-          {element.languageCode && (
-            <span style={{ paddingLeft: "4px" }}>
-              <IonBadge color="light">
-                {element.languageCode.toUpperCase()}
-              </IonBadge>
-            </span>
-          )}
-        </IonText>
-        {element.name}
-        <div style={{ marginTop: "4px" }}>
+    <IonCard className="ion-no-margin" routerLink={routerLink}>
+      <div className="ion-margin-end ion-margin-top ion-float-right">
+        <IconInfoList list={infoList}></IconInfoList>
+      </div>
+      <IonCardHeader>
+        <IonCardTitle>{element.name}</IonCardTitle>
+      </IonCardHeader>
+      <IonCardContent>
+        <div>
           <TagsComponent tags={element.tags.map((t) => t.name)}></TagsComponent>
         </div>
-      </IonLabel>
-    </IonItem>
+      </IonCardContent>
+      <div style={{ display: "flex" }}>
+        <IonButton style={{ flexGrow: 1 }} fill="clear" routerLink={routerLink}>
+          Open
+        </IonButton>
+      </div>
+    </IonCard>
   );
 };

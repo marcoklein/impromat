@@ -24,16 +24,16 @@ const config: PlaywrightTestConfig = {
     ignoreHTTPSErrors: true,
     isMobile: true,
     baseURL: `http://localhost:${PORT}/`,
-    actionTimeout: 15 * 1000,
+    actionTimeout: 5 * 1000,
   },
   expect: {
-    timeout: 15 * 1000,
+    timeout: 5 * 1000,
   },
   testDir: "test/component",
   reporter: [["list"], ["junit", { outputFile: "junit-results.xml" }]],
   fullyParallel: false,
   retries: 2,
-  timeout: 60 * 1000,
+  timeout: 30 * 1000,
 };
 
 export default config;

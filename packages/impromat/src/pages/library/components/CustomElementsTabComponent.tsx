@@ -1,10 +1,4 @@
-import {
-  IonFab,
-  IonFabButton,
-  IonIcon,
-  IonList,
-  IonSpinner,
-} from "@ionic/react";
+import { IonFab, IonFabButton, IonIcon, IonSpinner } from "@ionic/react";
 import { add } from "ionicons/icons";
 import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
@@ -18,6 +12,8 @@ import {
   routeLibraryElement,
 } from "../library-routes";
 import { CustomElementsEmptyComponent } from "./CustomElementsEmptyComponent";
+import { CardGridComponent } from "../../../components/CardGridComponent";
+import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 
 const CustomElementsTab_WorkshopFragment = graphql(`
   fragment CustomElementsTab_WorkshopFragment on User {
@@ -83,16 +79,17 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
       ) : !customElements?.length ? (
         <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
       ) : (
-        <IonList>
+        <CardGridComponent>
           {customElements.map((element) => (
-            <ElementPreviewItemComponent
-              showVisibility={true}
-              key={element.id}
-              routerLink={routeLibraryElement(element.id, { workshopId })}
-              workshopElementFragment={element}
-            ></ElementPreviewItemComponent>
+            <CardGridRowComponent key={element.id}>
+              <ElementPreviewItemComponent
+                key={element.id}
+                routerLink={routeLibraryElement(element.id, { workshopId })}
+                workshopElementFragment={element}
+              ></ElementPreviewItemComponent>
+            </CardGridRowComponent>
           ))}
-        </IonList>
+        </CardGridComponent>
       )}
     </>
   );

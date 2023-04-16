@@ -1,14 +1,11 @@
 import {
   IonButton,
   IonButtons,
-  IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
   IonIcon,
   IonMenuButton,
   IonPage,
-  IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -16,10 +13,13 @@ import { add } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
+import { CardGridComponent } from "../../components/CardGridComponent";
+import { CardGridRowComponent } from "../../components/CardGridRowComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewItemComponent } from "./components/WorkshopPreviewItemComponent";
 
 const WorkshopFields_WorkshopFragment = graphql(`
@@ -106,41 +106,19 @@ export const WorkshopsPage: React.FC = () => {
           reexecuteQuery={reexecuteWorkshopsQuery}
         >
           {availableWorkshops?.length ? (
-            <IonGrid>
-              <IonRow className="ion-align-items-start">
-                {availableWorkshops.map((workshop) => (
-                  <IonCol
-                    key={workshop.id}
-                    size="12"
-                    sizeSm="6"
-                    sizeMd="6"
-                    sizeLg="6"
-                    sizeXl="4"
-                  >
-                    <WorkshopPreviewItemComponent
-                      workshopFragment={workshop}
-                    ></WorkshopPreviewItemComponent>
-                  </IonCol>
-                ))}
-              </IonRow>
-            </IonGrid>
+            <CardGridComponent>
+              {availableWorkshops.map((workshop) => (
+                <CardGridRowComponent key={workshop.id}>
+                  <WorkshopPreviewItemComponent
+                    workshopFragment={workshop}
+                  ></WorkshopPreviewItemComponent>
+                </CardGridRowComponent>
+              ))}
+            </CardGridComponent>
           ) : (
-            <div
-              className="ion-padding"
-              style={{
-                minHeight: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <p>Start by creating your very first workshop:</p>
-              <IonButton expand="full" onClick={() => createWorkshopClick()}>
-                <IonIcon slot="start" icon={add}></IonIcon>
-                Add Workshop
-              </IonButton>
-            </div>
+            <WorkshopCreateFirstComponent
+              onCreateWorkshopClick={() => createWorkshopClick()}
+            ></WorkshopCreateFirstComponent>
           )}
         </PageContentLoaderComponent>
       </IonContent>

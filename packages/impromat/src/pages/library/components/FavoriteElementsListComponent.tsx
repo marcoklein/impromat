@@ -1,5 +1,6 @@
-import { IonList } from "@ionic/react";
 import { useEffect } from "react";
+import { CardGridComponent } from "../../../components/CardGridComponent";
+import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import {
   FragmentType,
@@ -41,17 +42,16 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
     logger("favoriteElements.length=%s", favoriteElements.length);
   }, [logger, favoriteElements]);
   return (
-    <>
-      {/* Add Account required... */}
-      <IonList>
-        {favoriteElements.map(({ element }) => (
+    <CardGridComponent>
+      {favoriteElements.map(({ element }) => (
+        <CardGridRowComponent key={element.id}>
           <ElementPreviewItemComponent
             key={element.id}
             routerLink={routeLibraryElement(element.id, { workshopId })}
             workshopElementFragment={element}
           ></ElementPreviewItemComponent>
-        ))}
-      </IonList>
-    </>
+        </CardGridRowComponent>
+      ))}
+    </CardGridComponent>
   );
 };
