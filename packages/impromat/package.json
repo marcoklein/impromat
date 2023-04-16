@@ -65,7 +65,7 @@
     "test:watch": "nodemon --config nodemon-test.json",
     "test:debug": "yarn test:headed --debug",
     "test:backend-up": "yarn docker-compose --profile backend up --wait --no-recreate",
-    "test:backend-down": "yarn docker-compose down",
+    "test:backend-down": "yarn docker-compose --profile backend down",
     "playwright:codegen": "playwright codegen",
     "playwright:install": "playwright install chromium",
     "copy-improbib": "cp ../improbib/output/improbib.json ./public/assets/improbib.json",

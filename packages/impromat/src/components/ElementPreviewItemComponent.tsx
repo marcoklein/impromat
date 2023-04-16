@@ -94,7 +94,7 @@ export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
     if (element.languageCode)
       resultList.push({
         tablerIcon: "language",
-        displayText: element.languageCode,
+        displayText: element.languageCode.toUpperCase(),
       });
     return resultList;
   }, [element]);

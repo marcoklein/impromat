@@ -14,11 +14,8 @@ export class LibraryDevPage extends DevPage {
   async gotoElementFromSearch() {
     const page = this.page;
     const searchText = "freeze";
-    // TODO this is a workaround to allow the search to load the improbib json
-    // fix it by fixing the search in the search component
-    // await page.waitForTimeout(1000);
     await this.searchForElement(searchText);
-    await page.getByText("improwikiENFreeze").click();
+    await page.getByText("Freeze").first().click();
   }
 
   searchTabLocator() {

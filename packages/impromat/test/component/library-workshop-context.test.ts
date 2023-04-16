@@ -1,5 +1,6 @@
 import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures";
+import { randomUUID } from "crypto";
 
 pageTest.describe("Library with Workshop Context", () => {
   pageTest(
@@ -40,25 +41,27 @@ pageTest.describe("Library with Workshop Context", () => {
       await auth.loginAsRandomUser();
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
+      const uniqueElementName = randomUUID();
       // when
       await libraryPage.libraryTabLocator().click();
       await page.locator("ion-router-outlet ion-fab-button").last().click();
       await page.getByRole("textbox", { name: "Name" }).click();
-      await page.getByRole("textbox", { name: "Name" }).fill("test-element");
+      await page.getByRole("textbox", { name: "Name" }).fill(uniqueElementName);
+      await page.waitForTimeout(1000);
       await page
         .getByRole("button", { name: "Create and Add to Workshop" })
         .click();
       await page.waitForNavigation();
       await workshopPage.openLibrary();
       await libraryPage.libraryTabLocator().click();
-      await page.getByRole("listitem").getByText("test-element").click();
+      await page.getByRole("heading").getByText(uniqueElementName).click();
       await page.getByRole("button", { name: "Add to Workshop" }).click();
       await page.waitForTimeout(500); // db has to update
       // then
       expect(
         await page
           .locator("ion-router-outlet ion-item")
-          .getByText("test-element")
+          .getByText(uniqueElementName)
           .count(),
       ).toBe(2);
     },

@@ -21,7 +21,7 @@ pageTest.describe("Library", () => {
     // when
     await libraryPage.gotoElementFromSearch();
     // then
-    await libraryPage.expectToolbarTextToBe("Freeze Tag");
+    await libraryPage.expectToolbarTextToBe("Freeze");
   });
 
   pageTest(
