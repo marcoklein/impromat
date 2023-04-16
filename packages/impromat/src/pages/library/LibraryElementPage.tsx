@@ -5,32 +5,38 @@ import {
   IonContent,
   IonFooter,
   IonHeader,
-  IonIcon,
   IonLabel,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { star, starOutline } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
-import { graphql } from "../../graphql-client";
+import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
+import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
 import { routeLibrary } from "./library-routes";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
 
 const LibraryElementQuery = graphql(`
   query LibraryElementQuery($id: ID!) {
     element(id: $id) {
-      id
-      name
-      isFavorite
-      ...Element_Element
+      ...LibraryElement_Element
     }
+  }
+`);
+
+const LibraryElement_ElementFragement = graphql(`
+  fragment LibraryElement_Element on Element {
+    id
+    name
+    isFavorite
+    ...Element_Element
+    ...ElementFavoriteIcon_Element
   }
 `);
 
@@ -47,14 +53,6 @@ const WorkshopQuery = graphql(`
 const AddToWorkshopMutation = graphql(`
   mutation AddToWorkhopMutation($input: UpdateWorkshopInput!) {
     updateWorkshop(input: $input) {
-      id
-    }
-  }
-`);
-
-const UpdateUserFavoriteElementMutation = graphql(`
-  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
-    updateUserFavoriteElement(input: $input) {
       id
     }
   }
@@ -83,32 +81,11 @@ export const LibraryElementPage: React.FC = () => {
     pause: !workshopId,
   });
   const [, addToWorkshopMutation] = useMutation(AddToWorkshopMutation);
-  const element = elementQueryResult.data?.element;
-  const history = useHistory();
-
-  const [, updateUserFavoriteElementMutation] = useMutation(
-    UpdateUserFavoriteElementMutation,
+  const element = getFragmentData(
+    LibraryElement_ElementFragement,
+    elementQueryResult.data?.element,
   );
-
-  function onStarElementClick() {
-    if (!element) {
-      return;
-    }
-
-    if (element.isFavorite === true) {
-      updateUserFavoriteElementMutation({
-        input: { elementId: element.id, isFavorite: false },
-      }).then(() => {
-        reexecuteElementQuery({ requestPolicy: "network-only" });
-      });
-    } else {
-      updateUserFavoriteElementMutation({
-        input: { elementId: element.id, isFavorite: true },
-      }).then(() => {
-        reexecuteElementQuery({ requestPolicy: "network-only" });
-      });
-    }
-  }
+  const history = useHistory();
 
   function addToWorkshop() {
     if (!element) return;
@@ -159,19 +136,13 @@ export const LibraryElementPage: React.FC = () => {
           <IonTitle>
             <IonLabel className="ion-text-wrap">{element?.name}</IonLabel>
           </IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={() => onStarElementClick()}>
-              <IonIcon
-                slot="icon-only"
-                icon={element?.isFavorite ? star : starOutline}
-                aria-label={
-                  element?.isFavorite
-                    ? "Remove from favorites."
-                    : "Add to favorites."
-                }
-              ></IonIcon>
-            </IonButton>
-          </IonButtons>
+          {element && (
+            <IonButtons slot="end">
+              <ElementFavoriteIconComponent
+                elementFragment={element}
+              ></ElementFavoriteIconComponent>
+            </IonButtons>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>

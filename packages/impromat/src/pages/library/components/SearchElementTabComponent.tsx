@@ -1,11 +1,14 @@
-import { IonList, IonSearchbar, IonSpinner } from "@ionic/react";
+import { IonContent, IonList, IonSpinner } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "urql";
+import { CardGridComponent } from "../../../components/CardGridComponent";
+import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import { graphql } from "../../../graphql-client";
 import { routeLibraryElement } from "../library-routes";
+import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 const SearchElementTabQuery = graphql(`
   query SearchElements($input: ElementSearchInput!) {
@@ -30,25 +33,12 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
 }) => {
   // Known issue with the search bar: sometimes inputs "hang up" if you type too fast.
   // Therefore, a `ref` is used to set the initial value only.
-  const searchInputRef = useRef<HTMLIonSearchbarElement>(null);
-  const [searchText, setSearchText] = useState(
-    window.localStorage.getItem("lastSearch") ?? "",
-  );
+  const [searchText, setSearchText] = useState<string>("");
+
   const [queryResult] = useQuery({
     query: SearchElementTabQuery,
     variables: { input: { text: searchText, limit: 20 } },
   });
-
-  useEffect(() => {
-    if (searchInputRef.current) {
-      searchInputRef.current.value =
-        window.localStorage.getItem("lastSearch") ?? "";
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem("lastSearch", searchText);
-  }, [searchText]);
 
   function SearchContent() {
     if (
@@ -68,17 +58,18 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
     }
     if (!!queryResult.data?.searchElements.length) {
       return (
-        <IonList>
+        <CardGridComponent>
           {queryResult.data.searchElements.map((searchResult) => (
-            <ElementPreviewItemComponent
-              key={searchResult.element.id}
-              routerLink={routeLibraryElement(searchResult.element.id, {
-                workshopId,
-              })}
-              workshopElementFragment={searchResult.element}
-            ></ElementPreviewItemComponent>
+            <CardGridRowComponent key={searchResult.element.id}>
+              <ElementPreviewItemComponent
+                routerLink={routeLibraryElement(searchResult.element.id, {
+                  workshopId,
+                })}
+                workshopElementFragment={searchResult.element}
+              ></ElementPreviewItemComponent>
+            </CardGridRowComponent>
           ))}
-        </IonList>
+        </CardGridComponent>
       );
     }
     if (!queryResult.data?.searchElements.length && !searchText.length) {
@@ -94,13 +85,12 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
 
   return (
     <>
-      <IonSearchbar
-        ref={searchInputRef}
-        onIonInput={(e) => {
-          setSearchText(e.detail.value ?? "");
-        }}
-      ></IonSearchbar>
-      <SearchContent></SearchContent>
+      <ElementSearchBarComponent
+        onSearchTextChange={(text) => setSearchText(text)}
+      ></ElementSearchBarComponent>
+      <IonContent>
+        <SearchContent></SearchContent>
+      </IonContent>
     </>
   );
 };
