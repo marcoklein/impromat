@@ -5,6 +5,9 @@ import {
 } from 'src/dtos/inputs/element-input';
 import { PrismaService } from './prisma.service';
 
+import { Prisma } from '@prisma/client';
+import { ElementsQueryInput } from 'src/dtos/inputs/elements-query-input';
+
 const IMPROMAT_SOURCE_NAME = 'impromat';
 
 @Injectable()
@@ -22,12 +25,25 @@ export class ElementService {
     });
   }
 
-  findElementsFromUser(userRequestId: string) {
-    return this.prismaService.user
-      .findFirstOrThrow({
-        where: { id: userRequestId },
-      })
-      .elements();
+  findElementsFromUser(userRequestId: string, input: ElementsQueryInput) {
+    const { filter, take, skip } = input;
+
+    const whereInput: Prisma.ElementWhereInput[] = [];
+
+    if (filter.isOwnerMe) {
+      whereInput.push({ ownerId: userRequestId });
+    }
+    if (filter.isPublic) {
+      whereInput.push({ visibility: 'PUBLIC' });
+    }
+
+    return this.prismaService.element.findMany({
+      where: {
+        OR: whereInput,
+      },
+      skip,
+      take,
+    });
   }
 
   async createElement(

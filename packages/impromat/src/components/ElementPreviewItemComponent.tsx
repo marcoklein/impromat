@@ -22,6 +22,7 @@ const ElementPreviewItem_ElementFragment = graphql(`
     name
     markdown
     tags {
+      id
       name
     }
     usedBy {

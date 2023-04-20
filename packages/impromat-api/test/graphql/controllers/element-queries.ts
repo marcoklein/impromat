@@ -32,6 +32,14 @@ export const userElementsQuery = graphql(`
   }
 `);
 
+export const elementsQuery = graphql(`
+  query ElementsQuery($filter: ElementFilter!) {
+    elements(filter: $filter) {
+      ...ElementFields
+    }
+  }
+`);
+
 export const searchElementsQuery = graphql(`
   query SearchElementsQuery($input: ElementSearchInput!) {
     searchElements(input: $input) {

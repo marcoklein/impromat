@@ -111,19 +111,40 @@ enum ElementVisibility {
   PUBLIC
 }
 
+type ElementSearchMatch {
+  """Key of field where searched text was found."""
+  key: String
+  indices: [[Int!]!]!
+
+  """
+  If the matching field is an array this field points to the index of the matching element in the source array.
+  """
+  refIndex: Int
+  value: String!
+}
+
 type ElementSearchResult {
   element: Element!
   score: Float!
+  matches: [ElementSearchMatch!]!
 }
 
 type Query {
   googleAuthUrl: String!
-  searchElements(input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElements(
+    input: ElementSearchInput!
+
+    """Helper field to pass skip argument into input field."""
+    skip: Int
+
+    """Helper field to pass take argument into input field."""
+    take: Int
+  ): [ElementSearchResult!]!
   workshop(id: ID!): Workshop!
   workshops: [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
   element(id: ID!): Element
-  elements: [Element!]
+  elements(input: ElementsQueryInput!, skip: Float, take: Float): [Element!]
 
   """Get information about the current user."""
   me: User!
@@ -131,7 +152,29 @@ type Query {
 
 input ElementSearchInput {
   text: String
-  limit: Int! = 20
+  take: Int! = 20
+  skip: Int! = 0
+}
+
+input ElementsQueryInput {
+  filter: ElementsFilterInput
+  orderBy: ElementsOrderByInput
+  take: Int! = 20
+  skip: Int! = 0
+}
+
+input ElementsFilterInput {
+  """Include all elements of the currently active user."""
+  isOwnerMe: Boolean
+
+  """
+  Include all elements that are publicaly available to the logged-in user.
+  """
+  isPublic: Boolean
+}
+
+input ElementsOrderByInput {
+  notImplemented: Boolean!
 }
 
 type Mutation {

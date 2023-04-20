@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Element as PrismaElement } from '@prisma/client';
 import Fuse from 'fuse.js';
 import { ElementSearchInput } from 'src/dtos/inputs/element-search-input';
+import { ElementSearchMatch } from 'src/dtos/types/element-search-result.dto';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
@@ -12,7 +13,11 @@ export class ElementSearchService {
     userRequestId: string,
     searchElementsInput: ElementSearchInput,
   ): Promise<
-    { element: PrismaElement; score: number; matches: { key: string }[] }[]
+    {
+      element: PrismaElement;
+      score: number;
+      matches: ElementSearchMatch[];
+    }[]
   > {
     const elementsToSearch = await this.prismaService.element.findMany({
       where: {
@@ -35,21 +40,44 @@ export class ElementSearchService {
           score: 0,
           matches: [],
         }))
-        .slice(0, searchElementsInput.limit);
+        .slice(
+          searchElementsInput.skip,
+          searchElementsInput.skip + searchElementsInput.take,
+        );
     }
     const fuse = new Fuse(elementsToSearch, {
-      keys: ['name', 'tags.name'],
+      keys: [
+        { name: 'name', weight: 2 },
+        { name: 'tags.name', weight: 1 },
+      ],
       includeScore: true,
       includeMatches: true,
+      shouldSort: true,
+      threshold: 0.5,
     });
 
-    return fuse
-      .search(searchElementsInput.text, { limit: searchElementsInput.limit })
+    // TODO optimize by reusing fuse instance for public elements and potentially cache search index for users
+    const result = fuse
+      .search(searchElementsInput.text, {
+        limit: searchElementsInput.skip + searchElementsInput.take,
+      })
+      .slice(
+        searchElementsInput.skip,
+        searchElementsInput.skip + searchElementsInput.take,
+      )
       .map((fuseResult) => ({
         element: fuseResult.item,
         score: fuseResult.score ?? 1,
         matches:
-          fuseResult.matches?.map((match) => ({ key: match.key ?? '' })) ?? [],
+          fuseResult.matches?.map(
+            (match): ElementSearchMatch => ({
+              indices: match.indices as [number, number][],
+              key: match.key,
+              refIndex: match.refIndex,
+              value: match.value ?? '',
+            }),
+          ) ?? [],
       }));
+    return result;
   }
 }

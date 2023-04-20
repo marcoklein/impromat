@@ -5487,6 +5487,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@urql/exchange-graphcache@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@urql/exchange-graphcache@npm:6.0.1"
+  dependencies:
+    "@0no-co/graphql.web": ^1.0.0
+    "@urql/core": ">=4.0.0"
+    wonka: ^6.3.0
+  checksum: e90feaa453e0c316f1250f08f3ce6c994375a408de1927fabc84d036b7d083776f4c8539d20954783061bad8810862cf210399c3380375781d2c2a12676d6d42
+  languageName: node
+  linkType: hard
+
 "@urql/exchange-retry@npm:^1.1.0":
   version: 1.1.0
   resolution: "@urql/exchange-retry@npm:1.1.0"
@@ -11601,6 +11612,7 @@ __metadata:
     "@types/react-router": ^5.1.11
     "@types/react-router-dom": ^5.1.7
     "@types/uuid": ^8.3.4
+    "@urql/exchange-graphcache": ^6.0.1
     "@urql/exchange-retry": ^1.1.0
     concurrently: ^7.6.0
     debug: ^4.3.4

@@ -13,6 +13,7 @@ import {
   CreateElementInput,
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
+import { ElementsQueryInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import { Element } from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
@@ -99,8 +100,15 @@ export class ElementController {
   }
 
   @Query(() => [Element], { nullable: true })
-  async elements(@SessionUserId() userId: string) {
-    return this.userElementService.findElementsFromUser(userId);
+  async elements(
+    @Args('input') input: ElementsQueryInput,
+    @Args('skip', { nullable: true }) skip: number,
+    @Args('take', { nullable: true }) take: number,
+    @SessionUserId() userId: string,
+  ) {
+    if (skip !== undefined) input.skip = skip;
+    if (take !== undefined) input.take = take;
+    return this.userElementService.findElementsFromUser(userId, input);
   }
 
   @Mutation(() => Element)

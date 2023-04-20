@@ -33,4 +33,9 @@ if (environment.ENABLE_TESTLOGIN) {
   console.log(`testUserB`);
   console.log(`${environment.TEST_GOOGLE_AUTH_URL}&userId=testuserB`);
   console.log(`-----------------------`);
+  console.log(`For accessing the API use`);
+  console.log(
+    `http://localhost:${environment.PORT}/auth/testlogin?redirectUrl=http://localhost:${environment.PORT}/graphql&userId=apiuser`,
+  );
+  console.log(`-----------------------`);
 }

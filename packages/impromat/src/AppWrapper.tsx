@@ -1,7 +1,6 @@
 import { setupIonicReact } from "@ionic/react";
 import { retryExchange } from "@urql/exchange-retry";
 import {
-  cacheExchange,
   createClient as createUrqlClient,
   dedupExchange,
   errorExchange,
@@ -21,6 +20,8 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
+import { cacheExchange } from "@urql/exchange-graphcache";
+import { simplePagination } from "@urql/exchange-graphcache/extras";
 import React, { PropsWithChildren, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { environment } from "./environment";
@@ -36,8 +37,21 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
       url: `${environment.API_URL}/graphql`,
       fetchOptions: { credentials: "include" },
       exchanges: [
+        cacheExchange({
+          keys: {
+            ElementSearchResult: () => null, // do not cache search results
+          },
+          resolvers: {
+            Query: {
+              // https://github.com/urql-graphql/urql/blob/main/exchanges/graphcache/src/extras/simplePagination.ts
+              searchElements: simplePagination({
+                limitArgument: "take",
+                offsetArgument: "skip",
+              }),
+            },
+          },
+        }),
         dedupExchange,
-        cacheExchange,
         errorExchange({
           onError(error, _operation) {
             console.error("GraphQL Error:", error);
