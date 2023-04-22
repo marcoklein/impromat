@@ -1,15 +1,10 @@
-import {
-  IonFab,
-  IonFabButton,
-  IonIcon,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-  IonSpinner,
-} from "@ionic/react";
+import { IonFab, IonFabButton, IonIcon, IonSpinner } from "@ionic/react";
 import { add } from "ionicons/icons";
 import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
 import { useQuery } from "urql";
+import { CardGridComponent } from "../../../components/CardGridComponent";
+import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
@@ -19,8 +14,6 @@ import {
   routeLibraryElement,
 } from "../library-routes";
 import { CustomElementsEmptyComponent } from "./CustomElementsEmptyComponent";
-import { CardGridComponent } from "../../../components/CardGridComponent";
-import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 
 const CustomElementsTab_WorkshopFragment = graphql(`
   fragment CustomElementsTab_WorkshopFragment on User {
@@ -86,27 +79,17 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
       ) : !customElements?.length ? (
         <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
       ) : (
-        <>
-          <CardGridComponent>
-            {customElements.map((element) => (
-              <CardGridRowComponent key={element.id}>
-                <ElementPreviewItemComponent
-                  key={element.id}
-                  routerLink={routeLibraryElement(element.id, { workshopId })}
-                  workshopElementFragment={element}
-                ></ElementPreviewItemComponent>
-              </CardGridRowComponent>
-            ))}
-          </CardGridComponent>
-          <IonInfiniteScroll
-            onIonInfinite={(ev) => {
-              // generateItems();
-              setTimeout(() => ev.target.complete(), 500);
-            }}
-          >
-            <IonInfiniteScrollContent></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
-        </>
+        <CardGridComponent>
+          {customElements.map((element) => (
+            <CardGridRowComponent key={element.id}>
+              <ElementPreviewItemComponent
+                key={element.id}
+                routerLink={routeLibraryElement(element.id, { workshopId })}
+                workshopElementFragment={element}
+              ></ElementPreviewItemComponent>
+            </CardGridRowComponent>
+          ))}
+        </CardGridComponent>
       )}
     </>
   );

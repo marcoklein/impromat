@@ -26,6 +26,7 @@ import React, { PropsWithChildren, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { environment } from "./environment";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
+import schema from "./schema-introspection.json";
 import "./theme/colors.css";
 import "./theme/variables.css";
 
@@ -40,6 +41,7 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
         cacheExchange({
           keys: {
             ElementSearchResult: () => null, // do not cache search results
+            ElementTag: () => null, // do not cache tags separately
           },
           resolvers: {
             Query: {
@@ -50,8 +52,8 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
               }),
             },
           },
+          schema,
         }),
-        dedupExchange,
         errorExchange({
           onError(error, _operation) {
             console.error("GraphQL Error:", error);
@@ -64,6 +66,7 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
           randomDelay: false,
           retryIf: (err: any) => !!(err && err.networkError),
         }) as any,
+        dedupExchange,
         fetchExchange,
       ],
     }),

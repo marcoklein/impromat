@@ -21,6 +21,7 @@ import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
 import { routeLibrary } from "./library-routes";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
+import { useMemo } from "react";
 
 const LibraryElementQuery = graphql(`
   query LibraryElementQuery($id: ID!) {
@@ -67,11 +68,14 @@ export const LibraryElementPage: React.FC = () => {
   useStateChangeLogger(workshopId, "workshopId", logger);
   useStateChangeLogger(libraryPartId, "libraryPartId", logger);
 
+  const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
+
   const [elementQueryResult, reexecuteElementQuery] = useQuery({
     query: LibraryElementQuery,
     variables: {
       id: libraryPartId,
     },
+    context,
   });
   const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
     query: WorkshopQuery,

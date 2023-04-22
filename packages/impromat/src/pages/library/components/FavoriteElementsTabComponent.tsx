@@ -36,6 +36,7 @@ export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
   const [{ data, fetching: isFetching, error }] = useQuery({
     query: MyUser_Query,
     context,
+    requestPolicy: "cache-and-network", // and network because isFavorite state of elements might change
   });
   const user = getFragmentData(MyUser_QueryFragment, data);
   const favoriteElements = user?.me.favoriteElements;

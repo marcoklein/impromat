@@ -6,6 +6,7 @@ import {
   graphql,
 } from "../../../graphql-client";
 import { useUpdateUserFavoriteElementMutation } from "../../../hooks/use-update-favorite-element-mutation";
+import { useCallback } from "react";
 
 const ElementFavoriteIcon_ElementFragment = graphql(`
   fragment ElementFavoriteIcon_Element on Element {
@@ -29,10 +30,11 @@ export const ElementFavoriteIconComponent: React.FC<ContainerProps> = ({
     elementFragment,
   );
 
-  function onStarElementClick() {
+  const onStarElementClick = useCallback(() => {
     if (!element) {
       return;
     }
+    console.log("on star element click");
 
     if (element.isFavorite === true) {
       updateUserFavoriteElementMutation({
@@ -43,7 +45,7 @@ export const ElementFavoriteIconComponent: React.FC<ContainerProps> = ({
         input: { elementId: element.id, isFavorite: true },
       });
     }
-  }
+  }, [element, updateUserFavoriteElementMutation]);
 
   return (
     <IonButton onClick={() => onStarElementClick()} fill="clear">

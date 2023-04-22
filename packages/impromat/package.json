@@ -97,6 +97,7 @@
     "@capacitor/cli": "4.1.0",
     "@graphql-codegen/cli": "^3.0.0",
     "@graphql-codegen/client-preset": "^2.0.0",
+    "@graphql-codegen/introspection": "^3.0.1",
     "@graphql-codegen/typescript": "^3.0.0",
     "@graphql-codegen/typescript-operations": "^3.0.0",
     "@types/debug": "^4.1.7",

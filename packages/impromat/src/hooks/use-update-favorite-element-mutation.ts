@@ -5,6 +5,7 @@ const UpdateUserFavoriteElementMutation = graphql(`
   mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
     updateUserFavoriteElement(input: $input) {
       id
+      isFavorite
     }
   }
 `);

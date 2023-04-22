@@ -5,7 +5,7 @@ import {
   IonList,
 } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { CardGridComponent } from "../../../components/CardGridComponent";
 import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
@@ -43,18 +43,9 @@ interface ContainerProps {
 export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
-  // Known issue with the search bar: sometimes inputs "hang up" if you type too fast.
-  // Therefore, a `ref` is used to set the initial value only.
   const [searchText, setSearchText] = useState<string>("");
   const [pageNumber, setPageNumber] = useState(0);
-
-  useEffect(() => {
-    console.log("start", pageNumber);
-
-    return () => {
-      console.log("cleanup");
-    };
-  }, [pageNumber]);
+  const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
 
   const [searchElementsQueryResult] = useQuery({
     query: SearchElementTabQuery,
@@ -65,6 +56,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
       skip: pageNumber * 20,
       take: 20,
     },
+    context,
   });
 
   return (
@@ -87,6 +79,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         {searchElementsQueryResult.data &&
           searchElementsQueryResult.data.searchElements.length > 0 && (
             <>
+              {/* add Virtuoso for faster rendering of components */}
               <CardGridComponent>
                 {searchElementsQueryResult.data.searchElements.map(
                   (searchResult) => (
