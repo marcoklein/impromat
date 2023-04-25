@@ -27,10 +27,10 @@ export class ElementsFilterInput {
 @InputType()
 export class ElementsQueryInput {
   @Field(() => ElementsFilterInput, { nullable: true })
-  filter: ElementsFilterInput;
+  filter: Nullable<ElementsFilterInput>;
 
   @Field(() => ElementsOrderByInput, { nullable: true })
-  orderBy: ElementsOrderByInput;
+  orderBy: Nullable<ElementsOrderByInput>;
 
   @Field(() => Int, { defaultValue: 20 })
   @Min(1)

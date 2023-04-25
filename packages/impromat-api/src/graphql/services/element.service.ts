@@ -30,10 +30,10 @@ export class ElementService {
 
     const whereInput: Prisma.ElementWhereInput[] = [];
 
-    if (filter.isOwnerMe) {
+    if (filter?.isOwnerMe) {
       whereInput.push({ ownerId: userRequestId });
     }
-    if (filter.isPublic) {
+    if (filter?.isPublic) {
       whereInput.push({ visibility: 'PUBLIC' });
     }
 
