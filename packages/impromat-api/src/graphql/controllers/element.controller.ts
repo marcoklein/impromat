@@ -101,11 +101,12 @@ export class ElementController {
 
   @Query(() => [Element], { nullable: true })
   async elements(
-    @Args('input') input: ElementsQueryInput,
+    @Args('input', { nullable: true }) input: ElementsQueryInput,
     @Args('skip', { nullable: true }) skip: number,
     @Args('take', { nullable: true }) take: number,
     @SessionUserId() userId: string,
   ) {
+    input = input ?? {};
     if (skip !== undefined) input.skip = skip;
     if (take !== undefined) input.take = take;
     return this.userElementService.findElementsFromUser(userId, input);

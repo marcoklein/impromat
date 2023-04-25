@@ -2,7 +2,6 @@ import { setupIonicReact } from "@ionic/react";
 import { retryExchange } from "@urql/exchange-retry";
 import {
   createClient as createUrqlClient,
-  dedupExchange,
   errorExchange,
   fetchExchange,
   Provider as UrqlProvider,
@@ -53,6 +52,33 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
             },
           },
           schema,
+          updates: {
+            Mutation: {
+              createElement(_result, _args, cache, _info) {
+                // invalidate me query because user elements are fetched via me.elements
+                // that might change in the future through (1) a custom MeUser type or (2) a User with id query.
+                cache.invalidate("Query", "me");
+              },
+              createWorkshop(_result, _args, cache, _info) {
+                cache.invalidate("Query", "workshops");
+              },
+              updateWorkshop(_result, _args, cache, _info) {
+                // TODO only invalidate fields that are updated through args.input
+                const id = (_result.updateWorkshop as any)?.id;
+                cache.invalidate({
+                  __typename: "Workshop",
+                  id,
+                });
+              },
+              updateWorkshopItemOrder(_result, _args, cache, _info) {
+                const id = (_result.updateWorkshopItemOrder as any)?.id;
+                cache.invalidate({
+                  __typename: "Workshop",
+                  id,
+                });
+              },
+            },
+          },
         }),
         errorExchange({
           onError(error, _operation) {
@@ -66,7 +92,6 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
           randomDelay: false,
           retryIf: (err: any) => !!(err && err.networkError),
         }) as any,
-        dedupExchange,
         fetchExchange,
       ],
     }),

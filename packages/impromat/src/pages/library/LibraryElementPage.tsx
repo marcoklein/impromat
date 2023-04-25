@@ -10,18 +10,19 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { useMemo } from "react";
 import { useHistory, useParams } from "react-router";
-import { useMutation, useQuery } from "urql";
+import { useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
+import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
 import { routeLibrary } from "./library-routes";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
-import { useMemo } from "react";
 
 const LibraryElementQuery = graphql(`
   query LibraryElementQuery($id: ID!) {
@@ -51,14 +52,6 @@ const WorkshopQuery = graphql(`
   }
 `);
 
-const AddToWorkshopMutation = graphql(`
-  mutation AddToWorkhopMutation($input: UpdateWorkshopInput!) {
-    updateWorkshop(input: $input) {
-      id
-    }
-  }
-`);
-
 export const LibraryElementPage: React.FC = () => {
   const { libraryPartId } = useParams<{
     libraryPartId: string;
@@ -84,7 +77,7 @@ export const LibraryElementPage: React.FC = () => {
     },
     pause: !workshopId,
   });
-  const [, addToWorkshopMutation] = useMutation(AddToWorkshopMutation);
+  const [, addToWorkshopMutation] = useUpdateWorkshopMutation();
   const element = getFragmentData(
     LibraryElement_ElementFragement,
     elementQueryResult.data?.element,

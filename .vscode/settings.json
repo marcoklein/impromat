@@ -1,10 +1,13 @@
 {
-  "jest.disabledWorkspaceFolders": [
-    "impromat-monorepo",
-    "packages"
-  ],
+  "files.exclude": {
+    "node_modules/": true,
+    "packages/": true
+  },
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
-  }
+  },
+  "jest.autoRun": "off",
+  "jest.jestCommandLine": "yarn test",
+  "jest.rootPath": ""
 }

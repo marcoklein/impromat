@@ -5,7 +5,7 @@ import {
   IonList,
 } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { CardGridComponent } from "../../../components/CardGridComponent";
 import { CardGridRowComponent } from "../../../components/CardGridRowComponent";

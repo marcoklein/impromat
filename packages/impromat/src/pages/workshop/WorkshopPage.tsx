@@ -27,6 +27,7 @@ import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useDeleteWorkshopMutation } from "../../hooks/use-delete-workshop-mutation";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshops } from "../../routes/shared-routes";
 import { routeLibrary } from "../library/library-routes";
 import {
@@ -81,15 +82,7 @@ export const WorkshopPage: React.FC = () => {
 
   const [, deleteWorkshopMutation] = useDeleteWorkshopMutation();
 
-  const [, updateWorkshopMutation] = useMutation(
-    graphql(`
-      mutation UpdateWorkshop($input: UpdateWorkshopInput!) {
-        updateWorkshop(input: $input) {
-          id
-        }
-      }
-    `),
-  );
+  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const [, updateWorkshopOrder] = useMutation(
     graphql(`
       mutation UpdateWorkshopItemOrder($input: UpdateWorkshopItemOrder!) {

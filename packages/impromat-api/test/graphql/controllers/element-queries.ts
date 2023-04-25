@@ -33,8 +33,8 @@ export const userElementsQuery = graphql(`
 `);
 
 export const elementsQuery = graphql(`
-  query ElementsQuery($filter: ElementFilter!) {
-    elements(filter: $filter) {
+  query ElementsQuery($input: ElementsQueryInput!) {
+    elements(input: $input) {
       ...ElementFields
     }
   }

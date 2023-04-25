@@ -47,7 +47,7 @@ export class WorkshopDevPage extends DevPage {
 
     await page.getByPlaceholder("Search").click();
     await page.getByPlaceholder("Search").fill(searchText);
-    await page.getByText("Freeze").first().click();
+    await page.getByRole("link", { name: "Open" }).first().click();
   }
 
   async addElementFromSearch() {
@@ -79,16 +79,6 @@ export class WorkshopDevPage extends DevPage {
 
   getElementByNameLocator(name: string) {
     return this.page.getByRole("heading", { name });
-  }
-
-  async addToFavoriteElements() {
-    const page = this.page;
-    await page.getByRole("button", { name: "Add to favorites." }).click();
-  }
-
-  async removeFromFavoriteElements() {
-    const page = this.page;
-    await page.getByRole("button", { name: "Remove from favorites." }).click();
   }
 
   async createAndGoto(name: string = "Test Workshop") {
