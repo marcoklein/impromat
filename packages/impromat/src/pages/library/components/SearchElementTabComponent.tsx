@@ -65,9 +65,10 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         onSearchTextChange={(text) => setSearchText(text)}
       ></ElementSearchBarComponent>
       <IonContent scrollY={true} className="ion-no-padding ion-no-margin">
-        {!searchElementsQueryResult.fetching &&
+        {!searchElementsQueryResult.stale &&
+          !searchElementsQueryResult.fetching &&
           !searchElementsQueryResult.data?.searchElements.length &&
-          searchText.length && (
+          searchText.length > 0 && (
             <IonList>
               <InfoItemComponent
                 message="No matching elements found."
@@ -100,7 +101,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
               </CardGridComponent>
               <IonInfiniteScroll
                 onIonInfinite={(ev) => {
-                  if (!searchElementsQueryResult.fetching) {
+                  if (!searchElementsQueryResult.stale) {
                     setPageNumber((currentPageNumber) => currentPageNumber + 1);
                     setTimeout(() => ev.target.complete(), 500);
                   } else {

@@ -5,18 +5,17 @@ import { Route } from "react-router";
 import { MenuComponent } from "./components/MenuComponent";
 import { ProtectedRouteComponent } from "./components/ProtectedRoute";
 import { AboutPage } from "./pages/AboutPage";
-import { AccountPage } from "./pages/account/AccountPage";
-import { HomePage } from "./pages/HomePage";
 import { LegalPage } from "./pages/LegalPage";
-import {
-  routeLibraryElement,
-  routeLibraryCreateCustomElement,
-  routeLibrary,
-} from "./pages/library/library-routes";
+import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
+import { AccountPage } from "./pages/account/AccountPage";
 import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
 import { LibraryElementPage } from "./pages/library/LibraryElementPage";
 import { LibraryPage } from "./pages/library/LibraryPage";
-import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
+import {
+  routeLibrary,
+  routeLibraryCreateCustomElement,
+  routeLibraryElement,
+} from "./pages/library/library-routes";
 import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
 import { WorkshopPage } from "./pages/workshop/WorkshopPage";
 import { WorkshopsPage } from "./pages/workshop/WorkshopsPage";
@@ -31,6 +30,7 @@ import {
   routeWorkshopElement,
   routeWorkshops,
 } from "./routes/shared-routes";
+import { HomePage } from "./pages/HomePage";
 
 export const App: React.FC = () => {
   return (
