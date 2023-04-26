@@ -1,4 +1,3 @@
-import { IonPage } from "@ionic/react";
 import { useIsLoggedIn } from "../hooks/use-is-logged-in";
 import { HomeLoggedIn } from "./home/HomeLoggedIn";
 import { HomeLoggedOut } from "./home/HomeLoggedOut";
@@ -12,16 +11,8 @@ export const HomePage: React.FC = () => {
 
   return (
     <>
-      {isLoggedIn && (
-        <IonPage>
-          <HomeLoggedIn></HomeLoggedIn>
-        </IonPage>
-      )}
-      {!isLoggedIn && (
-        <IonPage>
-          <HomeLoggedOut></HomeLoggedOut>
-        </IonPage>
-      )}
+      {isLoggedIn && <HomeLoggedIn></HomeLoggedIn>}
+      {!isLoggedIn && <HomeLoggedOut></HomeLoggedOut>}
     </>
   );
 };
