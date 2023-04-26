@@ -33,6 +33,7 @@ export class UserFavoriteElementsService {
         where: { userId_elementId: { elementId, userId } },
       });
     if (isFavorite && !existingConnection) {
+      // if error is thrown here it indicates a request duplication
       return await this.prismaService.userFavoriteElement.create({
         data: {
           userId,

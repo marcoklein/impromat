@@ -68,14 +68,16 @@ export const WorkshopElementPage: React.FC = () => {
   const workshopElement = workshopElementQueryResult.data?.workshopElement;
   const basedOnElement = workshopElement?.basedOn;
   const [presentInput] = useInputDialog();
-  const [, updateWorkshop] = useMutation(
+  const [, updateWorkshopElementNote] = useMutation(
     graphql(`
-      mutation UpdateWorkshopWithElement($input: UpdateWorkshopInput!) {
+      mutation UpdateWorkshopElementNote($input: UpdateWorkshopInput!) {
         updateWorkshop(input: $input) {
           id
           sections {
+            id
             elements {
               id
+              note
             }
           }
         }
@@ -89,7 +91,7 @@ export const WorkshopElementPage: React.FC = () => {
   const saveNotesChanges = useCallback(
     (note: string) => {
       if (!workshopElement) return;
-      updateWorkshop({
+      updateWorkshopElementNote({
         input: {
           id: workshopId,
           sections: {
@@ -103,7 +105,7 @@ export const WorkshopElementPage: React.FC = () => {
         },
       });
     },
-    [updateWorkshop, workshopElement, workshopId],
+    [updateWorkshopElementNote, workshopElement, workshopId],
   );
 
   const onChangeNoteClick = () => {

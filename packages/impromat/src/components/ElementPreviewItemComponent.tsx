@@ -9,6 +9,7 @@ import { brush, eye, star } from "ionicons/icons";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
+import { ElementFavoriteIconComponent } from "../pages/library/components/ElementFavoriteIconComponent";
 import { IconInfoList, IconInfoListItem } from "./IconInfoList";
 import { TagsComponent } from "./TagsComponent";
 
@@ -22,6 +23,7 @@ const ElementPreviewItem_ElementFragment = graphql(`
     name
     markdown
     tags {
+      id
       name
     }
     usedBy {
@@ -100,7 +102,7 @@ export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
   }, [element]);
 
   return (
-    <IonCard className="ion-no-margin" routerLink={routerLink}>
+    <IonCard className="ion-no-margin">
       <div className="ion-margin-end ion-margin-top ion-float-right">
         <IconInfoList list={infoList}></IconInfoList>
       </div>
@@ -116,6 +118,9 @@ export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
         <IonButton style={{ flexGrow: 1 }} fill="clear" routerLink={routerLink}>
           Open
         </IonButton>
+        <ElementFavoriteIconComponent
+          elementFragment={element}
+        ></ElementFavoriteIconComponent>
       </div>
     </IonCard>
   );

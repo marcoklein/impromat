@@ -13,10 +13,13 @@ import {
   CreateElementInput,
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
+import { ElementsQueryInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import { Element } from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
+import { Nullable } from 'src/utils/nullish';
+import { elementsQuery } from 'test/graphql/controllers/element-queries';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ElementService } from '../services/element.service';
 
@@ -99,8 +102,22 @@ export class ElementController {
   }
 
   @Query(() => [Element], { nullable: true })
-  async elements(@SessionUserId() userId: string) {
-    return this.userElementService.findElementsFromUser(userId);
+  async elements(
+    @Args('input', { type: () => ElementsQueryInput, nullable: true })
+    optionalInput: Nullable<ElementsQueryInput>,
+    @Args('skip', { nullable: true }) skip: number,
+    @Args('take', { nullable: true }) take: number,
+    @SessionUserId() userId: string,
+  ) {
+    const input = optionalInput ?? {
+      filter: null,
+      orderBy: null,
+      skip: 20,
+      take: 0,
+    };
+    if (skip !== undefined && skip !== null) input.skip = skip;
+    if (take !== undefined && take !== null) input.take = take;
+    return this.userElementService.findElementsFromUser(userId, input);
   }
 
   @Mutation(() => Element)

@@ -19,7 +19,7 @@ export function useGoogleLoginHref() {
           method: "POST",
           body: JSON.stringify({
             query: /* GraphQL */ `
-              {
+              query GoogleLoginHrefQuery {
                 googleAuthUrl
               }
             `,

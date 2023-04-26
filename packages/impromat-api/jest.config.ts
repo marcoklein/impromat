@@ -15,6 +15,7 @@ const config: Config = {
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
+  reporters: ['default', ['jest-junit', { outputName: 'junit-results.xml' }]],
 };
 
 export default config;

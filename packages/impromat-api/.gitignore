@@ -41,7 +41,6 @@ assets
 storage/*
 *db-journal
 *.gen.*
-/test/graphql-client
 
 .env.local
 .env.test.local

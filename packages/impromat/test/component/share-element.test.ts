@@ -17,7 +17,7 @@ pageTest.describe("Shared Elements", () => {
       await auth.loginAsRandomUser();
       await libraryPage.goto();
       await libraryPage.searchForElement(uniqueElementName);
-      await page.getByText(uniqueElementName).click();
+      await libraryPage.openElementCard(uniqueElementName);
       // then
       await expect(
         page.getByText("Created by a user in impromat"),
@@ -27,7 +27,13 @@ pageTest.describe("Shared Elements", () => {
 
   pageTest(
     "should favorise a user created element",
-    async ({ page, auth, libraryPage, favoriteElementsPage, workshopPage }) => {
+    async ({
+      page,
+      auth,
+      libraryPage,
+      libraryElementPage,
+      favoriteElementsPage,
+    }) => {
       // given
       await auth.loginAsRandomUser();
       const uniqueElementName = randomUUID();
@@ -40,7 +46,7 @@ pageTest.describe("Shared Elements", () => {
       await libraryPage.goto();
       await libraryPage.searchForElement(uniqueElementName);
       await page.getByText(uniqueElementName).click();
-      await workshopPage.addToFavoriteElements();
+      await libraryElementPage.addToFavoriteElements();
       await favoriteElementsPage.goto();
       // then
       await expect(page.getByText(uniqueElementName)).toBeVisible();

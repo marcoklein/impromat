@@ -191,10 +191,11 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
                 ],
               },
             },
-          });
-          history.push(routeWorkshop(workshopId), {
-            direction: "back",
-            newElement: newElement.id,
+          }).then(() => {
+            history.push(routeWorkshop(workshopId), {
+              direction: "back",
+              newElement: newElement.id,
+            });
           });
         } else {
           history.push(

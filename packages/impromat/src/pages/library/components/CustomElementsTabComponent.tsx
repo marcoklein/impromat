@@ -3,6 +3,8 @@ import { add } from "ionicons/icons";
 import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
 import { useQuery } from "urql";
+import { CardGridComponent } from "../../../components/CardGridComponent";
+import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
@@ -12,8 +14,6 @@ import {
   routeLibraryElement,
 } from "../library-routes";
 import { CustomElementsEmptyComponent } from "./CustomElementsEmptyComponent";
-import { CardGridComponent } from "../../../components/CardGridComponent";
-import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 
 const CustomElementsTab_WorkshopFragment = graphql(`
   fragment CustomElementsTab_WorkshopFragment on User {

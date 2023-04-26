@@ -1,6 +1,11 @@
-import { IonContent, IonList, IonSpinner } from "@ionic/react";
+import {
+  IonContent,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonList,
+} from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { CardGridComponent } from "../../../components/CardGridComponent";
 import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
@@ -11,11 +16,18 @@ import { routeLibraryElement } from "../library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 const SearchElementTabQuery = graphql(`
-  query SearchElements($input: ElementSearchInput!) {
-    searchElements(input: $input) {
+  query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {
+    searchElements(input: $input, skip: $skip, take: $take) {
       element {
         id
         ...ElementPreviewItem_Element
+      }
+      score
+      matches {
+        key
+        indices
+        refIndex
+        value
       }
     }
   }
@@ -31,65 +43,84 @@ interface ContainerProps {
 export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
-  // Known issue with the search bar: sometimes inputs "hang up" if you type too fast.
-  // Therefore, a `ref` is used to set the initial value only.
   const [searchText, setSearchText] = useState<string>("");
+  const [pageNumber, setPageNumber] = useState(0);
+  const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
 
-  const [queryResult] = useQuery({
+  const [searchElementsQueryResult] = useQuery({
     query: SearchElementTabQuery,
-    variables: { input: { text: searchText, limit: 20 } },
+    variables: {
+      input: {
+        text: searchText,
+      },
+      skip: pageNumber * 20,
+      take: 20,
+    },
+    context,
   });
-
-  function SearchContent() {
-    if (
-      !queryResult.fetching &&
-      !queryResult.data?.searchElements.length &&
-      searchText.length
-    ) {
-      return (
-        <IonList>
-          <InfoItemComponent
-            message="No matching elements found."
-            icon={informationCircle}
-            color="warning"
-          ></InfoItemComponent>
-        </IonList>
-      );
-    }
-    if (!!queryResult.data?.searchElements.length) {
-      return (
-        <CardGridComponent>
-          {queryResult.data.searchElements.map((searchResult) => (
-            <CardGridRowComponent key={searchResult.element.id}>
-              <ElementPreviewItemComponent
-                routerLink={routeLibraryElement(searchResult.element.id, {
-                  workshopId,
-                })}
-                workshopElementFragment={searchResult.element}
-              ></ElementPreviewItemComponent>
-            </CardGridRowComponent>
-          ))}
-        </CardGridComponent>
-      );
-    }
-    if (!queryResult.data?.searchElements.length && !searchText.length) {
-      return (
-        <InfoItemComponent
-          message={"Use the search bar to find elements from various sources."}
-          icon={informationCircle}
-        ></InfoItemComponent>
-      );
-    }
-    return <IonSpinner></IonSpinner>;
-  }
 
   return (
     <>
       <ElementSearchBarComponent
         onSearchTextChange={(text) => setSearchText(text)}
       ></ElementSearchBarComponent>
-      <IonContent>
-        <SearchContent></SearchContent>
+      <IonContent scrollY={true} className="ion-no-padding ion-no-margin">
+        {!searchElementsQueryResult.fetching &&
+          !searchElementsQueryResult.data?.searchElements.length &&
+          searchText.length && (
+            <IonList>
+              <InfoItemComponent
+                message="No matching elements found."
+                icon={informationCircle}
+                color="warning"
+              ></InfoItemComponent>
+            </IonList>
+          )}
+        {searchElementsQueryResult.data &&
+          searchElementsQueryResult.data.searchElements.length > 0 && (
+            <>
+              {/* add Virtuoso for faster rendering of components */}
+              <CardGridComponent>
+                {searchElementsQueryResult.data.searchElements.map(
+                  (searchResult) => (
+                    <CardGridRowComponent key={searchResult.element.id}>
+                      {/* <div>{JSON.stringify(searchResult.matches)}</div> */}
+                      <ElementPreviewItemComponent
+                        routerLink={routeLibraryElement(
+                          searchResult.element.id,
+                          {
+                            workshopId,
+                          },
+                        )}
+                        workshopElementFragment={searchResult.element}
+                      ></ElementPreviewItemComponent>
+                    </CardGridRowComponent>
+                  ),
+                )}
+              </CardGridComponent>
+              <IonInfiniteScroll
+                onIonInfinite={(ev) => {
+                  if (!searchElementsQueryResult.fetching) {
+                    setPageNumber((currentPageNumber) => currentPageNumber + 1);
+                    setTimeout(() => ev.target.complete(), 500);
+                  } else {
+                    ev.target.complete();
+                  }
+                }}
+              >
+                <IonInfiniteScrollContent></IonInfiniteScrollContent>
+              </IonInfiniteScroll>
+            </>
+          )}
+        {!searchElementsQueryResult.data?.searchElements.length &&
+          !searchText.length && (
+            <InfoItemComponent
+              message={
+                "Use the search bar to find elements from various sources."
+              }
+              icon={informationCircle}
+            ></InfoItemComponent>
+          )}
       </IonContent>
     </>
   );

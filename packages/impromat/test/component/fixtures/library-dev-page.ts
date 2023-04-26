@@ -12,10 +12,31 @@ export class LibraryDevPage extends DevPage {
   }
 
   async gotoElementFromSearch() {
-    const page = this.page;
     const searchText = "freeze";
     await this.searchForElement(searchText);
-    await page.getByText("Freeze").first().click();
+    await this.openElementCard();
+  }
+
+  async openElementCard(name?: string) {
+    const page = this.page;
+    if (name) {
+      await page
+        .locator("ion-card", {
+          hasText: name,
+        })
+        .getByRole("link", { name: "Open" })
+        .click();
+    } else {
+      await page.getByRole("link", { name: "Open" }).first().click();
+    }
+  }
+
+  async gotoSearch() {
+    await this.page.goto("./library/search");
+  }
+
+  async gotoFavorites() {
+    await this.page.goto("./library/favorites");
   }
 
   searchTabLocator() {
@@ -27,7 +48,7 @@ export class LibraryDevPage extends DevPage {
   }
 
   tabLocator(name: string | RegExp) {
-    return this.page.getByRole("contentinfo").getByText(name);
+    return this.page.getByRole("contentinfo").getByText(name).first();
   }
 
   async createCustomElement(

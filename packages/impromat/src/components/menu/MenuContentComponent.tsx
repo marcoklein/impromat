@@ -16,9 +16,18 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { close, documents, home, information, library } from "ionicons/icons";
+import {
+  brush,
+  close,
+  documents,
+  home,
+  information,
+  search,
+  star,
+} from "ionicons/icons";
 import { environment } from "../../environment";
-import { routeLibrary } from "../../pages/library/library-routes";
+import { Tabs } from "../../pages/library/components/LibraryContentComponent";
+import { routeLibraryTab } from "../../pages/library/library-routes";
 import {
   routeAbout,
   routeHome,
@@ -53,7 +62,7 @@ export const MenuContentComponent: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent>
         <AccountMenuItemComponent></AccountMenuItemComponent>
         <IonItemGroup>
           <IonItemDivider>
@@ -69,13 +78,25 @@ export const MenuContentComponent: React.FC = () => {
             </IonButton> */}
           </MenuItemComponent>
         </IonItemGroup>
-        <IonItemGroup>
-          <MenuItemComponent
-            routerLink={routeLibrary()}
-            icon={library}
-            label="Element Library"
-          ></MenuItemComponent>
-        </IonItemGroup>
+        <IonItemDivider>
+          <IonLabel>Element Library</IonLabel>
+        </IonItemDivider>
+        <MenuItemComponent
+          routerLink={routeLibraryTab(Tabs.SEARCH)}
+          icon={search}
+          label="Explore"
+        ></MenuItemComponent>
+        <MenuItemComponent
+          routerLink={routeLibraryTab(Tabs.FAVORITES)}
+          icon={star}
+          label="Favorites"
+        ></MenuItemComponent>
+        <MenuItemComponent
+          routerLink={routeLibraryTab(Tabs.CREATE)}
+          icon={brush}
+          label="My Elements"
+        ></MenuItemComponent>
+        <IonItemGroup></IonItemGroup>
         <IonItemGroup>
           <IonItemDivider>
             <IonLabel>More</IonLabel>

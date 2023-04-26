@@ -10,8 +10,8 @@ interface ContainerProps {
 export const TagsComponent: React.FC<ContainerProps> = ({ tags }) => (
   <>
     {tags &&
-      tags.map((tagName) => (
-        <IonBadge key={tagName} color="light" style={{ marginRight: "4px" }}>
+      tags.map((tagName, index) => (
+        <IonBadge key={index} color="light" style={{ marginRight: "4px" }}>
           <IonText color="medium">{tagName}</IonText>
         </IonBadge>
       ))}

@@ -1,9 +1,7 @@
 import { setupIonicReact } from "@ionic/react";
 import { retryExchange } from "@urql/exchange-retry";
 import {
-  cacheExchange,
   createClient as createUrqlClient,
-  dedupExchange,
   errorExchange,
   fetchExchange,
   Provider as UrqlProvider,
@@ -21,10 +19,13 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
+import { cacheExchange } from "@urql/exchange-graphcache";
+import { simplePagination } from "@urql/exchange-graphcache/extras";
 import React, { PropsWithChildren, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { environment } from "./environment";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
+import schema from "./schema-introspection.json";
 import "./theme/colors.css";
 import "./theme/variables.css";
 
@@ -36,8 +37,49 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
       url: `${environment.API_URL}/graphql`,
       fetchOptions: { credentials: "include" },
       exchanges: [
-        dedupExchange,
-        cacheExchange,
+        cacheExchange({
+          keys: {
+            ElementSearchResult: () => null, // do not cache search results
+            ElementTag: () => null, // do not cache tags separately
+          },
+          resolvers: {
+            Query: {
+              // https://github.com/urql-graphql/urql/blob/main/exchanges/graphcache/src/extras/simplePagination.ts
+              searchElements: simplePagination({
+                limitArgument: "take",
+                offsetArgument: "skip",
+              }),
+            },
+          },
+          schema,
+          updates: {
+            Mutation: {
+              createElement(_result, _args, cache, _info) {
+                // invalidate me query because user elements are fetched via me.elements
+                // that might change in the future through (1) a custom MeUser type or (2) a User with id query.
+                cache.invalidate("Query", "me");
+              },
+              createWorkshop(_result, _args, cache, _info) {
+                cache.invalidate("Query", "workshops");
+              },
+              updateWorkshop(_result, _args, cache, _info) {
+                // TODO only invalidate fields that are updated through args.input
+                const id = (_result.updateWorkshop as any)?.id;
+                cache.invalidate({
+                  __typename: "Workshop",
+                  id,
+                });
+              },
+              updateWorkshopItemOrder(_result, _args, cache, _info) {
+                const id = (_result.updateWorkshopItemOrder as any)?.id;
+                cache.invalidate({
+                  __typename: "Workshop",
+                  id,
+                });
+              },
+            },
+          },
+        }),
         errorExchange({
           onError(error, _operation) {
             console.error("GraphQL Error:", error);

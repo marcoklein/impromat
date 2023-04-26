@@ -8,6 +8,7 @@
     "bierner.markdown-mermaid",
     "yzhang.markdown-all-in-one",
     "prisma.prisma",
-    "arcanis.vscode-zipfs"
+    "arcanis.vscode-zipfs",
+    "orta.vscode-jest"
   ]
 }

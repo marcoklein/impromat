@@ -53,7 +53,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
 
   const [tab, setTab] = useState(Tabs.SEARCH);
   useEffect(() => {
-    console.log("location pathname", location.pathname);
+    logger("location pathname", location.pathname);
     if (location.pathname.endsWith(Tabs.CREATE)) {
       setTab(Tabs.CREATE);
     } else if (location.pathname.endsWith(Tabs.FAVORITES)) {
@@ -61,7 +61,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
     } else {
       setTab(Tabs.SEARCH);
     }
-  }, [location.pathname, hasWorkshopContext]);
+  }, [location.pathname, hasWorkshopContext, logger]);
 
   const createTabsRoute = useCallback(
     (tab: Tabs) => {
@@ -99,7 +99,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
           </IonContent>
         </Route>
       </Switch>
-      <IonFooter>
+      <IonFooter className="ion-hide-lg-up">
         <IonToolbar>
           <IonSegment value={tab}>
             <IonSegmentButton

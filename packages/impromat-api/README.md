@@ -61,11 +61,17 @@ Generate a new migration script without applying it:
 yarn prisma migrate dev --create-only
 ```
 
-## API Design
+## API Naming Conventions
 
-- Naming conventions inspired by the [GitHub API](https://docs.github.com/en/graphql/reference/mutations).
-- Model as closely as possible to the [Prisma Client](https://www.prisma.io/docs/concepts/components/prisma-client)
-- Follow [GraphqlCRUD](https://graphqlcrud.org)
+### Queries
+
+Use `where` statements to filter query results.
+
+```graphql
+query element(where: {title: "test"}) {
+  id
+}
+```
 
 ### Mutations
 
@@ -74,3 +80,10 @@ Use `CRUD` verbs:
 - `create` (e.g. `createWorkshop`)
 - `update` (e.g. `updateWorkshop`)
 - `delete` (e.g. `deleteWorkshop`)
+
+### Sources
+
+- Naming conventions inspired by the [GitHub API](https://docs.github.com/en/graphql/reference/mutations).
+- Model as closely as possible to the [Prisma Client](https://www.prisma.io/docs/concepts/components/prisma-client)
+- Follow [GraphqlCRUD](https://graphqlcrud.org)
+- Inspiration from https://github.com/supabase/pg_graphql

@@ -6,15 +6,15 @@ const config: CodegenConfig = {
   ignoreNoDocuments: true, // for better experience with the watcher
   generates: {
     "./src/graphql-client/": {
-      plugins: [
-        // "typescript",
-        // "typescript-operations",
-        // // // "typescript-graphql-request",
-        // "typescript-react-apollo",
-      ],
       preset: "client-preset",
       presetConfig: {
         fragmentMasking: { unmaskFunctionName: "getFragmentData" },
+      },
+    },
+    "./src/schema-introspection.json": {
+      plugins: ["introspection"],
+      config: {
+        minify: true,
       },
     },
   },
