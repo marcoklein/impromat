@@ -133,7 +133,14 @@ export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
         displayText: element.languageCode.toUpperCase(),
       });
     return resultList;
-  }, [element]);
+  }, [
+    element.isFavorite,
+    element.isOwnerMe,
+    element.languageCode,
+    element.sourceName,
+    element.visibility,
+    searchResult,
+  ]);
 
   return (
     <IonCard
