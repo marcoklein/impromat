@@ -29,6 +29,6 @@ describe('Elements', () => {
     ).toBeGreaterThan(2000);
     expect(
       result.data?.searchElements[0].element.markdownShort?.length,
-    ).toEqual(100);
+    ).toEqual(300);
   });
 });
