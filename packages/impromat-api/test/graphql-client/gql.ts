@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n": types.ElementFieldsFragmentDoc,
+    "\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n    markdownShort\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n": types.ElementFieldsFragmentDoc,
     "\n  query UserElementsQuery {\n    elements {\n      ...ElementFields\n    }\n  }\n": types.UserElementsQueryDocument,
     "\n  query ElementsQuery($input: ElementsQueryInput!) {\n    elements(input: $input) {\n      ...ElementFields\n    }\n  }\n": types.ElementsQueryDocument,
     "\n  query SearchElementsQuery($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n": types.SearchElementsQueryDocument,
@@ -50,7 +50,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n"): (typeof documents)["\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n"];
+export function graphql(source: "\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n    markdownShort\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n"): (typeof documents)["\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n    markdownShort\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

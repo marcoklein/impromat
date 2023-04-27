@@ -25,7 +25,6 @@ import React, { PropsWithChildren, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { environment } from "./environment";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
-import schema from "./schema-introspection.json";
 import "./theme/colors.css";
 import "./theme/variables.css";
 
@@ -51,7 +50,6 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
               }),
             },
           },
-          schema,
           updates: {
             Mutation: {
               createElement(_result, _args, cache, _info) {

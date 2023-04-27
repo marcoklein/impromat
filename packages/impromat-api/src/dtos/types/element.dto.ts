@@ -16,6 +16,13 @@ export class Element extends BaseDto {
   @Field(() => String, { nullable: true })
   markdown: Nullable<string>;
 
+  @Field(() => String, {
+    nullable: true,
+    description:
+      'Shortened markdown text for preview purposes to avoid loading the whole content in a request.',
+  })
+  markdownShort: Nullable<string>;
+
   @Field(() => [ElementTag])
   tags: ElementTag[];
 

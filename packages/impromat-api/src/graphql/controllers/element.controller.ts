@@ -19,7 +19,6 @@ import { Element } from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
 import { Nullable } from 'src/utils/nullish';
-import { elementsQuery } from 'test/graphql/controllers/element-queries';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ElementService } from '../services/element.service';
 
@@ -41,6 +40,11 @@ export class ElementController {
         },
       });
     return elementFavoriteRelations.length > 0;
+  }
+
+  @ResolveField(() => String)
+  async markdownShort(@Parent() element: Element) {
+    return element.markdown?.substring(0, 300);
   }
 
   @ResolveField(() => [User])

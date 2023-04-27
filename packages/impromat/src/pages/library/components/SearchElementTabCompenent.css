@@ -1,0 +1,25 @@
+.item-class-name {
+  width: 100%;
+
+  height: 200px;
+  padding: 4px;
+}
+
+@media (min-width: 768px) {
+  /* MD */
+  .item-class-name {
+    width: 50%;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* XL */
+  .item-class-name {
+    width: 33%;
+  }
+}
+
+.list-class-name {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -48,7 +48,7 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
           <ElementPreviewItemComponent
             key={element.id}
             routerLink={routeLibraryElement(element.id, { workshopId })}
-            workshopElementFragment={element}
+            elementFragment={element}
           ></ElementPreviewItemComponent>
         </CardGridRowComponent>
       ))}
