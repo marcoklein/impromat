@@ -63,10 +63,18 @@ export const MenuContentComponent: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <IonItemGroup>
+          <MenuItemComponent
+            exact
+            routerLink={routeHome()}
+            icon={home}
+            label="Home"
+          ></MenuItemComponent>
+        </IonItemGroup>
         <AccountMenuItemComponent></AccountMenuItemComponent>
         <IonItemGroup>
           <IonItemDivider>
-            <IonLabel>Navigation</IonLabel>
+            <IonLabel>Workshops</IonLabel>
           </IonItemDivider>
           <MenuItemComponent
             routerLink={routeWorkshops()}
@@ -79,7 +87,7 @@ export const MenuContentComponent: React.FC = () => {
           </MenuItemComponent>
         </IonItemGroup>
         <IonItemDivider>
-          <IonLabel>Element Library</IonLabel>
+          <IonLabel>Elements</IonLabel>
         </IonItemDivider>
         <MenuItemComponent
           routerLink={routeLibraryTab(Tabs.SEARCH)}
@@ -101,12 +109,6 @@ export const MenuContentComponent: React.FC = () => {
           <IonItemDivider>
             <IonLabel>More</IonLabel>
           </IonItemDivider>
-          <MenuItemComponent
-            exact
-            routerLink={routeHome()}
-            icon={home}
-            label="Home Page"
-          ></MenuItemComponent>
           <MenuItemComponent
             routerLink={routeAbout()}
             icon={information}

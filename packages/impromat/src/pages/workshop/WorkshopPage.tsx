@@ -215,7 +215,7 @@ export const WorkshopPage: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <IonContent fullscreen>
+        <IonContent>
           <PageContentLoaderComponent
             queryResult={workshopQueryResult}
             reexecuteQuery={reexecuteWorkshopQuery}

@@ -3,6 +3,7 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonList,
+  IonProgressBar,
 } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
 import { useMemo, useState } from "react";
@@ -64,10 +65,17 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
       <ElementSearchBarComponent
         onSearchTextChange={(text) => setSearchText(text)}
       ></ElementSearchBarComponent>
+      <div>
+        {(searchElementsQueryResult.stale ||
+          searchElementsQueryResult.fetching) && (
+          <IonProgressBar type="indeterminate" color="dark"></IonProgressBar>
+        )}
+      </div>
       <IonContent scrollY={true} className="ion-no-padding ion-no-margin">
-        {!searchElementsQueryResult.fetching &&
+        {!searchElementsQueryResult.stale &&
+          !searchElementsQueryResult.fetching &&
           !searchElementsQueryResult.data?.searchElements.length &&
-          searchText.length && (
+          searchText.length > 0 && (
             <IonList>
               <InfoItemComponent
                 message="No matching elements found."
@@ -100,7 +108,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
               </CardGridComponent>
               <IonInfiniteScroll
                 onIonInfinite={(ev) => {
-                  if (!searchElementsQueryResult.fetching) {
+                  if (!searchElementsQueryResult.stale) {
                     setPageNumber((currentPageNumber) => currentPageNumber + 1);
                     setTimeout(() => ev.target.complete(), 500);
                   } else {
@@ -112,7 +120,9 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
               </IonInfiniteScroll>
             </>
           )}
-        {!searchElementsQueryResult.data?.searchElements.length &&
+        {!searchElementsQueryResult.fetching &&
+          !searchElementsQueryResult.stale &&
+          !searchElementsQueryResult.data?.searchElements.length &&
           !searchText.length && (
             <InfoItemComponent
               message={
