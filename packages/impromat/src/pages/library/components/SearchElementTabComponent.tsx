@@ -3,6 +3,9 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonList,
+  IonLoading,
+  IonProgressBar,
+  IonSpinner,
 } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
 import { useMemo, useState } from "react";
@@ -64,6 +67,12 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
       <ElementSearchBarComponent
         onSearchTextChange={(text) => setSearchText(text)}
       ></ElementSearchBarComponent>
+      <div>
+        {(searchElementsQueryResult.stale ||
+          searchElementsQueryResult.fetching) && (
+          <IonProgressBar type="indeterminate" color="dark"></IonProgressBar>
+        )}
+      </div>
       <IonContent scrollY={true} className="ion-no-padding ion-no-margin">
         {!searchElementsQueryResult.stale &&
           !searchElementsQueryResult.fetching &&
@@ -113,7 +122,9 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
               </IonInfiniteScroll>
             </>
           )}
-        {!searchElementsQueryResult.data?.searchElements.length &&
+        {!searchElementsQueryResult.fetching &&
+          !searchElementsQueryResult.stale &&
+          !searchElementsQueryResult.data?.searchElements.length &&
           !searchText.length && (
             <InfoItemComponent
               message={

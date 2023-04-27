@@ -34,7 +34,6 @@ export const ElementFavoriteIconComponent: React.FC<ContainerProps> = ({
     if (!element) {
       return;
     }
-    console.log("on star element click");
 
     if (element.isFavorite === true) {
       updateUserFavoriteElementMutation({
