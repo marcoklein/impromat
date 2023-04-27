@@ -3,9 +3,7 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonList,
-  IonLoading,
   IonProgressBar,
-  IonSpinner,
 } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
 import { useMemo, useState } from "react";
