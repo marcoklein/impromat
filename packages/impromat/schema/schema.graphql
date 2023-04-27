@@ -83,6 +83,11 @@ type Element {
   deleted: Boolean!
   name: String!
   markdown: String
+
+  """
+  Shortened markdown text for preview purposes to avoid loading the whole content in a request.
+  """
+  markdownShort: String
   tags: [ElementTag!]!
   usedBy: [WorkshopElement!]!
   languageCode: String

@@ -1,16 +1,30 @@
 import {
+  IonBadge,
   IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
+  IonText,
 } from "@ionic/react";
-import { brush, eye, star } from "ionicons/icons";
+import { brush, eye, search, star } from "ionicons/icons";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
+import { ElementFavoriteIconComponent } from "../pages/library/components/ElementFavoriteIconComponent";
 import { IconInfoList, IconInfoListItem } from "./IconInfoList";
-import { TagsComponent } from "./TagsComponent";
+
+const ElementPreviewItem_ElementSearchResultFragment = graphql(`
+  fragment ElementPreviewItem_ElementSearchResult on ElementSearchResult {
+    score
+    matches {
+      key
+      indices
+      refIndex
+      value
+    }
+  }
+`);
 
 const ElementPreviewItem_ElementFragment = graphql(`
   fragment ElementPreviewItem_Element on Element {
@@ -20,7 +34,7 @@ const ElementPreviewItem_ElementFragment = graphql(`
     version
     deleted
     name
-    markdown
+    markdownShort
     tags {
       id
       name
@@ -47,28 +61,49 @@ const ElementPreviewItem_ElementFragment = graphql(`
 
 interface ContainerProps {
   routerLink: string;
+  elementFragment: FragmentType<typeof ElementPreviewItem_ElementFragment>;
   /**
-   * If true, shows an extra icon to depict elements with a PUBLIC visibility.
+   * Set if context is a search result to mark search result matches.
    */
-  showVisibility?: boolean;
-  workshopElementFragment: FragmentType<
-    typeof ElementPreviewItem_ElementFragment
+  elementSearchResultFragment?: FragmentType<
+    typeof ElementPreviewItem_ElementSearchResultFragment
   >;
 }
 
 export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
-  showVisibility,
   routerLink,
-  workshopElementFragment,
+  elementFragment,
+  elementSearchResultFragment,
 }) => {
   const element = getFragmentData(
     ElementPreviewItem_ElementFragment,
-    workshopElementFragment,
+    elementFragment,
+  );
+  const searchResult = getFragmentData(
+    ElementPreviewItem_ElementSearchResultFragment,
+    elementSearchResultFragment,
+  );
+
+  const tags = useMemo(
+    () =>
+      element.tags.map((tag) => ({
+        ...tag,
+        isMatch: searchResult?.matches.find(
+          (match) => match.key === "tags.name" && match.value === tag.name,
+        ),
+      })),
+    [element, searchResult],
   );
 
   const infoList = useMemo<IconInfoListItem[]>(() => {
     const resultList: IconInfoListItem[] = [];
-
+    if (searchResult && searchResult.score < 0.05) {
+      resultList.push({
+        ionicIcon: search,
+        color: "primary",
+        displayText: `high match`,
+      });
+    }
     if (element.isFavorite)
       resultList.push({
         ionicIcon: star,
@@ -98,25 +133,61 @@ export const ElementPreviewItemComponent: React.FC<ContainerProps> = ({
         displayText: element.languageCode.toUpperCase(),
       });
     return resultList;
-  }, [element]);
+  }, [
+    element.isFavorite,
+    element.isOwnerMe,
+    element.languageCode,
+    element.sourceName,
+    element.visibility,
+    searchResult,
+  ]);
 
   return (
-    <IonCard className="ion-no-margin">
-      <div className="ion-margin-end ion-margin-top ion-float-right">
-        <IconInfoList list={infoList}></IconInfoList>
-      </div>
-      <IonCardHeader>
-        <IonCardTitle>{element.name}</IonCardTitle>
-      </IonCardHeader>
-      <IonCardContent>
-        <div>
-          <TagsComponent tags={element.tags.map((t) => t.name)}></TagsComponent>
+    <IonCard
+      className="ion-no-margin"
+      style={{ height: "100%", display: "flex", flexDirection: "column" }}
+    >
+      <div style={{ overflow: "hidden", flexGrow: 1 }}>
+        <div className="ion-margin-end ion-margin-top ion-float-right">
+          <IconInfoList list={infoList}></IconInfoList>
         </div>
-      </IonCardContent>
+        <IonCardHeader>
+          <IonCardTitle>
+            <IonText
+              style={{
+                fontWeight: searchResult?.matches.find(
+                  (match) => match.key === "name",
+                )
+                  ? "bold"
+                  : undefined,
+              }}
+            >
+              {element.name}
+            </IonText>
+          </IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <div>
+            {tags.map(({ id, name, isMatch }) => (
+              <IonBadge
+                key={id}
+                color={isMatch ? "medium" : "light"}
+                style={{ marginRight: "4px" }}
+              >
+                <IonText color={isMatch ? "light" : "medium"}>{name}</IonText>
+              </IonBadge>
+            ))}
+          </div>
+          <IonText>{element.markdownShort}</IonText>
+        </IonCardContent>
+      </div>
       <div style={{ display: "flex" }}>
         <IonButton style={{ flexGrow: 1 }} fill="clear" routerLink={routerLink}>
           Open
         </IonButton>
+        <ElementFavoriteIconComponent
+          elementFragment={element}
+        ></ElementFavoriteIconComponent>
       </div>
     </IonCard>
   );

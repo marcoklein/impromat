@@ -37,7 +37,7 @@ export class ElementSearchService {
       return elementsToSearch
         .map((element) => ({
           element,
-          score: 0,
+          score: 1,
           matches: [],
         }))
         .slice(

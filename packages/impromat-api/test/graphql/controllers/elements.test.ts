@@ -3,7 +3,7 @@ import {
   ApiTestSession,
   initApiTestSession,
 } from '../../test-utils/init-api-test-session';
-import { createElementMutation } from './element-queries';
+import { searchElementsQuery } from './element-queries';
 
 describe('Elements', () => {
   let api: ApiTestSession;
@@ -15,21 +15,20 @@ describe('Elements', () => {
     await api.destroy();
   });
 
-  it('should create an element', async () => {
+  it('should find an element by text', async () => {
     // given
-    const query = graphql(`
-    query QueryAllElements`);
+    api.impersonateActiveUser();
     // when
-    const response = await api.graphqlRequest(createElementMutation, {
-      input: {
-        name: 'my-improv-game',
-        markdown: 'test element',
-      },
+    const result = await api.graphqlRequest(searchElementsQuery, {
+      input: { text: 'freeze' },
     });
     // then
-    expect(response.errors).toBeUndefined();
-    const result = response.data!.createElement;
-    expect(result.name).toBe('my-improv-game');
-    expect(result.markdown).toBe('test element');
+    expect(result.data?.searchElements[0].element.name).toBe('Freeze');
+    expect(
+      result.data?.searchElements[0].element.markdown?.length,
+    ).toBeGreaterThan(2000);
+    expect(
+      result.data?.searchElements[0].element.markdownShort?.length,
+    ).toEqual(300);
   });
 });
