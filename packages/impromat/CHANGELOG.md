@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.27.0
+
+### Minor Changes
+
+- 1e2b931: Show search result matches in element preview card
+- d0fe346: Continuously load search results through pagination
+- a8c7100: Switch search, favorites and my elements page to grid layout.
+- d0fe346: Change favorite state of element in preview card
+- 6fb373a: Home page for logged in user shows quick navigation
+- 1e2b931: Add Virtuoso library for virtual scrolling large element lists
+- 1e2b931: Preview short description in element cards
+- 6fb373a: Add progress bar for elements search.
+- d0fe346: Switch to URQL graphcache for better frontend experience
+- d0fe346: Improved search results
+- a8c7100: Add element preview card with information about element.
+- d0fe346: Add infinite loader for element search with paginated loading
+
+### Patch Changes
+
+- Updated dependencies [1e2b931]
+- Updated dependencies [d0fe346]
+  - impromat-api@0.3.0
+
 ## 0.26.0
 
 ### Minor Changes

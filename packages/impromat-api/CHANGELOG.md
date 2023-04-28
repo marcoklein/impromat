@@ -1,5 +1,12 @@
 # impromat-api
 
+## 0.3.0
+
+### Minor Changes
+
+- 1e2b931: Preview short description in element cards
+- d0fe346: Add infinite loader for element search with paginated loading
+
 ## 0.2.0
 
 ### Minor Changes
