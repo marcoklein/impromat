@@ -10,7 +10,6 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useMemo } from "react";
 import { useHistory, useParams } from "react-router";
 import { useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
