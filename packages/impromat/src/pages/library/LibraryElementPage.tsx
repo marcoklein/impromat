@@ -61,14 +61,11 @@ export const LibraryElementPage: React.FC = () => {
   useStateChangeLogger(workshopId, "workshopId", logger);
   useStateChangeLogger(libraryPartId, "libraryPartId", logger);
 
-  const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
-
   const [elementQueryResult, reexecuteElementQuery] = useQuery({
     query: LibraryElementQuery,
     variables: {
       id: libraryPartId,
     },
-    context,
   });
   const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
     query: WorkshopQuery,
