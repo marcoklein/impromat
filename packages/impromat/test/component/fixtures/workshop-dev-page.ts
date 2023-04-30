@@ -42,12 +42,8 @@ export class WorkshopDevPage extends DevPage {
 
   async gotoElementFromSearch() {
     const page = this.page;
-    const searchText = "freeze";
     await this.clickLocatorInFabMenu(this.addElementButtonLocator);
-
-    await page.getByPlaceholder("Search").click();
-    await page.getByPlaceholder("Search").fill(searchText);
-    await page.getByRole("link", { name: "Open" }).first().click();
+    await new LibraryDevPage(page).gotoFirstElementFromSearch();
   }
 
   async addElementFromSearch() {

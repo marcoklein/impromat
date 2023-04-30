@@ -1,15 +1,6 @@
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonContent,
-  IonList,
-  IonProgressBar,
-  IonSkeletonText,
-} from "@ionic/react";
+import { IonContent, IonList, IonProgressBar } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { VirtuosoGrid } from "react-virtuoso";
 import { useQuery } from "urql";
 import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
@@ -18,6 +9,7 @@ import { graphql } from "../../../graphql-client";
 import { routeLibraryElement } from "../library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
+import { LoadingCard } from "../../../components/LoadingCard";
 import "./SearchElementTabCompenent.css";
 
 const SearchElementTabQuery = graphql(`
@@ -42,9 +34,11 @@ interface ContainerProps {
 export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
-  const [searchText, setSearchText] = useState<string>("");
+  const [restoredSearchText] = useState(
+    window.localStorage.getItem("lastSearch") ?? "",
+  );
+  const [searchText, setSearchText] = useState(restoredSearchText);
   const [pageNumber, setPageNumber] = useState(0);
-  const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
 
   const itemsPerPage = 20;
 
@@ -57,13 +51,17 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
     },
-    context,
   });
 
   return (
     <>
       <ElementSearchBarComponent
-        onSearchTextChange={(text) => setSearchText(text)}
+        initialSearchText={restoredSearchText}
+        onSearchTextChange={(text) => {
+          setPageNumber(0);
+          setSearchText(text);
+          window.localStorage.setItem("lastSearch", text);
+        }}
       ></ElementSearchBarComponent>
       <div>
         {(searchElementsQueryResult.stale ||
@@ -89,7 +87,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
             <VirtuosoGrid
               className="ion-content-scroll-host"
               style={{ height: "100%" }}
-              totalCount={pageNumber * itemsPerPage}
+              totalCount={searchElementsQueryResult.data.searchElements.length}
               endReached={() => {
                 if (!searchElementsQueryResult.stale) {
                   setPageNumber((currentPageNumber) => currentPageNumber + 1);
@@ -108,25 +106,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                       padding: "4px",
                     }}
                   >
-                    <IonCard
-                      className="ion-no-margin"
-                      style={{ height: "100%" }}
-                    >
-                      <IonCardHeader>
-                        <IonCardTitle>
-                          <IonSkeletonText animated></IonSkeletonText>
-                        </IonCardTitle>
-                      </IonCardHeader>
-                      <IonCardContent>
-                        <IonSkeletonText animated></IonSkeletonText>
-                      </IonCardContent>
-                      <IonCardContent>
-                        <IonSkeletonText animated></IonSkeletonText>
-                      </IonCardContent>
-                      <IonCardContent>
-                        <IonSkeletonText animated></IonSkeletonText>
-                      </IonCardContent>
-                    </IonCard>
+                    <LoadingCard></LoadingCard>
                   </div>
                 ),
               }}

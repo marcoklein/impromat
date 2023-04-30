@@ -36,6 +36,7 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
       url: `${environment.API_URL}/graphql`,
       fetchOptions: { credentials: "include" },
       exchanges: [
+        // devtoolsExchange,
         cacheExchange({
           keys: {
             ElementSearchResult: () => null, // do not cache search results

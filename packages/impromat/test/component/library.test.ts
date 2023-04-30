@@ -19,7 +19,7 @@ pageTest.describe("Library", () => {
     await auth.loginAsRandomUser();
     await libraryPage.goto();
     // when
-    await libraryPage.gotoElementFromSearch();
+    await libraryPage.gotoFirstElementFromSearch();
     // then
     await libraryPage.expectToolbarTextToBe("Freeze");
   });

@@ -1,38 +1,29 @@
 import { IonSearchbar } from "@ionic/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface ContainerProps {
+  initialSearchText: string;
   onSearchTextChange: (searchText: string) => void;
 }
 
 export const ElementSearchBarComponent: React.FC<ContainerProps> = ({
+  initialSearchText,
   onSearchTextChange,
 }) => {
   const searchInputRef = useRef<HTMLIonSearchbarElement>(null);
-  const [searchText, setSearchText] = useState(
-    window.localStorage.getItem("lastSearch") ?? "",
-  );
 
   useEffect(() => {
-    if (searchInputRef.current) {
-      searchInputRef.current.value =
-        window.localStorage.getItem("lastSearch") ?? "";
+    if (initialSearchText && searchInputRef.current) {
+      searchInputRef.current.value = initialSearchText;
     }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem("lastSearch", searchText);
-  }, [searchText]);
-
-  useEffect(() => {
-    onSearchTextChange(searchText);
-  }, [searchText, onSearchTextChange]);
+  }, [initialSearchText]);
 
   return (
     <IonSearchbar
       ref={searchInputRef}
+      debounce={1000}
       onIonInput={(e) => {
-        setSearchText(e.detail.value ?? "");
+        onSearchTextChange(e.detail.value ?? "");
       }}
     ></IonSearchbar>
   );

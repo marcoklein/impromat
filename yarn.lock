@@ -5,15 +5,15 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@0no-co/graphql.web@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@0no-co/graphql.web@npm:1.0.0"
+"@0no-co/graphql.web@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@0no-co/graphql.web@npm:1.0.1"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
   peerDependenciesMeta:
     graphql:
       optional: true
-  checksum: 54e5651dd1c3806ced064b6e0bba5b6bc958b69898a1c3fbe0c96c5a0fb7189de9f479946159dd2e20d39a1b3b655de11da0b8b2dc92761132b61949872c7277
+  checksum: e577a80a210e48e0b054dcf363efa2107ab67b931ec923b1540300350f55576fc5493b6d4ca7f35379748d20bc0280ee32bdc98c2c2380476c814a472bcf0757
   languageName: node
   linkType: hard
 
@@ -5499,44 +5499,46 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@urql/core@npm:>=4.0.0":
-  version: 4.0.4
-  resolution: "@urql/core@npm:4.0.4"
+"@urql/core@npm:>=4.0.0, @urql/core@npm:^4.0.0":
+  version: 4.0.7
+  resolution: "@urql/core@npm:4.0.7"
   dependencies:
-    "@0no-co/graphql.web": ^1.0.0
-    wonka: ^6.3.0
-  checksum: 35b2bfe9c8516a600028465f6a1cd40c3b2cba5b497a3550410ce563de2017d4e875d0627bb8ba284179f0c03eb4ed6d69313c66e5f482e14ee17d8e65a304a3
+    "@0no-co/graphql.web": ^1.0.1
+    wonka: ^6.3.2
+  checksum: 9e8411434b61e544f71056f6ed0f76c01ab0aa0197771e3b7ffdd9d7a7e8ac4bcda5f62693c2fb66fafc29de2de9d25e0627cfc3e14be7f757915f61b4a31a94
   languageName: node
   linkType: hard
 
-"@urql/core@npm:^4.0.0":
-  version: 4.0.6
-  resolution: "@urql/core@npm:4.0.6"
+"@urql/devtools@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@urql/devtools@npm:2.0.3"
   dependencies:
-    "@0no-co/graphql.web": ^1.0.0
-    wonka: ^6.3.0
-  checksum: fa8a80598b9b11dae4c9835535e4577c66c458a1db85dd1ee8e7cc28a0d87f3951810e932d75e1b67bb7c5069e39497b6461c2282a9218ff5e472717f46d2c77
+    wonka: ">= 4.0.9"
+  peerDependencies:
+    "@urql/core": ">= 1.14.0"
+    graphql: ">= 0.11.0"
+  checksum: 9b4a46dd0b6cca5296667bc0e658212c3101cd1c0d01dcc0be736e5b5159beaf6aa982115dd7546ff5425ed91e1688132a82a8f101bf8ad560245b97bb533f59
   languageName: node
   linkType: hard
 
-"@urql/exchange-graphcache@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@urql/exchange-graphcache@npm:6.0.2"
+"@urql/exchange-graphcache@npm:^6.0.4":
+  version: 6.0.4
+  resolution: "@urql/exchange-graphcache@npm:6.0.4"
   dependencies:
-    "@0no-co/graphql.web": ^1.0.0
+    "@0no-co/graphql.web": ^1.0.1
     "@urql/core": ">=4.0.0"
-    wonka: ^6.3.0
-  checksum: efa3ccc88a4775b0910c73879c234d6ccc768c25918de7c5fa04f6c3fd4bdeb0087c99f6fa93a5fe67a3818c036cfe9b84c117520d26248876cba4660d936e15
+    wonka: ^6.3.2
+  checksum: a1a3d882f2af191727ca2936dc3e68fc61f01f0a491722aa4fb12ba0ff2ae33d8beb299d3b9077eb462e093004462b9085dab6d67e06f1a733903a918035eadb
   languageName: node
   linkType: hard
 
-"@urql/exchange-retry@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@urql/exchange-retry@npm:1.1.0"
+"@urql/exchange-retry@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@urql/exchange-retry@npm:1.1.1"
   dependencies:
     "@urql/core": ">=4.0.0"
-    wonka: ^6.3.0
-  checksum: 8927d451694dd0761b7e001a0d98ef5baf49d31fe9501da24c4ed0adaf2b0a49f847e6d74868b544ee584ec0bc0f183cc14cd2d2052fa2a88f129b86b2053f75
+    wonka: ^6.3.2
+  checksum: ec34f1033faef6ba137d61fe409a2d0213c03fc0c6e25935dc2af6852034fa433448a8d9f5c8582c58d924665ad68c24aa9f824750686a1eb084e32c8a52b90b
   languageName: node
   linkType: hard
 
@@ -11646,8 +11648,9 @@ __metadata:
     "@types/react-router": ^5.1.11
     "@types/react-router-dom": ^5.1.7
     "@types/uuid": ^8.3.4
-    "@urql/exchange-graphcache": ^6.0.2
-    "@urql/exchange-retry": ^1.1.0
+    "@urql/devtools": ^2.0.3
+    "@urql/exchange-graphcache": ^6.0.4
+    "@urql/exchange-retry": ^1.1.1
     concurrently: ^7.6.0
     debug: ^4.3.4
     dependency-cruiser: ^12.11.1
@@ -11670,7 +11673,7 @@ __metadata:
     react-virtuoso: ^4.3.2
     rxjs: ^7.5.6
     typescript: ^4.1.3
-    urql: ^4.0.0
+    urql: ^4.0.2
     uuid: ^9.0.0
     web-vitals: ^0.2.4
     workbox-background-sync: ^5.1.4
@@ -20540,15 +20543,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"urql@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "urql@npm:4.0.0"
+"urql@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "urql@npm:4.0.2"
   dependencies:
     "@urql/core": ^4.0.0
-    wonka: ^6.3.0
+    wonka: ^6.3.2
   peerDependencies:
     react: ">= 16.8.0"
-  checksum: 81b3dbefb523c4ed4a9b8da74fea8bfa9e9f47e426eac045d9cbdd1c3465133913a228e81967723cb10aadea54c6c9fe6d32e076dacad2e837287d5e553debe4
+  checksum: c0f5c2fef38369607cf6208ad76eb0a00157187d439c92c3fe68b6241d4d30ce7ec935531abfaa438b674ce545371d6bc4a8637fb97bfe5634cf576b1807b8be
   languageName: node
   linkType: hard
 
@@ -21206,10 +21209,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wonka@npm:^6.3.0":
-  version: 6.3.1
-  resolution: "wonka@npm:6.3.1"
-  checksum: 8748d5c8ce5ff4cdb69d61ce64ed19bd007a7c65d46dbb11ddd2271091c51c7241cb36642a2c32dd31bfcf5841f4c370a81b3be746b118c26bb30ba21b2b8c29
+"wonka@npm:>= 4.0.9, wonka@npm:^6.3.2":
+  version: 6.3.2
+  resolution: "wonka@npm:6.3.2"
+  checksum: e161f377a4ea17cc2b19fe8820219a9e3e2c78db5df08b820525bc2cc261184823d1bc33bd2385e632656a9676c9de6ff614b6324c441dd5fc5faa253433d032
   languageName: node
   linkType: hard
 

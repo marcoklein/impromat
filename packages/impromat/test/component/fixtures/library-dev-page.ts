@@ -1,5 +1,8 @@
 import { DevPage } from "./dev-page";
 
+const NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX =
+  /^((?!library-add-custom-element).)*$/;
+
 export class LibraryDevPage extends DevPage {
   async goto() {
     await this.page.goto(`./library`);
@@ -9,9 +12,10 @@ export class LibraryDevPage extends DevPage {
     const page = this.page;
     await page.getByPlaceholder("Search").click();
     await page.getByPlaceholder("Search").fill(searchText);
+    await page.getByText(new RegExp(searchText, "i")).first().waitFor();
   }
 
-  async gotoElementFromSearch() {
+  async gotoFirstElementFromSearch() {
     const searchText = "freeze";
     await this.searchForElement(searchText);
     await this.openElementCard();
@@ -62,6 +66,7 @@ export class LibraryDevPage extends DevPage {
     });
 
     await page.getByRole("button", { name: "Create Element" }).click();
+    await page.waitForURL(NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX);
   }
 
   async createCustomElementAndAddToWorkshop(
