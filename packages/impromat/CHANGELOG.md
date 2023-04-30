@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.27.1
+
+### Patch Changes
+
+- 41c0170: Fix paginated loading of search
+- 41c0170: Fix update of favorite state
+
 ## 0.27.0
 
 ### Minor Changes
