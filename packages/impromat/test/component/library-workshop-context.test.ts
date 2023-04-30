@@ -26,7 +26,7 @@ pageTest.describe("Library with Workshop Context", () => {
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // when
-      await libraryPage.gotoElementFromSearch();
+      await libraryPage.gotoFirstElementFromSearch();
       // then
       await expect(
         page.getByRole("button", { name: "Add to Workshop" }),

@@ -4,7 +4,7 @@ import { pageTest } from "./fixtures/page-fixtures";
 pageTest.describe("Workshop Elements Page", () => {
   pageTest(
     "should add an element from the search",
-    async ({ page, auth, workshopPage }) => {
+    async ({ page, auth, workshopPage, libraryPage }) => {
       // given
       await auth.loginAsRandomUser();
       await workshopPage.createAndGoto("workshop name");
