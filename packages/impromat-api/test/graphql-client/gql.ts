@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n    markdownShort\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n": types.ElementFieldsFragmentDoc,
     "\n  query UserElementsQuery {\n    elements {\n      ...ElementFields\n    }\n  }\n": types.UserElementsQueryDocument,
+    "\n  query ElementByIdQuery($id: ID!) {\n    element(id: $id) {\n      ...ElementFields\n    }\n  }\n": types.ElementByIdQueryDocument,
     "\n  query ElementsQuery($input: ElementsQueryInput!) {\n    elements(input: $input) {\n      ...ElementFields\n    }\n  }\n": types.ElementsQueryDocument,
     "\n  query SearchElementsQuery($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n": types.SearchElementsQueryDocument,
     "\n  mutation AddElementQuery($input: CreateElementInput!) {\n    createElement(input: $input) {\n      ...ElementFields\n    }\n  }\n": types.AddElementQueryDocument,
@@ -23,12 +24,15 @@ const documents = {
     "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateUserFavoriteElementDocument,
     "\n  query MeFavoriteElements {\n    me {\n      favoriteElements {\n        element {\n          id\n        }\n      }\n    }\n  }\n": types.MeFavoriteElementsDocument,
     "\n        query ElementIsFavorite($id: ID!) {\n          element(id: $id) {\n            isFavorite\n          }\n        }\n      ": types.ElementIsFavoriteDocument,
-    "\n  fragment WorkshopFields on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    description\n    sections {\n      id\n      version\n      createdAt\n      updatedAt\n      deleted\n\n      orderIndex\n      name\n      color\n      isCollapsed\n\n      elements {\n        id\n        note\n        basedOn {\n          name\n        }\n      }\n      workshop {\n        id\n      }\n    }\n    owner {\n      id\n    }\n  }\n": types.WorkshopFieldsFragmentDoc,
+    "\n  fragment WorkshopElementFields on WorkshopElement {\n    id\n    version\n    note\n  }\n": types.WorkshopElementFieldsFragmentDoc,
+    "\n  query WorkshopElementByIdQuery($id: ID!) {\n    workshopElement(id: $id) {\n      ...WorkshopElementFields\n    }\n  }\n": types.WorkshopElementByIdQueryDocument,
+    "\n  fragment WorkshopFields on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    description\n    sections {\n      id\n      version\n      createdAt\n      updatedAt\n      deleted\n\n      orderIndex\n      name\n      color\n      isCollapsed\n\n      elements {\n        id\n        note\n        basedOn {\n          id\n          name\n        }\n      }\n      workshop {\n        id\n      }\n    }\n    owner {\n      id\n    }\n  }\n": types.WorkshopFieldsFragmentDoc,
     "\n  query UserWorkshopsQuery {\n    workshops {\n      ...WorkshopFields\n    }\n  }\n": types.UserWorkshopsQueryDocument,
     "\n  query WorkshopQuery($workshopId: ID!) {\n    workshop(id: $workshopId) {\n      ...WorkshopFields\n    }\n  }\n": types.WorkshopQueryDocument,
     "\n  mutation DeleteWorkshop($id: ID!) {\n    deleteWorkshop(id: $id) {\n      id\n    }\n  }\n": types.DeleteWorkshopDocument,
     "\n  mutation AddWorkshopWithEmptyName {\n    createWorkshop(input: { name: \"\" }) {\n      ...WorkshopFields\n    }\n  }\n": types.AddWorkshopWithEmptyNameDocument,
-    "\n  mutation AddWorkshop($name: String!) {\n    createWorkshop(input: { name: $name }) {\n      ...WorkshopFields\n    }\n  }\n": types.AddWorkshopDocument,
+    "\n  mutation AddWorkshopByName($name: String!) {\n    createWorkshop(input: { name: $name }) {\n      ...WorkshopFields\n    }\n  }\n": types.AddWorkshopByNameDocument,
+    "\n  mutation AddWorkshop($input: CreateWorkshopInput!) {\n    createWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n": types.AddWorkshopDocument,
     "\n  mutation AddTestWorkshop {\n    createWorkshop(input: { name: \"test-workshop\" }) {\n      ...WorkshopFields\n    }\n  }\n": types.AddTestWorkshopDocument,
     "\n  mutation UpdateWorkshop($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n": types.UpdateWorkshopDocument,
 };
@@ -55,6 +59,10 @@ export function graphql(source: "\n  fragment ElementFields on Element {\n    id
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query UserElementsQuery {\n    elements {\n      ...ElementFields\n    }\n  }\n"): (typeof documents)["\n  query UserElementsQuery {\n    elements {\n      ...ElementFields\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query ElementByIdQuery($id: ID!) {\n    element(id: $id) {\n      ...ElementFields\n    }\n  }\n"): (typeof documents)["\n  query ElementByIdQuery($id: ID!) {\n    element(id: $id) {\n      ...ElementFields\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -90,7 +98,15 @@ export function graphql(source: "\n        query ElementIsFavorite($id: ID!) {\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment WorkshopFields on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    description\n    sections {\n      id\n      version\n      createdAt\n      updatedAt\n      deleted\n\n      orderIndex\n      name\n      color\n      isCollapsed\n\n      elements {\n        id\n        note\n        basedOn {\n          name\n        }\n      }\n      workshop {\n        id\n      }\n    }\n    owner {\n      id\n    }\n  }\n"): (typeof documents)["\n  fragment WorkshopFields on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    description\n    sections {\n      id\n      version\n      createdAt\n      updatedAt\n      deleted\n\n      orderIndex\n      name\n      color\n      isCollapsed\n\n      elements {\n        id\n        note\n        basedOn {\n          name\n        }\n      }\n      workshop {\n        id\n      }\n    }\n    owner {\n      id\n    }\n  }\n"];
+export function graphql(source: "\n  fragment WorkshopElementFields on WorkshopElement {\n    id\n    version\n    note\n  }\n"): (typeof documents)["\n  fragment WorkshopElementFields on WorkshopElement {\n    id\n    version\n    note\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query WorkshopElementByIdQuery($id: ID!) {\n    workshopElement(id: $id) {\n      ...WorkshopElementFields\n    }\n  }\n"): (typeof documents)["\n  query WorkshopElementByIdQuery($id: ID!) {\n    workshopElement(id: $id) {\n      ...WorkshopElementFields\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment WorkshopFields on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    description\n    sections {\n      id\n      version\n      createdAt\n      updatedAt\n      deleted\n\n      orderIndex\n      name\n      color\n      isCollapsed\n\n      elements {\n        id\n        note\n        basedOn {\n          id\n          name\n        }\n      }\n      workshop {\n        id\n      }\n    }\n    owner {\n      id\n    }\n  }\n"): (typeof documents)["\n  fragment WorkshopFields on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    description\n    sections {\n      id\n      version\n      createdAt\n      updatedAt\n      deleted\n\n      orderIndex\n      name\n      color\n      isCollapsed\n\n      elements {\n        id\n        note\n        basedOn {\n          id\n          name\n        }\n      }\n      workshop {\n        id\n      }\n    }\n    owner {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -110,7 +126,11 @@ export function graphql(source: "\n  mutation AddWorkshopWithEmptyName {\n    cr
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation AddWorkshop($name: String!) {\n    createWorkshop(input: { name: $name }) {\n      ...WorkshopFields\n    }\n  }\n"): (typeof documents)["\n  mutation AddWorkshop($name: String!) {\n    createWorkshop(input: { name: $name }) {\n      ...WorkshopFields\n    }\n  }\n"];
+export function graphql(source: "\n  mutation AddWorkshopByName($name: String!) {\n    createWorkshop(input: { name: $name }) {\n      ...WorkshopFields\n    }\n  }\n"): (typeof documents)["\n  mutation AddWorkshopByName($name: String!) {\n    createWorkshop(input: { name: $name }) {\n      ...WorkshopFields\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation AddWorkshop($input: CreateWorkshopInput!) {\n    createWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n"): (typeof documents)["\n  mutation AddWorkshop($input: CreateWorkshopInput!) {\n    createWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

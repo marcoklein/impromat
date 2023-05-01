@@ -3,30 +3,37 @@ import {
   IonButtons,
   IonCard,
   IonCardContent,
+  IonCheckbox,
   IonContent,
   IonFab,
   IonFabButton,
   IonFabList,
   IonHeader,
   IonIcon,
+  IonItem,
   IonLabel,
   IonMenuButton,
+  IonModal,
   IonPage,
   IonProgressBar,
+  IonSelect,
+  IonSelectOption,
   IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { add, globe, lockClosed } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { EditableItemComponent } from "../../components/EditableItemComponent";
+import { Icon } from "../../components/Icon";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useDeleteWorkshopMutation } from "../../hooks/use-delete-workshop-mutation";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { useIsMobile } from "../../hooks/use-is-mobile";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshops } from "../../routes/shared-routes";
 import { routeLibrary } from "../library/library-routes";
@@ -192,6 +199,10 @@ export const WorkshopPage: React.FC = () => {
     }
   };
 
+  const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
+
+  const isMobile = useIsMobile();
+
   return (
     <>
       <IonPage>
@@ -206,10 +217,60 @@ export const WorkshopPage: React.FC = () => {
             )}
             <IonButtons slot="end">
               {workshop && (
-                <WorkshopActionSheetComponent
-                  workshopFragment={workshop}
-                  onEvent={(event) => handleWorkshopEvent(event)}
-                ></WorkshopActionSheetComponent>
+                <>
+                  <IonButton onClick={() => setIsSharingModalOpen(true)}>
+                    <Icon slot="start" icon={lockClosed}></Icon> Share
+                  </IonButton>
+                  <IonModal
+                    isOpen={isSharingModalOpen}
+                    // onWillDismiss={(ev) => setIsSharingModalOpen(false)}
+                    // style={{ "--max-height": "50%" }}
+                  >
+                    <IonHeader>
+                      <IonToolbar>
+                        <IonTitle>Share Workshop</IonTitle>
+                        <IonButtons slot="end">
+                          <IonButton
+                            onClick={() => setIsSharingModalOpen(false)}
+                          >
+                            Close
+                          </IonButton>
+                        </IonButtons>
+                      </IonToolbar>
+                    </IonHeader>
+                    <IonContent className="ion-padding">
+                      <IonItem>
+                        <Icon icon={globe} slot="start"></Icon>
+                        <IonCheckbox labelPlacement="start">
+                          Anyone with the link can view
+                        </IonCheckbox>
+                      </IonItem>
+                      <IonItem>
+                        <Icon icon={globe} slot="start"></Icon>
+                        <IonSelect
+                          label="Anyone with the link"
+                          labelPlacement="floating"
+                          interface={isMobile ? "action-sheet" : "popover"}
+                          aria-label="link sharing option"
+                          defaultValue="no-access"
+                          defaultChecked={true}
+                          value="no-access"
+                        >
+                          <IonSelectOption value="no-access" color="dark">
+                            No Access
+                          </IonSelectOption>
+                          <IonSelectOption value="view" color="primary">
+                            Can view
+                          </IonSelectOption>
+                        </IonSelect>
+                      </IonItem>
+                    </IonContent>
+                  </IonModal>
+                  <WorkshopActionSheetComponent
+                    workshopFragment={workshop}
+                    onEvent={(event) => handleWorkshopEvent(event)}
+                  ></WorkshopActionSheetComponent>
+                </>
               )}
             </IonButtons>
           </IonToolbar>

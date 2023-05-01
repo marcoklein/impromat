@@ -4,7 +4,7 @@ import { UserSessionData } from 'src/auth/user-session-data';
 
 export function injectTestUserSessionMiddleware(app: INestApplication) {
   let userIdToImpersonate: string | undefined;
-  function impersonateUser(userId: string) {
+  function impersonateUser(userId: string | undefined) {
     userIdToImpersonate = userId;
   }
 

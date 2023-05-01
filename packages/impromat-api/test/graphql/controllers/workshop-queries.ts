@@ -26,6 +26,7 @@ export const workshopFieldsFragment = graphql(`
         id
         note
         basedOn {
+          id
           name
         }
       }
@@ -71,9 +72,17 @@ export const addWorskshopWithEmptyNameQuery = graphql(`
   }
 `);
 
-export const createWorkshopMutation = graphql(`
-  mutation AddWorkshop($name: String!) {
+export const createWorkshopByNameMutation = graphql(`
+  mutation AddWorkshopByName($name: String!) {
     createWorkshop(input: { name: $name }) {
+      ...WorkshopFields
+    }
+  }
+`);
+
+export const createWorkshopMutation = graphql(`
+  mutation AddWorkshop($input: CreateWorkshopInput!) {
+    createWorkshop(input: $input) {
       ...WorkshopFields
     }
   }

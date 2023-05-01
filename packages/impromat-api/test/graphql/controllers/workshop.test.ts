@@ -4,7 +4,7 @@ import {
 } from '../../test-utils/init-api-test-session';
 import {
   addWorskshopWithEmptyNameQuery,
-  createWorkshopMutation,
+  createWorkshopByNameMutation,
   deleteWorkshopMutation,
   updateWorkshopMutation,
   workshopByIdQuery,
@@ -27,7 +27,7 @@ describe('Workshop', () => {
     it('should create empty workshop', async () => {
       // given
       // when
-      const response = await api.graphqlRequest(createWorkshopMutation, {
+      const response = await api.graphqlRequest(createWorkshopByNameMutation, {
         name: 'empty workshop',
       });
       // then

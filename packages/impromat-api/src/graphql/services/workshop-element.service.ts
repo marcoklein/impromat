@@ -14,7 +14,7 @@ export class WorkshopElementService {
     return this.prismaService.workshopElement.findFirstOrThrow({
       where: {
         workshopSection: {
-          workshop: { ownerId: userRequestId },
+          workshop: { OR: [{ ownerId: userRequestId }, { isPublic: true }] },
         },
         id,
       },

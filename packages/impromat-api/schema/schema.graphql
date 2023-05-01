@@ -57,6 +57,7 @@ type Workshop {
   description: String
   sections: [WorkshopSection!]!
   owner: User!
+  isPublic: Boolean
 }
 
 type User {
@@ -204,6 +205,7 @@ input CreateWorkshopInput {
   name: String!
   description: String
   sections: WorkshopSectionListCreateInput
+  isPublic: Boolean
 }
 
 input WorkshopSectionListCreateInput {
@@ -220,6 +222,7 @@ input UpdateWorkshopInput {
   name: String
   description: String
   sections: WorkshopSectionListInput
+  isPublic: Boolean
   id: ID!
 }
 

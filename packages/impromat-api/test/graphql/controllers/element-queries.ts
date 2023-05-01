@@ -33,6 +33,14 @@ export const userElementsQuery = graphql(`
   }
 `);
 
+export const elementByIdQuery = graphql(`
+  query ElementByIdQuery($id: ID!) {
+    element(id: $id) {
+      ...ElementFields
+    }
+  }
+`);
+
 export const elementsQuery = graphql(`
   query ElementsQuery($input: ElementsQueryInput!) {
     elements(input: $input) {

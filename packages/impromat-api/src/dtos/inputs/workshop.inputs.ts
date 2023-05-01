@@ -23,6 +23,9 @@ export class CreateWorkshopInput {
 
   @Field(() => WorkshopSectionListCreateInput, { nullable: true })
   sections?: WorkshopSectionListCreateInput;
+
+  @Field(() => Boolean, { nullable: true })
+  isPublic?: boolean;
 }
 
 @InputType()

@@ -19,4 +19,7 @@ export class Workshop extends BaseDto {
 
   @Field(() => User)
   owner: User;
+
+  @Field(() => Boolean, { nullable: true })
+  isPublic: Nullable<boolean>;
 }

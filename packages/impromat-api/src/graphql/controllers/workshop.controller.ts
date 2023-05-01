@@ -20,7 +20,6 @@ import {
 import { WorkshopService } from '../services/workshop.service';
 
 @Resolver(Workshop)
-@UseGuards(GraphqlAuthGuard)
 export class WorkshopController {
   constructor(private workshopService: WorkshopService) {}
 
@@ -50,12 +49,13 @@ export class WorkshopController {
 
   @Query(() => Workshop)
   async workshop(
-    @SessionUserId() userId: string,
+    @SessionUserId() userId: string | undefined,
     @Args('id', { type: () => ID }) id: string,
   ): Promise<Omit<Workshop, WorkshopRelations> | null> {
     return this.workshopService.findWorkshopById(userId, id);
   }
 
+  @UseGuards(GraphqlAuthGuard)
   @Query(() => [Workshop])
   async workshops(
     @SessionUserId() userId: string,
@@ -63,6 +63,7 @@ export class WorkshopController {
     return this.workshopService.findWorkshopsFromUser(userId);
   }
 
+  @UseGuards(GraphqlAuthGuard)
   @Mutation(() => Workshop)
   async createWorkshop(
     @Args('input')
@@ -75,6 +76,7 @@ export class WorkshopController {
     );
   }
 
+  @UseGuards(GraphqlAuthGuard)
   @Mutation(() => Workshop)
   async updateWorkshop(
     @Args('input') updateWorkshopInput: UpdateWorkshopInput,
@@ -86,6 +88,7 @@ export class WorkshopController {
     );
   }
 
+  @UseGuards(GraphqlAuthGuard)
   @Mutation(() => Workshop, { nullable: true })
   async deleteWorkshop(
     @SessionUserId() userId: string,
@@ -94,6 +97,7 @@ export class WorkshopController {
     return this.workshopService.deleteWorkshop(userId, id);
   }
 
+  @UseGuards(GraphqlAuthGuard)
   @Mutation(() => Workshop)
   async updateWorkshopItemOrder(
     @SessionUserId() userId: string,
