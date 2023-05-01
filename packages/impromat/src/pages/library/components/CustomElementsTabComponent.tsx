@@ -5,7 +5,7 @@ import { useLocation } from "react-router";
 import { useQuery } from "urql";
 import { CardGridComponent } from "../../../components/CardGridComponent";
 import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
-import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
+import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
@@ -82,11 +82,11 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
         <CardGridComponent>
           {customElements.map((element) => (
             <CardGridRowComponent key={element.id}>
-              <ElementPreviewItemComponent
+              <ElementPreviewCard
                 key={element.id}
                 routerLink={routeLibraryElement(element.id, { workshopId })}
                 elementFragment={element}
-              ></ElementPreviewItemComponent>
+              ></ElementPreviewCard>
             </CardGridRowComponent>
           ))}
         </CardGridComponent>

@@ -3,7 +3,7 @@ import { informationCircle } from "ionicons/icons";
 import { useState } from "react";
 import { VirtuosoGrid } from "react-virtuoso";
 import { useQuery } from "urql";
-import { ElementPreviewItemComponent } from "../../../components/ElementPreviewItemComponent";
+import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import { graphql } from "../../../graphql-client";
 import { routeLibraryElement } from "../library-routes";
@@ -111,13 +111,13 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                 ),
               }}
               itemContent={(_index, searchResult) => (
-                <ElementPreviewItemComponent
+                <ElementPreviewCard
                   routerLink={routeLibraryElement(searchResult.element.id, {
                     workshopId,
                   })}
                   elementFragment={searchResult.element}
                   elementSearchResultFragment={searchResult}
-                ></ElementPreviewItemComponent>
+                ></ElementPreviewCard>
               )}
               scrollSeekConfiguration={{
                 enter: (velocity) => Math.abs(velocity) > 500,

@@ -19,6 +19,7 @@ pageTest.describe("Workshops Page", () => {
       await expect(page).toHaveURL(`./workshop/${workshopId}`);
     },
   );
+
   pageTest(
     "should show a network error notification",
     async ({ page, auth, workshopsPage }) => {
