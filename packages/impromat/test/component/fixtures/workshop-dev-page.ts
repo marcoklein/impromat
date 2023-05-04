@@ -83,6 +83,13 @@ export class WorkshopDevPage extends DevPage {
     return workshopId;
   }
 
+  async share() {
+    const page = this.page;
+    await page.getByRole("button", { name: "Share" }).click();
+    await page.locator("label").click();
+    await page.getByRole("button", { name: "Copy workshop link" }).click();
+  }
+
   async openLibrary() {
     const page = this.page;
 

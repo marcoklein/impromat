@@ -121,6 +121,7 @@ describe('Workshop Sharing', () => {
     expect(response.data!.workshop.sections[0].elements[1].basedOn.id).toBe(
       givenCustomElementId,
     );
+    expect(response.data!.workshop.canEdit).toBe(null);
   });
 
   it('should allow public access on workshop element based on improbib element', async () => {

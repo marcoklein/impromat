@@ -1,5 +1,5 @@
 import { IonContent, IonIcon, IonPopover } from "@ionic/react";
-import { calendar, person } from "ionicons/icons";
+import { calendar, globe, person } from "ionicons/icons";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { Icon } from "./Icon";
@@ -10,6 +10,7 @@ const WorkshopInfoList_Workshop = graphql(`
     id
     createdAt
     updatedAt
+    isPublic
   }
 `);
 
@@ -33,6 +34,13 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
 
   return (
     <>
+      {workshop.isPublic && (
+        <InfoListItem
+          ionicIcon={globe}
+          color="success"
+          displayText="publicly shared"
+        ></InfoListItem>
+      )}
       <InfoListItem
         ionicIcon={person}
         color="primary"

@@ -20,6 +20,12 @@ export class Workshop extends BaseDto {
   @Field(() => User)
   owner: User;
 
-  @Field(() => Boolean, { nullable: true })
-  isPublic: Nullable<boolean>;
+  @Field(() => Boolean, {
+    nullable: true,
+    description: 'If true, the client is authorized to edit the workshop.',
+  })
+  canEdit?: Nullable<boolean>;
+
+  @Field(() => Boolean)
+  isPublic: boolean;
 }

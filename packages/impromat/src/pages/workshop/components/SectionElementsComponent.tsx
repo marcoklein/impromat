@@ -17,6 +17,9 @@ const SectionElementsComponent_WorkshopSection = graphql(`
       id
       ...WorkshopElementItemComponent_WorkshopElement
     }
+    workshop {
+      canEdit
+    }
   }
 `);
 
@@ -44,7 +47,10 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
 
   useStateChangeLogger(section, "section", logger);
 
-  if (section.isCollapsed || !section.elements.length) {
+  if (
+    section.workshop.canEdit &&
+    (section.isCollapsed || !section.elements.length)
+  ) {
     return <></>;
   }
 

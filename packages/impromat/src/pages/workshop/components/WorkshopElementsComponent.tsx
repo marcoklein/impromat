@@ -13,31 +13,34 @@ import { SectionElementsComponent } from "./SectionElementsComponent";
 import { WorkshopElementsHeaderComponent } from "./WorkshopElementsHeaderComponent";
 import { WorkshopSectionComponent } from "./WorkshopSectionComponent";
 
-const WorkshopElementsComponent_WorkshopSection = graphql(`
-  fragment WorkshopElementsComponent_WorkshopSection on WorkshopSection {
-    id
-    ...SectionElementsComponent_WorkshopSection
-    ...WorkshopSectionComponent_WorkshopSection
+const WorkshopElementsComponent_Workshop = graphql(`
+  fragment WorkshopElementsComponent_Workshop on Workshop {
+    canEdit
+    sections {
+      id
+      ...SectionElementsComponent_WorkshopSection
+      ...WorkshopSectionComponent_WorkshopSection
+    }
   }
 `);
 
 interface ContainerProps {
   workshopId: string;
-  workshopSectionsFragment: FragmentType<
-    typeof WorkshopElementsComponent_WorkshopSection
-  >[];
+  workshopFragment: FragmentType<typeof WorkshopElementsComponent_Workshop>;
   onChangeOrder: (fromIndex: number, toIndex: number) => void;
 }
 
 export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
   workshopId,
-  workshopSectionsFragment,
+  workshopFragment,
   onChangeOrder,
 }) => {
-  const sections = getFragmentData(
-    WorkshopElementsComponent_WorkshopSection,
-    workshopSectionsFragment,
+  const workshop = getFragmentData(
+    WorkshopElementsComponent_Workshop,
+    workshopFragment,
   );
+  const sections = workshop.sections;
+  const canEdit = workshop.canEdit;
   const logger = useComponentLogger("WorkshopElementsComponent");
   const [reorderWorkshopElements, setReorderWorkshopElements] = useState(false);
   const [presentInputDialog] = useInputDialog();
@@ -128,6 +131,7 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
     <>
       <IonList>
         <WorkshopElementsHeaderComponent
+          canEdit={!!canEdit}
           isReordering={reorderWorkshopElements}
           disableReordering={sections.length <= 1}
           onReorderEvent={(event, isReordering) =>

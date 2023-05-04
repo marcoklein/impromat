@@ -10,6 +10,7 @@ export class AuthFixture extends DevPage {
     await this.loginAsUser(randomUserName);
     return randomUserName;
   }
+
   async loginAsUser(userId: string) {
     if (!process.env.REACT_APP_API_URL) {
       throw new Error("REACT_APP_API_URL undefined");

@@ -17,6 +17,11 @@ const WorkshopElementItemComponent_WorkshopElement = graphql(`
       name
       markdown
     }
+    section {
+      workshop {
+        canEdit
+      }
+    }
   }
 `);
 
@@ -52,8 +57,12 @@ export const WorkshopElementItemComponent: React.FC<ContainerProps> = ({
   return (
     <SlidingItemComponent
       isReordering={isReordering}
-      onEditClick={onEditClick}
-      onRemoveClick={onRemoveClick}
+      onEditClick={
+        workshopElement.section.workshop.canEdit ? onEditClick : undefined
+      }
+      onRemoveClick={
+        workshopElement.section.workshop.canEdit ? onRemoveClick : undefined
+      }
       routerLink={routerLink}
     >
       <>

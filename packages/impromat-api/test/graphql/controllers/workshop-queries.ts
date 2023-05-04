@@ -10,6 +10,7 @@ export const workshopFieldsFragment = graphql(`
 
     name
     description
+    canEdit
     sections {
       id
       version

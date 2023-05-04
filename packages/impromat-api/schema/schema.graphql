@@ -57,7 +57,10 @@ type Workshop {
   description: String
   sections: [WorkshopSection!]!
   owner: User!
-  isPublic: Boolean
+
+  """If true, the client is authorized to edit the workshop."""
+  canEdit: Boolean
+  isPublic: Boolean!
 }
 
 type User {

@@ -10,6 +10,7 @@ import {
 } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
+import { User } from 'src/dtos/types/user.dto';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { Workshop, WorkshopRelations } from 'src/dtos/types/workshop.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
@@ -37,7 +38,7 @@ export class WorkshopController {
       });
   }
 
-  @ResolveField(() => [WorkshopSection])
+  @ResolveField(() => User)
   async owner(
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string,
@@ -45,6 +46,21 @@ export class WorkshopController {
     return this.workshopService
       .findWorkshopById(userSessionId, workshop.id)
       .owner();
+  }
+
+  @ResolveField(() => Boolean)
+  async canEdit(
+    @Parent() workshop: Workshop,
+    @SessionUserId() userSessionId: string | undefined,
+  ) {
+    if (userSessionId) {
+      const owner = await this.workshopService
+        .findWorkshopById(userSessionId, workshop.id)
+        .owner();
+      if (!owner) return null;
+      return owner.id === userSessionId;
+    }
+    return null;
   }
 
   @Query(() => Workshop)

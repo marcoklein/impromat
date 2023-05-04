@@ -3,6 +3,7 @@ import { closeOutline, swapVertical } from "ionicons/icons";
 
 interface ContainerProps {
   isReordering: boolean;
+  canEdit: boolean;
   onReorderEvent?: (
     event: "start" | "save" | "cancel",
     isReordering: boolean,
@@ -12,6 +13,7 @@ interface ContainerProps {
 
 export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
   isReordering,
+  canEdit,
   onReorderEvent,
 }) => {
   const onReorderClick = () => {
@@ -26,15 +28,17 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
     return (
       <IonListHeader color="medium">
         <IonLabel>Elements</IonLabel>
-        <IonButton
-          expand="block"
-          size="small"
-          onClick={() => onReorderClick()}
-          color="dark"
-          fill="clear"
-        >
-          <IonIcon slot="icon-only" icon={swapVertical}></IonIcon>
-        </IonButton>
+        {canEdit && (
+          <IonButton
+            expand="block"
+            size="small"
+            onClick={() => onReorderClick()}
+            color="dark"
+            fill="clear"
+          >
+            <IonIcon slot="icon-only" icon={swapVertical}></IonIcon>
+          </IonButton>
+        )}
       </IonListHeader>
     );
   }
