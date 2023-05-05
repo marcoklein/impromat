@@ -14,7 +14,7 @@ pageTest.describe("Workshops Preview Cards", () => {
     // when
     await workshopsPage.goto();
     // then
-    await expect(page.getByText(workshopName)).toBeVisible();
+    await expect(page.getByText(workshopName).first()).toBeVisible();
   });
 
   pageTest("should show workshop infos", async ({ page, workshopsPage }) => {
