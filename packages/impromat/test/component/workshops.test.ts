@@ -1,5 +1,5 @@
 import { expect, Page } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures";
+import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Workshops Page", () => {
   pageTest(
@@ -50,11 +50,11 @@ pageTest.describe("Workshops Page", () => {
 });
 
 async function blockImpromatApiRequests(page: Page) {
-  await page.route(`${process.env.REACT_APP_API_URL}/*`, async (route) => {
+  await page.route(`${process.env.VITE_API_URL}/*`, async (route) => {
     await route.abort();
   });
 }
 
 async function unblockImpromatApiRequests(page: Page) {
-  await page.unroute(`${process.env.REACT_APP_API_URL}/*`);
+  await page.unroute(`${process.env.VITE_API_URL}/*`);
 }

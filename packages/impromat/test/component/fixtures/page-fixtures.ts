@@ -1,12 +1,12 @@
 import { test as base } from "@playwright/test";
-import { AccountDevPage } from "./account-dev-page";
-import { AuthFixture } from "./auth-fixture";
-import { FavoriteElementsDevPage } from "./favorite-elements-dev-page";
-import { LibraryDevPage } from "./library-dev-page";
-import { LibraryElementDevPage } from "./library-element-dev-page";
-import { WorkshopDevPage } from "./workshop-dev-page";
-import { WorkshopElementDevPage } from "./workshop-element-dev-page";
-import { WorkshopsDevPage } from "./workshops-dev-page";
+import { AccountDevPage } from "./account-dev-page.js";
+import { AuthFixture } from "./auth-fixture.js";
+import { FavoriteElementsDevPage } from "./favorite-elements-dev-page.js";
+import { LibraryDevPage } from "./library-dev-page.js";
+import { LibraryElementDevPage } from "./library-element-dev-page.js";
+import { WorkshopDevPage } from "./workshop-dev-page.js";
+import { WorkshopElementDevPage } from "./workshop-element-dev-page.js";
+import { WorkshopsDevPage } from "./workshops-dev-page.js";
 
 type PageFixtures = {
   workshopPage: WorkshopDevPage;

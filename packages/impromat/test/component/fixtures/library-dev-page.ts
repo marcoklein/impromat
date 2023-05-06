@@ -1,4 +1,4 @@
-import { DevPage } from "./dev-page";
+import { DevPage } from "./dev-page.js";
 
 const NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX =
   /^((?!library-add-custom-element).)*$/;

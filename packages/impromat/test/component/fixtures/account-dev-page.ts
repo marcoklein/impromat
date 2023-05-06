@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { DevPage } from "./dev-page";
+import { DevPage } from "./dev-page.js";
 
 export class AccountDevPage extends DevPage {
   async expectToBeSignedOut() {
@@ -15,7 +15,8 @@ export class AccountDevPage extends DevPage {
   async login() {
     await this.goto();
     await this.page
-      .locator("ion-button.google-sign-in-button")
+      .locator("#main")
+      .getByText("Google Sign In")
       .last()
       .click({ timeout: 30000 });
   }

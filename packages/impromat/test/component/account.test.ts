@@ -1,9 +1,10 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures";
+import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Account Page", () => {
   pageTest("should sign in", async ({ page, accountPage }) => {
     // given
+    await accountPage.goto();
     // when
     await accountPage.login();
     await accountPage.goto();
@@ -26,6 +27,7 @@ pageTest.describe("Account Page", () => {
 
   pageTest("should logout if signed in", async ({ page, accountPage }) => {
     // given
+    await accountPage.goto();
     await accountPage.login();
     // when
     await accountPage.logout();

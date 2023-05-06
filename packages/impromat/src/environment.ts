@@ -8,7 +8,7 @@ function defaultIfEmpty(value: string | undefined, defaultValue: string) {
 }
 
 export const environment = {
-  API_URL: process.env.REACT_APP_API_URL ?? "https://api.impromat.app",
-  VERSION: defaultIfEmpty(process.env.REACT_APP_VERSION, version),
+  API_URL: import.meta.env.VITE_API_URL ?? "https://api.impromat.app",
+  VERSION: defaultIfEmpty(import.meta.env.VITE_VERSION, version),
 };
 console.log("Loaded environment", environment);

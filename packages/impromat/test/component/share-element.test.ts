@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 import { randomUUID } from "crypto";
-import { pageTest } from "./fixtures/page-fixtures";
+import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Shared Elements", () => {
   pageTest(

@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures";
+import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Library", () => {
   pageTest("should render the library page", async ({ auth, libraryPage }) => {
