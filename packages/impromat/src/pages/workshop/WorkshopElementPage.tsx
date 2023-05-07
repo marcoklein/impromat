@@ -13,7 +13,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { arrowBack, document, pencil } from "ionicons/icons";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
@@ -123,6 +123,17 @@ export const WorkshopElementPage: React.FC = () => {
     });
   };
 
+  const renderNote = useMemo(
+    () =>
+      (workshopElement &&
+        workshopElement.note &&
+        workshopElement.note.length > 0) ||
+      (workshopElement &&
+        !workshopElement.note?.length &&
+        !!workshopElement.section.workshop.canEdit),
+    [workshopElement],
+  );
+
   return (
     <IonPage>
       <IonHeader>
@@ -146,37 +157,39 @@ export const WorkshopElementPage: React.FC = () => {
         >
           {workshopElement && (
             <IonList>
-              <IonCard>
-                <IonItem lines="none">
-                  {workshopElement.note ? (
-                    <>
-                      <IonLabel className="ion-text-wrap">
-                        <ReactMarkdown>{workshopElement.note}</ReactMarkdown>
-                      </IonLabel>
-                      {workshopElement.section.workshop.canEdit && (
-                        <IonButtons>
-                          <IonButton onClick={() => onChangeNoteClick()}>
-                            <IonIcon size="small" icon={pencil}></IonIcon>
+              {renderNote && (
+                <IonCard>
+                  <IonItem lines="none">
+                    {workshopElement.note ? (
+                      <>
+                        <IonLabel className="ion-text-wrap">
+                          <ReactMarkdown>{workshopElement.note}</ReactMarkdown>
+                        </IonLabel>
+                        {workshopElement.section.workshop.canEdit && (
+                          <IonButtons>
+                            <IonButton onClick={() => onChangeNoteClick()}>
+                              <IonIcon size="small" icon={pencil}></IonIcon>
+                            </IonButton>
+                          </IonButtons>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {workshopElement.section.workshop.canEdit && (
+                          <IonButton
+                            fill="clear"
+                            onClick={onChangeNoteClick}
+                            color="primary"
+                          >
+                            <IonIcon icon={document} slot="start"></IonIcon>
+                            Add Note
                           </IonButton>
-                        </IonButtons>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {workshopElement.section.workshop.canEdit && (
-                        <IonButton
-                          fill="clear"
-                          onClick={onChangeNoteClick}
-                          color="primary"
-                        >
-                          <IonIcon icon={document} slot="start"></IonIcon>Add
-                          Note
-                        </IonButton>
-                      )}
-                    </>
-                  )}
-                </IonItem>
-              </IonCard>
+                        )}
+                      </>
+                    )}
+                  </IonItem>
+                </IonCard>
+              )}
 
               <ElementComponent
                 elementFragment={workshopElement.basedOn}
