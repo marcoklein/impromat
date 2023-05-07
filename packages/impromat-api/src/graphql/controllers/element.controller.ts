@@ -23,7 +23,6 @@ import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ElementService } from '../services/element.service';
 
 @Resolver(Element)
-@UseGuards(GraphqlAuthGuard)
 export class ElementController {
   constructor(private userElementService: ElementService) {}
 
@@ -47,6 +46,7 @@ export class ElementController {
     return element.markdown?.substring(0, 300);
   }
 
+  @UseGuards(GraphqlAuthGuard)
   @ResolveField(() => [User])
   async owner(
     @Parent() element: Element,
@@ -57,6 +57,7 @@ export class ElementController {
       .owner();
   }
 
+  @UseGuards(GraphqlAuthGuard)
   @ResolveField(() => Boolean)
   async isOwnerMe(
     @Parent() element: Element,

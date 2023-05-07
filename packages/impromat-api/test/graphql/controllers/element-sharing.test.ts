@@ -87,18 +87,4 @@ describe('Sharing Workshop Elements', () => {
       elementsFromOtherUser.data?.searchElements?.at(0)?.element.isOwnerMe,
     ).toBe(false);
   }, 20000);
-
-  it.skip('should return all published elements of a user', async () => {
-    // given
-    const uniqueElementName = `shared-test-user-element-${randomUUID()}`;
-    // when
-    await api.graphqlRequest(createElementMutation, {
-      input: {
-        name: uniqueElementName,
-        visibility: ElementVisibility.Public,
-      },
-    });
-    // then
-    // TODO
-  });
 });

@@ -11,6 +11,7 @@ export const elementFieldsFragment = graphql(`
     name
     markdown
     markdownShort
+    visibility
 
     tags {
       id

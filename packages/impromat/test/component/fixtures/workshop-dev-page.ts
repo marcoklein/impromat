@@ -90,6 +90,20 @@ export class WorkshopDevPage extends DevPage {
     await page.getByRole("button", { name: "Copy workshop link" }).click();
   }
 
+  async closeSection(name: string = "[Default Section]") {
+    const page = this.page;
+    await page
+      .getByRole("listitem")
+      .filter({ hasText: `${name}Chevron DownEllipsis` })
+      .getByRole("button")
+      .nth(1)
+      .click();
+    await page
+      .getByRole("listitem")
+      .filter({ hasText: `${name}Chevron UpEllipsis` })
+      .waitFor();
+  }
+
   async openLibrary() {
     const page = this.page;
 
