@@ -96,7 +96,7 @@ pageTest.describe("Workshop Sharing", () => {
 
   pageTest(
     "should allow access on improbib element as public user",
-    async ({ page, auth, workshopPage }) => {
+    async ({ page, auth, workshopPage, workshopElementPage }) => {
       // given
       await auth.loginAsRandomUser();
       await workshopPage.createAndGoto("shared workshop");
@@ -110,7 +110,8 @@ pageTest.describe("Workshop Sharing", () => {
       await page.getByRole("heading", { name: "Freeze" }).click();
       await page.waitForURL(/\/workshop\/.*?\/part\/.*/);
       // then
-      await expect(page.getByText("Freeze").first()).toBeVisible();
+      await workshopPage.expectToolbarTextToBe("Freeze");
+      await expect(workshopElementPage.addNoteLocator).toBeHidden();
     },
   );
 });

@@ -35,7 +35,7 @@ pageTest.describe("Workshop Elements Page", () => {
       const noteText = "My Note";
       await workshopElementPage.createAndGoto();
       // when
-      await page.getByRole("button", { name: "Add Note" }).click();
+      await workshopElementPage.addNoteLocator.click();
       await page.locator("textarea").click();
       await page.locator("textarea").fill(noteText);
       await page.getByRole("button", { name: "Save" }).click();

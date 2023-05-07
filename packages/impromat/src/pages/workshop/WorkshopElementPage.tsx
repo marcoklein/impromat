@@ -48,6 +48,9 @@ const WorkshopElementPageQuery = graphql(`
       }
       section {
         id
+        workshop {
+          canEdit
+        }
       }
     }
   }
@@ -150,20 +153,27 @@ export const WorkshopElementPage: React.FC = () => {
                       <IonLabel className="ion-text-wrap">
                         <ReactMarkdown>{workshopElement.note}</ReactMarkdown>
                       </IonLabel>
-                      <IonButtons>
-                        <IonButton onClick={() => onChangeNoteClick()}>
-                          <IonIcon size="small" icon={pencil}></IonIcon>
-                        </IonButton>
-                      </IonButtons>
+                      {workshopElement.section.workshop.canEdit && (
+                        <IonButtons>
+                          <IonButton onClick={() => onChangeNoteClick()}>
+                            <IonIcon size="small" icon={pencil}></IonIcon>
+                          </IonButton>
+                        </IonButtons>
+                      )}
                     </>
                   ) : (
-                    <IonButton
-                      fill="clear"
-                      onClick={onChangeNoteClick}
-                      color="primary"
-                    >
-                      <IonIcon icon={document} slot="start"></IonIcon>Add Note
-                    </IonButton>
+                    <>
+                      {workshopElement.section.workshop.canEdit && (
+                        <IonButton
+                          fill="clear"
+                          onClick={onChangeNoteClick}
+                          color="primary"
+                        >
+                          <IonIcon icon={document} slot="start"></IonIcon>Add
+                          Note
+                        </IonButton>
+                      )}
+                    </>
                   )}
                 </IonItem>
               </IonCard>
