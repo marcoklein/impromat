@@ -4,7 +4,7 @@ import {
 } from '../../test-utils/init-api-test-session';
 import {
   addWorskshopWithEmptyNameQuery,
-  createWorkshopMutation,
+  createWorkshopByNameMutation,
   deleteWorkshopMutation,
   updateWorkshopMutation,
   workshopByIdQuery,
@@ -27,7 +27,7 @@ describe('Workshop', () => {
     it('should create empty workshop', async () => {
       // given
       // when
-      const response = await api.graphqlRequest(createWorkshopMutation, {
+      const response = await api.graphqlRequest(createWorkshopByNameMutation, {
         name: 'empty workshop',
       });
       // then
@@ -53,6 +53,7 @@ describe('Workshop', () => {
       expect(response.errors).toBeUndefined();
       expect(response.data?.workshop).toBeDefined();
       expect(response.data?.workshop.id).toBe(createdWorkshopId);
+      expect(response.data?.workshop.canEdit).toBe(true);
       expect(response.data?.workshop.sections).toHaveLength(1);
       expect(response.data?.workshop.sections[0].name).toBeNull();
       expect(response.data?.workshop.sections[0].orderIndex).toBe(0);

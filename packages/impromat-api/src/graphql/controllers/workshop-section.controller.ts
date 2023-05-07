@@ -19,7 +19,13 @@ export class WorkshopSectionController {
   ) {
     return this.prismaService.workshopSection
       .findFirstOrThrow({
-        where: { id: sectionDto.id, workshop: { ownerId: userSessionId } },
+        where: {
+          id: sectionDto.id,
+          OR: [
+            { workshop: { ownerId: userSessionId } },
+            { workshop: { isPublic: true } },
+          ],
+        },
       })
       .elements({ orderBy: { orderIndex: 'asc' } });
   }
@@ -31,7 +37,10 @@ export class WorkshopSectionController {
   ) {
     return this.prismaService.workshopSection
       .findFirstOrThrow({
-        where: { id: sectionDto.id, workshop: { ownerId: userSessionId } },
+        where: {
+          id: sectionDto.id,
+          workshop: { OR: [{ ownerId: userSessionId }, { isPublic: true }] },
+        },
       })
       .workshop();
   }

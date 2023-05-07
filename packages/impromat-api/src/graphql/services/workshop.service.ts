@@ -14,9 +14,9 @@ export class WorkshopService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   // TODO all function take the userSessionId => could this also be injected for specific requests?
-  findWorkshopById(userSessionId: string, id: string) {
+  findWorkshopById(userSessionId: string | undefined, id: string) {
     return this.prismaService.workshop.findFirst({
-      where: { id, ownerId: userSessionId },
+      where: { id, OR: [{ ownerId: userSessionId }, { isPublic: true }] },
     });
   }
 

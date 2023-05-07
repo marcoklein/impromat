@@ -57,6 +57,10 @@ type Workshop {
   description: String
   sections: [WorkshopSection!]!
   owner: User!
+
+  """If true, the client is authorized to edit the workshop."""
+  canEdit: Boolean
+  isPublic: Boolean!
 }
 
 type User {
@@ -204,6 +208,7 @@ input CreateWorkshopInput {
   name: String!
   description: String
   sections: WorkshopSectionListCreateInput
+  isPublic: Boolean
 }
 
 input WorkshopSectionListCreateInput {
@@ -220,6 +225,7 @@ input UpdateWorkshopInput {
   name: String
   description: String
   sections: WorkshopSectionListInput
+  isPublic: Boolean
   id: ID!
 }
 

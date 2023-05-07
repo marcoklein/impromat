@@ -10,6 +10,7 @@ export class AuthFixture extends DevPage {
     await this.loginAsUser(randomUserName);
     return randomUserName;
   }
+
   async loginAsUser(userId: string) {
     if (!process.env.VITE_API_URL) {
       throw new Error("VITE_API_URL undefined");

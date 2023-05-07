@@ -20,7 +20,7 @@ import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
-import { WorkshopPreviewItemComponent } from "./components/WorkshopPreviewItemComponent";
+import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -109,9 +109,9 @@ export const WorkshopsPage: React.FC = () => {
             <CardGridComponent>
               {availableWorkshops.map((workshop) => (
                 <CardGridRowComponent key={workshop.id}>
-                  <WorkshopPreviewItemComponent
+                  <WorkshopPreviewCard
                     workshopFragment={workshop}
-                  ></WorkshopPreviewItemComponent>
+                  ></WorkshopPreviewCard>
                 </CardGridRowComponent>
               ))}
             </CardGridComponent>

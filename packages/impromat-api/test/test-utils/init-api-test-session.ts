@@ -9,9 +9,13 @@ import { prepareTestDatabase } from './prepare-test-database';
 import { TestDatabase } from './test-database';
 
 export interface ApiTestSession {
-  impersonateUser: (userId: string) => void;
+  impersonateUser: (userId: string | undefined) => void;
   impersonateActiveUser: () => void;
   impersonateOtherActiveUser: () => void;
+  /**
+   * Anonymous user without Impromat account accessing the API from the world wide web.
+   */
+  impersonatePublicUser: () => void;
   testDb: TestDatabase;
   /**
    * Randomly generated user id for this test session.
@@ -56,12 +60,17 @@ export async function initApiTestSession(): Promise<ApiTestSession> {
     impersonateUser(testDatabase.userIdBOfDbSession);
   }
 
+  function impersonateAnonymousUser() {
+    impersonateUser(undefined);
+  }
+
   impersonateActiveUser();
 
   return {
     impersonateUser,
     impersonateOtherActiveUser,
     impersonateActiveUser,
+    impersonatePublicUser: impersonateAnonymousUser,
     testDb: testDatabase,
     userId: testDatabase.userIdOfDbSession,
     graphqlRequest: sendGraphqlQuery,

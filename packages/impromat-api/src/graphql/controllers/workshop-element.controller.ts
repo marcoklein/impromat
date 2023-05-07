@@ -17,7 +17,7 @@ import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { WorkshopElementService } from '../services/workshop-element.service';
 
 @Resolver(WorkshopElement)
-@UseGuards(GraphqlAuthGuard)
+// @UseGuards(GraphqlAuthGuard)
 export class WorkshopElementController {
   constructor(private workshopElementService: WorkshopElementService) {}
 

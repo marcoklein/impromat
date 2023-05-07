@@ -18,6 +18,9 @@ const WorkshopSectionComponent_WorkshopSection = graphql(`
     elements {
       id
     }
+    workshop {
+      canEdit
+    }
   }
 `);
 
@@ -42,12 +45,18 @@ export const WorkshopSectionComponent: React.FC<ContainerProps> = ({
     WorkshopSectionComponent_WorkshopSection,
     workshopSectionFragment,
   );
+  const canEdit = !!workshopSection.workshop.canEdit;
   return (
     <SlidingItemComponent
-      onEditClick={() =>
-        onEditClick(workshopSection.id, workshopSection.name ?? undefined)
+      onEditClick={
+        canEdit
+          ? () =>
+              onEditClick(workshopSection.id, workshopSection.name ?? undefined)
+          : undefined
       }
-      onRemoveClick={() => onRemoveClick(workshopSection.id)}
+      onRemoveClick={
+        canEdit ? () => onRemoveClick(workshopSection.id) : undefined
+      }
       isReordering={isReordering}
       color={workshopSection.color ?? "light"}
       itemProps={{
@@ -63,15 +72,19 @@ export const WorkshopSectionComponent: React.FC<ContainerProps> = ({
         <IonBadge color="medium">{workshopSection.elements.length}</IonBadge>
       }
       endSlot={
-        <IonButton
-          onClick={() =>
-            onCollapseClick(workshopSection.id, workshopSection.isCollapsed)
-          }
-        >
-          <IonIcon
-            icon={workshopSection.isCollapsed ? chevronUp : chevronDown}
-          ></IonIcon>
-        </IonButton>
+        canEdit ? (
+          <IonButton
+            onClick={() =>
+              onCollapseClick(workshopSection.id, workshopSection.isCollapsed)
+            }
+          >
+            <IonIcon
+              icon={workshopSection.isCollapsed ? chevronUp : chevronDown}
+            ></IonIcon>
+          </IonButton>
+        ) : (
+          <></>
+        )
       }
     >
       <>{workshopSection.name ?? "[Default Section]"}</>

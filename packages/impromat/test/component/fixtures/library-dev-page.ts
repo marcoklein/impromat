@@ -90,7 +90,7 @@ export class LibraryDevPage extends DevPage {
     const libraryPage = this;
     const page = this.page;
     await libraryPage.libraryTabLocator().click();
-    await page.locator("ion-fab-button").click();
+    await page.locator("ion-fab-button").last().click();
     await page.getByRole("textbox", { name: "Name" }).fill(options.name);
 
     if (options.isPublic) {

@@ -14,12 +14,24 @@ const IMPROMAT_SOURCE_NAME = 'impromat';
 export class ElementService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
-  findElementById(userRequestId: string, id: string) {
+  findElementById(userRequestId: string | undefined, id: string) {
     return this.prismaService.element.findFirstOrThrow({
       where: {
         OR: [
-          { ownerId: userRequestId, id },
+          userRequestId ? { ownerId: userRequestId, id } : {},
           { id, visibility: 'PUBLIC' },
+          {
+            id,
+            workshopElements: {
+              some: {
+                workshopSection: {
+                  workshop: {
+                    isPublic: true,
+                  },
+                },
+              },
+            },
+          },
         ],
       },
     });

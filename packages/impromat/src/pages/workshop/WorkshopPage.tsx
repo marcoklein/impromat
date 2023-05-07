@@ -3,25 +3,29 @@ import {
   IonButtons,
   IonCard,
   IonCardContent,
+  IonCheckbox,
   IonContent,
   IonFab,
   IonFabButton,
   IonFabList,
   IonHeader,
   IonIcon,
+  IonItem,
   IonLabel,
   IonMenuButton,
+  IonModal,
   IonPage,
   IonProgressBar,
   IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { add, checkmark, globe, lockClosed } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { EditableItemComponent } from "../../components/EditableItemComponent";
+import { Icon } from "../../components/Icon";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
@@ -40,18 +44,20 @@ const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
     id
     version
+    isPublic
     createdAt
     updatedAt
     deleted
     name
     description
+    canEdit
     sections {
       name
       elements {
         id
       }
-      ...WorkshopElementsComponent_WorkshopSection
     }
+    ...WorkshopElementsComponent_Workshop
     ...WorkshopActionSheet_Workshop
   }
 `);
@@ -192,6 +198,20 @@ export const WorkshopPage: React.FC = () => {
     }
   };
 
+  const onPublicClick = useCallback(
+    (isPublic: boolean) => {
+      if (!workshop) return;
+      logger("update public workshop state to %s", isPublic);
+      updateWorkshopMutation({
+        input: { id: workshop.id, isPublic },
+      });
+    },
+    [logger, updateWorkshopMutation, workshop],
+  );
+
+  const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+
   return (
     <>
       <IonPage>
@@ -200,16 +220,103 @@ export const WorkshopPage: React.FC = () => {
             <IonButtons slot="start">
               <IonMenuButton></IonMenuButton>
             </IonButtons>
-            <IonTitle>Workshop</IonTitle>
+            <IonTitle>
+              Workshop {workshop && !workshop.canEdit && "(View)"}
+            </IonTitle>
             {isReorderingElements && (
               <IonProgressBar type="indeterminate"></IonProgressBar>
             )}
             <IonButtons slot="end">
-              {workshop && (
-                <WorkshopActionSheetComponent
-                  workshopFragment={workshop}
-                  onEvent={(event) => handleWorkshopEvent(event)}
-                ></WorkshopActionSheetComponent>
+              {workshop && workshop.canEdit && (
+                <>
+                  <IonButton onClick={() => setIsSharingModalOpen(true)}>
+                    <Icon
+                      slot="start"
+                      icon={workshop.isPublic ? globe : lockClosed}
+                    ></Icon>{" "}
+                    Share
+                  </IonButton>
+                  <IonModal
+                    isOpen={isSharingModalOpen}
+                    onDidDismiss={() => setIsSharingModalOpen(false)}
+                    style={{ "--max-height": "50%", "--max-width": "95%" }}
+                  >
+                    <IonHeader>
+                      <IonToolbar>
+                        <IonTitle>Share Workshop</IonTitle>
+                        <IonButtons slot="end">
+                          <IonButton
+                            onClick={() => setIsSharingModalOpen(false)}
+                          >
+                            Close
+                          </IonButton>
+                        </IonButtons>
+                      </IonToolbar>
+                    </IonHeader>
+                    <IonContent className="ion-padding" scrollY={false}>
+                      <IonItem
+                        lines="none"
+                        color={workshop.isPublic ? "success" : undefined}
+                      >
+                        <Icon icon={globe} slot="start"></Icon>
+                        <IonCheckbox
+                          checked={workshop.isPublic ?? false}
+                          labelPlacement="start"
+                          onIonChange={(event) =>
+                            onPublicClick(event.detail.checked)
+                          }
+                        >
+                          <IonLabel className="ion-text-wrap">
+                            Anyone with the link can view
+                          </IonLabel>
+                        </IonCheckbox>
+                      </IonItem>
+                      {!workshop.isPublic && (
+                        <p>
+                          Activate the checkbox to share your workshop via url.
+                          Visitors will need the link to see your workshop but
+                          will not require an Impromat account.
+                        </p>
+                      )}
+                      {workshop.isPublic && (
+                        <>
+                          <p>
+                            Your workshop is available to everyone that follows
+                            the workshop link. Visitors do not require an
+                            account and can view your workshop including
+                            sections, elements, and notes.
+                          </p>
+                          <IonButton
+                            expand="full"
+                            color={!isCopied ? "primary" : "medium"}
+                            onClick={() => {
+                              setIsCopied(true);
+                              navigator.clipboard.writeText(
+                                window.location.href,
+                              );
+                            }}
+                          >
+                            {isCopied ? (
+                              <>
+                                <IonIcon
+                                  slot="start"
+                                  icon={checkmark}
+                                ></IonIcon>
+                                Copied workshop link
+                              </>
+                            ) : (
+                              "Copy workshop link"
+                            )}
+                          </IonButton>
+                        </>
+                      )}
+                    </IonContent>
+                  </IonModal>
+                  <WorkshopActionSheetComponent
+                    workshopFragment={workshop}
+                    onEvent={(event) => handleWorkshopEvent(event)}
+                  ></WorkshopActionSheetComponent>
+                </>
               )}
             </IonButtons>
           </IonToolbar>
@@ -222,19 +329,21 @@ export const WorkshopPage: React.FC = () => {
           >
             {workshop && (
               <>
-                <IonFab slot="fixed" vertical="bottom" horizontal="end">
-                  <IonFabButton>
-                    <IonIcon icon={add}></IonIcon>
-                  </IonFabButton>
-                  <IonFabList side="start">
-                    <IonButton routerLink={routeLibrary({ workshopId })}>
-                      Element
-                    </IonButton>
-                    <IonButton color="dark" onClick={() => onCreateSection()}>
-                      Section
-                    </IonButton>
-                  </IonFabList>
-                </IonFab>
+                {workshop.canEdit && (
+                  <IonFab slot="fixed" vertical="bottom" horizontal="end">
+                    <IonFabButton>
+                      <IonIcon icon={add}></IonIcon>
+                    </IonFabButton>
+                    <IonFabList side="start">
+                      <IonButton routerLink={routeLibrary({ workshopId })}>
+                        Element
+                      </IonButton>
+                      <IonButton color="dark" onClick={() => onCreateSection()}>
+                        Section
+                      </IonButton>
+                    </IonFabList>
+                  </IonFab>
+                )}
                 <EditableItemComponent
                   disableEditing={true}
                   text={workshop.name}
@@ -260,6 +369,7 @@ export const WorkshopPage: React.FC = () => {
 
                 {workshop.sections.length === 1 &&
                 workshop.sections[0].elements.length === 0 &&
+                workshop.canEdit &&
                 !workshop.sections[0].name ? (
                   <IonCard>
                     <IonCardContent className="ion-padding">
@@ -280,7 +390,7 @@ export const WorkshopPage: React.FC = () => {
                   <WorkshopElementsComponent
                     key={workshop.id}
                     workshopId={workshopId}
-                    workshopSectionsFragment={workshop.sections}
+                    workshopFragment={workshop}
                     onChangeOrder={(fromIndex, toIndex) =>
                       changeSectionsOrder(fromIndex, toIndex)
                     }

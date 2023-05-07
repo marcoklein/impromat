@@ -5,7 +5,7 @@ import {
 } from '../../test-utils/init-api-test-session';
 import { createElementMutation } from './element-queries';
 import {
-  createWorkshopMutation,
+  createWorkshopByNameMutation,
   updateWorkshopMutation,
 } from './workshop-queries';
 
@@ -34,7 +34,7 @@ describe('Workshop Elements', () => {
   let createdWorkshop: AddWorkshopMutation['createWorkshop'];
   async function ensureTestWorkshop() {
     if (createdWorkshop) return createdWorkshop;
-    const response = await api.graphqlRequest(createWorkshopMutation, {
+    const response = await api.graphqlRequest(createWorkshopByNameMutation, {
       name: 'empty workshop',
     });
     createdWorkshop = response.data!.createWorkshop;
