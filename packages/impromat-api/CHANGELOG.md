@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.4.0
+
+### Minor Changes
+
+- 28b8053: Add isPublic attribute to workshops for public workshop sharing
+
 ## 0.3.0
 
 ### Minor Changes

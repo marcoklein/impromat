@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.28.0
+
+### Minor Changes
+
+- 28b8053: Show same info list in workshop preview card as in element preview card
+
+### Patch Changes
+
+- 42c12ea: Hide "add note" button on uneditable workshop element
+- 42c12ea: Allow access on shared workshop element
+- Updated dependencies [28b8053]
+  - impromat-api@0.4.0
+
 ## 0.27.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.5.0
+
+### Minor Changes
+
+- f99a4ea: Disable building of improbib for app deployment
+
 ## 0.4.0
 
 ### Minor Changes
