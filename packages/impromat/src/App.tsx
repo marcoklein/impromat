@@ -63,9 +63,9 @@ export const App: React.FC = () => {
             <Route path={routeWorkshop()} exact>
               <WorkshopPage></WorkshopPage>
             </Route>
-            <ProtectedRouteComponent path={routeWorkshopElement()} exact>
+            <Route path={routeWorkshopElement()} exact>
               <WorkshopElementPage></WorkshopElementPage>
-            </ProtectedRouteComponent>
+            </Route>
             <ProtectedRouteComponent path={routeLibraryElement()} exact>
               <LibraryElementPage></LibraryElementPage>
             </ProtectedRouteComponent>
