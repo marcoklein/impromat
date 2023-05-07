@@ -19,9 +19,6 @@ COPY .yarn/ .yarn/
 COPY . .
 RUN yarn install --immutable
 
-WORKDIR /app/packages/improbib
-RUN yarn build
-
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL ${REACT_APP_API_URL}
 ARG REACT_APP_VERSION
