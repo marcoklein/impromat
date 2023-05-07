@@ -11,6 +11,7 @@ export const elementFieldsFragment = graphql(`
     name
     markdown
     markdownShort
+    visibility
 
     tags {
       id
@@ -28,6 +29,14 @@ export const elementFieldsFragment = graphql(`
 export const userElementsQuery = graphql(`
   query UserElementsQuery {
     elements {
+      ...ElementFields
+    }
+  }
+`);
+
+export const elementByIdQuery = graphql(`
+  query ElementByIdQuery($id: ID!) {
+    element(id: $id) {
       ...ElementFields
     }
   }

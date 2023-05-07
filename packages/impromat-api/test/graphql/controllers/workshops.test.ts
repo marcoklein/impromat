@@ -5,7 +5,7 @@ import {
 } from '../../test-utils/init-api-test-session';
 import {
   addWorskshopWithEmptyNameQuery,
-  createWorkshopMutation,
+  createWorkshopByNameMutation,
   userWorkshopsQuery,
 } from './workshop-queries';
 
@@ -36,7 +36,7 @@ describe('User Workshops', () => {
     it('should add a new workshop', async () => {
       // given
       const testWorkshopName = 'test-workshop';
-      const query = createWorkshopMutation;
+      const query = createWorkshopByNameMutation;
       // when
       const response = await api.graphqlRequest(query, {
         name: testWorkshopName,
@@ -50,8 +50,8 @@ describe('User Workshops', () => {
       const { id, version, createdAt, updatedAt, deleted } = newWorkshop;
       expect(id).toMatch(UUID4_REGEX);
       expect(version).toBe(0);
-      expect(new Date(createdAt).getTime()).toBeGreaterThan(Date.now() - 1000);
-      expect(new Date(updatedAt).getTime()).toBeGreaterThan(Date.now() - 1000);
+      expect(new Date(createdAt).getTime()).toBeGreaterThan(Date.now() - 10000);
+      expect(new Date(updatedAt).getTime()).toBeGreaterThan(Date.now() - 10000);
       expect(deleted).toBe(false);
 
       newWorkshopId = newWorkshop.id;

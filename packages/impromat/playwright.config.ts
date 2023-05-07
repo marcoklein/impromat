@@ -25,6 +25,7 @@ const config: PlaywrightTestConfig = {
     isMobile: true,
     baseURL: `http://localhost:${PORT}/`,
     actionTimeout: 5 * 1000,
+    permissions: ["clipboard-read", "clipboard-write"],
   },
   expect: {
     timeout: 10 * 1000,

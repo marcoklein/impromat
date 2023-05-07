@@ -4,6 +4,7 @@ import { pageTest } from "./fixtures/page-fixtures";
 pageTest.describe("Account Page", () => {
   pageTest("should sign in", async ({ page, accountPage }) => {
     // given
+    await accountPage.goto();
     // when
     await accountPage.login();
     await accountPage.goto();

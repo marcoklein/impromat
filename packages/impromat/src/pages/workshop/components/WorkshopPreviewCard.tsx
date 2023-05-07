@@ -1,21 +1,16 @@
 import {
   IonActionSheet,
   IonButton,
-  IonButtons,
-  IonCard,
   IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonContent,
   IonIcon,
   IonItem,
   IonList,
-  IonNote,
   IonPopover,
 } from "@ionic/react";
-import { calendar, close, ellipsisVertical, trash } from "ionicons/icons";
-import { useMemo, useRef, useState } from "react";
+import { close, ellipsisVertical, trash } from "ionicons/icons";
+import { useRef, useState } from "react";
+import { PreviewCard } from "../../../components/PreviewCard";
+import { WorkshopInfoList } from "../../../components/WorkshopInfoList";
 import {
   FragmentType,
   getFragmentData,
@@ -33,6 +28,7 @@ const WorkshopPreviewItem_WorkshopFragment = graphql(`
     deleted
     name
     description
+    ...WorkshopInfoList_Workshop
   }
 `);
 
@@ -40,20 +36,12 @@ interface ContainerProps {
   workshopFragment: FragmentType<typeof WorkshopPreviewItem_WorkshopFragment>;
 }
 
-export const WorkshopPreviewItemComponent: React.FC<ContainerProps> = ({
+export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
   workshopFragment,
 }) => {
   const workshop = getFragmentData(
     WorkshopPreviewItem_WorkshopFragment,
     workshopFragment,
-  );
-  const workshopCreatedAtText = useMemo(
-    () => new Date(workshop.createdAt).toLocaleDateString(),
-    [workshop],
-  );
-  const workshopUpdatedAtText = useMemo(
-    () => new Date(workshop.updatedAt).toLocaleDateString(),
-    [workshop],
   );
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState(false);
   const popover = useRef<HTMLIonPopoverElement>(null);
@@ -66,52 +54,27 @@ export const WorkshopPreviewItemComponent: React.FC<ContainerProps> = ({
   const [, deleteWorkshopMutation] = useDeleteWorkshopMutation();
 
   return (
-    <IonCard className="ion-no-margin">
-      <IonButtons style={{ float: "right" }} className="ion-padding-top">
-        <IonButton fill="clear" onClick={(event) => openPopover(event)}>
-          <IonIcon icon={ellipsisVertical}></IonIcon>
-        </IonButton>
-      </IonButtons>
-      <IonCardHeader>
-        <IonCardTitle>{workshop.name}</IonCardTitle>
-        {workshop.description && (
-          <IonCardSubtitle>{workshop.description}</IonCardSubtitle>
-        )}
-      </IonCardHeader>
-      <IonCardContent>
-        <IonNote>
+    <PreviewCard
+      infoListElement={
+        <WorkshopInfoList workshopFragment={workshop}></WorkshopInfoList>
+      }
+      titleElement={<>{workshop.name}</>}
+      buttonsElement={
+        <>
           <IonButton
+            style={{ flexGrow: 1 }}
             fill="clear"
-            size="small"
-            color="medium"
-            id={`updated-and-created-popover-${workshop.id}`}
+            routerLink={routeWorkshop(workshop.id)}
           >
-            <IonIcon icon={calendar} slot="start"></IonIcon>
-            {workshopUpdatedAtText}
+            Open
           </IonButton>
-          <IonPopover
-            trigger={`updated-and-created-popover-${workshop.id}`}
-            triggerAction="click"
-          >
-            <IonContent class="ion-padding">
-              <IonIcon icon={calendar}></IonIcon> {workshopUpdatedAtText}{" "}
-              (updated)
-            </IonContent>
-            <IonContent class="ion-padding">
-              <IonIcon icon={calendar}></IonIcon> {workshopCreatedAtText}{" "}
-              (created)
-            </IonContent>
-          </IonPopover>
-        </IonNote>
-      </IonCardContent>
-      <IonButton
-        fill="clear"
-        expand="full"
-        routerLink={routeWorkshop(workshop.id)}
-      >
-        Open
-      </IonButton>
-
+          <IonButton fill="clear" onClick={(event) => openPopover(event)}>
+            <IonIcon icon={ellipsisVertical}></IonIcon>
+          </IonButton>
+        </>
+      }
+    >
+      <IonCardContent>{workshop.description}</IonCardContent>
       {/* TODO create reusable options menu that is responsive and can switch between an action sheet and a popover version + hide buttons in the menu if necessary */}
       <IonPopover
         className="ion-hide"
@@ -151,6 +114,6 @@ export const WorkshopPreviewItemComponent: React.FC<ContainerProps> = ({
         ]}
         onDidDismiss={() => setIsOptionsMenuOpen(false)}
       ></IonActionSheet>
-    </IonCard>
+    </PreviewCard>
   );
 };

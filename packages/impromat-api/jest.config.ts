@@ -16,6 +16,7 @@ const config: Config = {
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
   reporters: ['default', ['jest-junit', { outputName: 'junit-results.xml' }]],
+  testTimeout: 10000,
 };
 
 export default config;

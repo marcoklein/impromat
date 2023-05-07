@@ -4,6 +4,22 @@ Deployment configurations for the monorepo via [Dokku](https://dokku.com).
 
 ## Getting started
 
+### Local Docker Compose
+
+`docker-compose.yml` defines the docker compose configuration.
+
+Start individual api
+
+```
+yarn docker-compose up api
+```
+
+Rebuild api image without cache
+
+```
+yarn docker-compose build api --no-cache
+```
+
 ### Configuration
 
 Allow execution of configuration script

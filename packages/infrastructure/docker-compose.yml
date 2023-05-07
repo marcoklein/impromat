@@ -23,6 +23,7 @@ services:
     volumes:
       # allows restarting with new api sources
       - ../impromat-api/src:/app/packages/impromat-api/src:ro
+      - ../impromat-api/prisma:/app/packages/impromat-api/prisma:ro
     ports:
       - 12345:8080
     networks:
@@ -40,6 +41,9 @@ services:
     build:
       context: ../../
       dockerfile: packages/infrastructure/Dockerfile-impromat-api
+    volumes:
+      # allows restarting with new api sources
+      - ../impromat-api/prisma:/app/packages/impromat-api/prisma:ro
     command:
       [
         "bash",
