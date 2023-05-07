@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures";
+import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Workshops Preview Cards", () => {
   const workshopName = "test-workshop";
