@@ -17,9 +17,11 @@ export class LibraryElementDevPage extends DevPage {
 
   async addToFavoriteElements() {
     await this.addToFavoritesButtonLocator.click();
+    await this.removeFromFavoritesButtonLocator.waitFor();
   }
 
   async removeFromFavoriteElements() {
     await this.removeFromFavoritesButtonLocator.click();
+    await this.addToFavoritesButtonLocator.waitFor();
   }
 }
