@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { DevPage } from "./dev-page";
+import { DevPage } from "./dev-page.js";
 
 export class LibraryElementDevPage extends DevPage {
   addToFavoritesButtonLocator: Locator;

@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
-import { DevPage } from "./dev-page";
-import { LibraryDevPage } from "./library-dev-page";
-import { WorkshopsDevPage } from "./workshops-dev-page";
+import { DevPage } from "./dev-page.js";
+import { LibraryDevPage } from "./library-dev-page.js";
+import { WorkshopsDevPage } from "./workshops-dev-page.js";
 
 export class WorkshopDevPage extends DevPage {
   readonly optionsLocator: Locator;

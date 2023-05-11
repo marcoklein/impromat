@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures";
+import { pageTest } from "./fixtures/page-fixtures.js";
 import { randomUUID } from "crypto";
 
 pageTest.describe("Library with Workshop Context", () => {
