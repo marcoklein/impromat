@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.29.0
+
+### Minor Changes
+
+- fdb50f6: Rename Impromat titles to impromat.app
+
+### Patch Changes
+
+- fdb50f6: Cleanups
+- 9f6a4ef: Switch to vite js as a bundler
+
 ## 0.28.0
 
 ### Minor Changes
