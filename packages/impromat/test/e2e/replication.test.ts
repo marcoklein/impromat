@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "../component/fixtures/page-fixtures";
-import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page";
-import { e2ePageTest } from "./fixtures/e2e-page-fixtures";
+import { pageTest } from "../component/fixtures/page-fixtures.js";
+import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page.js";
+import { e2ePageTest } from "./fixtures/e2e-page-fixtures.js";
 
 const sessionId = Date.now();
 const uniqueWorkshopName = `test-${sessionId}-replication`;

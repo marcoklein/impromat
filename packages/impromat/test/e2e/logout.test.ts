@@ -1,5 +1,5 @@
-import { changePageAuthenticationCookie } from "./fixtures/change-page-authentication-cookie";
-import { e2ePageTest } from "./fixtures/e2e-page-fixtures";
+import { changePageAuthenticationCookie } from "./fixtures/change-page-authentication-cookie.js";
+import { e2ePageTest } from "./fixtures/e2e-page-fixtures.js";
 
 // TODO login functionality for e2e test is not implemented yet
 e2ePageTest.skip("Logout", () => {

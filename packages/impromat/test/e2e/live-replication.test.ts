@@ -1,8 +1,8 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "../component/fixtures/page-fixtures";
-import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page";
-import { WorkshopsDevPage } from "../component/fixtures/workshops-dev-page";
-import { e2ePageTest } from "./fixtures/e2e-page-fixtures";
+import { pageTest } from "../component/fixtures/page-fixtures.js";
+import { WorkshopDevPage } from "../component/fixtures/workshop-dev-page.js";
+import { WorkshopsDevPage } from "../component/fixtures/workshops-dev-page.js";
+import { e2ePageTest } from "./fixtures/e2e-page-fixtures.js";
 
 // TODO login functionality for e2e test is not implemented yet
 // e.g. see https://docs.cypress.io/guides/end-to-end-testing/google-authentication#Google-Project-and-Application-Setup
