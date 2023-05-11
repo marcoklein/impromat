@@ -7,7 +7,7 @@ pageTest.describe("Home Page", () => {
     // when
     await page.goto("/");
     // then
-    await expect(page.getByText(/Welcome to Impromat/)).toBeVisible();
+    await expect(page.getByText(/Welcome to impromat\.app/)).toBeVisible();
   });
 
   pageTest("should render jump pad if signed in", async ({ page, auth }) => {
