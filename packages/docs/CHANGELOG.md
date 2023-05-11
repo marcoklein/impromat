@@ -1,5 +1,11 @@
 # docs
 
+## 0.1.4
+
+### Patch Changes
+
+- fdb50f6: Cleanups
+
 ## 0.1.3
 
 ### Patch Changes
