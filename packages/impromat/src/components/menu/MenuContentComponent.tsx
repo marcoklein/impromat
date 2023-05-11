@@ -50,7 +50,7 @@ export const MenuContentComponent: React.FC = () => {
                 src="/assets/logo.svg"
                 alt="Impromat Logo"
               ></IonImg>
-              <IonText className="ion-margin-start">Impromat</IonText>
+              <IonText className="ion-margin-start">impromat.app</IonText>
             </div>
           </IonTitle>
           <IonButtons slot="end">

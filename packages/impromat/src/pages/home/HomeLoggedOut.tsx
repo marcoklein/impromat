@@ -67,7 +67,7 @@ export const HomeLoggedOut: React.FC = () => {
             >
               <ImpromatLogoComponent></ImpromatLogoComponent>
             </div>
-            <MainTitleComponent>Welcome to Impromat</MainTitleComponent>
+            <MainTitleComponent>Welcome to impromat.app</MainTitleComponent>
             <IonText color="dark">
               <h1>
                 App for planning, giving and sharing improvisational theatre

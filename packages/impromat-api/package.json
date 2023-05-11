@@ -23,7 +23,7 @@
     "test:watch": "yarn test --watch",
     "test:cov": "yarn test --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "codegen": "graphql-codegen",
+    "codegen": "graphql-codegen & yarn prisma:generate",
     "codegen:watch": "yarn codegen --watch",
     "copy-improbib": "mkdir -p assets && cp ../improbib/output/improbib.json ./assets/improbib.json",
     "docker-compose": "yarn workspace infrastructure docker-compose"
