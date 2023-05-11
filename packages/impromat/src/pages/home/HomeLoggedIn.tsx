@@ -56,7 +56,7 @@ export const HomeLoggedIn: React.FC = () => {
             >
               <ImpromatLogoComponent></ImpromatLogoComponent>
             </div>
-            <MainTitleComponent>Impromat</MainTitleComponent>
+            <MainTitleComponent>impromat.app</MainTitleComponent>
             <IonText color="dark"></IonText>
           </div>
         </div>
