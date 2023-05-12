@@ -1,5 +1,15 @@
 # impromat-app-renderer
 
+## 0.1.17
+
+### Patch Changes
+
+- Updated dependencies [bda3008]
+- Updated dependencies [bda3008]
+- Updated dependencies [bda3008]
+- Updated dependencies [bda3008]
+  - impromat@0.30.0
+
 ## 0.1.16
 
 ### Patch Changes
