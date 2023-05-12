@@ -36,7 +36,10 @@ pageTest.describe("Workshop Page", () => {
     // when
     await workshopPage.optionsLocator.click();
     await page.getByRole("button", { name: "Delete" }).click();
-    // TODO test for confirmation dialog
+    await page
+      .locator("ion-alert")
+      .getByRole("button", { name: "Delete" })
+      .click();
     // then
     await page.waitForURL("./workshop");
     await expect(page.getByText("Add Workshop")).toBeVisible();
