@@ -1,22 +1,13 @@
-import {
-  IonActionSheet,
-  IonButton,
-  IonCardContent,
-  IonIcon,
-  IonItem,
-  IonList,
-  IonPopover,
-} from "@ionic/react";
-import { close, ellipsisVertical, trash } from "ionicons/icons";
-import { useRef, useState } from "react";
+import { IonButton, IonCardContent } from "@ionic/react";
+import { useMemo } from "react";
 import { PreviewCard } from "../../../components/PreviewCard";
 import { WorkshopInfoList } from "../../../components/WorkshopInfoList";
+import { WorkshopOptionsMenu } from "../../../components/WorkshopOptionsMenu";
 import {
   FragmentType,
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
-import { useDeleteWorkshopMutation } from "../../../hooks/use-delete-workshop-mutation";
 import { routeWorkshop } from "../../../routes/shared-routes";
 
 const WorkshopPreviewItem_WorkshopFragment = graphql(`
@@ -28,7 +19,16 @@ const WorkshopPreviewItem_WorkshopFragment = graphql(`
     deleted
     name
     description
+    sections {
+      name
+      elements {
+        basedOn {
+          name
+        }
+      }
+    }
     ...WorkshopInfoList_Workshop
+    ...WorkshopOptionsMenu_Workshop
   }
 `);
 
@@ -43,16 +43,14 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
     WorkshopPreviewItem_WorkshopFragment,
     workshopFragment,
   );
-  const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState(false);
-  const popover = useRef<HTMLIonPopoverElement>(null);
 
-  const openPopover = (e: any) => {
-    popover.current!.event = e;
-    setIsOptionsMenuOpen(true);
-  };
-
-  const [, deleteWorkshopMutation] = useDeleteWorkshopMutation();
-
+  const elementNames = useMemo(
+    () =>
+      workshop.sections.flatMap((section) =>
+        section.elements.map((element) => element.basedOn.name),
+      ),
+    [workshop],
+  );
   return (
     <PreviewCard
       infoListElement={
@@ -68,52 +66,19 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
           >
             Open
           </IonButton>
-          <IonButton fill="clear" onClick={(event) => openPopover(event)}>
-            <IonIcon icon={ellipsisVertical}></IonIcon>
-          </IonButton>
+          <WorkshopOptionsMenu
+            workshopFragment={workshop}
+          ></WorkshopOptionsMenu>
         </>
       }
     >
       <IonCardContent>{workshop.description}</IonCardContent>
-      {/* TODO create reusable options menu that is responsive and can switch between an action sheet and a popover version + hide buttons in the menu if necessary */}
-      <IonPopover
-        className="ion-hide"
-        ref={popover}
-        isOpen={isOptionsMenuOpen}
-        onDidDismiss={() => setIsOptionsMenuOpen(false)}
-      >
-        <IonList lines="none">
-          <IonItem onClick={() => {}}>Test</IonItem>
-          <IonItem onClick={() => {}}>Test</IonItem>
-        </IonList>
-      </IonPopover>
-      <IonActionSheet
-        // className="ion-hide-xl-up"
-        isOpen={isOptionsMenuOpen}
-        header={workshop.name}
-        buttons={[
-          {
-            text: "Delete",
-            role: "destructive",
-            icon: trash,
-            handler: () => {
-              deleteWorkshopMutation({ id: workshop.id });
-            },
-            data: {
-              action: "delete",
-            },
-          },
-          {
-            text: "Cancel",
-            role: "cancel",
-            icon: close,
-            data: {
-              action: "cancel",
-            },
-          },
-        ]}
-        onDidDismiss={() => setIsOptionsMenuOpen(false)}
-      ></IonActionSheet>
+      {elementNames.length === 0 && (
+        <IonCardContent>Open the workshop to add elements.</IonCardContent>
+      )}
+      {elementNames.length > 0 && (
+        <IonCardContent>Games: {elementNames.join(", ")}</IonCardContent>
+      )}
     </PreviewCard>
   );
 };

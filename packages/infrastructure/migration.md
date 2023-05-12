@@ -23,3 +23,9 @@ Run migration
 ```
 DATABASE_URL=... yarn dlx ts-node prisma/db-json-migration.ts
 ```
+
+Unexpose database
+
+```
+yarn dokku postgres:unexpose impromat-db-development
+```

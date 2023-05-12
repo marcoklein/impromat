@@ -13,9 +13,8 @@ import { add } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
-import { CardGridComponent } from "../../components/CardGridComponent";
-import { CardGridRowComponent } from "../../components/CardGridRowComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { PreviewCardGrid } from "../../components/PreviewCardGrid";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
@@ -106,15 +105,14 @@ export const WorkshopsPage: React.FC = () => {
           reexecuteQuery={reexecuteWorkshopsQuery}
         >
           {availableWorkshops?.length ? (
-            <CardGridComponent>
-              {availableWorkshops.map((workshop) => (
-                <CardGridRowComponent key={workshop.id}>
-                  <WorkshopPreviewCard
-                    workshopFragment={workshop}
-                  ></WorkshopPreviewCard>
-                </CardGridRowComponent>
-              ))}
-            </CardGridComponent>
+            <PreviewCardGrid
+              items={availableWorkshops}
+              itemContent={(_index, workshop) => (
+                <WorkshopPreviewCard
+                  workshopFragment={workshop}
+                ></WorkshopPreviewCard>
+              )}
+            ></PreviewCardGrid>
           ) : (
             <WorkshopCreateFirstComponent
               onCreateWorkshopClick={() => createWorkshopClick()}
