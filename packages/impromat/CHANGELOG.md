@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.30.0
+
+### Minor Changes
+
+- bda3008: Standardized options menu for workshop
+- bda3008: Show games in workshop preview card
+- bda3008: Responsive options menu
+
+### Patch Changes
+
+- bda3008: Element grids and workshop grid share same component
+
 ## 0.29.0
 
 ### Minor Changes
