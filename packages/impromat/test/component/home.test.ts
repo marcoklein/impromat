@@ -2,12 +2,12 @@ import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Home Page", () => {
-  pageTest("should render home page if not signed in", async ({ page }) => {
+  pageTest("should render home page if not signed in", async ({ homePage }) => {
     // given
     // when
-    await page.goto("/");
+    await homePage.goto();
     // then
-    await expect(page.getByText(/Welcome to impromat\.app/)).toBeVisible();
+    await expect(homePage.homePageTitleLocator).toBeVisible();
   });
 
   pageTest("should render jump pad if signed in", async ({ page, auth }) => {

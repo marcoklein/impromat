@@ -2,6 +2,7 @@ import { test as base } from "@playwright/test";
 import { AccountDevPage } from "./account-dev-page.js";
 import { AuthFixture } from "./auth-fixture.js";
 import { FavoriteElementsDevPage } from "./favorite-elements-dev-page.js";
+import { HomeDevPage } from "./home-dev-page.js";
 import { LibraryDevPage } from "./library-dev-page.js";
 import { LibraryElementDevPage } from "./library-element-dev-page.js";
 import { WorkshopDevPage } from "./workshop-dev-page.js";
@@ -9,6 +10,7 @@ import { WorkshopElementDevPage } from "./workshop-element-dev-page.js";
 import { WorkshopsDevPage } from "./workshops-dev-page.js";
 
 type PageFixtures = {
+  homePage: HomeDevPage;
   workshopPage: WorkshopDevPage;
   workshopsPage: WorkshopsDevPage;
   workshopElementPage: WorkshopElementDevPage;
@@ -20,6 +22,9 @@ type PageFixtures = {
 };
 
 const test = base.extend<PageFixtures>({
+  homePage: async ({ page }, use) => {
+    await use(new HomeDevPage(page));
+  },
   workshopPage: async ({ page }, use) => {
     await use(new WorkshopDevPage(page));
   },
