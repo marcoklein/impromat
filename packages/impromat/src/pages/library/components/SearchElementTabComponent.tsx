@@ -1,7 +1,6 @@
 import { IonContent, IonList, IonProgressBar } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
 import { useState } from "react";
-import { VirtuosoGrid } from "react-virtuoso";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
@@ -9,8 +8,7 @@ import { graphql } from "../../../graphql-client";
 import { routeLibraryElement } from "../library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
-import { LoadingCard } from "../../../components/LoadingCard";
-import "./SearchElementTabCompenent.css";
+import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
 
 const SearchElementTabQuery = graphql(`
   query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {
@@ -84,32 +82,13 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
           )}
         {searchElementsQueryResult.data &&
           searchElementsQueryResult.data.searchElements.length > 0 && (
-            <VirtuosoGrid
-              className="ion-content-scroll-host"
-              style={{ height: "100%" }}
-              totalCount={searchElementsQueryResult.data.searchElements.length}
+            <PreviewCardGrid
               endReached={() => {
                 if (!searchElementsQueryResult.stale) {
                   setPageNumber((currentPageNumber) => currentPageNumber + 1);
                 }
               }}
-              overscan={200}
-              data={searchElementsQueryResult.data.searchElements ?? []}
-              itemClassName="item-class-name"
-              listClassName="list-class-name"
-              components={{
-                ScrollSeekPlaceholder: (props) => (
-                  <div
-                    style={{
-                      height: props.height,
-                      width: props.width,
-                      padding: "4px",
-                    }}
-                  >
-                    <LoadingCard></LoadingCard>
-                  </div>
-                ),
-              }}
+              items={searchElementsQueryResult.data.searchElements ?? []}
               itemContent={(_index, searchResult) => (
                 <ElementPreviewCard
                   routerLink={routeLibraryElement(searchResult.element.id, {
@@ -119,11 +98,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                   elementSearchResultFragment={searchResult}
                 ></ElementPreviewCard>
               )}
-              scrollSeekConfiguration={{
-                enter: (velocity) => Math.abs(velocity) > 500,
-                exit: (velocity) => Math.abs(velocity) < 30,
-              }}
-            ></VirtuosoGrid>
+            ></PreviewCardGrid>
           )}
         {!searchElementsQueryResult.fetching &&
           !searchElementsQueryResult.stale &&

@@ -3,8 +3,6 @@ import { add } from "ionicons/icons";
 import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
 import { useQuery } from "urql";
-import { CardGridComponent } from "../../../components/CardGridComponent";
-import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
@@ -14,6 +12,7 @@ import {
   routeLibraryElement,
 } from "../library-routes";
 import { CustomElementsEmptyComponent } from "./CustomElementsEmptyComponent";
+import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
 
 const CustomElementsTab_WorkshopFragment = graphql(`
   fragment CustomElementsTab_WorkshopFragment on User {
@@ -52,8 +51,6 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
   const user = getFragmentData(CustomElementsTab_WorkshopFragment, data?.me);
   const customElements = user?.elements;
 
-  // const { customElements, isFetching } = useCustomElements();
-
   useEffect(() => {
     logger("location=%s", location.pathname);
     logger("state=%O", location.state);
@@ -79,17 +76,16 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
       ) : !customElements?.length ? (
         <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
       ) : (
-        <CardGridComponent>
-          {customElements.map((element) => (
-            <CardGridRowComponent key={element.id}>
-              <ElementPreviewCard
-                key={element.id}
-                routerLink={routeLibraryElement(element.id, { workshopId })}
-                elementFragment={element}
-              ></ElementPreviewCard>
-            </CardGridRowComponent>
-          ))}
-        </CardGridComponent>
+        <PreviewCardGrid
+          items={customElements}
+          itemContent={(_index, element) => (
+            <ElementPreviewCard
+              key={element.id}
+              routerLink={routeLibraryElement(element.id, { workshopId })}
+              elementFragment={element}
+            ></ElementPreviewCard>
+          )}
+        ></PreviewCardGrid>
       )}
     </>
   );

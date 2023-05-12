@@ -22,22 +22,16 @@ import {
 } from "@ionic/react";
 import { add, checkmark, globe, lockClosed } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
-import { EditableItemComponent } from "../../components/EditableItemComponent";
 import { Icon } from "../../components/Icon";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { WorkshopOptionsMenu } from "../../components/WorkshopOptionsMenu";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { useDeleteWorkshopMutation } from "../../hooks/use-delete-workshop-mutation";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
-import { routeWorkshops } from "../../routes/shared-routes";
 import { routeLibrary } from "../library/library-routes";
-import {
-  WorkshopActionSheetComponent,
-  WorkshopActionTypes,
-} from "./components/WorkshopActionSheetComponent";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 
 const WorkshopPage_Workshop = graphql(`
@@ -59,6 +53,7 @@ const WorkshopPage_Workshop = graphql(`
     }
     ...WorkshopElementsComponent_Workshop
     ...WorkshopActionSheet_Workshop
+    ...WorkshopOptionsMenu_Workshop
   }
 `);
 
@@ -72,7 +67,6 @@ const WorkshopByIdQuery = graphql(`
 
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
-  const history = useHistory();
 
   const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
     query: WorkshopByIdQuery,
@@ -86,9 +80,6 @@ export const WorkshopPage: React.FC = () => {
   );
   const [isReorderingElements, setIsReorderingElements] = useState(false);
 
-  const [, deleteWorkshopMutation] = useDeleteWorkshopMutation();
-
-  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const [, updateWorkshopOrder] = useMutation(
     graphql(`
       mutation UpdateWorkshopItemOrder($input: UpdateWorkshopItemOrder!) {
@@ -98,6 +89,7 @@ export const WorkshopPage: React.FC = () => {
       }
     `),
   );
+  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
 
   const logger = useComponentLogger("WorkshopPage");
 
@@ -107,16 +99,6 @@ export const WorkshopPage: React.FC = () => {
 
   const [presentInputDialog] = useInputDialog();
 
-  const changeWorkshopName = (newName: string) => {
-    if (!workshop) return;
-    updateWorkshopMutation({ input: { id: workshop.id, name: newName } });
-  };
-  const changeWorkshopDescription = (newDescription: string) => {
-    if (!workshop) return;
-    updateWorkshopMutation({
-      input: { id: workshop.id, description: newDescription },
-    });
-  };
   const changeSectionsOrder = (fromIndex: number, toIndex: number) => {
     if (!workshop) return;
     logger("Change section order from %d to %d", fromIndex, toIndex);
@@ -128,28 +110,7 @@ export const WorkshopPage: React.FC = () => {
         setIsReorderingElements(false);
       }, 2000);
     });
-    // });
     return true;
-  };
-
-  const onDeleteWorkshop = useCallback(() => {
-    logger("not implemented");
-    // TODO add confirmation dialog
-    deleteWorkshopMutation({ id: workshopId }).then(() => {
-      history.push(routeWorkshops(), { direction: "back" });
-      logger("Deleted workshop");
-    });
-  }, [deleteWorkshopMutation, history, logger, workshopId]);
-
-  const onRenameWorkshop = () => {
-    if (!workshop) return;
-    presentInputDialog({
-      header: "Rename",
-      initialText: workshop.name,
-      emptyInputMessage: "Please type a workshop name.",
-      onAccept: (text) => changeWorkshopName(text),
-    });
-    logger("Showing rename Workshop dialog");
   };
 
   const onCreateSection = () => {
@@ -170,32 +131,6 @@ export const WorkshopPage: React.FC = () => {
       },
     });
     logger("Showing add section dialog");
-  };
-
-  const onChangeDescription = () => {
-    logger("not implemented");
-    if (!workshop) return;
-    presentInputDialog({
-      initialText: workshop.description ?? "",
-      isMultiline: true,
-      header: "Description",
-      onAccept: (text) => changeWorkshopDescription(text),
-    });
-    logger("Showing change description dialog");
-  };
-
-  const handleWorkshopEvent = (event: WorkshopActionTypes) => {
-    switch (event) {
-      case "rename":
-        onRenameWorkshop();
-        break;
-      case "changeDescription":
-        onChangeDescription();
-        break;
-      case "delete":
-        onDeleteWorkshop();
-        break;
-    }
   };
 
   const onPublicClick = useCallback(
@@ -312,10 +247,10 @@ export const WorkshopPage: React.FC = () => {
                       )}
                     </IonContent>
                   </IonModal>
-                  <WorkshopActionSheetComponent
+                  <WorkshopOptionsMenu
+                    goBackAfterDeletion
                     workshopFragment={workshop}
-                    onEvent={(event) => handleWorkshopEvent(event)}
-                  ></WorkshopActionSheetComponent>
+                  ></WorkshopOptionsMenu>
                 </>
               )}
             </IonButtons>
@@ -344,27 +279,18 @@ export const WorkshopPage: React.FC = () => {
                     </IonFabList>
                   </IonFab>
                 )}
-                <EditableItemComponent
-                  disableEditing={true}
-                  text={workshop.name}
-                  displayName="Workshop Title"
-                  onChangeText={(newName) => changeWorkshopName(newName)}
-                  lines="none"
-                  renderText={(text) => (
-                    <IonLabel className="ion-text-wrap">
-                      <h1 style={{ padding: 0, margin: 0 }}>{text}</h1>
-                    </IonLabel>
-                  )}
-                ></EditableItemComponent>
+
+                <IonItem lines="none">
+                  <IonLabel className="ion-text-wrap">
+                    <h1 style={{ padding: 0, margin: 0 }}>{workshop.name}</h1>
+                  </IonLabel>
+                </IonItem>
                 {workshop.description && (
-                  <EditableItemComponent
-                    disableEditing={true}
-                    displayName="Workshop Description"
-                    text={workshop.description}
-                    isMultiline={true}
-                    onChangeText={(text) => changeWorkshopDescription(text)}
-                    lines="none"
-                  ></EditableItemComponent>
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-wrap">
+                      {workshop.description}
+                    </IonLabel>
+                  </IonItem>
                 )}
 
                 {workshop.sections.length === 1 &&

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { CardGridComponent } from "../../../components/CardGridComponent";
-import { CardGridRowComponent } from "../../../components/CardGridRowComponent";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
+import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
 import {
   FragmentType,
   getFragmentData,
@@ -42,16 +41,15 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
     logger("favoriteElements.length=%s", favoriteElements.length);
   }, [logger, favoriteElements]);
   return (
-    <CardGridComponent>
-      {favoriteElements.map(({ element }) => (
-        <CardGridRowComponent key={element.id}>
-          <ElementPreviewCard
-            key={element.id}
-            routerLink={routeLibraryElement(element.id, { workshopId })}
-            elementFragment={element}
-          ></ElementPreviewCard>
-        </CardGridRowComponent>
-      ))}
-    </CardGridComponent>
+    <PreviewCardGrid
+      items={favoriteElements}
+      itemContent={(_index, { element }) => (
+        <ElementPreviewCard
+          key={element.id}
+          routerLink={routeLibraryElement(element.id, { workshopId })}
+          elementFragment={element}
+        ></ElementPreviewCard>
+      )}
+    ></PreviewCardGrid>
   );
 };
