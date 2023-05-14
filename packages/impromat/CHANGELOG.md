@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.31.0
+
+### Minor Changes
+
+- 83081db: Users can define user names
+
+### Patch Changes
+
+- Updated dependencies [83081db]
+  - impromat-api@0.5.0
+
 ## 0.30.0
 
 ### Minor Changes

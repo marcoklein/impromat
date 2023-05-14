@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.5.0
+
+### Minor Changes
+
+- 83081db: Users can define user names
+
 ## 0.4.0
 
 ### Minor Changes
