@@ -8,7 +8,7 @@ import { routeHome, routePrivacyPolicy } from "../../../routes/shared-routes";
 
 interface ContainerProps {}
 
-export const AccountSignInComponent: React.FC<ContainerProps> = () => {
+export const AccountSignIn: React.FC<ContainerProps> = () => {
   const login = useGoogleLogin();
   return (
     <div

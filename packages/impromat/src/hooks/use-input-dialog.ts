@@ -8,11 +8,14 @@ interface DialogProps {
   message?: string;
   initialText?: string;
   buttonText?: string;
-  onAccept: (text: string) => boolean | void | Promise<void>;
+  onAccept: (text: string) => boolean | void | Promise<void> | Promise<boolean>;
   isMultiline?: boolean;
   maxlength?: number;
   placeholder?: string;
   emptyInputMessage?: string;
+  inputRegex?: RegExp;
+  inputRegexMessage?: string;
+  minlength?: number;
 }
 
 export function useInputDialog() {
@@ -37,6 +40,9 @@ export function useInputDialog() {
     message,
     emptyInputMessage,
     placeholder,
+    inputRegex,
+    minlength,
+    inputRegexMessage,
   }: DialogProps) => {
     history.push({
       pathname: history.location.pathname,
@@ -48,7 +54,7 @@ export function useInputDialog() {
       buttons: [
         {
           text: buttonText ?? "Save",
-          handler: (value: { text: string }) => {
+          handler: async (value: { text: string }) => {
             if (emptyInputMessage && value.text.trim().length <= 0) {
               presentToast({
                 color: "primary",
@@ -57,8 +63,25 @@ export function useInputDialog() {
               });
               return false;
             }
+            if (minlength && value.text.trim().length < minlength) {
+              presentToast({
+                color: "primary",
+                message: `Input at least ${minlength} characters.`,
+                duration: 2000,
+              });
+              return false;
+            }
+            if (inputRegex && !inputRegex.test(value.text)) {
+              presentToast({
+                color: "primary",
+                message:
+                  inputRegexMessage ?? "Input contains invalid characters.",
+                duration: 2000,
+              });
+              return false;
+            }
             if (onAccept) {
-              return onAccept(value.text);
+              return await onAccept(value.text);
             } else {
               console.warn(
                 "No onChangeText handler specified. If you edit an item you might want to specify one.",

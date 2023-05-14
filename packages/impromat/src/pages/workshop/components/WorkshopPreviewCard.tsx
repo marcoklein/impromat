@@ -2,7 +2,7 @@ import { IonButton, IonCardContent } from "@ionic/react";
 import { useMemo } from "react";
 import { PreviewCard } from "../../../components/PreviewCard";
 import { WorkshopInfoList } from "../../../components/WorkshopInfoList";
-import { WorkshopOptionsMenu } from "../../../components/WorkshopOptionsMenu";
+import { WorkshopOptionsMenu } from "../WorkshopOptionsMenu";
 import {
   FragmentType,
   getFragmentData,

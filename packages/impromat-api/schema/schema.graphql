@@ -197,6 +197,7 @@ type Mutation {
   updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
   createElement(input: CreateElementInput!): Element!
   updateElement(input: UpdateElementInput!): Element!
+  updateUser(input: UpdateUserInput!): User!
 }
 
 input UpdateUserFavoriteElementInput {
@@ -304,4 +305,9 @@ input UpdateElementInput {
   markdown: String
   orderIndex: Int
   id: ID!
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String!
 }
