@@ -14,14 +14,14 @@ pageTest.describe("Account Page", () => {
 
   pageTest(
     "should render the account page if signed in",
-    async ({ accountPage, page }) => {
+    async ({ accountPage }) => {
       // given
       await accountPage.goto();
       // when
       await accountPage.login();
       await accountPage.goto();
       // then
-      await accountPage.expectToolbarTextToBe("Account");
+      await accountPage.expectToolbarTextToBe("Profile");
     },
   );
 
@@ -33,6 +33,6 @@ pageTest.describe("Account Page", () => {
     await accountPage.logout();
     await accountPage.goto();
     // then
-    await accountPage.expectToolbarTextToBe("Account");
+    await accountPage.expectToolbarTextToBe("Profile");
   });
 });

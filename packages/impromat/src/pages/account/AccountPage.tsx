@@ -37,6 +37,7 @@ export const AccountPage: React.FC = () => {
 
   const [queryResult, reexecuteQuery] = useQuery({
     query: AccountPage_Query,
+    pause: !isLoggedIn,
   });
 
   const user = useMemo(() => queryResult.data?.me, [queryResult]);
@@ -59,27 +60,27 @@ export const AccountPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <PageContentLoaderComponent
-          queryResult={queryResult}
-          reexecuteQuery={reexecuteQuery}
-        >
-          {isLoading && <IonSpinner></IonSpinner>}
-          {!isLoading && isLoggedIn && user && (
+        {isLoading && <IonSpinner></IonSpinner>}
+        {!isLoading && isLoggedIn && user && (
+          <PageContentLoaderComponent
+            queryResult={queryResult}
+            reexecuteQuery={reexecuteQuery}
+          >
             <AccountSignedIn userFragment={user}></AccountSignedIn>
-          )}
-          {!isLoading &&
-            isNotLoggedIn &&
-            (!googleLoginHref ? (
-              <>
-                <InfoItemComponent
-                  color="warning"
-                  message="You need an active internet connection to login."
-                ></InfoItemComponent>
-              </>
-            ) : (
-              <AccountSignIn></AccountSignIn>
-            ))}
-        </PageContentLoaderComponent>
+          </PageContentLoaderComponent>
+        )}
+        {!isLoading &&
+          isNotLoggedIn &&
+          (!googleLoginHref ? (
+            <>
+              <InfoItemComponent
+                color="warning"
+                message="You need an active internet connection to login."
+              ></InfoItemComponent>
+            </>
+          ) : (
+            <AccountSignIn></AccountSignIn>
+          ))}
       </IonContent>
     </IonPage>
   );
