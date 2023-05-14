@@ -1,14 +1,14 @@
-import { IonAlert } from "@ionic/react";
 import { close, create, pencil, trash } from "ionicons/icons";
 import { useState } from "react";
 import { useHistory } from "react-router";
-import { FragmentType, getFragmentData, graphql } from "../graphql-client";
-import { useComponentLogger } from "../hooks/use-component-logger";
-import { useDeleteWorkshopMutation } from "../hooks/use-delete-workshop-mutation";
-import { useInputDialog } from "../hooks/use-input-dialog";
-import { useUpdateWorkshopMutation } from "../hooks/use-update-workshop-mutation";
-import { routeWorkshops } from "../routes/shared-routes";
-import { OptionsMenu } from "./OptionsMenu";
+import { FragmentType, getFragmentData, graphql } from "../../graphql-client";
+import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useDeleteWorkshopMutation } from "../../hooks/use-delete-workshop-mutation";
+import { useInputDialog } from "../../hooks/use-input-dialog";
+import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
+import { routeWorkshops } from "../../routes/shared-routes";
+import { ConfirmationAlert } from "../../components/ConfirmationAlert";
+import { OptionsMenu } from "../../components/OptionsMenu";
 
 const WorkshopOptionsMenu_Workshop = graphql(`
   fragment WorkshopOptionsMenu_Workshop on Workshop {
@@ -114,30 +114,21 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           },
         ]}
       ></OptionsMenu>
-      <IonAlert
+      <ConfirmationAlert
         header="Delete Workshop?"
+        confirmText="Delete"
         isOpen={isWorkshopDeleteAlertOpen}
-        buttons={[
-          {
-            text: "Cancel",
-            role: "cancel",
-          },
-          {
-            text: "Delete",
-            role: "destructive",
-            handler: () => {
-              logger("Deletion confirmed");
-              deleteWorkshopMutation({ id: workshop.id }).then(() => {
-                logger("Deleted workshop");
-                if (goBackAfterDeletion) {
-                  history.push(routeWorkshops(), { direction: "back" });
-                }
-              });
-            },
-          },
-        ]}
-        onDidDismiss={() => setIsWorkshopDeleteAlertOpen(false)}
-      ></IonAlert>
+        onConfirm={() => {
+          logger("Deletion confirmed");
+          deleteWorkshopMutation({ id: workshop.id }).then(() => {
+            logger("Deleted workshop");
+            if (goBackAfterDeletion) {
+              history.push(routeWorkshops(), { direction: "back" });
+            }
+          });
+        }}
+        onOpenChange={setIsWorkshopDeleteAlertOpen}
+      ></ConfirmationAlert>
     </>
   );
 };

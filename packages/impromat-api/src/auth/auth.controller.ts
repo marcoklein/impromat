@@ -1,8 +1,6 @@
-import { Controller, Get, HttpStatus, Query, Req, Res } from '@nestjs/common';
-import { sign } from 'cookie-signature';
+import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Session } from 'express-session';
-import { environment } from 'src/environment';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { GoogleOAuth2ClientService } from './google-oauth2-client-provider';
 import { UserSessionData } from './user-session-data';

@@ -29,6 +29,5 @@ export class AccountDevPage extends DevPage {
       .locator("ion-alert")
       .getByRole("button", { name: "Logout" })
       .click();
-    // await page.waitForNavigation();
   }
 }

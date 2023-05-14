@@ -26,7 +26,7 @@ import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { Icon } from "../../components/Icon";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
-import { WorkshopOptionsMenu } from "../../components/WorkshopOptionsMenu";
+import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
@@ -52,7 +52,6 @@ const WorkshopPage_Workshop = graphql(`
       }
     }
     ...WorkshopElementsComponent_Workshop
-    ...WorkshopActionSheet_Workshop
     ...WorkshopOptionsMenu_Workshop
   }
 `);

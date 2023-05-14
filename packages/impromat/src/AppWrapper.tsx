@@ -53,6 +53,9 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
           },
           updates: {
             Mutation: {
+              updateUser(_result, _args, cache, _info) {
+                cache.invalidate("Query", "me");
+              },
               createElement(_result, _args, cache, _info) {
                 // invalidate me query because user elements are fetched via me.elements
                 // that might change in the future through (1) a custom MeUser type or (2) a User with id query.

@@ -11,12 +11,6 @@ const config: CodegenConfig = {
         fragmentMasking: { unmaskFunctionName: "getFragmentData" },
       },
     },
-    "./src/schema-introspection.json": {
-      plugins: ["introspection"],
-      config: {
-        minify: true,
-      },
-    },
   },
 };
 

@@ -35,6 +35,15 @@ describe('me', () => {
     }
   `);
 
+  const mutation = graphql(`
+    mutation UpdateUserMutation($input: UpdateUserInput!) {
+      updateUser(input: $input) {
+        id
+        name
+      }
+    }
+  `);
+
   describe('happy', () => {
     it('should return active user for valid session with all relations', async () => {
       // given
@@ -50,6 +59,32 @@ describe('me', () => {
       expect(me.workshops).toEqual([]);
       expect(me.elements).toEqual([]);
       expect(me.favoriteElements).toEqual([]);
+    });
+
+    it('should update user name', async () => {
+      // given
+      api.impersonateActiveUser();
+      const newName = 'test';
+      // when
+      const response = await api.graphqlRequest(mutation, {
+        input: { id: api.userId, name: newName },
+      });
+      // then
+      expect(response.errors).toBeUndefined();
+      expect(response.data?.updateUser.name).toBe('test');
+    });
+
+    it('should not allow user name with @', async () => {
+      // given
+      api.impersonateActiveUser();
+      const newName = 'qwfp@';
+      // when
+      const response = await api.graphqlRequest(mutation, {
+        input: { id: api.userId, name: newName },
+      });
+      // then
+      expect(response.data).toBeNull();
+      expect(response.errors).toBeDefined();
     });
   });
 
