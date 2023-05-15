@@ -24,4 +24,4 @@ packageVersion=$(cd $WORKDIR/../impromat && echo $(cat ./package.json | grep ver
 echo "packageVersion=$packageVersion"
 appVersion="$packageVersion-$(($RANDOM % 999))"
 echo "appVersion=$appVersion"
-dokku docker-options:add $appName build "--build-arg VITE_APP_VERSION=$packageVersion-$RANDOM"
+dokku docker-options:add $appName build "--build-arg VITE_VERSION=$packageVersion-$RANDOM"
