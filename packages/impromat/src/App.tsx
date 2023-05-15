@@ -5,6 +5,7 @@ import { Route } from "react-router";
 import { MenuComponent } from "./components/MenuComponent";
 import { ProtectedRouteComponent } from "./components/ProtectedRoute";
 import { AboutPage } from "./pages/AboutPage";
+import { HomePage } from "./pages/HomePage";
 import { LegalPage } from "./pages/LegalPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { AccountPage } from "./pages/account/AccountPage";
@@ -30,7 +31,6 @@ import {
   routeWorkshopElement,
   routeWorkshops,
 } from "./routes/shared-routes";
-import { HomePage } from "./pages/HomePage";
 
 export const App: React.FC = () => {
   return (
