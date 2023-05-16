@@ -9,8 +9,8 @@ export default defineConfig({
     legacy(),
     VitePWA({
       manifest: {
-        short_name: "Impromat.app",
-        name: "Impromat.app",
+        short_name: "Impromat",
+        name: "Impromat",
         icons: [
           {
             src: "assets/icon/favicon.png",
@@ -37,7 +37,7 @@ export default defineConfig({
         background_color: "#ffffff",
       },
       filename: "service-worker.js",
-      registerType: "autoUpdate",
+      registerType: "prompt",
       includeManifestIcons: true,
     }),
   ],
