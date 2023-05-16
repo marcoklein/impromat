@@ -9,8 +9,15 @@ import reportWebVitals from "./reportWebVitals";
 if (process.env.NODE_ENV === "development") {
   localStorage.setItem("debug", "impromat:*");
 }
+const intervalMS = 60 * 1000;
 
 const updateSW = registerSW({
+  onRegistered(registration) {
+    registration &&
+      setInterval(() => {
+        registration.update();
+      }, intervalMS);
+  },
   onNeedRefresh() {
     if (window.confirm("New version available. Install now?")) {
       updateSW(true);
