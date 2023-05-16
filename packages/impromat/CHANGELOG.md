@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.31.1
+
+### Patch Changes
+
+- 5735100: Fix update via prompt with new Vite PWA plugin
+
 ## 0.31.0
 
 ### Minor Changes
