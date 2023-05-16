@@ -12,10 +12,22 @@ if (process.env.NODE_ENV === "development") {
 const intervalMS = 60 * 1000;
 
 const updateSW = registerSW({
-  onRegistered(registration) {
+  onRegisteredSW(swUrl, registration) {
     registration &&
-      setInterval(() => {
-        registration.update();
+      setInterval(async () => {
+        if (!(!registration.installing && navigator)) return;
+
+        if ("connection" in navigator && !navigator.onLine) return;
+
+        const resp = await fetch(swUrl, {
+          cache: "no-store",
+          headers: {
+            cache: "no-store",
+            "cache-control": "no-cache",
+          },
+        });
+
+        if (resp?.status === 200) await registration.update();
       }, intervalMS);
   },
   onNeedRefresh() {
