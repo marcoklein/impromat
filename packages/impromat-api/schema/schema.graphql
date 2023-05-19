@@ -66,6 +66,11 @@ type Workshop {
   True, if liked by the logged in user. Undefined, if there is no user logged in.
   """
   isLiked: Boolean
+
+  """
+  Convenience field to determine if the owner of the workshop is the logged in user.
+  """
+  isOwnerMe: Boolean
 }
 
 type UserLikedWorkshop {

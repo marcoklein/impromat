@@ -19,6 +19,7 @@ const WorkshopPreviewItem_WorkshopFragment = graphql(`
     deleted
     name
     description
+    canEdit
     sections {
       name
       elements {
@@ -66,9 +67,11 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
           >
             Open
           </IonButton>
-          <WorkshopOptionsMenu
-            workshopFragment={workshop}
-          ></WorkshopOptionsMenu>
+          {workshop.canEdit && (
+            <WorkshopOptionsMenu
+              workshopFragment={workshop}
+            ></WorkshopOptionsMenu>
+          )}
         </>
       }
     >

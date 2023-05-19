@@ -12,6 +12,7 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
+  IonLoading,
   IonMenuButton,
   IonModal,
   IonPage,
@@ -20,18 +21,26 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add, checkmark, globe, lockClosed } from "ionicons/icons";
+import {
+  add,
+  checkmark,
+  globe,
+  heart,
+  heartOutline,
+  lockClosed,
+} from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { Icon } from "../../components/Icon";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
-import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { useUpdateUserLikedWorkshopMutation } from "../../hooks/use-update-liked-workshop-mutation";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeLibrary } from "../library/library-routes";
+import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";
 
@@ -46,6 +55,7 @@ const WorkshopPage_Workshop = graphql(`
     name
     description
     canEdit
+    isLiked
     sections {
       name
       elements {
@@ -151,6 +161,17 @@ export const WorkshopPage: React.FC = () => {
   const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
+  const [updateUserLikedWorkshopResult, updateUserLikedWorkshop] =
+    useUpdateUserLikedWorkshopMutation();
+
+  const toggleWorkshopLike = useCallback(() => {
+    if (!workshop) throw Error("no workshop");
+    const newLiked = !workshop.isLiked;
+    updateUserLikedWorkshop({
+      input: { isLiked: newLiked, workshopId: workshop.id },
+    });
+  }, [updateUserLikedWorkshop, workshop]);
+
   return (
     <>
       <IonPage>
@@ -166,6 +187,19 @@ export const WorkshopPage: React.FC = () => {
               <IonProgressBar type="indeterminate"></IonProgressBar>
             )}
             <IonButtons slot="end">
+              {workshop && (
+                <IonButton onClick={() => toggleWorkshopLike()}>
+                  <IonIcon
+                    icon={workshop.isLiked ? heart : heartOutline}
+                    color="red-5"
+                    slot="icon-only"
+                  ></IonIcon>
+                  <IonLoading
+                    isOpen={updateUserLikedWorkshopResult.fetching}
+                    message="Updating Like"
+                  />
+                </IonButton>
+              )}
               {workshop && workshop.canEdit && (
                 <>
                   <IonButton onClick={() => setIsSharingModalOpen(true)}>

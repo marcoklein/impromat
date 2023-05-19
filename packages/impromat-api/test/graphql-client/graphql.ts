@@ -341,6 +341,8 @@ export type Workshop = {
   id: Scalars['ID'];
   /** True, if liked by the logged in user. Undefined, if there is no user logged in. */
   isLiked?: Maybe<Scalars['Boolean']>;
+  /** Convenience field to determine if the owner of the workshop is the logged in user. */
+  isOwnerMe?: Maybe<Scalars['Boolean']>;
   isPublic: Scalars['Boolean'];
   name: Scalars['String'];
   owner: User;

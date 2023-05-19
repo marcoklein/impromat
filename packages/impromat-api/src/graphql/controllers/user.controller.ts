@@ -37,7 +37,17 @@ export class MeResolver {
 
   @ResolveField()
   async workshops(@Parent() user: User) {
-    return this.findUserById(user.id).workshops();
+    return this.prismaService.workshop.findMany({
+      where: {
+        OR: [
+          { ownerId: user.id },
+          { userLikedWorkshops: { some: { userId: user.id } } },
+        ],
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
   }
 
   @Query(() => User, {

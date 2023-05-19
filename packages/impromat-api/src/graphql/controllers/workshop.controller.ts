@@ -59,6 +59,25 @@ export class WorkshopController {
       .owner();
   }
 
+  @UseGuards(GraphqlAuthGuard)
+  @ResolveField(() => Boolean)
+  async isOwnerMe(
+    @Parent() workshop: Workshop,
+    @SessionUserId() userSessionId: string,
+  ) {
+    if (userSessionId) {
+      const owner = await this.workshopService
+        .findWorkshopById(userSessionId, workshop.id)
+        .owner();
+      if (owner) {
+        return owner.id === userSessionId;
+      } else {
+        return false;
+      }
+    }
+    return null;
+  }
+
   @ResolveField(() => Boolean)
   async canEdit(
     @Parent() workshop: Workshop,
