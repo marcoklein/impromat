@@ -174,6 +174,7 @@ export const LibraryElementPage: React.FC = () => {
               <IonSelect
                 labelPlacement="floating"
                 label="Add to Workshop"
+                interface="action-sheet"
                 aria-label="Select workshop to add"
                 value={addToWorkshopSelectId}
                 onIonChange={(e) => {
