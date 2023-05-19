@@ -35,9 +35,9 @@ const documents = {
     "\n  mutation UpdateElementMutation($input: UpdateElementInput!) {\n    updateElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateElementMutationDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      id\n    }\n  }\n": types.CreateElementMutationDocument,
     "\n      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {\n        workshop(id: $id) {\n          sections {\n            id\n          }\n        }\n      }\n    ": types.LibraryCreateCustomElementWorkshopQueryDocument,
-    "\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      ...LibraryElement_Element\n    }\n  }\n": types.LibraryElementQueryDocument,
+    "\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      ...LibraryElement_Element\n    }\n    ...LibraryElementPage_Query\n  }\n": types.LibraryElementQueryDocument,
     "\n  fragment LibraryElement_Element on Element {\n    id\n    name\n    isFavorite\n    ...Element_Element\n    ...ElementFavoriteIcon_Element\n  }\n": types.LibraryElement_ElementFragmentDoc,
-    "\n  query WorkshopSectionsQuery($id: ID!) {\n    workshop(id: $id) {\n      sections {\n        id\n      }\n    }\n  }\n": types.WorkshopSectionsQueryDocument,
+    "\n  fragment LibraryElementPage_Query on Query {\n    me {\n      workshops {\n        id\n        name\n        sections {\n          id\n        }\n      }\n    }\n  }\n": types.LibraryElementPage_QueryFragmentDoc,
     "\n  fragment CustomElementsTab_WorkshopFragment on User {\n    elements {\n      id\n      name\n      ...ElementPreviewItem_Element\n    }\n  }\n": types.CustomElementsTab_WorkshopFragmentFragmentDoc,
     "\n  query CustomElementsTab_Query {\n    me {\n      ...CustomElementsTab_WorkshopFragment\n    }\n  }\n": types.CustomElementsTab_QueryDocument,
     "\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n": types.ElementFavoriteIcon_ElementFragmentDoc,
@@ -166,7 +166,7 @@ export function graphql(source: "\n      query LibraryCreateCustomElementWorksho
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      ...LibraryElement_Element\n    }\n  }\n"): (typeof documents)["\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      ...LibraryElement_Element\n    }\n  }\n"];
+export function graphql(source: "\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      ...LibraryElement_Element\n    }\n    ...LibraryElementPage_Query\n  }\n"): (typeof documents)["\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      ...LibraryElement_Element\n    }\n    ...LibraryElementPage_Query\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -174,7 +174,7 @@ export function graphql(source: "\n  fragment LibraryElement_Element on Element 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query WorkshopSectionsQuery($id: ID!) {\n    workshop(id: $id) {\n      sections {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  query WorkshopSectionsQuery($id: ID!) {\n    workshop(id: $id) {\n      sections {\n        id\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  fragment LibraryElementPage_Query on Query {\n    me {\n      workshops {\n        id\n        name\n        sections {\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment LibraryElementPage_Query on Query {\n    me {\n      workshops {\n        id\n        name\n        sections {\n          id\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

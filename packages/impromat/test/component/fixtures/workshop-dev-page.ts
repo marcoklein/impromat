@@ -50,8 +50,7 @@ export class WorkshopDevPage extends DevPage {
     const page = this.page;
     await this.gotoElementFromSearch();
     await page
-      .locator('ion-button:has-text("Add to Workshop")')
-      .getByRole("button")
+      .getByRole("button", { name: "Add to workshop", exact: true })
       .click();
   }
 

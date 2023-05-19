@@ -28,9 +28,9 @@ pageTest.describe("Library with Workshop Context", () => {
       // when
       await libraryPage.gotoFirstElementFromSearch();
       // then
-      await expect(
-        page.getByRole("button", { name: "Add to Workshop" }),
-      ).toBeVisible();
+      await page
+        .getByRole("button", { name: "Add to workshop", exact: true })
+        .click();
     },
   );
 
@@ -53,7 +53,9 @@ pageTest.describe("Library with Workshop Context", () => {
       await workshopPage.openLibrary();
       await libraryPage.libraryTabLocator().click();
       await libraryPage.openElementCard(uniqueElementName);
-      await page.getByRole("button", { name: "Add to Workshop" }).click();
+      await page
+        .getByRole("button", { name: "Add to workshop", exact: true })
+        .click();
       await page.waitForTimeout(500); // db has to update
       // then
       expect(

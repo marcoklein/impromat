@@ -65,7 +65,8 @@ export const WorkshopsPage: React.FC = () => {
   const createWorkshopClick = useCallback(() => {
     presentInputDialog({
       header: "Workshop Name",
-      message: "Enter a name for your workshop. You can change it later.",
+      message: "Enter a name for your workshop. You can change it later:",
+      placeholder: "Workshop name...",
       emptyInputMessage: "Please enter a name for your workshop.",
       onAccept: async (text) => {
         const { error, data } = await createWorkshopMutation({
