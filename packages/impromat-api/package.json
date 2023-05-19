@@ -19,6 +19,7 @@
     "test:load-env": "dotenv -c test --",
     "test": "yarn test:backend-up && yarn codegen && yarn test:load-env jest",
     "test:backend-up": "yarn docker-compose up database --wait && yarn test:prepare-db",
+    "test:backend-restart": "yarn docker-compose down && yarn test:backend-up",
     "test:prepare-db": "yarn test:load-env yarn prisma migrate reset --skip-generate --force",
     "test:watch": "yarn test --watch",
     "test:cov": "yarn test --coverage",

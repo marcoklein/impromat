@@ -10,18 +10,15 @@ import {
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { UpdateUserInput } from 'src/dtos/inputs/update-user-input';
 import { UserFavoriteElementDto } from 'src/dtos/types/user-favorite-element.dto';
-import { User, UserRelations } from 'src/dtos/types/user.dto';
+import { UserLikedWorkshopDto } from 'src/dtos/types/user-liked-workshop.dto';
+import { User, UserDtoComputedFields } from 'src/dtos/types/user.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { UserFavoriteElementsService } from 'src/graphql/services/user-favorite-elements.service';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
 export class MeResolver {
-  constructor(
-    @Inject(PrismaService) private prismaService: PrismaService,
-    private userFavoriteElementsService: UserFavoriteElementsService,
-  ) {}
+  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   @ResolveField()
   async elements(@Parent() user: User) {
@@ -31,6 +28,11 @@ export class MeResolver {
   @ResolveField(() => [UserFavoriteElementDto])
   async favoriteElements(@Parent() user: User) {
     return this.findUserById(user.id).favoriteElements();
+  }
+
+  @ResolveField(() => [UserLikedWorkshopDto])
+  async likedWorkshops(@Parent() user: User) {
+    return this.findUserById(user.id).likedWorkshops();
   }
 
   @ResolveField()
@@ -43,7 +45,7 @@ export class MeResolver {
   })
   async me(
     @SessionUserId() userId: string,
-  ): Promise<Omit<User, UserRelations> | null> {
+  ): Promise<Omit<User, UserDtoComputedFields> | null> {
     return this.findUserById(userId);
   }
 
@@ -52,7 +54,7 @@ export class MeResolver {
     @Args('input')
     updateUserInput: UpdateUserInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<User, UserRelations>> {
+  ): Promise<Omit<User, UserDtoComputedFields>> {
     if (updateUserInput.id !== sessionUserId) {
       throw new Error('Not Authorized');
     }

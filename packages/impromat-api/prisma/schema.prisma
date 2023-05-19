@@ -62,6 +62,20 @@ model UserFavoriteElement {
   @@id([userId, elementId])
 }
 
+model UserLikedWorkshop {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  version   Int      @default(0)
+
+  userId     String
+  workshopId String
+
+  workshop Workshop @relation(fields: [workshopId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@id([userId, workshopId])
+}
+
 model User {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now())
@@ -74,6 +88,7 @@ model User {
   googleSubscriptionId String? @unique
 
   favoriteElements UserFavoriteElement[]
+  likedWorkshops   UserLikedWorkshop[]
   workshops        Workshop[]
   elements         Element[]
 }
@@ -91,8 +106,9 @@ model Workshop {
 
   ownerId String
 
-  sections WorkshopSection[]
-  owner    User              @relation(fields: [ownerId], references: [id])
+  sections           WorkshopSection[]
+  owner              User                @relation(fields: [ownerId], references: [id])
+  userLikedWorkshops UserLikedWorkshop[]
 }
 
 model WorkshopSection {

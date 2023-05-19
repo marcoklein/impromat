@@ -12,7 +12,7 @@ import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
-import { Workshop, WorkshopRelations } from 'src/dtos/types/workshop.dto';
+import { Workshop, WorkshopOmittedFields } from 'src/dtos/types/workshop.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import {
   CreateWorkshopInput,
@@ -23,6 +23,17 @@ import { WorkshopService } from '../services/workshop.service';
 @Resolver(Workshop)
 export class WorkshopController {
   constructor(private workshopService: WorkshopService) {}
+
+  @ResolveField(() => Boolean)
+  async isLiked(
+    @Parent() workshop: Workshop,
+    @SessionUserId() userSessionId: string,
+  ) {
+    const elementFavoriteRelations = await this.workshopService
+      .findWorkshopById(userSessionId, workshop.id)
+      .userLikedWorkshops({ where: { userId: userSessionId } });
+    return elementFavoriteRelations && elementFavoriteRelations.length > 0;
+  }
 
   @ResolveField(() => [WorkshopSection])
   async sections(
@@ -67,7 +78,7 @@ export class WorkshopController {
   async workshop(
     @SessionUserId() userId: string | undefined,
     @Args('id', { type: () => ID }) id: string,
-  ): Promise<Omit<Workshop, WorkshopRelations> | null> {
+  ): Promise<Omit<Workshop, WorkshopOmittedFields> | null> {
     return this.workshopService.findWorkshopById(userId, id);
   }
 
@@ -75,7 +86,7 @@ export class WorkshopController {
   @Query(() => [Workshop])
   async workshops(
     @SessionUserId() userId: string,
-  ): Promise<Omit<Workshop, WorkshopRelations>[] | null> {
+  ): Promise<Omit<Workshop, WorkshopOmittedFields>[] | null> {
     return this.workshopService.findWorkshopsFromUser(userId);
   }
 
@@ -85,7 +96,7 @@ export class WorkshopController {
     @Args('input')
     createWorkshopInput: CreateWorkshopInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<Workshop, WorkshopRelations>> {
+  ): Promise<Omit<Workshop, WorkshopOmittedFields>> {
     return this.workshopService.createWorkshop(
       sessionUserId,
       createWorkshopInput,
@@ -97,7 +108,7 @@ export class WorkshopController {
   async updateWorkshop(
     @Args('input') updateWorkshopInput: UpdateWorkshopInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<Workshop, WorkshopRelations>> {
+  ): Promise<Omit<Workshop, WorkshopOmittedFields>> {
     return await this.workshopService.updateWorkshop(
       sessionUserId,
       updateWorkshopInput,

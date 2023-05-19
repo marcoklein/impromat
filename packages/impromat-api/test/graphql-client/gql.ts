@@ -25,6 +25,10 @@ const documents = {
     "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateUserFavoriteElementDocument,
     "\n  query MeFavoriteElements {\n    me {\n      favoriteElements {\n        element {\n          id\n        }\n      }\n    }\n  }\n": types.MeFavoriteElementsDocument,
     "\n        query ElementIsFavorite($id: ID!) {\n          element(id: $id) {\n            isFavorite\n          }\n        }\n      ": types.ElementIsFavoriteDocument,
+    "\n  mutation UpdateUserFavoriteWorkshop($input: UpdateUserLikedWorkshopInput!) {\n    updateUserLikedWorkshop(input: $input) {\n      id\n    }\n  }\n": types.UpdateUserFavoriteWorkshopDocument,
+    "\n  query MeFavoriteWorkshops {\n    me {\n      likedWorkshops {\n        workshop {\n          id\n        }\n      }\n    }\n  }\n": types.MeFavoriteWorkshopsDocument,
+    "\n          query WorkshopIsFavorite($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        ": types.WorkshopIsFavoriteDocument,
+    "\n          query WorkshopIsLiked($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        ": types.WorkshopIsLikedDocument,
     "\n  fragment WorkshopElementFields on WorkshopElement {\n    id\n    version\n    note\n  }\n": types.WorkshopElementFieldsFragmentDoc,
     "\n  query WorkshopElementByIdQuery($id: ID!) {\n    workshopElement(id: $id) {\n      ...WorkshopElementFields\n    }\n  }\n": types.WorkshopElementByIdQueryDocument,
     "\n  fragment WorkshopFields on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    description\n    canEdit\n    sections {\n      id\n      version\n      createdAt\n      updatedAt\n      deleted\n\n      orderIndex\n      name\n      color\n      isCollapsed\n\n      elements {\n        id\n        note\n        basedOn {\n          id\n          name\n        }\n      }\n      workshop {\n        id\n      }\n    }\n    owner {\n      id\n    }\n  }\n": types.WorkshopFieldsFragmentDoc,
@@ -100,6 +104,22 @@ export function graphql(source: "\n  query MeFavoriteElements {\n    me {\n     
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n        query ElementIsFavorite($id: ID!) {\n          element(id: $id) {\n            isFavorite\n          }\n        }\n      "): (typeof documents)["\n        query ElementIsFavorite($id: ID!) {\n          element(id: $id) {\n            isFavorite\n          }\n        }\n      "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateUserFavoriteWorkshop($input: UpdateUserLikedWorkshopInput!) {\n    updateUserLikedWorkshop(input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateUserFavoriteWorkshop($input: UpdateUserLikedWorkshopInput!) {\n    updateUserLikedWorkshop(input: $input) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query MeFavoriteWorkshops {\n    me {\n      likedWorkshops {\n        workshop {\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query MeFavoriteWorkshops {\n    me {\n      likedWorkshops {\n        workshop {\n          id\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n          query WorkshopIsFavorite($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        "): (typeof documents)["\n          query WorkshopIsFavorite($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n          query WorkshopIsLiked($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        "): (typeof documents)["\n          query WorkshopIsLiked($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

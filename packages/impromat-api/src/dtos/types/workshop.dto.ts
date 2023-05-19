@@ -4,7 +4,9 @@ import { BaseDto } from './base.dto';
 import { User } from './user.dto';
 import { WorkshopSection } from './workshop-section.dto';
 
-export type WorkshopRelations = 'owner' | 'sections';
+type WorkshopComputedFields = 'isLiked';
+type WorkshopRelations = 'owner' | 'sections';
+export type WorkshopOmittedFields = WorkshopRelations | WorkshopComputedFields;
 
 @ObjectType()
 export class Workshop extends BaseDto {
@@ -28,4 +30,11 @@ export class Workshop extends BaseDto {
 
   @Field(() => Boolean)
   isPublic: boolean;
+
+  @Field(() => Boolean, {
+    nullable: true,
+    description:
+      'True, if liked by the logged in user. Undefined, if there is no user logged in.',
+  })
+  isLiked: Nullable<boolean>;
 }
