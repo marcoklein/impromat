@@ -1,5 +1,12 @@
 # impromat-api
 
+## 0.6.0
+
+### Minor Changes
+
+- c458aca: Allow liking of workshops
+- c458aca: Liked user workshops
+
 ## 0.5.0
 
 ### Minor Changes

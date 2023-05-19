@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.32.0
+
+### Minor Changes
+
+- c458aca: Allow liking of workshops
+- 56d80bb: Make workshop name input text more concise
+- 56d80bb: Add to element to any workshop from selection of available workshops
+
+### Patch Changes
+
+- Updated dependencies [c458aca]
+- Updated dependencies [c458aca]
+  - impromat-api@0.6.0
+
 ## 0.31.1
 
 ### Patch Changes
