@@ -188,7 +188,12 @@ export const WorkshopPage: React.FC = () => {
             )}
             <IonButtons slot="end">
               {workshop && (
-                <IonButton onClick={() => toggleWorkshopLike()}>
+                <IonButton
+                  onClick={() => toggleWorkshopLike()}
+                  aria-label={
+                    workshop?.isLiked ? "Remove from likes." : "Add to likes."
+                  }
+                >
                   <IonIcon
                     icon={workshop.isLiked ? heart : heartOutline}
                     color="red-5"
