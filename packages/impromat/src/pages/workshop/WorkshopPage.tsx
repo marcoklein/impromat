@@ -188,16 +188,14 @@ export const WorkshopPage: React.FC = () => {
             )}
             <IonButtons slot="end">
               {workshop && (
-                <IonButton
-                  onClick={() => toggleWorkshopLike()}
-                  aria-label={
-                    workshop?.isLiked ? "Remove from likes." : "Add to likes."
-                  }
-                >
+                <IonButton onClick={() => toggleWorkshopLike()}>
                   <IonIcon
                     icon={workshop.isLiked ? heart : heartOutline}
                     color="red-5"
                     slot="icon-only"
+                    aria-label={
+                      workshop?.isLiked ? "Remove from likes." : "Add to likes."
+                    }
                   ></IonIcon>
                   <IonLoading
                     isOpen={updateUserLikedWorkshopResult.fetching}
