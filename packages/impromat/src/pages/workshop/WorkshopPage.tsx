@@ -33,6 +33,7 @@ import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeLibrary } from "../library/library-routes";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
+import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -66,6 +67,10 @@ const WorkshopByIdQuery = graphql(`
 
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_LAST_WORKSHOP_ID, workshopId);
+  }, [workshopId]);
 
   const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
     query: WorkshopByIdQuery,

@@ -14,6 +14,12 @@ Install all dependencies:
 yarn install
 ```
 
+Generate necessary code
+
+```
+yarn codegen
+```
+
 Start the development server for frontend and backend:
 
 ```
