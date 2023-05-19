@@ -34,10 +34,10 @@ export class WorkshopDevPage extends DevPage {
       .getByRole("link", { name: "Element" });
 
     this.addToLikesButtonLocator = page.getByRole("button", {
-      name: "Add to favorites.",
+      name: "Add to likes.",
     });
     this.removeFromLikesButtonLocator = page.getByRole("button", {
-      name: "Remove from favorites.",
+      name: "Remove from likes.",
     });
   }
 
