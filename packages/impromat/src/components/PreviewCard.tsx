@@ -19,7 +19,13 @@ export const PreviewCard: React.FC<ContainerProps> = ({
       style={{ height: "100%", display: "flex", flexDirection: "column" }}
     >
       <div style={{ overflow: "hidden", flexGrow: 1 }}>
-        <div className="ion-margin-end ion-margin-top ion-float-right">
+        <div
+          className="ion-margin-end ion-margin-top ion-float-right"
+          style={{
+            maxWidth: "50%",
+            textOverflow: "ellipsis",
+          }}
+        >
           {infoListElement}
         </div>
         <IonCardHeader>

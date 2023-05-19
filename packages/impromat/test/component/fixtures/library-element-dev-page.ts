@@ -2,8 +2,8 @@ import { Locator, Page } from "@playwright/test";
 import { DevPage } from "./dev-page.js";
 
 export class LibraryElementDevPage extends DevPage {
-  addToFavoritesButtonLocator: Locator;
-  removeFromFavoritesButtonLocator: Locator;
+  readonly addToFavoritesButtonLocator: Locator;
+  readonly removeFromFavoritesButtonLocator: Locator;
 
   constructor(page: Page) {
     super(page);

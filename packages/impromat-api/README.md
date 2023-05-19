@@ -55,6 +55,14 @@ Generate Prisma artifacts (database client):
 yarn prisma:generate
 ```
 
+If you change the database schema, generate a migration script via:
+
+```
+yarn prisma:migrate
+```
+
+> Restart test infrastructure via `yarn test:backend-restart`.
+
 Generate a new migration script without applying it:
 
 ```

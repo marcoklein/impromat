@@ -30,8 +30,10 @@ const WorkshopFields_WorkshopFragment = graphql(`
 
 const WorkshopsQuery = graphql(`
   query WorkshopsQuery {
-    workshops {
-      ...WorkshopFields_Workshop
+    me {
+      workshops {
+        ...WorkshopFields_Workshop
+      }
     }
   }
 `);
@@ -56,7 +58,7 @@ export const WorkshopsPage: React.FC = () => {
 
   const availableWorkshops = getFragmentData(
     WorkshopFields_WorkshopFragment,
-    workshopsQueryResult.data?.workshops,
+    workshopsQueryResult.data?.me.workshops,
   );
 
   const history = useHistory();

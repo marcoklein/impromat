@@ -7,6 +7,7 @@ import { ElementSearchController } from './controllers/element-search.controller
 import { ElementController } from './controllers/element.controller';
 import { UserFavoriteElementController } from './controllers/user-favorite-element.controller';
 import { UserFavoriteElementsController } from './controllers/user-favorite-elements.controller';
+import { UserLikedWorkshopController } from './controllers/user-liked-workshop.controller';
 import { MeResolver } from './controllers/user.controller';
 import { WorkshopElementController } from './controllers/workshop-element.controller';
 import { WorkshopSectionController } from './controllers/workshop-section.controller';
@@ -14,6 +15,7 @@ import { WorkshopController } from './controllers/workshop.controller';
 import { ElementSearchService } from './services/element-search.service';
 import { ElementService } from './services/element.service';
 import { UserFavoriteElementsService } from './services/user-favorite-elements.service';
+import { UserLikedWorkshopsService } from './services/user-liked-workshops.service';
 import { UserSessionService } from './services/user-session.service';
 import { WorkshopElementService } from './services/workshop-element.service';
 import { WorkshopService } from './services/workshop.service';
@@ -41,6 +43,7 @@ import { WorkshopService } from './services/workshop.service';
     PrismaService,
     UserFavoriteElementController,
     UserFavoriteElementsController,
+    UserLikedWorkshopController,
     UserFavoriteElementsService,
     ElementSearchController,
     WorkshopController,
@@ -53,6 +56,7 @@ import { WorkshopService } from './services/workshop.service';
     UserSessionService,
     WorkshopService,
     ElementSearchService,
+    UserLikedWorkshopsService,
   ],
 })
 export class GraphqlModule {}
