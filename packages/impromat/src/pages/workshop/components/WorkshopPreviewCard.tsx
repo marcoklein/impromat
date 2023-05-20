@@ -1,14 +1,15 @@
 import { IonButton, IonCardContent } from "@ionic/react";
 import { useMemo } from "react";
+import { useHistory } from "react-router";
 import { PreviewCard } from "../../../components/PreviewCard";
 import { WorkshopInfoList } from "../../../components/WorkshopInfoList";
-import { WorkshopOptionsMenu } from "../WorkshopOptionsMenu";
 import {
   FragmentType,
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
 import { routeWorkshop } from "../../../routes/shared-routes";
+import { WorkshopOptionsMenu } from "../WorkshopOptionsMenu";
 
 const WorkshopPreviewItem_WorkshopFragment = graphql(`
   fragment WorkshopPreviewItem_Workshop on Workshop {
@@ -45,6 +46,8 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
     workshopFragment,
   );
 
+  const history = useHistory();
+
   const elementNames = useMemo(
     () =>
       workshop.sections.flatMap((section) =>
@@ -54,6 +57,9 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
   );
   return (
     <PreviewCard
+      onCardClick={() => {
+        history.push(routeWorkshop(workshop.id));
+      }}
       infoListElement={
         <WorkshopInfoList workshopFragment={workshop}></WorkshopInfoList>
       }
