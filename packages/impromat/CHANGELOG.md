@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.33.0
+
+### Minor Changes
+
+- 6bcd0d1: Click on preview cards for elements and workshops to open them
+- 6bcd0d1: Loading indicator on bottom of lists
+
+### Patch Changes
+
+- 6bcd0d1: Fix cached custom element
+- 6bcd0d1: Restore scroll position
+
 ## 0.32.0
 
 ### Minor Changes
