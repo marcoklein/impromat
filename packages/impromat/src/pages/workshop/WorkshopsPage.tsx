@@ -109,6 +109,7 @@ export const WorkshopsPage: React.FC = () => {
         >
           {availableWorkshops?.length ? (
             <PreviewCardGrid
+              scrollStoreKey="workshops-page"
               isFetching={false}
               items={availableWorkshops}
               itemContent={(_index, workshop) => (

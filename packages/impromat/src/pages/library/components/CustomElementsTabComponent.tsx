@@ -77,6 +77,7 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
         <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
       ) : (
         <PreviewCardGrid
+          scrollStoreKey="custom-elements-tab-component"
           isFetching={isFetching}
           items={customElements}
           itemContent={(_index, element) => (

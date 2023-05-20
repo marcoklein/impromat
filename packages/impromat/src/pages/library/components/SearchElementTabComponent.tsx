@@ -7,7 +7,7 @@ import {
   IonProgressBar,
 } from "@ionic/react";
 import { add, informationCircle } from "ionicons/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
@@ -19,6 +19,7 @@ import {
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
 
 const SearchElementTabQuery = graphql(`
   query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {
@@ -42,6 +43,7 @@ interface ContainerProps {
 export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
+  const logger = useComponentLogger("SearchElementTabComponent");
   const [restoredSearchText] = useState(
     window.localStorage.getItem("lastSearch") ?? "",
   );
@@ -60,6 +62,25 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
       take: itemsPerPage,
     },
   });
+
+  useEffect(() => {
+    const actualSkip = searchElementsQueryResult.data?.searchElements.length;
+    if (!actualSkip) return;
+    const actualPageNumber = Math.floor(actualSkip / itemsPerPage) - 1;
+    logger(
+      "actual page number=%s, current page number=%s",
+      actualPageNumber,
+      pageNumber,
+    );
+    if (pageNumber < actualPageNumber) {
+      logger(
+        "Correcting page number (actualPageNumber=%s, currentPageNumber=%s) as cached entities got retrieved.",
+        actualPageNumber,
+        pageNumber,
+      );
+      setPageNumber(actualPageNumber);
+    }
+  }, [pageNumber, searchElementsQueryResult, logger]);
 
   return (
     <>
@@ -101,13 +122,19 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         {searchElementsQueryResult.data &&
           searchElementsQueryResult.data.searchElements.length > 0 && (
             <PreviewCardGrid
+              scrollStoreKey="search-element-tab-component"
               isFetching={
                 searchElementsQueryResult.fetching ||
                 searchElementsQueryResult.stale
               }
               endReached={() => {
+                logger(
+                  "end reached, queryResult.stale=%s",
+                  searchElementsQueryResult.stale,
+                );
                 if (!searchElementsQueryResult.stale) {
                   setPageNumber((currentPageNumber) => currentPageNumber + 1);
+                  logger("setting page number to %s", pageNumber + 1);
                 }
               }}
               items={searchElementsQueryResult.data.searchElements ?? []}
