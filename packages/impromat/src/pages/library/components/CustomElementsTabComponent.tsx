@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
+import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
@@ -12,7 +13,6 @@ import {
   routeLibraryElement,
 } from "../library-routes";
 import { CustomElementsEmptyComponent } from "./CustomElementsEmptyComponent";
-import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
 
 const CustomElementsTab_WorkshopFragment = graphql(`
   fragment CustomElementsTab_WorkshopFragment on User {
@@ -77,6 +77,8 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
         <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
       ) : (
         <PreviewCardGrid
+          scrollStoreKey="custom-elements-tab-component"
+          isFetching={isFetching}
           items={customElements}
           itemContent={(_index, element) => (
             <ElementPreviewCard

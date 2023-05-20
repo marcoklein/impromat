@@ -27,8 +27,8 @@ WHERE (ws.id, we."orderIndex") IN (
 ;
 
 -- # of workshops per user
-SELECT u.id, count(*) AS workshopcount FROM "Workshop" w
-INNER JOIN "User" u ON u.id = w."ownerId"
+SELECT u.id, MAX(u."createdAt") AS usercreated, MAX(w."updatedAt") AS workshopupdated, count(w.id) AS workshopcount FROM "Workshop" w
+RIGHT OUTER JOIN "User" u ON u.id = w."ownerId"
 GROUP BY u.id 
 ORDER BY workshopcount DESC;
 
