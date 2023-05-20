@@ -1,3 +1,5 @@
+TBD: use `MAX()` for getting latest `updatedAt` for workshop.
+
 ```ts
 // Try to sort workshops by "updatedAt" with liked elements
 const userId = user.id;
