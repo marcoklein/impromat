@@ -109,6 +109,7 @@ export const WorkshopsPage: React.FC = () => {
         >
           {availableWorkshops?.length ? (
             <PreviewCardGrid
+              isFetching={false}
               items={availableWorkshops}
               itemContent={(_index, workshop) => (
                 <WorkshopPreviewCard

@@ -1,11 +1,21 @@
-import { IonContent, IonList, IonProgressBar } from "@ionic/react";
-import { informationCircle } from "ionicons/icons";
+import {
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonList,
+  IonProgressBar,
+} from "@ionic/react";
+import { add, informationCircle } from "ionicons/icons";
 import { useState } from "react";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import { graphql } from "../../../graphql-client";
-import { routeLibraryElement } from "../library-routes";
+import {
+  routeLibraryCreateCustomElement,
+  routeLibraryElement,
+} from "../library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
@@ -68,6 +78,14 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         )}
       </div>
       <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton
+            color="primary"
+            routerLink={routeLibraryCreateCustomElement({ workshopId })}
+          >
+            <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+        </IonFab>
         {!searchElementsQueryResult.stale &&
           !searchElementsQueryResult.fetching &&
           !searchElementsQueryResult.data?.searchElements.length &&
@@ -83,6 +101,10 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         {searchElementsQueryResult.data &&
           searchElementsQueryResult.data.searchElements.length > 0 && (
             <PreviewCardGrid
+              isFetching={
+                searchElementsQueryResult.fetching ||
+                searchElementsQueryResult.stale
+              }
               endReached={() => {
                 if (!searchElementsQueryResult.stale) {
                   setPageNumber((currentPageNumber) => currentPageNumber + 1);

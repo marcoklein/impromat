@@ -42,6 +42,7 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
   }, [logger, favoriteElements]);
   return (
     <PreviewCardGrid
+      isFetching={false}
       items={favoriteElements}
       itemContent={(_index, { element }) => (
         <ElementPreviewCard
