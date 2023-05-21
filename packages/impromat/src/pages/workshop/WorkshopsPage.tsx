@@ -10,7 +10,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { add, filter } from "ionicons/icons";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
@@ -20,6 +20,7 @@ import { getFragmentData, graphql } from "../../graphql-client";
 import { UserWorkshopsFilterInput } from "../../graphql-client/graphql";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { usePersistedState } from "../../hooks/use-persisted-state";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 
@@ -53,35 +54,14 @@ export const WorkshopsPage: React.FC = () => {
 
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
 
-  function safelyLoadFromLocalStorage<
-    T extends Record<keyof T, boolean | number | string>,
-  >(key: string, fallback: Required<T>) {
-    // TODO refactor into general local storage persistence function
-    try {
-      const value = localStorage.getItem(key);
-      if (!value) return fallback;
-      const loadedValue = JSON.parse(value) as T;
-      if (
-        JSON.stringify(Object.keys(fallback)) !==
-        JSON.stringify(Object.keys(loadedValue))
-      ) {
-        console.log("cached value mismatch");
-        localStorage.removeItem(key);
-        return fallback;
-      }
-    } catch {
-      localStorage.removeItem(key);
-    }
-    return fallback;
-  }
-
   const [userWorkshopsFilterInput, setUserWorkshopsFilterInput] =
-    useState<UserWorkshopsFilterInput>(
-      safelyLoadFromLocalStorage("user-workshops-filter-input", {
+    usePersistedState<UserWorkshopsFilterInput>({
+      key: "user-workshops-filter-input",
+      defaultValue: {
         liked: true,
         owned: true,
-      }),
-    );
+      },
+    });
 
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: WorkshopsQuery,
@@ -178,7 +158,7 @@ export const WorkshopsPage: React.FC = () => {
               }}
             >
               <div>
-                <p>Filters return no workshops</p>
+                <p>The current filter selection returns no workshops</p>
                 <IonButton
                   expand="full"
                   onClick={() => {
