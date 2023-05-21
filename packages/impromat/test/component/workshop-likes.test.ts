@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures.js";
 import { randomUUID } from "crypto";
+import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Workshop Likes", () => {
   pageTest(
@@ -19,7 +19,7 @@ pageTest.describe("Workshop Likes", () => {
       await workshopsPage.goto();
       // then
       await expect(page.getByText(uniqueWorkshopName)).toBeVisible();
-      await expect(page.getByText("liked")).toBeVisible();
+      await expect(page.getByText("Heart liked")).toBeVisible();
     },
   );
 });
