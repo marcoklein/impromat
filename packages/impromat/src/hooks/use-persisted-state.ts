@@ -11,13 +11,7 @@ import { useLogger } from "./use-logger";
  */
 export function usePersistedState<
   T extends Partial<Record<keyof T, boolean | number | string | undefined>>,
->({
-  key,
-  defaultValue,
-}: {
-  key: string;
-  defaultValue: Required<T>;
-}): [T, (valueToPersist: T) => void] {
+>(key: string, defaultValue: Required<T>): [T, (valueToPersist: T) => void] {
   const logger = useLogger("usePersistedState");
   const [state, setState] = useState<T>(() => {
     logger("key=%s: loading initial state", key);

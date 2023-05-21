@@ -55,12 +55,9 @@ export const WorkshopsPage: React.FC = () => {
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
 
   const [userWorkshopsFilterInput, setUserWorkshopsFilterInput] =
-    usePersistedState<UserWorkshopsFilterInput>({
-      key: "user-workshops-filter-input",
-      defaultValue: {
-        liked: true,
-        owned: true,
-      },
+    usePersistedState<UserWorkshopsFilterInput>("user-workshops-filter-input", {
+      liked: true,
+      owned: true,
     });
 
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
