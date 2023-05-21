@@ -50,7 +50,7 @@ const LibraryElement_Element = graphql(`
 const LibraryElementPage_Query = graphql(`
   fragment LibraryElementPage_Query on Query {
     me {
-      workshops {
+      workshops(input: { owned: true }) {
         id
         name
         sections {

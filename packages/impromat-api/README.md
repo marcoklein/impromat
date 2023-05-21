@@ -69,7 +69,7 @@ Generate a new migration script without applying it:
 yarn prisma migrate dev --create-only
 ```
 
-## API Naming Conventions
+## API Conventions
 
 ### Queries
 
@@ -79,6 +79,30 @@ Use `where` statements to filter query results.
 query element(where: {title: "test"}) {
   id
 }
+```
+
+### Default values
+
+Use `defaultValue` where applicable to avoid `isNullable` fields. With this, clients see default values for e.g. filters.
+
+E.g. in code:
+
+```ts
+// ...
+@Args('input', {
+  type: () => UserWorkshopsFilterInput,
+  defaultValue: { liked: true, owned: true },
+})
+input: UserWorkshopsFilterInput,
+// ...
+```
+
+Generated GraphQL:
+
+```graphql
+# ...
+workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
+# ...
 ```
 
 ### Mutations

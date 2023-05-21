@@ -85,7 +85,9 @@ type User {
   updatedAt: DateTime!
   version: Int!
   deleted: Boolean!
-  workshops: [Workshop!]!
+
+  """All workshops that this user has access to."""
+  workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
 
   """Elements owned by this user."""
   elements: [Element!]!
@@ -94,6 +96,14 @@ type User {
 
   """Public display name of the user."""
   name: String
+}
+
+"""Filter workshops of user."""
+input UserWorkshopsFilterInput {
+  liked: Boolean! = true
+
+  """Filter for workshops that are owned by the user."""
+  owned: Boolean! = true
 }
 
 type Element {

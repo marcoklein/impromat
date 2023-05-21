@@ -9,13 +9,15 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add } from "ionicons/icons";
-import { useCallback, useMemo } from "react";
+import { add, filter } from "ionicons/icons";
+import { useCallback, useMemo, useState } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { PreviewCardGrid } from "../../components/PreviewCardGrid";
+import { WorkshopsFilterBar } from "../../components/WorkshopsFilterBar";
 import { getFragmentData, graphql } from "../../graphql-client";
+import { UserWorkshopsFilterInput } from "../../graphql-client/graphql";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
@@ -29,9 +31,9 @@ const WorkshopFields_WorkshopFragment = graphql(`
 `);
 
 const WorkshopsQuery = graphql(`
-  query WorkshopsQuery {
+  query WorkshopsQuery($userWorkshopsFilterInput: UserWorkshopsFilterInput) {
     me {
-      workshops {
+      workshops(input: $userWorkshopsFilterInput) {
         ...WorkshopFields_Workshop
       }
     }
@@ -50,9 +52,43 @@ export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
 
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
+
+  function safelyLoadFromLocalStorage<
+    T extends Record<keyof T, boolean | number | string>,
+  >(key: string, fallback: Required<T>) {
+    // TODO refactor into general local storage persistence function
+    try {
+      const value = localStorage.getItem(key);
+      if (!value) return fallback;
+      const loadedValue = JSON.parse(value) as T;
+      if (
+        JSON.stringify(Object.keys(fallback)) !==
+        JSON.stringify(Object.keys(loadedValue))
+      ) {
+        console.log("cached value mismatch");
+        localStorage.removeItem(key);
+        return fallback;
+      }
+    } catch {
+      localStorage.removeItem(key);
+    }
+    return fallback;
+  }
+
+  const [userWorkshopsFilterInput, setUserWorkshopsFilterInput] =
+    useState<UserWorkshopsFilterInput>(
+      safelyLoadFromLocalStorage("user-workshops-filter-input", {
+        liked: true,
+        owned: true,
+      }),
+    );
+
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: WorkshopsQuery,
     context,
+    variables: {
+      userWorkshopsFilterInput,
+    },
   });
   const [, createWorkshopMutation] = useMutation(CreateWorkshopMutation);
 
@@ -100,6 +136,18 @@ export const WorkshopsPage: React.FC = () => {
             </IonButton>
           </IonButtons>
         </IonToolbar>
+        <WorkshopsFilterBar
+          filterInput={userWorkshopsFilterInput}
+          onFilterInputChange={(filterInput) => {
+            console.log("filter changed");
+            reexecuteWorkshopsQuery();
+            setUserWorkshopsFilterInput(filterInput);
+            localStorage.setItem(
+              "user-workshops-filter-input",
+              JSON.stringify(filterInput),
+            );
+          }}
+        ></WorkshopsFilterBar>
       </IonHeader>
 
       <IonContent>
@@ -118,6 +166,30 @@ export const WorkshopsPage: React.FC = () => {
                 ></WorkshopPreviewCard>
               )}
             ></PreviewCardGrid>
+          ) : !userWorkshopsFilterInput.liked ||
+            !userWorkshopsFilterInput.owned ? (
+            <div
+              className="ion-padding"
+              style={{
+                minHeight: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <p>Filters return no workshops</p>
+                <IonButton
+                  expand="full"
+                  onClick={() => {
+                    setUserWorkshopsFilterInput({ liked: true, owned: true });
+                  }}
+                >
+                  <IonIcon slot="start" icon={filter}></IonIcon>
+                  Clear Filters
+                </IonButton>
+              </div>
+            </div>
           ) : (
             <WorkshopCreateFirstComponent
               onCreateWorkshopClick={() => createWorkshopClick()}
