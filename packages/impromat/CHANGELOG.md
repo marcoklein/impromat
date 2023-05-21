@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.34.0
+
+### Minor Changes
+
+- 04dd3c7: Filters for workshops
+
+### Patch Changes
+
+- 04dd3c7: Add vitest for unit testing
+- 04dd3c7: Fix add to workshop workshops
+- Updated dependencies [04dd3c7]
+  - impromat-api@0.7.0
+
 ## 0.33.0
 
 ### Minor Changes

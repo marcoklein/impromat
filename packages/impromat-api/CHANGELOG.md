@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.7.0
+
+### Minor Changes
+
+- 04dd3c7: Filter for workshops
+
 ## 0.6.0
 
 ### Minor Changes
