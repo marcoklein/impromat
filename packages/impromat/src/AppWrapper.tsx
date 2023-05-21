@@ -62,6 +62,7 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
                 cache.invalidate("Query", "me");
               },
               updateElement(result, _args, cache, _info) {
+                // TODO define fields of updated element in query to fetch it with mutation
                 const id = (result.updateElement as any)?.id;
                 cache.invalidate({
                   __typename: "Element",

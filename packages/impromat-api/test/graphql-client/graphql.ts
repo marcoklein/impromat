@@ -314,7 +314,13 @@ export type User = {
   name?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
   version: Scalars['Int'];
+  /** All workshops that this user has access to. */
   workshops: Array<Workshop>;
+};
+
+
+export type UserWorkshopsArgs = {
+  input?: UserWorkshopsFilterInput;
 };
 
 export type UserFavoriteElement = {
@@ -329,6 +335,13 @@ export type UserLikedWorkshop = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   workshop: Workshop;
+};
+
+/** Filter workshops of user. */
+export type UserWorkshopsFilterInput = {
+  liked?: Scalars['Boolean'];
+  /** Filter for workshops that are owned by the user. */
+  owned?: Scalars['Boolean'];
 };
 
 export type Workshop = {

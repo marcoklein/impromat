@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { Icon } from "./Icon";
 import { InfoListItem } from "./InfoListItem";
+import { COLOR_LIKE, COLOR_MY_WORKSHOP } from "../theme/theme-colors";
 const WorkshopInfoList_Workshop = graphql(`
   fragment WorkshopInfoList_Workshop on Workshop {
     id
@@ -42,7 +43,7 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
       {workshop.isLiked && (
         <InfoListItem
           ionicIcon={heart}
-          color="red-5"
+          color={COLOR_LIKE}
           displayText="liked"
         ></InfoListItem>
       )}
@@ -56,7 +57,7 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
       {workshop.isOwnerMe && (
         <InfoListItem
           ionicIcon={person}
-          color="primary"
+          color={COLOR_MY_WORKSHOP}
           displayText="my workshop"
         ></InfoListItem>
       )}

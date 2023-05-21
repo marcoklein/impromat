@@ -14,7 +14,9 @@ export type UserDtoComputedFields =
 
 @ObjectType()
 export class User extends BaseDto {
-  @Field(() => [Workshop])
+  @Field(() => [Workshop], {
+    description: 'All workshops that this user has access to.',
+  })
   workshops: Workshop[];
 
   @Field(() => [Element], { description: 'Elements owned by this user.' })

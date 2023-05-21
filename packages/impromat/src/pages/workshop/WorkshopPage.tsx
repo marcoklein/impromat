@@ -43,6 +43,7 @@ import { routeLibrary } from "../library/library-routes";
 import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";
+import { COLOR_LIKE } from "../../theme/theme-colors";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -191,7 +192,7 @@ export const WorkshopPage: React.FC = () => {
                 <IonButton onClick={() => toggleWorkshopLike()}>
                   <IonIcon
                     icon={workshop.isLiked ? heart : heartOutline}
-                    color="red-5"
+                    color={COLOR_LIKE}
                     slot="icon-only"
                     aria-label={
                       workshop?.isLiked ? "Remove from likes." : "Add to likes."

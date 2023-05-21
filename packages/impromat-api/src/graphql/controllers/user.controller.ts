@@ -7,8 +7,10 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { Prisma } from '@prisma/client';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { UpdateUserInput } from 'src/dtos/inputs/update-user-input';
+import { UserWorkshopsFilterInput } from 'src/dtos/inputs/user-workshops-filter-input';
 import { UserFavoriteElementDto } from 'src/dtos/types/user-favorite-element.dto';
 import { UserLikedWorkshopDto } from 'src/dtos/types/user-liked-workshop.dto';
 import { User, UserDtoComputedFields } from 'src/dtos/types/user.dto';
@@ -36,14 +38,24 @@ export class MeResolver {
   }
 
   @ResolveField()
-  async workshops(@Parent() user: User) {
+  async workshops(
+    @Parent() user: User,
+    @Args('input', {
+      type: () => UserWorkshopsFilterInput,
+      defaultValue: { liked: true, owned: true },
+    })
+    input: UserWorkshopsFilterInput,
+  ) {
+    const { liked, owned } = input;
+    const ownedFilter: Prisma.WorkshopWhereInput = { ownerId: user.id };
+    const likedFilter: Prisma.WorkshopWhereInput = {
+      userLikedWorkshops: { some: { userId: user.id } },
+    };
+    const filter: Prisma.WorkshopWhereInput = {
+      OR: [owned ? ownedFilter : {}, liked ? likedFilter : {}],
+    };
     return this.prismaService.workshop.findMany({
-      where: {
-        OR: [
-          { ownerId: user.id },
-          { userLikedWorkshops: { some: { userId: user.id } } },
-        ],
-      },
+      where: filter,
       orderBy: {
         updatedAt: 'desc',
       },

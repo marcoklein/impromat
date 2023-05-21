@@ -54,6 +54,12 @@ export const PreviewCardGrid = <ItemData, Context>({
                   behavior: "auto",
                   top: scrollOptions.top,
                 });
+              }, 30);
+              setTimeout(() => {
+                virtuosoRef.current?.scrollTo({
+                  behavior: "auto",
+                  top: scrollOptions.top,
+                });
               }, 100);
             }
           }
@@ -92,7 +98,8 @@ export const PreviewCardGrid = <ItemData, Context>({
                 justifyContent: "center",
               }}
             >
-              <IonSpinner className="ion-margin-end"></IonSpinner> Loading
+              <IonSpinner className="ion-margin-end"></IonSpinner> Don't look at
+              me.
             </div>
           ) : (
             <></>
