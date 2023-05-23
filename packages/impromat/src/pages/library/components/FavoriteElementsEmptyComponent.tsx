@@ -1,5 +1,5 @@
 import { IonIcon } from "@ionic/react";
-import { heart, star } from "ionicons/icons";
+import { heart } from "ionicons/icons";
 import { COLOR_LIKE } from "../../../theme/theme-colors";
 
 export const FavoriteElementsEmptyComponent: React.FC = () => {

@@ -132,7 +132,7 @@ export const HomeContent: React.FC = () => {
                 className="ion-margin-vertical"
                 fill="solid"
                 color="yellow-4"
-                routerLink={routeLibraryTab(Tabs.LIKED)}
+                routerLink={routeLibraryTab(Tabs.LIKES)}
               >
                 <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
                 Open Liked Elements
