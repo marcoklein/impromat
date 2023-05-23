@@ -13,7 +13,7 @@ pageTest.describe("Library with Workshop Context", () => {
       // then
       await libraryPage.expectToolbarTextToBe("Add Element");
       await expect(libraryPage.tabLocator(/Explore/)).toBeVisible();
-      await expect(libraryPage.tabLocator(/Favorites/)).toBeVisible();
+      await expect(libraryPage.tabLocator(/Likes/)).toBeVisible();
       await expect(libraryPage.tabLocator(/My Library/)).toBeVisible();
     },
   );

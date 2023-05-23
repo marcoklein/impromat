@@ -1,13 +1,14 @@
 import { IonIcon } from "@ionic/react";
-import { star } from "ionicons/icons";
+import { heart, star } from "ionicons/icons";
+import { COLOR_LIKE } from "../../../theme/theme-colors";
 
 export const FavoriteElementsEmptyComponent: React.FC = () => {
   return (
     <div className="ion-padding">
-      <p>No favorites yet.</p>
+      <p>No likes yet.</p>
       <p>
-        Click on the <IonIcon icon={star}></IonIcon> of workshop elements to
-        mark an element as a favorite.
+        Click on the <IonIcon icon={heart} color={COLOR_LIKE}></IonIcon> of
+        workshop elements to like them.
       </p>
     </div>
   );

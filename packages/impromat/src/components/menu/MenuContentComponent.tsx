@@ -95,9 +95,9 @@ export const MenuContentComponent: React.FC = () => {
           label="Explore"
         ></MenuItemComponent>
         <MenuItemComponent
-          routerLink={routeLibraryTab(Tabs.FAVORITES)}
+          routerLink={routeLibraryTab(Tabs.LIKED)}
           icon={star}
-          label="Favorites"
+          label="Likes"
         ></MenuItemComponent>
         <MenuItemComponent
           routerLink={routeLibraryTab(Tabs.CREATE)}

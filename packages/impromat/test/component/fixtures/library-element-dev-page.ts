@@ -2,26 +2,26 @@ import { Locator, Page } from "@playwright/test";
 import { DevPage } from "./dev-page.js";
 
 export class LibraryElementDevPage extends DevPage {
-  readonly addToFavoritesButtonLocator: Locator;
-  readonly removeFromFavoritesButtonLocator: Locator;
+  readonly addToLikesButtonLocator: Locator;
+  readonly removeFromLikesButtonLocator: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.addToFavoritesButtonLocator = page.getByRole("button", {
-      name: "Add to favorites.",
+    this.addToLikesButtonLocator = page.getByRole("button", {
+      name: "Add to likes.",
     });
-    this.removeFromFavoritesButtonLocator = page.getByRole("button", {
-      name: "Remove from favorites.",
+    this.removeFromLikesButtonLocator = page.getByRole("button", {
+      name: "Remove from likes.",
     });
   }
 
-  async addToFavoriteElements() {
-    await this.addToFavoritesButtonLocator.click();
-    await this.removeFromFavoritesButtonLocator.waitFor();
+  async addToLikedElements() {
+    await this.addToLikesButtonLocator.click();
+    await this.removeFromLikesButtonLocator.waitFor();
   }
 
-  async removeFromFavoriteElements() {
-    await this.removeFromFavoritesButtonLocator.click();
-    await this.addToFavoritesButtonLocator.waitFor();
+  async removeFromLikedElements() {
+    await this.removeFromLikesButtonLocator.click();
+    await this.addToLikesButtonLocator.waitFor();
   }
 }

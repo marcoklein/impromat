@@ -1,6 +1,7 @@
-import { brush, eye, search, star } from "ionicons/icons";
+import { brush, eye, heart, search } from "ionicons/icons";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
+import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
 import { InfoListItem } from "./InfoListItem";
 
 const ElementInfoList_ElementSearchResult = graphql(`
@@ -60,9 +61,9 @@ export const ElementInfoList: React.FC<ContainerProps> = ({
       )}
       {element.isFavorite && (
         <InfoListItem
-          displayText="favorite"
-          ionicIcon={star}
-          color="yellow-5"
+          displayText="liked"
+          ionicIcon={heart}
+          color={COLOR_LIKE}
         ></InfoListItem>
       )}
       {element.isOwnerMe && element.visibility === ElementVisibility.Public && (
@@ -76,7 +77,7 @@ export const ElementInfoList: React.FC<ContainerProps> = ({
       {element.isOwnerMe && (
         <InfoListItem
           ionicIcon={brush}
-          color="primary"
+          color={COLOR_USER_CREATED}
           displayText="my element"
         ></InfoListItem>
       )}

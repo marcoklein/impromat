@@ -1,7 +1,7 @@
 import { IonChip, IonIcon, IonLabel } from "@ionic/react";
 import { close, filter, heart, person } from "ionicons/icons";
 import { UserWorkshopsFilterInput } from "../graphql-client/graphql";
-import { COLOR_LIKE, COLOR_MY_WORKSHOP } from "../theme/theme-colors";
+import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
 
 interface WorkshopsFilter extends UserWorkshopsFilterInput {}
 
@@ -50,7 +50,7 @@ export const WorkshopsFilterBar: React.FC<ContainerProps> = ({
           onFilterInputChange(newFilter);
         }}
       >
-        <IonIcon icon={person} color={COLOR_MY_WORKSHOP}></IonIcon>
+        <IonIcon icon={person} color={COLOR_USER_CREATED}></IonIcon>
         <IonLabel>My Workshop</IonLabel>
         {filterInput.owned && <IonIcon icon={close}></IonIcon>}
       </IonChip>

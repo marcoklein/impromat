@@ -10,7 +10,7 @@ pageTest.describe("Library", () => {
     // then
     await libraryPage.expectToolbarTextToBe("Element Library");
     await expect(libraryPage.tabLocator(/Explore/)).toBeVisible();
-    await expect(libraryPage.tabLocator(/Favorites/)).toBeVisible();
+    await expect(libraryPage.tabLocator(/Likes/)).toBeVisible();
     await expect(libraryPage.tabLocator(/My Library/)).toBeVisible();
   });
 

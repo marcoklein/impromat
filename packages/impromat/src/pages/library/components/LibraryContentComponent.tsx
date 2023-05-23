@@ -7,7 +7,7 @@ import {
   IonSegmentButton,
   IonToolbar,
 } from "@ionic/react";
-import { brush, search, star } from "ionicons/icons";
+import { brush, heart, search } from "ionicons/icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Redirect,
@@ -19,6 +19,7 @@ import {
 } from "react-router";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
+import { COLOR_LIKE, COLOR_USER_CREATED } from "../../../theme/theme-colors";
 import { routeLibraryTab } from "../library-routes";
 import { CustomElementsTabComponent } from "./CustomElementsTabComponent";
 import { FavoriteElementsTabComponent } from "./FavoriteElementsTabComponent";
@@ -26,7 +27,7 @@ import { SearchElementTabComponent } from "./SearchElementTabComponent";
 
 export enum Tabs {
   CREATE = "create",
-  FAVORITES = "favorites",
+  LIKED = "liked",
   SEARCH = "search",
 }
 
@@ -56,8 +57,8 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
     logger("location pathname", location.pathname);
     if (location.pathname.endsWith(Tabs.CREATE)) {
       setTab(Tabs.CREATE);
-    } else if (location.pathname.endsWith(Tabs.FAVORITES)) {
-      setTab(Tabs.FAVORITES);
+    } else if (location.pathname.endsWith(Tabs.LIKED)) {
+      setTab(Tabs.LIKED);
     } else {
       setTab(Tabs.SEARCH);
     }
@@ -84,7 +85,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
             workshopId={workshopId}
           ></SearchElementTabComponent>
         </Route>
-        <Route path={`${path}/${Tabs.FAVORITES}`} exact>
+        <Route path={`${path}/${Tabs.LIKED}`} exact>
           <IonContent>
             <FavoriteElementsTabComponent
               workshopId={workshopId}
@@ -110,17 +111,18 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
               <IonLabel>Explore</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton
-              value={Tabs.FAVORITES}
-              onClick={() => history.replace(createTabsRoute(Tabs.FAVORITES))}
+              value={Tabs.LIKED}
+              onClick={() => history.replace(createTabsRoute(Tabs.LIKED))}
+              color="red-5"
             >
-              <IonIcon icon={star}></IonIcon>
-              <IonLabel>Favorites</IonLabel>
+              <IonIcon icon={heart} color={COLOR_LIKE}></IonIcon>
+              <IonLabel>Likes</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton
               value={Tabs.CREATE}
               onClick={() => history.replace(createTabsRoute(Tabs.CREATE))}
             >
-              <IonIcon icon={brush}></IonIcon>
+              <IonIcon icon={brush} color={COLOR_USER_CREATED}></IonIcon>
               <IonLabel>My Library</IonLabel>
             </IonSegmentButton>
           </IonSegment>
