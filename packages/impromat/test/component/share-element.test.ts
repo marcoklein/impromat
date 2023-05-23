@@ -46,7 +46,7 @@ pageTest.describe("Shared Elements", () => {
       await libraryPage.goto();
       await libraryPage.searchForElement(uniqueElementName);
       await libraryPage.openElementCard(uniqueElementName);
-      await libraryElementPage.addToFavoriteElements();
+      await libraryElementPage.addToLikedElements();
       await favoriteElementsPage.goto();
       // then
       await expect(page.getByText(uniqueElementName)).toBeVisible();
