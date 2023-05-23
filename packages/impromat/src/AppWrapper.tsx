@@ -50,6 +50,12 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
                 offsetArgument: "skip",
               }),
             },
+            User: {
+              elements: simplePagination({
+                limitArgument: "take",
+                offsetArgument: "skip",
+              }),
+            },
           },
           updates: {
             Mutation: {

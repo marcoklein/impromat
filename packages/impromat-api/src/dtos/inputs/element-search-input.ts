@@ -3,7 +3,10 @@ import { Max, MaxLength, Min } from 'class-validator';
 
 @InputType()
 export class ElementSearchInput {
-  @Field(() => String, { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+    deprecationReason: 'Use user.elements(searchText) instead',
+  })
   @MaxLength(500)
   text?: string;
 

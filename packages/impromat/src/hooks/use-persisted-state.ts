@@ -10,7 +10,9 @@ import { useLogger } from "./use-logger";
  * @returns
  */
 export function usePersistedState<
-  T extends Partial<Record<keyof T, boolean | number | string | undefined>>,
+  T extends
+    | Partial<Record<keyof T, boolean | number | string | undefined | null>>
+    | string,
 >(key: string, defaultValue: Required<T>): [T, (valueToPersist: T) => void] {
   const logger = useLogger("usePersistedState");
   const [state, setState] = useState<T>(() => {

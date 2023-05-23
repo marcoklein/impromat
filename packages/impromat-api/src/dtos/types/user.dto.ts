@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
-import { Element } from './element.dto';
+import { ElementSearchResult } from './element-search-result.dto';
 import { UserFavoriteElementDto } from './user-favorite-element.dto';
 import { UserLikedWorkshopDto } from './user-liked-workshop.dto';
 import { Workshop } from './workshop.dto';
@@ -19,13 +19,19 @@ export class User extends BaseDto {
   })
   workshops: Workshop[];
 
-  @Field(() => [Element], { description: 'Elements owned by this user.' })
-  elements: Element[];
+  @Field(() => [ElementSearchResult], {
+    description: 'Elements owned by this user.',
+  })
+  elements: ElementSearchResult[];
 
-  @Field(() => [UserFavoriteElementDto])
+  @Field(() => [UserFavoriteElementDto], {
+    deprecationReason: 'use elements() with a filter',
+  })
   favoriteElements: UserFavoriteElementDto[];
 
-  @Field(() => [UserLikedWorkshopDto])
+  @Field(() => [UserLikedWorkshopDto], {
+    deprecationReason: 'use workshops() with a filter',
+  })
   likedWorkshops: UserLikedWorkshopDto[];
 
   @Field(() => String, {

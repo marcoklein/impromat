@@ -12,23 +12,32 @@ import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import { graphql } from "../../../graphql-client";
+import { UserElementsFilterInput } from "../../../graphql-client/graphql";
 import {
   routeLibraryCreateCustomElement,
   routeLibraryElement,
 } from "../library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
+import { ElementsFilterBar } from "../../../components/ElementsFilterBar";
 import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { usePersistedState } from "../../../hooks/use-persisted-state";
 
 const SearchElementTabQuery = graphql(`
-  query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {
-    searchElements(input: $input, skip: $skip, take: $take) {
-      element {
-        id
-        ...ElementPreviewItem_Element
+  query SearchElementTabQuery(
+    $input: UserElementsFilterInput!
+    $skip: Int!
+    $take: Int!
+  ) {
+    me {
+      elements(input: $input, skip: $skip, take: $take) {
+        element {
+          id
+          ...ElementPreviewItem_Element
+        }
+        ...ElementPreviewItem_ElementSearchResult
       }
-      ...ElementPreviewItem_ElementSearchResult
     }
   }
 `);
@@ -44,27 +53,28 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
   const logger = useComponentLogger("SearchElementTabComponent");
-  const [restoredSearchText] = useState(
-    window.localStorage.getItem("lastSearch") ?? "",
-  );
-  const [searchText, setSearchText] = useState(restoredSearchText);
   const [pageNumber, setPageNumber] = useState(0);
 
+  const [userElementsFilterInput, setUserElementsFilterInput] =
+    usePersistedState<UserElementsFilterInput>("user-elements-filter-input", {
+      liked: true,
+      owned: true,
+      public: true,
+      searchText: null,
+    });
   const itemsPerPage = 20;
 
   const [searchElementsQueryResult] = useQuery({
     query: SearchElementTabQuery,
     variables: {
-      input: {
-        text: searchText,
-      },
+      input: userElementsFilterInput,
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
     },
   });
 
   useEffect(() => {
-    const actualSkip = searchElementsQueryResult.data?.searchElements.length;
+    const actualSkip = searchElementsQueryResult.data?.me.elements.length;
     if (!actualSkip) return;
     const actualPageNumber = Math.floor(actualSkip / itemsPerPage) - 1;
     logger(
@@ -85,13 +95,21 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   return (
     <>
       <ElementSearchBarComponent
-        initialSearchText={restoredSearchText}
+        initialSearchText={userElementsFilterInput.searchText ?? ""}
         onSearchTextChange={(text) => {
           setPageNumber(0);
-          setSearchText(text);
-          window.localStorage.setItem("lastSearch", text);
+          setUserElementsFilterInput({
+            ...userElementsFilterInput,
+            ...{ searchText: text },
+          });
         }}
       ></ElementSearchBarComponent>
+      <ElementsFilterBar
+        filterInput={userElementsFilterInput}
+        onFilterInputChange={(filterInput) =>
+          setUserElementsFilterInput(filterInput)
+        }
+      ></ElementsFilterBar>
       <div>
         {(searchElementsQueryResult.stale ||
           searchElementsQueryResult.fetching) && (
@@ -109,8 +127,9 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         </IonFab>
         {!searchElementsQueryResult.stale &&
           !searchElementsQueryResult.fetching &&
-          !searchElementsQueryResult.data?.searchElements.length &&
-          searchText.length > 0 && (
+          !searchElementsQueryResult.data?.me.elements.length &&
+          userElementsFilterInput.searchText &&
+          userElementsFilterInput.searchText.length > 0 && (
             <IonList>
               <InfoItemComponent
                 message="No matching elements found."
@@ -120,7 +139,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
             </IonList>
           )}
         {searchElementsQueryResult.data &&
-          searchElementsQueryResult.data.searchElements.length > 0 && (
+          searchElementsQueryResult.data.me.elements.length > 0 && (
             <PreviewCardGrid
               scrollStoreKey="search-element-tab-component"
               isFetching={
@@ -137,7 +156,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                   logger("setting page number to %s", pageNumber + 1);
                 }
               }}
-              items={searchElementsQueryResult.data.searchElements ?? []}
+              items={searchElementsQueryResult.data.me.elements ?? []}
               itemContent={(_index, searchResult) => (
                 <ElementPreviewCard
                   routerLink={routeLibraryElement(searchResult.element.id, {
@@ -151,8 +170,11 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
           )}
         {!searchElementsQueryResult.fetching &&
           !searchElementsQueryResult.stale &&
-          !searchElementsQueryResult.data?.searchElements.length &&
-          !searchText.length && (
+          !searchElementsQueryResult.data?.me.elements.length &&
+          !(
+            userElementsFilterInput.searchText &&
+            userElementsFilterInput.searchText.length
+          ) && (
             <InfoItemComponent
               message={
                 "Use the search bar to find elements from various sources."

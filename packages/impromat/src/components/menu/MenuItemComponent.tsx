@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 
 interface ContainerProps {
   routerLink: string;
-  icon: string;
+  icon?: string;
   label: string;
   exact?: boolean;
   iconColor?: string;
@@ -34,11 +34,13 @@ export const MenuItemComponent: React.FC<PropsWithChildren<ContainerProps>> = ({
       lines={isRoute ? "full" : "inset"}
       style={{ "--border-color": isRoute && "var(--ion-color-primary)" }}
     >
-      <IonIcon
-        slot="start"
-        icon={icon}
-        color={isRoute ? iconColor ?? defaultIconColor : undefined}
-      ></IonIcon>
+      {icon && (
+        <IonIcon
+          slot="start"
+          icon={icon}
+          color={isRoute ? iconColor ?? defaultIconColor : undefined}
+        ></IonIcon>
+      )}
       <IonLabel>
         <IonText color={isRoute ? "light" : ""}></IonText>
         {label}

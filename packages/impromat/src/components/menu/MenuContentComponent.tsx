@@ -16,18 +16,9 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {
-  brush,
-  close,
-  documents,
-  home,
-  information,
-  search,
-  star,
-} from "ionicons/icons";
+import { close, documents, home, information, library } from "ionicons/icons";
 import { environment } from "../../environment";
-import { Tabs } from "../../pages/library/components/LibraryContentComponent";
-import { routeLibraryTab } from "../../pages/library/library-routes";
+import { routeLibrary } from "../../pages/library/library-routes";
 import {
   routeAbout,
   routeHome,
@@ -86,23 +77,10 @@ export const MenuContentComponent: React.FC = () => {
             </IonButton> */}
           </MenuItemComponent>
         </IonItemGroup>
-        <IonItemDivider>
-          <IonLabel>Elements</IonLabel>
-        </IonItemDivider>
         <MenuItemComponent
-          routerLink={routeLibraryTab(Tabs.SEARCH)}
-          icon={search}
-          label="Explore"
-        ></MenuItemComponent>
-        <MenuItemComponent
-          routerLink={routeLibraryTab(Tabs.FAVORITES)}
-          icon={star}
-          label="Favorites"
-        ></MenuItemComponent>
-        <MenuItemComponent
-          routerLink={routeLibraryTab(Tabs.CREATE)}
-          icon={brush}
-          label="My Elements"
+          routerLink={routeLibrary()}
+          icon={library}
+          label="Elements"
         ></MenuItemComponent>
         <IonItemGroup></IonItemGroup>
         <IonItemGroup>

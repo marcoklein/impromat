@@ -4,15 +4,10 @@ import {
   ApiTestSession,
   initApiTestSession,
 } from '../../test-utils/init-api-test-session';
-import { createElementMutation } from './element-queries';
-
-const updateUserFavoriteElementMutation = graphql(`
-  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
-    updateUserFavoriteElement(input: $input) {
-      id
-    }
-  }
-`);
+import {
+  createElementMutation,
+  updateUserFavoriteElementMutation,
+} from './element-queries';
 
 const meFavoriteElementsQuery = graphql(`
   query MeFavoriteElements {

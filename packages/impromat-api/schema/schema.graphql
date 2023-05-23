@@ -90,9 +90,9 @@ type User {
   workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
 
   """Elements owned by this user."""
-  elements: [Element!]!
-  favoriteElements: [UserFavoriteElement!]!
-  likedWorkshops: [UserLikedWorkshop!]!
+  elements(input: UserElementsFilterInput! = {liked: true, owned: true}, skip: Int! = 0, take: Int! = 20): [ElementSearchResult!]!
+  favoriteElements: [UserFavoriteElement!]! @deprecated(reason: "use elements() with a filter")
+  likedWorkshops: [UserLikedWorkshop!]! @deprecated(reason: "use workshops() with a filter")
 
   """Public display name of the user."""
   name: String
@@ -104,6 +104,21 @@ input UserWorkshopsFilterInput {
 
   """Filter for workshops that are owned by the user."""
   owned: Boolean! = true
+}
+
+"""Filter elements of user."""
+input UserElementsFilterInput {
+  """Include elements liked by the user."""
+  liked: Boolean! = true
+
+  """Include public elements."""
+  public: Boolean! = true
+
+  """Include elements owned by the user."""
+  owned: Boolean! = true
+
+  """Search elements by text."""
+  searchText: String
 }
 
 type Element {
@@ -184,6 +199,9 @@ type Query {
 
   """Get information about the current user."""
   me: User!
+
+  """Get information about the user with given id"""
+  user(id: ID!): User!
 }
 
 input ElementSearchInput {

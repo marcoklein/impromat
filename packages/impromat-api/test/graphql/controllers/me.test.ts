@@ -24,7 +24,9 @@ describe('me', () => {
           id
         }
         elements {
-          id
+          element {
+            id
+          }
         }
         favoriteElements {
           element {

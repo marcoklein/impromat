@@ -19,6 +19,7 @@ import { UserLikedWorkshopsService } from './services/user-liked-workshops.servi
 import { UserSessionService } from './services/user-session.service';
 import { WorkshopElementService } from './services/workshop-element.service';
 import { WorkshopService } from './services/workshop.service';
+import { UserElementsService } from './services/user-elements.service';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { WorkshopService } from './services/workshop.service';
     WorkshopService,
     ElementSearchService,
     UserLikedWorkshopsService,
+    UserElementsService,
   ],
 })
 export class GraphqlModule {}

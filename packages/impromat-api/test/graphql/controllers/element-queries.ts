@@ -75,3 +75,11 @@ export const updateElementMutation = graphql(`
     }
   }
 `);
+
+export const updateUserFavoriteElementMutation = graphql(`
+  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
+    updateUserFavoriteElement(input: $input) {
+      id
+    }
+  }
+`);

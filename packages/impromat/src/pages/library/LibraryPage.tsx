@@ -13,7 +13,7 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeWorkshop } from "../../routes/shared-routes";
-import { LibraryContentComponent } from "./components/LibraryContentComponent";
+import { SearchElementTabComponent } from "./components/SearchElementTabComponent";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
 
 export const LibraryPage: React.FC = () => {
@@ -40,9 +40,9 @@ export const LibraryPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <LibraryContentComponent
+      <SearchElementTabComponent
         workshopId={workshopId}
-      ></LibraryContentComponent>
+      ></SearchElementTabComponent>
     </IonPage>
   );
 };

@@ -14,8 +14,7 @@ import {
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";
-import { Tabs } from "../library/components/LibraryContentComponent";
-import { routeLibrary, routeLibraryTab } from "../library/library-routes";
+import { routeLibrary } from "../library/library-routes";
 
 export const HomeContent: React.FC = () => {
   return (
@@ -132,7 +131,7 @@ export const HomeContent: React.FC = () => {
                 className="ion-margin-vertical"
                 fill="solid"
                 color="yellow-4"
-                routerLink={routeLibraryTab(Tabs.FAVORITES)}
+                routerLink={routeLibrary()}
               >
                 <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
                 Open Favorite Elements

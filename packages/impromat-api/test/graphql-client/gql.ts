@@ -20,15 +20,16 @@ const documents = {
     "\n  query SearchElementsQuery($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n": types.SearchElementsQueryDocument,
     "\n  mutation AddElementQuery($input: CreateElementInput!) {\n    createElement(input: $input) {\n      ...ElementFields\n    }\n  }\n": types.AddElementQueryDocument,
     "\n  mutation UpdateElement($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n": types.UpdateElementDocument,
-    "\n    query MeQuery {\n      me {\n        id\n        workshops {\n          id\n        }\n        elements {\n          id\n        }\n        favoriteElements {\n          element {\n            id\n          }\n        }\n      }\n    }\n  ": types.MeQueryDocument,
-    "\n    mutation UpdateUserMutation($input: UpdateUserInput!) {\n      updateUser(input: $input) {\n        id\n        name\n      }\n    }\n  ": types.UpdateUserMutationDocument,
     "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateUserFavoriteElementDocument,
+    "\n    query MeQuery {\n      me {\n        id\n        workshops {\n          id\n        }\n        elements {\n          element {\n            id\n          }\n        }\n        favoriteElements {\n          element {\n            id\n          }\n        }\n      }\n    }\n  ": types.MeQueryDocument,
+    "\n    mutation UpdateUserMutation($input: UpdateUserInput!) {\n      updateUser(input: $input) {\n        id\n        name\n      }\n    }\n  ": types.UpdateUserMutationDocument,
     "\n  query MeFavoriteElements {\n    me {\n      favoriteElements {\n        element {\n          id\n        }\n      }\n    }\n  }\n": types.MeFavoriteElementsDocument,
     "\n        query ElementIsFavorite($id: ID!) {\n          element(id: $id) {\n            isFavorite\n          }\n        }\n      ": types.ElementIsFavoriteDocument,
     "\n  mutation UpdateUserFavoriteWorkshop($input: UpdateUserLikedWorkshopInput!) {\n    updateUserLikedWorkshop(input: $input) {\n      id\n    }\n  }\n": types.UpdateUserFavoriteWorkshopDocument,
     "\n  query MeFavoriteWorkshops {\n    me {\n      likedWorkshops {\n        workshop {\n          id\n        }\n      }\n    }\n  }\n": types.MeFavoriteWorkshopsDocument,
     "\n          query WorkshopIsFavorite($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        ": types.WorkshopIsFavoriteDocument,
     "\n          query WorkshopIsLiked($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        ": types.WorkshopIsLikedDocument,
+    "\n  query UserElements($userId: ID!, $input: UserElementsFilterInput!) {\n    user(id: $userId) {\n      elements(input: $input) {\n        element {\n          id\n          name\n          visibility\n          isFavorite\n        }\n        score\n      }\n    }\n  }\n": types.UserElementsDocument,
     "\n  fragment WorkshopElementFields on WorkshopElement {\n    id\n    version\n    note\n  }\n": types.WorkshopElementFieldsFragmentDoc,
     "\n  query WorkshopElementByIdQuery($id: ID!) {\n    workshopElement(id: $id) {\n      ...WorkshopElementFields\n    }\n  }\n": types.WorkshopElementByIdQueryDocument,
     "\n  fragment WorkshopFields on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    description\n    canEdit\n    sections {\n      id\n      version\n      createdAt\n      updatedAt\n      deleted\n\n      orderIndex\n      name\n      color\n      isCollapsed\n\n      elements {\n        id\n        note\n        basedOn {\n          id\n          name\n        }\n      }\n      workshop {\n        id\n      }\n    }\n    owner {\n      id\n    }\n  }\n": types.WorkshopFieldsFragmentDoc,
@@ -87,15 +88,15 @@ export function graphql(source: "\n  mutation UpdateElement($input: UpdateWorksh
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query MeQuery {\n      me {\n        id\n        workshops {\n          id\n        }\n        elements {\n          id\n        }\n        favoriteElements {\n          element {\n            id\n          }\n        }\n      }\n    }\n  "): (typeof documents)["\n    query MeQuery {\n      me {\n        id\n        workshops {\n          id\n        }\n        elements {\n          id\n        }\n        favoriteElements {\n          element {\n            id\n          }\n        }\n      }\n    }\n  "];
+export function graphql(source: "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query MeQuery {\n      me {\n        id\n        workshops {\n          id\n        }\n        elements {\n          element {\n            id\n          }\n        }\n        favoriteElements {\n          element {\n            id\n          }\n        }\n      }\n    }\n  "): (typeof documents)["\n    query MeQuery {\n      me {\n        id\n        workshops {\n          id\n        }\n        elements {\n          element {\n            id\n          }\n        }\n        favoriteElements {\n          element {\n            id\n          }\n        }\n      }\n    }\n  "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    mutation UpdateUserMutation($input: UpdateUserInput!) {\n      updateUser(input: $input) {\n        id\n        name\n      }\n    }\n  "): (typeof documents)["\n    mutation UpdateUserMutation($input: UpdateUserInput!) {\n      updateUser(input: $input) {\n        id\n        name\n      }\n    }\n  "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -120,6 +121,10 @@ export function graphql(source: "\n          query WorkshopIsFavorite($id: ID!) 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n          query WorkshopIsLiked($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        "): (typeof documents)["\n          query WorkshopIsLiked($id: ID!) {\n            workshop(id: $id) {\n              isLiked\n            }\n          }\n        "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query UserElements($userId: ID!, $input: UserElementsFilterInput!) {\n    user(id: $userId) {\n      elements(input: $input) {\n        element {\n          id\n          name\n          visibility\n          isFavorite\n        }\n        score\n      }\n    }\n  }\n"): (typeof documents)["\n  query UserElements($userId: ID!, $input: UserElementsFilterInput!) {\n    user(id: $userId) {\n      elements(input: $input) {\n        element {\n          id\n          name\n          visibility\n          isFavorite\n        }\n        score\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

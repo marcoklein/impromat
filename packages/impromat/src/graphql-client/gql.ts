@@ -39,13 +39,8 @@ const documents = {
     "\n  query LibraryElementQuery($id: ID!) {\n    element(id: $id) {\n      ...LibraryElement_Element\n    }\n    ...LibraryElementPage_Query\n  }\n": types.LibraryElementQueryDocument,
     "\n  fragment LibraryElement_Element on Element {\n    id\n    name\n    isFavorite\n    ...Element_Element\n    ...ElementFavoriteIcon_Element\n  }\n": types.LibraryElement_ElementFragmentDoc,
     "\n  fragment LibraryElementPage_Query on Query {\n    me {\n      workshops(input: { owned: true }) {\n        id\n        name\n        sections {\n          id\n        }\n      }\n    }\n  }\n": types.LibraryElementPage_QueryFragmentDoc,
-    "\n  fragment CustomElementsTab_WorkshopFragment on User {\n    elements {\n      id\n      name\n      ...ElementPreviewItem_Element\n    }\n  }\n": types.CustomElementsTab_WorkshopFragmentFragmentDoc,
-    "\n  query CustomElementsTab_Query {\n    me {\n      ...CustomElementsTab_WorkshopFragment\n    }\n  }\n": types.CustomElementsTab_QueryDocument,
     "\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n": types.ElementFavoriteIcon_ElementFragmentDoc,
-    "\n  fragment FavoriteElements_User on User {\n    favoriteElements {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n": types.FavoriteElements_UserFragmentDoc,
-    "\n  fragment MyUser_Query on Query {\n    me {\n      id\n      favoriteElements {\n        element {\n          id\n        }\n      }\n      ...FavoriteElements_User\n    }\n  }\n": types.MyUser_QueryFragmentDoc,
-    "\n  query MyUser {\n    ...MyUser_Query\n  }\n": types.MyUserDocument,
-    "\n  query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {\n    searchElements(input: $input, skip: $skip, take: $take) {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n      ...ElementPreviewItem_ElementSearchResult\n    }\n  }\n": types.SearchElementsDocument,
+    "\n  query SearchElementTabQuery(\n    $input: UserElementsFilterInput!\n    $skip: Int!\n    $take: Int!\n  ) {\n    me {\n      elements(input: $input, skip: $skip, take: $take) {\n        element {\n          id\n          ...ElementPreviewItem_Element\n        }\n        ...ElementPreviewItem_ElementSearchResult\n      }\n    }\n  }\n": types.SearchElementTabQueryDocument,
     "\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      id\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n        isOwnerMe\n        ...CustomElement_Element\n        ...Element_Element\n      }\n      section {\n        id\n        workshop {\n          canEdit\n        }\n      }\n    }\n  }\n": types.WorkshopElementPageDocument,
     "\n      mutation UpdateWorkshopElementNote($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n          sections {\n            id\n            elements {\n              id\n              note\n            }\n          }\n        }\n      }\n    ": types.UpdateWorkshopElementNoteDocument,
     "\n  fragment WorkshopOptionsMenu_Workshop on Workshop {\n    id\n    name\n    description\n  }\n": types.WorkshopOptionsMenu_WorkshopFragmentDoc,
@@ -183,31 +178,11 @@ export function graphql(source: "\n  fragment LibraryElementPage_Query on Query 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment CustomElementsTab_WorkshopFragment on User {\n    elements {\n      id\n      name\n      ...ElementPreviewItem_Element\n    }\n  }\n"): (typeof documents)["\n  fragment CustomElementsTab_WorkshopFragment on User {\n    elements {\n      id\n      name\n      ...ElementPreviewItem_Element\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query CustomElementsTab_Query {\n    me {\n      ...CustomElementsTab_WorkshopFragment\n    }\n  }\n"): (typeof documents)["\n  query CustomElementsTab_Query {\n    me {\n      ...CustomElementsTab_WorkshopFragment\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n"): (typeof documents)["\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment FavoriteElements_User on User {\n    favoriteElements {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment FavoriteElements_User on User {\n    favoriteElements {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  fragment MyUser_Query on Query {\n    me {\n      id\n      favoriteElements {\n        element {\n          id\n        }\n      }\n      ...FavoriteElements_User\n    }\n  }\n"): (typeof documents)["\n  fragment MyUser_Query on Query {\n    me {\n      id\n      favoriteElements {\n        element {\n          id\n        }\n      }\n      ...FavoriteElements_User\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query MyUser {\n    ...MyUser_Query\n  }\n"): (typeof documents)["\n  query MyUser {\n    ...MyUser_Query\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {\n    searchElements(input: $input, skip: $skip, take: $take) {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n      ...ElementPreviewItem_ElementSearchResult\n    }\n  }\n"): (typeof documents)["\n  query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {\n    searchElements(input: $input, skip: $skip, take: $take) {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n      ...ElementPreviewItem_ElementSearchResult\n    }\n  }\n"];
+export function graphql(source: "\n  query SearchElementTabQuery(\n    $input: UserElementsFilterInput!\n    $skip: Int!\n    $take: Int!\n  ) {\n    me {\n      elements(input: $input, skip: $skip, take: $take) {\n        element {\n          id\n          ...ElementPreviewItem_Element\n        }\n        ...ElementPreviewItem_ElementSearchResult\n      }\n    }\n  }\n"): (typeof documents)["\n  query SearchElementTabQuery(\n    $input: UserElementsFilterInput!\n    $skip: Int!\n    $take: Int!\n  ) {\n    me {\n      elements(input: $input, skip: $skip, take: $take) {\n        element {\n          id\n          ...ElementPreviewItem_Element\n        }\n        ...ElementPreviewItem_ElementSearchResult\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

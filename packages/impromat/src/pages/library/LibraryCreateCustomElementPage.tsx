@@ -29,7 +29,6 @@ import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshop } from "../../routes/shared-routes";
-import { Tabs } from "./components/LibraryContentComponent";
 import {
   LIBRARY_ELEMENT_ID_SEARCH_PARAM,
   routeLibrary,
@@ -150,7 +149,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             history.goBack();
           } else {
             history.push({
-              pathname: `${routeLibrary()}/${Tabs.CREATE}`,
+              pathname: `${routeLibrary()}`,
               search: `?newElement=${newElementId}`,
             });
           }
@@ -200,7 +199,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
         } else {
           history.push(
             {
-              pathname: `${routeLibrary()}/${Tabs.CREATE}`,
+              pathname: `${routeLibrary()}`,
               search: `?newElement=${newElement.id}`,
             },
             { direction: "back" },
@@ -216,7 +215,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton
-              defaultHref={`${routeLibrary({ workshopId })}/${Tabs.CREATE}`}
+              defaultHref={`${routeLibrary({ workshopId })}`}
             ></IonBackButton>
           </IonButtons>
           <IonTitle>
