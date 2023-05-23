@@ -20,10 +20,10 @@ import {
   brush,
   close,
   documents,
+  heart,
   home,
   information,
   search,
-  star,
 } from "ionicons/icons";
 import { environment } from "../../environment";
 import { Tabs } from "../../pages/library/components/LibraryContentComponent";
@@ -35,6 +35,7 @@ import {
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";
+import { COLOR_LIKE, COLOR_USER_CREATED } from "../../theme/theme-colors";
 import { AccountMenuItemComponent } from "./AccountMenuItemComponent";
 import { MenuItemComponent } from "./MenuItemComponent";
 
@@ -96,12 +97,14 @@ export const MenuContentComponent: React.FC = () => {
         ></MenuItemComponent>
         <MenuItemComponent
           routerLink={routeLibraryTab(Tabs.LIKED)}
-          icon={star}
+          icon={heart}
+          iconColor={COLOR_LIKE}
           label="Likes"
         ></MenuItemComponent>
         <MenuItemComponent
           routerLink={routeLibraryTab(Tabs.CREATE)}
           icon={brush}
+          iconColor={COLOR_USER_CREATED}
           label="My Elements"
         ></MenuItemComponent>
         <IonItemGroup></IonItemGroup>
