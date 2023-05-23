@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.35.0
+
+### Minor Changes
+
+- b12f3f0: Liked elements
+
 ## 0.34.0
 
 ### Minor Changes
