@@ -27,7 +27,7 @@ import { SearchElementTabComponent } from "./SearchElementTabComponent";
 
 export enum Tabs {
   CREATE = "create",
-  LIKED = "liked",
+  LIKES = "likes",
   SEARCH = "search",
 }
 
@@ -57,8 +57,8 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
     logger("location pathname", location.pathname);
     if (location.pathname.endsWith(Tabs.CREATE)) {
       setTab(Tabs.CREATE);
-    } else if (location.pathname.endsWith(Tabs.LIKED)) {
-      setTab(Tabs.LIKED);
+    } else if (location.pathname.endsWith(Tabs.LIKES)) {
+      setTab(Tabs.LIKES);
     } else {
       setTab(Tabs.SEARCH);
     }
@@ -85,7 +85,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
             workshopId={workshopId}
           ></SearchElementTabComponent>
         </Route>
-        <Route path={`${path}/${Tabs.LIKED}`} exact>
+        <Route path={`${path}/${Tabs.LIKES}`} exact>
           <IonContent>
             <FavoriteElementsTabComponent
               workshopId={workshopId}
@@ -111,8 +111,8 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
               <IonLabel>Explore</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton
-              value={Tabs.LIKED}
-              onClick={() => history.replace(createTabsRoute(Tabs.LIKED))}
+              value={Tabs.LIKES}
+              onClick={() => history.replace(createTabsRoute(Tabs.LIKES))}
               color="red-5"
             >
               <IonIcon icon={heart} color={COLOR_LIKE}></IonIcon>
