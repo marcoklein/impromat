@@ -14,7 +14,7 @@ First of all, by using it, creating new exercises and games and share your works
 
 Second of all, Impromat is open-source, thus you can also get your hands dirty and pick a [good first issue](https://github.com/marcoklein/impromat/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) for getting started.
 
-## Contributing
+## How can I join with coding?
 
 The following section describes the technical quick start for running Impromat locally.
 
