@@ -4,7 +4,6 @@
   "description": "",
   "author": "Marco Klein <marcoklein",
   "private": true,
-  "license": "UNLICENSED",
   "scripts": {
     "start": "yarn db:migrate && node dist/src/main.js",
     "db:migrate": "prisma migrate deploy",

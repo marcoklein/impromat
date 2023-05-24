@@ -3,6 +3,7 @@
   "version": "37",
   "private": true,
   "type": "module",
+  "license": "GPL-3.0",
   "workspaces": {
     "packages": [
       "packages/*"
@@ -29,6 +30,5 @@
   "description": "Impromat Monorepo",
   "main": "index.js",
   "author": "Marco Klein <hello@marcoklein.dev>",
-  "license": "MIT",
   "packageManager": "yarn@3.4.1"
 }
