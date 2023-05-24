@@ -5,7 +5,6 @@
   "private": true,
   "description": "Uniting improvisational theatre games and excercises for easy improv access.",
   "author": "Marco Klein <hello@marcoklein.dev>",
-  "license": "MIT",
   "types": "./src/improbib.d.ts",
   "exports": {
     ".": {

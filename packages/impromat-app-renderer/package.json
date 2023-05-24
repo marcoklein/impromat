@@ -3,7 +3,6 @@
   "version": "0.1.23",
   "description": "Render Impromat application.",
   "author": "Marco Klein <hello@marcoklein.dev>",
-  "license": "MIT",
   "type": "module",
   "private": true,
   "scripts": {

@@ -5,7 +5,6 @@
   "description": "Experiments for improbib.",
   "repository": "git@github.com:marcoklein/improbib.git",
   "author": "Marco Klein <hello@marcoklein.dev>",
-  "license": "MIT",
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "yarn copy-improbib && nodemon",
