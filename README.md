@@ -4,19 +4,15 @@
 
 # Impromat
 
-> I am in the process of open sourcing Impromat. Documentation might be out of date. Feel free to support with an issue or PR for running the repository.
+Improvisational theatre app at https://impromat.app.
 
-Monorepo for Impromat - the Improvisational Theatre App.
+> Impromat is in the process of being open sourced. Documentation might be out of date. Feel free to support with an [issue](https://github.com/marcoklein/impromat/issues) or PR for running the repository.
 
-Access app at https://impromat.app
+## Prerequisites
+
+- Install [NodeJs](https://nodejs.org/en)
 
 ## Getting started
-
-The `folke.vscode-monorepo-workspace` extension can list all monorepo extensions in the workspace. Use the following command in the command plate after installation to activate them:
-
-```
->monorepo: Select Workspace Folders
-```
 
 Install all dependencies:
 
@@ -40,6 +36,12 @@ Explore project graph:
 
 ```
 yarn dlx nx graph
+```
+
+The `folke.vscode-monorepo-workspace` extension can list all monorepo extensions in the workspace. Use the following command in the command plate after installation to activate them:
+
+```
+>monorepo: Select Workspace Folders
 ```
 
 ## Changelog and Version Bumps
