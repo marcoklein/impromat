@@ -8,6 +8,20 @@ Developed by improvisers — made for improvisers. Impromat offers all necessary
 
 Access the app at [impromat.app](https://impromat.app).
 
+## What is the roadmap?
+
+On a visionary level, Impromat should be the supporting application for any improvisational theatre activities.
+
+Our mission is the fostering of knowledge exchange for improv workshops and exercises and build an active global community around it.
+
+As first steps, Impromat will support the workshop facilitation journey from:
+
+1. Planning a Workshop
+2. Facilitating the Workshop
+3. Sharing the Workshop
+
+For an up-to-date overview see Impromats [Milestones](https://github.com/marcoklein/impromat/milestones?direction=asc&sort=title&state=open).
+
 ## How can I contribute?
 
 First of all, by using it, creating new exercises and games and share your workshop creations with the community. Contribute with bug reports or new feature ideas through [issues](https://github.com/marcoklein/impromat/issues/new/choose).
