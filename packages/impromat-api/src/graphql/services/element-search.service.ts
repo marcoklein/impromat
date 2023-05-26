@@ -54,7 +54,7 @@ export class ElementSearchService {
       includeScore: true,
       includeMatches: true,
       shouldSort: true,
-      threshold: 0.9,
+      threshold: 0.6,
     });
 
     // TODO optimize by reusing fuse instance for public elements and potentially cache search index for users
