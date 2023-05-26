@@ -59,7 +59,7 @@ export class ElementSearchService {
 
     // TODO optimize by reusing fuse instance for public elements and potentially cache search index for users
     const result = fuse
-      .search(searchElementsInput.text, {
+      .search(searchElementsInput.text.trim(), {
         limit: searchElementsInput.skip + searchElementsInput.take,
       })
       .slice(
