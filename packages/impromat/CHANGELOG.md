@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.35.1
+
+### Patch Changes
+
+- 0303a12: Disable unnecessary menu buttons for publicly shared workshop
+- Updated dependencies [56ddd9c]
+  - impromat-api@0.8.0
+
 ## 0.35.0
 
 ### Minor Changes
