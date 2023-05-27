@@ -21,6 +21,7 @@ export type BasedOnElementConnectInput = {
 };
 
 export type CreateElementInput = {
+  languageCode: Scalars['String'];
   markdown?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   orderIndex?: InputMaybe<Scalars['Int']>;
@@ -248,6 +249,7 @@ export type QueryWorkshopElementArgs = {
 
 export type UpdateElementInput = {
   id: Scalars['ID'];
+  languageCode?: InputMaybe<Scalars['String']>;
   markdown?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   orderIndex?: InputMaybe<Scalars['Int']>;

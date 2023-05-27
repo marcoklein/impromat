@@ -5,7 +5,7 @@ import {
   IntersectionType,
   PartialType,
 } from '@nestjs/graphql';
-import { MaxLength } from 'class-validator';
+import { IsIn, Length, MaxLength } from 'class-validator';
 import { Nullable } from 'src/utils/nullish';
 import { ElementVisibility } from '../types/element-visibility.dto';
 import { IdInput } from './id-input';
@@ -22,6 +22,11 @@ export class CreateElementInput {
   @Field(() => String, { nullable: true })
   @MaxLength(10000)
   markdown: Nullable<string>;
+
+  @Field(() => String)
+  @Length(2)
+  @IsIn(['en', 'de'])
+  languageCode: string;
 
   @Field(() => Int, { nullable: true })
   orderIndex?: number;

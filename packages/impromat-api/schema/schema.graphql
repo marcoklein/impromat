@@ -331,6 +331,7 @@ input CreateElementInput {
   name: String!
   visibility: ElementVisibility! = PRIVATE
   markdown: String
+  languageCode: String!
   orderIndex: Int
 }
 
@@ -338,6 +339,7 @@ input UpdateElementInput {
   name: String
   visibility: ElementVisibility = PRIVATE
   markdown: String
+  languageCode: String
   orderIndex: Int
   id: ID!
 }
