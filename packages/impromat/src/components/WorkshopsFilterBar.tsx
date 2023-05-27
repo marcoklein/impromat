@@ -1,5 +1,5 @@
 import { IonChip, IonIcon, IonLabel } from "@ionic/react";
-import { close, filter, heart, person } from "ionicons/icons";
+import { close, heart, person } from "ionicons/icons";
 import { UserWorkshopsFilterInput } from "../graphql-client/graphql";
 import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
 
@@ -25,7 +25,6 @@ export const WorkshopsFilterBar: React.FC<ContainerProps> = ({
         alignItems: "center",
       }}
     >
-      <IonIcon icon={filter} className="ion-margin-end"></IonIcon>
       <IonChip
         outline={!filterInput.liked}
         onClick={() => {
