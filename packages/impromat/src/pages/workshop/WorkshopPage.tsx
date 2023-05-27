@@ -37,13 +37,14 @@ import { PageContentLoaderComponent } from "../../components/PageContentLoaderCo
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateUserLikedWorkshopMutation } from "../../hooks/use-update-liked-workshop-mutation";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
+import { COLOR_LIKE } from "../../theme/theme-colors";
 import { routeLibrary } from "../library/library-routes";
 import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";
-import { COLOR_LIKE } from "../../theme/theme-colors";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -78,6 +79,8 @@ const WorkshopByIdQuery = graphql(`
 
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
+
+  const { isLoggedIn } = useIsLoggedIn();
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_LAST_WORKSHOP_ID, workshopId);
@@ -188,7 +191,7 @@ export const WorkshopPage: React.FC = () => {
               <IonProgressBar type="indeterminate"></IonProgressBar>
             )}
             <IonButtons slot="end">
-              {workshop && (
+              {workshop && isLoggedIn && (
                 <IonButton onClick={() => toggleWorkshopLike()}>
                   <IonIcon
                     icon={workshop.isLiked ? heart : heartOutline}
