@@ -117,7 +117,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
       logger("Loaded existing element");
       setName(existingElement.name);
       setContent(existingElement.markdown ?? "");
-      setLanguageCode(existingElement.languageCode ?? undefined);
+      setLanguageCode(existingElement.languageCode ?? "en");
       setIsPublic(existingElement.visibility === ElementVisibility.Public);
     }
   }, [existingElement, logger]);
