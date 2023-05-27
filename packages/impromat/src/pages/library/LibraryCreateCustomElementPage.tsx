@@ -136,7 +136,8 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             languageCode,
           },
         });
-        const newElementId = newElement.data?.updateElement.id;
+        const newElementId =
+          newElement.data?.updateElement?.id ?? existingElement.id;
         if (!newElementId) {
           console.error("Could not create element");
           return;
