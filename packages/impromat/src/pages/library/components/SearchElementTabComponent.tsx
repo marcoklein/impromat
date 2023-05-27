@@ -7,7 +7,7 @@ import {
   IonProgressBar,
 } from "@ionic/react";
 import { add, informationCircle } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
@@ -52,11 +52,13 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
 
   const itemsPerPage = 20;
 
+  const trimmedSearchText = useMemo(() => searchText.trim(), [searchText]);
+
   const [searchElementsQueryResult] = useQuery({
     query: SearchElementTabQuery,
     variables: {
       input: {
-        text: searchText,
+        text: trimmedSearchText,
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
