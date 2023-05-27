@@ -102,7 +102,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
 
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const [languageCode, setLanguageCode] = useState<string>();
+  const [languageCode, setLanguageCode] = useState<string>("en");
   const [isPublic, setIsPublic] = useState(false);
   const history = useHistory();
   const logger = useLogger("LibraryCreateCustomElementPage");
