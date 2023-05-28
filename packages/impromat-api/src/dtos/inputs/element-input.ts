@@ -23,7 +23,10 @@ export class CreateElementInput {
   @MaxLength(10000)
   markdown: Nullable<string>;
 
-  @Field(() => String)
+  @Field(() => String, {
+    defaultValue: 'en',
+    description: 'Language code (e.g. en, de) of the element.',
+  })
   @Length(2)
   @IsIn(['en', 'de'])
   languageCode: string;

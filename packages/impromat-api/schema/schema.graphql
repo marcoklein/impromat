@@ -331,7 +331,9 @@ input CreateElementInput {
   name: String!
   visibility: ElementVisibility! = PRIVATE
   markdown: String
-  languageCode: String!
+
+  """Language code (e.g. en, de) of the element."""
+  languageCode: String! = "en"
   orderIndex: Int
 }
 
@@ -339,7 +341,9 @@ input UpdateElementInput {
   name: String
   visibility: ElementVisibility = PRIVATE
   markdown: String
-  languageCode: String
+
+  """Language code (e.g. en, de) of the element."""
+  languageCode: String = "en"
   orderIndex: Int
   id: ID!
 }
