@@ -91,7 +91,7 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
         trigger="open-modal"
         initialBreakpoint={0.5}
         breakpoints={[0, 0.25, 0.5, 0.75]}
-        style={{ "--width": "fit-content", "--min-width": "768px" }}
+
         showBackdrop={true}
       >
         <IonContent className="ion-padding">
