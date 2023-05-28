@@ -1,12 +1,13 @@
 import { IonButton, IonIcon } from "@ionic/react";
-import { star, starOutline } from "ionicons/icons";
+import { heart, heartOutline } from "ionicons/icons";
+import { useCallback } from "react";
 import {
   FragmentType,
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
 import { useUpdateUserFavoriteElementMutation } from "../../../hooks/use-update-favorite-element-mutation";
-import { useCallback } from "react";
+import { COLOR_LIKE } from "../../../theme/theme-colors";
 
 const ElementFavoriteIcon_ElementFragment = graphql(`
   fragment ElementFavoriteIcon_Element on Element {
@@ -50,9 +51,10 @@ export const ElementFavoriteIconComponent: React.FC<ContainerProps> = ({
     <IonButton onClick={() => onStarElementClick()} fill="clear">
       <IonIcon
         slot="icon-only"
-        icon={element?.isFavorite ? star : starOutline}
+        icon={element?.isFavorite ? heart : heartOutline}
+        color={COLOR_LIKE}
         aria-label={
-          element?.isFavorite ? "Remove from favorites." : "Add to favorites."
+          element?.isFavorite ? "Remove from likes." : "Add to likes."
         }
       ></IonIcon>
     </IonButton>

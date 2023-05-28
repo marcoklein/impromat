@@ -1,5 +1,24 @@
 # impromat-api
 
+## 0.8.0
+
+### Minor Changes
+
+- 56ddd9c: Increase element search threshold to 0.9 to allow fuzzier search results
+
+## 0.7.0
+
+### Minor Changes
+
+- 04dd3c7: Filter for workshops
+
+## 0.6.0
+
+### Minor Changes
+
+- c458aca: Allow liking of workshops
+- c458aca: Liked user workshops
+
 ## 0.5.0
 
 ### Minor Changes

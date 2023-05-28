@@ -1,4 +1,5 @@
 import { DevPage } from "./dev-page.js";
+import { FavoriteElementsDevPage } from "./favorite-elements-dev-page.js";
 
 const NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX =
   /^((?!library-add-custom-element).)*$/;
@@ -40,7 +41,7 @@ export class LibraryDevPage extends DevPage {
   }
 
   async gotoFavorites() {
-    await this.page.goto("./library/favorites");
+    await new FavoriteElementsDevPage(this.page).goto();
   }
 
   searchTabLocator() {

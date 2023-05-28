@@ -1,14 +1,25 @@
-import { IonContent, IonList, IonProgressBar } from "@ionic/react";
-import { informationCircle } from "ionicons/icons";
-import { useState } from "react";
+import {
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonList,
+  IonProgressBar,
+} from "@ionic/react";
+import { add, informationCircle } from "ionicons/icons";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import { graphql } from "../../../graphql-client";
-import { routeLibraryElement } from "../library-routes";
+import {
+  routeLibraryCreateCustomElement,
+  routeLibraryElement,
+} from "../library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
 
 const SearchElementTabQuery = graphql(`
   query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {
@@ -32,6 +43,7 @@ interface ContainerProps {
 export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
+  const logger = useComponentLogger("SearchElementTabComponent");
   const [restoredSearchText] = useState(
     window.localStorage.getItem("lastSearch") ?? "",
   );
@@ -40,16 +52,37 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
 
   const itemsPerPage = 20;
 
+  const trimmedSearchText = useMemo(() => searchText.trim(), [searchText]);
+
   const [searchElementsQueryResult] = useQuery({
     query: SearchElementTabQuery,
     variables: {
       input: {
-        text: searchText,
+        text: trimmedSearchText,
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
     },
   });
+
+  useEffect(() => {
+    const actualSkip = searchElementsQueryResult.data?.searchElements.length;
+    if (!actualSkip) return;
+    const actualPageNumber = Math.floor(actualSkip / itemsPerPage) - 1;
+    logger(
+      "actual page number=%s, current page number=%s",
+      actualPageNumber,
+      pageNumber,
+    );
+    if (pageNumber < actualPageNumber) {
+      logger(
+        "Correcting page number (actualPageNumber=%s, currentPageNumber=%s) as cached entities got retrieved.",
+        actualPageNumber,
+        pageNumber,
+      );
+      setPageNumber(actualPageNumber);
+    }
+  }, [pageNumber, searchElementsQueryResult, logger]);
 
   return (
     <>
@@ -68,6 +101,14 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         )}
       </div>
       <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton
+            color="primary"
+            routerLink={routeLibraryCreateCustomElement({ workshopId })}
+          >
+            <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+        </IonFab>
         {!searchElementsQueryResult.stale &&
           !searchElementsQueryResult.fetching &&
           !searchElementsQueryResult.data?.searchElements.length &&
@@ -83,9 +124,19 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         {searchElementsQueryResult.data &&
           searchElementsQueryResult.data.searchElements.length > 0 && (
             <PreviewCardGrid
+              scrollStoreKey="search-element-tab-component"
+              isFetching={
+                searchElementsQueryResult.fetching ||
+                searchElementsQueryResult.stale
+              }
               endReached={() => {
+                logger(
+                  "end reached, queryResult.stale=%s",
+                  searchElementsQueryResult.stale,
+                );
                 if (!searchElementsQueryResult.stale) {
                   setPageNumber((currentPageNumber) => currentPageNumber + 1);
+                  logger("setting page number to %s", pageNumber + 1);
                 }
               }}
               items={searchElementsQueryResult.data.searchElements ?? []}

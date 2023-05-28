@@ -1,7 +1,7 @@
 import { IonBadge, IonButton, IonCardContent, IonText } from "@ionic/react";
 import { useMemo } from "react";
+import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
-import { ElementFavoriteIconComponent } from "../pages/library/components/ElementFavoriteIconComponent";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
 
@@ -88,8 +88,13 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
     [element, searchResult],
   );
 
+  const history = useHistory();
+
   return (
     <PreviewCard
+      onCardClick={() => {
+        history.push(routerLink);
+      }}
       infoListElement={
         <ElementInfoList
           elementFragment={element}
@@ -118,9 +123,6 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
           >
             Open
           </IonButton>
-          <ElementFavoriteIconComponent
-            elementFragment={element}
-          ></ElementFavoriteIconComponent>
         </>
       }
     >

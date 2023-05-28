@@ -123,29 +123,29 @@ export const HomeContent: React.FC = () => {
 
             <IonCardContent>
               <p>
-                For easy access, tag certain elements, e.g. exercises you
-                commonly use in your workshops, as <b>Favorites</b>. If you
-                cannot find an exercise or game in the library, <b>create</b>{" "}
-                your own element and incorporate them in your workshop(s).
+                For easy access, tag certain elements, e.g. <b>like</b>{" "}
+                exercises you commonly use in your workshops. If you cannot find
+                an exercise or game in the library, <b>create</b> your own
+                element and incorporate them in your workshop(s).
               </p>
               <IonButton
                 className="ion-margin-vertical"
                 fill="solid"
                 color="yellow-4"
-                routerLink={routeLibraryTab(Tabs.FAVORITES)}
+                routerLink={routeLibraryTab(Tabs.LIKES)}
               >
                 <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-                Open Favorite Elements
+                Open Liked Elements
               </IonButton>
               <p>
                 The <b>Login</b> via Google account allows you to{" "}
-                <b>synchronize</b> your workshops, favorite elements and
-                personally created elements on all devices. Thus, you can plan a
-                workshop on your computer with the desktop version of Impromat
-                and use the <b>mobile app</b> on your smartphone during the
-                workshop. (Don't worry, your improv data is not shared with
-                Google and safely hosted on a server based in Germany — the
-                Impromat server does not collect personal information. See our{" "}
+                <b>synchronize</b> your workshops, liked elements and personally
+                created elements on all devices. Thus, you can plan a workshop
+                on your computer with the desktop version of Impromat and use
+                the <b>mobile app</b> on your smartphone during the workshop.
+                (Don't worry, your improv data is not shared with Google and
+                safely hosted on a server based in Germany — the Impromat server
+                does not collect personal information. See our{" "}
                 <IonRouterLink routerLink={routePrivacyPolicy()}>
                   Privacy Policy
                 </IonRouterLink>{" "}
@@ -208,7 +208,7 @@ export const HomeContent: React.FC = () => {
               for others? With Impromat you can easily{" "}
               <b>plan, guide through and manage your workshops</b>,{" "}
               <i className="a"></i> by duplicating and adapting given workshop
-              structures, adding your personal favorites and creating your own
+              structures, adding your personal liked ones and creating your own
               elements — plus, when participants or other workshop leaders ask
               you for your notes on a workshop, you can <b>share</b> your
               Impromat workshop with them in no time.

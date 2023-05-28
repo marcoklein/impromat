@@ -62,6 +62,8 @@ export const SlidingItemComponent: React.FC<ContainerProps> = ({
     }
   }, [isReordering]);
 
+  const hasOptionsButtons = onRemoveClick && onEditClick;
+
   return (
     <IonItemSliding ref={optionsRef} disabled={isReordering}>
       <IonItem
@@ -77,12 +79,14 @@ export const SlidingItemComponent: React.FC<ContainerProps> = ({
         {!isReordering && (
           <IonButtons>
             {endSlot}
-            <IonButton
-              onClick={(event) => toggleOptionsClicked(event)}
-              color="medium"
-            >
-              <IonIcon icon={ellipsisVertical}></IonIcon>
-            </IonButton>
+            {hasOptionsButtons && (
+              <IonButton
+                onClick={(event) => toggleOptionsClicked(event)}
+                color="medium"
+              >
+                <IonIcon icon={ellipsisVertical}></IonIcon>
+              </IonButton>
+            )}
           </IonButtons>
         )}
       </IonItem>
@@ -111,12 +115,14 @@ export const SlidingItemComponent: React.FC<ContainerProps> = ({
             <IonIcon slot="start" icon={pencilOutline}></IonIcon>
           </IonItemOption>
         )}
-        <IonItemOption
-          color="medium"
-          onClick={(event) => toggleOptionsClicked(event)}
-        >
-          <IonIcon slot="icon-only" icon={chevronForward}></IonIcon>
-        </IonItemOption>
+        {hasOptionsButtons && (
+          <IonItemOption
+            color="medium"
+            onClick={(event) => toggleOptionsClicked(event)}
+          >
+            <IonIcon slot="icon-only" icon={chevronForward}></IonIcon>
+          </IonItemOption>
+        )}
       </IonItemOptions>
     </IonItemSliding>
   );

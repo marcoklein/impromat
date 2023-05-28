@@ -1,10 +1,9 @@
 {
   "name": "impromat-api",
-  "version": "0.5.0",
+  "version": "0.8.0",
   "description": "",
   "author": "Marco Klein <marcoklein",
   "private": true,
-  "license": "UNLICENSED",
   "scripts": {
     "start": "yarn db:migrate && node dist/src/main.js",
     "db:migrate": "prisma migrate deploy",
@@ -19,6 +18,7 @@
     "test:load-env": "dotenv -c test --",
     "test": "yarn test:backend-up && yarn codegen && yarn test:load-env jest",
     "test:backend-up": "yarn docker-compose up database --wait && yarn test:prepare-db",
+    "test:backend-restart": "yarn docker-compose down && yarn test:backend-up",
     "test:prepare-db": "yarn test:load-env yarn prisma migrate reset --skip-generate --force",
     "test:watch": "yarn test --watch",
     "test:cov": "yarn test --coverage",

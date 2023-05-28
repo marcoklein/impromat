@@ -7,21 +7,20 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { Prisma } from '@prisma/client';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { UpdateUserInput } from 'src/dtos/inputs/update-user-input';
+import { UserWorkshopsFilterInput } from 'src/dtos/inputs/user-workshops-filter-input';
 import { UserFavoriteElementDto } from 'src/dtos/types/user-favorite-element.dto';
-import { User, UserRelations } from 'src/dtos/types/user.dto';
+import { UserLikedWorkshopDto } from 'src/dtos/types/user-liked-workshop.dto';
+import { User, UserDtoComputedFields } from 'src/dtos/types/user.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { UserFavoriteElementsService } from 'src/graphql/services/user-favorite-elements.service';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
 export class MeResolver {
-  constructor(
-    @Inject(PrismaService) private prismaService: PrismaService,
-    private userFavoriteElementsService: UserFavoriteElementsService,
-  ) {}
+  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   @ResolveField()
   async elements(@Parent() user: User) {
@@ -33,9 +32,34 @@ export class MeResolver {
     return this.findUserById(user.id).favoriteElements();
   }
 
+  @ResolveField(() => [UserLikedWorkshopDto])
+  async likedWorkshops(@Parent() user: User) {
+    return this.findUserById(user.id).likedWorkshops();
+  }
+
   @ResolveField()
-  async workshops(@Parent() user: User) {
-    return this.findUserById(user.id).workshops();
+  async workshops(
+    @Parent() user: User,
+    @Args('input', {
+      type: () => UserWorkshopsFilterInput,
+      defaultValue: { liked: true, owned: true },
+    })
+    input: UserWorkshopsFilterInput,
+  ) {
+    const { liked, owned } = input;
+    const ownedFilter: Prisma.WorkshopWhereInput = { ownerId: user.id };
+    const likedFilter: Prisma.WorkshopWhereInput = {
+      userLikedWorkshops: { some: { userId: user.id } },
+    };
+    const filter: Prisma.WorkshopWhereInput = {
+      OR: [owned ? ownedFilter : {}, liked ? likedFilter : {}],
+    };
+    return this.prismaService.workshop.findMany({
+      where: filter,
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
   }
 
   @Query(() => User, {
@@ -43,7 +67,7 @@ export class MeResolver {
   })
   async me(
     @SessionUserId() userId: string,
-  ): Promise<Omit<User, UserRelations> | null> {
+  ): Promise<Omit<User, UserDtoComputedFields> | null> {
     return this.findUserById(userId);
   }
 
@@ -52,7 +76,7 @@ export class MeResolver {
     @Args('input')
     updateUserInput: UpdateUserInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<User, UserRelations>> {
+  ): Promise<Omit<User, UserDtoComputedFields>> {
     if (updateUserInput.id !== sessionUserId) {
       throw new Error('Not Authorized');
     }

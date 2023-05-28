@@ -9,6 +9,8 @@ export class WorkshopDevPage extends DevPage {
   readonly elementSelector: Locator;
   readonly addFabButtonToggleLocator: Locator;
   readonly addElementButtonLocator: Locator;
+  readonly addToLikesButtonLocator: Locator;
+  readonly removeFromLikesButtonLocator: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -30,6 +32,13 @@ export class WorkshopDevPage extends DevPage {
     this.addElementButtonLocator = page
       .locator("ion-fab-list")
       .getByRole("link", { name: "Element" });
+
+    this.addToLikesButtonLocator = page.getByRole("button", {
+      name: "Add to likes.",
+    });
+    this.removeFromLikesButtonLocator = page.getByRole("button", {
+      name: "Remove from likes.",
+    });
   }
 
   async createNew(name: string) {
@@ -50,8 +59,7 @@ export class WorkshopDevPage extends DevPage {
     const page = this.page;
     await this.gotoElementFromSearch();
     await page
-      .locator('ion-button:has-text("Add to Workshop")')
-      .getByRole("button")
+      .getByRole("button", { name: "Add to workshop", exact: true })
       .click();
   }
 
@@ -127,5 +135,15 @@ export class WorkshopDevPage extends DevPage {
       await this.addFabButtonToggleLocator.click();
       await locator.click();
     }
+  }
+
+  async like() {
+    await this.addToLikesButtonLocator.click();
+    await this.removeFromLikesButtonLocator.waitFor();
+  }
+
+  async unlike() {
+    await this.removeFromLikesButtonLocator.click();
+    await this.addToLikesButtonLocator.waitFor();
   }
 }

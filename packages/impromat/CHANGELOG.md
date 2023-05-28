@@ -1,5 +1,58 @@
 # Changelog
 
+## 0.35.1
+
+### Patch Changes
+
+- 0303a12: Disable unnecessary menu buttons for publicly shared workshop
+- Updated dependencies [56ddd9c]
+  - impromat-api@0.8.0
+
+## 0.35.0
+
+### Minor Changes
+
+- b12f3f0: Liked elements
+
+## 0.34.0
+
+### Minor Changes
+
+- 04dd3c7: Filters for workshops
+
+### Patch Changes
+
+- 04dd3c7: Add vitest for unit testing
+- 04dd3c7: Fix add to workshop workshops
+- Updated dependencies [04dd3c7]
+  - impromat-api@0.7.0
+
+## 0.33.0
+
+### Minor Changes
+
+- 6bcd0d1: Click on preview cards for elements and workshops to open them
+- 6bcd0d1: Loading indicator on bottom of lists
+
+### Patch Changes
+
+- 6bcd0d1: Fix cached custom element
+- 6bcd0d1: Restore scroll position
+
+## 0.32.0
+
+### Minor Changes
+
+- c458aca: Allow liking of workshops
+- 56d80bb: Make workshop name input text more concise
+- 56d80bb: Add to element to any workshop from selection of available workshops
+
+### Patch Changes
+
+- Updated dependencies [c458aca]
+- Updated dependencies [c458aca]
+  - impromat-api@0.6.0
+
 ## 0.31.1
 
 ### Patch Changes

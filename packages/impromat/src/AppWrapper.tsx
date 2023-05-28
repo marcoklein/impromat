@@ -61,8 +61,17 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
                 // that might change in the future through (1) a custom MeUser type or (2) a User with id query.
                 cache.invalidate("Query", "me");
               },
+              updateElement(result, _args, cache, _info) {
+                // TODO define fields of updated element in query to fetch it with mutation
+                const id = (result.updateElement as any)?.id;
+                cache.invalidate({
+                  __typename: "Element",
+                  id,
+                });
+              },
               createWorkshop(_result, _args, cache, _info) {
                 cache.invalidate("Query", "workshops");
+                cache.invalidate("Query", "me");
               },
               updateWorkshop(_result, _args, cache, _info) {
                 // TODO only invalidate fields that are updated through args.input

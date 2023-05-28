@@ -1,16 +1,16 @@
 import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures.js";
 
-pageTest.describe("Favorite Elements", () => {
+pageTest.describe("Liked Elements", () => {
   pageTest(
-    "should add a favorite element",
+    "should add a liked element",
     async ({ page, auth, libraryElementPage, libraryPage }) => {
       // given
       await auth.loginAsRandomUser();
       await libraryPage.goto();
       await libraryPage.gotoFirstElementFromSearch();
       // when
-      await libraryElementPage.addToFavoriteElements();
+      await libraryElementPage.addToLikedElements();
       await libraryPage.gotoFavorites();
       // then
       await expect(page.getByText("Freeze").first()).toBeVisible();
@@ -18,7 +18,7 @@ pageTest.describe("Favorite Elements", () => {
   );
 
   pageTest(
-    "should immediately update the favorite icon if the favorite state is changed through cached version",
+    "should immediately update the liked icon if the liked state is changed through cached version",
     async ({ page, auth, libraryElementPage, libraryPage }) => {
       // given
       await auth.loginAsRandomUser();
@@ -28,30 +28,28 @@ pageTest.describe("Favorite Elements", () => {
       await page.getByRole("button", { name: "back" }).click();
       await libraryPage.gotoFirstElementFromSearch();
       // when
-      await libraryElementPage.addToFavoriteElements();
+      await libraryElementPage.addToLikedElements();
       // then
       await expect(
-        libraryElementPage.removeFromFavoritesButtonLocator,
-        "Favorite icon state did not update.",
+        libraryElementPage.removeFromLikesButtonLocator,
+        "Liked icon state did not update.",
       ).toBeVisible();
     },
   );
 
   pageTest(
-    "should remove a favorite element",
+    "should remove a liked element",
     async ({ page, auth, libraryPage, libraryElementPage }) => {
       // given
       await auth.loginAsRandomUser();
       await libraryPage.goto();
       await libraryPage.gotoFirstElementFromSearch();
-      await libraryElementPage.addToFavoriteElements();
+      await libraryElementPage.addToLikedElements();
       // when
-      await libraryElementPage.removeFromFavoriteElements();
+      await libraryElementPage.removeFromLikedElements();
       await libraryPage.gotoFavorites();
       // then
-      await expect(
-        page.locator("p").getByText("No favorites yet."),
-      ).toBeVisible();
+      await expect(page.locator("p").getByText("No likes yet.")).toBeVisible();
     },
   );
 });

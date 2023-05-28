@@ -61,6 +61,22 @@ type Workshop {
   """If true, the client is authorized to edit the workshop."""
   canEdit: Boolean
   isPublic: Boolean!
+
+  """
+  True, if liked by the logged in user. Undefined, if there is no user logged in.
+  """
+  isLiked: Boolean
+
+  """
+  Convenience field to determine if the owner of the workshop is the logged in user.
+  """
+  isOwnerMe: Boolean
+}
+
+type UserLikedWorkshop {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  workshop: Workshop!
 }
 
 type User {
@@ -69,14 +85,25 @@ type User {
   updatedAt: DateTime!
   version: Int!
   deleted: Boolean!
-  workshops: [Workshop!]!
+
+  """All workshops that this user has access to."""
+  workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
 
   """Elements owned by this user."""
   elements: [Element!]!
   favoriteElements: [UserFavoriteElement!]!
+  likedWorkshops: [UserLikedWorkshop!]!
 
   """Public display name of the user."""
   name: String
+}
+
+"""Filter workshops of user."""
+input UserWorkshopsFilterInput {
+  liked: Boolean! = true
+
+  """Filter for workshops that are owned by the user."""
+  owned: Boolean! = true
 }
 
 type Element {
@@ -191,6 +218,9 @@ type Mutation {
 
   """Change the favorite state for element of the logged in user."""
   updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Element
+
+  """Change the liked state for workshop of the logged in user."""
+  updateUserLikedWorkshop(input: UpdateUserLikedWorkshopInput!): Workshop
   createWorkshop(input: CreateWorkshopInput!): Workshop!
   updateWorkshop(input: UpdateWorkshopInput!): Workshop!
   deleteWorkshop(id: ID!): Workshop
@@ -203,6 +233,11 @@ type Mutation {
 input UpdateUserFavoriteElementInput {
   elementId: ID!
   isFavorite: Boolean!
+}
+
+input UpdateUserLikedWorkshopInput {
+  workshopId: ID!
+  isLiked: Boolean!
 }
 
 input CreateWorkshopInput {

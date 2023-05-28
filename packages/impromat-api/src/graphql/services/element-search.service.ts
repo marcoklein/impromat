@@ -50,15 +50,16 @@ export class ElementSearchService {
         { name: 'name', weight: 2 },
         { name: 'tags.name', weight: 1 },
       ],
+      isCaseSensitive: false,
       includeScore: true,
       includeMatches: true,
       shouldSort: true,
-      threshold: 0.5,
+      threshold: 0.6,
     });
 
     // TODO optimize by reusing fuse instance for public elements and potentially cache search index for users
     const result = fuse
-      .search(searchElementsInput.text, {
+      .search(searchElementsInput.text.trim(), {
         limit: searchElementsInput.skip + searchElementsInput.take,
       })
       .slice(

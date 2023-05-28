@@ -9,15 +9,18 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { add, filter } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { PreviewCardGrid } from "../../components/PreviewCardGrid";
+import { WorkshopsFilterBar } from "../../components/WorkshopsFilterBar";
 import { getFragmentData, graphql } from "../../graphql-client";
+import { UserWorkshopsFilterInput } from "../../graphql-client/graphql";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { usePersistedState } from "../../hooks/use-persisted-state";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 
@@ -29,9 +32,11 @@ const WorkshopFields_WorkshopFragment = graphql(`
 `);
 
 const WorkshopsQuery = graphql(`
-  query WorkshopsQuery {
-    workshops {
-      ...WorkshopFields_Workshop
+  query WorkshopsQuery($userWorkshopsFilterInput: UserWorkshopsFilterInput) {
+    me {
+      workshops(input: $userWorkshopsFilterInput) {
+        ...WorkshopFields_Workshop
+      }
     }
   }
 `);
@@ -48,15 +53,39 @@ export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
 
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
+
+  const defaultFilterInput: Required<UserWorkshopsFilterInput> = useMemo(
+    () => ({
+      liked: true,
+      owned: true,
+    }),
+    [],
+  );
+  const [userWorkshopsFilterInput, setUserWorkshopsFilterInput] =
+    usePersistedState<UserWorkshopsFilterInput>(
+      "user-workshops-filter-input",
+      defaultFilterInput,
+    );
+
+  const workshopsFilterInputQueryVariables = useMemo(() => {
+    if (Object.values(userWorkshopsFilterInput).every((value) => !value)) {
+      return defaultFilterInput;
+    }
+    return userWorkshopsFilterInput;
+  }, [defaultFilterInput, userWorkshopsFilterInput]);
+
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: WorkshopsQuery,
     context,
+    variables: {
+      userWorkshopsFilterInput: workshopsFilterInputQueryVariables,
+    },
   });
   const [, createWorkshopMutation] = useMutation(CreateWorkshopMutation);
 
   const availableWorkshops = getFragmentData(
     WorkshopFields_WorkshopFragment,
-    workshopsQueryResult.data?.workshops,
+    workshopsQueryResult.data?.me.workshops,
   );
 
   const history = useHistory();
@@ -65,7 +94,8 @@ export const WorkshopsPage: React.FC = () => {
   const createWorkshopClick = useCallback(() => {
     presentInputDialog({
       header: "Workshop Name",
-      message: "Enter a name for your workshop. You can change it later.",
+      message: "Enter a name for your workshop. You can change it later:",
+      placeholder: "Workshop name...",
       emptyInputMessage: "Please enter a name for your workshop.",
       onAccept: async (text) => {
         const { error, data } = await createWorkshopMutation({
@@ -97,6 +127,18 @@ export const WorkshopsPage: React.FC = () => {
             </IonButton>
           </IonButtons>
         </IonToolbar>
+        <WorkshopsFilterBar
+          filterInput={userWorkshopsFilterInput}
+          onFilterInputChange={(filterInput) => {
+            console.log("filter changed");
+            reexecuteWorkshopsQuery();
+            setUserWorkshopsFilterInput(filterInput);
+            localStorage.setItem(
+              "user-workshops-filter-input",
+              JSON.stringify(filterInput),
+            );
+          }}
+        ></WorkshopsFilterBar>
       </IonHeader>
 
       <IonContent>
@@ -106,6 +148,8 @@ export const WorkshopsPage: React.FC = () => {
         >
           {availableWorkshops?.length ? (
             <PreviewCardGrid
+              scrollStoreKey="workshops-page"
+              isFetching={false}
               items={availableWorkshops}
               itemContent={(_index, workshop) => (
                 <WorkshopPreviewCard
@@ -113,6 +157,30 @@ export const WorkshopsPage: React.FC = () => {
                 ></WorkshopPreviewCard>
               )}
             ></PreviewCardGrid>
+          ) : !userWorkshopsFilterInput.liked ||
+            !userWorkshopsFilterInput.owned ? (
+            <div
+              className="ion-padding"
+              style={{
+                minHeight: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <p>The current filter selection returns no workshops</p>
+                <IonButton
+                  expand="full"
+                  onClick={() => {
+                    setUserWorkshopsFilterInput({ liked: true, owned: true });
+                  }}
+                >
+                  <IonIcon slot="start" icon={filter}></IonIcon>
+                  Clear Filters
+                </IonButton>
+              </div>
+            </div>
           ) : (
             <WorkshopCreateFirstComponent
               onCreateWorkshopClick={() => createWorkshopClick()}

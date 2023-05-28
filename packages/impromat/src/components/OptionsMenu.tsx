@@ -50,8 +50,9 @@ export const OptionsMenu: React.FC<ContainerProps> = ({
         onDidDismiss={() => setIsOpen(false)}
       >
         <IonList lines="none">
-          {options.map((option) => (
+          {options.map((option, index) => (
             <IonItem
+              key={index}
               button
               onClick={() => {
                 option.handler();
