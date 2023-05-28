@@ -31,6 +31,7 @@ import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshop } from "../../routes/shared-routes";
+import { ElementTagsItem } from "./components/ElementTagsItem";
 import { Tabs } from "./components/LibraryContentComponent";
 import {
   LIBRARY_ELEMENT_ID_SEARCH_PARAM,
@@ -46,6 +47,10 @@ const LibraryCreateCustomElement_Query = graphql(`
       visibility
       markdown
       languageCode
+      tags {
+        id
+        name
+      }
     }
   }
 `);
@@ -103,6 +108,8 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [languageCode, setLanguageCode] = useState<string>("en");
+  const [tags, setTags] = useState<{ id: string; name: string }[]>([]);
+
   const [isPublic, setIsPublic] = useState(false);
   const history = useHistory();
   const logger = useLogger("LibraryCreateCustomElementPage");
@@ -118,6 +125,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
       setName(existingElement.name);
       setContent(existingElement.markdown ?? "");
       setLanguageCode(existingElement.languageCode ?? "en");
+      setTags(existingElement.tags.map(({ id, name }) => ({ id, name })));
       setIsPublic(existingElement.visibility === ElementVisibility.Public);
     }
   }, [existingElement, logger]);
@@ -134,6 +142,11 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
               : ElementVisibility.Private,
             markdown: content,
             languageCode,
+            tags: {
+              connect: tags.map((tag) => ({
+                id: tag.id,
+              })),
+            },
           },
         });
         const newElementId =
@@ -264,6 +277,10 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
               <IonSelectOption value="de">Deutsch</IonSelectOption>
             </IonSelect>
           </IonItem>
+          <ElementTagsItem
+            tags={tags}
+            onTagsChange={(tags) => setTags(tags)}
+          ></ElementTagsItem>
           {editExistingItem && (
             <InfoItemComponent>
               <>

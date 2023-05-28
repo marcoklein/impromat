@@ -32,7 +32,7 @@ const documents = {
     "\n  fragment AccountOptionsMenu_User on User {\n    id\n    name\n  }\n": types.AccountOptionsMenu_UserFragmentDoc,
     "\n      mutation UpdateUserMutation($input: UpdateUserInput!) {\n        updateUser(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateUserMutationDocument,
     "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n  }\n": types.AccountSignedIn_UserFragmentDoc,
-    "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n    }\n  }\n": types.LibraryCreateCustomElement_QueryDocument,
+    "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n  }\n": types.LibraryCreateCustomElement_QueryDocument,
     "\n  mutation UpdateElementMutation($input: UpdateElementInput!) {\n    updateElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateElementMutationDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      id\n    }\n  }\n": types.CreateElementMutationDocument,
     "\n      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {\n        workshop(id: $id) {\n          sections {\n            id\n          }\n        }\n      }\n    ": types.LibraryCreateCustomElementWorkshopQueryDocument,
@@ -42,6 +42,8 @@ const documents = {
     "\n  fragment CustomElementsTab_WorkshopFragment on User {\n    elements {\n      id\n      name\n      ...ElementPreviewItem_Element\n    }\n  }\n": types.CustomElementsTab_WorkshopFragmentFragmentDoc,
     "\n  query CustomElementsTab_Query {\n    me {\n      ...CustomElementsTab_WorkshopFragment\n    }\n  }\n": types.CustomElementsTab_QueryDocument,
     "\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n": types.ElementFavoriteIcon_ElementFragmentDoc,
+    "\n  query LibraryCreateCustomElementTags_Query($filter: ElementTagsFilterInput!) {\n    tags(filter: $filter) {\n      ...ElementTagsItem_ElementTag\n    }\n  }\n": types.LibraryCreateCustomElementTags_QueryDocument,
+    "\n  fragment ElementTagsItem_ElementTag on ElementTag {\n    id\n    name\n  }\n": types.ElementTagsItem_ElementTagFragmentDoc,
     "\n  fragment FavoriteElements_User on User {\n    favoriteElements {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n": types.FavoriteElements_UserFragmentDoc,
     "\n  fragment MyUser_Query on Query {\n    me {\n      id\n      favoriteElements {\n        element {\n          id\n        }\n      }\n      ...FavoriteElements_User\n    }\n  }\n": types.MyUser_QueryFragmentDoc,
     "\n  query MyUser {\n    ...MyUser_Query\n  }\n": types.MyUserDocument,
@@ -155,7 +157,7 @@ export function graphql(source: "\n  fragment AccountSignedIn_User on User {\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n    }\n  }\n"): (typeof documents)["\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n    }\n  }\n"];
+export function graphql(source: "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -192,6 +194,14 @@ export function graphql(source: "\n  query CustomElementsTab_Query {\n    me {\n
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n"): (typeof documents)["\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query LibraryCreateCustomElementTags_Query($filter: ElementTagsFilterInput!) {\n    tags(filter: $filter) {\n      ...ElementTagsItem_ElementTag\n    }\n  }\n"): (typeof documents)["\n  query LibraryCreateCustomElementTags_Query($filter: ElementTagsFilterInput!) {\n    tags(filter: $filter) {\n      ...ElementTagsItem_ElementTag\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment ElementTagsItem_ElementTag on ElementTag {\n    id\n    name\n  }\n"): (typeof documents)["\n  fragment ElementTagsItem_ElementTag on ElementTag {\n    id\n    name\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
