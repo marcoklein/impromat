@@ -89,8 +89,6 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
       <IonModal
         ref={modal}
         trigger="open-modal"
-        initialBreakpoint={0.5}
-        breakpoints={[0, 0.25, 0.5, 0.75]}
 
         showBackdrop={true}
       >
