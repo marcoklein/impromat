@@ -11,6 +11,12 @@ import { ElementVisibility } from '../types/element-visibility.dto';
 import { IdInput } from './id-input';
 
 @InputType()
+export class ElementTagConnectInput {
+  @Field(() => [IdInput])
+  connect: IdInput[];
+}
+
+@InputType()
 export class CreateElementInput {
   @Field(() => String)
   @MaxLength(500)
@@ -33,6 +39,9 @@ export class CreateElementInput {
 
   @Field(() => Int, { nullable: true })
   orderIndex?: number;
+
+  @Field(() => ElementTagConnectInput, { nullable: true })
+  tags: ElementTagConnectInput;
 }
 
 @InputType()

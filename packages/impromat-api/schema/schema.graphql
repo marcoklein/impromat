@@ -184,6 +184,7 @@ type Query {
 
   """Get information about the current user."""
   me: User!
+  tags(filter: ElementTagsFilterInput, skip: Float = 0, take: Float = 20): [ElementTag!]!
 }
 
 input ElementSearchInput {
@@ -211,6 +212,11 @@ input ElementsFilterInput {
 
 input ElementsOrderByInput {
   notImplemented: Boolean!
+}
+
+"""Filter tags of elements."""
+input ElementTagsFilterInput {
+  text: String
 }
 
 type Mutation {
@@ -335,6 +341,11 @@ input CreateElementInput {
   """Language code (e.g. en, de) of the element."""
   languageCode: String! = "en"
   orderIndex: Int
+  tags: ElementTagConnectInput
+}
+
+input ElementTagConnectInput {
+  connect: [IdInput!]!
 }
 
 input UpdateElementInput {
@@ -345,6 +356,7 @@ input UpdateElementInput {
   """Language code (e.g. en, de) of the element."""
   languageCode: String = "en"
   orderIndex: Int
+  tags: ElementTagConnectInput
   id: ID!
 }
 

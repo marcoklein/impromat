@@ -26,6 +26,7 @@ export type CreateElementInput = {
   markdown?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   orderIndex?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<ElementTagConnectInput>;
   visibility?: ElementVisibility;
 };
 
@@ -114,6 +115,15 @@ export type ElementTag = {
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   version: Scalars['Int'];
+};
+
+export type ElementTagConnectInput = {
+  connect: Array<IdInput>;
+};
+
+/** Filter tags of elements. */
+export type ElementTagsFilterInput = {
+  text?: InputMaybe<Scalars['String']>;
 };
 
 export enum ElementVisibility {
@@ -214,6 +224,7 @@ export type Query = {
   /** Get information about the current user. */
   me: User;
   searchElements: Array<ElementSearchResult>;
+  tags: Array<ElementTag>;
   workshop: Workshop;
   workshopElement: WorkshopElement;
   workshops: Array<Workshop>;
@@ -239,6 +250,13 @@ export type QuerySearchElementsArgs = {
 };
 
 
+export type QueryTagsArgs = {
+  filter?: InputMaybe<ElementTagsFilterInput>;
+  skip?: InputMaybe<Scalars['Float']>;
+  take?: InputMaybe<Scalars['Float']>;
+};
+
+
 export type QueryWorkshopArgs = {
   id: Scalars['ID'];
 };
@@ -255,6 +273,7 @@ export type UpdateElementInput = {
   markdown?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   orderIndex?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<ElementTagConnectInput>;
   visibility?: InputMaybe<ElementVisibility>;
 };
 
