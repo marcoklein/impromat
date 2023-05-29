@@ -1,5 +1,6 @@
 import {
   IonButton,
+  IonButtons,
   IonChip,
   IonContent,
   IonIcon,
@@ -8,6 +9,8 @@ import {
   IonList,
   IonModal,
   IonSearchbar,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/react";
 import { close } from "ionicons/icons";
 import { useRef, useState } from "react";
@@ -89,10 +92,22 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
       <IonModal
         ref={modal}
         trigger="open-modal"
-
+        style={{
+          "--max-width": "768px",
+          "--max-height": "70%",
+          "--backdrop-opacity": "0.9",
+        }}
         showBackdrop={true}
       >
         <IonContent className="ion-padding">
+          <IonToolbar>
+            <IonTitle>Add Tag</IonTitle>
+            <IonButtons slot="end">
+              <IonButton onClick={() => modal.current?.dismiss()}>
+                Cancel
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
           <IonSearchbar
             value={elementSearchValue}
             onIonInput={(e) => setElementSearchValue(e.detail.value ?? "")}
