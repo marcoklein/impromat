@@ -1,5 +1,12 @@
 # impromat-api
 
+## 0.9.0
+
+### Minor Changes
+
+- 67c31e4: Define language for custom elements
+- f2509b3: Add custom element tags for User created elements
+
 ## 0.8.0
 
 ### Minor Changes

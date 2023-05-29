@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.36.0
+
+### Minor Changes
+
+- 67c31e4: Define language for custom elements
+- f2509b3: Add custom element tags for User created elements
+- ec28af8: Search for everything if filter cards in workshops are inactive
+
+### Patch Changes
+
+- Updated dependencies [67c31e4]
+- Updated dependencies [f2509b3]
+  - impromat-api@0.9.0
+
 ## 0.35.1
 
 ### Patch Changes
