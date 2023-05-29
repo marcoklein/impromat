@@ -1,6 +1,7 @@
 import { Inject, UseGuards } from '@nestjs/common';
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
@@ -45,6 +46,8 @@ export class MeResolver {
       defaultValue: { liked: true, owned: true },
     })
     input: UserWorkshopsFilterInput,
+    @Args('skip', { type: () => Int, defaultValue: 0 }) skip: number,
+    @Args('take', { type: () => Int, defaultValue: 20 }) take: number,
   ) {
     const { liked, owned } = input;
     const ownedFilter: Prisma.WorkshopWhereInput = { ownerId: user.id };
@@ -59,6 +62,8 @@ export class MeResolver {
       orderBy: {
         updatedAt: 'desc',
       },
+      skip,
+      take,
     });
   }
 

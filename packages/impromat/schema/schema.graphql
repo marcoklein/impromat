@@ -87,7 +87,7 @@ type User {
   deleted: Boolean!
 
   """All workshops that this user has access to."""
-  workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
+  workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}, skip: Int! = 0, take: Int! = 20): [Workshop!]!
 
   """Elements owned by this user."""
   elements: [Element!]!

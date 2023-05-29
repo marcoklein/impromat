@@ -344,6 +344,8 @@ export type User = {
 
 export type UserWorkshopsArgs = {
   input?: UserWorkshopsFilterInput;
+  skip?: Scalars['Int'];
+  take?: Scalars['Int'];
 };
 
 export type UserFavoriteElement = {

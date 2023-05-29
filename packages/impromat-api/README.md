@@ -89,7 +89,7 @@ E.g. in code:
 
 ```ts
 // ...
-@Args('input', {
+@Args('filter', {
   type: () => UserWorkshopsFilterInput,
   defaultValue: { liked: true, owned: true },
 })
@@ -101,7 +101,7 @@ Generated GraphQL:
 
 ```graphql
 # ...
-workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
+workshops(filter: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
 # ...
 ```
 
