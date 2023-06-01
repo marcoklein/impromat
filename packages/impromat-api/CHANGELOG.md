@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.10.0
+
+### Minor Changes
+
+- c832b13: Show latest workshops shared with community
+
 ## 0.9.0
 
 ### Minor Changes
