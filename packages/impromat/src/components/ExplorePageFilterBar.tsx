@@ -1,11 +1,7 @@
 import { IonChip, IonIcon, IonLabel } from "@ionic/react";
-import { close, globe, heart, person } from "ionicons/icons";
+import { close, heart, person } from "ionicons/icons";
 import { UserWorkshopsFilterInput } from "../graphql-client/graphql";
-import {
-  COLOR_LIKE,
-  COLOR_SHARED,
-  COLOR_USER_CREATED,
-} from "../theme/theme-colors";
+import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
 
 interface WorkshopsFilter extends UserWorkshopsFilterInput {}
 
@@ -22,21 +18,13 @@ export const WorkshopsFilterBar: React.FC<ContainerProps> = ({
   onFilterInputChange,
 }) => {
   return (
-    <div className="ion-padding-horizontal">
-      <IonChip
-        outline={!filterInput.owned}
-        onClick={() => {
-          const newFilter = {
-            ...filterInput,
-            ...{ owned: !filterInput.owned },
-          };
-          onFilterInputChange(newFilter);
-        }}
-      >
-        <IonIcon icon={person} color={COLOR_USER_CREATED}></IonIcon>
-        <IonLabel>Mine</IonLabel>
-        {filterInput.owned && <IonIcon icon={close}></IonIcon>}
-      </IonChip>
+    <div
+      className="ion-padding-horizontal"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
       <IonChip
         outline={!filterInput.liked}
         onClick={() => {
@@ -52,18 +40,18 @@ export const WorkshopsFilterBar: React.FC<ContainerProps> = ({
         {filterInput.liked && <IonIcon icon={close}></IonIcon>}
       </IonChip>
       <IonChip
-        outline={!filterInput.isPublic}
+        outline={!filterInput.owned}
         onClick={() => {
           const newFilter = {
             ...filterInput,
-            ...{ isPublic: !filterInput.isPublic },
+            ...{ owned: !filterInput.owned },
           };
           onFilterInputChange(newFilter);
         }}
       >
-        <IonIcon icon={globe} color={COLOR_SHARED}></IonIcon>
-        <IonLabel>Shared</IonLabel>
-        {filterInput.isPublic && <IonIcon icon={close}></IonIcon>}
+        <IonIcon icon={person} color={COLOR_USER_CREATED}></IonIcon>
+        <IonLabel>My Workshop</IonLabel>
+        {filterInput.owned && <IonIcon icon={close}></IonIcon>}
       </IonChip>
     </div>
   );

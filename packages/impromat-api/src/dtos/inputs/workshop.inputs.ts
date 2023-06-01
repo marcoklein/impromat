@@ -26,6 +26,13 @@ export class CreateWorkshopInput {
 
   @Field(() => Boolean, { nullable: true })
   isPublic?: boolean;
+
+  @Field(() => Boolean, {
+    nullable: true,
+    description:
+      'Publicly list workshop within impromat. Worshop must be public in order to list it.',
+  })
+  isListed?: boolean;
 }
 
 @InputType()

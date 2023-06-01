@@ -6,7 +6,7 @@ export const routeHome = () => "/";
 export const routeAbout = () => "/about";
 export const routePrivacyPolicy = () => "/privacy";
 export const routeProfile = () => "/profile";
-export const routeExplore = () => "/explore";
+export const routeCommunity = () => "/community";
 export const routeAccount = () => "/account";
 export const routeLegal = () => "/legal";
 export const routeAccountSignin = () => "/account/signin";

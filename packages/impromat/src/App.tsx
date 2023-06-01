@@ -5,7 +5,7 @@ import { Route } from "react-router";
 import { MenuComponent } from "./components/MenuComponent";
 import { ProtectedRouteComponent } from "./components/ProtectedRoute";
 import { AboutPage } from "./pages/AboutPage";
-import { ExplorePage } from "./pages/ExplorePage";
+import { CommunityPage } from "./pages/CommunityPage";
 import { HomePage } from "./pages/HomePage";
 import { LegalPage } from "./pages/LegalPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
@@ -23,7 +23,7 @@ import { WorkshopPage } from "./pages/workshop/WorkshopPage";
 import { WorkshopsPage } from "./pages/workshop/WorkshopsPage";
 import {
   routeAbout,
-  routeExplore,
+  routeCommunity,
   routeHome,
   routeLegal,
   routePrivacyPolicy,
@@ -52,8 +52,8 @@ export const App: React.FC = () => {
             <Route path={routeLegal()} exact>
               <LegalPage></LegalPage>
             </Route>
-            <Route path={routeExplore()} exact>
-              <ExplorePage></ExplorePage>
+            <Route path={routeCommunity()} exact>
+              <CommunityPage></CommunityPage>
             </Route>
             <ProtectedRouteComponent path={routeProfile()} exact>
               <AccountPage></AccountPage>

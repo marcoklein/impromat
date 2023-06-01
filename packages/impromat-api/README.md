@@ -61,7 +61,7 @@ If you change the database schema, generate a migration script via:
 yarn prisma:migrate
 ```
 
-> Restart test infrastructure via `yarn test:backend-restart`.
+> Rebuild api test infrastructure via `yarn test:backend-rebuild`.
 
 Generate a new migration script without applying it:
 

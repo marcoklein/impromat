@@ -103,6 +103,7 @@ model Workshop {
   name        String
   description String?
   isPublic    Boolean @default(false)
+  isListed    Boolean @default(false)
 
   ownerId String
 
