@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test";
+import { randomUUID } from "crypto";
 import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Workshop Sharing", () => {
@@ -19,9 +20,10 @@ pageTest.describe("Workshop Sharing", () => {
   );
 
   pageTest.describe("with shared workshop", () => {
+    let uniqueWorkshopName = `shared workshop ${randomUUID()}`;
     pageTest.beforeEach(async ({ auth, workshopPage }) => {
       await auth.loginAsRandomUser();
-      await workshopPage.createAndGoto("shared workshop");
+      await workshopPage.createAndGoto(uniqueWorkshopName);
       await workshopPage.share();
     });
 
@@ -68,6 +70,23 @@ pageTest.describe("Workshop Sharing", () => {
         await workshopPage.expectToolbarTextToBe("Workshop (View)");
         await expect(workshopPage.addFabButtonToggleLocator).toBeHidden();
         await expect(workshopPage.addFirstElementLocator).toBeHidden();
+      },
+    );
+
+    pageTest(
+      "should list workshop and show in community page",
+      async ({ auth, page, communityPage }) => {
+        // given beforeEach
+        await page
+          .locator("ion-checkbox")
+          .filter({ hasText: "Share with community" })
+          .locator("label")
+          .click();
+        // when
+        await auth.loginAsRandomUser();
+        await communityPage.goto();
+        // then
+        await expect(page.getByText(uniqueWorkshopName)).toBeVisible();
       },
     );
   });

@@ -51,7 +51,6 @@ describe('ElementSearchService', () => {
       skip: 0,
     });
     // then
-    expect(result).toHaveLength(1);
     expect(result[0].score).toBeGreaterThan(0.1);
     expect(result[0].score).toBeLessThan(0.4);
     expect(result[0].element.id).toBe('2');

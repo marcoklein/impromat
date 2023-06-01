@@ -5,9 +5,9 @@ import {
   VirtuosoGrid,
   VirtuosoGridHandle,
 } from "react-virtuoso";
+import { useComponentLogger } from "../hooks/use-component-logger";
 import { LoadingCard } from "./LoadingCard";
 import "./PreviewCardGrid.css";
-import { useComponentLogger } from "../hooks/use-component-logger";
 
 interface ContainerProps<ItemData, Context> {
   scrollStoreKey?: string;

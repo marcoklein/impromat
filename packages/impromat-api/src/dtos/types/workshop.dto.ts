@@ -28,8 +28,18 @@ export class Workshop extends BaseDto {
   })
   canEdit?: Nullable<boolean>;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, {
+    nullable: true,
+    description:
+      'Public users can view the workshop but they require the direct link to the workshop. The url of the workshop does not change.',
+  })
   isPublic: boolean;
+
+  @Field(() => Boolean, {
+    description:
+      'True, if the workshop is listed publicly in the improv community.',
+  })
+  isListed: boolean;
 
   @Field(() => Boolean, {
     nullable: true,

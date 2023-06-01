@@ -54,17 +54,31 @@ export const WorkshopsPage: React.FC = () => {
 
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
 
-  const [userWorkshopsFilterInput, setUserWorkshopsFilterInput] =
-    usePersistedState<UserWorkshopsFilterInput>("user-workshops-filter-input", {
+  const defaultFilterInput: Required<UserWorkshopsFilterInput> = useMemo(
+    () => ({
       liked: true,
       owned: true,
-    });
+    }),
+    [],
+  );
+  const [userWorkshopsFilterInput, setUserWorkshopsFilterInput] =
+    usePersistedState<UserWorkshopsFilterInput>(
+      "user-workshops-filter-input",
+      defaultFilterInput,
+    );
+
+  const workshopsFilterInputQueryVariables = useMemo(() => {
+    if (Object.values(userWorkshopsFilterInput).every((value) => !value)) {
+      return defaultFilterInput;
+    }
+    return userWorkshopsFilterInput;
+  }, [defaultFilterInput, userWorkshopsFilterInput]);
 
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: WorkshopsQuery,
     context,
     variables: {
-      userWorkshopsFilterInput,
+      userWorkshopsFilterInput: workshopsFilterInputQueryVariables,
     },
   });
   const [, createWorkshopMutation] = useMutation(CreateWorkshopMutation);

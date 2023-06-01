@@ -1,0 +1,16 @@
+{
+  "name": "improbib-ai",
+  "packageManager": "yarn@3.4.1",
+  "type": "module",
+  "scripts": {
+    "start": "dotenv -c -- ts-node src/index.ts"
+  },
+  "dependencies": {
+    "openai": "^3.2.1"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.2.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}

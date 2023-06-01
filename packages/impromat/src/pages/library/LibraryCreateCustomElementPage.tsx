@@ -13,15 +13,17 @@ import {
   IonList,
   IonNote,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonTextarea,
   IonTitle,
   IonToolbar,
-  useIonToast,
 } from "@ionic/react";
 import { informationCircle } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
+import { Icon } from "../../components/Icon";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
 import { graphql } from "../../graphql-client";
 import { ElementVisibility } from "../../graphql-client/graphql";
@@ -29,6 +31,7 @@ import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshop } from "../../routes/shared-routes";
+import { ElementTagsItem } from "./components/ElementTagsItem";
 import { Tabs } from "./components/LibraryContentComponent";
 import {
   LIBRARY_ELEMENT_ID_SEARCH_PARAM,
@@ -43,6 +46,11 @@ const LibraryCreateCustomElement_Query = graphql(`
       name
       visibility
       markdown
+      languageCode
+      tags {
+        id
+        name
+      }
     }
   }
 `);
@@ -97,32 +105,32 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
   const existingElement = existingElementQueryResult.data?.element;
   const editExistingItem = !!existingElement;
 
-  const [presentToast] = useIonToast();
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
+  const [languageCode, setLanguageCode] = useState<string>("en");
+  const [tags, setTags] = useState<{ id: string; name: string }[]>([]);
+
   const [isPublic, setIsPublic] = useState(false);
   const history = useHistory();
   const logger = useLogger("LibraryCreateCustomElementPage");
 
-  const validateInputs = () => {
-    if (!name?.length) {
-      presentToast({ message: "Please enter a name", duration: 1500 });
-      return false;
-    }
-    return true;
-  };
+  const isInputValid = useMemo(
+    () => name && name.length > 0 && languageCode,
+    [name, languageCode],
+  );
 
   useEffect(() => {
     if (existingElement) {
       logger("Loaded existing element");
       setName(existingElement.name);
       setContent(existingElement.markdown ?? "");
+      setLanguageCode(existingElement.languageCode ?? "en");
+      setTags(existingElement.tags.map(({ id, name }) => ({ id, name })));
       setIsPublic(existingElement.visibility === ElementVisibility.Public);
     }
   }, [existingElement, logger]);
 
   const onCreateElementClick = () => {
-    if (!validateInputs()) return;
     (async () => {
       if (editExistingItem) {
         const newElement = await executeMutation({
@@ -133,9 +141,16 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
               ? ElementVisibility.Public
               : ElementVisibility.Private,
             markdown: content,
+            languageCode,
+            tags: {
+              connect: tags.map((tag) => ({
+                id: tag.id,
+              })),
+            },
           },
         });
-        const newElementId = newElement.data?.updateElement.id;
+        const newElementId =
+          newElement.data?.updateElement?.id ?? existingElement.id;
         if (!newElementId) {
           console.error("Could not create element");
           return;
@@ -156,6 +171,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
           }
         }
       } else {
+        if (!languageCode) throw new Error("No language code");
         const result = await executeElementMutationResult({
           input: {
             name,
@@ -163,6 +179,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
               ? ElementVisibility.Public
               : ElementVisibility.Private,
             markdown: content,
+            languageCode,
           },
         });
         const newElement = result.data?.createElement;
@@ -228,8 +245,10 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
       <IonContent fullscreen>
         <IonList>
           <IonItem>
-            <IonLabel position="floating">Name</IonLabel>
             <IonInput
+              placeholder="Please enter a name"
+              label="Name (required)"
+              labelPlacement="floating"
               maxlength={200}
               value={name}
               type="text"
@@ -237,13 +256,31 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             ></IonInput>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating">Content</IonLabel>
             <IonTextarea
+              label="Content"
+              labelPlacement="floating"
               rows={10}
               value={content}
               onIonInput={(event) => setContent(event.detail.value!)}
             ></IonTextarea>
           </IonItem>
+          <IonItem>
+            <Icon tablerIcon="language" slot="start"></Icon>
+            <IonSelect
+              value={languageCode}
+              onIonChange={(event) => setLanguageCode(event.detail.value)}
+              label="Language (required)"
+              labelPlacement="floating"
+              placeholder="Select language"
+            >
+              <IonSelectOption value="en">English</IonSelectOption>
+              <IonSelectOption value="de">Deutsch</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+          <ElementTagsItem
+            tags={tags}
+            onTagsChange={(tags) => setTags(tags)}
+          ></ElementTagsItem>
           {editExistingItem && (
             <InfoItemComponent>
               <>
@@ -298,11 +335,19 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
       </IonContent>
       <IonFooter>
         {editExistingItem ? (
-          <IonButton expand="full" onClick={onCreateElementClick}>
+          <IonButton
+            expand="full"
+            onClick={onCreateElementClick}
+            disabled={!isInputValid}
+          >
             {workshopId ? "Save and goto Workshop" : "Save Element"}
           </IonButton>
         ) : (
-          <IonButton expand="full" onClick={onCreateElementClick}>
+          <IonButton
+            expand="full"
+            onClick={onCreateElementClick}
+            disabled={!isInputValid}
+          >
             {workshopId ? "Create and Add to Workshop" : "Create Element"}
           </IonButton>
         )}

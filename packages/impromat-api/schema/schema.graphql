@@ -60,7 +60,14 @@ type Workshop {
 
   """If true, the client is authorized to edit the workshop."""
   canEdit: Boolean
-  isPublic: Boolean!
+
+  """
+  Public users can view the workshop but they require the direct link to the workshop. The url of the workshop does not change.
+  """
+  isPublic: Boolean
+
+  """True, if the workshop is listed publicly in the improv community."""
+  isListed: Boolean!
 
   """
   True, if liked by the logged in user. Undefined, if there is no user logged in.
@@ -87,7 +94,7 @@ type User {
   deleted: Boolean!
 
   """All workshops that this user has access to."""
-  workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
+  workshops(input: UserWorkshopsFilterInput, skip: Int! = 0, take: Int! = 20): [Workshop!]!
 
   """Elements owned by this user."""
   elements: [Element!]!
@@ -100,10 +107,13 @@ type User {
 
 """Filter workshops of user."""
 input UserWorkshopsFilterInput {
-  liked: Boolean! = true
+  liked: Boolean! = false
 
   """Filter for workshops that are owned by the user."""
-  owned: Boolean! = true
+  owned: Boolean! = false
+
+  """Publicly accessible community workshop."""
+  isPublic: Boolean! = false
 }
 
 type Element {
@@ -184,6 +194,7 @@ type Query {
 
   """Get information about the current user."""
   me: User!
+  tags(filter: ElementTagsFilterInput, skip: Float = 0, take: Float = 20): [ElementTag!]!
 }
 
 input ElementSearchInput {
@@ -204,13 +215,18 @@ input ElementsFilterInput {
   isOwnerMe: Boolean
 
   """
-  Include all elements that are publicaly available to the logged-in user.
+  Include all elements that are publicly available to the logged-in user.
   """
   isPublic: Boolean
 }
 
 input ElementsOrderByInput {
   notImplemented: Boolean!
+}
+
+"""Filter tags of elements."""
+input ElementTagsFilterInput {
+  text: String
 }
 
 type Mutation {
@@ -245,6 +261,11 @@ input CreateWorkshopInput {
   description: String
   sections: WorkshopSectionListCreateInput
   isPublic: Boolean
+
+  """
+  Publicly list workshop within impromat. Worshop must be public in order to list it.
+  """
+  isListed: Boolean
 }
 
 input WorkshopSectionListCreateInput {
@@ -262,6 +283,11 @@ input UpdateWorkshopInput {
   description: String
   sections: WorkshopSectionListInput
   isPublic: Boolean
+
+  """
+  Publicly list workshop within impromat. Worshop must be public in order to list it.
+  """
+  isListed: Boolean
   id: ID!
 }
 
@@ -331,14 +357,26 @@ input CreateElementInput {
   name: String!
   visibility: ElementVisibility! = PRIVATE
   markdown: String
+
+  """Language code (e.g. en, de) of the element."""
+  languageCode: String! = "en"
   orderIndex: Int
+  tags: ElementTagConnectInput
+}
+
+input ElementTagConnectInput {
+  connect: [IdInput!]!
 }
 
 input UpdateElementInput {
   name: String
   visibility: ElementVisibility = PRIVATE
   markdown: String
+
+  """Language code (e.g. en, de) of the element."""
+  languageCode: String = "en"
   orderIndex: Int
+  tags: ElementTagConnectInput
   id: ID!
 }
 

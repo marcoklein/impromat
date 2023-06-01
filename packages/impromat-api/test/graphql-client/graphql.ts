@@ -21,9 +21,12 @@ export type BasedOnElementConnectInput = {
 };
 
 export type CreateElementInput = {
+  /** Language code (e.g. en, de) of the element. */
+  languageCode?: Scalars['String'];
   markdown?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   orderIndex?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<ElementTagConnectInput>;
   visibility?: ElementVisibility;
 };
 
@@ -35,6 +38,8 @@ export type CreateWorkshopElementInput = {
 
 export type CreateWorkshopInput = {
   description?: InputMaybe<Scalars['String']>;
+  /** Publicly list workshop within impromat. Worshop must be public in order to list it. */
+  isListed?: InputMaybe<Scalars['Boolean']>;
   isPublic?: InputMaybe<Scalars['Boolean']>;
   name: Scalars['String'];
   sections?: InputMaybe<WorkshopSectionListCreateInput>;
@@ -112,6 +117,15 @@ export type ElementTag = {
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   version: Scalars['Int'];
+};
+
+export type ElementTagConnectInput = {
+  connect: Array<IdInput>;
+};
+
+/** Filter tags of elements. */
+export type ElementTagsFilterInput = {
+  text?: InputMaybe<Scalars['String']>;
 };
 
 export enum ElementVisibility {
@@ -212,6 +226,7 @@ export type Query = {
   /** Get information about the current user. */
   me: User;
   searchElements: Array<ElementSearchResult>;
+  tags: Array<ElementTag>;
   workshop: Workshop;
   workshopElement: WorkshopElement;
   workshops: Array<Workshop>;
@@ -237,6 +252,13 @@ export type QuerySearchElementsArgs = {
 };
 
 
+export type QueryTagsArgs = {
+  filter?: InputMaybe<ElementTagsFilterInput>;
+  skip?: InputMaybe<Scalars['Float']>;
+  take?: InputMaybe<Scalars['Float']>;
+};
+
+
 export type QueryWorkshopArgs = {
   id: Scalars['ID'];
 };
@@ -248,9 +270,12 @@ export type QueryWorkshopElementArgs = {
 
 export type UpdateElementInput = {
   id: Scalars['ID'];
+  /** Language code (e.g. en, de) of the element. */
+  languageCode?: InputMaybe<Scalars['String']>;
   markdown?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   orderIndex?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<ElementTagConnectInput>;
   visibility?: InputMaybe<ElementVisibility>;
 };
 
@@ -279,6 +304,8 @@ export type UpdateWorkshopElementInput = {
 export type UpdateWorkshopInput = {
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
+  /** Publicly list workshop within impromat. Worshop must be public in order to list it. */
+  isListed?: InputMaybe<Scalars['Boolean']>;
   isPublic?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   sections?: InputMaybe<WorkshopSectionListInput>;
@@ -320,7 +347,9 @@ export type User = {
 
 
 export type UserWorkshopsArgs = {
-  input?: UserWorkshopsFilterInput;
+  input?: InputMaybe<UserWorkshopsFilterInput>;
+  skip?: Scalars['Int'];
+  take?: Scalars['Int'];
 };
 
 export type UserFavoriteElement = {
@@ -339,6 +368,8 @@ export type UserLikedWorkshop = {
 
 /** Filter workshops of user. */
 export type UserWorkshopsFilterInput = {
+  /** Publicly accessible community workshop. */
+  isPublic?: Scalars['Boolean'];
   liked?: Scalars['Boolean'];
   /** Filter for workshops that are owned by the user. */
   owned?: Scalars['Boolean'];
@@ -354,6 +385,8 @@ export type Workshop = {
   id: Scalars['ID'];
   /** True, if liked by the logged in user. Undefined, if there is no user logged in. */
   isLiked?: Maybe<Scalars['Boolean']>;
+  /** True, if the workshop is listed publicly in the improv community. */
+  isListed: Scalars['Boolean'];
   /** Convenience field to determine if the owner of the workshop is the logged in user. */
   isOwnerMe?: Maybe<Scalars['Boolean']>;
   isPublic: Scalars['Boolean'];
