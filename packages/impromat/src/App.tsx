@@ -23,6 +23,7 @@ import { WorkshopPage } from "./pages/workshop/WorkshopPage";
 import { WorkshopsPage } from "./pages/workshop/WorkshopsPage";
 import {
   routeAbout,
+  routeAccount,
   routeCommunity,
   routeHome,
   routeLegal,
@@ -51,6 +52,9 @@ export const App: React.FC = () => {
             </Route>
             <Route path={routeLegal()} exact>
               <LegalPage></LegalPage>
+            </Route>
+            <Route path={routeAccount()} exact>
+              <AccountPage></AccountPage>
             </Route>
             <Route path={routeCommunity()} exact>
               <CommunityPage></CommunityPage>
