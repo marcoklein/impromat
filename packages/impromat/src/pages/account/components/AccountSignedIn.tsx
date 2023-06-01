@@ -41,7 +41,12 @@ export const AccountSignedIn: React.FC<ContainerProps> = ({ userFragment }) => {
           </IonText>
           <IonLabel>{user.name}</IonLabel>
         </IonItem>
-        <IonButton onClick={() => triggerLogout()}>
+        <IonButton
+          className="ion-margin-top"
+          onClick={() => triggerLogout()}
+          expand="full"
+          fill="clear"
+        >
           <IonIcon icon={logOut} slot="start"></IonIcon>Logout
         </IonButton>
       </div>

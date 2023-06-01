@@ -61,7 +61,7 @@ If you change the database schema, generate a migration script via:
 yarn prisma:migrate
 ```
 
-> Restart test infrastructure via `yarn test:backend-restart`.
+> Rebuild api test infrastructure via `yarn test:backend-rebuild`.
 
 Generate a new migration script without applying it:
 
@@ -89,7 +89,7 @@ E.g. in code:
 
 ```ts
 // ...
-@Args('input', {
+@Args('filter', {
   type: () => UserWorkshopsFilterInput,
   defaultValue: { liked: true, owned: true },
 })
@@ -101,7 +101,7 @@ Generated GraphQL:
 
 ```graphql
 # ...
-workshops(input: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
+workshops(filter: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
 # ...
 ```
 

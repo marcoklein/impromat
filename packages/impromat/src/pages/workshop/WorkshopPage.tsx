@@ -27,6 +27,7 @@ import {
   globe,
   heart,
   heartOutline,
+  link,
   lockClosed,
 } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
@@ -51,6 +52,7 @@ const WorkshopPage_Workshop = graphql(`
     id
     version
     isPublic
+    isListed
     createdAt
     updatedAt
     deleted
@@ -162,6 +164,17 @@ export const WorkshopPage: React.FC = () => {
     [logger, updateWorkshopMutation, workshop],
   );
 
+  const onListClick = useCallback(
+    (isListed: boolean) => {
+      if (!workshop) return;
+      logger("update workshop listed state to %s", isListed);
+      updateWorkshopMutation({
+        input: { id: workshop.id, isListed },
+      });
+    },
+    [logger, updateWorkshopMutation, workshop],
+  );
+
   const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -209,12 +222,21 @@ export const WorkshopPage: React.FC = () => {
               )}
               {workshop && workshop.canEdit && (
                 <>
-                  <IonButton onClick={() => setIsSharingModalOpen(true)}>
+                  <IonButton
+                    onClick={() => setIsSharingModalOpen(true)}
+                    aria-label="Share"
+                  >
                     <Icon
                       slot="start"
-                      icon={workshop.isPublic ? globe : lockClosed}
-                    ></Icon>{" "}
-                    Share
+                      icon={
+                        workshop.isPublic
+                          ? workshop.isListed
+                            ? globe
+                            : link
+                          : lockClosed
+                      }
+                    ></Icon>
+                    <span className="ion-hide-sm-down"> Share</span>
                   </IonButton>
                   <IonModal
                     isOpen={isSharingModalOpen}
@@ -233,12 +255,13 @@ export const WorkshopPage: React.FC = () => {
                         </IonButtons>
                       </IonToolbar>
                     </IonHeader>
-                    <IonContent className="ion-padding" scrollY={false}>
+                    <IonContent className="ion-padding" scrollY={true}>
                       <IonItem
                         lines="none"
                         color={workshop.isPublic ? "success" : undefined}
+                        disabled={workshop.isListed}
                       >
-                        <Icon icon={globe} slot="start"></Icon>
+                        <Icon icon={link} slot="start"></Icon>
                         <IonCheckbox
                           checked={workshop.isPublic ?? false}
                           labelPlacement="start"
@@ -251,21 +274,49 @@ export const WorkshopPage: React.FC = () => {
                           </IonLabel>
                         </IonCheckbox>
                       </IonItem>
-                      {!workshop.isPublic && (
+                      {!workshop.isPublic && !workshop.isListed && (
                         <p>
                           Activate the checkbox to share your workshop via url.
                           Visitors will need the link to see your workshop but
                           will not require an Impromat account.
                         </p>
                       )}
-                      {workshop.isPublic && (
+                      {(workshop.isPublic || workshop.isListed) && (
                         <>
-                          <p>
-                            Your workshop is available to everyone that follows
-                            the workshop link. Visitors do not require an
-                            account and can view your workshop including
-                            sections, elements, and notes.
-                          </p>
+                          <IonItem
+                            lines="none"
+                            color={workshop.isListed ? "success" : undefined}
+                          >
+                            <Icon icon={globe} slot="start"></Icon>
+                            <IonCheckbox
+                              checked={workshop.isListed ?? false}
+                              labelPlacement="start"
+                              onIonChange={(event) =>
+                                onListClick(event.detail.checked)
+                              }
+                            >
+                              <IonLabel className="ion-text-wrap">
+                                Share with community
+                              </IonLabel>
+                            </IonCheckbox>
+                          </IonItem>
+                          {!workshop.isListed && (
+                            <p>
+                              Your workshop is available to everyone that
+                              follows the workshop link. Visitors do not require
+                              an account and can view your workshop including
+                              sections, elements, and notes.
+                            </p>
+                          )}
+                          {workshop.isListed && (
+                            <p>
+                              Thanks for your awesome contribution! Your
+                              workshop is visible and publicly listed in the
+                              Impromat community. Visitors do not require an
+                              account and can view your workshop including
+                              sections, elements, and notes.
+                            </p>
+                          )}
                           <IonButton
                             expand="full"
                             color={!isCopied ? "primary" : "medium"}

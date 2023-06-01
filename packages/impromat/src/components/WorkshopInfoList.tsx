@@ -1,16 +1,17 @@
 import { IonContent, IonIcon, IonPopover } from "@ionic/react";
-import { calendar, globe, heart, person } from "ionicons/icons";
+import { calendar, globe, heart, link, person } from "ionicons/icons";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
+import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
 import { Icon } from "./Icon";
 import { InfoListItem } from "./InfoListItem";
-import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
 const WorkshopInfoList_Workshop = graphql(`
   fragment WorkshopInfoList_Workshop on Workshop {
     id
     createdAt
     updatedAt
     isPublic
+    isListed
     canEdit
     isOwnerMe
     isLiked
@@ -49,9 +50,11 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
       )}
       {workshop.isPublic && (
         <InfoListItem
-          ionicIcon={globe}
+          ionicIcon={workshop.isListed ? globe : link}
           color="success"
-          displayText="publicly shared"
+          displayText={
+            workshop.isListed ? "publicly shared" : "shared via link"
+          }
         ></InfoListItem>
       )}
       {workshop.isOwnerMe && (

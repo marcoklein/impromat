@@ -20,6 +20,7 @@ import {
   brush,
   close,
   documents,
+  globe,
   heart,
   home,
   information,
@@ -30,6 +31,7 @@ import { Tabs } from "../../pages/library/components/LibraryContentComponent";
 import { routeLibraryTab } from "../../pages/library/library-routes";
 import {
   routeAbout,
+  routeCommunity,
   routeHome,
   routeLegal,
   routePrivacyPolicy,
@@ -81,11 +83,12 @@ export const MenuContentComponent: React.FC = () => {
             routerLink={routeWorkshops()}
             icon={documents}
             label="Workshops"
-          >
-            {/* <IonButton slot="end" fill="solid" color="dark">
-              <IonIcon icon={add}></IonIcon>
-            </IonButton> */}
-          </MenuItemComponent>
+          ></MenuItemComponent>
+          <MenuItemComponent
+            routerLink={routeCommunity()}
+            icon={globe}
+            label="Community"
+          ></MenuItemComponent>
         </IonItemGroup>
         <IonItemDivider>
           <IonLabel>Elements</IonLabel>

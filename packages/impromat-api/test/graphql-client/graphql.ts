@@ -38,6 +38,8 @@ export type CreateWorkshopElementInput = {
 
 export type CreateWorkshopInput = {
   description?: InputMaybe<Scalars['String']>;
+  /** Publicly list workshop within impromat. Worshop must be public in order to list it. */
+  isListed?: InputMaybe<Scalars['Boolean']>;
   isPublic?: InputMaybe<Scalars['Boolean']>;
   name: Scalars['String'];
   sections?: InputMaybe<WorkshopSectionListCreateInput>;
@@ -302,6 +304,8 @@ export type UpdateWorkshopElementInput = {
 export type UpdateWorkshopInput = {
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
+  /** Publicly list workshop within impromat. Worshop must be public in order to list it. */
+  isListed?: InputMaybe<Scalars['Boolean']>;
   isPublic?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
   sections?: InputMaybe<WorkshopSectionListInput>;
@@ -343,7 +347,9 @@ export type User = {
 
 
 export type UserWorkshopsArgs = {
-  input?: UserWorkshopsFilterInput;
+  input?: InputMaybe<UserWorkshopsFilterInput>;
+  skip?: Scalars['Int'];
+  take?: Scalars['Int'];
 };
 
 export type UserFavoriteElement = {
@@ -362,6 +368,8 @@ export type UserLikedWorkshop = {
 
 /** Filter workshops of user. */
 export type UserWorkshopsFilterInput = {
+  /** Publicly accessible community workshop. */
+  isPublic?: Scalars['Boolean'];
   liked?: Scalars['Boolean'];
   /** Filter for workshops that are owned by the user. */
   owned?: Scalars['Boolean'];
@@ -377,6 +385,8 @@ export type Workshop = {
   id: Scalars['ID'];
   /** True, if liked by the logged in user. Undefined, if there is no user logged in. */
   isLiked?: Maybe<Scalars['Boolean']>;
+  /** True, if the workshop is listed publicly in the improv community. */
+  isListed: Scalars['Boolean'];
   /** Convenience field to determine if the owner of the workshop is the logged in user. */
   isOwnerMe?: Maybe<Scalars['Boolean']>;
   isPublic: Scalars['Boolean'];

@@ -74,6 +74,7 @@
     "test:backend-up": "yarn docker-compose --profile backend up --wait",
     "test:backend-down": "yarn docker-compose --profile backend down",
     "test:backend-restart": "yarn test:backend-down && yarn test:backend-up",
+    "test:backend-rebuild": "yarn docker-compose build api --no-cache",
     "playwright:codegen": "playwright codegen",
     "playwright:install": "playwright install chromium",
     "copy-improbib": "cp ../improbib/output/improbib.json ./public/assets/improbib.json",

@@ -1,5 +1,5 @@
 import { IonButton, IonIcon, IonLabel, IonListHeader } from "@ionic/react";
-import { closeOutline, swapVertical } from "ionicons/icons";
+import { closeOutline } from "ionicons/icons";
 
 interface ContainerProps {
   isReordering: boolean;
@@ -33,10 +33,9 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
             expand="block"
             size="small"
             onClick={() => onReorderClick()}
-            color="dark"
-            fill="clear"
+            fill="outline"
           >
-            <IonIcon slot="icon-only" icon={swapVertical}></IonIcon>
+            Reorder
           </IonButton>
         )}
       </IonListHeader>
@@ -48,7 +47,7 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
       <IonLabel>Change order with right handle</IonLabel>
       <IonButton
         color="light"
-        size="small"
+        size="default"
         fill="solid"
         onClick={() => onReorderClick()}
       >

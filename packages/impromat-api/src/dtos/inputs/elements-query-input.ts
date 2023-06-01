@@ -19,7 +19,7 @@ export class ElementsFilterInput {
   @Field(() => Boolean, {
     nullable: true,
     description:
-      'Include all elements that are publicaly available to the logged-in user.',
+      'Include all elements that are publicly available to the logged-in user.',
   })
   isPublic: Nullable<boolean>;
 }

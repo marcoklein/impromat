@@ -1,6 +1,7 @@
 import { Inject, UseGuards } from '@nestjs/common';
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
@@ -15,6 +16,7 @@ import { UserFavoriteElementDto } from 'src/dtos/types/user-favorite-element.dto
 import { UserLikedWorkshopDto } from 'src/dtos/types/user-liked-workshop.dto';
 import { User, UserDtoComputedFields } from 'src/dtos/types/user.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
+import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 
 @Resolver(User)
@@ -42,23 +44,39 @@ export class MeResolver {
     @Parent() user: User,
     @Args('input', {
       type: () => UserWorkshopsFilterInput,
-      defaultValue: { liked: true, owned: true },
+      nullable: true,
     })
-    input: UserWorkshopsFilterInput,
+    input: Nullable<UserWorkshopsFilterInput>,
+    @Args('skip', { type: () => Int, defaultValue: 0 }) skip: number,
+    @Args('take', { type: () => Int, defaultValue: 20 }) take: number,
   ) {
-    const { liked, owned } = input;
+    const { liked, owned, isPublic } = input ?? {
+      isPublic: true,
+      liked: true,
+      owned: true,
+    };
     const ownedFilter: Prisma.WorkshopWhereInput = { ownerId: user.id };
+    const communityFilter: Prisma.WorkshopWhereInput = {
+      isPublic: true,
+      isListed: true,
+    };
     const likedFilter: Prisma.WorkshopWhereInput = {
       userLikedWorkshops: { some: { userId: user.id } },
     };
     const filter: Prisma.WorkshopWhereInput = {
-      OR: [owned ? ownedFilter : {}, liked ? likedFilter : {}],
+      OR: [
+        owned ? ownedFilter : {},
+        liked ? likedFilter : {},
+        isPublic ? communityFilter : {},
+      ],
     };
     return this.prismaService.workshop.findMany({
       where: filter,
       orderBy: {
         updatedAt: 'desc',
       },
+      skip,
+      take,
     });
   }
 
