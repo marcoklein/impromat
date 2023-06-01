@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: "yarn"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "yarn"
+    directory: "/packages/impromat"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "yarn"
+    directory: "/packages/impromat-api"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "yarn"
+    directory: "/packages/impromat-renderer"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "yarn"
+    directory: "/packages/improbib"
+    schedule:
+      interval: "weekly"
