@@ -34,7 +34,7 @@ exit 1
 dokku config $appName
 # Set GF_DATABASE_URL
 dokku config:set $appName GF_DATABASE_URL='previously_copied_database_url'
-dokku config:set $appName GF_DATABASE_URL='postgres://postgres:514d552922fa84f30419538c12797e96@dokku-postgres-impromat-grafana-db-production:5432/impromat_grafana_db_production'
+dokku config:set $appName GF_DATABASE_URL='postgres://postgres:$DB_PW@dokku-postgres-impromat-grafana-db-production:5432/impromat_grafana_db_production'
 
 dokku config:set $appName GF_SERVER_HTTP_PORT=5000
 
