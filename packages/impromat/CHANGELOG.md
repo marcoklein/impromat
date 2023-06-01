@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.37.0
+
+### Minor Changes
+
+- c832b13: Show latest workshops shared with community
+- c832b13: Add workshop filter for shared workshops
+
+### Patch Changes
+
+- Updated dependencies [c832b13]
+  - impromat-api@0.10.0
+
 ## 0.36.0
 
 ### Minor Changes
