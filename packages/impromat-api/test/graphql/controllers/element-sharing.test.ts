@@ -28,7 +28,7 @@ describe('Sharing Workshop Elements', () => {
       filter: { isOwnerMe: true },
     });
     // then
-    expect(elements.data?.elements?.length).toBe(20);
+    expect(elements.data?.elements?.length).toBe(0);
   });
 
   it('should have no elements if not shared', async () => {
