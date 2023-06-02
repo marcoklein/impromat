@@ -16,7 +16,7 @@ const documents = {
     "\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n    markdownShort\n    visibility\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n": types.ElementFieldsFragmentDoc,
     "\n  query UserElementsQuery {\n    elements {\n      ...ElementFields\n    }\n  }\n": types.UserElementsQueryDocument,
     "\n  query ElementByIdQuery($id: ID!) {\n    element(id: $id) {\n      ...ElementFields\n    }\n  }\n": types.ElementByIdQueryDocument,
-    "\n  query ElementsQuery($input: ElementsQueryInput!) {\n    elements(input: $input) {\n      ...ElementFields\n    }\n  }\n": types.ElementsQueryDocument,
+    "\n  query ElementsQuery($filter: ElementsFilterInput) {\n    elements(filter: $filter) {\n      ...ElementFields\n    }\n  }\n": types.ElementsQueryDocument,
     "\n  query SearchElementsQuery($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n": types.SearchElementsQueryDocument,
     "\n  mutation AddElementQuery($input: CreateElementInput!) {\n    createElement(input: $input) {\n      ...ElementFields\n    }\n  }\n": types.AddElementQueryDocument,
     "\n  mutation UpdateElement($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n": types.UpdateElementDocument,
@@ -71,7 +71,7 @@ export function graphql(source: "\n  query ElementByIdQuery($id: ID!) {\n    ele
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query ElementsQuery($input: ElementsQueryInput!) {\n    elements(input: $input) {\n      ...ElementFields\n    }\n  }\n"): (typeof documents)["\n  query ElementsQuery($input: ElementsQueryInput!) {\n    elements(input: $input) {\n      ...ElementFields\n    }\n  }\n"];
+export function graphql(source: "\n  query ElementsQuery($filter: ElementsFilterInput) {\n    elements(filter: $filter) {\n      ...ElementFields\n    }\n  }\n"): (typeof documents)["\n  query ElementsQuery($filter: ElementsFilterInput) {\n    elements(filter: $filter) {\n      ...ElementFields\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

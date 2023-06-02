@@ -43,8 +43,8 @@ export const elementByIdQuery = graphql(`
 `);
 
 export const elementsQuery = graphql(`
-  query ElementsQuery($input: ElementsQueryInput!) {
-    elements(input: $input) {
+  query ElementsQuery($filter: ElementsFilterInput) {
+    elements(filter: $filter) {
       ...ElementFields
     }
   }

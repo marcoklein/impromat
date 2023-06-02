@@ -60,7 +60,11 @@ type Workshop {
 
   """If true, the client is authorized to edit the workshop."""
   canEdit: Boolean
-  isPublic: Boolean!
+
+  """
+  Public users can view the workshop but they require the direct link to the workshop. The url of the workshop does not change.
+  """
+  isPublic: Boolean
 
   """True, if the workshop is listed publicly in the improv community."""
   isListed: Boolean!
@@ -171,6 +175,10 @@ type ElementSearchResult {
   matches: [ElementSearchMatch!]!
 }
 
+type ElementQueryResult {
+  element: Element!
+}
+
 type Query {
   googleAuthUrl: String!
   searchElements(
@@ -186,7 +194,8 @@ type Query {
   workshops: [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
   element(id: ID!): Element
-  elements(input: ElementsQueryInput, skip: Float, take: Float): [Element!]
+  elements(filter: ElementsFilterInput, orderBy: ElementsOrderByInput, skip: Int! = 0, take: Int! = 20): [ElementQueryResult!]!
+  elementsCount(filter: ElementsFilterInput): Int!
 
   """Get information about the current user."""
   me: User!
@@ -199,19 +208,15 @@ input ElementSearchInput {
   skip: Int! = 0
 }
 
-input ElementsQueryInput {
-  filter: ElementsFilterInput
-  orderBy: ElementsOrderByInput
-  take: Int! = 20
-  skip: Int! = 0
-}
-
+"""Filter for elements"""
 input ElementsFilterInput {
+  nameSearch: String
+
   """Include all elements of the currently active user."""
   isOwnerMe: Boolean
 
   """
-  Include all elements that are publicaly available to the logged-in user.
+  Include all elements that are publicly available to the logged-in user.
   """
   isPublic: Boolean
 }

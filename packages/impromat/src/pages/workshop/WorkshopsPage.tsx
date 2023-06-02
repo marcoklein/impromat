@@ -14,7 +14,7 @@ import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
-import { PreviewCardGrid } from "../../components/PreviewCardGrid";
+import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { WorkshopsFilterBar } from "../../components/WorkshopsFilterBar";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { UserWorkshopsFilterInput } from "../../graphql-client/graphql";
@@ -147,7 +147,7 @@ export const WorkshopsPage: React.FC = () => {
           reexecuteQuery={reexecuteWorkshopsQuery}
         >
           {availableWorkshops?.length ? (
-            <PreviewCardGrid
+            <VirtualCardGrid
               scrollStoreKey="workshops-page"
               isFetching={false}
               items={availableWorkshops}
@@ -156,7 +156,7 @@ export const WorkshopsPage: React.FC = () => {
                   workshopFragment={workshop}
                 ></WorkshopPreviewCard>
               )}
-            ></PreviewCardGrid>
+            ></VirtualCardGrid>
           ) : !userWorkshopsFilterInput.liked ||
             !userWorkshopsFilterInput.owned ? (
             <div

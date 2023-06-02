@@ -90,10 +90,10 @@ E.g. in code:
 ```ts
 // ...
 @Args('filter', {
-  type: () => UserWorkshopsFilterInput,
+  type: () => WorkshopsFilterInput,
   defaultValue: { liked: true, owned: true },
 })
-input: UserWorkshopsFilterInput,
+input: WorkshopsFilterInput,
 // ...
 ```
 
@@ -101,8 +101,23 @@ Generated GraphQL:
 
 ```graphql
 # ...
-workshops(filter: UserWorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
+workshops(filter: WorkshopsFilterInput! = {liked: true, owned: true}): [Workshop!]!
 # ...
+```
+
+### Make users and owners part of filters
+
+Allow filtering for owned by workhops or elements.
+
+DO NOT make nested relationships on user specific items.
+
+```graphql
+# NOT
+me {
+  elements
+}
+# BUT
+elements(filter: {ownerId: "my-user-id"})
 ```
 
 ### Mutations

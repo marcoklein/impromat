@@ -2,6 +2,7 @@ import { IonBadge, IonButton, IonCardContent, IonText } from "@ionic/react";
 import { useMemo } from "react";
 import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
+import { routeLibraryElement } from "../pages/library/library-routes";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
 
@@ -50,7 +51,7 @@ const ElementPreviewItem_ElementFragment = graphql(`
 `);
 
 interface ContainerProps {
-  routerLink: string;
+  routerLink?: string;
   elementFragment: FragmentType<typeof ElementPreviewItem_ElementFragment>;
   /**
    * Set if context is a search result to mark search result matches.
@@ -64,7 +65,7 @@ interface ContainerProps {
  * Previews content of an element in a card. Use within a grid or list.
  */
 export const ElementPreviewCard: React.FC<ContainerProps> = ({
-  routerLink,
+  routerLink: routerLinkInput,
   elementFragment,
   elementSearchResultFragment,
 }) => {
@@ -76,7 +77,10 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
     ElementPreviewItem_ElementSearchResultFragment,
     elementSearchResultFragment,
   );
-
+  const routerLink = useMemo(
+    () => routerLinkInput ?? routeLibraryElement(element.id),
+    [element.id, routerLinkInput],
+  );
   const tags = useMemo(
     () =>
       element.tags.map((tag) => ({
