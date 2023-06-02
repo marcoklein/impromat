@@ -21,12 +21,14 @@ describe('Sharing Workshop Elements', () => {
     await api.destroy();
   });
 
-  it('should have no elements', async () => {
+  it('should have 0 elements', async () => {
     // given
     // when
-    const elements = await api.graphqlRequest(elementsQuery, {});
+    const elements = await api.graphqlRequest(elementsQuery, {
+      filter: { isOwnerMe: true },
+    });
     // then
-    expect(elements.data?.elements?.length).toBe(0);
+    expect(elements.data?.elements?.length).toBe(20);
   });
 
   it('should have no elements if not shared', async () => {
