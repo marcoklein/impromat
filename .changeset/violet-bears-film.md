@@ -1,5 +1,0 @@
----
-
----
-
-Create dependabot.yml

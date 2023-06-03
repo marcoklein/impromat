@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.11.0
+
+### Minor Changes
+
+- e26fffb: Explore latest elements
+
 ## 0.10.0
 
 ### Minor Changes

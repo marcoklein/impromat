@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.38.0
+
+### Minor Changes
+
+- e26fffb: Explore latest elements
+
+### Patch Changes
+
+- Updated dependencies [e26fffb]
+  - impromat-api@0.11.0
+
 ## 0.37.0
 
 ### Minor Changes
