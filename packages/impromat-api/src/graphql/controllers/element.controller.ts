@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import {
   Args,
   ID,
+  Int,
   Mutation,
   Parent,
   Query,
@@ -9,11 +10,13 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
+import { ElementsQueryArgs } from 'src/dtos/args/elements-query-args';
 import {
   CreateElementInput,
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
-import { ElementsQueryInput } from 'src/dtos/inputs/elements-query-input';
+import { ElementsFilterInput } from 'src/dtos/inputs/elements-query-input';
+import { ElementQueryResult } from 'src/dtos/types/element-query-result.dto';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import { Element } from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
@@ -106,23 +109,32 @@ export class ElementController {
     return this.userElementService.findElementById(userId, id);
   }
 
-  @Query(() => [Element], { nullable: true })
+  @Query(() => [ElementQueryResult])
   async elements(
-    @Args('input', { type: () => ElementsQueryInput, nullable: true })
-    optionalInput: Nullable<ElementsQueryInput>,
-    @Args('skip', { nullable: true }) skip: number,
-    @Args('take', { nullable: true }) take: number,
+    @Args() { filter, orderBy, skip, take }: ElementsQueryArgs,
     @SessionUserId() userId: string,
   ) {
-    const input = optionalInput ?? {
-      filter: null,
-      orderBy: null,
-      skip: 20,
-      take: 0,
-    };
-    if (skip !== undefined && skip !== null) input.skip = skip;
-    if (take !== undefined && take !== null) input.take = take;
-    return this.userElementService.findElementsFromUser(userId, input);
+    const elements = await this.userElementService.findElementsFromUser(
+      userId,
+      {
+        filter: filter ?? { isOwnerMe: true, isPublic: true },
+        orderBy: orderBy ?? { notImplemented: true },
+        skip,
+        take,
+      },
+    );
+    return elements.map((element) => ({
+      element,
+    }));
+  }
+
+  @Query(() => Int)
+  async elementsCount(
+    @Args('filter', { type: () => ElementsFilterInput, nullable: true })
+    filterInput: Nullable<ElementsFilterInput>,
+    @SessionUserId() userId: string,
+  ) {
+    throw new Error('Not implemented yet');
   }
 
   @Mutation(() => Element)

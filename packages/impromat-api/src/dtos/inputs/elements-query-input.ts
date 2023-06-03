@@ -1,5 +1,5 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
-import { Max, Min } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql';
+import { MaxLength } from 'class-validator';
 import { Nullable } from 'src/utils/nullish';
 
 @InputType()
@@ -8,8 +8,12 @@ export class ElementsOrderByInput {
   notImplemented: Nullable<boolean>;
 }
 
-@InputType()
+@InputType({ description: 'Filter for elements' })
 export class ElementsFilterInput {
+  @Field(() => String, { nullable: true })
+  @MaxLength(100)
+  nameSearch: Nullable<string>;
+
   @Field(() => Boolean, {
     nullable: true,
     description: 'Include all elements of the currently active user.',
@@ -22,22 +26,4 @@ export class ElementsFilterInput {
       'Include all elements that are publicly available to the logged-in user.',
   })
   isPublic: Nullable<boolean>;
-}
-
-@InputType()
-export class ElementsQueryInput {
-  @Field(() => ElementsFilterInput, { nullable: true })
-  filter: Nullable<ElementsFilterInput>;
-
-  @Field(() => ElementsOrderByInput, { nullable: true })
-  orderBy: Nullable<ElementsOrderByInput>;
-
-  @Field(() => Int, { defaultValue: 20 })
-  @Min(1)
-  @Max(100)
-  take: number;
-
-  @Field(() => Int, { defaultValue: 0 })
-  @Min(0)
-  skip: number;
 }

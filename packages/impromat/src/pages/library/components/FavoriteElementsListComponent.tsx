@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
-import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
+import { VirtualCardGrid } from "../../../components/VirtualCardGrid";
 import {
   FragmentType,
   getFragmentData,
@@ -41,7 +41,7 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
     logger("favoriteElements.length=%s", favoriteElements.length);
   }, [logger, favoriteElements]);
   return (
-    <PreviewCardGrid
+    <VirtualCardGrid
       scrollStoreKey="favorite-elements-list-component"
       isFetching={false}
       items={favoriteElements}
@@ -52,6 +52,6 @@ export const FavoriteElementsListComponent: React.FC<ContainerProps> = ({
           elementFragment={element}
         ></ElementPreviewCard>
       )}
-    ></PreviewCardGrid>
+    ></VirtualCardGrid>
   );
 };

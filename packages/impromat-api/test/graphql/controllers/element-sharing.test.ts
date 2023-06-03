@@ -6,8 +6,8 @@ import {
 } from 'test/test-utils/init-api-test-session';
 import {
   createElementMutation,
+  elementsQuery,
   searchElementsQuery,
-  userElementsQuery,
 } from './element-queries';
 
 describe('Sharing Workshop Elements', () => {
@@ -21,10 +21,12 @@ describe('Sharing Workshop Elements', () => {
     await api.destroy();
   });
 
-  it('should have no elements', async () => {
+  it('should have 0 elements', async () => {
     // given
     // when
-    const elements = await api.graphqlRequest(userElementsQuery);
+    const elements = await api.graphqlRequest(elementsQuery, {
+      filter: { isOwnerMe: true },
+    });
     // then
     expect(elements.data?.elements?.length).toBe(0);
   });

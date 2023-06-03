@@ -7,7 +7,7 @@ import {
 } from "react-virtuoso";
 import { useComponentLogger } from "../hooks/use-component-logger";
 import { LoadingCard } from "./LoadingCard";
-import "./PreviewCardGrid.css";
+import "./VirtualCardGrid.css";
 
 interface ContainerProps<ItemData, Context> {
   scrollStoreKey?: string;
@@ -20,7 +20,7 @@ interface ContainerProps<ItemData, Context> {
 /**
  * Grid helper for rendering `PreviewCard`s with virtual scrolling support.
  */
-export const PreviewCardGrid = <ItemData, Context>({
+export const VirtualCardGrid = <ItemData, Context>({
   scrollStoreKey,
   itemContent,
   items,

@@ -18,7 +18,7 @@ import {
 } from "../library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
-import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
+import { VirtualCardGrid } from "../../../components/VirtualCardGrid";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 
 const SearchElementTabQuery = graphql(`
@@ -123,7 +123,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
           )}
         {searchElementsQueryResult.data &&
           searchElementsQueryResult.data.searchElements.length > 0 && (
-            <PreviewCardGrid
+            <VirtualCardGrid
               scrollStoreKey="search-element-tab-component"
               isFetching={
                 searchElementsQueryResult.fetching ||
@@ -149,7 +149,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                   elementSearchResultFragment={searchResult}
                 ></ElementPreviewCard>
               )}
-            ></PreviewCardGrid>
+            ></VirtualCardGrid>
           )}
         {!searchElementsQueryResult.fetching &&
           !searchElementsQueryResult.stale &&

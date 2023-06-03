@@ -11,8 +11,10 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { useQuery } from "urql";
+import { ElementPreviewCard } from "../components/ElementPreviewCard";
 import { PageContentLoaderComponent } from "../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../graphql-client";
+import { TeaserGrid } from "./community/TeaserGrid";
 import { WorkshopPreviewCard } from "./workshop/components/WorkshopPreviewCard";
 
 const ExplorePage_WorkshopFragment = graphql(`
@@ -22,14 +24,27 @@ const ExplorePage_WorkshopFragment = graphql(`
   }
 `);
 
+const CommunityPage_Element = graphql(`
+  fragment CommunityPage_Element on Element {
+    id
+    ...ElementPreviewItem_Element
+  }
+`);
+
 const ExplorePageQuery = graphql(`
   query ExplorePageQuery(
     $userWorkshopsFilterInput: UserWorkshopsFilterInput
+    $elementsFilterInput: ElementsFilterInput
     $take: Int!
   ) {
     me {
       workshops(input: $userWorkshopsFilterInput, take: $take) {
         ...WorkshopFields_Workshop
+      }
+    }
+    elements(filter: $elementsFilterInput, take: $take) {
+      element {
+        ...CommunityPage_Element
       }
     }
   }
@@ -44,6 +59,10 @@ export const CommunityPage: React.FC = () => {
         owned: false,
         isPublic: true,
       },
+      elementsFilterInput: {
+        isOwnerMe: true,
+        isPublic: true,
+      },
       take: 6,
     },
   });
@@ -52,6 +71,11 @@ export const CommunityPage: React.FC = () => {
     ExplorePage_WorkshopFragment,
     workshopsQueryResult.data?.me.workshops,
   );
+  const latestElements = getFragmentData(
+    CommunityPage_Element,
+    workshopsQueryResult.data?.elements.map(({ element }) => element),
+  );
+
   return (
     <IonPage>
       <IonHeader>
@@ -68,6 +92,17 @@ export const CommunityPage: React.FC = () => {
           queryResult={workshopsQueryResult}
           reexecuteQuery={reexecuteWorkshopsQuery}
         >
+          {latestElements && (
+            <TeaserGrid
+              title="Latest Community Elements"
+              items={latestElements}
+              itemContent={(element) => (
+                <ElementPreviewCard
+                  elementFragment={element}
+                ></ElementPreviewCard>
+              )}
+            ></TeaserGrid>
+          )}
           <div
             style={{
               display: "flex",

@@ -6,7 +6,8 @@ import {
 import { PrismaService } from './prisma.service';
 
 import { Prisma } from '@prisma/client';
-import { ElementsQueryInput } from 'src/dtos/inputs/elements-query-input';
+import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
+import { ElementsFilterInput } from 'test/graphql-client/graphql';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
 
@@ -37,7 +38,15 @@ export class ElementService {
     });
   }
 
-  findElementsFromUser(userRequestId: string, input: ElementsQueryInput) {
+  findElementsFromUser(
+    userRequestId: string,
+    input: {
+      filter: ElementsFilterInput;
+      orderBy: ElementsOrderByInput;
+      skip: number;
+      take: number;
+    },
+  ) {
     const { filter, take, skip } = input;
 
     const whereInput: Prisma.ElementWhereInput[] = [];

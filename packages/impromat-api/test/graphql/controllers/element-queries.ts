@@ -26,14 +26,6 @@ export const elementFieldsFragment = graphql(`
   }
 `);
 
-export const userElementsQuery = graphql(`
-  query UserElementsQuery {
-    elements {
-      ...ElementFields
-    }
-  }
-`);
-
 export const elementByIdQuery = graphql(`
   query ElementByIdQuery($id: ID!) {
     element(id: $id) {
@@ -43,9 +35,11 @@ export const elementByIdQuery = graphql(`
 `);
 
 export const elementsQuery = graphql(`
-  query ElementsQuery($input: ElementsQueryInput!) {
-    elements(input: $input) {
-      ...ElementFields
+  query ElementsQuery($filter: ElementsFilterInput) {
+    elements(filter: $filter) {
+      element {
+        ...ElementFields
+      }
     }
   }
 `);

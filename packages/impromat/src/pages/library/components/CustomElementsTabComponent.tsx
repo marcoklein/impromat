@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
-import { PreviewCardGrid } from "../../../components/PreviewCardGrid";
+import { VirtualCardGrid } from "../../../components/VirtualCardGrid";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
@@ -76,7 +76,7 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
       ) : !customElements?.length ? (
         <CustomElementsEmptyComponent></CustomElementsEmptyComponent>
       ) : (
-        <PreviewCardGrid
+        <VirtualCardGrid
           scrollStoreKey="custom-elements-tab-component"
           isFetching={isFetching}
           items={customElements}
@@ -87,7 +87,7 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
               elementFragment={element}
             ></ElementPreviewCard>
           )}
-        ></PreviewCardGrid>
+        ></VirtualCardGrid>
       )}
     </>
   );
