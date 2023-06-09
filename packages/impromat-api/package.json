@@ -29,6 +29,8 @@
     "docker-compose": "yarn workspace infrastructure docker-compose"
   },
   "dependencies": {
+    "@casl/ability": "^6.5.0",
+    "@casl/prisma": "^1.4.0",
     "@nestjs/apollo": "^10.2.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
