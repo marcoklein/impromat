@@ -15,11 +15,12 @@ import {
   IonPage,
   IonSelect,
   IonSelectOption,
+  IonText,
   IonTextarea,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { informationCircle } from "ionicons/icons";
+import { globe } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
@@ -31,6 +32,7 @@ import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshop } from "../../routes/shared-routes";
+import { COLOR_SHARED } from "../../theme/theme-colors";
 import { ElementTagsItem } from "./components/ElementTagsItem";
 import { Tabs } from "./components/LibraryContentComponent";
 import {
@@ -255,6 +257,10 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
               onIonInput={(event) => setName(event.detail.value!.toString())}
             ></IonInput>
           </IonItem>
+          <ElementTagsItem
+            tags={tags}
+            onTagsChange={(tags) => setTags(tags)}
+          ></ElementTagsItem>
           <IonItem>
             <IonTextarea
               label="Content"
@@ -277,10 +283,62 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
               <IonSelectOption value="de">Deutsch</IonSelectOption>
             </IonSelect>
           </IonItem>
-          <ElementTagsItem
-            tags={tags}
-            onTagsChange={(tags) => setTags(tags)}
-          ></ElementTagsItem>
+          {existingElement &&
+          existingElement.visibility === ElementVisibility.Public ? (
+            <>
+              <IonItem>
+                <IonIcon
+                  slot="start"
+                  icon={globe}
+                  color={COLOR_SHARED}
+                ></IonIcon>
+                <IonLabel className="ion-text-wrap">
+                  Community Element
+                  <div>
+                    <IonNote>
+                      This is a public community element of Impromat. It is
+                      shared with everyone and editable by Impromat users.
+                    </IonNote>
+                  </div>
+                </IonLabel>
+              </IonItem>
+              <InfoItemComponent
+                color="warning"
+                message="Changes to community elements are visible in a public activity record."
+              ></InfoItemComponent>
+            </>
+          ) : (
+            <>
+              <IonItem
+                style={{
+                  "--border-color": isPublic
+                    ? "var(--ion-color-danger)"
+                    : undefined,
+                  "--border-width": "1px",
+                }}
+                lines="none"
+              >
+                <IonCheckbox
+                  slot="start"
+                  checked={isPublic}
+                  onIonChange={(e) => setIsPublic(e.detail.checked)}
+                ></IonCheckbox>
+                <IonLabel className="ion-text-wrap">
+                  Add to Public Impromat Elements
+                  <IonNote>
+                    <div>
+                      Contribute your element to the public Impromat community.
+                      Shared elements are visible, searchable, and editable by
+                      Impromat users.
+                    </div>
+                  </IonNote>
+                  <IonNote>
+                    <IonText color="danger">Sharing cannot be undone.</IonText>
+                  </IonNote>
+                </IonLabel>
+              </IonItem>
+            </>
+          )}
           {editExistingItem && (
             <InfoItemComponent>
               <>
@@ -299,38 +357,6 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
               </>
             </InfoItemComponent>
           )}
-          <IonItem
-            style={{
-              "--border-color": isPublic
-                ? "var(--ion-color-tertiary)"
-                : undefined,
-              "--border-width": "1px",
-            }}
-            lines="none"
-          >
-            <IonCheckbox
-              slot="start"
-              checked={isPublic}
-              onIonChange={(e) => setIsPublic(e.detail.checked)}
-            ></IonCheckbox>
-            <IonLabel className="ion-text-wrap">
-              Share Element with Community
-              <IonNote>
-                <div>
-                  Contribute to the Impromat community with your individual
-                  improv element creations.
-                </div>
-                <div>
-                  Shared elements are publicly visible and allows others to copy
-                  them and add them to own workshops.
-                </div>
-                <div>
-                  <IonIcon icon={informationCircle}></IonIcon> Attribution and
-                  licensing for shared elements is under development.
-                </div>
-              </IonNote>
-            </IonLabel>
-          </IonItem>
         </IonList>
       </IonContent>
       <IonFooter>

@@ -31,6 +31,10 @@ model Element {
   owner               User?                 @relation(fields: [ownerId], references: [id])
   userFavoriteElement UserFavoriteElement[]
   workshopElements    WorkshopElement[]
+
+  snapshotParent   Element?  @relation("SnapshotRelation", fields: [snapshotParentId], references: [id])
+  snapshots        Element[] @relation("SnapshotRelation")
+  snapshotParentId String?
 }
 
 enum ElementVisibility {
