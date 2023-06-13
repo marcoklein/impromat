@@ -5,13 +5,14 @@ import {
   IonLabel,
   IonRouterLink,
 } from "@ionic/react";
-import { brush, eye, pencil } from "ionicons/icons";
+import { brush, globe, pencil } from "ionicons/icons";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
 import {
   routeLibraryEditCustomElement,
   routeLibraryElement,
 } from "../pages/library/library-routes";
+import { COLOR_SHARED } from "../theme/theme-colors";
 
 const CustomElement_ElementFragment = graphql(`
   fragment CustomElement_Element on Element {
@@ -67,11 +68,9 @@ export const CustomElementInfoItemComponent: React.FC<ContainerProps> = ({
       </IonItem>
 
       {element.visibility === ElementVisibility.Public && (
-        <IonItem lines="none" color="tertiary">
-          <IonIcon icon={eye} slot="start"></IonIcon>
-          <IonLabel className="ion-text-wrap">
-            {element.name} is publicly shared with the Impromat community.
-          </IonLabel>
+        <IonItem lines="none">
+          <IonIcon icon={globe} slot="start" color={COLOR_SHARED}></IonIcon>
+          <IonLabel className="ion-text-wrap">Community Element</IonLabel>
         </IonItem>
       )}
     </>

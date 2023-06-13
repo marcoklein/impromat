@@ -1,10 +1,14 @@
+import { IonIcon, IonItem, IonLabel, IonNote } from "@ionic/react";
+import { globe } from "ionicons/icons";
 import ReactMarkdown from "react-markdown";
+import { NavLink } from "react-router-dom";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
+import { routeLibraryEditCustomElement } from "../pages/library/library-routes";
+import { COLOR_SHARED } from "../theme/theme-colors";
 import { CustomElementInfoItemComponent } from "./CustomElementInfoItemComponent";
+import { InfoItemComponent } from "./InfoItemComponent";
 import { LicenseItemComponent } from "./LicenseItemComponent";
 import { TagsComponent } from "./TagsComponent";
-import { InfoItemComponent } from "./InfoItemComponent";
-import { warning } from "ionicons/icons";
 
 const Element_ElementFragment = graphql(`
   fragment Element_Element on Element {
@@ -27,6 +31,7 @@ const Element_ElementFragment = graphql(`
     sourceBaseUrl
     licenseName
     licenseUrl
+    visibility
     owner {
       id
       name
@@ -61,11 +66,6 @@ export const ElementComponent: React.FC<ContainerProps> = ({
               element.owner?.name ?? "a user"
             } in impromat`}
           ></InfoItemComponent>
-          <InfoItemComponent
-            icon={warning}
-            color="warning"
-            message="Sharing of elements is under development"
-          ></InfoItemComponent>
         </>
       ) : (
         <LicenseItemComponent
@@ -76,6 +76,25 @@ export const ElementComponent: React.FC<ContainerProps> = ({
           name={element.name}
           sourceUrl={element.sourceUrl}
         ></LicenseItemComponent>
+      )}
+      {!element.isOwnerMe && element.visibility === "PUBLIC" && (
+        <IonItem>
+          <IonIcon slot="start" icon={globe} color={COLOR_SHARED}></IonIcon>
+          <IonLabel className="ion-text-wrap">
+            Community Element
+            <div>
+              <IonNote>
+                Want to improve this element? You can{" "}
+                <NavLink
+                  to={routeLibraryEditCustomElement({ elementId: element.id })}
+                >
+                  edit it here
+                </NavLink>
+                .
+              </IonNote>
+            </div>
+          </IonLabel>
+        </IonItem>
       )}
     </>
   );
