@@ -1,5 +1,5 @@
-import { IonIcon, IonItem, IonLabel } from "@ionic/react";
-import { information } from "ionicons/icons";
+import { IonItem, IonLabel } from "@ionic/react";
+import { Icon } from "./Icon";
 
 interface ContainerProps {
   name?: string | null;
@@ -32,20 +32,18 @@ export const LicenseItemComponent: React.FC<ContainerProps> = ({
 
   return (
     <IonItem color="" lines="none">
-      <IonIcon icon={information} slot="start"></IonIcon>
+      <Icon tablerIcon="license" slot="start"></Icon>
       <IonLabel className="ion-text-wrap">
-        <p>
-          Based on "{OptionalLink(name, sourceUrl)}"
-          {authorName && (
-            <>
-              {" "}
-              from {OptionalLink(authorName, authorUrl)}
-              {licenseName && (
-                <>, licensed under {OptionalLink(licenseName, licenseUrl)}</>
-              )}
-            </>
-          )}
-        </p>
+        Based on "{OptionalLink(name, sourceUrl)}"
+        {authorName && (
+          <>
+            {" "}
+            from {OptionalLink(authorName, authorUrl)}
+            {licenseName && (
+              <>, licensed under {OptionalLink(licenseName, licenseUrl)}</>
+            )}
+          </>
+        )}
       </IonLabel>
     </IonItem>
   );

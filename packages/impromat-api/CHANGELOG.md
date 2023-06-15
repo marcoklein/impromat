@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.12.0
+
+### Minor Changes
+
+- 3d90c99: Allow public editing of elements
+
 ## 0.11.0
 
 ### Minor Changes

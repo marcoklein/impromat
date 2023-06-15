@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.39.0
+
+### Minor Changes
+
+- 3d90c99: Allow public editing of elements
+
+### Patch Changes
+
+- Updated dependencies [3d90c99]
+  - impromat-api@0.12.0
+
 ## 0.38.0
 
 ### Minor Changes
