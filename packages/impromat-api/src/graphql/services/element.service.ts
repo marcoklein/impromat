@@ -62,6 +62,9 @@ export class ElementService {
       where: {
         OR: whereInput,
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
       skip,
       take,
     });
