@@ -5,9 +5,11 @@ import {
 } from 'src/dtos/inputs/element-input';
 import { PrismaService } from './prisma.service';
 
+import { accessibleBy } from '@casl/prisma';
 import { ElementVisibility, Prisma } from '@prisma/client';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementsFilterInput } from 'test/graphql-client/graphql';
+import { defineAbilityFor } from '../abilities';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
 
@@ -58,9 +60,16 @@ export class ElementService {
       whereInput.push({ visibility: 'PUBLIC' });
     }
 
+    const ability = defineAbilityFor(userRequestId);
+
     return this.prismaService.element.findMany({
       where: {
-        OR: whereInput,
+        AND: [
+          accessibleBy(ability).Element,
+          {
+            OR: whereInput,
+          },
+        ],
       },
       orderBy: {
         updatedAt: 'desc',
