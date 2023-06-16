@@ -71,7 +71,9 @@ export class ElementService {
           },
         ],
       },
-
+      orderBy: {
+        updatedAt: 'desc',
+      },
       skip,
       take,
     });
