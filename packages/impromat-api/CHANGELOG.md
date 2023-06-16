@@ -1,5 +1,15 @@
 # impromat-api
 
+## 0.13.0
+
+### Minor Changes
+
+- 6b1b04d: Add authorization package for access control
+
+### Patch Changes
+
+- cd7b022: Sort community elements by latest per default
+
 ## 0.12.0
 
 ### Minor Changes
