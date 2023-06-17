@@ -1,6 +1,6 @@
 {
   "name": "impromat",
-  "version": "0.39.0",
+  "version": "0.39.1",
   "private": true,
   "homepage": "https://impromat.app",
   "description": "Application code for Impromat.",
@@ -28,7 +28,7 @@
     "graphql": "^16.6.0",
     "history": "^4.0.0",
     "immer": "^9.0.15",
-    "impromat-api": "0.12.0",
+    "impromat-api": "0.13.0",
     "ionicons": "^5.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -1,5 +1,11 @@
 # impromat-app-renderer
 
+## 0.1.29
+
+### Patch Changes
+
+- impromat@0.39.1
+
 ## 0.1.28
 
 ### Patch Changes
