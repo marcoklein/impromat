@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.39.2
+
+### Patch Changes
+
+- 4a9fd35: Exclude own elements from latest community elements
+
 ## 0.39.1
 
 ### Patch Changes
