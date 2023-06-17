@@ -4,6 +4,8 @@ import Fuse from 'fuse.js';
 import { ElementSearchInput } from 'src/dtos/inputs/element-search-input';
 import { ElementSearchMatch } from 'src/dtos/types/element-search-result.dto';
 import { PrismaService } from './prisma.service';
+import { defineAbilityFor } from '../abilities';
+import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
 export class ElementSearchService {
@@ -19,14 +21,24 @@ export class ElementSearchService {
       matches: ElementSearchMatch[];
     }[]
   > {
+    const ability = defineAbilityFor(userRequestId);
+
     const elementsToSearch = await this.prismaService.element.findMany({
       where: {
-        OR: [
+        AND: [
+          accessibleBy(ability).Element,
           {
-            ownerId: userRequestId,
+            snapshotParentId: null,
           },
           {
-            visibility: 'PUBLIC',
+            OR: [
+              {
+                ownerId: userRequestId,
+              },
+              {
+                visibility: 'PUBLIC',
+              },
+            ],
           },
         ],
       },
