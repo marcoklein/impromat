@@ -67,6 +67,9 @@ export class ElementService {
         AND: [
           accessibleBy(ability).Element,
           {
+            snapshotParentId: null,
+          },
+          {
             OR: whereInput,
           },
         ],

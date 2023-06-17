@@ -60,7 +60,7 @@ export const CommunityPage: React.FC = () => {
         isPublic: true,
       },
       elementsFilterInput: {
-        isOwnerMe: true,
+        isOwnerMe: false,
         isPublic: true,
       },
       take: 6,
