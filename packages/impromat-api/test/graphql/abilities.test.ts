@@ -39,6 +39,8 @@ describe('Abilities', () => {
       userAbility.can('list', subject('Element', publicElementWithOtherOwner)),
     ).toBe(true);
 
+    // TODO add test to disallow writing of element visiblity state and name for other user
+
     expect(
       userAbility.can('read', subject('Element', elementWithOtherOwner)),
     ).toBe(false);

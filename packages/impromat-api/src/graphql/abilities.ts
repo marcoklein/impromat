@@ -12,9 +12,12 @@ import {
   WorkshopSection,
 } from '@prisma/client';
 
+export const ABILITY_ACTION_READ = 'read';
+export const ABILITY_ACTION_LIST = 'list';
+
 type AppAbility = PureAbility<
   [
-    'read' | 'write' | 'list',
+    typeof ABILITY_ACTION_READ | 'write' | typeof ABILITY_ACTION_LIST,
     Subjects<{
       User: User;
       Element: Element;
@@ -32,12 +35,12 @@ type AppAbility = PureAbility<
 export const defineAbilityFor = (userId: string) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
-  can('read', 'Element', { ownerId: userId });
-  can('list', 'Element', { ownerId: userId });
+  can(ABILITY_ACTION_READ, 'Element', { ownerId: userId });
+  can(ABILITY_ACTION_LIST, 'Element', { ownerId: userId });
   can('write', 'Element', { ownerId: userId });
 
-  can('read', 'Element', { visibility: ElementVisibility.PUBLIC });
-  can('list', 'Element', { visibility: ElementVisibility.PUBLIC });
+  can(ABILITY_ACTION_READ, 'Element', { visibility: ElementVisibility.PUBLIC });
+  can(ABILITY_ACTION_LIST, 'Element', { visibility: ElementVisibility.PUBLIC });
 
   return build();
 };

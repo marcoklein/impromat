@@ -6,7 +6,14 @@ import { ElementVisibility } from './element-visibility.dto';
 import { User } from './user.dto';
 import { WorkshopElement } from './workshop-element.dto';
 
-export type ElementRelations = 'tags' | 'usedBy' | 'owner';
+export type ElementOmittedFields =
+  | 'tags'
+  | 'usedBy'
+  | 'owner'
+  | 'visibility'
+  | 'isFavorite'
+  | 'markdownShort'
+  | 'isOwnerMe';
 
 @ObjectType()
 export class Element extends BaseDto {

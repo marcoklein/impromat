@@ -9,7 +9,11 @@ import { accessibleBy } from '@casl/prisma';
 import { ElementVisibility, Prisma } from '@prisma/client';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementsFilterInput } from 'test/graphql-client/graphql';
-import { defineAbilityFor } from '../abilities';
+import {
+  ABILITY_ACTION_LIST,
+  ABILITY_ACTION_READ,
+  defineAbilityFor,
+} from '../abilities';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
 
@@ -65,7 +69,7 @@ export class ElementService {
     return this.prismaService.element.findMany({
       where: {
         AND: [
-          accessibleBy(ability).Element,
+          accessibleBy(ability, ABILITY_ACTION_LIST).Element,
           {
             snapshotParentId: null,
           },
@@ -105,9 +109,11 @@ export class ElementService {
     userRequestId: string,
     updateElementInput: UpdateElementInput,
   ) {
+    const ability = defineAbilityFor(userRequestId);
     const existing = await this.prismaService.element.findFirstOrThrow({
       where: {
         AND: [
+          accessibleBy(ability, ABILITY_ACTION_READ).Element,
           { id: updateElementInput.id },
           {
             OR: [
