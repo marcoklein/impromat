@@ -46,6 +46,9 @@ export const defineAbilityForUser = (userId: string) => {
 
   can(ABILITY_ACTION_READ, 'Element', { visibility: ElementVisibility.PUBLIC });
   can(ABILITY_ACTION_LIST, 'Element', { visibility: ElementVisibility.PUBLIC });
+  can(ABILITY_ACTION_WRITE, 'Element', {
+    visibility: ElementVisibility.PUBLIC,
+  });
 
   return build();
 };

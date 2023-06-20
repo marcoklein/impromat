@@ -34,7 +34,7 @@ describe('Abilities', () => {
     ).toBe(true);
     expect(
       userAbility.can('write', subject('Element', publicElementWithOtherOwner)),
-    ).toBe(false);
+    ).toBe(true);
     expect(
       userAbility.can('list', subject('Element', publicElementWithOtherOwner)),
     ).toBe(true);
@@ -42,16 +42,6 @@ describe('Abilities', () => {
     expect(
       userAbility.can('write', subject('Element', ownElement), 'visibility'),
     ).toBe(true);
-    expect(
-      userAbility.can('write', subject('Element', ownElement), 'visibility'),
-    ).toBe(true);
-    expect(
-      userAbility.can(
-        'write',
-        subject('Element', publicElementWithOtherOwner),
-        'visibility',
-      ),
-    ).toBe(false);
     expect(
       userAbility.can('write', subject('Element', ownElement), 'visibility'),
     ).toBe(true);
