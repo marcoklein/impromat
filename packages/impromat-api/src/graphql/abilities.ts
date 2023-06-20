@@ -14,10 +14,15 @@ import {
 
 export const ABILITY_ACTION_READ = 'read';
 export const ABILITY_ACTION_LIST = 'list';
+export const ABILITY_ACTION_WRITE = 'write';
 
 type AppAbility = PureAbility<
   [
-    typeof ABILITY_ACTION_READ | 'write' | typeof ABILITY_ACTION_LIST,
+    (
+      | typeof ABILITY_ACTION_READ
+      | typeof ABILITY_ACTION_WRITE
+      | typeof ABILITY_ACTION_LIST
+    ),
     Subjects<{
       User: User;
       Element: Element;
@@ -32,12 +37,12 @@ type AppAbility = PureAbility<
   PrismaQuery
 >;
 
-export const defineAbilityFor = (userId: string) => {
+export const defineAbilityForUser = (userId: string) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
   can(ABILITY_ACTION_READ, 'Element', { ownerId: userId });
   can(ABILITY_ACTION_LIST, 'Element', { ownerId: userId });
-  can('write', 'Element', { ownerId: userId });
+  can(ABILITY_ACTION_WRITE, 'Element', { ownerId: userId });
 
   can(ABILITY_ACTION_READ, 'Element', { visibility: ElementVisibility.PUBLIC });
   can(ABILITY_ACTION_LIST, 'Element', { visibility: ElementVisibility.PUBLIC });

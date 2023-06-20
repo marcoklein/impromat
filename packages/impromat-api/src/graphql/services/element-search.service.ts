@@ -4,7 +4,7 @@ import { Element as PrismaElement } from '@prisma/client';
 import Fuse from 'fuse.js';
 import { ElementSearchInput } from 'src/dtos/inputs/element-search-input';
 import { ElementSearchMatch } from 'src/dtos/types/element-search-result.dto';
-import { ABILITY_ACTION_LIST, defineAbilityFor } from '../abilities';
+import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ElementSearchService {
       matches: ElementSearchMatch[];
     }[]
   > {
-    const ability = defineAbilityFor(userRequestId);
+    const ability = defineAbilityForUser(userRequestId);
 
     const elementsToSearch = await this.prismaService.element.findMany({
       where: {

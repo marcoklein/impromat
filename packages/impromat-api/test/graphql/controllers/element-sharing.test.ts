@@ -10,7 +10,8 @@ import {
   elementsQuery,
   updateElementMutation,
 } from './element-queries';
-describe('Sharing Workshop Elements', () => {
+
+describe('Sharing Elements', () => {
   let api: ApiTestSession;
 
   beforeAll(async () => {
