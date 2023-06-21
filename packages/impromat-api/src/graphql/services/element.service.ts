@@ -9,7 +9,13 @@ import { accessibleBy } from '@casl/prisma';
 import { ElementVisibility, Prisma } from '@prisma/client';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementsFilterInput } from 'test/graphql-client/graphql';
-import { defineAbilityFor } from '../abilities';
+import {
+  ABILITY_ACTION_LIST,
+  ABILITY_ACTION_READ,
+  ABILITY_ACTION_WRITE,
+  defineAbilityForUser,
+} from '../abilities';
+import { subject } from '@casl/ability';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
 
@@ -60,12 +66,12 @@ export class ElementService {
       whereInput.push({ visibility: 'PUBLIC' });
     }
 
-    const ability = defineAbilityFor(userRequestId);
+    const ability = defineAbilityForUser(userRequestId);
 
     return this.prismaService.element.findMany({
       where: {
         AND: [
-          accessibleBy(ability).Element,
+          accessibleBy(ability, ABILITY_ACTION_LIST).Element,
           {
             snapshotParentId: null,
           },
@@ -105,9 +111,11 @@ export class ElementService {
     userRequestId: string,
     updateElementInput: UpdateElementInput,
   ) {
+    const ability = defineAbilityForUser(userRequestId);
     const existing = await this.prismaService.element.findFirstOrThrow({
       where: {
         AND: [
+          accessibleBy(ability, ABILITY_ACTION_READ).Element,
           { id: updateElementInput.id },
           {
             OR: [
@@ -122,6 +130,17 @@ export class ElementService {
       },
     });
     if (!existing) throw new Error('Not existing or not owner.');
+
+    if (!ability.can(ABILITY_ACTION_WRITE, subject('Element', existing))) {
+      throw new Error('Write not permitted.');
+    }
+
+    if (
+      existing.visibility === 'PUBLIC' &&
+      updateElementInput.visibility === 'PRIVATE'
+    ) {
+      throw new Error('Cannot make visiblity private.');
+    }
 
     return await this.prismaService.$transaction(async (tx) => {
       await tx.element.create({

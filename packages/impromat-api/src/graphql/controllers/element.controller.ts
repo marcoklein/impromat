@@ -18,7 +18,7 @@ import {
 import { ElementsFilterInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementQueryResult } from 'src/dtos/types/element-query-result.dto';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
-import { Element } from 'src/dtos/types/element.dto';
+import { Element, ElementOmittedFields } from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
 import { Nullable } from 'src/utils/nullish';
@@ -153,7 +153,7 @@ export class ElementController {
   async updateElement(
     @Args('input') updateElementInput: UpdateElementInput,
     @SessionUserId() sessionUserId: string,
-  ) {
+  ): Promise<Omit<Element, ElementOmittedFields> | null> {
     return await this.userElementService.updateElement(
       sessionUserId,
       updateElementInput,

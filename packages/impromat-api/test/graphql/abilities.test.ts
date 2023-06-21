@@ -1,6 +1,6 @@
 import { subject } from '@casl/ability';
 import { Element } from '@prisma/client';
-import { defineAbilityFor } from 'src/graphql/abilities';
+import { defineAbilityForUser } from 'src/graphql/abilities';
 
 const ownerId = 'owner-id';
 
@@ -24,7 +24,7 @@ const publicElementWithOtherOwner = {
 describe('Abilities', () => {
   it('should have correct elements abilities', () => {
     // given
-    const userAbility = defineAbilityFor(ownerId);
+    const userAbility = defineAbilityForUser(ownerId);
     // when, then
     expect(userAbility.can('read', subject('Element', ownElement))).toBe(true);
     expect(userAbility.can('write', subject('Element', ownElement))).toBe(true);
@@ -34,9 +34,16 @@ describe('Abilities', () => {
     ).toBe(true);
     expect(
       userAbility.can('write', subject('Element', publicElementWithOtherOwner)),
-    ).toBe(false);
+    ).toBe(true);
     expect(
       userAbility.can('list', subject('Element', publicElementWithOtherOwner)),
+    ).toBe(true);
+
+    expect(
+      userAbility.can('write', subject('Element', ownElement), 'visibility'),
+    ).toBe(true);
+    expect(
+      userAbility.can('write', subject('Element', ownElement), 'visibility'),
     ).toBe(true);
 
     expect(

@@ -35,8 +35,13 @@ export const elementByIdQuery = graphql(`
 `);
 
 export const elementsQuery = graphql(`
-  query ElementsQuery($filter: ElementsFilterInput) {
-    elements(filter: $filter) {
+  query ElementsQuery(
+    $filter: ElementsFilterInput
+    $orderBy: ElementsOrderByInput
+    $skip: Int! = 0
+    $take: Int! = 20
+  ) {
+    elements(filter: $filter, orderBy: $orderBy, skip: $skip, take: $take) {
       element {
         ...ElementFields
       }
@@ -55,7 +60,7 @@ export const searchElementsQuery = graphql(`
 `);
 
 export const createElementMutation = graphql(`
-  mutation AddElementQuery($input: CreateElementInput!) {
+  mutation CreateElementMutation($input: CreateElementInput!) {
     createElement(input: $input) {
       ...ElementFields
     }
@@ -63,9 +68,10 @@ export const createElementMutation = graphql(`
 `);
 
 export const updateElementMutation = graphql(`
-  mutation UpdateElement($input: UpdateWorkshopInput!) {
-    updateWorkshop(input: $input) {
-      ...WorkshopFields
+  mutation UpdateElementMutation($input: UpdateElementInput!) {
+    updateElement(input: $input) {
+      id
+      # ...ElementFields
     }
   }
 `);

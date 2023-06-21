@@ -33,6 +33,18 @@ Run a specific test
 yarn test --fgrep "empty workshop list"
 ```
 
+or
+
+```bash
+yarn test -t "empty workshop list"
+```
+
+Run only jest (without resetting the test database):
+
+```bash
+yarn test:jest -t "empty workshop list"
+```
+
 Watch tests
 
 ```
