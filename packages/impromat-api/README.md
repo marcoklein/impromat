@@ -30,13 +30,13 @@ yarn test
 Run a specific test
 
 ```bash
-yarn test --fgrep "empty workshop list"
+yarn test -t "empty workshop list"
 ```
 
-or
+Run a specific test file (faster for testing individual services for example):
 
 ```bash
-yarn test -t "empty workshop list"
+yarn test:jest test/graphql/services/element.service.test
 ```
 
 Run only jest (without resetting the test database):
@@ -50,6 +50,10 @@ Watch tests
 ```
 yarn test:watch
 ```
+
+## Service Template Test
+
+See `test/graphql/services/element.service.test.ts` for a template test.
 
 ## Database Schema
 

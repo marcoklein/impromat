@@ -32,6 +32,8 @@ model Element {
   userFavoriteElement UserFavoriteElement[]
   workshopElements    WorkshopElement[]
 
+  snapshotUser     User?     @relation("SnapshotUser", fields: [snapshotUserId], references: [id])
+  snapshotUserId   String?
   snapshotParent   Element?  @relation("SnapshotRelation", fields: [snapshotParentId], references: [id])
   snapshots        Element[] @relation("SnapshotRelation")
   snapshotParentId String?
@@ -95,6 +97,8 @@ model User {
   likedWorkshops   UserLikedWorkshop[]
   workshops        Workshop[]
   elements         Element[]
+
+  elementSnapshots Element[] @relation("SnapshotUser")
 }
 
 model Workshop {

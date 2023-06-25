@@ -4,6 +4,9 @@ import { ElementTagsFilterInput } from 'src/dtos/inputs/element-tags-filter-inpu
 import { Nullable } from 'src/utils/nullish';
 import { PrismaService } from './prisma.service';
 
+/**
+ * Business logic for `ElementTags`.
+ */
 @Injectable()
 export class ElementTagService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
