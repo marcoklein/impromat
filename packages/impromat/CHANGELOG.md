@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.40.0
+
+### Minor Changes
+
+- 2ac3f0c: Move community page menu item in a separate section
+
+### Patch Changes
+
+- Updated dependencies [2ac3f0c]
+- Updated dependencies [59f1e80]
+  - impromat-api@0.14.0
+
 ## 0.39.2
 
 ### Patch Changes
