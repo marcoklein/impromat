@@ -1,5 +1,15 @@
 # impromat-api
 
+## 0.14.0
+
+### Minor Changes
+
+- 59f1e80: Fine grained abilities protection for elements
+
+### Patch Changes
+
+- 2ac3f0c: Store user id of user that changes a public element
+
 ## 0.13.0
 
 ### Minor Changes
