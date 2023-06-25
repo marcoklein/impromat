@@ -13,11 +13,15 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { documents, menu, person, search } from "ionicons/icons";
+import { documents, globe, menu, person, search } from "ionicons/icons";
 import { Icon } from "../../components/Icon";
 import { ImpromatLogoComponent } from "../../components/ImpromatLogoComponent";
 import { MainTitleComponent } from "../../components/MainTitleComponent";
-import { routeProfile, routeWorkshops } from "../../routes/shared-routes";
+import {
+  routeCommunity,
+  routeProfile,
+  routeWorkshops,
+} from "../../routes/shared-routes";
 import { routeLibrary } from "../library/library-routes";
 import { HomeContent } from "./HomeContent";
 
@@ -62,6 +66,12 @@ export const HomeLoggedIn: React.FC = () => {
         </div>
         <IonGrid style={{ maxWidth: "768px" }}>
           <IonRow>
+            <IonCol sizeSm="6" sizeXs="12">
+              <IonButton expand="full" routerLink={routeCommunity()}>
+                <Icon icon={globe} slot="start"></Icon>
+                Community
+              </IonButton>
+            </IonCol>
             <IonCol sizeSm="6" sizeXs="12">
               <IonButton expand="full" routerLink={routeWorkshops()}>
                 <Icon icon={documents} slot="start"></Icon>
