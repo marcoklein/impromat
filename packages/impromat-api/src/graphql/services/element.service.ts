@@ -112,7 +112,7 @@ export class ElementService {
     updateElementInput: UpdateElementInput,
   ) {
     const ability = defineAbilityForUser(userRequestId);
-    const existing = await this.prismaService.element.findFirstOrThrow({
+    const existing = await this.prismaService.element.findFirst({
       where: {
         AND: [
           accessibleBy(ability, ABILITY_ACTION_READ).Element,
@@ -129,7 +129,7 @@ export class ElementService {
         tags: true,
       },
     });
-    if (!existing) throw new Error('Not existing or not owner.');
+    if (!existing) throw new Error('Not existing or insufficient read rights.');
 
     if (!ability.can(ABILITY_ACTION_WRITE, subject('Element', existing))) {
       throw new Error('Write not permitted.');
@@ -139,32 +139,38 @@ export class ElementService {
       existing.visibility === 'PUBLIC' &&
       updateElementInput.visibility === 'PRIVATE'
     ) {
-      throw new Error('Cannot make visiblity private.');
+      throw new Error('Cannot change visibility to private.');
     }
 
-    return await this.prismaService.$transaction(async (tx) => {
-      await tx.element.create({
-        data: {
-          ...existing,
-          ...{
-            snapshotParentId: existing.id,
-            id: undefined,
-            updatedAt: undefined,
-            createdAt: undefined,
-            improbibIdentifier: undefined,
-            tags: {
-              connect: existing.tags.map((existingTag) => ({
-                id: existingTag.id,
-              })),
-            },
+    const saveSnapshotQuery = this.prismaService.element.create({
+      data: {
+        ...existing,
+        ...{
+          snapshotParentId: existing.id,
+          snapshotUserId: userRequestId,
+          id: undefined,
+          updatedAt: undefined,
+          createdAt: undefined,
+          improbibIdentifier: undefined,
+          tags: {
+            connect: existing.tags.map((existingTag) => ({
+              id: existingTag.id,
+            })),
           },
         },
-      });
-
-      return tx.element.update({
-        where: { id: updateElementInput.id },
-        data: updateElementInput,
-      });
+      },
     });
+
+    const updateElementQuery = this.prismaService.element.update({
+      where: { id: updateElementInput.id },
+      data: updateElementInput,
+    });
+
+    const [, updateResult] = await this.prismaService.$transaction([
+      saveSnapshotQuery,
+      updateElementQuery,
+    ]);
+
+    return updateResult;
   }
 }

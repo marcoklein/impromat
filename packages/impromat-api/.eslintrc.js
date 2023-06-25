@@ -28,6 +28,12 @@ module.exports = {
       files: ['test/**/*.test.ts'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/no-unused-vars': [
+          'warn',
+          {
+            varsIgnorePattern: '_',
+          },
+        ],
       },
     },
   ],
