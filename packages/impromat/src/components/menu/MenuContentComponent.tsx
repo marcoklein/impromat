@@ -77,17 +77,22 @@ export const MenuContentComponent: React.FC = () => {
         <AccountMenuItemComponent></AccountMenuItemComponent>
         <IonItemGroup>
           <IonItemDivider>
+            <IonLabel>Community</IonLabel>
+          </IonItemDivider>
+          <MenuItemComponent
+            routerLink={routeCommunity()}
+            icon={globe}
+            label="Community"
+          ></MenuItemComponent>
+        </IonItemGroup>
+        <IonItemGroup>
+          <IonItemDivider>
             <IonLabel>Workshops</IonLabel>
           </IonItemDivider>
           <MenuItemComponent
             routerLink={routeWorkshops()}
             icon={documents}
             label="Workshops"
-          ></MenuItemComponent>
-          <MenuItemComponent
-            routerLink={routeCommunity()}
-            icon={globe}
-            label="Community"
           ></MenuItemComponent>
         </IonItemGroup>
         <IonItemDivider>
