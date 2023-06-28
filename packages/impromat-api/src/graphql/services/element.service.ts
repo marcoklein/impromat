@@ -5,6 +5,7 @@ import {
 } from 'src/dtos/inputs/element-input';
 import { PrismaService } from './prisma.service';
 
+import { subject } from '@casl/ability';
 import { accessibleBy } from '@casl/prisma';
 import { ElementVisibility, Prisma } from '@prisma/client';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
@@ -15,7 +16,6 @@ import {
   ABILITY_ACTION_WRITE,
   defineAbilityForUser,
 } from '../abilities';
-import { subject } from '@casl/ability';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
 
@@ -23,30 +23,23 @@ const IMPROMAT_SOURCE_NAME = 'impromat';
 export class ElementService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
+  /**
+   * Finds the Element with given id.
+   *
+   * @param userRequestId Request id of the authenticated user.
+   * @param id Element id to find.
+   * @returns Element with given id or throws if the element is not existing.
+   */
   findElementById(userRequestId: string | undefined, id: string) {
+    const ability = defineAbilityForUser(userRequestId);
     return this.prismaService.element.findFirstOrThrow({
       where: {
-        OR: [
-          userRequestId ? { ownerId: userRequestId, id } : {},
-          { id, visibility: 'PUBLIC' },
-          {
-            id,
-            workshopElements: {
-              some: {
-                workshopSection: {
-                  workshop: {
-                    isPublic: true,
-                  },
-                },
-              },
-            },
-          },
-        ],
+        AND: [accessibleBy(ability).Element, { id }],
       },
     });
   }
 
-  findElementsFromUser(
+  findElements(
     userRequestId: string,
     input: {
       filter: ElementsFilterInput;
@@ -88,30 +81,45 @@ export class ElementService {
     });
   }
 
+  /**
+   * Creates a new element for the given user.
+   *
+   * @param userRequestId User id of authenticated user.
+   * @param createElementInput Parameters of created element.
+   * @returns Created element record.
+   */
   async createElement(
-    userRequestId: string,
+    userRequestId: string | undefined,
     createElementInput: CreateElementInput,
   ) {
-    const [, element] = await this.prismaService.$transaction([
-      this.prismaService.user.findUniqueOrThrow({
-        where: { id: userRequestId },
-      }),
-      this.prismaService.element.create({
-        data: {
-          ...createElementInput,
-          sourceName: IMPROMAT_SOURCE_NAME,
-          ownerId: userRequestId,
-        },
-      }),
-    ]);
-    return element;
+    const ability = defineAbilityForUser(userRequestId);
+    if (ability.cannot('write', 'Element')) {
+      throw new Error('Unauthorized');
+    }
+    return this.prismaService.element.create({
+      data: {
+        ...createElementInput,
+        sourceName: IMPROMAT_SOURCE_NAME,
+        ownerId: userRequestId,
+      },
+    });
   }
 
+  /**
+   * Updates the given element.
+   *
+   * @param userRequestId User id of authenticated user.
+   * @param updateElementInput New element state.
+   * @returns Updated element record.
+   */
   async updateElement(
-    userRequestId: string,
+    userRequestId: string | undefined,
     updateElementInput: UpdateElementInput,
   ) {
     const ability = defineAbilityForUser(userRequestId);
+    if (ability.cannot('write', 'Element')) {
+      throw new Error('Unauthorized');
+    }
     const existing = await this.prismaService.element.findFirst({
       where: {
         AND: [
