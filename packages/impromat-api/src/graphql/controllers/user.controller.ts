@@ -57,8 +57,7 @@ export class MeResolver {
     };
     const ownedFilter: Prisma.WorkshopWhereInput = { ownerId: user.id };
     const communityFilter: Prisma.WorkshopWhereInput = {
-      isPublic: true,
-      isListed: true,
+      OR: [{ isPublic: true }, { isListed: true }],
     };
     const likedFilter: Prisma.WorkshopWhereInput = {
       userLikedWorkshops: { some: { userId: user.id } },

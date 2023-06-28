@@ -58,6 +58,7 @@ export const WorkshopsPage: React.FC = () => {
     () => ({
       liked: true,
       owned: true,
+      isPublic: true,
     }),
     [],
   );
