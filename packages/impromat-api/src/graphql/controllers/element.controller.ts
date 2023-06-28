@@ -2,7 +2,6 @@ import { UseGuards } from '@nestjs/common';
 import {
   Args,
   ID,
-  Int,
   Mutation,
   Parent,
   Query,
@@ -15,13 +14,11 @@ import {
   CreateElementInput,
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
-import { ElementsFilterInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementQueryResult } from 'src/dtos/types/element-query-result.dto';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import { Element, ElementOmittedFields } from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
-import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ElementService } from '../services/element.service';
 
@@ -114,27 +111,15 @@ export class ElementController {
     @Args() { filter, orderBy, skip, take }: ElementsQueryArgs,
     @SessionUserId() userId: string,
   ) {
-    const elements = await this.userElementService.findElementsFromUser(
-      userId,
-      {
-        filter: filter ?? { isOwnerMe: true, isPublic: true },
-        orderBy: orderBy ?? { notImplemented: true },
-        skip,
-        take,
-      },
-    );
+    const elements = await this.userElementService.findElements(userId, {
+      filter: filter ?? { isOwnerMe: true, isPublic: true },
+      orderBy: orderBy ?? { notImplemented: true },
+      skip,
+      take,
+    });
     return elements.map((element) => ({
       element,
     }));
-  }
-
-  @Query(() => Int)
-  async elementsCount(
-    @Args('filter', { type: () => ElementsFilterInput, nullable: true })
-    filterInput: Nullable<ElementsFilterInput>,
-    @SessionUserId() userId: string,
-  ) {
-    throw new Error('Not implemented yet');
   }
 
   @Mutation(() => Element)

@@ -2,10 +2,13 @@ import { accessibleBy } from '@casl/prisma';
 import { Test } from '@nestjs/testing';
 import {
   Element,
-  ElementVisibility as PrismaElementVisibility,
   Element as PrismaElement,
+  ElementVisibility as PrismaElementVisibility,
 } from '@prisma/client';
-import { UpdateElementInput } from 'src/dtos/inputs/element-input';
+import {
+  CreateElementInput,
+  UpdateElementInput,
+} from 'src/dtos/inputs/element-input';
 import { ElementVisibility } from 'src/dtos/types/element-visibility.dto';
 import {
   ABILITY_ACTION_READ,
@@ -27,15 +30,107 @@ describe('ElementService', () => {
     prismaService = moduleRef.get(PrismaService);
   });
 
-  describe('updateElement', () => {
-    it('should update an element', async () => {
+  // given
+  let userRequestId: undefined | string = 'test-user';
+  const ability = defineAbilityForUser(userRequestId);
+
+  describe('findElementById', () => {
+    // given
+    const elementId = 'test-element';
+
+    it('should trigger the correct SQL', async () => {
       // given
-      const userRequestId = 'test-user';
-      const ability = defineAbilityForUser(userRequestId);
-      const updateInput: UpdateElementInput = {
-        id: 'test-element',
-      };
-      const existingMock = jest
+      const findFirstSpy = jest
+        .spyOn(prismaService.element, 'findFirstOrThrow')
+        .mockResolvedValueOnce({
+          id: 'test-element',
+          ownerId: 'test-user',
+          visibility: 'PRIVATE',
+          tags: [],
+        } as Partial<PrismaElement> as PrismaElement);
+      // when
+      await service.findElementById(userRequestId, elementId);
+      // then
+      expect(findFirstSpy.mock.calls[0][0]).toEqual({
+        where: {
+          AND: [
+            accessibleBy(ability, ABILITY_ACTION_READ).Element,
+            { id: elementId },
+          ],
+        },
+      });
+    });
+  });
+
+  describe('createElement', () => {
+    // given
+    const createElementInput = {
+      name: 'test-element-name',
+    } as CreateElementInput;
+    let createMock: jest.SpyInstance<
+      unknown,
+      Parameters<typeof prismaService.element.create>
+    >;
+
+    beforeEach(() => {
+      // given default mocks
+      createMock = jest
+        .spyOn(prismaService.element, 'create')
+        .mockResolvedValueOnce({
+          id: 'test-element',
+          ownerId: 'test-user',
+          visibility: 'PRIVATE',
+          tags: [],
+        } as Partial<PrismaElement> as PrismaElement);
+    });
+
+    it('should trigger expected create call', async () => {
+      // when
+      await service.createElement(userRequestId, createElementInput);
+      // then
+      expect(createMock.mock.calls[0][0]).toEqual({
+        data: {
+          ...createElementInput,
+          sourceName: 'impromat',
+          ownerId: userRequestId,
+        },
+      });
+    });
+
+    it('should throw an error if user is unauthorized', async () => {
+      // given
+      userRequestId = undefined;
+      // when, then
+      await expect(
+        service.createElement(userRequestId, createElementInput),
+      ).rejects.toThrow('Unauthorized');
+    });
+  });
+
+  describe('updateElement', () => {
+    // given
+    let updateInput: UpdateElementInput = {
+      id: 'test-element',
+    };
+    let existingMock: jest.SpyInstance<
+      unknown,
+      Parameters<typeof prismaService.element.findFirst>
+    >;
+    let createSnapshotElementMock: jest.SpyInstance<
+      unknown,
+      Parameters<typeof prismaService.element.create>
+    >;
+    let updateElementMock: jest.SpyInstance<
+      unknown,
+      Parameters<typeof prismaService.element.update>
+    >;
+    let updateTransaction: jest.SpyInstance<
+      unknown,
+      Parameters<typeof prismaService.$transaction>
+    >;
+    beforeEach(() => {
+      // given default mocks
+      existingMock = jest
         .spyOn(prismaService.element, 'findFirst')
         .mockResolvedValue({
           id: 'test-element',
@@ -43,13 +138,13 @@ describe('ElementService', () => {
           visibility: 'PRIVATE',
           tags: [],
         } as Partial<PrismaElement> as PrismaElement);
-      const createSnapshotElementMock = jest
+      createSnapshotElementMock = jest
         .spyOn(prismaService.element, 'create')
         .mockResolvedValueOnce('createSnapshotElementMock' as any);
-      const updateElementMock = jest
+      updateElementMock = jest
         .spyOn(prismaService.element, 'update')
         .mockResolvedValueOnce('updateElementMock' as any);
-      const updateTransaction = jest
+      updateTransaction = jest
         .spyOn(prismaService, '$transaction')
         .mockResolvedValue([
           null,
@@ -58,8 +153,11 @@ describe('ElementService', () => {
             visibility: 'PRIVATE',
           } as Element,
         ]);
+    });
+
+    it('should have the expected SQL call', async () => {
       // when
-      const response = await service.updateElement(userRequestId, updateInput);
+      await service.updateElement(userRequestId, updateInput);
       // then
       expect(existingMock.mock.calls[0][0]?.where).toEqual({
         AND: [
@@ -73,7 +171,12 @@ describe('ElementService', () => {
           },
         ],
       });
+    });
 
+    it('should create a snapshot element', async () => {
+      // when
+      await service.updateElement(userRequestId, updateInput);
+      // then
       expect(createSnapshotElementMock.mock.calls[0][0].data).toEqual({
         ownerId: 'test-user',
         visibility: 'PRIVATE',
@@ -81,7 +184,12 @@ describe('ElementService', () => {
         snapshotUserId: userRequestId,
         tags: { connect: [] },
       });
+    });
 
+    it('should update the element', async () => {
+      // when
+      await service.updateElement(userRequestId, updateInput);
+      // then
       expect(updateElementMock.mock.calls[0][0]).toEqual({
         where: {
           id: 'test-element',
@@ -89,78 +197,65 @@ describe('ElementService', () => {
         data: updateInput,
       });
       expect(updateTransaction.mock.calls).toHaveLength(1);
+    });
+
+    it('should have the expected response', async () => {
+      // when
+      const response = await service.updateElement(userRequestId, updateInput);
+      // then
       expect(response).toEqual({
         id: 'test-element',
         visibility: 'PRIVATE',
       });
     });
 
+    it('should throw an error if user is unauthorized', async () => {
+      // given
+      userRequestId = undefined;
+      // when, then
+      await expect(
+        service.updateElement(userRequestId, updateInput),
+      ).rejects.toThrow('Unauthorized');
+    });
+
     it('should throw an error if the element is not existing', async () => {
       // given
-      const userRequestId = 'test-user';
-      const updateInput: UpdateElementInput = {
-        id: 'test-element',
-      };
-      const _existingMock = jest
+      existingMock = jest
         .spyOn(prismaService.element, 'findFirst')
         .mockResolvedValueOnce(null);
-      // when
-      try {
-        await service.updateElement(userRequestId, updateInput);
-        fail('Error expected.');
-      } catch (e) {
-        // then
-        expect(e).toBeInstanceOf(Error);
-        expect((e as Error).message).toContain(
-          'Not existing or insufficient read rights.',
-        );
-      }
+      // when, then
+      await expect(() =>
+        service.updateElement(userRequestId, updateInput),
+      ).rejects.toThrow('Not existing or insufficient read rights');
     });
 
     it('should throw an error if the element is not writable', async () => {
       // given
-      const userRequestId = 'test-user';
-      const updateInput: UpdateElementInput = {
-        id: 'test-element',
-      };
-      const _existingMock = jest
+      existingMock = jest
         .spyOn(prismaService.element, 'findFirst')
         .mockResolvedValueOnce({ ownerId: 'other-user' } as PrismaElement);
-      // when
-      try {
-        await service.updateElement(userRequestId, updateInput);
-        fail('Error expected.');
-      } catch (e) {
-        // then
-        expect(e).toBeInstanceOf(Error);
-        expect((e as Error).message).toContain('Write not permitted.');
-      }
+      // when, then
+      await expect(() =>
+        service.updateElement(userRequestId, updateInput),
+      ).rejects.toThrow('Write not permitted.');
     });
 
     it('should throw an error if update contains a visiblity change from PUBLIC to PRIVATE', async () => {
       // given
-      const userRequestId = 'test-user';
-      const updateInput: UpdateElementInput = {
+      updateInput = {
         id: 'test-element',
         visibility: ElementVisibility.PRIVATE,
       };
-      const _existingMock = jest
+      existingMock = jest
         .spyOn(prismaService.element, 'findFirst')
         .mockResolvedValueOnce({
           ownerId: 'test-user',
           visibility: 'PUBLIC',
         } as PrismaElement);
-      // when
-      try {
-        await service.updateElement(userRequestId, updateInput);
-        fail('Error expected.');
-      } catch (e) {
-        // then
-        expect(e).toBeInstanceOf(Error);
-        expect((e as Error).message).toContain(
-          'Cannot change visibility to private.',
-        );
-      }
+      // when, then
+      await expect(() =>
+        service.updateElement(userRequestId, updateInput),
+      ).rejects.toThrow('Cannot change visibility to private.');
     });
   });
 });

@@ -1,59 +1,80 @@
-import { subject } from '@casl/ability';
-import { Element } from '@prisma/client';
-import { defineAbilityForUser } from 'src/graphql/abilities';
-
-const ownerId = 'owner-id';
-
-const ownElement = {
-  id: 'element-own',
-  ownerId,
-} as Element;
-
-const elementWithOtherOwner = {
-  id: 'element-with-different-owner',
-  ownerId: 'other-owner',
-  visibility: 'PRIVATE',
-} as Element;
-
-const publicElementWithOtherOwner = {
-  id: 'element-with-different-owner',
-  ownerId: 'other-owner',
-  visibility: 'PUBLIC',
-} as Element;
+import { ExtractSubjectType } from '@casl/ability';
+import {
+  AppAbility,
+  REASON_OWNER,
+  REASON_PART_OF_PUBLIC_WORKSHOP,
+  REASON_PUBLIC,
+  defineAbilityForUser,
+} from 'src/graphql/abilities';
 
 describe('Abilities', () => {
-  it('should have correct elements abilities', () => {
+  describe('with authenticated user', () => {
     // given
-    const userAbility = defineAbilityForUser(ownerId);
-    // when, then
-    expect(userAbility.can('read', subject('Element', ownElement))).toBe(true);
-    expect(userAbility.can('write', subject('Element', ownElement))).toBe(true);
-    expect(userAbility.can('list', subject('Element', ownElement))).toBe(true);
-    expect(
-      userAbility.can('read', subject('Element', publicElementWithOtherOwner)),
-    ).toBe(true);
-    expect(
-      userAbility.can('write', subject('Element', publicElementWithOtherOwner)),
-    ).toBe(true);
-    expect(
-      userAbility.can('list', subject('Element', publicElementWithOtherOwner)),
-    ).toBe(true);
+    const userId = 'owner-id';
+    const userAbility = defineAbilityForUser(userId);
 
-    expect(
-      userAbility.can('write', subject('Element', ownElement), 'visibility'),
-    ).toBe(true);
-    expect(
-      userAbility.can('write', subject('Element', ownElement), 'visibility'),
-    ).toBe(true);
+    it('should provide reasons for all abilities', () => {
+      // when
+      const rulesWithoutReason = userAbility.rules.filter(
+        (rule) => !rule.reason,
+      );
+      // then
+      expect(rulesWithoutReason).toEqual([]);
+    });
 
-    expect(
-      userAbility.can('read', subject('Element', elementWithOtherOwner)),
-    ).toBe(false);
-    expect(
-      userAbility.can('write', subject('Element', elementWithOtherOwner)),
-    ).toBe(false);
-    expect(
-      userAbility.can('list', subject('Element', elementWithOtherOwner)),
-    ).toBe(false);
+    it.each([
+      [
+        'Element',
+        'read',
+        [REASON_OWNER, REASON_PUBLIC, REASON_PART_OF_PUBLIC_WORKSHOP],
+      ],
+      ['Element', 'write', [REASON_OWNER, REASON_PUBLIC]],
+      ['Element', 'list', [REASON_OWNER, REASON_PUBLIC]],
+    ])(
+      'should contain expected rules for subject "%s" and action "%s"',
+      (
+        subjectType: ExtractSubjectType<AppAbility>,
+        action: 'read' | 'write' | 'list',
+        ruleReasons: string[],
+      ) => {
+        // when
+        const rules = userAbility.rulesFor(action, subjectType);
+        // then
+        expect(rules.map((r) => r.reason).sort()).toEqual(ruleReasons.sort());
+      },
+    );
+  });
+
+  describe('with anonymous user', () => {
+    // given
+    const userId = undefined;
+    const anonymousUserAbility = defineAbilityForUser(userId);
+
+    it('should provide reasons for all abilities', () => {
+      // when
+      const rulesWithoutReason = anonymousUserAbility.rules.filter(
+        (rule) => !rule.reason,
+      );
+      // then
+      expect(rulesWithoutReason).toEqual([]);
+    });
+
+    it.each([
+      ['Element', 'read', [REASON_PUBLIC, REASON_PART_OF_PUBLIC_WORKSHOP]],
+      ['Element', 'write', []],
+      ['Element', 'list', [REASON_PUBLIC]],
+    ])(
+      'should contain expected rules for subject "%s" and action "%s"',
+      (
+        subjectType: ExtractSubjectType<AppAbility>,
+        action: 'read' | 'write' | 'list',
+        ruleReasons: string[],
+      ) => {
+        // when
+        const rules = anonymousUserAbility.rulesFor(action, subjectType);
+        // then
+        expect(rules.map((r) => r.reason).sort()).toEqual(ruleReasons.sort());
+      },
+    );
   });
 });
