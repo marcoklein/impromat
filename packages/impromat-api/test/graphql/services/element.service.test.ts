@@ -12,6 +12,7 @@ import {
 import { ElementVisibility } from 'src/dtos/types/element-visibility.dto';
 import {
   ABILITY_ACTION_READ,
+  AppAbility,
   defineAbilityForUser,
 } from 'src/graphql/abilities';
 import { ElementService } from 'src/graphql/services/element.service';
@@ -31,8 +32,13 @@ describe('ElementService', () => {
   });
 
   // given
-  let userRequestId: undefined | string = 'test-user';
-  const ability = defineAbilityForUser(userRequestId);
+  let userRequestId: undefined | string;
+  let ability: AppAbility;
+
+  beforeEach(() => {
+    userRequestId = 'test-user';
+    ability = defineAbilityForUser(userRequestId);
+  });
 
   describe('findElementById', () => {
     // given

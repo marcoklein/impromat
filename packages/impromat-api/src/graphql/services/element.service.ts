@@ -117,6 +117,9 @@ export class ElementService {
     updateElementInput: UpdateElementInput,
   ) {
     const ability = defineAbilityForUser(userRequestId);
+    if (ability.cannot('write', 'Element')) {
+      throw new Error('Unauthorized');
+    }
     const existing = await this.prismaService.element.findFirst({
       where: {
         AND: [
