@@ -18,6 +18,7 @@ export const ABILITY_ACTION_WRITE = 'write';
 
 export const REASON_OWNER = 'You own the element.';
 export const REASON_PUBLIC = 'The element is public.';
+export const REASON_PUBLICLY_LISTED = 'The element is publicly listed.';
 export const REASON_PART_OF_PUBLIC_WORKSHOP =
   'You can read elements of published workshops.';
 
@@ -51,6 +52,25 @@ export type AppAbility = PureAbility<
 export const defineAbilityForUser = (userId: string | undefined) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
   if (userId) {
+    can(ABILITY_ACTION_READ, 'Workshop', { ownerId: userId }).because(
+      REASON_OWNER,
+    );
+    can(ABILITY_ACTION_READ, 'Workshop', { isPublic: true }).because(
+      REASON_PUBLIC,
+    );
+    can(ABILITY_ACTION_READ, 'Workshop', { isListed: true }).because(
+      REASON_PUBLICLY_LISTED,
+    );
+    can(ABILITY_ACTION_WRITE, 'Workshop', { ownerId: userId }).because(
+      REASON_OWNER,
+    );
+    can(ABILITY_ACTION_LIST, 'Workshop', { ownerId: userId }).because(
+      REASON_OWNER,
+    );
+    can(ABILITY_ACTION_LIST, 'Workshop', { isListed: true }).because(
+      REASON_PUBLICLY_LISTED,
+    );
+
     can(ABILITY_ACTION_READ, 'Element', { ownerId: userId }).because(
       REASON_OWNER,
     );
@@ -63,13 +83,13 @@ export const defineAbilityForUser = (userId: string | undefined) => {
 
     can(ABILITY_ACTION_READ, 'Element', {
       visibility: ElementVisibility.PUBLIC,
-    }).because(REASON_PUBLIC);
+    }).because(REASON_PUBLICLY_LISTED);
     can(ABILITY_ACTION_LIST, 'Element', {
       visibility: ElementVisibility.PUBLIC,
-    }).because(REASON_PUBLIC);
+    }).because(REASON_PUBLICLY_LISTED);
     can(ABILITY_ACTION_WRITE, 'Element', {
       visibility: ElementVisibility.PUBLIC,
-    }).because(REASON_PUBLIC);
+    }).because(REASON_PUBLICLY_LISTED);
 
     can(ABILITY_ACTION_READ, 'Element', {
       workshopElements: {
@@ -77,12 +97,22 @@ export const defineAbilityForUser = (userId: string | undefined) => {
       },
     }).because(REASON_PART_OF_PUBLIC_WORKSHOP);
   } else {
+    can(ABILITY_ACTION_READ, 'Workshop', { isPublic: true }).because(
+      REASON_PUBLIC,
+    );
+    can(ABILITY_ACTION_READ, 'Workshop', { isListed: true }).because(
+      REASON_PUBLICLY_LISTED,
+    );
+    can(ABILITY_ACTION_LIST, 'Workshop', { isListed: true }).because(
+      REASON_PUBLICLY_LISTED,
+    );
+
     can(ABILITY_ACTION_READ, 'Element', {
       visibility: ElementVisibility.PUBLIC,
-    }).because(REASON_PUBLIC);
+    }).because(REASON_PUBLICLY_LISTED);
     can(ABILITY_ACTION_LIST, 'Element', {
       visibility: ElementVisibility.PUBLIC,
-    }).because(REASON_PUBLIC);
+    }).because(REASON_PUBLICLY_LISTED);
     can(ABILITY_ACTION_READ, 'Element', {
       workshopElements: {
         some: { workshopSection: { workshop: { isPublic: true } } },

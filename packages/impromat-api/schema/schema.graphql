@@ -195,7 +195,6 @@ type Query {
   workshopElement(id: ID!): WorkshopElement!
   element(id: ID!): Element
   elements(filter: ElementsFilterInput, orderBy: ElementsOrderByInput, skip: Int! = 0, take: Int! = 20): [ElementQueryResult!]!
-  elementsCount(filter: ElementsFilterInput): Int!
 
   """Get information about the current user."""
   me: User!

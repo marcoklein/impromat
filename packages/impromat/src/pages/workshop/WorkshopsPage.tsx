@@ -174,7 +174,11 @@ export const WorkshopsPage: React.FC = () => {
                 <IonButton
                   expand="full"
                   onClick={() => {
-                    setUserWorkshopsFilterInput({ liked: true, owned: true });
+                    setUserWorkshopsFilterInput({
+                      liked: true,
+                      owned: true,
+                      isPublic: true,
+                    });
                   }}
                 >
                   <IonIcon slot="start" icon={filter}></IonIcon>

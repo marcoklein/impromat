@@ -18,6 +18,8 @@ import { User, UserDtoComputedFields } from 'src/dtos/types/user.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
+import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
+import { accessibleBy } from '@casl/prisma';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
@@ -50,6 +52,7 @@ export class MeResolver {
     @Args('skip', { type: () => Int, defaultValue: 0 }) skip: number,
     @Args('take', { type: () => Int, defaultValue: 20 }) take: number,
   ) {
+    const ability = defineAbilityForUser(user.id);
     const { liked, owned, isPublic } = input ?? {
       isPublic: true,
       liked: true,
@@ -57,7 +60,7 @@ export class MeResolver {
     };
     const ownedFilter: Prisma.WorkshopWhereInput = { ownerId: user.id };
     const communityFilter: Prisma.WorkshopWhereInput = {
-      OR: [{ isPublic: true }, { isListed: true }],
+      AND: [ownedFilter, { OR: [{ isPublic: true }, { isListed: true }] }],
     };
     const likedFilter: Prisma.WorkshopWhereInput = {
       userLikedWorkshops: { some: { userId: user.id } },
@@ -70,7 +73,9 @@ export class MeResolver {
       ],
     };
     return this.prismaService.workshop.findMany({
-      where: filter,
+      where: {
+        AND: [accessibleBy(ability, ABILITY_ACTION_LIST).Workshop, filter],
+      },
       orderBy: {
         updatedAt: 'desc',
       },
