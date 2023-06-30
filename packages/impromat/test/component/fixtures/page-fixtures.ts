@@ -56,4 +56,13 @@ const test = base.extend<PageFixtures>({
   },
 });
 
+test.beforeEach(({ page }) => {
+  page.on("console", (msg) => {
+    console.log(msg);
+  });
+  page.on("pageerror", (msg) => {
+    console.error("PAGE ERROR: ", msg);
+  });
+});
+
 export { test as pageTest };
