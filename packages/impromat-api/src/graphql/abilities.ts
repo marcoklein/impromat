@@ -21,6 +21,7 @@ export const REASON_PUBLIC = 'The element is public.';
 export const REASON_PUBLICLY_LISTED = 'The element is publicly listed.';
 export const REASON_PART_OF_PUBLIC_WORKSHOP =
   'You can read elements of published workshops.';
+export const REASON_LIKED_WORKSHOP = 'You liked the workshop.';
 
 export type AppAbility = PureAbility<
   [
@@ -70,6 +71,9 @@ export const defineAbilityForUser = (userId: string | undefined) => {
     can(ABILITY_ACTION_LIST, 'Workshop', { isListed: true }).because(
       REASON_PUBLICLY_LISTED,
     );
+    can(ABILITY_ACTION_LIST, 'Workshop', {
+      userLikedWorkshops: { some: { userId: userId } },
+    }).because(REASON_LIKED_WORKSHOP);
 
     can(ABILITY_ACTION_READ, 'Element', { ownerId: userId }).because(
       REASON_OWNER,
