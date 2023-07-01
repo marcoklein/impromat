@@ -1,5 +1,12 @@
 # impromat-api
 
+## 0.14.1
+
+### Patch Changes
+
+- 2e903e6: Fix workshops filter
+- 1a3037f: Refactor unit tests of elements
+
 ## 0.14.0
 
 ### Minor Changes
