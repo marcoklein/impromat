@@ -112,8 +112,11 @@ input UserWorkshopsFilterInput {
   """Filter for workshops that are owned by the user."""
   owned: Boolean! = false
 
-  """Publicly accessible community workshop."""
+  """Publicly or listed workshops of user."""
   isPublic: Boolean! = false
+
+  """Publicly accessible community workshop."""
+  isCommunity: Boolean! = false
 }
 
 type Element {
@@ -190,12 +193,13 @@ type Query {
     """Helper field to pass take argument into input field."""
     take: Int
   ): [ElementSearchResult!]!
-  workshop(id: ID!): Workshop!
-  workshops: [Workshop!]!
+  workshop(id: ID!): Workshop
+
+  """Find workshops."""
+  workshops(skip: Int! = 0, take: Int! = 20, where: WorkshopsWhereInput, orderBy: [WorkshopsOrderByInput!]): [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
   element(id: ID!): Element
-  elements(filter: ElementsFilterInput, orderBy: ElementsOrderByInput, skip: Int! = 0, take: Int! = 20): [ElementQueryResult!]!
-  elementsCount(filter: ElementsFilterInput): Int!
+  elements(skip: Int! = 0, take: Int! = 20, filter: ElementsFilterInput, orderBy: ElementsOrderByInput): [ElementQueryResult!]!
 
   """Get information about the current user."""
   me: User!
@@ -206,6 +210,73 @@ input ElementSearchInput {
   text: String
   take: Int! = 20
   skip: Int! = 0
+}
+
+input WorkshopsWhereInput {
+  AND: [WorkshopsWhereInput!]
+  OR: [WorkshopsWhereInput!]
+  NOT: [WorkshopsWhereInput!]
+  id: StringFilter
+  ownerId: StringFilter
+  isPublic: BoolFilter
+  isListed: BoolFilter
+  userLikedWorkshops: UserLikedWorkshopListRelationFilter
+}
+
+input StringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringFilter
+}
+
+input NestedStringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringFilter
+}
+
+input BoolFilter {
+  equals: Boolean
+}
+
+input UserLikedWorkshopListRelationFilter {
+  every: UserLikedWorkshopWhereInput
+  some: UserLikedWorkshopWhereInput
+  none: UserLikedWorkshopWhereInput
+}
+
+input UserLikedWorkshopWhereInput {
+  userId: StringFilter
+}
+
+input WorkshopsOrderByInput {
+  updatedAt: SortOrder
+  name: SortOrder
+  createdAt: SortOrder
+}
+
+enum SortOrder {
+  """Ascending sort order."""
+  asc
+
+  """Descending sort order."""
+  desc
 }
 
 """Filter for elements"""
