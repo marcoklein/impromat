@@ -16,15 +16,19 @@ import {
   defineAbilityForUser,
 } from 'src/graphql/abilities';
 import { ElementService } from 'src/graphql/services/element.service';
-import { PrismaService } from 'src/graphql/services/prisma.service';
+import {
+  PrismaServiceMock,
+  PrismaServiceMockProvider,
+} from 'test/prisma-service-mock';
+import { PrismaService } from './prisma.service';
 
 describe('ElementService', () => {
   let service: ElementService;
-  let prismaService: PrismaService;
+  let prismaService: PrismaServiceMock;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ElementService, PrismaService],
+      providers: [ElementService, PrismaServiceMockProvider],
     }).compile();
 
     service = moduleRef.get(ElementService);

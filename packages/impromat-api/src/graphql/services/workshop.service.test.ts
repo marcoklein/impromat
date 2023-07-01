@@ -1,15 +1,19 @@
 import { Test } from '@nestjs/testing';
 import { Workshop } from '@prisma/client';
-import { PrismaService } from 'src/graphql/services/prisma.service';
 import { WorkshopService } from 'src/graphql/services/workshop.service';
+import {
+  PrismaServiceMock,
+  PrismaServiceMockProvider,
+} from 'test/prisma-service-mock';
+import { PrismaService } from './prisma.service';
 
 describe('WorkshopService', () => {
   let service: WorkshopService;
-  let prismaService: PrismaService;
+  let prismaService: PrismaServiceMock;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [WorkshopService, PrismaService],
+      providers: [WorkshopService, PrismaServiceMockProvider],
     }).compile();
 
     service = moduleRef.get(WorkshopService);

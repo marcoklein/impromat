@@ -9,6 +9,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
+import { FindManyWorkshopsArgs } from 'src/dtos/args/find-many-workshops-args';
 import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
@@ -93,7 +94,7 @@ export class WorkshopController {
     return null;
   }
 
-  @Query(() => Workshop)
+  @Query(() => Workshop, { nullable: true })
   async workshop(
     @SessionUserId() userId: string | undefined,
     @Args('id', { type: () => ID }) id: string,
@@ -102,11 +103,14 @@ export class WorkshopController {
   }
 
   @UseGuards(GraphqlAuthGuard)
-  @Query(() => [Workshop])
+  @Query(() => [Workshop], {
+    description: 'Find workshops.',
+  })
   async workshops(
     @SessionUserId() userId: string,
+    @Args() args: FindManyWorkshopsArgs,
   ): Promise<Omit<Workshop, WorkshopOmittedFields>[] | null> {
-    return this.workshopService.findWorkshopsFromUser(userId);
+    return this.workshopService.findWorkshops(userId, args);
   }
 
   @UseGuards(GraphqlAuthGuard)

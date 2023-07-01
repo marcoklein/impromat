@@ -20,6 +20,10 @@ export type BasedOnElementConnectInput = {
   connect: IdInput;
 };
 
+export type BoolFilter = {
+  equals?: InputMaybe<Scalars['Boolean']>;
+};
+
 export type CreateElementInput = {
   /** Language code (e.g. en, de) of the element. */
   languageCode?: Scalars['String'];
@@ -218,18 +222,32 @@ export type MutationUpdateWorkshopItemOrderArgs = {
   input: UpdateWorkshopItemOrder;
 };
 
+export type NestedStringFilter = {
+  contains?: InputMaybe<Scalars['String']>;
+  endsWith?: InputMaybe<Scalars['String']>;
+  equals?: InputMaybe<Scalars['String']>;
+  gt?: InputMaybe<Scalars['String']>;
+  gte?: InputMaybe<Scalars['String']>;
+  in?: InputMaybe<Array<Scalars['String']>>;
+  lt?: InputMaybe<Scalars['String']>;
+  lte?: InputMaybe<Scalars['String']>;
+  not?: InputMaybe<NestedStringFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+  startsWith?: InputMaybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   element?: Maybe<Element>;
   elements: Array<ElementQueryResult>;
-  elementsCount: Scalars['Int'];
   googleAuthUrl: Scalars['String'];
   /** Get information about the current user. */
   me: User;
   searchElements: Array<ElementSearchResult>;
   tags: Array<ElementTag>;
-  workshop: Workshop;
+  workshop?: Maybe<Workshop>;
   workshopElement: WorkshopElement;
+  /** Find workshops. */
   workshops: Array<Workshop>;
 };
 
@@ -244,11 +262,6 @@ export type QueryElementsArgs = {
   orderBy?: InputMaybe<ElementsOrderByInput>;
   skip?: Scalars['Int'];
   take?: Scalars['Int'];
-};
-
-
-export type QueryElementsCountArgs = {
-  filter?: InputMaybe<ElementsFilterInput>;
 };
 
 
@@ -273,6 +286,35 @@ export type QueryWorkshopArgs = {
 
 export type QueryWorkshopElementArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryWorkshopsArgs = {
+  orderBy?: InputMaybe<Array<WorkshopsOrderByInput>>;
+  skip?: Scalars['Int'];
+  take?: Scalars['Int'];
+  where?: InputMaybe<WorkshopsWhereInput>;
+};
+
+export enum SortOrder {
+  /** Ascending sort order. */
+  Asc = 'asc',
+  /** Descending sort order. */
+  Desc = 'desc'
+}
+
+export type StringFilter = {
+  contains?: InputMaybe<Scalars['String']>;
+  endsWith?: InputMaybe<Scalars['String']>;
+  equals?: InputMaybe<Scalars['String']>;
+  gt?: InputMaybe<Scalars['String']>;
+  gte?: InputMaybe<Scalars['String']>;
+  in?: InputMaybe<Array<Scalars['String']>>;
+  lt?: InputMaybe<Scalars['String']>;
+  lte?: InputMaybe<Scalars['String']>;
+  not?: InputMaybe<NestedStringFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+  startsWith?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateElementInput = {
@@ -373,6 +415,16 @@ export type UserLikedWorkshop = {
   workshop: Workshop;
 };
 
+export type UserLikedWorkshopListRelationFilter = {
+  every?: InputMaybe<UserLikedWorkshopWhereInput>;
+  none?: InputMaybe<UserLikedWorkshopWhereInput>;
+  some?: InputMaybe<UserLikedWorkshopWhereInput>;
+};
+
+export type UserLikedWorkshopWhereInput = {
+  userId?: InputMaybe<StringFilter>;
+};
+
 /** Filter workshops of user. */
 export type UserWorkshopsFilterInput = {
   /** Publicly accessible community workshop. */
@@ -448,6 +500,23 @@ export type WorkshopSectionListInput = {
   create?: InputMaybe<Array<CreateWorkshopSectionInput>>;
   delete?: InputMaybe<Array<DeleteWorkshopSectionInput>>;
   update?: InputMaybe<Array<UpdateWorkshopSectionInput>>;
+};
+
+export type WorkshopsOrderByInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type WorkshopsWhereInput = {
+  AND?: InputMaybe<Array<WorkshopsWhereInput>>;
+  NOT?: InputMaybe<Array<WorkshopsWhereInput>>;
+  OR?: InputMaybe<Array<WorkshopsWhereInput>>;
+  id?: InputMaybe<StringFilter>;
+  isListed?: InputMaybe<BoolFilter>;
+  isPublic?: InputMaybe<BoolFilter>;
+  ownerId?: InputMaybe<StringFilter>;
+  userLikedWorkshops?: InputMaybe<UserLikedWorkshopListRelationFilter>;
 };
 
 export type CustomElement_ElementFragment = { __typename?: 'Element', id: string, name: string, visibility: ElementVisibility } & { ' $fragmentName'?: 'CustomElement_ElementFragment' };
@@ -591,7 +660,7 @@ export type LibraryCreateCustomElementWorkshopQueryQueryVariables = Exact<{
 }>;
 
 
-export type LibraryCreateCustomElementWorkshopQueryQuery = { __typename?: 'Query', workshop: { __typename?: 'Workshop', sections: Array<{ __typename?: 'WorkshopSection', id: string }> } };
+export type LibraryCreateCustomElementWorkshopQueryQuery = { __typename?: 'Query', workshop?: { __typename?: 'Workshop', sections: Array<{ __typename?: 'WorkshopSection', id: string }> } | null };
 
 export type LibraryElementQueryQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -702,10 +771,10 @@ export type WorkshopByIdQueryQueryVariables = Exact<{
 }>;
 
 
-export type WorkshopByIdQueryQuery = { __typename?: 'Query', workshop: (
+export type WorkshopByIdQueryQuery = { __typename?: 'Query', workshop?: (
     { __typename?: 'Workshop' }
     & { ' $fragmentRefs'?: { 'WorkshopPage_WorkshopFragment': WorkshopPage_WorkshopFragment } }
-  ) };
+  ) | null };
 
 export type UpdateWorkshopItemOrderMutationVariables = Exact<{
   input: UpdateWorkshopItemOrder;

@@ -19,7 +19,9 @@ export class User extends BaseDto {
   })
   workshops: Workshop[];
 
-  @Field(() => [Element], { description: 'Elements owned by this user.' })
+  @Field(() => [Element], {
+    description: 'Elements owned by this user.',
+  })
   elements: Element[];
 
   @Field(() => [UserFavoriteElementDto])

@@ -17,6 +17,7 @@ const config: Config = {
   testEnvironment: 'node',
   reporters: ['default', ['jest-junit', { outputName: 'junit-results.xml' }]],
   testTimeout: 10000,
+  setupFilesAfterEnv: ['<rootDir>/test/prisma-service-mock.ts'],
 };
 
 export default config;

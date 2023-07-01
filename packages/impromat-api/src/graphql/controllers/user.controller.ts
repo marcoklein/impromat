@@ -1,3 +1,4 @@
+import { accessibleBy } from '@casl/prisma';
 import { Inject, UseGuards } from '@nestjs/common';
 import {
   Args,
@@ -19,12 +20,15 @@ import { PrismaService } from 'src/graphql/services/prisma.service';
 import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
-import { accessibleBy } from '@casl/prisma';
+import { WorkshopService } from '../services/workshop.service';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
 export class MeResolver {
-  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+  constructor(
+    @Inject(PrismaService) private prismaService: PrismaService,
+    private workshopService: WorkshopService,
+  ) {}
 
   @ResolveField()
   async elements(@Parent() user: User) {
