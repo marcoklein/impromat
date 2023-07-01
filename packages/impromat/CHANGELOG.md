@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.40.1
+
+### Patch Changes
+
+- 2e903e6: Fix workshops filter
+- Updated dependencies [2e903e6]
+- Updated dependencies [1a3037f]
+  - impromat-api@0.14.1
+
 ## 0.40.0
 
 ### Minor Changes
