@@ -376,6 +376,8 @@ export type UserLikedWorkshop = {
 /** Filter workshops of user. */
 export type UserWorkshopsFilterInput = {
   /** Publicly accessible community workshop. */
+  isCommunity?: Scalars['Boolean'];
+  /** Publicly or listed workshops of user. */
   isPublic?: Scalars['Boolean'];
   liked?: Scalars['Boolean'];
   /** Filter for workshops that are owned by the user. */
