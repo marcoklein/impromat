@@ -80,7 +80,7 @@ describe('Workshop Sections', () => {
       });
       // then
       expect(response.errors).toBeUndefined();
-      expect(response.data?.workshop.name).toBe('super name');
+      expect(response.data?.workshop?.name).toBe('super name');
     });
 
     it('should delete section', async () => {

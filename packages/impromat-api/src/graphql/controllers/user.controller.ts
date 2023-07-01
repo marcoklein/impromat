@@ -1,3 +1,4 @@
+import { accessibleBy } from '@casl/prisma';
 import { Inject, UseGuards } from '@nestjs/common';
 import {
   Args,
@@ -18,11 +19,16 @@ import { User, UserDtoComputedFields } from 'src/dtos/types/user.dto';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
+import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
+import { WorkshopService } from '../services/workshop.service';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
 export class MeResolver {
-  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+  constructor(
+    @Inject(PrismaService) private prismaService: PrismaService,
+    private workshopService: WorkshopService,
+  ) {}
 
   @ResolveField()
   async elements(@Parent() user: User) {
@@ -50,14 +56,18 @@ export class MeResolver {
     @Args('skip', { type: () => Int, defaultValue: 0 }) skip: number,
     @Args('take', { type: () => Int, defaultValue: 20 }) take: number,
   ) {
-    const { liked, owned, isPublic } = input ?? {
+    const ability = defineAbilityForUser(user.id);
+    const { liked, owned, isPublic, isCommunity } = input ?? {
+      isCommunity: false,
       isPublic: true,
       liked: true,
       owned: true,
     };
     const ownedFilter: Prisma.WorkshopWhereInput = { ownerId: user.id };
+    const sharedFilter: Prisma.WorkshopWhereInput = {
+      AND: [ownedFilter, { OR: [{ isPublic: true }, { isListed: true }] }],
+    };
     const communityFilter: Prisma.WorkshopWhereInput = {
-      isPublic: true,
       isListed: true,
     };
     const likedFilter: Prisma.WorkshopWhereInput = {
@@ -67,11 +77,14 @@ export class MeResolver {
       OR: [
         owned ? ownedFilter : {},
         liked ? likedFilter : {},
-        isPublic ? communityFilter : {},
+        isPublic ? sharedFilter : {},
+        isCommunity ? communityFilter : {},
       ],
     };
     return this.prismaService.workshop.findMany({
-      where: filter,
+      where: {
+        AND: [accessibleBy(ability, ABILITY_ACTION_LIST).Workshop, filter],
+      },
       orderBy: {
         updatedAt: 'desc',
       },

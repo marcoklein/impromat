@@ -13,7 +13,13 @@ export class UserWorkshopsFilterInput {
 
   @Field(() => Boolean, {
     defaultValue: false,
+    description: 'Publicly or listed workshops of user.',
+  })
+  isPublic: boolean; // better call isShared
+
+  @Field(() => Boolean, {
+    defaultValue: false,
     description: 'Publicly accessible community workshop.',
   })
-  isPublic: boolean;
+  isCommunity: boolean;
 }

@@ -82,6 +82,7 @@ pageTest.describe("Workshop Sharing", () => {
           .filter({ hasText: "Share with community" })
           .locator("label")
           .click();
+        await page.waitForTimeout(500);
         // when
         await auth.loginAsRandomUser();
         await communityPage.goto();

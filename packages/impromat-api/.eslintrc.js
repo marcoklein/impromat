@@ -25,11 +25,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['test/**/*.test.ts'],
+      files: ['**/*.test.ts'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/no-unused-vars': [
-          'warn',
+          'off',
           {
             varsIgnorePattern: '_',
           },

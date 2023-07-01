@@ -1,15 +1,19 @@
 import { Test } from '@nestjs/testing';
-import { UserFavoriteElement } from '@prisma/client';
-import { PrismaService } from 'src/graphql/services/prisma.service';
+import { Element, UserFavoriteElement } from '@prisma/client';
 import { UserFavoriteElementsService } from 'src/graphql/services/user-favorite-elements.service';
+import {
+  PrismaServiceMock,
+  PrismaServiceMockProvider,
+} from 'test/prisma-service-mock';
+import { PrismaService } from './prisma.service';
 
 describe('UserFavoriteElementsService', () => {
   let service: UserFavoriteElementsService;
-  let prismaService: PrismaService;
+  let prismaService: PrismaServiceMock;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [UserFavoriteElementsService, PrismaService],
+      providers: [UserFavoriteElementsService, PrismaServiceMockProvider],
     }).compile();
 
     service = moduleRef.get(UserFavoriteElementsService);
@@ -48,6 +52,9 @@ describe('UserFavoriteElementsService', () => {
       prismaService.userFavoriteElement,
       'create',
     ).mock;
+    const _findUniqueElementMock = jest
+      .spyOn(prismaService.element, 'findUnique')
+      .mockResolvedValueOnce({} as Element);
     // when
     await service.updateFavoriteElementOfUser(userId, elementId, true);
     // then

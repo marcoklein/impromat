@@ -1,15 +1,19 @@
 import { Test } from '@nestjs/testing';
 import { Element } from '@prisma/client';
 import { ElementSearchService } from 'src/graphql/services/element-search.service';
-import { PrismaService } from 'src/graphql/services/prisma.service';
+import {
+  PrismaServiceMock,
+  PrismaServiceMockProvider,
+} from 'test/prisma-service-mock';
+import { PrismaService } from './prisma.service';
 
 describe('ElementSearchService', () => {
   let service: ElementSearchService;
-  let prismaService: PrismaService;
+  let prismaService: PrismaServiceMock;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ElementSearchService, PrismaService],
+      providers: [ElementSearchService, PrismaServiceMockProvider],
     }).compile();
 
     service = moduleRef.get(ElementSearchService);

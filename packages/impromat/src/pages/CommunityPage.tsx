@@ -57,7 +57,8 @@ export const CommunityPage: React.FC = () => {
       userWorkshopsFilterInput: {
         liked: false,
         owned: false,
-        isPublic: true,
+        isPublic: false,
+        isCommunity: true,
       },
       elementsFilterInput: {
         isOwnerMe: false,

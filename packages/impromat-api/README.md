@@ -9,22 +9,28 @@
 
 Install dependencies
 
-```
+```sh
 yarn install
 ```
 
 Start server with watching changes. Useful for development.
 
-```
+```sh
 yarn dev
 ```
 
-Start tests
+Start all tests
 
 > Requires PostgreSQL
 
-```
+```sh
 yarn test
+```
+
+Run unit tests only (requires no dependencies)
+
+```sh
+yarn test:unit
 ```
 
 Run a specific test
@@ -47,15 +53,56 @@ yarn test:jest -t "empty workshop list"
 
 Watch tests
 
-```
+```sh
 yarn test:watch
+```
+
+## Testing Layers
+
+We differentiate the following test layers:
+
+- Unit Tests
+- Integration Tests
+
+### Unit Tests
+
+Tests small blocks of code. Generally only code within a single file. Unit tests describe the behavior of a certain class or function. Thus, they are defined in the `src` folder with tests having the `.test.ts` postfix, right next to the code they test.
+
+Example:
+
+If we define a class within the file `src/services/element.service.ts`, we define its unit test in the file `src/services/element.test.ts`. With this approach it is very easy to find it's corresponding test code that holds definitions on the expected behavior.
+
+### Integration Tests
+
+Tests that require external dependencies, like a database or an API.
+
+They are defined in the `test` folder and require its external dependencies to run before a test execution.
+
+## Testing Style
+
+1. Name your tests with `should [do something]` for clarity and readability.
+2. Structure tests using the `given` a certain setup, `when` this happens, `then` expect this outcome.
+
+Example:
+
+```ts
+it('should trim text', () => {
+  // given...
+  const input = 'test ';
+  // when
+  const output = input.trim();
+  // then
+  expect(output).toBe('test');
+});
 ```
 
 ## Service Template Test
 
-See `test/graphql/services/element.service.test.ts` for a template test.
+See `src/graphql/services/element.service.test.ts` for a template test.
 
-## Database Schema
+## Database
+
+### Prisma
 
 We manage our database schema with Prisma.
 
@@ -87,12 +134,16 @@ yarn prisma migrate dev --create-only
 
 ## API Conventions
 
+### Model as close to Prisma as possible
+
+Take the [typegraphql-prisma generator](https://github.com/MichalLytek/typegraphql-prisma/blob/main/examples/4-nest-js/prisma/generated/type-graphql/resolvers/inputs/UserOrderByWithRelationInput.ts) as an example on how to structure the GraphQL API.
+
 ### Queries
 
 Use `where` statements to filter query results.
 
 ```graphql
-query element(where: {title: "test"}) {
+query element(where: {title: {equals: "test" }}) {
   id
 }
 ```
@@ -133,7 +184,7 @@ me {
   elements
 }
 # BUT
-elements(filter: {ownerId: "my-user-id"})
+elements(filter: {ownerId: { equals: "my-user-id" }})
 ```
 
 ### Mutations

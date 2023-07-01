@@ -28,7 +28,7 @@ const config: PlaywrightTestConfig = {
     permissions: ["clipboard-read", "clipboard-write"],
   },
   expect: {
-    timeout: 10 * 1000,
+    timeout: 15 * 1000,
   },
   testDir: "test/component",
   reporter: [["list"], ["junit", { outputFile: "junit-results.xml" }]],

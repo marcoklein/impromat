@@ -7,8 +7,8 @@ import {
 } from '../../test-utils/init-api-test-session';
 import { elementByIdQuery } from './element-queries';
 import { workshopElementById } from './workshop-element-queries';
-import { workshopByIdQuery } from './workshop-queries';
 import { provideComplexTestWorkshopFixture } from './workshop-fixture';
+import { workshopByIdQuery } from './workshop-queries';
 
 describe('Workshop Sharing', () => {
   let api: ApiTestSession;
@@ -57,13 +57,13 @@ describe('Workshop Sharing', () => {
       // when
       api.impersonatePublicUser();
       const response = await api.graphqlRequest(workshopElementById, {
-        id: fixture.givenPublicWorkshopResponse.data!.workshop.sections[0]
+        id: fixture.givenPublicWorkshopResponse.data!.workshop!.sections[0]
           .elements[0].id,
       });
       // then
       expect(response.errors).toBeUndefined();
       expect(response.data?.workshopElement.id).toBe(
-        fixture.givenPublicWorkshopResponse.data!.workshop.sections[0]
+        fixture.givenPublicWorkshopResponse.data!.workshop!.sections[0]
           .elements[0].id,
       );
       expect(response.data?.workshopElement.note).toBe(
@@ -76,13 +76,13 @@ describe('Workshop Sharing', () => {
       // when
       api.impersonatePublicUser();
       const response = await api.graphqlRequest(workshopElementById, {
-        id: fixture.givenPublicWorkshopResponse.data!.workshop.sections[0]
+        id: fixture.givenPublicWorkshopResponse.data!.workshop!.sections[0]
           .elements[1].id,
       });
       // then
       expect(response.errors).toBeUndefined();
       expect(response.data?.workshopElement.id).toEqual(
-        fixture.givenPublicWorkshopResponse.data!.workshop.sections[0]
+        fixture.givenPublicWorkshopResponse.data!.workshop!.sections[0]
           .elements[1].id,
       );
     });
@@ -90,7 +90,7 @@ describe('Workshop Sharing', () => {
     it('should allow public access on custom workshop element from public workshop', async () => {
       // given beforeEach
       const idOfCustomElement =
-        fixture.givenPublicWorkshopResponse.data!.workshop.sections[0]
+        fixture.givenPublicWorkshopResponse.data!.workshop!.sections[0]
           .elements[1].basedOn.id;
       // when
       api.impersonatePublicUser();
@@ -106,16 +106,16 @@ describe('Workshop Sharing', () => {
       response: ExecutionResult<WorkshopQueryQuery, ObjMap<unknown>>,
     ) {
       expect(response.errors).toBeUndefined();
-      expect(response.data!.workshop.id).toBe(
+      expect(response.data!.workshop!.id).toBe(
         fixture.givenWorkshopResponse.data!.createWorkshop.id,
       );
-      expect(response.data!.workshop.sections[0].elements[0].basedOn.id).toBe(
+      expect(response.data!.workshop!.sections[0].elements[0].basedOn.id).toBe(
         fixture.givenPublicFreezeElementId,
       );
-      expect(response.data!.workshop.sections[0].elements[1].basedOn.id).toBe(
+      expect(response.data!.workshop!.sections[0].elements[1].basedOn.id).toBe(
         fixture.givenCustomElementId,
       );
-      expect(response.data!.workshop.canEdit).toBeFalsy();
+      expect(response.data!.workshop!.canEdit).toBeFalsy();
     }
   });
 
@@ -135,8 +135,8 @@ describe('Workshop Sharing', () => {
         workshopId: fixture.givenWorkshopResponse.data!.createWorkshop.id,
       });
       // then
-      expect(response.data).toBeNull();
-      expect(response.errors).toBeDefined();
+      expect(response.errors).toBeUndefined();
+      expect(response.data).toEqual({ workshop: null });
     });
 
     it('should not allow access on unshared workshop for logged in user', async () => {
@@ -147,8 +147,8 @@ describe('Workshop Sharing', () => {
         workshopId: fixture.givenWorkshopResponse.data!.createWorkshop.id,
       });
       // then
-      expect(response.data).toBeNull();
-      expect(response.errors).toBeDefined();
+      expect(response.errors).toBeUndefined();
+      expect(response.data).toEqual({ workshop: null });
     });
 
     it('should dissallow public access on workshop element based on improbib element', async () => {
@@ -156,7 +156,7 @@ describe('Workshop Sharing', () => {
       // when
       api.impersonatePublicUser();
       const response = await api.graphqlRequest(workshopElementById, {
-        id: fixture.givenPublicWorkshopResponse.data!.workshop.sections[0]
+        id: fixture.givenPublicWorkshopResponse.data!.workshop!.sections[0]
           .elements[0].id,
       });
       // then
@@ -169,7 +169,7 @@ describe('Workshop Sharing', () => {
       // when
       api.impersonatePublicUser();
       const response = await api.graphqlRequest(workshopElementById, {
-        id: fixture.givenPublicWorkshopResponse.data!.workshop.sections[0]
+        id: fixture.givenPublicWorkshopResponse.data!.workshop!.sections[0]
           .elements[1].id,
       });
       // then
@@ -180,7 +180,7 @@ describe('Workshop Sharing', () => {
     it('should not allow public access on custom element from unshared workshop', async () => {
       // given beforeEach
       const idOfCustomElement =
-        fixture.givenPublicWorkshopResponse.data!.workshop.sections[0]
+        fixture.givenPublicWorkshopResponse.data!.workshop!.sections[0]
           .elements[1].basedOn.id;
       // when
       api.impersonatePublicUser();

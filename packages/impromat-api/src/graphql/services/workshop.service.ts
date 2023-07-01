@@ -8,22 +8,39 @@ import {
 } from '../../dtos/inputs/workshop.inputs';
 import { moveItemFromIndexToIndex } from './move-item-position';
 import { PrismaService } from './prisma.service';
+import { FindManyWorkshopsArgs } from 'src/dtos/args/find-many-workshops-args';
+import {
+  ABILITY_ACTION_LIST,
+  ABILITY_ACTION_READ,
+  defineAbilityForUser,
+} from '../abilities';
+import { accessibleBy } from '@casl/prisma';
 
 @Injectable()
 export class WorkshopService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
-  // TODO all function take the userSessionId => could this also be injected for specific requests?
   findWorkshopById(userSessionId: string | undefined, id: string) {
+    const ability = defineAbilityForUser(userSessionId);
     return this.prismaService.workshop.findFirst({
-      where: { id, OR: [{ ownerId: userSessionId }, { isPublic: true }] },
+      where: {
+        AND: [accessibleBy(ability, ABILITY_ACTION_READ).Workshop, { id }],
+      },
     });
   }
 
-  findWorkshopsFromUser(userSessionId: string) {
+  async findWorkshops(userSessionId: string, args: FindManyWorkshopsArgs) {
+    const ability = defineAbilityForUser(userSessionId);
     return this.prismaService.workshop.findMany({
-      where: { ownerId: userSessionId },
-      orderBy: { updatedAt: 'desc' },
+      where: {
+        AND: [
+          accessibleBy(ability, ABILITY_ACTION_LIST).Workshop,
+          args.where ?? {},
+        ],
+      },
+      orderBy: args.orderBy,
+      take: args.take,
+      skip: args.skip,
     });
   }
 
