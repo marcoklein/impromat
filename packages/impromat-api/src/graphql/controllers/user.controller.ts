@@ -53,14 +53,18 @@ export class MeResolver {
     @Args('take', { type: () => Int, defaultValue: 20 }) take: number,
   ) {
     const ability = defineAbilityForUser(user.id);
-    const { liked, owned, isPublic } = input ?? {
+    const { liked, owned, isPublic, isCommunity } = input ?? {
+      isCommunity: false,
       isPublic: true,
       liked: true,
       owned: true,
     };
     const ownedFilter: Prisma.WorkshopWhereInput = { ownerId: user.id };
-    const communityFilter: Prisma.WorkshopWhereInput = {
+    const sharedFilter: Prisma.WorkshopWhereInput = {
       AND: [ownedFilter, { OR: [{ isPublic: true }, { isListed: true }] }],
+    };
+    const communityFilter: Prisma.WorkshopWhereInput = {
+      isListed: true,
     };
     const likedFilter: Prisma.WorkshopWhereInput = {
       userLikedWorkshops: { some: { userId: user.id } },
@@ -69,7 +73,8 @@ export class MeResolver {
       OR: [
         owned ? ownedFilter : {},
         liked ? likedFilter : {},
-        isPublic ? communityFilter : {},
+        isPublic ? sharedFilter : {},
+        isCommunity ? communityFilter : {},
       ],
     };
     return this.prismaService.workshop.findMany({
