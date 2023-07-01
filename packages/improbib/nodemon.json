@@ -1,5 +1,5 @@
 {
-  "exec": "yarn test:no-lint",
+  "exec": "yarn test",
   "watch": ["src", "test"],
   "ext": "ts"
 }

@@ -4,5 +4,5 @@ export function uniqueTagList({ tags }: { tags: string[] }) {
     uniqueTags[tag] = tag;
   }
 
-  return { tags: Object.values(uniqueTags) };
+  return { tags: Object.values(uniqueTags).sort() };
 }
