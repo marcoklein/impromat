@@ -16,15 +16,24 @@ import {
 } from 'src/dtos/inputs/element-input';
 import { ElementQueryResult } from 'src/dtos/types/element-query-result.dto';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
-import { Element, ElementOmittedFields } from 'src/dtos/types/element.dto';
+import {
+  Element,
+  ElementOmittedFields,
+  ElementSnapshot,
+} from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ElementService } from '../services/element.service';
+import { PaginationArgs } from 'src/dtos/args/pagination-args';
+import { ElementSnapshotService } from '../services/element-snapshot.service';
 
 @Resolver(Element)
 export class ElementController {
-  constructor(private userElementService: ElementService) {}
+  constructor(
+    private userElementService: ElementService,
+    private elementSnapshotService: ElementSnapshotService,
+  ) {}
 
   @ResolveField(() => Boolean)
   async isFavorite(
@@ -96,6 +105,19 @@ export class ElementController {
     return this.userElementService
       .findElementById(userSessionId, element.id)
       .workshopElements();
+  }
+
+  @ResolveField(() => [ElementSnapshot])
+  async snapshots(
+    @Args() args: PaginationArgs,
+    @Parent() element: Element,
+    @SessionUserId() userSessionId: string | undefined,
+  ): Promise<Partial<ElementSnapshot>[]> {
+    return this.elementSnapshotService.findElementSnapshots(
+      userSessionId,
+      element.id,
+      args,
+    );
   }
 
   @Query(() => Element, { nullable: true })

@@ -13,6 +13,9 @@ import { environment } from 'src/environment';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { UserSessionData } from './user-session-data';
 
+/**
+ * Injected for mocking the login procedure. Used for testing and local development purposes.
+ */
 @Controller('auth')
 export class TestAuthController {
   constructor(private prismaService: PrismaService) {}

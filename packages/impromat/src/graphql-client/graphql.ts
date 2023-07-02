@@ -68,6 +68,8 @@ export type Element = {
   createdAt: Scalars['DateTime'];
   deleted: Scalars['Boolean'];
   id: Scalars['ID'];
+  /** Set if the element was imported from improbib, a project that collects existing improv resources. */
+  improbibIdentifier?: Maybe<Scalars['String']>;
   /** Set if the element is called from a user context. */
   isFavorite?: Maybe<Scalars['Boolean']>;
   /** Convenience field to determine if the owner of the element is the logged in user. */
