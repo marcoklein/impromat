@@ -58,10 +58,16 @@ Install all dependencies:
 yarn install
 ```
 
-Run code generation
+Build packages:
 
 ```
-yarn codegen
+yarn build
+```
+
+Seed database:
+
+```
+yarn workspace impromat-api run prisma db seed
 ```
 
 Start the development server for frontend and backend:
