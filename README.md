@@ -58,10 +58,10 @@ Install all dependencies:
 yarn install
 ```
 
-Build packages:
+Build impromat frontend and impromat backend:
 
 ```
-yarn build
+yarn workspaces foreach --from '{impromat,impromat-api}' run build
 ```
 
 Seed database:
