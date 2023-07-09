@@ -92,6 +92,7 @@ model User {
 
   name                 String? @unique
   googleSubscriptionId String? @unique
+  accessToken          String?
 
   favoriteElements UserFavoriteElement[]
   likedWorkshops   UserLikedWorkshop[]

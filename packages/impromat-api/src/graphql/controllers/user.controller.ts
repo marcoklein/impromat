@@ -85,9 +85,12 @@ export class MeResolver {
       where: {
         AND: [accessibleBy(ability, ABILITY_ACTION_LIST).Workshop, filter],
       },
-      orderBy: {
-        updatedAt: 'desc',
-      },
+      orderBy: [
+        { id: 'asc' },
+        {
+          updatedAt: 'desc',
+        },
+      ],
       skip,
       take,
     });

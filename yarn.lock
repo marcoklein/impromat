@@ -7552,6 +7552,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "commander@npm:11.0.0"
+  checksum: 6621954e1e1d078b4991c1f5bbd9439ad37aa7768d6ab4842de1dbd4d222c8a27e1b8e62108b3a92988614af45031d5bb2a2aaa92951f4d0c934d1a1ac564bb4
+  languageName: node
+  linkType: hard
+
 "commander@npm:^2.20.0, commander@npm:^2.20.3":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
@@ -10754,6 +10761,7 @@ __metadata:
   dependencies:
     "@graphql-codegen/cli": ^4.0.1
     "@types/diff": ^5.0.3
+    commander: ^11.0.0
     diff: ^5.1.0
     graphql-request: ^6.1.0
     improbib: "workspace:^"

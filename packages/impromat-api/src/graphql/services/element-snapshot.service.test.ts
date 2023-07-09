@@ -1,5 +1,6 @@
 import { accessibleBy } from '@casl/prisma';
 import { Test } from '@nestjs/testing';
+import { Element } from '@prisma/client';
 import { PaginationArgs } from 'src/dtos/args/pagination-args';
 import {
   ABILITY_ACTION_LIST,
@@ -64,6 +65,12 @@ describe('ElementSnapshotService', () => {
         take: 20,
       };
       const findManyMock = prismaService.element.findMany;
+      findManyMock.mockResolvedValueOnce([
+        {
+          createdAt: new Date(),
+          id: 'snapshot-id',
+        } as Element,
+      ]);
       // when
       await service.findElementSnapshots(
         userRequestId,
@@ -78,9 +85,7 @@ describe('ElementSnapshotService', () => {
             { snapshotParentId: elementId },
           ],
         },
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
         skip: 0,
         take: 20,
       });

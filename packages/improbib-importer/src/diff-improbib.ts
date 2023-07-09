@@ -1,65 +1,30 @@
 import { diffChars } from "diff";
 import { GraphQLClient } from "graphql-request";
-import { Improbib } from "improbib";
-import fs from "node:fs/promises";
-import { graphql } from "./graphql-client";
-import { ElementsQuery } from "./graphql-client/graphql";
-
-const fetchMyUserIdQuery = graphql(`
-  query Me {
-    me {
-      id
-    }
-  }
-`);
-
-const _elementFieldsFragment = graphql(`
-  fragment ElementFields on Element {
-    id
-    name
-    improbibIdentifier
-    markdown
-    tags {
-      id
-      name
-    }
-  }
-`);
-
-const fetchElementsQuery = graphql(`
-  query Elements($skip: Int!, $take: Int!) {
-    elements(skip: $skip, take: $take) {
-      element {
-        ...ElementFields
-        snapshots {
-          id
-          user {
-            id
-          }
-          element {
-            ...ElementFields
-          }
-        }
-      }
-    }
-  }
-`);
-
-const endpoint = "http://localhost:8080/graphql";
+import { ImprobibElement } from "improbib";
+import { ImpromatElementType, fetchResources } from "./fetch-resources";
 
 /**
  * Finds difference between loaded improbib in Impromat and improbib from improbib.json.
  * Only compares differences, without writing to the database.
  */
-export async function diffImprobib() {
-  const client = await createSignedInGraphQLClient();
-  const myUserId = await fetchMyUserId(client);
-  const impromatElements = await fetchImpromatElements(client);
-  const improbibElements = await fetchImprobibElements();
+export async function diffImprobib(options: {
+  endpoint: string;
+  userName: string;
+  accessToken: string;
+}) {
+  const { client, improbibElements, impromatElements, myUserId } =
+    await fetchResources(options);
 
-  for (const improbibElement of improbibElements.sort((a, b) =>
-    a.name.localeCompare(b.name)
-  )) {
+  showDiff(client, myUserId, impromatElements, improbibElements);
+}
+
+async function showDiff(
+  client: GraphQLClient,
+  myUserId: string,
+  impromatElements: ImpromatElementType,
+  improbibElements: ImprobibElement[]
+) {
+  for (const improbibElement of improbibElements) {
     const impromatElement = impromatElements.find(
       (impromatElement) =>
         impromatElement.improbibIdentifier === improbibElement.identifier
@@ -114,63 +79,4 @@ export async function diffImprobib() {
       console.log(`Deleted element (${impromatElement.name})`);
     }
   }
-}
-
-async function fetchMyUserId(client: GraphQLClient) {
-  const response = await client.request(fetchMyUserIdQuery);
-  return response.me.id;
-}
-
-async function fetchImprobibElements() {
-  const improbibJson = await fs.readFile("../improbib/output/improbib.json");
-  const improbib = JSON.parse(improbibJson.toString("utf8")) as Improbib;
-  return improbib.elements;
-}
-
-async function createSignedInGraphQLClient() {
-  const signInResponse = await fetch(
-    "http://localhost:8080/auth/testlogin?userId=improbib-test"
-  );
-  const cookie = await signInResponse.text();
-  console.log(cookie);
-
-  const client = new GraphQLClient(endpoint, {
-    headers: { Cookie: `connect.sid=s:${cookie}` },
-  });
-  return client;
-}
-
-/**
- * Get type of array.
- */
-type Unpacked<T> = T extends (infer U)[] ? U : T;
-
-async function fetchImpromatElements(client: GraphQLClient) {
-  const allElements: Unpacked<ElementsQuery["elements"]>["element"][] = [];
-  const batchSize = 100;
-
-  console.time("fetch");
-  for (let i = 0; ; i++) {
-    const response = await client.request(fetchElementsQuery, {
-      skip: i * batchSize,
-      take: batchSize,
-    });
-    console.log("skip", i * batchSize);
-    allElements.push(...response.elements.map((result) => result.element));
-    console.log(
-      `Iteration ${i}: loaded ${response.elements.length} elements (${allElements.length} total)`
-    );
-    if (response.elements.length < batchSize) {
-      console.timeEnd("fetch");
-      console.log("Finished loading.");
-      break;
-    }
-  }
-
-  // TODO we cannot currently filter for improbib elements in the original query.
-  // Thus, we have to fetch all elements and then filter for elements that represent an improbib element
-  const improbibElements = allElements.filter(
-    (element) => element.improbibIdentifier
-  );
-  return improbibElements;
 }

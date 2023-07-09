@@ -1,6 +1,17 @@
-import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
+import { sign } from 'cookie-signature';
 import { Request, Response } from 'express';
 import { Session } from 'express-session';
+import { environment } from 'src/environment';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 import { GoogleOAuth2ClientService } from './google-oauth2-client-provider';
 import { UserSessionData } from './user-session-data';
@@ -11,6 +22,31 @@ export class AuthController {
     private googleOAuth2ClientService: GoogleOAuth2ClientService,
     private prismaService: PrismaService,
   ) {}
+
+  /**
+   * Allows access via access tokens.
+   *
+   * @param signInBody
+   * @param req
+   * @param res
+   */
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  async signInWithAccessToken(
+    @Body() signInBody: { name: string; accessToken: string },
+    @Req() req: Request & { session: Session & { data: UserSessionData } },
+    @Res() res: Response,
+  ) {
+    const dbUser = await this.prismaService.user.findFirstOrThrow({
+      where: { name: signInBody.name, accessToken: signInBody.accessToken },
+    });
+
+    req.session.data = { userId: dbUser.id };
+    req.session.save(() => {
+      const signedSession = sign(req.session.id, environment.SESSION_SECRET);
+      res.send(JSON.stringify({ Cookie: `connect.sid=s:${signedSession}` }));
+    });
+  }
 
   @Get('google/callback')
   async callback(

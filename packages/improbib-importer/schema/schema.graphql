@@ -217,9 +217,8 @@ type Query {
   """Find workshops."""
   workshops(skip: Int! = 0, take: Int! = 20, where: WorkshopsWhereInput, orderBy: [WorkshopsOrderByInput!]): [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
-  element: Element!
+  element(id: ID!): Element
   elements(skip: Int! = 0, take: Int! = 20, filter: ElementsFilterInput, orderBy: ElementsOrderByInput): [ElementQueryResult!]!
-  user: User!
 
   """Get information about the current user."""
   me: User!
@@ -447,28 +446,61 @@ input UpdateWorkshopItemOrder {
 
 input CreateElementInput {
   name: String!
-  visibility: ElementVisibility! = PRIVATE
   markdown: String
 
   """Language code (e.g. en, de) of the element."""
   languageCode: String! = "en"
+  sourceUrl: String
+  sourceName: String! = "impromat"
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  visibility: ElementVisibility! = PRIVATE
   orderIndex: Int
-  tags: ElementTagConnectInput
+  tags: ElementTagsInput
 }
 
-input ElementTagConnectInput {
-  connect: [IdInput!]!
+input ElementTagsInput {
+  connect: [ElementTagWhereInput!]
+
+  """Defines all tags of the element."""
+  set: [ElementTagSetInput!]
+}
+
+input ElementTagWhereInput {
+  id: ID
+  name: String
+}
+
+input ElementTagSetInput {
+  id: ID
+  name: String
 }
 
 input UpdateElementInput {
   name: String
-  visibility: ElementVisibility = PRIVATE
   markdown: String
 
   """Language code (e.g. en, de) of the element."""
   languageCode: String = "en"
+  sourceUrl: String
+  sourceName: String = "impromat"
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  visibility: ElementVisibility = PRIVATE
   orderIndex: Int
-  tags: ElementTagConnectInput
+  tags: ElementTagsInput
   id: ID!
 }
 

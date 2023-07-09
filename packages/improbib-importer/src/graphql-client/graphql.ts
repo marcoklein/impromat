@@ -25,12 +25,19 @@ export type BoolFilter = {
 };
 
 export type CreateElementInput = {
+  /** Set if the element was imported from improbib, a project that collects existing improv resources. */
+  improbibIdentifier?: InputMaybe<Scalars['String']>;
   /** Language code (e.g. en, de) of the element. */
   languageCode?: Scalars['String'];
+  licenseName?: InputMaybe<Scalars['String']>;
+  licenseUrl?: InputMaybe<Scalars['String']>;
   markdown?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   orderIndex?: InputMaybe<Scalars['Int']>;
-  tags?: InputMaybe<ElementTagConnectInput>;
+  sourceBaseUrl?: InputMaybe<Scalars['String']>;
+  sourceName?: Scalars['String'];
+  sourceUrl?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<ElementTagsInput>;
   visibility?: ElementVisibility;
 };
 
@@ -148,13 +155,25 @@ export type ElementTag = {
   version: Scalars['Int'];
 };
 
-export type ElementTagConnectInput = {
-  connect: Array<IdInput>;
+export type ElementTagSetInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type ElementTagWhereInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 /** Filter tags of elements. */
 export type ElementTagsFilterInput = {
   text?: InputMaybe<Scalars['String']>;
+};
+
+export type ElementTagsInput = {
+  connect?: InputMaybe<Array<ElementTagWhereInput>>;
+  /** Defines all tags of the element. */
+  set?: InputMaybe<Array<ElementTagSetInput>>;
 };
 
 export enum ElementVisibility {
@@ -258,18 +277,22 @@ export type NestedStringFilter = {
 
 export type Query = {
   __typename?: 'Query';
-  element: Element;
+  element?: Maybe<Element>;
   elements: Array<ElementQueryResult>;
   googleAuthUrl: Scalars['String'];
   /** Get information about the current user. */
   me: User;
   searchElements: Array<ElementSearchResult>;
   tags: Array<ElementTag>;
-  user: User;
   workshop?: Maybe<Workshop>;
   workshopElement: WorkshopElement;
   /** Find workshops. */
   workshops: Array<Workshop>;
+};
+
+
+export type QueryElementArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -335,12 +358,19 @@ export type StringFilter = {
 
 export type UpdateElementInput = {
   id: Scalars['ID'];
+  /** Set if the element was imported from improbib, a project that collects existing improv resources. */
+  improbibIdentifier?: InputMaybe<Scalars['String']>;
   /** Language code (e.g. en, de) of the element. */
   languageCode?: InputMaybe<Scalars['String']>;
+  licenseName?: InputMaybe<Scalars['String']>;
+  licenseUrl?: InputMaybe<Scalars['String']>;
   markdown?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   orderIndex?: InputMaybe<Scalars['Int']>;
-  tags?: InputMaybe<ElementTagConnectInput>;
+  sourceBaseUrl?: InputMaybe<Scalars['String']>;
+  sourceName?: InputMaybe<Scalars['String']>;
+  sourceUrl?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<ElementTagsInput>;
   visibility?: InputMaybe<ElementVisibility>;
 };
 
@@ -550,6 +580,14 @@ export type ElementsQueryVariables = Exact<{
 
 export type ElementsQuery = { __typename?: 'Query', elements: Array<{ __typename?: 'ElementQueryResult', element: { __typename?: 'Element', id: string, name: string, improbibIdentifier?: string | null, markdown?: string | null, snapshots: Array<{ __typename?: 'ElementSnapshot', id: string, user?: { __typename?: 'User', id: string } | null, element: { __typename?: 'Element', id: string, name: string, improbibIdentifier?: string | null, markdown?: string | null, tags: Array<{ __typename?: 'ElementTag', id: string, name: string }> } }>, tags: Array<{ __typename?: 'ElementTag', id: string, name: string }> } }> };
 
+export type CreateElementMutationMutationVariables = Exact<{
+  input: CreateElementInput;
+}>;
+
+
+export type CreateElementMutationMutation = { __typename?: 'Mutation', createElement: { __typename?: 'Element', id: string } };
+
 export const ElementFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ElementFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Element"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"improbibIdentifier"}},{"kind":"Field","name":{"kind":"Name","value":"markdown"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<ElementFieldsFragment, unknown>;
 export const MeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
 export const ElementsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Elements"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"elements"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ElementFields"}},{"kind":"Field","name":{"kind":"Name","value":"snapshots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ElementFields"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ElementFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Element"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"improbibIdentifier"}},{"kind":"Field","name":{"kind":"Name","value":"markdown"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<ElementsQuery, ElementsQueryVariables>;
+export const CreateElementMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateElementMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateElementInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createElement"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateElementMutationMutation, CreateElementMutationMutationVariables>;

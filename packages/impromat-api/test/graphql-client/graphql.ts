@@ -25,12 +25,19 @@ export type BoolFilter = {
 };
 
 export type CreateElementInput = {
+  /** Set if the element was imported from improbib, a project that collects existing improv resources. */
+  improbibIdentifier?: InputMaybe<Scalars['String']>;
   /** Language code (e.g. en, de) of the element. */
   languageCode?: Scalars['String'];
+  licenseName?: InputMaybe<Scalars['String']>;
+  licenseUrl?: InputMaybe<Scalars['String']>;
   markdown?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   orderIndex?: InputMaybe<Scalars['Int']>;
-  tags?: InputMaybe<ElementTagConnectInput>;
+  sourceBaseUrl?: InputMaybe<Scalars['String']>;
+  sourceName?: Scalars['String'];
+  sourceUrl?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<ElementTagsInput>;
   visibility?: ElementVisibility;
 };
 
@@ -83,7 +90,7 @@ export type Element = {
   name: Scalars['String'];
   owner?: Maybe<User>;
   /** Changes of the element. */
-  snapshots: Array<Element>;
+  snapshots: Array<ElementSnapshot>;
   sourceBaseUrl?: Maybe<Scalars['String']>;
   sourceName?: Maybe<Scalars['String']>;
   sourceUrl?: Maybe<Scalars['String']>;
@@ -92,6 +99,12 @@ export type Element = {
   usedBy: Array<WorkshopElement>;
   version: Scalars['Int'];
   visibility: ElementVisibility;
+};
+
+
+export type ElementSnapshotsArgs = {
+  skip?: Scalars['Int'];
+  take?: Scalars['Int'];
 };
 
 export type ElementQueryResult = {
@@ -122,6 +135,16 @@ export type ElementSearchResult = {
   score: Scalars['Float'];
 };
 
+export type ElementSnapshot = {
+  __typename?: 'ElementSnapshot';
+  createdAt: Scalars['DateTime'];
+  /** Element of snapshot. */
+  element: Element;
+  id: Scalars['ID'];
+  /** User that created the snapshot. */
+  user?: Maybe<User>;
+};
+
 export type ElementTag = {
   __typename?: 'ElementTag';
   createdAt: Scalars['DateTime'];
@@ -132,13 +155,25 @@ export type ElementTag = {
   version: Scalars['Int'];
 };
 
-export type ElementTagConnectInput = {
-  connect: Array<IdInput>;
+export type ElementTagSetInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type ElementTagWhereInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 /** Filter tags of elements. */
 export type ElementTagsFilterInput = {
   text?: InputMaybe<Scalars['String']>;
+};
+
+export type ElementTagsInput = {
+  connect?: InputMaybe<Array<ElementTagWhereInput>>;
+  /** Defines all tags of the element. */
+  set?: InputMaybe<Array<ElementTagSetInput>>;
 };
 
 export enum ElementVisibility {
@@ -323,12 +358,19 @@ export type StringFilter = {
 
 export type UpdateElementInput = {
   id: Scalars['ID'];
+  /** Set if the element was imported from improbib, a project that collects existing improv resources. */
+  improbibIdentifier?: InputMaybe<Scalars['String']>;
   /** Language code (e.g. en, de) of the element. */
   languageCode?: InputMaybe<Scalars['String']>;
+  licenseName?: InputMaybe<Scalars['String']>;
+  licenseUrl?: InputMaybe<Scalars['String']>;
   markdown?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   orderIndex?: InputMaybe<Scalars['Int']>;
-  tags?: InputMaybe<ElementTagConnectInput>;
+  sourceBaseUrl?: InputMaybe<Scalars['String']>;
+  sourceName?: InputMaybe<Scalars['String']>;
+  sourceUrl?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<ElementTagsInput>;
   visibility?: InputMaybe<ElementVisibility>;
 };
 

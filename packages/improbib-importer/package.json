@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@graphql-codegen/cli": "^4.0.1",
+    "commander": "^11.0.0",
     "diff": "^5.1.0",
     "graphql-request": "^6.1.0",
     "improbib": "workspace:^"
