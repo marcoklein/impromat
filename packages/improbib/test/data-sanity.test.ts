@@ -140,8 +140,7 @@ describe("data sanity", () => {
     expect(elements).to.have.lengthOf(1);
     const element = elements[0];
     expect(element.name).to.equal(elementName, "Id generation changed?");
-    expect(element.tags).contains("game");
-    expect(element.tags).contains("exercise");
+    expect(element.tags).contains("Spiel");
   });
 
   it("should sort by identifiers from A-Z", () => {
