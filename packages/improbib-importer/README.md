@@ -48,6 +48,8 @@ The implementation of the import is using the GraphQL interface and not a direct
 
 Additionally, the improbib is just seen as _another user_ and not a special service within the Impromat itself.
 
+## GitHub Actions
+
 ## Libraries
 
 - `graphql-request` as GraphQL client
