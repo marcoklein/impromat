@@ -1,0 +1,18 @@
+name: Production Improbib Import
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 2.22am on Sunday
+    - cron: "22 2 * * 0"
+
+jobs:
+  improbib-import:
+    uses: ./.github/workflows/shared-improbib-import.yml
+    secrets:
+      improbibUserAccessToken: ${{ secrets.PROD_IMPROBIB_ACCESS_TOKEN }}
+    with:
+      environment: production
+      checkoutEnvironment: true
+      useCache: false
+      apiEndpoint: https://api.impromat.app

@@ -37,3 +37,6 @@ jobs:
       - uses: EndBug/latest-tag@latest
         with:
           ref: impromat-api-${{ inputs.environment }}
+      - uses: EndBug/latest-tag@latest
+        with:
+          ref: ${{ inputs.environment }}-latest

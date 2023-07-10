@@ -1,32 +1,22 @@
-# Imports latest changes from the improbib into the impromat
 name: Development Improbib Import
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   # 2.22am
-  #   - cron: "22 2 * * *"
+    inputs:
+      useCommitOfAction:
+        type: boolean
+        default: false
+      useCache:
+        type: boolean
+        default: true
 
 jobs:
   improbib-import:
-    name: Improbib Import
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: yarn
-      - run: yarn workspaces focus improbib
-      # - run: rm -r packages/improbib/.html-cache/improwiki.com
-      #   name: Delete improbib cache
-      - run: yarn workspace improbib start
-        name: Retrieve latest improbib
-      - run: yarn workspaces focus improbib-importer
-        name: Install improbib-importer
-      - run: yarn workspace improbib-importer start write --access-token "${{ secrets.DEV_IMPROBIB_ACCESS_TOKEN }}" --endpoint https://api.dev.impromat.app
-        name: Run improbib import to add newest improbib entries to impromat
+    uses: ./.github/workflows/shared-improbib-import.yml
+    secrets:
+      improbibUserAccessToken: ${{ secrets.DEV_IMPROBIB_ACCESS_TOKEN }}
+    with:
+      environment: development
+      checkoutEnvironment: ${{ inputs.useCommitOfAction }}
+      useCache: ${{ inputs.useCache }}
+      apiEndpoint: https://api.dev.impromat.app

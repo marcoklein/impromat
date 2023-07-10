@@ -1,0 +1,50 @@
+name: Shared Improbib Import
+
+on:
+  workflow_call:
+    secrets:
+      improbibUserAccessToken:
+        required: true
+    inputs:
+      environment:
+        required: true
+        type: string
+      checkoutEnvironment:
+        type: boolean
+        default: true
+        description: True, if the specific environment tag should be checked-out.
+      useCache:
+        type: boolean
+        default: true
+      apiEndpoint:
+        required: true
+        type: string
+
+    
+jobs:
+  improbib-import:
+    name: Improbib Import
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        if: inputs.checkoutEnvironment
+        with:
+          # TODO change this to ${{ inputs.environment }}-latest if ref is available
+          ref: impromat-app-${{ inputs.environment }}
+      - uses: actions/checkout@v3
+        if: !inputs.checkoutEnvironment
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+      - run: yarn workspaces focus improbib
+      - run: rm -r packages/improbib/.html-cache
+        if: !inputs.useCache
+        name: Delete improbib cache
+      - run: yarn workspace improbib start
+        name: Retrieve latest improbib
+      - run: yarn workspaces focus improbib-importer
+        name: Install improbib-importer
+      - run: yarn workspace improbib-importer start write --access-token "${{ secrets.improbibUserAccessToken }}" --endpoint "${{ inputs.apiEndpoint }}"
+        name: Run improbib import to add newest improbib entries to impromat
