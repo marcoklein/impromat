@@ -3,7 +3,7 @@ name: Development Improbib Import
 on:
   workflow_dispatch:
     inputs:
-      useCommitOfAction:
+      checkoutDeployedDevelopmentTag:
         type: boolean
         default: false
       useCache:
@@ -17,6 +17,6 @@ jobs:
       improbibUserAccessToken: ${{ secrets.DEV_IMPROBIB_ACCESS_TOKEN }}
     with:
       environment: development
-      checkoutEnvironment: ${{ inputs.useCommitOfAction }}
+      checkoutEnvironment: ${{ inputs.checkoutDeployedDevelopmentTag }}
       useCache: ${{ inputs.useCache }}
       apiEndpoint: https://api.dev.impromat.app
