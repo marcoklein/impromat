@@ -6,6 +6,9 @@ on:
   # schedule:
   #   # 2.22am
   #   - cron: "22 2 * * *"
+  pull_request:
+    branches:
+      - main
 
 jobs:
   improbib-import:
