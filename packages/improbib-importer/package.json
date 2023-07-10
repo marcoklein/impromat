@@ -2,7 +2,7 @@
   "name": "improbib-importer",
   "type": "module",
   "scripts": {
-    "start": "yarn dev",
+    "start": "ts-node --transpile-only src/main.ts",
     "dev": "ts-node src/main.ts",
     "codegen": "yarn codegen:get-schema-graphql && graphql-codegen",
     "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql"
