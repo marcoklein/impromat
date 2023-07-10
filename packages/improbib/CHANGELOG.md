@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3
+
+### Patch Changes
+
+- 347f4f1: Add improbib-importer
+
 ## 0.4.2
 
 ### Patch Changes

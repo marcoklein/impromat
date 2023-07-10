@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.40.2
+
+### Patch Changes
+
+- 347f4f1: Add improbib-importer
+- Updated dependencies [347f4f1]
+  - impromat-api@0.14.2
+
 ## 0.40.1
 
 ### Patch Changes
