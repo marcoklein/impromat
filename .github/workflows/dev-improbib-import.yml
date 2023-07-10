@@ -22,8 +22,8 @@ jobs:
           node-version: 18
           cache: yarn
       - run: yarn workspaces focus improbib
-      - run: rm -r packages/improbib/.html-cache/improwiki.com
-        name: Delete improbib cache
+      # - run: rm -r packages/improbib/.html-cache/improwiki.com
+      #   name: Delete improbib cache
       - run: yarn workspace improbib start
         name: Retrieve latest improbib
       - run: yarn workspaces focus improbib-importer

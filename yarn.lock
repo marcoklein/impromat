@@ -10765,6 +10765,7 @@ __metadata:
     diff: ^5.1.0
     graphql-request: ^6.1.0
     improbib: "workspace:^"
+    ts-node: ^10.9.1
     typescript: ^5.1.6
   languageName: unknown
   linkType: soft
