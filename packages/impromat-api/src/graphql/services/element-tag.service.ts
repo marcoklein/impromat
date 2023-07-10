@@ -44,9 +44,7 @@ export class ElementTagService {
           },
         ],
       },
-      orderBy: {
-        elements: { _count: 'desc' },
-      },
+      orderBy: [{ elements: { _count: 'desc' } }, { id: 'asc' }],
       skip: pagination.skip,
       take: pagination.take,
     });

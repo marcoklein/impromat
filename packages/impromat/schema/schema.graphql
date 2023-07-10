@@ -140,6 +140,11 @@ type Element {
   sourceBaseUrl: String
   licenseName: String
   licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
   owner: User
 
   """
@@ -150,6 +155,9 @@ type Element {
 
   """Set if the element is called from a user context."""
   isFavorite: Boolean
+
+  """Changes of the element."""
+  snapshots(skip: Int! = 0, take: Int! = 20): [ElementSnapshot!]!
 }
 
 enum ElementVisibility {
@@ -158,6 +166,17 @@ enum ElementVisibility {
 
   """Element is publicly shared with the whole community."""
   PUBLIC
+}
+
+type ElementSnapshot {
+  id: ID!
+  createdAt: DateTime!
+
+  """User that created the snapshot."""
+  user: User
+
+  """Element of snapshot."""
+  element: Element!
 }
 
 type ElementSearchMatch {
@@ -427,28 +446,61 @@ input UpdateWorkshopItemOrder {
 
 input CreateElementInput {
   name: String!
-  visibility: ElementVisibility! = PRIVATE
   markdown: String
 
   """Language code (e.g. en, de) of the element."""
   languageCode: String! = "en"
+  sourceUrl: String
+  sourceName: String! = "impromat"
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  visibility: ElementVisibility! = PRIVATE
   orderIndex: Int
-  tags: ElementTagConnectInput
+  tags: ElementTagsInput
 }
 
-input ElementTagConnectInput {
-  connect: [IdInput!]!
+input ElementTagsInput {
+  connect: [ElementTagWhereInput!]
+
+  """Defines all tags of the element."""
+  set: [ElementTagSetInput!]
+}
+
+input ElementTagWhereInput {
+  id: ID
+  name: String
+}
+
+input ElementTagSetInput {
+  id: ID
+  name: String
 }
 
 input UpdateElementInput {
   name: String
-  visibility: ElementVisibility = PRIVATE
   markdown: String
 
   """Language code (e.g. en, de) of the element."""
   languageCode: String = "en"
+  sourceUrl: String
+  sourceName: String = "impromat"
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  visibility: ElementVisibility = PRIVATE
   orderIndex: Int
-  tags: ElementTagConnectInput
+  tags: ElementTagsInput
   id: ID!
 }
 

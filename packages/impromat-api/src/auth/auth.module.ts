@@ -11,7 +11,8 @@ import { TestGoogleAuthUrlResolver } from './test-google-auth-url-resolver';
 @Module({
   imports: [],
   controllers: [
-    environment.ENABLE_TESTLOGIN ? TestAuthController : AuthController,
+    AuthController,
+    ...(environment.ENABLE_TESTLOGIN ? [TestAuthController] : []),
   ],
   providers: [
     GoogleOAuth2ClientService,

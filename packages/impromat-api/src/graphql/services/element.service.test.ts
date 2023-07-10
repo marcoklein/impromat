@@ -90,7 +90,6 @@ describe('ElementService', () => {
           id: 'test-element',
           ownerId: 'test-user',
           visibility: 'PRIVATE',
-          tags: [],
         } as Partial<PrismaElement> as PrismaElement);
     });
 
@@ -114,6 +113,131 @@ describe('ElementService', () => {
       await expect(
         service.createElement(userRequestId, createElementInput),
       ).rejects.toThrow('Unauthorized');
+    });
+
+    describe('with tags input', () => {
+      it('should call the expected SQL for connecting tags', async () => {
+        // given
+        const createElementInputWithTags = {
+          name: 'test-element-name',
+          tags: {
+            connect: [
+              {
+                name: 'first-tag',
+              },
+              {
+                id: 'second-tag-id',
+              },
+              {
+                id: 'last-tag-id',
+                name: 'last-tag',
+              },
+            ],
+          },
+        } as CreateElementInput;
+        // when
+        await service.createElement(userRequestId, createElementInputWithTags);
+        // then
+        expect(createMock.mock.calls[0][0].data.tags).toEqual({
+          connect: [
+            {
+              name: 'first-tag',
+            },
+            {
+              id: 'second-tag-id',
+            },
+            {
+              id: 'last-tag-id',
+              name: 'last-tag',
+            },
+          ],
+        });
+      });
+
+      it('should call the expected SQL for setting tags', async () => {
+        // given
+        const createElementInputWithTags = {
+          name: 'test-element-name',
+          tags: {
+            set: [
+              {
+                name: 'first-tag',
+              },
+              {
+                id: 'second-tag-id',
+              },
+              {
+                id: 'last-tag-id',
+                name: 'last-tag',
+              },
+            ],
+          },
+        } as CreateElementInput;
+        // when
+        await service.createElement(userRequestId, createElementInputWithTags);
+        // then
+        expect(createMock.mock.calls[0][0].data.tags).toEqual({
+          connectOrCreate: [
+            {
+              create: { name: 'first-tag' },
+              where: { name: 'first-tag' },
+            },
+            {
+              create: { name: 'last-tag' },
+              where: { id: 'last-tag-id', name: 'last-tag' },
+            },
+          ],
+          connect: [
+            {
+              id: 'second-tag-id',
+            },
+          ],
+        });
+      });
+
+      it('should throw if set is called without any arguments', async () => {
+        // given
+        const createElementInputWithTags = {
+          name: 'test-element-name',
+          tags: {
+            set: [
+              {
+                name: undefined,
+                id: undefined,
+              },
+            ],
+          },
+        } as CreateElementInput;
+        // when, then
+        await expect(
+          service.createElement(userRequestId, createElementInputWithTags),
+        ).rejects.toThrowError('Name and id undefined');
+      });
+
+      it('should not allow "connect" and "set" call for element tags', async () => {
+        // given
+        const createElementInputWithTags = {
+          name: 'test-element-name',
+          tags: {
+            set: [
+              {
+                name: 'first-tag',
+              },
+            ],
+            connect: [
+              {
+                id: 'test',
+              },
+            ],
+          },
+        } as CreateElementInput;
+        // when, then
+        await expect(
+          service.createElement(userRequestId, createElementInputWithTags),
+        ).rejects.toThrowError(
+          'Specify either "connect" or "set" for tags input.',
+        );
+      });
     });
   });
 
@@ -266,6 +390,34 @@ describe('ElementService', () => {
       await expect(() =>
         service.updateElement(userRequestId, updateInput),
       ).rejects.toThrow('Cannot change visibility to private.');
+    });
+
+    describe('with tags input', () => {
+      it('should throw an error if calling set elements input', async () => {
+        // given
+        const updateElementInput = {
+          name: 'test-element-name',
+          tags: {
+            set: [
+              {
+                name: 'first-tag',
+              },
+              {
+                id: 'second-tag-id',
+              },
+              {
+                id: 'last-tag-id',
+                name: 'last-tag',
+              },
+            ],
+          },
+        } as UpdateElementInput;
+
+        // when, then
+        await expect(() =>
+          service.updateElement(userRequestId, updateElementInput),
+        ).rejects.toThrow('Not implemented yet');
+      });
     });
   });
 });

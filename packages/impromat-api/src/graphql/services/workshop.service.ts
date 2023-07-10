@@ -38,7 +38,7 @@ export class WorkshopService {
           args.where ?? {},
         ],
       },
-      orderBy: args.orderBy,
+      orderBy: [...(args.orderBy ?? []), { id: 'asc' }],
       take: args.take,
       skip: args.skip,
     });

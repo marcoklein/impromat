@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CreateElementInput,
+  ElementTagsInput,
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
 import { PrismaService } from './prisma.service';
@@ -73,9 +74,7 @@ export class ElementService {
           },
         ],
       },
-      orderBy: {
-        updatedAt: 'desc',
-      },
+      orderBy: [{ updatedAt: 'desc' }, { id: 'asc' }],
       skip,
       take,
     });
@@ -96,10 +95,14 @@ export class ElementService {
     if (ability.cannot('write', 'Element')) {
       throw new Error('Unauthorized');
     }
+
+    const tagsQuery = this.getCreateTagsInputQuery(createElementInput?.tags);
+
     return this.prismaService.element.create({
       data: {
         ...createElementInput,
-        sourceName: IMPROMAT_SOURCE_NAME,
+        tags: tagsQuery,
+        sourceName: createElementInput.sourceName ?? IMPROMAT_SOURCE_NAME,
         ownerId: userRequestId,
       },
     });
@@ -119,6 +122,9 @@ export class ElementService {
     const ability = defineAbilityForUser(userRequestId);
     if (ability.cannot('write', 'Element')) {
       throw new Error('Unauthorized');
+    }
+    if (updateElementInput.tags?.set) {
+      throw new Error('Not implemented yet');
     }
     const existing = await this.prismaService.element.findFirst({
       where: {
@@ -180,5 +186,42 @@ export class ElementService {
     ]);
 
     return updateResult;
+  }
+
+  private getCreateTagsInputQuery(
+    elementTagsInput: ElementTagsInput | undefined,
+  ):
+    | Prisma.ElementTagUncheckedCreateNestedManyWithoutElementsInput
+    | undefined {
+    if (!elementTagsInput) return undefined;
+    if (elementTagsInput.connect && elementTagsInput.set) {
+      throw new Error('Specify either "connect" or "set" for tags input.');
+    }
+    if (elementTagsInput.connect) {
+      return { connect: elementTagsInput.connect };
+    }
+    if (elementTagsInput.set) {
+      const setInput = elementTagsInput.set;
+      const connectOrCreate: Prisma.ElementTagCreateOrConnectWithoutElementsInput[] =
+        [];
+      const connect: Prisma.ElementTagWhereUniqueInput[] = [];
+      for (const input of setInput) {
+        if (input.name) {
+          connectOrCreate.push({
+            create: { name: input.name },
+            where: { id: input.id, name: input.name },
+          });
+        } else if (input.id) {
+          connect.push(input);
+        } else {
+          throw new Error('Name and id undefined');
+        }
+      }
+      return {
+        connectOrCreate,
+        connect,
+      };
+    }
+    return undefined;
   }
 }

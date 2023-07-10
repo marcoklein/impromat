@@ -15,6 +15,7 @@ import { ImprobibEntry } from "../improbib";
 import { changeImprowikiMarkdown } from "./improwiki/change-improwiki-markdown";
 import { WebsiteExtractor } from "./website-extractor";
 import { PipelineRunParameters, WikiPipeline } from "./wiki-pipeline";
+import { transformImprowikiDeTags } from "../common-transformers/transform-improwiki-de-tags";
 
 export class PipelineAggregator {
   constructor(private readonly pipelines: WikiPipeline[]) {}
@@ -77,7 +78,8 @@ export class PipelineAggregator {
       .apply(changeImprowikiMarkdown)
       .apply(removeMarkdownLinks)
       .apply(trimMarkdown)
-      .apply(uniqueTagList);
+      .apply(uniqueTagList)
+      .apply(transformImprowikiDeTags);
 
     const transformedEntries = await commonEntryTransforms.transformList(
       uniqueImprovEntries,

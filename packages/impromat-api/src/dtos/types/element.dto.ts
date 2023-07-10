@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
 import { ElementTag } from './element-tag.dto';
@@ -13,6 +13,7 @@ export type ElementOmittedFields =
   | 'visibility'
   | 'isFavorite'
   | 'markdownShort'
+  | 'snapshots'
   | 'isOwnerMe';
 
 @ObjectType()
@@ -54,6 +55,13 @@ export class Element extends BaseDto {
   @Field(() => String, { nullable: true })
   licenseUrl: Nullable<string>;
 
+  @Field(() => String, {
+    nullable: true,
+    description:
+      'Set if the element was imported from improbib, a project that collects existing improv resources.',
+  })
+  improbibIdentifier: Nullable<string>;
+
   @Field(() => User, { nullable: true })
   owner: Nullable<User>;
 
@@ -73,4 +81,25 @@ export class Element extends BaseDto {
     description: 'Set if the element is called from a user context.',
   })
   isFavorite: Nullable<boolean>;
+
+  @Field(() => [ElementSnapshot], { description: 'Changes of the element.' })
+  snapshots: ElementSnapshot[];
+}
+
+@ObjectType()
+export class ElementSnapshot {
+  @Field(() => ID)
+  id: string;
+
+  @Field(() => Date)
+  createdAt: Date;
+
+  @Field(() => User, {
+    description: 'User that created the snapshot.',
+    nullable: true,
+  })
+  user: Nullable<User>;
+
+  @Field(() => Element, { description: 'Element of snapshot.' })
+  element: Element;
 }

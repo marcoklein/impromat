@@ -59,7 +59,8 @@ export const ElementComponent: React.FC<ContainerProps> = ({
         <CustomElementInfoItemComponent
           elementFragment={element}
         ></CustomElementInfoItemComponent>
-      ) : element.sourceName === "impromat" ? (
+      ) : element.sourceName === "impromat" &&
+        element.owner?.name !== "improbib" ? (
         <>
           <InfoItemComponent
             message={`Created by ${

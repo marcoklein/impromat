@@ -29,6 +29,13 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - run: yarn install
+      - run: yarn codegen
+      - run: |
+          if git diff-index --quiet HEAD --; then
+              echo "Codegen produced changes. Please run 'yarn codegen' and commit changes."
+              exit 1
+          fi
+        name: Test if codegen has been run
 
       - run: yarn workspace:lint
       - run: yarn workspace:build
