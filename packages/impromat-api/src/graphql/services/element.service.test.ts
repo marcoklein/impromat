@@ -309,12 +309,17 @@ describe('ElementService', () => {
 
     it('should create a snapshot element', async () => {
       // when
+      updateInput = {
+        id: 'test-element',
+        improbibIdentifier: 'improbib-identifier',
+      };
       await service.updateElement(userRequestId, updateInput);
       // then
       expect(createSnapshotElementMock.mock.calls[0][0].data).toEqual({
         ownerId: 'test-user',
         visibility: 'PRIVATE',
         snapshotParentId: 'test-element',
+        improbibIdentifier: undefined,
         snapshotUserId: userRequestId,
         tags: { connect: [] },
       });

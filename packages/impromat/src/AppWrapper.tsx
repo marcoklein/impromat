@@ -81,6 +81,14 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
                   id,
                 });
               },
+              duplicateWorkshop(_result, _args, cache, _info) {
+                cache.invalidate("Query", "workshops");
+                cache.invalidate("Query", "me");
+              },
+              deleteWorkshop(_result, _args, cache, _info) {
+                cache.invalidate("Query", "workshops");
+                cache.invalidate("Query", "me");
+              },
               updateWorkshopItemOrder(_result, _args, cache, _info) {
                 const id = (_result.updateWorkshopItemOrder as any)?.id;
                 cache.invalidate({

@@ -10,6 +10,7 @@ import {
 } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { FindManyWorkshopsArgs } from 'src/dtos/args/find-many-workshops-args';
+import { DuplicateWorkshopInput } from 'src/dtos/inputs/duplicate-workshop-input';
 import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
@@ -160,6 +161,18 @@ export class WorkshopController {
     return this.workshopService.findWorkshopById(
       userId,
       updateWorkshopItemOrder.workshopId,
+    );
+  }
+
+  @UseGuards(GraphqlAuthGuard)
+  @Mutation(() => Workshop)
+  async duplicateWorkshop(
+    @SessionUserId() userId: string,
+    @Args('input') duplicateWorkshopInput: DuplicateWorkshopInput,
+  ) {
+    return await this.workshopService.duplicateWorkshop(
+      userId,
+      duplicateWorkshopInput,
     );
   }
 }

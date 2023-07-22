@@ -15,17 +15,16 @@ import {
   defineAbilityForUser,
 } from '../abilities';
 import { accessibleBy } from '@casl/prisma';
+import { DuplicateWorkshopInput } from 'src/dtos/inputs/duplicate-workshop-input';
+import { randomUUID } from 'node:crypto';
 
 @Injectable()
 export class WorkshopService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
-  findWorkshopById(userSessionId: string | undefined, id: string) {
-    const ability = defineAbilityForUser(userSessionId);
+  findWorkshopById(userSessionId: string | undefined, workshopId: string) {
     return this.prismaService.workshop.findFirst({
-      where: {
-        AND: [accessibleBy(ability, ABILITY_ACTION_READ).Workshop, { id }],
-      },
+      where: this.findWorkshopByIdWhereQuery(userSessionId, workshopId),
     });
   }
 
@@ -203,6 +202,105 @@ export class WorkshopService {
     });
   }
 
+  async duplicateWorkshop(
+    userSessionId: string | undefined,
+    input: DuplicateWorkshopInput,
+  ) {
+    const { workshopId } = input;
+    const existingWorkshop = await this.prismaService.workshop.findFirst({
+      where: this.findWorkshopByIdWhereQuery(userSessionId, workshopId),
+      include: {
+        sections: {
+          include: {
+            elements: true,
+          },
+        },
+      },
+    });
+    if (!existingWorkshop) {
+      throw new Error('Workshop not found');
+    }
+    if (existingWorkshop.ownerId !== userSessionId) {
+      throw new Error('Can only duplicate own workshops');
+    }
+
+    const newWorkshopId = randomUUID();
+    const workshopCreate = this.prismaService.workshop.create({
+      data: {
+        ...existingWorkshop,
+        ...{
+          id: newWorkshopId,
+          createdAt: undefined,
+          updatedAt: undefined,
+          version: undefined,
+          isListed: false,
+          isPublic: false,
+          deleted: false,
+          sections: undefined,
+        },
+      },
+    });
+    const prismaService = this.prismaService;
+    const workshopElementsCreate: Array<
+      ReturnType<typeof prismaService.workshopElement.create>
+    > = [];
+    const sectionsCreate: Array<
+      ReturnType<typeof prismaService.workshopSection.create>
+    > = [];
+
+    for (const section of existingWorkshop.sections) {
+      const sectionId = randomUUID();
+      sectionsCreate.push(
+        this.prismaService.workshopSection.create({
+          data: {
+            ...section,
+            ...{
+              id: sectionId,
+              createdAt: undefined,
+              updatedAt: undefined,
+              deleted: false,
+              deletedAt: undefined,
+              isCollapsed: false,
+              version: undefined,
+              elements: undefined,
+              workshop: undefined,
+              workshopId: newWorkshopId,
+            },
+          },
+        }),
+      );
+      for (const workshopElement of section.elements) {
+        workshopElementsCreate.push(
+          this.prismaService.workshopElement.create({
+            data: {
+              ...workshopElement,
+              ...{
+                id: undefined,
+                createdAt: undefined,
+                updatedAt: undefined,
+                version: undefined,
+                deleted: false,
+                deletedAt: undefined,
+
+                workshopSection: undefined,
+                basedOn: undefined,
+                workshopSectionId: sectionId,
+                basedOnId: workshopElement.basedOnId,
+              },
+            },
+          }),
+        );
+      }
+    }
+
+    const transactionResult = await this.prismaService.$transaction([
+      workshopCreate,
+      ...sectionsCreate,
+      ...workshopElementsCreate,
+    ]);
+    return transactionResult[0];
+  }
+
   async updateWorkshopItemOrder(
     userId: string,
     updateWorkshopItemOrder: UpdateWorkshopItemOrder,
@@ -259,5 +357,20 @@ export class WorkshopService {
       }
     });
     return result;
+  }
+
+  private findWorkshopByIdWhereQuery(
+    userSessionId: string | undefined,
+    workshopId: string,
+    workshopWhere: Prisma.WorkshopWhereInput = {},
+  ): Prisma.WorkshopWhereInput {
+    const ability = defineAbilityForUser(userSessionId);
+    return {
+      AND: [
+        accessibleBy(ability, ABILITY_ACTION_READ).Workshop,
+        { id: workshopId },
+        workshopWhere,
+      ],
+    };
   }
 }

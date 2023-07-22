@@ -1,14 +1,16 @@
-import { close, create, pencil, trash } from "ionicons/icons";
+import { IonToast } from "@ionic/react";
+import { close, copy, create, pencil, trash } from "ionicons/icons";
 import { useState } from "react";
 import { useHistory } from "react-router";
+import { ConfirmationAlert } from "../../components/ConfirmationAlert";
+import { OptionsMenu } from "../../components/OptionsMenu";
 import { FragmentType, getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useDeleteWorkshopMutation } from "../../hooks/use-delete-workshop-mutation";
+import { useDuplicateWorkshopMutation } from "../../hooks/use-duplicate-workshop-mutation";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
-import { routeWorkshops } from "../../routes/shared-routes";
-import { ConfirmationAlert } from "../../components/ConfirmationAlert";
-import { OptionsMenu } from "../../components/OptionsMenu";
+import { routeWorkshop, routeWorkshops } from "../../routes/shared-routes";
 
 const WorkshopOptionsMenu_Workshop = graphql(`
   fragment WorkshopOptionsMenu_Workshop on Workshop {
@@ -25,6 +27,9 @@ interface ContainerProps {
 
 export interface Option {}
 
+/**
+ * Options menu for manipulating a Workshop.
+ */
 export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   workshopFragment,
   goBackAfterDeletion,
@@ -40,9 +45,15 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   const [presentInputDialog] = useInputDialog();
   const [, deleteWorkshopMutation] = useDeleteWorkshopMutation();
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
+  const [, duplicateWorkshopMutation] = useDuplicateWorkshopMutation();
 
   const [isWorkshopDeleteAlertOpen, setIsWorkshopDeleteAlertOpen] =
     useState(false);
+
+  const [duplicatedWorkshop, setDuplicatedWorkshop] = useState<{
+    id: string;
+    name: string;
+  }>();
 
   const changeWorkshopName = (newName: string) => {
     if (!workshop) return;
@@ -53,6 +64,13 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
     updateWorkshopMutation({
       input: { id: workshop.id, description: newDescription },
     });
+  };
+  const onDuplicateWorkshop = async () => {
+    if (!workshop) return;
+    await duplicateWorkshopMutation({
+      input: { workshopId: workshop.id },
+    });
+    setDuplicatedWorkshop({ id: workshop.id, name: workshop.name });
   };
 
   const onChangeDescription = () => {
@@ -82,6 +100,13 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       <OptionsMenu
         header="Options"
         options={[
+          {
+            icon: copy,
+            text: "Duplicate",
+            handler: () => {
+              onDuplicateWorkshop();
+            },
+          },
           {
             icon: pencil,
             text: "Rename",
@@ -129,6 +154,22 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
         }}
         onOpenChange={setIsWorkshopDeleteAlertOpen}
       ></ConfirmationAlert>
+      <IonToast
+        isOpen={!!duplicatedWorkshop}
+        message={`Duplicated "${workshop.name}"`}
+        onDidDismiss={() => setDuplicatedWorkshop(undefined)}
+        buttons={[
+          {
+            text: "Open",
+            handler: () => history.push(routeWorkshop(duplicatedWorkshop!.id)),
+          },
+          {
+            role: "cancel",
+            icon: close,
+          },
+        ]}
+        duration={10000}
+      ></IonToast>
     </>
   );
 };

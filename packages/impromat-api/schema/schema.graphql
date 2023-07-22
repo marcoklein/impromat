@@ -332,6 +332,7 @@ type Mutation {
   updateWorkshop(input: UpdateWorkshopInput!): Workshop!
   deleteWorkshop(id: ID!): Workshop
   updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
+  duplicateWorkshop(input: DuplicateWorkshopInput!): Workshop!
   createElement(input: CreateElementInput!): Element!
   updateElement(input: UpdateElementInput!): Element!
   updateUser(input: UpdateUserInput!): User!
@@ -442,6 +443,11 @@ input UpdateWorkshopItemOrder {
 
   """To position."""
   toPosition: Int!
+}
+
+"""Duplicates a workshop to allow changes to the new workshop."""
+input DuplicateWorkshopInput {
+  workshopId: ID!
 }
 
 input CreateElementInput {
