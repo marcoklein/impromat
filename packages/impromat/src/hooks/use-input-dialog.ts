@@ -18,6 +18,9 @@ interface DialogProps {
   minlength?: number;
 }
 
+/**
+ * TODO refactor into Ionic 7 Inline Alert (https://ionicframework.com/docs/api/alert#inputs)
+ */
 export function useInputDialog() {
   const [presentAlert, dismissAlert] = useIonAlert();
   const [presentToast] = useIonToast();

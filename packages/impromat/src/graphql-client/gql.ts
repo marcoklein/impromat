@@ -22,6 +22,7 @@ const documents = {
     "\n  fragment WorkshopInfoList_Workshop on Workshop {\n    id\n    createdAt\n    updatedAt\n    isPublic\n    isListed\n    canEdit\n    isOwnerMe\n    isLiked\n    owner {\n      name\n    }\n  }\n": types.WorkshopInfoList_WorkshopFragmentDoc,
     "\n  query Me {\n    me {\n      id\n      version\n      favoriteElements {\n        element {\n          id\n        }\n      }\n    }\n  }\n": types.MeDocument,
     "\n      mutation DeleteWorkshopMutation($id: ID!) {\n        deleteWorkshop(id: $id) {\n          id\n        }\n      }\n    ": types.DeleteWorkshopMutationDocument,
+    "\n      mutation DuplicateWorkshopMutation($input: DuplicateWorkshopInput!) {\n        duplicateWorkshop(input: $input) {\n          id\n        }\n      }\n    ": types.DuplicateWorkshopMutationDocument,
     "\n              query GoogleLoginHrefQuery {\n                googleAuthUrl\n              }\n            ": types.GoogleLoginHrefQueryDocument,
     "\n  query IsLoggedIn {\n    me {\n      id\n    }\n  }\n": types.IsLoggedInDocument,
     "\n      mutation LogoutMutation {\n        logout\n      }\n    ": types.LogoutMutationDocument,
@@ -116,6 +117,10 @@ export function graphql(source: "\n  query Me {\n    me {\n      id\n      versi
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      mutation DeleteWorkshopMutation($id: ID!) {\n        deleteWorkshop(id: $id) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DeleteWorkshopMutation($id: ID!) {\n        deleteWorkshop(id: $id) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation DuplicateWorkshopMutation($input: DuplicateWorkshopInput!) {\n        duplicateWorkshop(input: $input) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation DuplicateWorkshopMutation($input: DuplicateWorkshopInput!) {\n        duplicateWorkshop(input: $input) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

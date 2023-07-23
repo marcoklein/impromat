@@ -70,6 +70,12 @@ export type DeleteWorkshopSectionInput = {
   id: Scalars['ID'];
 };
 
+/** Duplicates a workshop to allow changes to the new workshop. */
+export type DuplicateWorkshopInput = {
+  name: Scalars['String'];
+  workshopId: Scalars['ID'];
+};
+
 export type Element = {
   __typename?: 'Element';
   createdAt: Scalars['DateTime'];
@@ -205,6 +211,7 @@ export type Mutation = {
   createElement: Element;
   createWorkshop: Workshop;
   deleteWorkshop?: Maybe<Workshop>;
+  duplicateWorkshop: Workshop;
   logout: Scalars['Boolean'];
   updateElement: Element;
   updateUser: User;
@@ -229,6 +236,11 @@ export type MutationCreateWorkshopArgs = {
 
 export type MutationDeleteWorkshopArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationDuplicateWorkshopArgs = {
+  input: DuplicateWorkshopInput;
 };
 
 
