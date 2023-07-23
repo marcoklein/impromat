@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.15.0
+
+### Minor Changes
+
+- b73ea5b: Duplication of user-owned workshops
+
 ## 0.14.2
 
 ### Patch Changes
