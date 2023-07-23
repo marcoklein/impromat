@@ -117,7 +117,10 @@ describe('WorkshopService', () => {
       prismaService.workshop.findFirst.mockResolvedValue(null);
       // when, then
       await expect(async () =>
-        service.duplicateWorkshop(userId, { workshopId }),
+        service.duplicateWorkshop(userId, {
+          workshopId,
+          name: 'test-workshop',
+        }),
       ).rejects.toThrowError(/Workshop not found/);
     });
 
@@ -130,7 +133,10 @@ describe('WorkshopService', () => {
       prismaService.workshop.findFirst.mockResolvedValue(existingWorkshop);
       // when, then
       await expect(async () =>
-        service.duplicateWorkshop(userId, { workshopId }),
+        service.duplicateWorkshop(userId, {
+          workshopId,
+          name: 'test-workshop',
+        }),
       ).rejects.toThrowError(/duplicate own workshops/);
     });
 
@@ -200,6 +206,7 @@ describe('WorkshopService', () => {
           // when
           await service.duplicateWorkshop(userId, {
             workshopId: duplicatedWorkshopId,
+            name: 'test-workshop Copy',
           });
           duplicatedWorkshopId = workshopCreateMock.calls[0][0].data.id!;
           duplicatedSectionId = workshopSectionCreate.calls[0][0].data.id!;

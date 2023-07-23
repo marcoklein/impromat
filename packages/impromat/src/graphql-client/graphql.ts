@@ -72,6 +72,7 @@ export type DeleteWorkshopSectionInput = {
 
 /** Duplicates a workshop to allow changes to the new workshop. */
 export type DuplicateWorkshopInput = {
+  name: Scalars['String'];
   workshopId: Scalars['ID'];
 };
 

@@ -448,6 +448,7 @@ input UpdateWorkshopItemOrder {
 """Duplicates a workshop to allow changes to the new workshop."""
 input DuplicateWorkshopInput {
   workshopId: ID!
+  name: String!
 }
 
 input CreateElementInput {

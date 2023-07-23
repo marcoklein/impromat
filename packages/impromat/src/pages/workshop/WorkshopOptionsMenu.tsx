@@ -67,10 +67,28 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   };
   const onDuplicateWorkshop = async () => {
     if (!workshop) return;
-    await duplicateWorkshopMutation({
-      input: { workshopId: workshop.id },
+    presentInputDialog({
+      header: "New Workshop Name",
+      initialText: workshop.name,
+      message: "Enter a name for your duplicated workshop:",
+      placeholder: "Workshop name...",
+      emptyInputMessage: "Please enter a name for your workshop.",
+      buttonText: "Duplicate",
+      onAccept: async (newWorkshopName) => {
+        const { error, data } = await duplicateWorkshopMutation({
+          input: { workshopId: workshop.id, name: newWorkshopName },
+        });
+        const id = data?.duplicateWorkshop.id;
+        if (error || !id) {
+          return;
+        }
+        setDuplicatedWorkshop({ id: workshop.id, name: workshop.name });
+        logger("Adding new workshop with id %s", id);
+        const navigateTo = `/workshop/${id}`;
+        history.replace(navigateTo);
+        logger("Navigating to %s", navigateTo);
+      },
     });
-    setDuplicatedWorkshop({ id: workshop.id, name: workshop.name });
   };
 
   const onChangeDescription = () => {

@@ -18,8 +18,6 @@ import { accessibleBy } from '@casl/prisma';
 import { DuplicateWorkshopInput } from 'src/dtos/inputs/duplicate-workshop-input';
 import { randomUUID } from 'node:crypto';
 
-const DUPLICATED_WORKSHOP_PREFIX = ' Copy';
-
 @Injectable()
 export class WorkshopService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
@@ -231,8 +229,8 @@ export class WorkshopService {
       data: {
         ...existingWorkshop,
         ...{
+          name: input.name,
           id: newWorkshopId,
-          name: `${existingWorkshop.name}${DUPLICATED_WORKSHOP_PREFIX}`,
           createdAt: undefined,
           updatedAt: undefined,
           version: undefined,
