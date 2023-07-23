@@ -215,7 +215,7 @@ describe('WorkshopService', () => {
           // then
           delete workshopCreateData.id;
           expect(workshopCreateData).toEqual({
-            name: 'test-workshop',
+            name: 'test-workshop Copy',
             description: 'original workshop',
             ownerId: userId,
             isListed: false,
