@@ -76,7 +76,7 @@ export class ElementService {
           {
             snapshotParentId: null,
             languageCode: {
-              in: user.languageCodes,
+              in: user.languageCodes ?? ['en', 'de'],
             },
             OR: whereInput,
           },

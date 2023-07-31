@@ -39,7 +39,7 @@ export class ElementSearchService {
           },
           {
             languageCode: {
-              in: user.languageCodes,
+              in: user.languageCodes ?? ['en', 'de'],
             },
           },
           {
