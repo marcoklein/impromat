@@ -3,22 +3,20 @@ import {
   IonIcon,
   IonInput,
   IonItem,
-  IonItemDivider,
   IonLabel,
   IonNote,
   IonSelect,
   IonSelectOption,
   IonSpinner,
-  IonText,
 } from "@ionic/react";
-import { information, informationCircle, logOut } from "ionicons/icons";
+import { logOut } from "ionicons/icons";
+import { useState } from "react";
 import {
   FragmentType,
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
 import { useLogout } from "../../../hooks/use-logout";
-import { useState } from "react";
 import { useUpdateUserMutation } from "../../../hooks/use-update-user-mutation";
 
 const AccountSignedIn_User = graphql(`
