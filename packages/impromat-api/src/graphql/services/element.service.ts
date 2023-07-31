@@ -75,9 +75,13 @@ export class ElementService {
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
           {
             snapshotParentId: null,
-            languageCode: {
-              in: user.languageCodes ?? ['en', 'de'],
-            },
+            ...(user.languageCodes && user.languageCodes.length > 0
+              ? {
+                  languageCode: {
+                    in: user.languageCodes,
+                  },
+                }
+              : {}),
             OR: whereInput,
           },
         ],
