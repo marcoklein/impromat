@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.41.1
+
+### Patch Changes
+
+- fa3a206: Hide unnamed sections
+
 ## 0.41.0
 
 ### Minor Changes
