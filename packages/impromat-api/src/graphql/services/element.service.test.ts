@@ -4,6 +4,7 @@ import {
   Element,
   Element as PrismaElement,
   ElementVisibility as PrismaElementVisibility,
+  User,
 } from '@prisma/client';
 import {
   CreateElementInput,
@@ -11,6 +12,7 @@ import {
 } from 'src/dtos/inputs/element-input';
 import { ElementVisibility } from 'src/dtos/types/element-visibility.dto';
 import {
+  ABILITY_ACTION_LIST,
   ABILITY_ACTION_READ,
   AppAbility,
   defineAbilityForUser,
@@ -21,18 +23,26 @@ import {
   PrismaServiceMockProvider,
 } from 'test/prisma-service-mock';
 import { PrismaService } from './prisma.service';
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
+import { UserService } from './user.service';
 
 describe('ElementService', () => {
   let service: ElementService;
   let prismaService: PrismaServiceMock;
+  let userService: DeepMockProxy<UserService>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ElementService, PrismaServiceMockProvider],
+      providers: [
+        ElementService,
+        PrismaServiceMockProvider,
+        { provide: UserService, useValue: mockDeep(UserService) },
+      ],
     }).compile();
 
     service = moduleRef.get(ElementService);
     prismaService = moduleRef.get(PrismaService);
+    userService = moduleRef.get(UserService);
   });
 
   // given
@@ -68,6 +78,67 @@ describe('ElementService', () => {
             { id: elementId },
           ],
         },
+      });
+    });
+  });
+
+  describe('findElements', () => {
+    // given
+    const options = {
+      filter: { isOwnerMe: true, isPublic: true },
+      orderBy: { notImplemented: true },
+      skip: 1,
+      take: 3,
+    };
+
+    let userMock: jest.SpyInstance<
+      unknown,
+      Parameters<typeof userService.findUserById>
+    >;
+    let findManyMock: jest.SpyInstance<
+      unknown,
+      Parameters<typeof prismaService.element.findMany>
+    >;
+    beforeEach(() => {
+      userMock = userService.findUserById.mockResolvedValueOnce({
+        id: userRequestId,
+        languageCodes: ['en', 'de'],
+      } as User);
+      findManyMock = prismaService.element.findMany.mockResolvedValue([
+        {
+          id: 'test-element',
+          ownerId: 'test-user',
+          visibility: 'PRIVATE',
+          languageCode: 'en',
+        },
+      ] as PrismaElement[]);
+    });
+
+    it('should trigger the expected user mock', async () => {
+      // when
+      await service.findElements(userRequestId, options);
+      // then
+      expect(userMock.mock.calls[0][0]).toEqual(userRequestId);
+    });
+
+    it('should trigger the expected find many SQL', async () => {
+      // when
+      await service.findElements(userRequestId, options);
+      // then
+      expect(findManyMock.mock.calls[0][0]).toEqual({
+        where: {
+          AND: [
+            accessibleBy(ability, ABILITY_ACTION_LIST).Element,
+            {
+              snapshotParentId: null,
+              languageCode: { in: ['en', 'de'] },
+              OR: [{ ownerId: userRequestId }, { visibility: 'PUBLIC' }],
+            },
+          ],
+        },
+        orderBy: [{ updatedAt: 'desc' }, { id: 'asc' }],
+        skip: 1,
+        take: 3,
       });
     });
   });

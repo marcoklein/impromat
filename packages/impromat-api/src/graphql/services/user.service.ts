@@ -8,19 +8,24 @@ import { PrismaService } from './prisma.service';
 export class UserService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
+  async findUserById(userId: string | undefined) {
+    const ability = defineAbilityForUser(userId);
+    if (!userId) return undefined;
+    return await this.prismaService.user.findFirst({
+      where: {
+        AND: [accessibleBy(ability, ABILITY_ACTION_READ).User, { id: userId }],
+      },
+    });
+  }
+
   async updateUser(
     userRequestId: string | undefined,
     updateUserInput: UpdateUserInput,
   ) {
-    const ability = defineAbilityForUser(userRequestId);
-    const user = await this.prismaService.user.findFirstOrThrow({
-      where: {
-        AND: [
-          accessibleBy(ability, ABILITY_ACTION_READ).User,
-          { id: userRequestId },
-        ],
-      },
-    });
+    const user = await this.findUserById(userRequestId);
+    if (!user) {
+      throw new Error('User not found or insufficent permissions.');
+    }
     const result = await this.prismaService.user.update({
       data: {
         name: updateUserInput.name,

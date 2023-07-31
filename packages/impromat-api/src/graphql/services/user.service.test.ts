@@ -56,7 +56,7 @@ describe('UserService', () => {
     };
     let existingMock: jest.SpyInstance<
       unknown,
-      Parameters<typeof prismaService.user.findFirstOrThrow>
+      Parameters<typeof prismaService.user.findFirst>
     >;
     let updateMock: jest.SpyInstance<
       unknown,
@@ -64,7 +64,7 @@ describe('UserService', () => {
     >;
 
     beforeEach(() => {
-      existingMock = prismaService.user.findFirstOrThrow.mockResolvedValueOnce({
+      existingMock = prismaService.user.findFirst.mockResolvedValueOnce({
         id: userRequestId,
         name: 'test-name',
         languageCodes: [],
