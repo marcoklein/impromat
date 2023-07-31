@@ -53,6 +53,8 @@ export type AppAbility = PureAbility<
 export const defineAbilityForUser = (userId: string | undefined) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
   if (userId) {
+    can(ABILITY_ACTION_WRITE, 'User', { id: userId }).because(REASON_OWNER);
+    can(ABILITY_ACTION_READ, 'User', { id: userId }).because(REASON_OWNER);
     can(ABILITY_ACTION_READ, 'Workshop', { ownerId: userId }).because(
       REASON_OWNER,
     );

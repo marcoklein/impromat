@@ -25,6 +25,8 @@ describe('Abilities', () => {
     });
 
     it.each([
+      ['User', 'read', [REASON_OWNER]],
+      ['User', 'write', [REASON_OWNER]],
       [
         'Element',
         'read',

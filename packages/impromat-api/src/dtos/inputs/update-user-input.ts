@@ -1,11 +1,14 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
 import {
-  Matches,
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsString,
   IsUUID,
+  Matches,
   MaxLength,
   MinLength,
-  IsString,
 } from 'class-validator';
 
 @InputType()
@@ -14,11 +17,20 @@ export class UpdateUserInput {
   @IsUUID(4)
   id: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @MinLength(2)
   @MaxLength(20)
   @Matches(/^[a-zA-Z \-_0-9]*$/)
   @Transform((param) => param.value.trim())
   @IsString()
-  name: string;
+  name?: string | undefined;
+
+  @Field(() => [String], {
+    description: 'Preferred languages of the user. E.g. de or en.',
+    nullable: true,
+  })
+  @IsArray()
+  @ArrayMaxSize(2)
+  @ArrayMinSize(1)
+  languageCodes?: string[] | undefined;
 }

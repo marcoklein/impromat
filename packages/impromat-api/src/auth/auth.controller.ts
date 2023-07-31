@@ -61,8 +61,12 @@ export class AuthController {
       const { tokens } = await oAuth2Client.getToken(code);
       oAuth2Client.setCredentials(tokens);
 
+      if (!tokens.access_token) {
+        throw new Error('Access token is null.');
+      }
+
       const { sub: userGoogleId } = await oAuth2Client.getTokenInfo(
-        tokens.access_token!,
+        tokens.access_token,
       );
 
       if (!userGoogleId) {
@@ -79,7 +83,10 @@ export class AuthController {
         if (user) return user;
         // first time login
         return await tx.user.create({
-          data: { googleSubscriptionId: userGoogleId },
+          data: {
+            googleSubscriptionId: userGoogleId,
+            languageCodes: ['en', 'de'],
+          },
         });
       });
 

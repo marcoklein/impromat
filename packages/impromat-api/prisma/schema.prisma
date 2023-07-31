@@ -90,8 +90,9 @@ model User {
   deleted   Boolean   @default(false)
   deletedAt DateTime?
 
-  name                 String? @unique
-  googleSubscriptionId String? @unique
+  name                 String?  @unique
+  languageCodes        String[]
+  googleSubscriptionId String?  @unique
   accessToken          String?
 
   favoriteElements UserFavoriteElement[]

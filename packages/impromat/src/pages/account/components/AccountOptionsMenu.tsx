@@ -1,6 +1,5 @@
 import { useIonToast } from "@ionic/react";
 import { close, person } from "ionicons/icons";
-import { useMutation } from "urql";
 import { OptionsMenu } from "../../../components/OptionsMenu";
 import {
   FragmentType,
@@ -9,6 +8,7 @@ import {
 } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useInputDialog } from "../../../hooks/use-input-dialog";
+import { useUpdateUserMutation } from "../../../hooks/use-update-user-mutation";
 
 const AccountOptionsMenu_User = graphql(`
   fragment AccountOptionsMenu_User on User {
@@ -30,15 +30,7 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
   const [presentInputDialog] = useInputDialog();
   const [presentToast] = useIonToast();
 
-  const [, updateUserMutation] = useMutation(
-    graphql(`
-      mutation UpdateUserMutation($input: UpdateUserInput!) {
-        updateUser(input: $input) {
-          id
-        }
-      }
-    `),
-  );
+  const [, updateUserMutation] = useUpdateUserMutation();
 
   const onRenameUser = () => {
     presentInputDialog({

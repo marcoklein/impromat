@@ -20,14 +20,14 @@ import { PrismaService } from 'src/graphql/services/prisma.service';
 import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
-import { WorkshopService } from '../services/workshop.service';
+import { UserService } from '../services/user.service';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
-export class MeResolver {
+export class UserController {
   constructor(
     @Inject(PrismaService) private prismaService: PrismaService,
-    private workshopService: WorkshopService,
+    private userService: UserService,
   ) {}
 
   @ResolveField()
@@ -109,16 +109,9 @@ export class MeResolver {
   async updateUser(
     @Args('input')
     updateUserInput: UpdateUserInput,
-    @SessionUserId() sessionUserId: string,
+    @SessionUserId() sessionUserId: string | undefined,
   ): Promise<Omit<User, UserDtoComputedFields>> {
-    if (updateUserInput.id !== sessionUserId) {
-      throw new Error('Not Authorized');
-    }
-    const result = await this.prismaService.user.update({
-      data: { name: updateUserInput.name },
-      where: { id: sessionUserId },
-    });
-    return result;
+    return this.userService.updateUser(sessionUserId, updateUserInput);
   }
 
   private findUserById(userId: string) {

@@ -28,14 +28,14 @@ const documents = {
     "\n      mutation LogoutMutation {\n        logout\n      }\n    ": types.LogoutMutationDocument,
     "\n  mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {\n    updateUserFavoriteElement(input: $input) {\n      id\n      isFavorite\n    }\n  }\n": types.UpdateUserFavoriteElementDocument,
     "\n  mutation UpdateUserLikedWorkshopMutation(\n    $input: UpdateUserLikedWorkshopInput!\n  ) {\n    updateUserLikedWorkshop(input: $input) {\n      id\n      isLiked\n    }\n  }\n": types.UpdateUserLikedWorkshopMutationDocument,
+    "\n      mutation UpdateUserMutation($input: UpdateUserInput!) {\n        updateUser(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateUserMutationDocument,
     "\n      mutation UpdateWorkshopMutation($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateWorkshopMutationDocument,
     "\n  fragment WorkshopFields_Workshop on Workshop {\n    id\n    ...WorkshopPreviewItem_Workshop\n  }\n": types.WorkshopFields_WorkshopFragmentDoc,
     "\n  fragment CommunityPage_Element on Element {\n    id\n    ...ElementPreviewItem_Element\n  }\n": types.CommunityPage_ElementFragmentDoc,
     "\n  query ExplorePageQuery(\n    $userWorkshopsFilterInput: UserWorkshopsFilterInput\n    $elementsFilterInput: ElementsFilterInput\n    $take: Int!\n  ) {\n    me {\n      workshops(input: $userWorkshopsFilterInput, take: $take) {\n        ...WorkshopFields_Workshop\n      }\n    }\n    elements(filter: $elementsFilterInput, take: $take) {\n      element {\n        ...CommunityPage_Element\n      }\n    }\n  }\n": types.ExplorePageQueryDocument,
     "\n  query AccountPage_Query {\n    me {\n      ...AccountOptionsMenu_User\n      ...AccountSignedIn_User\n    }\n  }\n": types.AccountPage_QueryDocument,
     "\n  fragment AccountOptionsMenu_User on User {\n    id\n    name\n  }\n": types.AccountOptionsMenu_UserFragmentDoc,
-    "\n      mutation UpdateUserMutation($input: UpdateUserInput!) {\n        updateUser(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateUserMutationDocument,
-    "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n  }\n": types.AccountSignedIn_UserFragmentDoc,
+    "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n  }\n": types.AccountSignedIn_UserFragmentDoc,
     "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n  }\n": types.LibraryCreateCustomElement_QueryDocument,
     "\n  mutation UpdateElementMutation($input: UpdateElementInput!) {\n    updateElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateElementMutationDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      id\n    }\n  }\n": types.CreateElementMutationDocument,
@@ -144,6 +144,10 @@ export function graphql(source: "\n  mutation UpdateUserLikedWorkshopMutation(\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n      mutation UpdateUserMutation($input: UpdateUserInput!) {\n        updateUser(input: $input) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateUserMutation($input: UpdateUserInput!) {\n        updateUser(input: $input) {\n          id\n        }\n      }\n    "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n      mutation UpdateWorkshopMutation($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateWorkshopMutation($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n        }\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -168,11 +172,7 @@ export function graphql(source: "\n  fragment AccountOptionsMenu_User on User {\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n      mutation UpdateUserMutation($input: UpdateUserInput!) {\n        updateUser(input: $input) {\n          id\n        }\n      }\n    "): (typeof documents)["\n      mutation UpdateUserMutation($input: UpdateUserInput!) {\n        updateUser(input: $input) {\n          id\n        }\n      }\n    "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n  }\n"): (typeof documents)["\n  fragment AccountSignedIn_User on User {\n    id\n    name\n  }\n"];
+export function graphql(source: "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n  }\n"): (typeof documents)["\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
