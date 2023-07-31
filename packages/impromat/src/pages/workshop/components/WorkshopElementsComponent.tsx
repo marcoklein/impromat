@@ -18,6 +18,7 @@ const WorkshopElementsComponent_Workshop = graphql(`
     canEdit
     sections {
       id
+      name
       ...SectionElementsComponent_WorkshopSection
       ...WorkshopSectionComponent_WorkshopSection
     }
@@ -143,13 +144,15 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
           disabled={!reorderWorkshopElements}
           onIonItemReorder={(event) => onElementsReorder(event)}
         >
-          {sections.map((section) => (
+          {sections.map((section, index) => (
             <Fragment key={section.id}>
-              <WorkshopSectionComponent
-                workshopSectionFragment={section}
-                isReordering={reorderWorkshopElements}
-                {...workshopSectionHandlers}
-              ></WorkshopSectionComponent>
+              {!(index === 0 && !section.name) && (
+                <WorkshopSectionComponent
+                  workshopSectionFragment={section}
+                  isReordering={reorderWorkshopElements}
+                  {...workshopSectionHandlers}
+                ></WorkshopSectionComponent>
+              )}
               <SectionElementsComponent
                 workshopId={workshopId}
                 sectionFragment={section}

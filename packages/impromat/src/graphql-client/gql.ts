@@ -62,7 +62,7 @@ const documents = {
     "\n  mutation CreateWorkshopMutation($input: CreateWorkshopInput!) {\n    createWorkshop(input: $input) {\n      id\n    }\n  }\n": types.CreateWorkshopMutationDocument,
     "\n  fragment SectionElementsComponent_WorkshopSection on WorkshopSection {\n    id\n    name\n    isCollapsed\n    orderIndex\n    elements {\n      id\n      ...WorkshopElementItemComponent_WorkshopElement\n    }\n    workshop {\n      canEdit\n    }\n  }\n": types.SectionElementsComponent_WorkshopSectionFragmentDoc,
     "\n  fragment WorkshopElementItemComponent_WorkshopElement on WorkshopElement {\n    id\n    note\n    basedOn {\n      id\n      name\n      markdown\n    }\n    section {\n      workshop {\n        canEdit\n      }\n    }\n  }\n": types.WorkshopElementItemComponent_WorkshopElementFragmentDoc,
-    "\n  fragment WorkshopElementsComponent_Workshop on Workshop {\n    canEdit\n    sections {\n      id\n      ...SectionElementsComponent_WorkshopSection\n      ...WorkshopSectionComponent_WorkshopSection\n    }\n  }\n": types.WorkshopElementsComponent_WorkshopFragmentDoc,
+    "\n  fragment WorkshopElementsComponent_Workshop on Workshop {\n    canEdit\n    sections {\n      id\n      name\n      ...SectionElementsComponent_WorkshopSection\n      ...WorkshopSectionComponent_WorkshopSection\n    }\n  }\n": types.WorkshopElementsComponent_WorkshopFragmentDoc,
     "\n  fragment WorkshopPreviewItem_Workshop on Workshop {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n    name\n    description\n    canEdit\n    sections {\n      name\n      elements {\n        basedOn {\n          name\n        }\n      }\n    }\n    ...WorkshopInfoList_Workshop\n    ...WorkshopOptionsMenu_Workshop\n  }\n": types.WorkshopPreviewItem_WorkshopFragmentDoc,
     "\n  fragment WorkshopSectionComponent_WorkshopSection on WorkshopSection {\n    id\n    name\n    color\n    isCollapsed\n    elements {\n      id\n    }\n    workshop {\n      canEdit\n    }\n  }\n": types.WorkshopSectionComponent_WorkshopSectionFragmentDoc,
 };
@@ -280,7 +280,7 @@ export function graphql(source: "\n  fragment WorkshopElementItemComponent_Works
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment WorkshopElementsComponent_Workshop on Workshop {\n    canEdit\n    sections {\n      id\n      ...SectionElementsComponent_WorkshopSection\n      ...WorkshopSectionComponent_WorkshopSection\n    }\n  }\n"): (typeof documents)["\n  fragment WorkshopElementsComponent_Workshop on Workshop {\n    canEdit\n    sections {\n      id\n      ...SectionElementsComponent_WorkshopSection\n      ...WorkshopSectionComponent_WorkshopSection\n    }\n  }\n"];
+export function graphql(source: "\n  fragment WorkshopElementsComponent_Workshop on Workshop {\n    canEdit\n    sections {\n      id\n      name\n      ...SectionElementsComponent_WorkshopSection\n      ...WorkshopSectionComponent_WorkshopSection\n    }\n  }\n"): (typeof documents)["\n  fragment WorkshopElementsComponent_Workshop on Workshop {\n    canEdit\n    sections {\n      id\n      name\n      ...SectionElementsComponent_WorkshopSection\n      ...WorkshopSectionComponent_WorkshopSection\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
