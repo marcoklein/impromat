@@ -35,4 +35,10 @@ export class User extends BaseDto {
     description: 'Public display name of the user.',
   })
   name: Nullable<string>;
+
+  @Field(() => [String], {
+    description: 'Preferred language codes of the user.',
+    defaultValue: [],
+  })
+  languageCodes: string[];
 }

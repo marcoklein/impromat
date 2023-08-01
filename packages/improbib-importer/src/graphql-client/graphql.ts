@@ -393,7 +393,9 @@ export type UpdateUserFavoriteElementInput = {
 
 export type UpdateUserInput = {
   id: Scalars['ID'];
-  name: Scalars['String'];
+  /** Preferred languages of the user. E.g. de or en. */
+  languageCodes?: InputMaybe<Array<Scalars['String']>>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateUserLikedWorkshopInput = {
@@ -443,6 +445,8 @@ export type User = {
   elements: Array<Element>;
   favoriteElements: Array<UserFavoriteElement>;
   id: Scalars['ID'];
+  /** Preferred language codes of the user. */
+  languageCodes: Array<Scalars['String']>;
   likedWorkshops: Array<UserLikedWorkshop>;
   /** Public display name of the user. */
   name?: Maybe<Scalars['String']>;

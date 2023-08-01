@@ -39,7 +39,6 @@ const documents = {
     "\n  mutation AddWorkshop($input: CreateWorkshopInput!) {\n    createWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n": types.AddWorkshopDocument,
     "\n  mutation AddTestWorkshop {\n    createWorkshop(input: { name: \"test-workshop\" }) {\n      ...WorkshopFields\n    }\n  }\n": types.AddTestWorkshopDocument,
     "\n  mutation UpdateWorkshop($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n": types.UpdateWorkshopDocument,
-    "\n  mutation DuplicateWorkshop($input: DuplicateWorkshopInput!) {\n    duplicateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n": types.DuplicateWorkshopDocument,
 };
 
 /**
@@ -160,10 +159,6 @@ export function graphql(source: "\n  mutation AddTestWorkshop {\n    createWorks
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation UpdateWorkshop($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateWorkshop($input: UpdateWorkshopInput!) {\n    updateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation DuplicateWorkshop($input: DuplicateWorkshopInput!) {\n    duplicateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n"): (typeof documents)["\n  mutation DuplicateWorkshop($input: DuplicateWorkshopInput!) {\n    duplicateWorkshop(input: $input) {\n      ...WorkshopFields\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

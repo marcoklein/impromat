@@ -6,10 +6,14 @@ import { ElementSearchInput } from 'src/dtos/inputs/element-search-input';
 import { ElementSearchMatch } from 'src/dtos/types/element-search-result.dto';
 import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
 import { PrismaService } from './prisma.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class ElementSearchService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private userService: UserService,
+  ) {}
 
   async searchElements(
     userRequestId: string,
@@ -21,6 +25,9 @@ export class ElementSearchService {
       matches: ElementSearchMatch[];
     }[]
   > {
+    const user = await this.userService.findUserById(userRequestId);
+    if (!user) throw new Error('User not found');
+
     const ability = defineAbilityForUser(userRequestId);
 
     const elementsToSearch = await this.prismaService.element.findMany({
@@ -30,6 +37,13 @@ export class ElementSearchService {
           {
             snapshotParentId: null,
           },
+          user.languageCodes && user.languageCodes.length > 0
+            ? {
+                languageCode: {
+                  in: user.languageCodes,
+                },
+              }
+            : {},
           {
             OR: [
               {

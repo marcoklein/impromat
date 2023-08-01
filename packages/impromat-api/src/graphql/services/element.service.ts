@@ -17,12 +17,16 @@ import {
   ABILITY_ACTION_WRITE,
   defineAbilityForUser,
 } from '../abilities';
+import { UserService } from './user.service';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
 
 @Injectable()
 export class ElementService {
-  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+  constructor(
+    @Inject(PrismaService) private prismaService: PrismaService,
+    private userService: UserService,
+  ) {}
 
   /**
    * Finds the Element with given id.
@@ -40,8 +44,8 @@ export class ElementService {
     });
   }
 
-  findElements(
-    userRequestId: string,
+  async findElements(
+    userRequestId: string | undefined,
     input: {
       filter: ElementsFilterInput;
       orderBy: ElementsOrderByInput;
@@ -50,6 +54,9 @@ export class ElementService {
     },
   ) {
     const { filter, take, skip } = input;
+
+    const user = await this.userService.findUserById(userRequestId);
+    if (!user) throw new Error('User not found');
 
     const whereInput: Prisma.ElementWhereInput[] = [];
 
@@ -68,8 +75,13 @@ export class ElementService {
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
           {
             snapshotParentId: null,
-          },
-          {
+            ...(user.languageCodes && user.languageCodes.length > 0
+              ? {
+                  languageCode: {
+                    in: user.languageCodes,
+                  },
+                }
+              : {}),
             OR: whereInput,
           },
         ],

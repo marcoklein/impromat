@@ -38,7 +38,10 @@ export class TestAuthController {
       if (user) return user;
       // first time login
       return await tx.user.create({
-        data: { googleSubscriptionId: userGoogleId },
+        data: {
+          googleSubscriptionId: userGoogleId,
+          languageCodes: ['en', 'de'],
+        },
       });
     });
 

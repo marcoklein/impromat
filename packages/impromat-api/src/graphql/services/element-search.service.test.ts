@@ -1,23 +1,38 @@
 import { Test } from '@nestjs/testing';
-import { Element } from '@prisma/client';
+import { Element, User } from '@prisma/client';
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { ElementSearchService } from 'src/graphql/services/element-search.service';
 import {
   PrismaServiceMock,
   PrismaServiceMockProvider,
 } from 'test/prisma-service-mock';
 import { PrismaService } from './prisma.service';
+import { UserService } from './user.service';
 
 describe('ElementSearchService', () => {
   let service: ElementSearchService;
   let prismaService: PrismaServiceMock;
+  let userService: DeepMockProxy<UserService>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ElementSearchService, PrismaServiceMockProvider],
+      providers: [
+        ElementSearchService,
+        PrismaServiceMockProvider,
+        { provide: UserService, useValue: mockDeep(UserService) },
+      ],
     }).compile();
 
     service = moduleRef.get(ElementSearchService);
     prismaService = moduleRef.get(PrismaService);
+    userService = moduleRef.get(UserService);
+  });
+
+  beforeEach(() => {
+    userService.findUserById.mockResolvedValueOnce({
+      id: 'userId',
+      languageCodes: ['en', 'de'],
+    } as User);
   });
 
   it('should return all existing elements for empty text', async () => {

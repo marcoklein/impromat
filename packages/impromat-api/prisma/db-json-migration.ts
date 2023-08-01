@@ -86,7 +86,6 @@ async function main() {
     // const newImprobibIdsMapping: Record<string, string> = {};
     for (const [userGoogleId, user] of Object.entries(legacyUsers)) {
       const { createdAt, deleted, favoriteElementIds } = user;
-      // TODO connect favorite elements later
       const newUser = await prisma.user.create({
         data: {
           googleSubscriptionId: userGoogleId,

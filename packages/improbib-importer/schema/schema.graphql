@@ -103,6 +103,9 @@ type User {
 
   """Public display name of the user."""
   name: String
+
+  """Preferred language codes of the user."""
+  languageCodes: [String!]!
 }
 
 """Filter workshops of user."""
@@ -513,5 +516,8 @@ input UpdateElementInput {
 
 input UpdateUserInput {
   id: ID!
-  name: String!
+  name: String
+
+  """Preferred languages of the user. E.g. de or en."""
+  languageCodes: [String!]
 }

@@ -17,8 +17,8 @@ import { getFragmentData, graphql } from "../graphql-client";
 import { TeaserGrid } from "./community/TeaserGrid";
 import { WorkshopPreviewCard } from "./workshop/components/WorkshopPreviewCard";
 
-const ExplorePage_WorkshopFragment = graphql(`
-  fragment WorkshopFields_Workshop on Workshop {
+const CommunityPage_Workshop = graphql(`
+  fragment CommunityPage_Workshop on Workshop {
     id
     ...WorkshopPreviewItem_Workshop
   }
@@ -31,15 +31,15 @@ const CommunityPage_Element = graphql(`
   }
 `);
 
-const ExplorePageQuery = graphql(`
-  query ExplorePageQuery(
+const CommunityPageQuery = graphql(`
+  query CommunityPageQuery(
     $userWorkshopsFilterInput: UserWorkshopsFilterInput
     $elementsFilterInput: ElementsFilterInput
     $take: Int!
   ) {
     me {
       workshops(input: $userWorkshopsFilterInput, take: $take) {
-        ...WorkshopFields_Workshop
+        ...CommunityPage_Workshop
       }
     }
     elements(filter: $elementsFilterInput, take: $take) {
@@ -52,7 +52,7 @@ const ExplorePageQuery = graphql(`
 
 export const CommunityPage: React.FC = () => {
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
-    query: ExplorePageQuery,
+    query: CommunityPageQuery,
     variables: {
       userWorkshopsFilterInput: {
         liked: false,
@@ -69,7 +69,7 @@ export const CommunityPage: React.FC = () => {
   });
 
   const availableWorkshops = getFragmentData(
-    ExplorePage_WorkshopFragment,
+    CommunityPage_Workshop,
     workshopsQueryResult.data?.me.workshops,
   );
   const latestElements = getFragmentData(
