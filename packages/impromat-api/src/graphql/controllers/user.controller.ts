@@ -20,9 +20,8 @@ import { PrismaService } from 'src/graphql/services/prisma.service';
 import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
-import { UserService } from '../services/user.service';
 import { ElementService } from '../services/element.service';
-import { PaginationArgs } from 'src/dtos/args/pagination-args';
+import { UserService } from '../services/user.service';
 
 @Resolver(User)
 @UseGuards(GraphqlAuthGuard)
