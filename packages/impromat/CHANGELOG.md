@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.42.0
+
+### Minor Changes
+
+- 3769c01: Consider language codes of user in community elements page and elements search
+- 3769c01: Setting language codes for user in account page
+
+### Patch Changes
+
+- Updated dependencies [3769c01]
+- Updated dependencies [3769c01]
+  - impromat-api@0.16.0
+
 ## 0.41.1
 
 ### Patch Changes
