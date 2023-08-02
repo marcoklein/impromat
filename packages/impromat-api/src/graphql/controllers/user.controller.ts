@@ -20,6 +20,7 @@ import { PrismaService } from 'src/graphql/services/prisma.service';
 import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
+import { ElementService } from '../services/element.service';
 import { UserService } from '../services/user.service';
 
 @Resolver(User)
@@ -28,11 +29,21 @@ export class UserController {
   constructor(
     @Inject(PrismaService) private prismaService: PrismaService,
     private userService: UserService,
+    private elementService: ElementService,
   ) {}
 
   @ResolveField()
-  async elements(@Parent() user: User) {
-    return this.findUserById(user.id).elements();
+  async elements(
+    @Parent() user: User,
+    // TODO add pagination
+    //, @Args() { skip, take }: PaginationArgs
+  ) {
+    return this.elementService.findElements(user.id, {
+      filter: { isOwnerMe: true, isPublic: false },
+      orderBy: { notImplemented: true },
+      skip: 0,
+      take: 1000,
+    });
   }
 
   @ResolveField(() => [UserFavoriteElementDto])

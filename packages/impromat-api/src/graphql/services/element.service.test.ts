@@ -131,7 +131,22 @@ describe('ElementService', () => {
             accessibleBy(ability, ABILITY_ACTION_LIST).Element,
             {
               snapshotParentId: null,
-              languageCode: { in: ['en', 'de'] },
+            },
+            {
+              OR: [
+                { languageCode: { in: ['en', 'de'] } },
+                { languageCode: null },
+                { ownerId: userRequestId },
+                {
+                  userFavoriteElement: {
+                    some: {
+                      userId: userRequestId,
+                    },
+                  },
+                },
+              ],
+            },
+            {
               OR: [{ ownerId: userRequestId }, { visibility: 'PUBLIC' }],
             },
           ],

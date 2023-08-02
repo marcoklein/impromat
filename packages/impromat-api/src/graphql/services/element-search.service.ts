@@ -39,9 +39,27 @@ export class ElementSearchService {
           },
           user.languageCodes && user.languageCodes.length > 0
             ? {
-                languageCode: {
-                  in: user.languageCodes,
-                },
+                OR: [
+                  {
+                    languageCode: {
+                      in: user.languageCodes,
+                    },
+                  },
+                  {
+                    languageCode: null,
+                  },
+                  // ignore language for owned requests and liked elements
+                  {
+                    ownerId: userRequestId,
+                  },
+                  {
+                    userFavoriteElement: {
+                      some: {
+                        userId: userRequestId,
+                      },
+                    },
+                  },
+                ],
               }
             : {},
           {

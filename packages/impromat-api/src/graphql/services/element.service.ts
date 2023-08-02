@@ -47,6 +47,7 @@ export class ElementService {
   async findElements(
     userRequestId: string | undefined,
     input: {
+      // TODO Query elements is not called anywhere, thus refactor to a function that takes in the `where` statement
       filter: ElementsFilterInput;
       orderBy: ElementsOrderByInput;
       skip: number;
@@ -75,15 +76,33 @@ export class ElementService {
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
           {
             snapshotParentId: null,
-            ...(user.languageCodes && user.languageCodes.length > 0
-              ? {
-                  languageCode: {
-                    in: user.languageCodes,
-                  },
-                }
-              : {}),
-            OR: whereInput,
           },
+          user.languageCodes && user.languageCodes.length > 0
+            ? {
+                OR: [
+                  {
+                    languageCode: {
+                      in: user.languageCodes,
+                    },
+                  },
+                  {
+                    languageCode: null,
+                  },
+                  // ignore language for owned requests and liked elements
+                  {
+                    ownerId: userRequestId,
+                  },
+                  {
+                    userFavoriteElement: {
+                      some: {
+                        userId: userRequestId,
+                      },
+                    },
+                  },
+                ],
+              }
+            : {},
+          { OR: whereInput },
         ],
       },
       orderBy: [{ updatedAt: 'desc' }, { id: 'asc' }],
