@@ -20,8 +20,8 @@ import { AccountSignIn } from "./components/AccountSignIn";
 import { AccountSignedIn } from "./components/AccountSignedIn";
 
 const AccountPage_Query = graphql(`
-  query AccountPage_Query {
-    me {
+  query AccountPage_Query($userId: ID!) {
+    user(id: $userId) {
       ...AccountOptionsMenu_User
       ...AccountSignedIn_User
     }
@@ -30,17 +30,20 @@ const AccountPage_Query = graphql(`
 
 export const AccountPage: React.FC = () => {
   const { googleLoginHref, isGoogleLoginHrefFetching } = useGoogleLoginHref();
-  const { isLoggedIn } = useIsLoggedIn();
+  const { isLoggedIn, myUserId } = useIsLoggedIn();
 
   const isLoading = isGoogleLoginHrefFetching;
   const isNotLoggedIn = !isLoggedIn;
 
   const [queryResult, reexecuteQuery] = useQuery({
     query: AccountPage_Query,
-    pause: !isLoggedIn,
+    pause: !isLoggedIn || !myUserId,
+    variables: {
+      userId: myUserId!,
+    },
   });
 
-  const user = useMemo(() => queryResult.data?.me, [queryResult]);
+  const myUser = useMemo(() => queryResult.data?.user, [queryResult]);
 
   return (
     <IonPage>
@@ -51,9 +54,9 @@ export const AccountPage: React.FC = () => {
           </IonButtons>
           <IonTitle>Profile</IonTitle>
           <IonButtons slot="end">
-            {!!queryResult.data?.me && (
+            {!!queryResult.data?.user && (
               <AccountOptionsMenu
-                userFragment={queryResult.data.me}
+                userFragment={queryResult.data.user}
               ></AccountOptionsMenu>
             )}
           </IonButtons>
@@ -61,12 +64,12 @@ export const AccountPage: React.FC = () => {
       </IonHeader>
       <IonContent>
         {isLoading && <IonSpinner></IonSpinner>}
-        {!isLoading && isLoggedIn && user && (
+        {!isLoading && isLoggedIn && myUser && (
           <PageContentLoaderComponent
             queryResult={queryResult}
             reexecuteQuery={reexecuteQuery}
           >
-            <AccountSignedIn userFragment={user}></AccountSignedIn>
+            <AccountSignedIn userFragment={myUser}></AccountSignedIn>
           </PageContentLoaderComponent>
         )}
         {!isLoading &&

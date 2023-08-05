@@ -25,7 +25,10 @@ export class ElementSearchService {
       matches: ElementSearchMatch[];
     }[]
   > {
-    const user = await this.userService.findUserById(userRequestId);
+    const user = await this.userService.findUserById(
+      userRequestId,
+      userRequestId,
+    );
     if (!user) throw new Error('User not found');
 
     const ability = defineAbilityForUser(userRequestId);

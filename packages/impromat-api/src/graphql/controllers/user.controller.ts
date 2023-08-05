@@ -2,6 +2,7 @@ import { accessibleBy } from '@casl/prisma';
 import { Inject, UseGuards } from '@nestjs/common';
 import {
   Args,
+  ID,
   Int,
   Mutation,
   Parent,
@@ -107,13 +108,21 @@ export class UserController {
     });
   }
 
+  @Query(() => User, {})
+  async user(
+    @SessionUserId() sessionUserId: string,
+    @Args('id', { type: () => ID }) userId: string,
+  ): Promise<Omit<User, UserDtoComputedFields> | null | undefined> {
+    return this.userService.findUserById(sessionUserId, userId);
+  }
+
   @Query(() => User, {
     description: 'Get information about the current user.',
   })
   async me(
     @SessionUserId() userId: string,
-  ): Promise<Omit<User, UserDtoComputedFields> | null> {
-    return this.findUserById(userId);
+  ): Promise<Omit<User, UserDtoComputedFields> | null | undefined> {
+    return await this.userService.findUserById(userId, userId);
   }
 
   @Mutation(() => User)

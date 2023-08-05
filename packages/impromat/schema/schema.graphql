@@ -222,6 +222,7 @@ type Query {
   workshopElement(id: ID!): WorkshopElement!
   element(id: ID!): Element
   elements(skip: Int! = 0, take: Int! = 20, filter: ElementsFilterInput, orderBy: ElementsOrderByInput): [ElementQueryResult!]!
+  user(id: ID!): User!
 
   """Get information about the current user."""
   me: User!

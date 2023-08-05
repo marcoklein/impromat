@@ -7,6 +7,7 @@ import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
 import { VirtualCardGrid } from "../../../components/VirtualCardGrid";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { useIsLoggedIn } from "../../../hooks/use-is-logged-in";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
 import {
   routeLibraryCreateCustomElement,
@@ -25,8 +26,8 @@ const CustomElementsTab_WorkshopFragment = graphql(`
 `);
 
 const MyUser_Query = graphql(`
-  query CustomElementsTab_Query {
-    me {
+  query CustomElementsTab_Query($userId: ID!) {
+    user(id: $userId) {
       ...CustomElementsTab_WorkshopFragment
     }
   }
@@ -41,14 +42,19 @@ export const CustomElementsTabComponent: React.FC<ContainerProps> = ({
 }) => {
   const location = useLocation();
   const logger = useComponentLogger("CustomElementsTabComponent");
+  const { myUserId } = useIsLoggedIn();
 
   const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
   const [{ data, fetching: isFetching }] = useQuery({
     query: MyUser_Query,
     context,
+    pause: !myUserId,
+    variables: {
+      userId: myUserId!,
+    },
   });
 
-  const user = getFragmentData(CustomElementsTab_WorkshopFragment, data?.me);
+  const user = getFragmentData(CustomElementsTab_WorkshopFragment, data?.user);
   const customElements = user?.elements;
 
   useEffect(() => {

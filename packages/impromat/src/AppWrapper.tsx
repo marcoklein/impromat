@@ -54,12 +54,16 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
           updates: {
             Mutation: {
               updateUser(_result, _args, cache, _info) {
-                cache.invalidate("Query", "me");
+                const id = (_result.updateUser as any)?.id;
+                cache.invalidate({
+                  __typename: "User",
+                  id,
+                });
               },
               createElement(_result, _args, cache, _info) {
-                // invalidate me query because user elements are fetched via me.elements
-                // that might change in the future through (1) a custom MeUser type or (2) a User with id query.
-                cache.invalidate("Query", "me");
+                // TODO only invalidate user that has this element
+                // eg. cache. loop through users . elements ...
+                cache.invalidate("Query", "user");
               },
               updateElement(result, _args, cache, _info) {
                 // TODO define fields of updated element in query to fetch it with mutation
@@ -71,7 +75,8 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
               },
               createWorkshop(_result, _args, cache, _info) {
                 cache.invalidate("Query", "workshops");
-                cache.invalidate("Query", "me");
+                // TODO invalidate only "my user" or user with workshop
+                cache.invalidate("Query", "user");
               },
               updateWorkshop(_result, _args, cache, _info) {
                 // TODO only invalidate fields that are updated through args.input
@@ -83,11 +88,13 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
               },
               duplicateWorkshop(_result, _args, cache, _info) {
                 cache.invalidate("Query", "workshops");
-                cache.invalidate("Query", "me");
+                // TODO invalidate only "my user" or user with workshop
+                cache.invalidate("Query", "user");
               },
               deleteWorkshop(_result, _args, cache, _info) {
                 cache.invalidate("Query", "workshops");
-                cache.invalidate("Query", "me");
+                // TODO invalidate only "my user" or user with workshop
+                cache.invalidate("Query", "user");
               },
               updateWorkshopItemOrder(_result, _args, cache, _info) {
                 const id = (_result.updateWorkshopItemOrder as any)?.id;

@@ -23,6 +23,7 @@ import { useInputDialog } from "../../hooks/use-input-dialog";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
+import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -32,8 +33,11 @@ const WorkshopFields_WorkshopFragment = graphql(`
 `);
 
 const WorkshopsQuery = graphql(`
-  query WorkshopsQuery($userWorkshopsFilterInput: UserWorkshopsFilterInput) {
-    me {
+  query WorkshopsQuery(
+    $userId: ID!
+    $userWorkshopsFilterInput: UserWorkshopsFilterInput
+  ) {
+    user(id: $userId) {
       workshops(input: $userWorkshopsFilterInput) {
         ...WorkshopFields_Workshop
       }
@@ -53,6 +57,7 @@ export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
 
   const context = useMemo(() => ({ additionalTypenames: ["Workshop"] }), []);
+  const { myUserId } = useIsLoggedIn();
 
   const defaultFilterInput: Required<UserWorkshopsFilterInput> = useMemo(
     () => ({
@@ -79,7 +84,9 @@ export const WorkshopsPage: React.FC = () => {
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: WorkshopsQuery,
     context,
+    pause: !myUserId,
     variables: {
+      userId: myUserId!,
       userWorkshopsFilterInput: workshopsFilterInputQueryVariables,
     },
   });
@@ -87,7 +94,7 @@ export const WorkshopsPage: React.FC = () => {
 
   const availableWorkshops = getFragmentData(
     WorkshopFields_WorkshopFragment,
-    workshopsQueryResult.data?.me.workshops,
+    workshopsQueryResult.data?.user.workshops,
   );
 
   const history = useHistory();

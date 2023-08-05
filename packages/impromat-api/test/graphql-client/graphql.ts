@@ -296,6 +296,7 @@ export type Query = {
   me: User;
   searchElements: Array<ElementSearchResult>;
   tags: Array<ElementTag>;
+  user: User;
   workshop?: Maybe<Workshop>;
   workshopElement: WorkshopElement;
   /** Find workshops. */
@@ -327,6 +328,11 @@ export type QueryTagsArgs = {
   filter?: InputMaybe<ElementTagsFilterInput>;
   skip?: InputMaybe<Scalars['Float']>;
   take?: InputMaybe<Scalars['Float']>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID'];
 };
 
 
