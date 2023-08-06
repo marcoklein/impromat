@@ -22,6 +22,7 @@ import { AccountSignedIn } from "./components/AccountSignedIn";
 const AccountPage_Query = graphql(`
   query AccountPage_Query($userId: ID!) {
     user(id: $userId) {
+      id
       ...AccountOptionsMenu_User
       ...AccountSignedIn_User
     }

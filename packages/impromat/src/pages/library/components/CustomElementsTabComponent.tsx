@@ -28,6 +28,7 @@ const CustomElementsTab_WorkshopFragment = graphql(`
 const MyUser_Query = graphql(`
   query CustomElementsTab_Query($userId: ID!) {
     user(id: $userId) {
+      id
       ...CustomElementsTab_WorkshopFragment
     }
   }

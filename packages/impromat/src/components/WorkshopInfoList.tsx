@@ -16,6 +16,7 @@ const WorkshopInfoList_Workshop = graphql(`
     isOwnerMe
     isLiked
     owner {
+      id
       name
     }
   }

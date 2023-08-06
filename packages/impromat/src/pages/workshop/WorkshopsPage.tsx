@@ -24,6 +24,7 @@ import { usePersistedState } from "../../hooks/use-persisted-state";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
+import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -38,6 +39,7 @@ const WorkshopsQuery = graphql(`
     $userWorkshopsFilterInput: UserWorkshopsFilterInput
   ) {
     user(id: $userId) {
+      id
       workshops(input: $userWorkshopsFilterInput) {
         ...WorkshopFields_Workshop
       }
@@ -90,6 +92,12 @@ export const WorkshopsPage: React.FC = () => {
       userWorkshopsFilterInput: workshopsFilterInputQueryVariables,
     },
   });
+  useStateChangeLogger(myUserId, "myUserId", logger);
+  useStateChangeLogger(
+    workshopsQueryResult.fetching,
+    "workshopsQueryResult.fetching",
+    logger,
+  );
   const [, createWorkshopMutation] = useMutation(CreateWorkshopMutation);
 
   const availableWorkshops = getFragmentData(

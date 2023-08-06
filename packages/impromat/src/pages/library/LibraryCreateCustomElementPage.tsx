@@ -192,7 +192,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
         if (workshopId) {
           logger("Last section result=%o", workshopQueryResult);
           const lastSectionId =
-            workshopQueryResult.data?.workshop.sections.at(-1)?.id;
+            workshopQueryResult.data?.workshop?.sections.at(-1)?.id;
           if (!lastSectionId) {
             throw new Error("no last section");
           }

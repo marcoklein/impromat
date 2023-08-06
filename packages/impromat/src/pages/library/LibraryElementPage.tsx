@@ -51,6 +51,7 @@ const LibraryElement_Element = graphql(`
 const LibraryElementPage_Query = graphql(`
   fragment LibraryElementPage_Query on Query {
     user(id: $userId) {
+      id
       workshops(input: { owned: true }) {
         id
         name

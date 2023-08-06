@@ -44,7 +44,6 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
           },
           resolvers: {
             Query: {
-              // https://github.com/urql-graphql/urql/blob/main/exchanges/graphcache/src/extras/simplePagination.ts
               searchElements: simplePagination({
                 limitArgument: "take",
                 offsetArgument: "skip",
@@ -53,20 +52,11 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
           },
           updates: {
             Mutation: {
-              updateUser(_result, _args, cache, _info) {
-                const id = (_result.updateUser as any)?.id;
-                cache.invalidate({
-                  __typename: "User",
-                  id,
-                });
-              },
               createElement(_result, _args, cache, _info) {
-                // TODO only invalidate user that has this element
-                // eg. cache. loop through users . elements ...
-                cache.invalidate("Query", "user");
+                cache.invalidate("Query", "elements");
+                cache.invalidate("User", "elements");
               },
               updateElement(result, _args, cache, _info) {
-                // TODO define fields of updated element in query to fetch it with mutation
                 const id = (result.updateElement as any)?.id;
                 cache.invalidate({
                   __typename: "Element",
@@ -75,11 +65,9 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
               },
               createWorkshop(_result, _args, cache, _info) {
                 cache.invalidate("Query", "workshops");
-                // TODO invalidate only "my user" or user with workshop
-                cache.invalidate("Query", "user");
+                cache.invalidate("User", "workshops");
               },
               updateWorkshop(_result, _args, cache, _info) {
-                // TODO only invalidate fields that are updated through args.input
                 const id = (_result.updateWorkshop as any)?.id;
                 cache.invalidate({
                   __typename: "Workshop",
@@ -88,13 +76,11 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
               },
               duplicateWorkshop(_result, _args, cache, _info) {
                 cache.invalidate("Query", "workshops");
-                // TODO invalidate only "my user" or user with workshop
-                cache.invalidate("Query", "user");
+                cache.invalidate("User", "workshops");
               },
               deleteWorkshop(_result, _args, cache, _info) {
-                cache.invalidate("Query", "workshops");
-                // TODO invalidate only "my user" or user with workshop
-                cache.invalidate("Query", "user");
+                const id = (_result.deleteWorkshop as any)?.id;
+                cache.invalidate({ __typename: "Workshop", id });
               },
               updateWorkshopItemOrder(_result, _args, cache, _info) {
                 const id = (_result.updateWorkshopItemOrder as any)?.id;
