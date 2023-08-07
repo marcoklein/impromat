@@ -18,6 +18,7 @@ const SectionElementsComponent_WorkshopSection = graphql(`
       ...WorkshopElementItemComponent_WorkshopElement
     }
     workshop {
+      id
       canEdit
     }
   }

@@ -56,7 +56,10 @@ export class ElementService {
   ) {
     const { filter, take, skip } = input;
 
-    const user = await this.userService.findUserById(userRequestId);
+    const user = await this.userService.findUserById(
+      userRequestId,
+      userRequestId,
+    );
     if (!user) throw new Error('User not found');
 
     const whereInput: Prisma.ElementWhereInput[] = [];

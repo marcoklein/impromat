@@ -7,6 +7,13 @@ export function useUpdateUserMutation() {
       mutation UpdateUserMutation($input: UpdateUserInput!) {
         updateUser(input: $input) {
           id
+          name
+          languageCodes
+
+          createdAt
+          updatedAt
+          version
+          deleted
         }
       }
     `),

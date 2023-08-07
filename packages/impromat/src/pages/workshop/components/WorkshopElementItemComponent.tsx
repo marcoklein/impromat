@@ -18,7 +18,9 @@ const WorkshopElementItemComponent_WorkshopElement = graphql(`
       markdown
     }
     section {
+      id
       workshop {
+        id
         canEdit
       }
     }

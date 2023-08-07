@@ -22,9 +22,12 @@ const WorkshopPreviewItem_WorkshopFragment = graphql(`
     description
     canEdit
     sections {
+      id
       name
       elements {
+        id
         basedOn {
+          id
           name
         }
       }

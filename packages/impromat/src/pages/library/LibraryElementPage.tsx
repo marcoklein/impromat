@@ -14,6 +14,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { add } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useQuery } from "urql";
@@ -21,16 +22,16 @@ import { ElementComponent } from "../../components/ElementComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/local-storage-workshop-id";
 import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
 import { routeLibrary } from "./library-routes";
-import { add } from "ionicons/icons";
 
 const LibraryElementPageQuery = graphql(`
-  query LibraryElementQuery($id: ID!) {
-    element(id: $id) {
+  query LibraryElementQuery($userId: ID!, $elementId: ID!) {
+    element(id: $elementId) {
       ...LibraryElement_Element
     }
     ...LibraryElementPage_Query
@@ -49,7 +50,8 @@ const LibraryElement_Element = graphql(`
 
 const LibraryElementPage_Query = graphql(`
   fragment LibraryElementPage_Query on Query {
-    me {
+    user(id: $userId) {
+      id
       workshops(input: { owned: true }) {
         id
         name
@@ -65,6 +67,7 @@ export const LibraryElementPage: React.FC = () => {
   const { libraryPartId } = useParams<{
     libraryPartId: string;
   }>();
+  const { myUserId } = useIsLoggedIn();
   const logger = useComponentLogger("ImprobibElementPage");
   const workshopContextId = useMemo(
     () => localStorage.getItem(STORAGE_LAST_WORKSHOP_ID) ?? undefined,
@@ -75,8 +78,10 @@ export const LibraryElementPage: React.FC = () => {
 
   const [elementPageQueryResult, reexecuteElementPageQuery] = useQuery({
     query: LibraryElementPageQuery,
+    pause: !myUserId,
     variables: {
-      id: libraryPartId,
+      elementId: libraryPartId,
+      userId: myUserId!,
     },
   });
   const [, addToWorkshopMutation] = useUpdateWorkshopMutation();
@@ -92,16 +97,16 @@ export const LibraryElementPage: React.FC = () => {
   const [addToWorkshopSelectId, setAddToWorkshopSelectId] = useState<string>();
   useEffect(() => {
     setAddToWorkshopSelectId(
-      workshopContextId ?? workshops?.me.workshops.at(0)?.id ?? undefined,
+      workshopContextId ?? workshops?.user.workshops.at(0)?.id ?? undefined,
     );
-  }, [workshopContextId, workshops?.me.workshops]);
+  }, [workshopContextId, workshops?.user.workshops]);
 
   const history = useHistory();
 
   function addToWorkshop() {
     if (!element) return;
     if (!workshops) throw new Error("no workshops response");
-    const workshop = workshops.me.workshops.find(
+    const workshop = workshops.user.workshops.find(
       ({ id }) => id === addToWorkshopSelectId,
     );
     if (!workshop) throw new Error("invalid select id");
@@ -182,7 +187,7 @@ export const LibraryElementPage: React.FC = () => {
                 }}
                 placeholder="Select workshop"
               >
-                {workshops.me.workshops.map(({ id, name }) => (
+                {workshops.user.workshops.map(({ id, name }) => (
                   <IonSelectOption key={id} value={id}>
                     {name}
                   </IonSelectOption>

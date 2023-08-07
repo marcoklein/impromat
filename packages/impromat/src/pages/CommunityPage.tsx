@@ -33,14 +33,12 @@ const CommunityPage_Element = graphql(`
 
 const CommunityPageQuery = graphql(`
   query CommunityPageQuery(
-    $userWorkshopsFilterInput: UserWorkshopsFilterInput
+    $workshopsWhereInput: WorkshopsWhereInput
     $elementsFilterInput: ElementsFilterInput
     $take: Int!
   ) {
-    me {
-      workshops(input: $userWorkshopsFilterInput, take: $take) {
-        ...CommunityPage_Workshop
-      }
+    workshops(where: $workshopsWhereInput, take: $take) {
+      ...CommunityPage_Workshop
     }
     elements(filter: $elementsFilterInput, take: $take) {
       element {
@@ -54,11 +52,8 @@ export const CommunityPage: React.FC = () => {
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: CommunityPageQuery,
     variables: {
-      userWorkshopsFilterInput: {
-        liked: false,
-        owned: false,
-        isPublic: false,
-        isCommunity: true,
+      workshopsWhereInput: {
+        isListed: { equals: true },
       },
       elementsFilterInput: {
         isOwnerMe: false,
@@ -70,7 +65,7 @@ export const CommunityPage: React.FC = () => {
 
   const availableWorkshops = getFragmentData(
     CommunityPage_Workshop,
-    workshopsQueryResult.data?.me.workshops,
+    workshopsQueryResult.data?.workshops,
   );
   const latestElements = getFragmentData(
     CommunityPage_Element,
