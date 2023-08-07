@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.43.0
+
+### Minor Changes
+
+- 3d6e06c: Implement a user by id query and switch to it in the app
+
+### Patch Changes
+
+- Updated dependencies [3d6e06c]
+  - impromat-api@0.17.0
+
 ## 0.42.0
 
 ### Minor Changes
