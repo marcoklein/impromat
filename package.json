@@ -10,7 +10,7 @@
     ]
   },
   "devDependencies": {
-    "@changesets/cli": "^2.25.2"
+    "@changesets/cli": "^2.26.2"
   },
   "scripts": {
     "ci:version": "yarn changeset version && yarn install --mode=update-lockfile",

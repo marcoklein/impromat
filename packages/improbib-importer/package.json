@@ -13,7 +13,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/cli": "^5.0.0",
     "commander": "^11.0.0",
     "diff": "^5.1.0",
     "graphql": "^16.7.1",
