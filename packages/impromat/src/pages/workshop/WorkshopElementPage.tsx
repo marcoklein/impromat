@@ -49,6 +49,7 @@ const WorkshopElementPageQuery = graphql(`
       section {
         id
         workshop {
+          id
           canEdit
         }
       }
