@@ -1,22 +1,22 @@
+import { accessibleBy } from '@casl/prisma';
 import { Inject, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { randomUUID } from 'node:crypto';
+import { FindManyWorkshopsArgs } from 'src/dtos/args/find-many-workshops-args';
+import { DuplicateWorkshopInput } from 'src/dtos/inputs/duplicate-workshop-input';
 import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
 import { UpdateWorkshopSectionInput } from 'src/dtos/inputs/workshop-section-input';
 import {
   CreateWorkshopInput,
   UpdateWorkshopInput,
 } from '../../dtos/inputs/workshop.inputs';
-import { moveItemFromIndexToIndex } from './move-item-position';
-import { PrismaService } from './prisma.service';
-import { FindManyWorkshopsArgs } from 'src/dtos/args/find-many-workshops-args';
 import {
   ABILITY_ACTION_LIST,
   ABILITY_ACTION_READ,
   defineAbilityForUser,
 } from '../abilities';
-import { accessibleBy } from '@casl/prisma';
-import { DuplicateWorkshopInput } from 'src/dtos/inputs/duplicate-workshop-input';
-import { randomUUID } from 'node:crypto';
+import { moveItemFromIndexToIndex } from './move-item-position';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class WorkshopService {

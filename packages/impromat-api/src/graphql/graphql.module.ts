@@ -24,6 +24,8 @@ import { UserSessionService } from './services/user-session.service';
 import { WorkshopElementService } from './services/workshop-element.service';
 import { WorkshopService } from './services/workshop.service';
 import { UserService } from './services/user.service';
+import { ElementRecommendationService } from './services/element-recommendation.service';
+import { WorkshopRecommendationService } from './services/workshop-recommendation.service';
 
 @Module({
   imports: [
@@ -57,6 +59,8 @@ import { UserService } from './services/user.service';
     WorkshopElementService,
     ElementController,
     ElementSnapshotController,
+    ElementRecommendationService,
+    WorkshopRecommendationService,
     ElementService,
     ElementSnapshotService,
     UserController,

@@ -78,6 +78,7 @@ type Workshop {
   Convenience field to determine if the owner of the workshop is the logged in user.
   """
   isOwnerMe: Boolean
+  elementRecommendations: [Element!]!
 }
 
 type UserLikedWorkshop {
@@ -137,6 +138,7 @@ type Element {
   markdownShort: String
   tags: [ElementTag!]!
   usedBy: [WorkshopElement!]!
+  recommendations: [Element!]!
   languageCode: String
   sourceUrl: String
   sourceName: String

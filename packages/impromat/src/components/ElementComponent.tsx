@@ -3,9 +3,11 @@ import { globe } from "ionicons/icons";
 import ReactMarkdown from "react-markdown";
 import { NavLink } from "react-router-dom";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
+import { TeaserGrid } from "../pages/community/TeaserGrid";
 import { routeLibraryEditCustomElement } from "../pages/library/library-routes";
 import { COLOR_SHARED } from "../theme/theme-colors";
 import { CustomElementInfoItemComponent } from "./CustomElementInfoItemComponent";
+import { ElementPreviewCard } from "./ElementPreviewCard";
 import { InfoItemComponent } from "./InfoItemComponent";
 import { LicenseItemComponent } from "./LicenseItemComponent";
 import { TagsComponent } from "./TagsComponent";
@@ -32,6 +34,10 @@ const Element_ElementFragment = graphql(`
     licenseName
     licenseUrl
     visibility
+    recommendations {
+      id
+      ...ElementPreviewItem_Element
+    }
     owner {
       id
       name
@@ -97,6 +103,17 @@ export const ElementComponent: React.FC<ContainerProps> = ({
           </IonLabel>
         </IonItem>
       )}
+
+      <TeaserGrid
+        title="Similar Elements"
+        items={element.recommendations}
+        itemContent={(element) => (
+          <ElementPreviewCard
+            key={element.id}
+            elementFragment={element}
+          ></ElementPreviewCard>
+        )}
+      ></TeaserGrid>
     </>
   );
 };

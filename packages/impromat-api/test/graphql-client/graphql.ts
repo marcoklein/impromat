@@ -95,6 +95,7 @@ export type Element = {
   markdownShort?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   owner?: Maybe<User>;
+  recommendations: Array<Element>;
   /** Changes of the element. */
   snapshots: Array<ElementSnapshot>;
   sourceBaseUrl?: Maybe<Scalars['String']>;
@@ -511,6 +512,7 @@ export type Workshop = {
   createdAt: Scalars['DateTime'];
   deleted: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
+  elementRecommendations: Array<Element>;
   id: Scalars['ID'];
   /** True, if liked by the logged in user. Undefined, if there is no user logged in. */
   isLiked?: Maybe<Scalars['Boolean']>;
