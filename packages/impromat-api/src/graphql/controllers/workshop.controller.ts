@@ -20,11 +20,15 @@ import {
   CreateWorkshopInput,
   UpdateWorkshopInput,
 } from '../../dtos/inputs/workshop.inputs';
+import { WorkshopRecommendationService } from '../services/workshop-recommendation.service';
 import { WorkshopService } from '../services/workshop.service';
 
 @Resolver(Workshop)
 export class WorkshopController {
-  constructor(private workshopService: WorkshopService) {}
+  constructor(
+    private workshopService: WorkshopService,
+    private workshopRecommendationService: WorkshopRecommendationService,
+  ) {}
 
   @ResolveField(() => Boolean)
   async isLiked(
@@ -35,6 +39,19 @@ export class WorkshopController {
       .findWorkshopById(userSessionId, workshop.id)
       .userLikedWorkshops({ where: { userId: userSessionId } });
     return elementFavoriteRelations && elementFavoriteRelations.length > 0;
+  }
+
+  @ResolveField(() => [Element], {
+    description: 'Find recommended elements.',
+  })
+  async elementRecommendations(
+    @Parent() workshop: Workshop,
+    @SessionUserId() userId: string,
+  ) {
+    return await this.workshopRecommendationService.findElementRecommendations(
+      userId,
+      workshop.id,
+    );
   }
 
   @ResolveField(() => [WorkshopSection])

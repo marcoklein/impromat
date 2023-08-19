@@ -54,7 +54,7 @@ pageTest.describe("Workshop Elements Page", () => {
       // when
       await workshopElementPage.createAndGoto();
       // then
-      await expect(page.getByText("Based on")).toBeVisible();
+      await expect(page.getByText("Based on").last()).toBeVisible();
     },
   );
 });

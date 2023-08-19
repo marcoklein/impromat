@@ -46,6 +46,8 @@ import { routeLibrary } from "../library/library-routes";
 import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";
+import { TeaserGrid } from "../community/TeaserGrid";
+import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -66,6 +68,10 @@ const WorkshopPage_Workshop = graphql(`
         id
       }
     }
+    elementRecommendations {
+      id
+      ...ElementPreviewItem_Element
+    }
     ...WorkshopElementsComponent_Workshop
     ...WorkshopOptionsMenu_Workshop
   }
@@ -78,6 +84,11 @@ const WorkshopByIdQuery = graphql(`
     }
   }
 `);
+
+/**
+ * This feature toggle is used to enable/disable the similar elements feature.
+ */
+const WORKSHOP_SIMILAR_ELEMENTS_FEATURE_TOGGLE = false;
 
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
@@ -418,6 +429,20 @@ export const WorkshopPage: React.FC = () => {
                     }
                   ></WorkshopElementsComponent>
                 )}
+                {WORKSHOP_SIMILAR_ELEMENTS_FEATURE_TOGGLE &&
+                  workshop.elementRecommendations.length > 0 &&
+                  workshop.canEdit && (
+                    <TeaserGrid
+                      title="Elements that might match"
+                      items={workshop.elementRecommendations}
+                      itemContent={(element) => (
+                        <ElementPreviewCard
+                          key={element.id}
+                          elementFragment={element}
+                        ></ElementPreviewCard>
+                      )}
+                    ></TeaserGrid>
+                  )}
               </>
             )}
           </PageContentLoaderComponent>

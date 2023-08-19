@@ -1,10 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
+import { Element } from './element.dto';
 import { User } from './user.dto';
 import { WorkshopSection } from './workshop-section.dto';
 
-type WorkshopComputedFields = 'isLiked' | 'isOwnerMe';
+type WorkshopComputedFields =
+  | 'isLiked'
+  | 'isOwnerMe'
+  | 'elementRecommendations';
 type WorkshopRelations = 'owner' | 'sections';
 export type WorkshopOmittedFields = WorkshopRelations | WorkshopComputedFields;
 
@@ -54,4 +58,7 @@ export class Workshop extends BaseDto {
       'Convenience field to determine if the owner of the workshop is the logged in user.',
   })
   isOwnerMe: Nullable<boolean>;
+
+  @Field(() => [Element])
+  elementRecommendations: Element[];
 }

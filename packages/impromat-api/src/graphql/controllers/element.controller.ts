@@ -10,6 +10,7 @@ import {
 } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { ElementsQueryArgs } from 'src/dtos/args/elements-query-args';
+import { PaginationArgs } from 'src/dtos/args/pagination-args';
 import {
   CreateElementInput,
   UpdateElementInput,
@@ -24,16 +25,28 @@ import {
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
-import { ElementService } from '../services/element.service';
-import { PaginationArgs } from 'src/dtos/args/pagination-args';
+import { ElementRecommendationService } from '../services/element-recommendation.service';
 import { ElementSnapshotService } from '../services/element-snapshot.service';
+import { ElementService } from '../services/element.service';
 
 @Resolver(Element)
 export class ElementController {
   constructor(
     private userElementService: ElementService,
+    private elementRecommendationService: ElementRecommendationService,
     private elementSnapshotService: ElementSnapshotService,
   ) {}
+
+  @ResolveField(() => [Element])
+  async recommendations(
+    @Parent() element: Element,
+    @SessionUserId() userSessionId: string,
+  ) {
+    return this.elementRecommendationService.findRecommendations(
+      userSessionId,
+      element.id,
+    );
+  }
 
   @ResolveField(() => Boolean)
   async isFavorite(

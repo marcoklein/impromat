@@ -14,7 +14,8 @@ export type ElementOmittedFields =
   | 'isFavorite'
   | 'markdownShort'
   | 'snapshots'
-  | 'isOwnerMe';
+  | 'isOwnerMe'
+  | 'recommendations';
 
 @ObjectType()
 export class Element extends BaseDto {
@@ -36,6 +37,9 @@ export class Element extends BaseDto {
 
   @Field(() => [WorkshopElement])
   usedBy: WorkshopElement[];
+
+  @Field(() => [Element])
+  recommendations: Element[];
 
   @Field(() => String, { nullable: true })
   languageCode: Nullable<string>;
