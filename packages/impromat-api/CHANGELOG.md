@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.18.0
+
+### Minor Changes
+
+- 0de93e2: Add element recommendations and preview of similar elements
+
 ## 0.17.0
 
 ### Minor Changes
