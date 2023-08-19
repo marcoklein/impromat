@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.44.0
+
+### Minor Changes
+
+- 0de93e2: Add element recommendations and preview of similar elements
+
+### Patch Changes
+
+- Updated dependencies [0de93e2]
+  - impromat-api@0.18.0
+
 ## 0.43.0
 
 ### Minor Changes
