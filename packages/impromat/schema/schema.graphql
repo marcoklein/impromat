@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Predicted tag for an element."""
+type ElementPredictedTag {
+  """Name of the predicted tag."""
+  name: String!
+
+  """Reason for the predicted tag."""
+  reason: String!
+}
+
 type ElementTag {
   id: ID!
   createdAt: DateTime!
@@ -138,7 +147,6 @@ type Element {
   markdownShort: String
   tags: [ElementTag!]!
   usedBy: [WorkshopElement!]!
-  recommendations: [Element!]!
   languageCode: String
   sourceUrl: String
   sourceName: String
@@ -163,6 +171,12 @@ type Element {
 
   """Changes of the element."""
   snapshots(skip: Int! = 0, take: Int! = 20): [ElementSnapshot!]!
+  recommendations: [Element!]!
+
+  """
+  Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.
+  """
+  predictedLevelTags: [ElementPredictedTag!]
 }
 
 enum ElementVisibility {
@@ -476,6 +490,7 @@ input CreateElementInput {
   visibility: ElementVisibility! = PRIVATE
   orderIndex: Int
   tags: ElementTagsInput
+  predictLevelTags: [Boolean!]
 }
 
 input ElementTagsInput {
@@ -514,6 +529,7 @@ input UpdateElementInput {
   visibility: ElementVisibility = PRIVATE
   orderIndex: Int
   tags: ElementTagsInput
+  predictLevelTags: [Boolean!]
   id: ID!
 }
 

@@ -8,6 +8,7 @@ import { getExpressSessionRequestHandler } from './get-express-session-request-h
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({ credentials: true, origin: true });
+  app.enableShutdownHooks();
   app.use(getExpressSessionRequestHandler());
   await app.listen(environment.PORT);
   console.log(`Application is running on: ${await app.getUrl()}`);

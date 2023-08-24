@@ -21,11 +21,15 @@ import { IdInput } from './id-input';
 @InputType()
 export class ElementTagWhereInput {
   @Field(() => ID, { nullable: true })
+  @ValidateIf((o) => !o.name || o.id)
   @IsUUID(4)
-  id?: string | undefined;
+  @IsNotEmpty()
+  id: string;
 
   @Field(() => String, { nullable: true })
-  name?: string | undefined;
+  @ValidateIf((o) => !o.id || o.name)
+  @IsNotEmpty()
+  name: string;
 }
 
 @InputType()
@@ -34,12 +38,12 @@ export class ElementTagSetInput {
   @IsUUID(4)
   @ValidateIf((o) => !o.name || o.id)
   @IsNotEmpty()
-  id?: string | undefined;
+  id: string;
 
   @Field(() => String, { nullable: true })
   @ValidateIf((o) => !o.id || o.name)
   @IsNotEmpty()
-  name?: string | undefined;
+  name: string;
 }
 
 @InputType()
@@ -69,7 +73,6 @@ export class CreateElementInput {
   markdown: Nullable<string>;
 
   @Field(() => String, {
-    defaultValue: 'en',
     description: 'Language code (e.g. en, de) of the element.',
   })
   @Length(2)
@@ -98,7 +101,7 @@ export class CreateElementInput {
   })
   improbibIdentifier?: string | undefined;
 
-  @Field(() => ElementVisibility, { defaultValue: ElementVisibility.PRIVATE })
+  @Field(() => ElementVisibility)
   visibility: ElementVisibility;
 
   @Field(() => Int, { nullable: true })
@@ -106,6 +109,11 @@ export class CreateElementInput {
 
   @Field(() => ElementTagsInput, { nullable: true })
   tags: ElementTagsInput;
+
+  @Field(() => Boolean, {
+    nullable: true,
+  })
+  setPredictedLevelTags?: boolean;
 }
 
 @InputType()

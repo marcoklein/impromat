@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
+import { ElementPredictedTag } from './element-predicted-tag.dto';
 import { ElementTag } from './element-tag.dto';
 import { ElementVisibility } from './element-visibility.dto';
 import { User } from './user.dto';
@@ -15,6 +16,7 @@ export type ElementOmittedFields =
   | 'markdownShort'
   | 'snapshots'
   | 'isOwnerMe'
+  | 'predictedLevelTags'
   | 'recommendations';
 
 @ObjectType()
@@ -37,9 +39,6 @@ export class Element extends BaseDto {
 
   @Field(() => [WorkshopElement])
   usedBy: WorkshopElement[];
-
-  @Field(() => [Element])
-  recommendations: Element[];
 
   @Field(() => String, { nullable: true })
   languageCode: Nullable<string>;
@@ -88,6 +87,16 @@ export class Element extends BaseDto {
 
   @Field(() => [ElementSnapshot], { description: 'Changes of the element.' })
   snapshots: ElementSnapshot[];
+
+  @Field(() => [Element])
+  recommendations: Element[];
+
+  @Field(() => [ElementPredictedTag], {
+    description:
+      'Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.',
+    nullable: true,
+  })
+  predictedLevelTags: Nullable<ElementPredictedTag[]>;
 }
 
 @ObjectType()
