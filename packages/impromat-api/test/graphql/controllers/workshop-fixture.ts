@@ -35,6 +35,7 @@ export async function provideComplexTestWorkshopFixture(
     createElementMutation,
     {
       input: {
+        languageCode: 'en',
         name: 'custom-improv-game',
         markdown: 'custom improv test game to be shared in workshop',
         visibility: ElementVisibility.Private,

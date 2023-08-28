@@ -39,6 +39,8 @@ describe('Sharing Elements', () => {
     const createdElement = await api.graphqlRequest(createElementMutation, {
       input: {
         name: `unique-element-name-${randomUUID()}`,
+        languageCode: 'en',
+        visibility: ElementVisibility.Private,
       },
     });
     api.impersonateOtherActiveUser();
@@ -59,6 +61,7 @@ describe('Sharing Elements', () => {
     api.impersonateActiveUser();
     const createdElement = await api.graphqlRequest(createElementMutation, {
       input: {
+        languageCode: 'en',
         name: uniqueElementName,
         visibility: ElementVisibility.Public,
       },
@@ -79,6 +82,7 @@ describe('Sharing Elements', () => {
     api.impersonateActiveUser();
     const createdElement = await api.graphqlRequest(createElementMutation, {
       input: {
+        languageCode: 'en',
         name: uniqueElementName,
         visibility: ElementVisibility.Public,
       },
@@ -98,6 +102,7 @@ describe('Sharing Elements', () => {
     api.impersonateActiveUser();
     const createdElement = await api.graphqlRequest(createElementMutation, {
       input: {
+        languageCode: 'en',
         name: uniqueElementName,
         visibility: ElementVisibility.Public,
       },
@@ -135,6 +140,7 @@ describe('Sharing Elements', () => {
     api.impersonateActiveUser();
     const createdElement = await api.graphqlRequest(createElementMutation, {
       input: {
+        languageCode: 'en',
         name: uniqueElementName,
         visibility: ElementVisibility.Public,
       },
@@ -167,6 +173,7 @@ describe('Sharing Elements', () => {
     api.impersonateActiveUser();
     const createdElement = await api.graphqlRequest(createElementMutation, {
       input: {
+        languageCode: 'en',
         name: uniqueElementName,
         visibility: ElementVisibility.Public,
       },
