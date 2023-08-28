@@ -293,7 +293,7 @@ describe('ElementService', () => {
               },
             ],
           },
-        } as CreateElementInput;
+        } as unknown as CreateElementInput;
         // when, then
         await expect(
           service.createElement(userRequestId, createElementInputWithTags),

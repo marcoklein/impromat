@@ -5,5 +5,6 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     dir: "src",
+    outputFile: "junit-results.xml",
   },
 });

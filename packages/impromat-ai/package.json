@@ -14,7 +14,8 @@
   "scripts": {
     "start": "dotenv -c -- ts-node src/index.ts",
     "build": "tsc -b tsconfig.json",
-    "test": "jest",
+    "test": "yarn test:unit",
+    "test:unit": "jest",
     "clean": "rm -r build"
   },
   "dependencies": {
