@@ -10,7 +10,7 @@ describe("LevelPromptDe", () => {
 
   it("should parse a response with JSON", () => {
     // given
-    const response = `[{"level": "EXPERTEN", "reason": "test"}]`;
+    const response = `[{"level": "EXPERTEN", "reason": "test", "empfohlen": "JA"}]`;
     // when
     const result = prompt.parseResponse(response);
     // then
