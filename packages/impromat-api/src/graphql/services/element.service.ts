@@ -285,7 +285,7 @@ export class ElementService {
           improbibIdentifier: undefined,
           metadata: {
             // TODO clone metadata?
-            connect: existing.metadata.map((metadata) => ({
+            connect: existing.metadata?.map((metadata) => ({
               id: metadata.id,
             })),
           },
@@ -298,14 +298,14 @@ export class ElementService {
       },
     });
 
+    delete updateElementInput.setPredictedLevelTags;
     const updateElementQuery = this.prismaService.element.update({
       where: { id: updateElementInput.id },
       data: {
         ...updateElementInput,
         ...{
-          setPredictedLevelTags: undefined,
           metadata: {
-            connect: existing.metadata.map((metadata) => ({
+            connect: existing.metadata?.map((metadata) => ({
               id: metadata.id,
             })),
           },

@@ -490,7 +490,7 @@ input CreateElementInput {
   visibility: ElementVisibility!
   orderIndex: Int
   tags: ElementTagsInput
-  setPredictedLevelTags: [Boolean!]
+  setPredictedLevelTags: Boolean
 }
 
 input ElementTagsInput {
@@ -529,7 +529,7 @@ input UpdateElementInput {
   visibility: ElementVisibility
   orderIndex: Int
   tags: ElementTagsInput
-  setPredictedLevelTags: [Boolean!]
+  setPredictedLevelTags: Boolean
   id: ID!
 }
 
