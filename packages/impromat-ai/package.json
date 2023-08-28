@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "private": true,
   "main": "./build/lib/index.js",
-  "types": "./src/lib/index.ts",
+  "types": "./build/lib/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/lib/index.ts",
+      "types": "./build/lib/index.d.ts",
       "require": "./build/lib/index.js"
     }
   },

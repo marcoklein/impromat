@@ -28,18 +28,18 @@ export type CreateElementInput = {
   /** Set if the element was imported from improbib, a project that collects existing improv resources. */
   improbibIdentifier?: InputMaybe<Scalars['String']>;
   /** Language code (e.g. en, de) of the element. */
-  languageCode?: Scalars['String'];
+  languageCode: Scalars['String'];
   licenseName?: InputMaybe<Scalars['String']>;
   licenseUrl?: InputMaybe<Scalars['String']>;
   markdown?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   orderIndex?: InputMaybe<Scalars['Int']>;
-  predictLevelTags?: InputMaybe<Array<Scalars['Boolean']>>;
+  setPredictedLevelTags?: InputMaybe<Array<Scalars['Boolean']>>;
   sourceBaseUrl?: InputMaybe<Scalars['String']>;
   sourceName?: Scalars['String'];
   sourceUrl?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<ElementTagsInput>;
-  visibility?: ElementVisibility;
+  visibility: ElementVisibility;
 };
 
 export type CreateWorkshopElementInput = {
@@ -398,7 +398,7 @@ export type UpdateElementInput = {
   markdown?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   orderIndex?: InputMaybe<Scalars['Int']>;
-  predictLevelTags?: InputMaybe<Array<Scalars['Boolean']>>;
+  setPredictedLevelTags?: InputMaybe<Array<Scalars['Boolean']>>;
   sourceBaseUrl?: InputMaybe<Scalars['String']>;
   sourceName?: InputMaybe<Scalars['String']>;
   sourceUrl?: InputMaybe<Scalars['String']>;

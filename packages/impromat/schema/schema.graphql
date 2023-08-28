@@ -476,7 +476,7 @@ input CreateElementInput {
   markdown: String
 
   """Language code (e.g. en, de) of the element."""
-  languageCode: String! = "en"
+  languageCode: String!
   sourceUrl: String
   sourceName: String! = "impromat"
   sourceBaseUrl: String
@@ -487,10 +487,10 @@ input CreateElementInput {
   Set if the element was imported from improbib, a project that collects existing improv resources.
   """
   improbibIdentifier: String
-  visibility: ElementVisibility! = PRIVATE
+  visibility: ElementVisibility!
   orderIndex: Int
   tags: ElementTagsInput
-  predictLevelTags: [Boolean!]
+  setPredictedLevelTags: [Boolean!]
 }
 
 input ElementTagsInput {
@@ -515,7 +515,7 @@ input UpdateElementInput {
   markdown: String
 
   """Language code (e.g. en, de) of the element."""
-  languageCode: String = "en"
+  languageCode: String
   sourceUrl: String
   sourceName: String = "impromat"
   sourceBaseUrl: String
@@ -526,10 +526,10 @@ input UpdateElementInput {
   Set if the element was imported from improbib, a project that collects existing improv resources.
   """
   improbibIdentifier: String
-  visibility: ElementVisibility = PRIVATE
+  visibility: ElementVisibility
   orderIndex: Int
   tags: ElementTagsInput
-  predictLevelTags: [Boolean!]
+  setPredictedLevelTags: [Boolean!]
   id: ID!
 }
 

@@ -40,21 +40,25 @@ export class LevelPromptDe extends GamePromptWithTagsOutput {
   }
   parseResponse(response: string): TagOutput[] {
     let parsedResponse = null;
+    type responseType =
+      | [{ level: string; reason: string; empfohlen: string }]
+      | null
+      | undefined;
     if (response.includes("---")) {
       const splittedResponse = response.split("---")[1].trim();
-      parsedResponse = JSON.parse(splittedResponse) as [
-        { level: string; reason: string; empfohlen: string }
-      ];
+      parsedResponse = JSON.parse(splittedResponse) as responseType;
     } else {
-      parsedResponse = JSON.parse(response) as [
-        { level: string; reason: string; empfohlen: string }
-      ];
+      parsedResponse = JSON.parse(response) as responseType;
     }
     const levelMap: Record<string, string> = {
       ANFAENGER: "Anfänger",
       FORTGESCHRITTENE: "Fortgeschritten",
       EXPERTEN: "Experte",
     };
+
+    if (!parsedResponse) {
+      return [];
+    }
 
     const mappedResponse: TagOutput[] = parsedResponse
       .filter((response) => response.empfohlen === "JA")
