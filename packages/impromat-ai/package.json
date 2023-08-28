@@ -3,12 +3,12 @@
   "type": "commonjs",
   "version": "0.0.0",
   "private": true,
-  "main": "./build/lib/index.js",
-  "types": "./build/lib/index.d.ts",
+  "main": "./build/src/lib/index.js",
+  "types": "./build/src/lib/index.d.ts",
   "exports": {
     ".": {
-      "types": "./build/lib/index.d.ts",
-      "require": "./build/lib/index.js"
+      "types": "./build/src/lib/index.d.ts",
+      "require": "./build/src/lib/index.js"
     }
   },
   "scripts": {
