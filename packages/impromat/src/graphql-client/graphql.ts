@@ -398,7 +398,7 @@ export type UpdateElementInput = {
   markdown?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   orderIndex?: InputMaybe<Scalars['Int']>;
-  setPredictedLevelTags?: InputMaybe<Array<Scalars['Boolean']>>;
+  setPredictedLevelTags?: InputMaybe<Scalars['Boolean']>;
   sourceBaseUrl?: InputMaybe<Scalars['String']>;
   sourceName?: InputMaybe<Scalars['String']>;
   sourceUrl?: InputMaybe<Scalars['String']>;

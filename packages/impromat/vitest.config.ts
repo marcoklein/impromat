@@ -5,6 +5,6 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     dir: "src",
-    outputFile: "junit-results.xml",
+    outputFile: "vitest-junit-results.xml",
   },
 });
