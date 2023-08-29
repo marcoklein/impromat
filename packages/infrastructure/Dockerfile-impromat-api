@@ -7,9 +7,12 @@ WORKDIR /app
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn/ .yarn/
 COPY packages/impromat-api/package.json /app/packages/impromat-api/package.json
+COPY packages/impromat-ai/package.json /app/packages/impromat-ai/package.json
 COPY . .
-RUN yarn workspaces focus impromat-api
+RUN yarn install --immutable
 
+WORKDIR /app/packages/impromat-ai
+RUN yarn build
 
 WORKDIR /app/packages/impromat-api
 RUN yarn build

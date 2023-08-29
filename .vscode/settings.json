@@ -1,7 +1,7 @@
 {
   "files.exclude": {
-    "node_modules/": true,
-    "packages/": true
+    "node_modules/": true
+    // "packages/"
   },
   "search.exclude": {
     "**/.yarn": true,
@@ -9,5 +9,7 @@
   },
   "jest.autoRun": "off",
   "jest.jestCommandLine": "yarn test",
-  "jest.rootPath": ""
+  "jest.rootPath": "",
+  "monorepoWorkspace.folders.custom": ["packages/*"],
+  "editor.formatOnSave": true
 }

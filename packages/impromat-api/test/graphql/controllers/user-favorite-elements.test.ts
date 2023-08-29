@@ -5,6 +5,7 @@ import {
   initApiTestSession,
 } from '../../test-utils/init-api-test-session';
 import { createElementMutation } from './element-queries';
+import { ElementVisibility } from 'test/graphql-client/graphql';
 
 const updateUserFavoriteElementMutation = graphql(`
   mutation UpdateUserFavoriteElement($input: UpdateUserFavoriteElementInput!) {
@@ -45,6 +46,8 @@ describe('User Favorite Elements', () => {
       createElementMutation,
       {
         input: {
+          languageCode: 'en',
+          visibility: ElementVisibility.Private,
           name: 'my-improv-game',
           markdown: 'test element',
         },
@@ -74,6 +77,8 @@ describe('User Favorite Elements', () => {
       createElementMutation,
       {
         input: {
+          languageCode: 'en',
+          visibility: ElementVisibility.Private,
           name: 'my-improv-game',
           markdown: 'test element',
         },

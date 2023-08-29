@@ -10,6 +10,7 @@ import { subject } from '@casl/ability';
 import { accessibleBy } from '@casl/prisma';
 import { ElementVisibility, Prisma } from '@prisma/client';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
+import { ElementPredictedTag } from 'src/dtos/types/element-predicted-tag.dto';
 import { ElementsFilterInput } from 'test/graphql-client/graphql';
 import {
   ABILITY_ACTION_LIST,
@@ -17,6 +18,7 @@ import {
   ABILITY_ACTION_WRITE,
   defineAbilityForUser,
 } from '../abilities';
+import { ElementAIService } from './element-ai.service';
 import { UserService } from './user.service';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
@@ -25,8 +27,61 @@ const IMPROMAT_SOURCE_NAME = 'impromat';
 export class ElementService {
   constructor(
     @Inject(PrismaService) private prismaService: PrismaService,
+    private elementAiService: ElementAIService,
     private userService: UserService,
   ) {}
+
+  async findPredictedLevelTags(
+    userRequestId: string | undefined,
+    elementId: string,
+  ): Promise<ElementPredictedTag[] | undefined> {
+    // TODO create more fine grained permission for running the AI prediction
+    const ability = defineAbilityForUser(userRequestId);
+    const element = await this.prismaService.element.findFirstOrThrow({
+      where: {
+        AND: [accessibleBy(ability).Element, { id: elementId }],
+      },
+      include: {
+        tags: true,
+        metadata: {
+          where: { name: 'predictedLevelTags' },
+          take: 1,
+          orderBy: { updatedAt: 'desc' },
+        },
+      },
+    });
+
+    const metadata = element.metadata[0];
+    if (metadata) {
+      const value = metadata.value as {
+        prompt: string;
+        tags: { name: string; reason: string }[];
+      };
+      return value.tags;
+    }
+
+    const predictedTags = await this.elementAiService.predictLevelTags({
+      id: element.id,
+      languageCode: element.languageCode ?? '',
+      markdown: element.markdown ?? '',
+      name: element.name,
+      tags: element.tags.map((tag) => tag.name),
+    });
+    if (predictedTags) {
+      await this.prismaService.elementMetadata.create({
+        data: {
+          elementId: element.id,
+          name: 'predictedLevelTags',
+          value: {
+            prompt: predictedTags.prompt,
+            message: predictedTags.message,
+            tags: predictedTags.tags,
+          },
+        },
+      });
+    }
+    return predictedTags?.tags;
+  }
 
   /**
    * Finds the Element with given id.
@@ -130,6 +185,11 @@ export class ElementService {
       throw new Error('Unauthorized');
     }
 
+    if (createElementInput.setPredictedLevelTags) {
+      // TODO implement setting of predicted level tags on element creation
+      throw new Error('Not implemented yet');
+    }
+
     const tagsQuery = this.getCreateTagsInputQuery(createElementInput?.tags);
 
     return this.prismaService.element.create({
@@ -175,12 +235,34 @@ export class ElementService {
       },
       include: {
         tags: true,
+        metadata: true,
       },
     });
     if (!existing) throw new Error('Not existing or insufficient read rights.');
 
     if (!ability.can(ABILITY_ACTION_WRITE, subject('Element', existing))) {
       throw new Error('Write not permitted.');
+    }
+
+    let tagsConnectOrCreate: Prisma.ElementTagCreateOrConnectWithoutElementsInput[] =
+      [];
+    console.log(
+      'set predicted level tags',
+      updateElementInput.setPredictedLevelTags,
+    );
+    if (updateElementInput.setPredictedLevelTags) {
+      const predictedLevelTags = await this.findPredictedLevelTags(
+        userRequestId,
+        updateElementInput.id,
+      );
+      console.log('predicted level tags:', predictedLevelTags);
+      if (predictedLevelTags) {
+        tagsConnectOrCreate = predictedLevelTags.map((tag) => ({
+          create: { name: tag.name },
+          where: { name: tag.name },
+        }));
+        console.log('setting predicted level tags', tagsConnectOrCreate);
+      }
     }
 
     if (
@@ -190,6 +272,7 @@ export class ElementService {
       throw new Error('Cannot change visibility to private.');
     }
 
+    // TODO fix but of snapshot retrieval: user can only see its own snapshots (create an issue for that)
     const saveSnapshotQuery = this.prismaService.element.create({
       data: {
         ...existing,
@@ -200,6 +283,12 @@ export class ElementService {
           updatedAt: undefined,
           createdAt: undefined,
           improbibIdentifier: undefined,
+          metadata: {
+            // TODO clone metadata?
+            connect: existing.metadata?.map((metadata) => ({
+              id: metadata.id,
+            })),
+          },
           tags: {
             connect: existing.tags.map((existingTag) => ({
               id: existingTag.id,
@@ -209,9 +298,23 @@ export class ElementService {
       },
     });
 
+    delete updateElementInput.setPredictedLevelTags;
     const updateElementQuery = this.prismaService.element.update({
       where: { id: updateElementInput.id },
-      data: updateElementInput,
+      data: {
+        ...updateElementInput,
+        ...{
+          metadata: {
+            connect: existing.metadata?.map((metadata) => ({
+              id: metadata.id,
+            })),
+          },
+          tags: {
+            ...updateElementInput.tags,
+            ...{ connectOrCreate: tagsConnectOrCreate },
+          },
+        },
+      },
     });
 
     const [, updateResult] = await this.prismaService.$transaction([

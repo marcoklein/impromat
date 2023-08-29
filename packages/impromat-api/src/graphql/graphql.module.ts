@@ -26,6 +26,7 @@ import { WorkshopService } from './services/workshop.service';
 import { UserService } from './services/user.service';
 import { ElementRecommendationService } from './services/element-recommendation.service';
 import { WorkshopRecommendationService } from './services/workshop-recommendation.service';
+import { ElementAIService } from './services/element-ai.service';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { WorkshopRecommendationService } from './services/workshop-recommendatio
   controllers: [],
   providers: [
     PrismaService,
+    ElementAIService,
     UserFavoriteElementController,
     UserFavoriteElementsController,
     UserLikedWorkshopController,

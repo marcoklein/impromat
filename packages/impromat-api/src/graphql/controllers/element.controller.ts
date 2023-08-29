@@ -15,6 +15,7 @@ import {
   CreateElementInput,
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
+import { ElementPredictedTag } from 'src/dtos/types/element-predicted-tag.dto';
 import { ElementQueryResult } from 'src/dtos/types/element-query-result.dto';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import {
@@ -32,10 +33,21 @@ import { ElementService } from '../services/element.service';
 @Resolver(Element)
 export class ElementController {
   constructor(
-    private userElementService: ElementService,
+    private elementService: ElementService,
     private elementRecommendationService: ElementRecommendationService,
     private elementSnapshotService: ElementSnapshotService,
   ) {}
+
+  @ResolveField(() => [ElementPredictedTag])
+  async predictedLevelTags(
+    @Parent() element: Element,
+    @SessionUserId() userSessionId: string,
+  ) {
+    return this.elementService.findPredictedLevelTags(
+      userSessionId,
+      element.id,
+    );
+  }
 
   @ResolveField(() => [Element])
   async recommendations(
@@ -53,7 +65,7 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    const elementFavoriteRelations = await this.userElementService
+    const elementFavoriteRelations = await this.elementService
       .findElementById(userSessionId, element.id)
       .userFavoriteElement({
         where: {
@@ -74,7 +86,7 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.userElementService
+    return this.elementService
       .findElementById(userSessionId, element.id)
       .owner();
   }
@@ -86,7 +98,7 @@ export class ElementController {
     @SessionUserId() userSessionId: string,
   ) {
     if (userSessionId) {
-      const owner = await this.userElementService
+      const owner = await this.elementService
         .findElementById(userSessionId, element.id)
         .owner();
       if (owner) {
@@ -104,9 +116,8 @@ export class ElementController {
     @SessionUserId() userSessionId: string,
   ) {
     return (
-      this.userElementService
-        .findElementById(userSessionId, element.id)
-        .tags() ?? []
+      this.elementService.findElementById(userSessionId, element.id).tags() ??
+      []
     );
   }
 
@@ -115,7 +126,7 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.userElementService
+    return this.elementService
       .findElementById(userSessionId, element.id)
       .workshopElements();
   }
@@ -138,7 +149,7 @@ export class ElementController {
     @SessionUserId() userId: string,
     @Args('id', { type: () => ID }) id: string,
   ) {
-    return this.userElementService.findElementById(userId, id);
+    return this.elementService.findElementById(userId, id);
   }
 
   @Query(() => [ElementQueryResult])
@@ -146,7 +157,7 @@ export class ElementController {
     @Args() { filter, orderBy, skip, take }: ElementsQueryArgs,
     @SessionUserId() userId: string,
   ) {
-    const elements = await this.userElementService.findElements(userId, {
+    const elements = await this.elementService.findElements(userId, {
       filter: filter ?? { isOwnerMe: true, isPublic: true },
       orderBy: orderBy ?? { notImplemented: true },
       skip,
@@ -163,7 +174,7 @@ export class ElementController {
     createWorkshopInput: CreateElementInput,
     @SessionUserId() sessionUserId: string,
   ) {
-    return this.userElementService.createElement(
+    return this.elementService.createElement(
       sessionUserId,
       createWorkshopInput,
     );
@@ -174,7 +185,7 @@ export class ElementController {
     @Args('input') updateElementInput: UpdateElementInput,
     @SessionUserId() sessionUserId: string,
   ): Promise<Omit<Element, ElementOmittedFields> | null> {
-    return await this.userElementService.updateElement(
+    return await this.elementService.updateElement(
       sessionUserId,
       updateElementInput,
     );

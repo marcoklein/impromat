@@ -25,6 +25,7 @@ import {
 import { PrismaService } from './prisma.service';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { UserService } from './user.service';
+import { ElementAIService } from './element-ai.service';
 
 describe('ElementService', () => {
   let service: ElementService;
@@ -35,6 +36,7 @@ describe('ElementService', () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         ElementService,
+        { provide: ElementAIService, useValue: {} },
         PrismaServiceMockProvider,
         { provide: UserService, useValue: mockDeep(UserService) },
       ],
@@ -293,7 +295,7 @@ describe('ElementService', () => {
               },
             ],
           },
-        } as CreateElementInput;
+        } as unknown as CreateElementInput;
         // when, then
         await expect(
           service.createElement(userRequestId, createElementInputWithTags),
@@ -402,6 +404,12 @@ describe('ElementService', () => {
       await service.updateElement(userRequestId, updateInput);
       // then
       expect(createSnapshotElementMock.mock.calls[0][0].data).toEqual({
+        id: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
+        metadata: {
+          connect: undefined,
+        },
         ownerId: 'test-user',
         visibility: 'PRIVATE',
         snapshotParentId: 'test-element',
@@ -419,7 +427,15 @@ describe('ElementService', () => {
         where: {
           id: 'test-element',
         },
-        data: updateInput,
+        data: {
+          ...updateInput,
+          metadata: {
+            connect: undefined,
+          },
+          tags: {
+            connectOrCreate: [],
+          },
+        },
       });
       expect(updateTransaction.mock.calls).toHaveLength(1);
     });

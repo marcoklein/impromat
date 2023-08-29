@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Predicted tag for an element."""
+type ElementPredictedTag {
+  """Name of the predicted tag."""
+  name: String!
+
+  """Reason for the predicted tag."""
+  reason: String!
+}
+
 type ElementTag {
   id: ID!
   createdAt: DateTime!
@@ -138,7 +147,6 @@ type Element {
   markdownShort: String
   tags: [ElementTag!]!
   usedBy: [WorkshopElement!]!
-  recommendations: [Element!]!
   languageCode: String
   sourceUrl: String
   sourceName: String
@@ -163,6 +171,12 @@ type Element {
 
   """Changes of the element."""
   snapshots(skip: Int! = 0, take: Int! = 20): [ElementSnapshot!]!
+  recommendations: [Element!]!
+
+  """
+  Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.
+  """
+  predictedLevelTags: [ElementPredictedTag!]
 }
 
 enum ElementVisibility {
@@ -462,7 +476,7 @@ input CreateElementInput {
   markdown: String
 
   """Language code (e.g. en, de) of the element."""
-  languageCode: String! = "en"
+  languageCode: String!
   sourceUrl: String
   sourceName: String! = "impromat"
   sourceBaseUrl: String
@@ -473,9 +487,10 @@ input CreateElementInput {
   Set if the element was imported from improbib, a project that collects existing improv resources.
   """
   improbibIdentifier: String
-  visibility: ElementVisibility! = PRIVATE
+  visibility: ElementVisibility!
   orderIndex: Int
   tags: ElementTagsInput
+  setPredictedLevelTags: Boolean
 }
 
 input ElementTagsInput {
@@ -500,7 +515,7 @@ input UpdateElementInput {
   markdown: String
 
   """Language code (e.g. en, de) of the element."""
-  languageCode: String = "en"
+  languageCode: String
   sourceUrl: String
   sourceName: String = "impromat"
   sourceBaseUrl: String
@@ -511,9 +526,10 @@ input UpdateElementInput {
   Set if the element was imported from improbib, a project that collects existing improv resources.
   """
   improbibIdentifier: String
-  visibility: ElementVisibility = PRIVATE
+  visibility: ElementVisibility
   orderIndex: Int
   tags: ElementTagsInput
+  setPredictedLevelTags: Boolean
   id: ID!
 }
 
