@@ -1,4 +1,7 @@
-import { AddWorkshopMutation } from 'test/graphql-client/graphql';
+import {
+  AddWorkshopMutation,
+  ElementVisibility,
+} from 'test/graphql-client/graphql';
 import {
   ApiTestSession,
   initApiTestSession,
@@ -24,6 +27,8 @@ describe('Workshop Elements', () => {
   beforeAll(async () => {
     const response = await api.graphqlRequest(createElementMutation, {
       input: {
+        languageCode: 'en',
+        visibility: ElementVisibility.Private,
         name: 'my-improv-game',
         markdown: 'test element',
       },

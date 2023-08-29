@@ -1,3 +1,4 @@
+import { ElementVisibility } from 'test/graphql-client/graphql';
 import { UUID4_REGEX } from 'test/test-utils/uuid4-regex';
 import {
   ApiTestSession,
@@ -20,6 +21,8 @@ describe('User Elements', () => {
     // when
     const response = await api.graphqlRequest(createElementMutation, {
       input: {
+        languageCode: 'en',
+        visibility: ElementVisibility.Private,
         name: 'my-improv-game',
         markdown: 'test element',
       },
