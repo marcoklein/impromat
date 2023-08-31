@@ -34,32 +34,18 @@ export class ElementTagWhereInput {
 
 @InputType()
 export class ElementTagSetInput {
-  @Field(() => ID, { nullable: true })
-  @IsUUID(4)
-  @ValidateIf((o) => !o.name || o.id)
-  @IsNotEmpty()
-  id: string;
-
-  @Field(() => String, { nullable: true })
-  @ValidateIf((o) => !o.id || o.name)
+  @Field(() => String)
   @IsNotEmpty()
   name: string;
 }
 
 @InputType()
 export class ElementTagsInput {
-  @Field(() => [ElementTagWhereInput], { nullable: true })
-  @ValidateIf((o) => !o.set || o.connect)
-  @IsNotEmpty()
-  connect: ElementTagWhereInput[] | undefined;
-
   @Field(() => [ElementTagSetInput], {
-    nullable: true,
     description: 'Defines all tags of the element.',
   })
-  @ValidateIf((o) => !o.connect || o.set)
   @IsNotEmpty()
-  set: ElementTagSetInput[] | undefined;
+  set: ElementTagSetInput[];
 }
 
 @InputType()

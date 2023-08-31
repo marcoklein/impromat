@@ -190,6 +190,9 @@ describe('ElementService', () => {
           ...createElementInput,
           sourceName: 'impromat',
           ownerId: userRequestId,
+          tags: {
+            connectOrCreate: undefined,
+          },
         },
       });
     });
@@ -209,15 +212,14 @@ describe('ElementService', () => {
         const createElementInputWithTags = {
           name: 'test-element-name',
           tags: {
-            connect: [
+            set: [
               {
                 name: 'first-tag',
               },
               {
-                id: 'second-tag-id',
+                name: 'second-tag',
               },
               {
-                id: 'last-tag-id',
                 name: 'last-tag',
               },
             ],
@@ -227,16 +229,30 @@ describe('ElementService', () => {
         await service.createElement(userRequestId, createElementInputWithTags);
         // then
         expect(createMock.mock.calls[0][0].data.tags).toEqual({
-          connect: [
+          connectOrCreate: [
             {
-              name: 'first-tag',
+              create: {
+                name: 'first-tag',
+              },
+              where: {
+                name: 'first-tag',
+              },
             },
             {
-              id: 'second-tag-id',
+              create: {
+                name: 'second-tag',
+              },
+              where: {
+                name: 'second-tag',
+              },
             },
             {
-              id: 'last-tag-id',
-              name: 'last-tag',
+              create: {
+                name: 'last-tag',
+              },
+              where: {
+                name: 'last-tag',
+              },
             },
           ],
         });
@@ -252,10 +268,9 @@ describe('ElementService', () => {
                 name: 'first-tag',
               },
               {
-                id: 'second-tag-id',
+                name: 'second-tag',
               },
               {
-                id: 'last-tag-id',
                 name: 'last-tag',
               },
             ],
@@ -271,60 +286,15 @@ describe('ElementService', () => {
               where: { name: 'first-tag' },
             },
             {
-              create: { name: 'last-tag' },
-              where: { id: 'last-tag-id', name: 'last-tag' },
+              create: { name: 'second-tag' },
+              where: { name: 'second-tag' },
             },
-          ],
-          connect: [
             {
-              id: 'second-tag-id',
+              create: { name: 'last-tag' },
+              where: { name: 'last-tag' },
             },
           ],
         });
-      });
-
-      it('should throw if set is called without any arguments', async () => {
-        // given
-        const createElementInputWithTags = {
-          name: 'test-element-name',
-          tags: {
-            set: [
-              {
-                name: undefined,
-                id: undefined,
-              },
-            ],
-          },
-        } as unknown as CreateElementInput;
-        // when, then
-        await expect(
-          service.createElement(userRequestId, createElementInputWithTags),
-        ).rejects.toThrowError('Name and id undefined');
-      });
-
-      it('should not allow "connect" and "set" call for element tags', async () => {
-        // given
-        const createElementInputWithTags = {
-          name: 'test-element-name',
-          tags: {
-            set: [
-              {
-                name: 'first-tag',
-              },
-            ],
-            connect: [
-              {
-                id: 'test',
-              },
-            ],
-          },
-        } as CreateElementInput;
-        // when, then
-        await expect(
-          service.createElement(userRequestId, createElementInputWithTags),
-        ).rejects.toThrowError(
-          'Specify either "connect" or "set" for tags input.',
-        );
       });
     });
   });
