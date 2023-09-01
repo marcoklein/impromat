@@ -28,17 +28,18 @@ export type CreateElementInput = {
   /** Set if the element was imported from improbib, a project that collects existing improv resources. */
   improbibIdentifier?: InputMaybe<Scalars['String']>;
   /** Language code (e.g. en, de) of the element. */
-  languageCode?: Scalars['String'];
+  languageCode: Scalars['String'];
   licenseName?: InputMaybe<Scalars['String']>;
   licenseUrl?: InputMaybe<Scalars['String']>;
   markdown?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   orderIndex?: InputMaybe<Scalars['Int']>;
+  setPredictedLevelTags?: InputMaybe<Scalars['Boolean']>;
   sourceBaseUrl?: InputMaybe<Scalars['String']>;
   sourceName?: Scalars['String'];
   sourceUrl?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<ElementTagsInput>;
-  visibility?: ElementVisibility;
+  visibility: ElementVisibility;
 };
 
 export type CreateWorkshopElementInput = {
@@ -95,6 +96,8 @@ export type Element = {
   markdownShort?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   owner?: Maybe<User>;
+  /** Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed. */
+  predictedLevelTags?: Maybe<Array<ElementPredictedTag>>;
   recommendations: Array<Element>;
   /** Changes of the element. */
   snapshots: Array<ElementSnapshot>;
@@ -112,6 +115,15 @@ export type Element = {
 export type ElementSnapshotsArgs = {
   skip?: Scalars['Int'];
   take?: Scalars['Int'];
+};
+
+/** Predicted tag for an element. */
+export type ElementPredictedTag = {
+  __typename?: 'ElementPredictedTag';
+  /** Name of the predicted tag. */
+  name: Scalars['String'];
+  /** Reason for the predicted tag. */
+  reason: Scalars['String'];
 };
 
 export type ElementQueryResult = {
@@ -148,6 +160,8 @@ export type ElementSnapshot = {
   /** Element of snapshot. */
   element: Element;
   id: Scalars['ID'];
+  /** Element this snapshot was created of. */
+  parent: Element;
   /** User that created the snapshot. */
   user?: Maybe<User>;
 };
@@ -163,13 +177,7 @@ export type ElementTag = {
 };
 
 export type ElementTagSetInput = {
-  id?: InputMaybe<Scalars['ID']>;
-  name?: InputMaybe<Scalars['String']>;
-};
-
-export type ElementTagWhereInput = {
-  id?: InputMaybe<Scalars['ID']>;
-  name?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 /** Filter tags of elements. */
@@ -178,9 +186,8 @@ export type ElementTagsFilterInput = {
 };
 
 export type ElementTagsInput = {
-  connect?: InputMaybe<Array<ElementTagWhereInput>>;
   /** Defines all tags of the element. */
-  set?: InputMaybe<Array<ElementTagSetInput>>;
+  set: Array<ElementTagSetInput>;
 };
 
 export enum ElementVisibility {
@@ -386,6 +393,7 @@ export type UpdateElementInput = {
   markdown?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   orderIndex?: InputMaybe<Scalars['Int']>;
+  setPredictedLevelTags?: InputMaybe<Scalars['Boolean']>;
   sourceBaseUrl?: InputMaybe<Scalars['String']>;
   sourceName?: InputMaybe<Scalars['String']>;
   sourceUrl?: InputMaybe<Scalars['String']>;

@@ -25,7 +25,7 @@ import {
   defineAbilityForUser,
 } from '../abilities';
 import { ElementAIService } from './element-ai.service';
-import { transformImprowikiDeTags } from './element-tag-mappings';
+import { transformTagNames } from './element-tag-mappings';
 import { UserService } from './user.service';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
@@ -233,9 +233,6 @@ export class ElementService {
     if (!userRequestId || ability.cannot('write', 'Element')) {
       throw new Error('Unauthorized');
     }
-    if (updateElementInput.tags?.set) {
-      throw new Error('Not implemented yet');
-    }
     const existing = await this.prismaService.element.findFirst({
       where: {
         AND: [
@@ -272,7 +269,6 @@ export class ElementService {
       updateElementInput.setPredictedLevelTags ?? false,
       updateElementInput.id,
     );
-    const saveSnapshotQuery = this.createSnapshotQuery(userRequestId, existing);
     const languageCode =
       updateElementInput.languageCode ?? existing.languageCode ?? undefined;
     const tagsSetQuery = this.createTagsSetQuery(
@@ -282,6 +278,39 @@ export class ElementService {
     );
 
     delete updateElementInput.setPredictedLevelTags;
+
+    const fieldsHaveChanged =
+      (updateElementInput.name !== undefined &&
+        updateElementInput.name !== existing.name) ||
+      (updateElementInput.markdown !== undefined &&
+        updateElementInput.markdown !== existing.markdown) ||
+      (updateElementInput.languageCode !== undefined &&
+        updateElementInput.languageCode !== existing.languageCode) ||
+      (updateElementInput.sourceName !== undefined &&
+        updateElementInput.sourceName !== existing.sourceName) ||
+      (updateElementInput.sourceUrl !== undefined &&
+        updateElementInput.sourceUrl !== existing.sourceUrl) ||
+      (updateElementInput.sourceBaseUrl !== undefined &&
+        updateElementInput.sourceBaseUrl !== existing.sourceBaseUrl) ||
+      (updateElementInput.licenseName !== undefined &&
+        updateElementInput.licenseName !== existing.licenseName) ||
+      (updateElementInput.licenseUrl !== undefined &&
+        updateElementInput.licenseUrl !== existing.licenseUrl) ||
+      (updateElementInput.visibility !== undefined &&
+        updateElementInput.visibility !== existing.visibility);
+
+    const tagsHaveChanged =
+      tagsSetQuery?.length !== existing.tags?.length ||
+      tagsSetQuery?.some(
+        (tag) =>
+          !existing.tags?.some((existingTag) => existingTag.name === tag.name),
+      );
+
+    if (!fieldsHaveChanged && !tagsHaveChanged) {
+      return existing;
+    }
+
+    const saveSnapshotQuery = this.createSnapshotQuery(userRequestId, existing);
     const updateElementQuery = this.prismaService.element.update({
       where: { id: updateElementInput.id },
       data: {
@@ -293,8 +322,14 @@ export class ElementService {
             })),
           },
           tags: {
-            set: tagsSetQuery,
-            ...{ connectOrCreate: predictedTagsConnectOrCreate },
+            set: [], // ensure tags are removed, so connectOrCreate creates missing tags
+            connectOrCreate: [
+              ...(tagsSetQuery?.map((tag) => ({
+                create: { name: tag.name },
+                where: { name: tag.name },
+              })) ?? []),
+              ...predictedTagsConnectOrCreate,
+            ],
           },
         },
       },
@@ -352,15 +387,11 @@ export class ElementService {
     if (elementTagsInput === undefined) return undefined;
     const languageCode =
       inputLanguageCode ?? existing?.languageCode ?? undefined;
-    const tagNames =
-      elementTagsInput.set.map((tag) => tag.name) ??
-      existing?.tags.map((tag) => tag.name) ??
-      [];
-    // const tagsSetQuery: Prisma.ElementTagWhereUniqueInput[] = tagNames
+    const tagNames = elementTagsInput.set.map((tag) => tag.name);
     const tagsSetQuery = tagNames
       .flatMap(
         (tagName) =>
-          transformImprowikiDeTags([tagName], languageCode)?.tags ?? [tagName],
+          transformTagNames([tagName], languageCode)?.tags ?? [tagName],
       )
       .map((tagName) => ({ name: tagName }));
     return tagsSetQuery;

@@ -196,6 +196,9 @@ type ElementSnapshot {
 
   """Element of snapshot."""
   element: Element!
+
+  """Element this snapshot was created of."""
+  parent: Element!
 }
 
 type ElementSearchMatch {
@@ -494,20 +497,12 @@ input CreateElementInput {
 }
 
 input ElementTagsInput {
-  connect: [ElementTagWhereInput!]
-
   """Defines all tags of the element."""
-  set: [ElementTagSetInput!]
-}
-
-input ElementTagWhereInput {
-  id: ID
-  name: String
+  set: [ElementTagSetInput!]!
 }
 
 input ElementTagSetInput {
-  id: ID
-  name: String
+  name: String!
 }
 
 input UpdateElementInput {

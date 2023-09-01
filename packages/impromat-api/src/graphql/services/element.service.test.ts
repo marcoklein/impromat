@@ -301,9 +301,7 @@ describe('ElementService', () => {
 
   describe('updateElement', () => {
     // given
-    let updateInput: UpdateElementInput = {
-      id: 'test-element',
-    };
+    let updateInput: UpdateElementInput;
     let existingMock: jest.SpyInstance<
       unknown,
       Parameters<typeof prismaService.element.findFirst>
@@ -322,13 +320,20 @@ describe('ElementService', () => {
     >;
     beforeEach(() => {
       // given default mocks
+      updateInput = {
+        id: 'test-element',
+        name: 'new-name',
+      };
       existingMock = jest
         .spyOn(prismaService.element, 'findFirst')
         .mockResolvedValue({
           id: 'test-element',
           ownerId: 'test-user',
           visibility: 'PRIVATE',
-          tags: [],
+          tags: [
+            { id: 'tag1-id', name: 'tag1' },
+            { id: 'tag2-id', name: 'tag2' },
+          ],
         } as Partial<PrismaElement> as PrismaElement);
       createSnapshotElementMock = jest
         .spyOn(prismaService.element, 'create')
@@ -366,11 +371,12 @@ describe('ElementService', () => {
     });
 
     it('should create a snapshot element', async () => {
-      // when
+      // given beforeEach
       updateInput = {
         id: 'test-element',
         improbibIdentifier: 'improbib-identifier',
       };
+      // when
       await service.updateElement(userRequestId, updateInput);
       // then
       expect(createSnapshotElementMock.mock.calls[0][0].data).toEqual({
@@ -385,8 +391,20 @@ describe('ElementService', () => {
         snapshotParentId: 'test-element',
         improbibIdentifier: undefined,
         snapshotUserId: userRequestId,
-        tags: { connect: [] },
+        tags: { connect: [{ id: 'tag1-id' }, { id: 'tag2-id' }] },
       });
+    });
+
+    it('should not create a snapshot element if there is no change to tags', async () => {
+      // given beforeEach
+      updateInput = {
+        id: 'test-element',
+        tags: { set: [{ name: 'tag1' }, { name: 'tag2' }] },
+      };
+      // when
+      await service.updateElement(userRequestId, updateInput);
+      // then
+      expect(createSnapshotElementMock.mock.calls).toHaveLength(0);
     });
 
     it('should update the element', async () => {
@@ -403,6 +421,7 @@ describe('ElementService', () => {
             connect: undefined,
           },
           tags: {
+            set: [],
             connectOrCreate: [],
           },
         },
@@ -467,34 +486,6 @@ describe('ElementService', () => {
       await expect(() =>
         service.updateElement(userRequestId, updateInput),
       ).rejects.toThrow('Cannot change visibility to private.');
-    });
-
-    describe('with tags input', () => {
-      it('should throw an error if calling set elements input', async () => {
-        // given
-        const updateElementInput = {
-          name: 'test-element-name',
-          tags: {
-            set: [
-              {
-                name: 'first-tag',
-              },
-              {
-                id: 'second-tag-id',
-              },
-              {
-                id: 'last-tag-id',
-                name: 'last-tag',
-              },
-            ],
-          },
-        } as UpdateElementInput;
-
-        // when, then
-        await expect(() =>
-          service.updateElement(userRequestId, updateElementInput),
-        ).rejects.toThrow('Not implemented yet');
-      });
     });
   });
 });

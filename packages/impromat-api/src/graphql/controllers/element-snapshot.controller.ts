@@ -23,6 +23,17 @@ export class ElementSnapshotController {
     @Parent() elementSnapshot: ElementSnapshot,
     @SessionUserId() userId: string,
   ) {
+    return this.elementSnapshotService.findElementSnapshotById(
+      userId,
+      elementSnapshot.id,
+    );
+  }
+
+  @ResolveField(() => Element)
+  async parent(
+    @Parent() elementSnapshot: ElementSnapshot,
+    @SessionUserId() userId: string,
+  ) {
     return this.elementSnapshotService
       .findElementSnapshotById(userId, elementSnapshot.id)
       .snapshotParent();

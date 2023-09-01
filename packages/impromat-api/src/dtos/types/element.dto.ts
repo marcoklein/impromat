@@ -115,4 +115,9 @@ export class ElementSnapshot {
 
   @Field(() => Element, { description: 'Element of snapshot.' })
   element: Element;
+
+  @Field(() => Element, {
+    description: 'Element this snapshot was created of.',
+  })
+  parent: Element;
 }

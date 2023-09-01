@@ -67,6 +67,7 @@
     "test": "yarn test:vitest:ci && yarn test:backend-up --no-recreate && yarn playwright:install && playwright test",
     "test:vitest:ci": "yarn vitest --reporter=junit --output-file=vitest-junit-results.xml --watch=false",
     "test:vitest": "vitest",
+    "test:unit": "yarn test:vitest",
     "test:e2e": "yarn playwright:install && playwright test --config playwright-e2e.config.ts",
     "test:headed": "yarn test --headed",
     "test:watch": "nodemon --config nodemon-test.json",

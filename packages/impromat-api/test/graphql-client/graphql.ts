@@ -160,6 +160,8 @@ export type ElementSnapshot = {
   /** Element of snapshot. */
   element: Element;
   id: Scalars['ID'];
+  /** Element this snapshot was created of. */
+  parent: Element;
   /** User that created the snapshot. */
   user?: Maybe<User>;
 };
@@ -175,13 +177,7 @@ export type ElementTag = {
 };
 
 export type ElementTagSetInput = {
-  id?: InputMaybe<Scalars['ID']>;
-  name?: InputMaybe<Scalars['String']>;
-};
-
-export type ElementTagWhereInput = {
-  id?: InputMaybe<Scalars['ID']>;
-  name?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 /** Filter tags of elements. */
@@ -190,9 +186,8 @@ export type ElementTagsFilterInput = {
 };
 
 export type ElementTagsInput = {
-  connect?: InputMaybe<Array<ElementTagWhereInput>>;
   /** Defines all tags of the element. */
-  set?: InputMaybe<Array<ElementTagSetInput>>;
+  set: Array<ElementTagSetInput>;
 };
 
 export enum ElementVisibility {

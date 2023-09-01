@@ -3,12 +3,12 @@ import { PrismaService } from './prisma.service';
 
 import { accessibleBy } from '@casl/prisma';
 import { PaginationArgs } from 'src/dtos/args/pagination-args';
-import { ElementSnapshot } from 'src/dtos/types/element.dto';
 import {
   ABILITY_ACTION_LIST,
   ABILITY_ACTION_READ,
   defineAbilityForUser,
 } from '../abilities';
+import { ElementSnapshot } from 'src/dtos/types/element.dto';
 
 @Injectable()
 export class ElementSnapshotService {
@@ -52,9 +52,6 @@ export class ElementSnapshotService {
       ],
       ...paginationArgs,
     });
-    return dbSnapshots.map((dbSnapshot) => ({
-      createdAt: dbSnapshot.createdAt,
-      id: dbSnapshot.id,
-    }));
+    return dbSnapshots;
   }
 }
