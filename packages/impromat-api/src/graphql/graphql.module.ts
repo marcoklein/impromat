@@ -27,6 +27,8 @@ import { UserService } from './services/user.service';
 import { ElementRecommendationService } from './services/element-recommendation.service';
 import { WorkshopRecommendationService } from './services/workshop-recommendation.service';
 import { ElementAIService } from './services/element-ai.service';
+import { AdminController } from './controllers/admin.controller';
+import { AdminService } from './services/admin.service';
 
 @Module({
   imports: [
@@ -73,6 +75,8 @@ import { ElementAIService } from './services/element-ai.service';
     UserLikedWorkshopsService,
     ElementTagsController,
     ElementTagService,
+    AdminController,
+    AdminService,
   ],
 })
 export class GraphqlModule {}

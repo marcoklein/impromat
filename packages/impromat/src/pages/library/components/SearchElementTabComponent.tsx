@@ -96,13 +96,13 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
           window.localStorage.setItem("lastSearch", text);
         }}
       ></ElementSearchBarComponent>
-      {/* <IonContent scrollY>
+      <IonContent scrollY>
         {searchElementsQueryResult.data && (
-          // <ElementFilterBar
-          //   queryFragment={searchElementsQueryResult.data}
-          // ></ElementFilterBar>
+          <ElementFilterBar
+            queryFragment={searchElementsQueryResult.data}
+          ></ElementFilterBar>
         )}
-      </IonContent> */}
+      </IonContent>
       <div>
         {(searchElementsQueryResult.stale ||
           searchElementsQueryResult.fetching) && (

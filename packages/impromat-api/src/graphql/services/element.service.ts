@@ -137,6 +137,9 @@ export class ElementService {
     const ability = defineAbilityForUser(userRequestId);
 
     return this.prismaService.element.findMany({
+      include: {
+        tags: true,
+      },
       where: {
         AND: [
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
@@ -299,12 +302,17 @@ export class ElementService {
       (updateElementInput.visibility !== undefined &&
         updateElementInput.visibility !== existing.visibility);
 
-    const tagsHaveChanged =
-      tagsSetQuery?.length !== existing.tags?.length ||
-      tagsSetQuery?.some(
-        (tag) =>
-          !existing.tags?.some((existingTag) => existingTag.name === tag.name),
-      );
+    function twoListsAreEqual(list1: string[], list2: string[]) {
+      if (list1.length !== list2.length) return false;
+      for (const item of list1) {
+        if (!list2.includes(item)) return false;
+      }
+      return true;
+    }
+    const tagsHaveChanged = !twoListsAreEqual(
+      existing.tags.map((tag) => tag.name),
+      tagsSetQuery?.map((tag) => tag.name) ?? [],
+    );
 
     if (!fieldsHaveChanged && !tagsHaveChanged) {
       return existing;
@@ -358,7 +366,6 @@ export class ElementService {
   ) {
     let predictedTagsConnectOrCreate: Prisma.ElementTagCreateOrConnectWithoutElementsInput[] =
       [];
-    console.log('set predicted level tags', setPredictedLevelTags);
     if (setPredictedLevelTags) {
       const predictedLevelTags = await this.findPredictedLevelTags(
         userRequestId,
