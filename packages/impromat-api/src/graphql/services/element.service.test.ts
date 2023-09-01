@@ -153,6 +153,13 @@ describe('ElementService', () => {
             },
           ],
         },
+        include: {
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
+        },
         orderBy: [{ updatedAt: 'desc' }, { id: 'asc' }],
         skip: 1,
         take: 3,
@@ -191,7 +198,7 @@ describe('ElementService', () => {
           sourceName: 'impromat',
           ownerId: userRequestId,
           tags: {
-            connectOrCreate: undefined,
+            connectOrCreate: [],
           },
         },
       });
@@ -232,26 +239,62 @@ describe('ElementService', () => {
           connectOrCreate: [
             {
               create: {
-                name: 'first-tag',
+                tag: {
+                  connectOrCreate: {
+                    create: {
+                      name: 'first-tag',
+                    },
+                    where: {
+                      name: 'first-tag',
+                    },
+                  },
+                },
               },
               where: {
-                name: 'first-tag',
+                elementId_tagId: undefined,
+                tag: {
+                  name: 'first-tag',
+                },
               },
             },
             {
               create: {
-                name: 'second-tag',
+                tag: {
+                  connectOrCreate: {
+                    create: {
+                      name: 'second-tag',
+                    },
+                    where: {
+                      name: 'second-tag',
+                    },
+                  },
+                },
               },
               where: {
-                name: 'second-tag',
+                elementId_tagId: undefined,
+                tag: {
+                  name: 'second-tag',
+                },
               },
             },
             {
               create: {
-                name: 'last-tag',
+                tag: {
+                  connectOrCreate: {
+                    create: {
+                      name: 'last-tag',
+                    },
+                    where: {
+                      name: 'last-tag',
+                    },
+                  },
+                },
               },
               where: {
-                name: 'last-tag',
+                elementId_tagId: undefined,
+                tag: {
+                  name: 'last-tag',
+                },
               },
             },
           ],
@@ -282,16 +325,52 @@ describe('ElementService', () => {
         expect(createMock.mock.calls[0][0].data.tags).toEqual({
           connectOrCreate: [
             {
-              create: { name: 'first-tag' },
-              where: { name: 'first-tag' },
+              create: {
+                tag: {
+                  connectOrCreate: {
+                    create: { name: 'first-tag' },
+                    where: { name: 'first-tag' },
+                  },
+                },
+              },
+              where: {
+                elementId_tagId: undefined,
+                tag: {
+                  name: 'first-tag',
+                },
+              },
             },
             {
-              create: { name: 'second-tag' },
-              where: { name: 'second-tag' },
+              create: {
+                tag: {
+                  connectOrCreate: {
+                    create: { name: 'second-tag' },
+                    where: { name: 'second-tag' },
+                  },
+                },
+              },
+              where: {
+                elementId_tagId: undefined,
+                tag: {
+                  name: 'second-tag',
+                },
+              },
             },
             {
-              create: { name: 'last-tag' },
-              where: { name: 'last-tag' },
+              create: {
+                tag: {
+                  connectOrCreate: {
+                    create: { name: 'last-tag' },
+                    where: { name: 'last-tag' },
+                  },
+                },
+              },
+              where: {
+                elementId_tagId: undefined,
+                tag: {
+                  name: 'last-tag',
+                },
+              },
             },
           ],
         });
@@ -331,8 +410,8 @@ describe('ElementService', () => {
           ownerId: 'test-user',
           visibility: 'PRIVATE',
           tags: [
-            { id: 'tag1-id', name: 'tag1' },
-            { id: 'tag2-id', name: 'tag2' },
+            { tag: { id: 'tag1-id', name: 'tag1' } },
+            { tag: { id: 'tag2-id', name: 'tag2' } },
           ],
         } as Partial<PrismaElement> as PrismaElement);
       createSnapshotElementMock = jest
@@ -391,7 +470,12 @@ describe('ElementService', () => {
         snapshotParentId: 'test-element',
         improbibIdentifier: undefined,
         snapshotUserId: userRequestId,
-        tags: { connect: [{ id: 'tag1-id' }, { id: 'tag2-id' }] },
+        tags: {
+          create: [
+            { tag: { connect: { name: 'tag1' } } },
+            { tag: { connect: { name: 'tag2' } } },
+          ],
+        },
       });
     });
 

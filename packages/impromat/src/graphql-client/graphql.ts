@@ -216,6 +216,8 @@ export type IdInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Iterates over all elements and applies tag mappings. */
+  applyAllTagMappings: Scalars['Float'];
   createElement: Element;
   createWorkshop: Workshop;
   deleteWorkshop?: Maybe<Workshop>;

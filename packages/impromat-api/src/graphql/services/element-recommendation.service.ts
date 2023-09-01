@@ -19,7 +19,11 @@ export class ElementRecommendationService {
         AND: [accessibleBy(ability).Element, { id: elementId }],
       },
       include: {
-        tags: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
       },
     });
 
@@ -34,16 +38,18 @@ export class ElementRecommendationService {
             languageCode: element.languageCode,
             tags: {
               some: {
-                name: {
-                  in: element.tags.map((tag) => tag.name),
-                  notIn: [
-                    'game',
-                    'exercise',
-                    'warmup',
-                    'Spiel',
-                    'Übung',
-                    'Aufwärmspiel',
-                  ],
+                tag: {
+                  name: {
+                    in: element.tags.map((relation) => relation.tag.name),
+                    notIn: [
+                      'game',
+                      'exercise',
+                      'warmup',
+                      'Spiel',
+                      'Übung',
+                      'Aufwärmspiel',
+                    ],
+                  },
                 },
               },
             },

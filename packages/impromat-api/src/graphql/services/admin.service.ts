@@ -32,7 +32,7 @@ export class AdminService {
           id: element.id,
           tags: {
             set: element.tags.map((tag) => ({
-              name: tag.name,
+              name: tag.tag.name,
             })),
           },
         });

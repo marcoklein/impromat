@@ -359,6 +359,9 @@ type Mutation {
   createElement(input: CreateElementInput!): Element!
   updateElement(input: UpdateElementInput!): Element!
   updateUser(input: UpdateUserInput!): User!
+
+  """Iterates over all elements and applies tag mappings."""
+  applyAllTagMappings: Float!
 }
 
 input UpdateUserFavoriteElementInput {

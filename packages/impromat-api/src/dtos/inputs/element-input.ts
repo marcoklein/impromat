@@ -94,7 +94,7 @@ export class CreateElementInput {
   orderIndex?: number;
 
   @Field(() => ElementTagsInput, { nullable: true })
-  tags: ElementTagsInput;
+  tags?: ElementTagsInput | undefined;
 
   @Field(() => Boolean, {
     nullable: true,

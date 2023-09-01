@@ -19,7 +19,9 @@ export class ElementTagService {
     const userFilter: Prisma.ElementTagWhereInput = {
       elements: {
         some: {
-          ownerId: userSessionId,
+          element: {
+            ownerId: userSessionId,
+          },
         },
       },
     };
@@ -36,7 +38,9 @@ export class ElementTagService {
               {
                 elements: {
                   some: {
-                    visibility: 'PUBLIC',
+                    element: {
+                      visibility: 'PUBLIC',
+                    },
                   },
                 },
               },

@@ -74,13 +74,19 @@ async function main() {
   });
 
   await prisma.$transaction(
-    elementTagList.map((item) =>
-      prisma.element.update({
-        where: { improbibIdentifier: item.improbibIdentifier },
-        data: {
-          tags: { connect: item.tags.map((tagName) => ({ name: tagName })) },
-        },
-      }),
+    elementTagList.flatMap((item) =>
+      item.tags.map((tagName) =>
+        prisma.elementToElementTag.create({
+          data: {
+            element: {
+              connect: { improbibIdentifier: item.improbibIdentifier },
+            },
+            tag: {
+              connect: { name: tagName },
+            },
+          },
+        }),
+      ),
     ),
   );
   // for (const item of elementTagList) {

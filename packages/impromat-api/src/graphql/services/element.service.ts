@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CreateElementInput,
-  ElementTagsInput,
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
 import { PrismaService } from './prisma.service';
@@ -12,9 +11,11 @@ import {
   Element,
   ElementMetadata,
   ElementTag,
+  ElementToElementTag,
   ElementVisibility,
   Prisma,
 } from '@prisma/client';
+import { randomUUID } from 'node:crypto';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementPredictedTag } from 'src/dtos/types/element-predicted-tag.dto';
 import { ElementsFilterInput } from 'test/graphql-client/graphql';
@@ -50,7 +51,7 @@ export class ElementService {
         AND: [accessibleBy(ability).Element, { id: elementId }],
       },
       include: {
-        tags: true,
+        tags: { include: { tag: true } },
         metadata: {
           where: { name: 'predictedLevelTags' },
           take: 1,
@@ -73,7 +74,7 @@ export class ElementService {
       languageCode: element.languageCode ?? '',
       markdown: element.markdown ?? '',
       name: element.name,
-      tags: element.tags.map((tag) => tag.name),
+      tags: element.tags.map((result) => result.tag.name),
     });
     if (predictedTags) {
       await this.prismaService.elementMetadata.create({
@@ -107,6 +108,32 @@ export class ElementService {
     });
   }
 
+  async findElementTags(userRequestId: string | undefined, id: string) {
+    const ability = defineAbilityForUser(userRequestId);
+    const result = await this.prismaService.element.findFirstOrThrow({
+      where: {
+        AND: [accessibleBy(ability).Element, { id }],
+      },
+      select: {
+        tags: { include: { tag: true } },
+      },
+    });
+    return result.tags.map((relation) => relation.tag);
+  }
+
+  async findElementOwner(userRequestId: string | undefined, id: string) {
+    const ability = defineAbilityForUser(userRequestId);
+    const result = await this.prismaService.element.findFirstOrThrow({
+      where: {
+        AND: [accessibleBy(ability).Element, { id }],
+      },
+      select: {
+        owner: true,
+      },
+    });
+    return result.owner;
+  }
+
   async findElements(
     userRequestId: string | undefined,
     input: {
@@ -137,9 +164,6 @@ export class ElementService {
     const ability = defineAbilityForUser(userRequestId);
 
     return this.prismaService.element.findMany({
-      include: {
-        tags: true,
-      },
       where: {
         AND: [
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
@@ -174,6 +198,7 @@ export class ElementService {
           { OR: whereInput },
         ],
       },
+      include: { tags: { include: { tag: true } } },
       orderBy: [{ updatedAt: 'desc' }, { id: 'asc' }],
       skip,
       take,
@@ -200,19 +225,25 @@ export class ElementService {
       throw new Error('setPredictedLevelTags not implemented yet');
     }
 
-    const tagsSetQuery = this.createTagsSetQuery(
-      createElementInput.tags,
+    const tagsSetQuery = this.transformTags(
+      createElementInput.tags?.set.flatMap((tag) => tag.name) ?? [],
       createElementInput.languageCode,
-      undefined,
     );
 
     return this.prismaService.element.create({
       data: {
         ...createElementInput,
         tags: {
-          connectOrCreate: tagsSetQuery?.map((tag) => ({
-            create: { name: tag.name },
-            where: { name: tag.name },
+          connectOrCreate: tagsSetQuery.map((tagName) => ({
+            create: {
+              tag: {
+                connectOrCreate: {
+                  create: { name: tagName },
+                  where: { name: tagName },
+                },
+              },
+            },
+            where: { elementId_tagId: undefined, tag: { name: tagName } },
           })),
         },
         sourceName: createElementInput.sourceName ?? IMPROMAT_SOURCE_NAME,
@@ -236,7 +267,7 @@ export class ElementService {
     if (!userRequestId || ability.cannot('write', 'Element')) {
       throw new Error('Unauthorized');
     }
-    const existing = await this.prismaService.element.findFirst({
+    const existingElement = await this.prismaService.element.findFirst({
       where: {
         AND: [
           accessibleBy(ability, ABILITY_ACTION_READ).Element,
@@ -250,57 +281,64 @@ export class ElementService {
         ],
       },
       include: {
-        tags: true,
+        tags: { include: { tag: true } },
         metadata: true,
       },
     });
-    if (!existing) throw new Error('Not existing or insufficient read rights.');
+
+    if (!existingElement)
+      throw new Error('Not existing or insufficient read rights.');
 
     if (
-      existing.visibility === 'PUBLIC' &&
+      existingElement.visibility === 'PUBLIC' &&
       updateElementInput.visibility === 'PRIVATE'
     ) {
       throw new Error('Cannot change visibility to private.');
     }
 
-    if (!ability.can(ABILITY_ACTION_WRITE, subject('Element', existing))) {
+    if (
+      !ability.can(ABILITY_ACTION_WRITE, subject('Element', existingElement))
+    ) {
       throw new Error('Write not permitted.');
     }
 
-    const predictedTagsConnectOrCreate = await this.createPredictedTagsQuery(
-      userRequestId,
-      updateElementInput.setPredictedLevelTags ?? false,
-      updateElementInput.id,
-    );
+    const predictedLevelTags = updateElementInput.setPredictedLevelTags
+      ? await this.findPredictedLevelTags(userRequestId, updateElementInput.id)
+      : [];
     const languageCode =
-      updateElementInput.languageCode ?? existing.languageCode ?? undefined;
-    const tagsSetQuery = this.createTagsSetQuery(
-      updateElementInput.tags,
-      languageCode,
-      existing,
+      updateElementInput.languageCode ??
+      existingElement.languageCode ??
+      undefined;
+
+    const transformedTagNames = this.transformTags(
+      [
+        ...(updateElementInput.tags?.set.flatMap((tag) => tag.name) ?? []),
+        ...(predictedLevelTags?.map((tag) => tag.name) ?? []),
+      ],
+      languageCode ?? existingElement.languageCode ?? undefined,
     );
 
     delete updateElementInput.setPredictedLevelTags;
 
     const fieldsHaveChanged =
       (updateElementInput.name !== undefined &&
-        updateElementInput.name !== existing.name) ||
+        updateElementInput.name !== existingElement.name) ||
       (updateElementInput.markdown !== undefined &&
-        updateElementInput.markdown !== existing.markdown) ||
+        updateElementInput.markdown !== existingElement.markdown) ||
       (updateElementInput.languageCode !== undefined &&
-        updateElementInput.languageCode !== existing.languageCode) ||
+        updateElementInput.languageCode !== existingElement.languageCode) ||
       (updateElementInput.sourceName !== undefined &&
-        updateElementInput.sourceName !== existing.sourceName) ||
+        updateElementInput.sourceName !== existingElement.sourceName) ||
       (updateElementInput.sourceUrl !== undefined &&
-        updateElementInput.sourceUrl !== existing.sourceUrl) ||
+        updateElementInput.sourceUrl !== existingElement.sourceUrl) ||
       (updateElementInput.sourceBaseUrl !== undefined &&
-        updateElementInput.sourceBaseUrl !== existing.sourceBaseUrl) ||
+        updateElementInput.sourceBaseUrl !== existingElement.sourceBaseUrl) ||
       (updateElementInput.licenseName !== undefined &&
-        updateElementInput.licenseName !== existing.licenseName) ||
+        updateElementInput.licenseName !== existingElement.licenseName) ||
       (updateElementInput.licenseUrl !== undefined &&
-        updateElementInput.licenseUrl !== existing.licenseUrl) ||
+        updateElementInput.licenseUrl !== existingElement.licenseUrl) ||
       (updateElementInput.visibility !== undefined &&
-        updateElementInput.visibility !== existing.visibility);
+        updateElementInput.visibility !== existingElement.visibility);
 
     function twoListsAreEqual(list1: string[], list2: string[]) {
       if (list1.length !== list2.length) return false;
@@ -310,35 +348,42 @@ export class ElementService {
       return true;
     }
     const tagsHaveChanged = !twoListsAreEqual(
-      existing.tags.map((tag) => tag.name),
-      tagsSetQuery?.map((tag) => tag.name) ?? [],
+      existingElement.tags.map((result) => result.tag.name),
+      transformedTagNames,
     );
 
     if (!fieldsHaveChanged && !tagsHaveChanged) {
-      return existing;
+      return existingElement;
     }
 
-    const saveSnapshotQuery = this.createSnapshotQuery(userRequestId, existing);
+    const saveSnapshotQuery = this.createSnapshotQuery(
+      userRequestId,
+      existingElement,
+    );
     const updateElementQuery = this.prismaService.element.update({
       where: { id: updateElementInput.id },
       data: {
         ...updateElementInput,
-        ...{
-          metadata: {
-            connect: existing.metadata?.map((metadata) => ({
-              id: metadata.id,
+        metadata: {
+          connect: existingElement.metadata?.map((metadata) => ({
+            id: metadata.id,
+          })),
+        },
+        tags: {
+          set: [], // ensure tags are removed, so connectOrCreate creates missing tags
+          connectOrCreate: [
+            ...transformedTagNames.map((tagName) => ({
+              create: {
+                tag: {
+                  connectOrCreate: {
+                    create: { name: tagName },
+                    where: { name: tagName },
+                  },
+                },
+              },
+              where: { elementId_tagId: undefined, tag: { name: tagName } },
             })),
-          },
-          tags: {
-            set: [], // ensure tags are removed, so connectOrCreate creates missing tags
-            connectOrCreate: [
-              ...(tagsSetQuery?.map((tag) => ({
-                create: { name: tag.name },
-                where: { name: tag.name },
-              })) ?? []),
-              ...predictedTagsConnectOrCreate,
-            ],
-          },
+          ],
         },
       },
     });
@@ -351,62 +396,19 @@ export class ElementService {
     return updateResult;
   }
 
-  /**
-   * TODO make method more generic to support element creation (e.g. extract cache layer)
-   *
-   * @param userRequestId
-   * @param setPredictedLevelTags
-   * @param elementId
-   * @returns
-   */
-  private async createPredictedTagsQuery(
-    userRequestId: string,
-    setPredictedLevelTags: boolean,
-    elementId: string,
-  ) {
-    let predictedTagsConnectOrCreate: Prisma.ElementTagCreateOrConnectWithoutElementsInput[] =
-      [];
-    if (setPredictedLevelTags) {
-      const predictedLevelTags = await this.findPredictedLevelTags(
-        userRequestId,
-        elementId,
-      );
-      console.log('predicted level tags:', predictedLevelTags);
-      if (predictedLevelTags) {
-        predictedTagsConnectOrCreate = predictedLevelTags.map((tag) => ({
-          create: { name: tag.name },
-          where: { name: tag.name },
-        }));
-        console.log(
-          'setting predicted level tags',
-          predictedTagsConnectOrCreate,
-        );
-      }
-    }
-    return predictedTagsConnectOrCreate;
-  }
-
-  private createTagsSetQuery(
-    elementTagsInput: ElementTagsInput | undefined,
-    inputLanguageCode: string | undefined,
-    existing: (Element & { tags: ElementTag[] }) | undefined,
-  ) {
-    if (elementTagsInput === undefined) return undefined;
-    const languageCode =
-      inputLanguageCode ?? existing?.languageCode ?? undefined;
-    const tagNames = elementTagsInput.set.map((tag) => tag.name);
-    const tagsSetQuery = tagNames
-      .flatMap(
-        (tagName) =>
-          transformTagNames([tagName], languageCode)?.tags ?? [tagName],
-      )
-      .map((tagName) => ({ name: tagName }));
-    return tagsSetQuery;
+  private transformTags(tagNames: string[], languageCode: string | undefined) {
+    return tagNames.flatMap(
+      (tagName) =>
+        transformTagNames([tagName], languageCode)?.tags ?? [tagName],
+    );
   }
 
   private createSnapshotQuery(
     userRequestId: string | undefined,
-    existing: Element & { metadata: ElementMetadata[]; tags: ElementTag[] },
+    existing: Element & {
+      metadata: ElementMetadata[];
+      tags: (ElementToElementTag & { tag: ElementTag })[];
+    },
   ) {
     return this.prismaService.element.create({
       data: {
@@ -425,8 +427,9 @@ export class ElementService {
             })),
           },
           tags: {
-            connect: existing.tags.map((existingTag) => ({
-              id: existingTag.id,
+            create: existing.tags.map((existingTag) => ({
+              // TODO add data of relationship if relevant
+              tag: { connect: { name: existingTag.tag.name } },
             })),
           },
         },

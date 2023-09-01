@@ -36,10 +36,14 @@ describe('AdminService', () => {
           id: 'elementId',
           tags: [
             {
-              name: 'tag1',
+              tag: {
+                name: 'tag1',
+              },
             },
             {
-              name: 'tag2',
+              tag: {
+                name: 'tag2',
+              },
             },
           ],
         },
@@ -48,10 +52,14 @@ describe('AdminService', () => {
         id: 'elementId',
         tags: [
           {
-            name: 'tag1',
+            tag: {
+              name: 'tag1',
+            },
           },
           {
-            name: 'tag2',
+            tag: {
+              name: 'tag2',
+            },
           },
         ],
       } as any);

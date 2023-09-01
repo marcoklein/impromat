@@ -27,7 +27,6 @@ model Element {
 
   ownerId String?
 
-  tags                ElementTag[]
   owner               User?                 @relation(fields: [ownerId], references: [id])
   userFavoriteElement UserFavoriteElement[]
   workshopElements    WorkshopElement[]
@@ -39,6 +38,7 @@ model Element {
   snapshotParentId String?
 
   metadata ElementMetadata[]
+  tags     ElementToElementTag[]
 }
 
 model ElementMetadata {
@@ -58,14 +58,28 @@ enum ElementVisibility {
   PUBLIC
 }
 
+model ElementToElementTag {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  version   Int      @default(0)
+
+  elementId String
+  tagId     String
+
+  element Element    @relation(fields: [elementId], references: [id])
+  tag     ElementTag @relation(fields: [tagId], references: [id])
+
+  @@id([elementId, tagId])
+}
+
 model ElementTag {
   id        String   @id @default(uuid())
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
   version   Int      @default(0)
 
-  name     String    @unique
-  elements Element[]
+  name     String                @unique
+  elements ElementToElementTag[]
 }
 
 model UserFavoriteElement {

@@ -25,12 +25,12 @@ describe('ElementRecommendationService', () => {
     const userRequestId = 'userRequestId';
     const elementId = 'elementId';
     const dbElements = [{ id: '1' }, { id: '2' }] as Element[];
-    jest.spyOn(prismaService.element, 'findFirstOrThrow').mockResolvedValue({
+    prismaService.element.findFirstOrThrow.mockResolvedValue({
       id: elementId,
       languageCode: 'de',
-      tags: [{ name: 'tag1' }, { name: 'tag2' }],
+      tags: [{ tag: { name: 'tag1' } }, { tag: { name: 'tag2' } }],
     } as Partial<Element> as Element);
-    jest.spyOn(prismaService.element, 'findMany').mockResolvedValue(dbElements);
+    prismaService.element.findMany.mockResolvedValue(dbElements);
     // when
     const result = await service.findRecommendations(userRequestId, elementId);
     // then
