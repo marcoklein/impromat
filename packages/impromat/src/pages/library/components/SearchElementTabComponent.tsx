@@ -20,6 +20,7 @@ import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 import { VirtualCardGrid } from "../../../components/VirtualCardGrid";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { ElementFilterBar } from "./ElementFilterBar";
 
 const SearchElementTabQuery = graphql(`
   query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {
@@ -30,6 +31,7 @@ const SearchElementTabQuery = graphql(`
       }
       ...ElementPreviewItem_ElementSearchResult
     }
+    ...ElementFilterBar_Query
   }
 `);
 
@@ -94,6 +96,13 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
           window.localStorage.setItem("lastSearch", text);
         }}
       ></ElementSearchBarComponent>
+      {/* <IonContent scrollY>
+        {searchElementsQueryResult.data && (
+          // <ElementFilterBar
+          //   queryFragment={searchElementsQueryResult.data}
+          // ></ElementFilterBar>
+        )}
+      </IonContent> */}
       <div>
         {(searchElementsQueryResult.stale ||
           searchElementsQueryResult.fetching) && (
