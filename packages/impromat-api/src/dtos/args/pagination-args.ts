@@ -13,7 +13,7 @@ export class PaginationArgs {
 
   @IsInt()
   @Min(1)
-  @Max(100)
+  @Max(200)
   @Field(() => Int, { defaultValue: 20 })
   take: number;
 }

@@ -3,6 +3,7 @@ import { PrismaQuery, Subjects, createPrismaAbility } from '@casl/prisma';
 import {
   Element,
   ElementTag,
+  ElementToElementTag,
   ElementVisibility,
   User,
   UserFavoriteElement,
@@ -34,6 +35,7 @@ export type AppAbility = PureAbility<
       User: User;
       Element: Element;
       ElementTag: ElementTag;
+      ElementToElementTag: ElementToElementTag;
       UserFavoriteElement: UserFavoriteElement;
       UserLikedWorkshop: UserLikedWorkshop;
       Workshop: Workshop;
@@ -76,6 +78,29 @@ export const defineAbilityForUser = (userId: string | undefined) => {
     can(ABILITY_ACTION_LIST, 'Workshop', {
       userLikedWorkshops: { some: { userId: userId } },
     }).because(REASON_LIKED_WORKSHOP);
+
+    can([ABILITY_ACTION_READ, ABILITY_ACTION_LIST], 'ElementToElementTag', {
+      element: { ownerId: userId },
+    }).because(REASON_OWNER);
+    can([ABILITY_ACTION_READ, ABILITY_ACTION_LIST], 'ElementToElementTag', {
+      element: { visibility: ElementVisibility.PUBLIC },
+    }).because(REASON_PUBLIC);
+    can(ABILITY_ACTION_READ, 'ElementToElementTag', {
+      element: {
+        workshopElements: {
+          some: { workshopSection: { workshop: { isPublic: true } } },
+        },
+      },
+    }).because(REASON_PUBLIC);
+    can([ABILITY_ACTION_READ, ABILITY_ACTION_LIST], 'ElementToElementTag', {
+      element: {
+        workshopElements: {
+          some: {
+            workshopSection: { workshop: { isPublic: true, isListed: true } },
+          },
+        },
+      },
+    }).because(REASON_PUBLICLY_LISTED);
 
     can(ABILITY_ACTION_READ, 'Element', { ownerId: userId }).because(
       REASON_OWNER,

@@ -96,7 +96,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
           window.localStorage.setItem("lastSearch", text);
         }}
       ></ElementSearchBarComponent>
-      <IonContent scrollY>
+      <IonContent scrollY style={{ maxHeight: "5rem" }}>
         {searchElementsQueryResult.data && (
           <ElementFilterBar
             queryFragment={searchElementsQueryResult.data}

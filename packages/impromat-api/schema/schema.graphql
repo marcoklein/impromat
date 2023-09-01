@@ -245,7 +245,7 @@ type Query {
 
   """Get information about the current user."""
   me: User!
-  tags(filter: ElementTagsFilterInput, skip: Float = 0, take: Float = 20): [ElementTag!]!
+  tags(filter: ElementTagsFilterInput, skip: Int! = 0, take: Int! = 20): [ElementTag!]!
 }
 
 input ElementSearchInput {

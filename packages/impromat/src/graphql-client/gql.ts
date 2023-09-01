@@ -45,7 +45,7 @@ const documents = {
     "\n  fragment CustomElementsTab_WorkshopFragment on User {\n    elements {\n      id\n      name\n      ...ElementPreviewItem_Element\n    }\n  }\n": types.CustomElementsTab_WorkshopFragmentFragmentDoc,
     "\n  query CustomElementsTab_Query($userId: ID!) {\n    user(id: $userId) {\n      id\n      ...CustomElementsTab_WorkshopFragment\n    }\n  }\n": types.CustomElementsTab_QueryDocument,
     "\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n": types.ElementFavoriteIcon_ElementFragmentDoc,
-    "\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 1000) {\n      id\n      name\n    }\n  }\n": types.ElementFilterBar_QueryFragmentDoc,
+    "\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200) {\n      id\n      name\n    }\n  }\n": types.ElementFilterBar_QueryFragmentDoc,
     "\n  query LibraryCreateCustomElementTags_Query($filter: ElementTagsFilterInput!) {\n    tags(filter: $filter) {\n      ...ElementTagsItem_ElementTag\n    }\n  }\n": types.LibraryCreateCustomElementTags_QueryDocument,
     "\n  fragment ElementTagsItem_ElementTag on ElementTag {\n    id\n    name\n  }\n": types.ElementTagsItem_ElementTagFragmentDoc,
     "\n  fragment FavoriteElements_User on User {\n    favoriteElements {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n    }\n  }\n": types.FavoriteElements_UserFragmentDoc,
@@ -213,7 +213,7 @@ export function graphql(source: "\n  fragment ElementFavoriteIcon_Element on Ele
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 1000) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 1000) {\n      id\n      name\n    }\n  }\n"];
+export function graphql(source: "\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
