@@ -4,7 +4,6 @@ import {
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
-import { useComponentLogger } from "../../../hooks/use-component-logger";
 
 export const ElementFilterBar_Query = graphql(`
   fragment ElementFilterBar_Query on Query {
@@ -31,7 +30,6 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
   loadingAvailableTags,
   onTagsChange,
 }) => {
-  const logger = useComponentLogger("ElementFilterBar");
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
 
   return (
