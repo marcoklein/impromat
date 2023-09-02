@@ -20,10 +20,16 @@ import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 import { VirtualCardGrid } from "../../../components/VirtualCardGrid";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { usePersistedState } from "../../../hooks/use-persisted-state";
 import { ElementFilterBar } from "./ElementFilterBar";
 
 const SearchElementTabQuery = graphql(`
-  query SearchElements($input: ElementSearchInput!, $skip: Int!, $take: Int!) {
+  query SearchElements(
+    $input: ElementSearchInput!
+    $skip: Int!
+    $take: Int!
+    $selectedTagNames: [String!]!
+  ) {
     searchElements(input: $input, skip: $skip, take: $take) {
       element {
         id
@@ -49,8 +55,13 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   const [restoredSearchText] = useState(
     window.localStorage.getItem("lastSearch") ?? "",
   );
+  const [selectedTagNames, setSelectedTagNames] = usePersistedState<string[]>(
+    "lastSelectedTags",
+    [],
+  );
   const [searchText, setSearchText] = useState(restoredSearchText);
   const [pageNumber, setPageNumber] = useState(0);
+  const [scrollToTop, setScrollToTop] = useState(0);
 
   const itemsPerPage = 20;
 
@@ -61,11 +72,18 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
     variables: {
       input: {
         text: trimmedSearchText,
+        tagNames: selectedTagNames,
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
+      selectedTagNames,
     },
   });
+
+  const resetScroll = () => {
+    setScrollToTop((current) => current + 1);
+    setPageNumber(0);
+  };
 
   useEffect(() => {
     const actualSkip = searchElementsQueryResult.data?.searchElements.length;
@@ -91,15 +109,24 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
       <ElementSearchBarComponent
         initialSearchText={restoredSearchText}
         onSearchTextChange={(text) => {
-          setPageNumber(0);
+          resetScroll();
           setSearchText(text);
           window.localStorage.setItem("lastSearch", text);
         }}
       ></ElementSearchBarComponent>
-      <IonContent scrollY style={{ maxHeight: "5rem" }}>
+      <IonContent style={{ maxHeight: "5rem" }}>
         {searchElementsQueryResult.data && (
           <ElementFilterBar
+            selectedTagNames={selectedTagNames}
+            onTagsChange={(selectedTagNames) => {
+              resetScroll();
+              setSelectedTagNames(selectedTagNames);
+            }}
             queryFragment={searchElementsQueryResult.data}
+            loadingAvailableTags={
+              searchElementsQueryResult.fetching ||
+              searchElementsQueryResult.stale
+            }
           ></ElementFilterBar>
         )}
       </IonContent>
@@ -138,6 +165,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
                 searchElementsQueryResult.fetching ||
                 searchElementsQueryResult.stale
               }
+              scrollToTop={scrollToTop}
               endReached={() => {
                 logger(
                   "end reached, queryResult.stale=%s",

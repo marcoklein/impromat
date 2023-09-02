@@ -10,7 +10,9 @@ import { useLogger } from "./use-logger";
  * @returns
  */
 export function usePersistedState<
-  T extends Partial<Record<keyof T, boolean | number | string | undefined>>,
+  T extends Partial<
+    Record<keyof T, boolean | number | string | undefined | object>
+  >,
 >(key: string, defaultValue: Required<T>): [T, (valueToPersist: T) => void] {
   const logger = useLogger("usePersistedState");
   const [state, setState] = useState<T>(() => {
@@ -20,8 +22,9 @@ export function usePersistedState<
       if (!value) return defaultValue;
       const loadedValue = JSON.parse(value) as T;
       if (
+        !Array.isArray(loadedValue) &&
         JSON.stringify(Object.keys(defaultValue)) !==
-        JSON.stringify(Object.keys(loadedValue))
+          JSON.stringify(Object.keys(loadedValue))
       ) {
         logger("key=%s: cache mismatch", key);
         localStorage.removeItem(key);

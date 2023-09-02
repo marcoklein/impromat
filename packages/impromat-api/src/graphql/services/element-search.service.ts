@@ -1,11 +1,15 @@
 import { accessibleBy } from '@casl/prisma';
 import { Injectable } from '@nestjs/common';
-import { Element as PrismaElement } from '@prisma/client';
+import { Prisma, Element as PrismaElement } from '@prisma/client';
 import Fuse from 'fuse.js';
 import { ElementSearchInput } from 'src/dtos/inputs/element-search-input';
 import { ElementSearchMatch } from 'src/dtos/types/element-search-result.dto';
 import { ABILITY_ACTION_LIST, defineAbilityForUser } from '../abilities';
 import { PrismaService } from './prisma.service';
+import {
+  elementLanguageFilterQuery,
+  noSnapshotElementFilterQuery,
+} from './shared-prisma-queries';
 import { UserService } from './user.service';
 
 @Injectable()
@@ -33,38 +37,29 @@ export class ElementSearchService {
 
     const ability = defineAbilityForUser(userRequestId);
 
+    function createFilterTagNamesQuery(
+      tagNames: string[] | undefined,
+    ): Prisma.ElementWhereInput {
+      if (!tagNames || tagNames.length === 0) return {};
+      return {
+        AND: tagNames.map((tagName) => ({
+          tags: {
+            some: {
+              tag: {
+                name: tagName,
+              },
+            },
+          },
+        })),
+      };
+    }
+
     const elementsToSearch = await this.prismaService.element.findMany({
       where: {
         AND: [
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
-          {
-            snapshotParentId: null,
-          },
-          user.languageCodes && user.languageCodes.length > 0
-            ? {
-                OR: [
-                  {
-                    languageCode: {
-                      in: user.languageCodes,
-                    },
-                  },
-                  {
-                    languageCode: null,
-                  },
-                  // ignore language for owned requests and liked elements
-                  {
-                    ownerId: userRequestId,
-                  },
-                  {
-                    userFavoriteElement: {
-                      some: {
-                        userId: userRequestId,
-                      },
-                    },
-                  },
-                ],
-              }
-            : {},
+          noSnapshotElementFilterQuery,
+          elementLanguageFilterQuery(userRequestId, user.languageCodes),
           {
             OR: [
               {
@@ -75,6 +70,7 @@ export class ElementSearchService {
               },
             ],
           },
+          createFilterTagNamesQuery(searchElementsInput.tagNames),
         ],
       },
       include: { tags: true },

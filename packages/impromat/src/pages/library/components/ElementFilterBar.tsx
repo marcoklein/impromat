@@ -1,5 +1,4 @@
-import { IonChip, IonIcon, IonLabel, IonRange } from "@ionic/react";
-import { filter } from "ionicons/icons";
+import { IonChip, IonLabel } from "@ionic/react";
 import {
   FragmentType,
   getFragmentData,
@@ -9,7 +8,7 @@ import { useComponentLogger } from "../../../hooks/use-component-logger";
 
 export const ElementFilterBar_Query = graphql(`
   fragment ElementFilterBar_Query on Query {
-    tags(take: 200) {
+    tags(take: 200, filter: { selectedTagNames: $selectedTagNames }) {
       id
       name
     }
@@ -18,6 +17,9 @@ export const ElementFilterBar_Query = graphql(`
 
 interface ContainerProps {
   queryFragment: FragmentType<typeof ElementFilterBar_Query>;
+  selectedTagNames: string[];
+  loadingAvailableTags: boolean;
+  onTagsChange: (tags: string[]) => void;
 }
 
 /**
@@ -25,19 +27,56 @@ interface ContainerProps {
  */
 export const ElementFilterBar: React.FC<ContainerProps> = ({
   queryFragment,
+  selectedTagNames,
+  loadingAvailableTags,
+  onTagsChange,
 }) => {
   const logger = useComponentLogger("ElementFilterBar");
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
 
   return (
     <div>
-      <IonChip>
+      {/* <IonChip>
         <IonIcon icon={filter}></IonIcon>
         <IonLabel>Filter</IonLabel>
-      </IonChip>
+      </IonChip> */}
+      {/* <IonChip>
+        <IonSelect value="en">
+          <IonSelectOption value="en">EN</IonSelectOption>
+          <IonSelectOption value="de">DE</IonSelectOption>
+        </IonSelect>
+      </IonChip> */}
+      {/* <IonChip outline>
+        <IonIcon color={COLOR_LIKE} icon={heart}></IonIcon>
+        <IonLabel>liked</IonLabel>
+      </IonChip> */}
+      {selectedTagNames.map((tagName) => (
+        <IonChip
+          style={{ "--background": "var(--ion-color-primary)" }}
+          key={tagName}
+          onClick={() => {
+            const newSelectedTagNames = selectedTagNames.filter(
+              (selectedTagName) => selectedTagName !== tagName,
+            );
+            onTagsChange(newSelectedTagNames);
+          }}
+        >
+          <IonLabel color="light">{tagName}</IonLabel>
+        </IonChip>
+      ))}
       {tags.map((tag) => (
-        <IonChip outline key={tag.id}>
-          <IonLabel>{tag.name}</IonLabel>
+        <IonChip
+          outline
+          key={tag.id}
+          onClick={() => {
+            onTagsChange([...new Set([...selectedTagNames, tag.name])]);
+          }}
+          disabled={loadingAvailableTags}
+        >
+          <IonLabel>
+            {tag.name}
+            {/* <IonNote>DE</IonNote> */}
+          </IonLabel>
         </IonChip>
       ))}
     </div>

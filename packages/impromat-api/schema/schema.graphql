@@ -250,6 +250,7 @@ type Query {
 
 input ElementSearchInput {
   text: String
+  tagNames: [String!]
   take: Int! = 20
   skip: Int! = 0
 }
@@ -341,6 +342,7 @@ input ElementsOrderByInput {
 """Filter tags of elements."""
 input ElementTagsFilterInput {
   text: String
+  selectedTagNames: [String!]
 }
 
 type Mutation {

@@ -15,7 +15,6 @@ import {
   ElementVisibility,
   Prisma,
 } from '@prisma/client';
-import { randomUUID } from 'node:crypto';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementPredictedTag } from 'src/dtos/types/element-predicted-tag.dto';
 import { ElementsFilterInput } from 'test/graphql-client/graphql';

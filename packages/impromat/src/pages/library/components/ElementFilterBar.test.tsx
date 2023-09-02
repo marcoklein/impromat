@@ -8,16 +8,23 @@ describe("ElementFilterBar", () => {
   it("renders", () => {
     // given
     const elementFilterBarFragment: ElementFilterBar_QueryFragment = {
-      tags: [],
+      tags: [{ id: "first-tag-id", name: "test-tag-game" }],
     };
     const fragmentData = makeFragmentData(
       elementFilterBarFragment,
       ElementFilterBar_Query,
     );
     // when
-    render(<ElementFilterBar queryFragment={fragmentData}></ElementFilterBar>);
+    render(
+      <ElementFilterBar
+        queryFragment={fragmentData}
+        loadingAvailableTags={false}
+        onTagsChange={() => {}}
+        selectedTagNames={[]}
+      ></ElementFilterBar>,
+    );
     // then
-    const text = screen.getByText("Filter");
+    const text = screen.getByText("test-tag-game");
     expect(text).toBeInTheDocument();
   });
 });

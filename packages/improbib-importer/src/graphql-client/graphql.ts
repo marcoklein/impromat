@@ -133,6 +133,7 @@ export type ElementQueryResult = {
 
 export type ElementSearchInput = {
   skip?: Scalars['Int'];
+  tagNames?: InputMaybe<Array<Scalars['String']>>;
   take?: Scalars['Int'];
   text?: InputMaybe<Scalars['String']>;
 };
@@ -182,6 +183,7 @@ export type ElementTagSetInput = {
 
 /** Filter tags of elements. */
 export type ElementTagsFilterInput = {
+  selectedTagNames?: InputMaybe<Array<Scalars['String']>>;
   text?: InputMaybe<Scalars['String']>;
 };
 
@@ -216,6 +218,8 @@ export type IdInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Iterates over all elements and applies tag mappings. */
+  applyAllTagMappings: Scalars['Float'];
   createElement: Element;
   createWorkshop: Workshop;
   deleteWorkshop?: Maybe<Workshop>;
@@ -334,8 +338,8 @@ export type QuerySearchElementsArgs = {
 
 export type QueryTagsArgs = {
   filter?: InputMaybe<ElementTagsFilterInput>;
-  skip?: InputMaybe<Scalars['Float']>;
-  take?: InputMaybe<Scalars['Float']>;
+  skip?: Scalars['Int'];
+  take?: Scalars['Int'];
 };
 
 

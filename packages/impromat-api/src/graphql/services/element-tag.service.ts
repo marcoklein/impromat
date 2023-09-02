@@ -6,6 +6,7 @@ import { Nullable } from 'src/utils/nullish';
 import { defineAbilityForUser } from '../abilities';
 import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
+import { elementLanguageFilterQuery } from './shared-prisma-queries';
 
 /**
  * Business logic for `ElementTags`.
@@ -76,28 +77,29 @@ export class ElementTagService {
               { element: { snapshotParentId: null } },
               user.languageCodes && user.languageCodes.length > 0
                 ? {
+                    element: elementLanguageFilterQuery(
+                      user.id,
+                      user.languageCodes,
+                    ),
+                  }
+                : {},
+              filter?.selectedTagNames && filter.selectedTagNames.length > 0
+                ? {
+                    tag: {
+                      name: {
+                        notIn: filter.selectedTagNames,
+                      },
+                    },
                     element: {
-                      OR: [
-                        {
-                          languageCode: {
-                            in: user.languageCodes,
-                          },
-                        },
-                        {
-                          languageCode: null,
-                        },
-                        // ignore language for owned requests and liked elements
-                        {
-                          ownerId: userRequestId,
-                        },
-                        {
-                          userFavoriteElement: {
-                            some: {
-                              userId: userRequestId,
+                      AND: filter.selectedTagNames.map((tagName) => ({
+                        tags: {
+                          some: {
+                            tag: {
+                              name: tagName,
                             },
                           },
                         },
-                      ],
+                      })),
                     },
                   }
                 : {},
@@ -106,7 +108,8 @@ export class ElementTagService {
           having: {
             tagId: {
               _count: {
-                gt: 1,
+                // only return relevant tags if there were no tags selected yet
+                gt: filter?.selectedTagNames?.length ? 1 : 8,
               },
             },
           },

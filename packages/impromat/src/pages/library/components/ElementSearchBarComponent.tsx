@@ -4,11 +4,13 @@ import { useEffect, useRef } from "react";
 interface ContainerProps {
   initialSearchText: string;
   onSearchTextChange: (searchText: string) => void;
+  disabled?: boolean;
 }
 
 export const ElementSearchBarComponent: React.FC<ContainerProps> = ({
   initialSearchText,
   onSearchTextChange,
+  disabled,
 }) => {
   const searchInputRef = useRef<HTMLIonSearchbarElement>(null);
 
@@ -20,6 +22,7 @@ export const ElementSearchBarComponent: React.FC<ContainerProps> = ({
 
   return (
     <IonSearchbar
+      disabled={disabled}
       ref={searchInputRef}
       debounce={1000}
       onIonInput={(e) => {
