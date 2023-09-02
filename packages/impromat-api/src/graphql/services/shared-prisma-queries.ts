@@ -4,7 +4,7 @@ export const elementLanguageFilterQuery = (
   userId: string,
   userLanguageCodes: string[] | undefined,
 ): Prisma.ElementWhereInput => {
-  if (userLanguageCodes === undefined) {
+  if (userLanguageCodes === undefined || userLanguageCodes.length === 0) {
     return {};
   }
   return {
