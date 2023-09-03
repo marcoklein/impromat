@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import { Improbib } from 'improbib';
 import * as fs from 'node:fs/promises';
@@ -35,11 +35,6 @@ async function main() {
     data: tagList.map((tagName) => ({ name: tagName })),
   });
 
-  const elementList: Prisma.ElementCreateInput[] = [];
-  const elementTagList: Array<{
-    improbibIdentifier: string;
-    tags: string[];
-  }> = [];
   for (const {
     baseUrl,
     identifier,
@@ -52,62 +47,41 @@ async function main() {
     sourceUrl,
     tags,
   } of improbibElements) {
-    const element: Prisma.ElementCreateInput = {
-      visibility: 'PUBLIC',
-      version: -1,
-      improbibIdentifier: identifier,
-      languageCode: languageCode,
-      licenseName: licenseName,
-      licenseUrl,
-      markdown,
-      name,
-      sourceBaseUrl: baseUrl,
-      sourceName,
-      sourceUrl,
-    };
-    elementList.push(element);
-    elementTagList.push({ improbibIdentifier: identifier, tags });
+    await prisma.element.create({
+      data: {
+        visibility: 'PUBLIC',
+        version: -1,
+        improbibIdentifier: identifier,
+        languageCode: languageCode,
+        licenseName: licenseName,
+        licenseUrl,
+        markdown,
+        name,
+        sourceBaseUrl: baseUrl,
+        sourceName,
+        sourceUrl,
+        tags: {
+          connectOrCreate: tags.map((tagName) => ({
+            create: {
+              tag: {
+                connectOrCreate: {
+                  create: { name: tagName },
+                  where: { name: tagName },
+                },
+              },
+            },
+            where: {
+              elementId_tagId: undefined,
+              tag: {
+                name: tagName,
+              },
+            },
+          })),
+        },
+      },
+    });
   }
-  await prisma.element.createMany({
-    data: elementList,
-    skipDuplicates: true,
-  });
 
-  await prisma.$transaction(
-    elementTagList.flatMap((item) =>
-      item.tags.map((tagName) =>
-        prisma.elementToElementTag.create({
-          data: {
-            element: {
-              connect: { improbibIdentifier: item.improbibIdentifier },
-            },
-            tag: {
-              connect: { name: tagName },
-            },
-          },
-        }),
-      ),
-    ),
-  );
-  // for (const item of elementTagList) {
-  //   await prisma.element.update({
-  //     where: { improbibIdentifier: item.improbibIdentifier },
-  //     data: {
-  //       tags: { connect: item.tags.map((tagName) => ({ name: tagName })) },
-  //     },
-  //   });
-  // }
-  // }
-  // await Promise.all(
-  //   elementTagList.map((item) =>
-  //     prisma.element.update({
-  //       where: { improbibIdentifier: item.improbibIdentifier },
-  //       data: {
-  //         tags: { connect: item.tags.map((tagName) => ({ name: tagName })) },
-  //       },
-  //     }),
-  //   ),
-  // );
   console.log(`added improbib entries in ${Date.now() - startTime} ms`);
 }
 
