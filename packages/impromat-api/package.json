@@ -20,7 +20,7 @@
     "test": "yarn test:backend-up && yarn codegen && yarn test:jest",
     "test:unit": "yarn test:jest src/**/*.test.ts",
     "test:jest": "yarn test:load-env jest",
-    "test:backend-up": "yarn docker-compose --profile database up --wait",
+    "test:backend-up": "yarn docker-compose --profile database up",
     "test:backend-restart": "yarn docker-compose down && yarn test:backend-up",
     "test:watch": "yarn test --watch",
     "test:cov": "yarn test --coverage",
