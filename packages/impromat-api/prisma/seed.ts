@@ -35,6 +35,10 @@ async function main() {
     data: tagList.map((tagName) => ({ name: tagName })),
   });
 
+  const elementTagList: Array<{
+    improbibIdentifier: string;
+    tags: string[];
+  }> = [];
   for (const {
     baseUrl,
     identifier,
@@ -47,6 +51,7 @@ async function main() {
     sourceUrl,
     tags,
   } of improbibElements) {
+    elementTagList.push({ improbibIdentifier: identifier, tags });
     await prisma.element.create({
       data: {
         visibility: 'PUBLIC',
@@ -60,17 +65,28 @@ async function main() {
         sourceBaseUrl: baseUrl,
         sourceName,
         sourceUrl,
-        tags: {
-          connect: [...new Set(tags)].map((tagName) => ({
-            elementId_tagId: undefined,
-            tag: {
-              name: tagName,
-            },
-          })),
-        },
       },
     });
   }
+
+  await prisma.$transaction(
+    elementTagList.flatMap((item) =>
+      item.tags.map((tagName) =>
+        prisma.elementToElementTag.create({
+          data: {
+            element: {
+              connect: {
+                improbibIdentifier: item.improbibIdentifier,
+              },
+            },
+            tag: {
+              connect: { name: tagName },
+            },
+          },
+        }),
+      ),
+    ),
+  );
 
   console.log(`added improbib entries in ${Date.now() - startTime} ms`);
 }
