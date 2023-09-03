@@ -61,7 +61,7 @@ async function main() {
         sourceName,
         sourceUrl,
         tags: {
-          connectOrCreate: tags.map((tagName) => ({
+          connectOrCreate: [...new Set(tags)].map((tagName) => ({
             create: {
               tag: {
                 connectOrCreate: {
