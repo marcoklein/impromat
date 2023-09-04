@@ -6,6 +6,7 @@ import {
   ElementVisibility as PrismaElementVisibility,
   User,
 } from '@prisma/client';
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import {
   CreateElementInput,
   UpdateElementInput,
@@ -22,15 +23,20 @@ import {
   PrismaServiceMock,
   PrismaServiceMockProvider,
 } from 'test/prisma-service-mock';
-import { PrismaService } from './prisma.service';
-import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
-import { UserService } from './user.service';
+import { UUID4_REGEX } from 'test/test-utils/uuid4-regex';
 import { ElementAIService } from './element-ai.service';
+import { PrismaService } from './prisma.service';
+import { UserService } from './user.service';
+import { randomUUID as randomUUIDOriginal } from 'node:crypto';
+
+jest.mock('node:crypto');
+const randomUUID = randomUUIDOriginal as jest.Mock;
 
 describe('ElementService', () => {
   let service: ElementService;
   let prismaService: PrismaServiceMock;
   let userService: DeepMockProxy<UserService>;
+  const randomUUID4 = '2a4f6f7b-69c8-4e50-ab1d-6df4aad892f4';
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -176,31 +182,39 @@ describe('ElementService', () => {
       unknown,
       Parameters<typeof prismaService.element.create>
     >;
+    let transactionMock: jest.SpyInstance<
+      unknown,
+      Parameters<typeof prismaService.$transaction>
+    >;
 
     beforeEach(() => {
       // given default mocks
-      createMock = jest
-        .spyOn(prismaService.element, 'create')
-        .mockResolvedValueOnce({
-          id: 'test-element',
-          ownerId: 'test-user',
+      randomUUID.mockReturnValue(randomUUID4);
+      createMock = prismaService.element.create.mockResolvedValueOnce({
+        id: randomUUID4,
+        ownerId: 'test-user',
+        visibility: 'PRIVATE',
+      } as Partial<PrismaElement> as PrismaElement);
+
+      transactionMock = prismaService.$transaction.mockResolvedValue([
+        {
+          id: randomUUID4,
           visibility: 'PRIVATE',
-        } as Partial<PrismaElement> as PrismaElement);
+        } as Element,
+      ]);
     });
 
     it('should trigger expected create call', async () => {
       // when
       await service.createElement(userRequestId, createElementInput);
       // then
-      expect(createMock.mock.calls[0][0]).toEqual({
-        data: {
-          ...createElementInput,
-          sourceName: 'impromat',
-          ownerId: userRequestId,
-          tags: {
-            connectOrCreate: [],
-          },
-        },
+      const createCallData = createMock.mock.calls[0][0].data;
+      expect(createCallData).toEqual({
+        ...createElementInput,
+        id: '2a4f6f7b-69c8-4e50-ab1d-6df4aad892f4',
+        sourceName: 'impromat',
+        ownerId: userRequestId,
+        tags: undefined,
       });
     });
 
@@ -214,93 +228,6 @@ describe('ElementService', () => {
     });
 
     describe('with tags input', () => {
-      it('should call the expected SQL for connecting tags', async () => {
-        // given
-        const createElementInputWithTags = {
-          name: 'test-element-name',
-          tags: {
-            set: [
-              {
-                name: 'first-tag',
-              },
-              {
-                name: 'second-tag',
-              },
-              {
-                name: 'last-tag',
-              },
-            ],
-          },
-        } as CreateElementInput;
-        // when
-        await service.createElement(userRequestId, createElementInputWithTags);
-        // then
-        expect(createMock.mock.calls[0][0].data.tags).toEqual({
-          connectOrCreate: [
-            {
-              create: {
-                tag: {
-                  connectOrCreate: {
-                    create: {
-                      name: 'first-tag',
-                    },
-                    where: {
-                      name: 'first-tag',
-                    },
-                  },
-                },
-              },
-              where: {
-                elementId_tagId: undefined,
-                tag: {
-                  name: 'first-tag',
-                },
-              },
-            },
-            {
-              create: {
-                tag: {
-                  connectOrCreate: {
-                    create: {
-                      name: 'second-tag',
-                    },
-                    where: {
-                      name: 'second-tag',
-                    },
-                  },
-                },
-              },
-              where: {
-                elementId_tagId: undefined,
-                tag: {
-                  name: 'second-tag',
-                },
-              },
-            },
-            {
-              create: {
-                tag: {
-                  connectOrCreate: {
-                    create: {
-                      name: 'last-tag',
-                    },
-                    where: {
-                      name: 'last-tag',
-                    },
-                  },
-                },
-              },
-              where: {
-                elementId_tagId: undefined,
-                tag: {
-                  name: 'last-tag',
-                },
-              },
-            },
-          ],
-        });
-      });
-
       it('should call the expected SQL for setting tags', async () => {
         // given
         const createElementInputWithTags = {
@@ -313,66 +240,55 @@ describe('ElementService', () => {
               {
                 name: 'second-tag',
               },
-              {
-                name: 'last-tag',
-              },
             ],
           },
         } as CreateElementInput;
         // when
-        await service.createElement(userRequestId, createElementInputWithTags);
+        const result = await service.createElement(
+          userRequestId,
+          createElementInputWithTags,
+        );
         // then
-        expect(createMock.mock.calls[0][0].data.tags).toEqual({
-          connectOrCreate: [
-            {
+        expect(
+          prismaService.elementToElementTag.create.mock.calls,
+        ).toHaveLength(2);
+        expect(
+          prismaService.elementToElementTag.create.mock.calls[0][0].data,
+        ).toEqual({
+          element: {
+            connect: {
+              id: result.id,
+            },
+          },
+          tag: {
+            connectOrCreate: {
               create: {
-                tag: {
-                  connectOrCreate: {
-                    create: { name: 'first-tag' },
-                    where: { name: 'first-tag' },
-                  },
-                },
+                name: 'first-tag',
               },
               where: {
-                elementId_tagId: undefined,
-                tag: {
-                  name: 'first-tag',
-                },
+                name: 'first-tag',
               },
             },
-            {
+          },
+        });
+        expect(
+          prismaService.elementToElementTag.create.mock.calls[1][0].data,
+        ).toEqual({
+          element: {
+            connect: {
+              id: result.id,
+            },
+          },
+          tag: {
+            connectOrCreate: {
               create: {
-                tag: {
-                  connectOrCreate: {
-                    create: { name: 'second-tag' },
-                    where: { name: 'second-tag' },
-                  },
-                },
+                name: 'second-tag',
               },
               where: {
-                elementId_tagId: undefined,
-                tag: {
-                  name: 'second-tag',
-                },
+                name: 'second-tag',
               },
             },
-            {
-              create: {
-                tag: {
-                  connectOrCreate: {
-                    create: { name: 'last-tag' },
-                    where: { name: 'last-tag' },
-                  },
-                },
-              },
-              where: {
-                elementId_tagId: undefined,
-                tag: {
-                  name: 'last-tag',
-                },
-              },
-            },
-          ],
+          },
         });
       });
     });
@@ -506,7 +422,6 @@ describe('ElementService', () => {
           },
           tags: {
             set: [],
-            connectOrCreate: [],
           },
         },
       });

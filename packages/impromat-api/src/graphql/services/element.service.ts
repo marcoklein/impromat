@@ -15,6 +15,7 @@ import {
   ElementVisibility,
   Prisma,
 } from '@prisma/client';
+import { randomUUID } from 'node:crypto';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementPredictedTag } from 'src/dtos/types/element-predicted-tag.dto';
 import { ElementsFilterInput } from 'test/graphql-client/graphql';
@@ -35,7 +36,6 @@ export class ElementService {
   constructor(
     @Inject(PrismaService) private prismaService: PrismaService,
     private elementAiService: ElementAIService,
-    // private elementTagService: ElementTagService,
     private userService: UserService,
   ) {}
 
@@ -229,26 +229,36 @@ export class ElementService {
       createElementInput.languageCode,
     );
 
-    return this.prismaService.element.create({
+    const createdElementId = randomUUID();
+    const createElementQuery = this.prismaService.element.create({
       data: {
         ...createElementInput,
-        tags: {
-          connectOrCreate: tagsSetQuery.map((tagName) => ({
-            create: {
-              tag: {
-                connectOrCreate: {
-                  create: { name: tagName },
-                  where: { name: tagName },
-                },
-              },
-            },
-            where: { elementId_tagId: undefined, tag: { name: tagName } },
-          })),
-        },
+        id: createdElementId,
+        tags: undefined,
         sourceName: createElementInput.sourceName ?? IMPROMAT_SOURCE_NAME,
         ownerId: userRequestId,
       },
     });
+
+    const createTagsQueries = tagsSetQuery.map((tagName) =>
+      this.prismaService.elementToElementTag.create({
+        data: {
+          element: { connect: { id: createdElementId } },
+          tag: {
+            connectOrCreate: {
+              create: { name: tagName },
+              where: { name: tagName },
+            },
+          },
+        },
+      }),
+    );
+
+    const [createResult] = await this.prismaService.$transaction([
+      createElementQuery,
+      ...createTagsQueries,
+    ]);
+    return createResult;
   }
 
   /**
@@ -370,26 +380,28 @@ export class ElementService {
         },
         tags: {
           set: [], // ensure tags are removed, so connectOrCreate creates missing tags
-          connectOrCreate: [
-            ...transformedTagNames.map((tagName) => ({
-              create: {
-                tag: {
-                  connectOrCreate: {
-                    create: { name: tagName },
-                    where: { name: tagName },
-                  },
-                },
-              },
-              where: { elementId_tagId: undefined, tag: { name: tagName } },
-            })),
-          ],
         },
       },
     });
 
+    const elementQueries = transformedTagNames.map((tagName) =>
+      this.prismaService.elementToElementTag.create({
+        data: {
+          element: { connect: { id: updateElementInput.id } },
+          tag: {
+            connectOrCreate: {
+              create: { name: tagName },
+              where: { name: tagName },
+            },
+          },
+        },
+      }),
+    );
+
     const [, updateResult] = await this.prismaService.$transaction([
       saveSnapshotQuery,
       updateElementQuery,
+      ...elementQueries,
     ]);
 
     return updateResult;
