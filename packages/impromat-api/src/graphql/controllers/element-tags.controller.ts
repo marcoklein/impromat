@@ -4,6 +4,7 @@ import { ElementTagsFilterInput } from 'src/dtos/inputs/element-tags-filter-inpu
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import { Nullable } from 'src/utils/nullish';
 import { ElementTagService } from '../services/element-tag.service';
+import { PaginationArgs } from 'src/dtos/args/pagination-args';
 
 @Resolver(ElementTag)
 export class ElementTagsController {
@@ -11,19 +12,18 @@ export class ElementTagsController {
 
   @Query(() => [ElementTag])
   async tags(
+    @SessionUserId() sessionUserId: string | undefined,
     @Args('filter', {
       type: () => ElementTagsFilterInput,
       nullable: true,
     })
     filter: Nullable<ElementTagsFilterInput>,
-    @Args('skip', { nullable: true, defaultValue: 0 }) skip: number,
-    @Args('take', { nullable: true, defaultValue: 20 }) take: number,
-    @SessionUserId() sessionUserId: Nullable<string>,
+    @Args() paginationArgs: PaginationArgs,
   ) {
     return await this.elementTagsService.findAvailableTags(
-      filter ?? undefined,
-      { skip, take },
       sessionUserId,
+      filter ?? undefined,
+      paginationArgs,
     );
   }
 }

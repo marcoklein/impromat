@@ -1,20 +1,8 @@
 version: "3.9"
 services:
-  app:
-    depends_on:
-      - api
-    build:
-      context: ../../
-      dockerfile: packages/infrastructure/Dockerfile-impromat-app
-    ports:
-      - 12344:3080
-    networks:
-      - api-network
-    profiles:
-      - frontend
   api:
     depends_on:
-      seed-database:
+      reset-database:
         condition: service_completed_successfully
     build:
       context: ../../
@@ -34,7 +22,8 @@ services:
       ENABLE_TESTLOGIN: 1
     profiles:
       - backend
-  seed-database:
+      - all
+  reset-database:
     depends_on:
       database:
         condition: service_healthy
@@ -44,12 +33,7 @@ services:
     volumes:
       # allows restarting with new api sources
       - ../impromat-api/prisma:/app/packages/impromat-api/prisma:ro
-    command:
-      [
-        "bash",
-        "-c",
-        'time yarn prisma db push && time yarn prisma db seed'
-      ]
+    command: "yarn prisma:reset --force"
     healthcheck:
       disable: true
     networks:
@@ -60,6 +44,7 @@ services:
     profiles:
       - backend
       - database
+      - all
   database:
     image: postgres:latest
     networks:
@@ -71,6 +56,7 @@ services:
     profiles:
       - backend
       - database
+      - all
     healthcheck:
       test:
         [

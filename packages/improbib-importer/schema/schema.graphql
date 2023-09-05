@@ -196,6 +196,9 @@ type ElementSnapshot {
 
   """Element of snapshot."""
   element: Element!
+
+  """Element this snapshot was created of."""
+  parent: Element!
 }
 
 type ElementSearchMatch {
@@ -242,11 +245,12 @@ type Query {
 
   """Get information about the current user."""
   me: User!
-  tags(filter: ElementTagsFilterInput, skip: Float = 0, take: Float = 20): [ElementTag!]!
+  tags(filter: ElementTagsFilterInput, skip: Int! = 0, take: Int! = 20): [ElementTag!]!
 }
 
 input ElementSearchInput {
   text: String
+  tagNames: [String!]
   take: Int! = 20
   skip: Int! = 0
 }
@@ -338,6 +342,7 @@ input ElementsOrderByInput {
 """Filter tags of elements."""
 input ElementTagsFilterInput {
   text: String
+  selectedTagNames: [String!]
 }
 
 type Mutation {
@@ -356,6 +361,9 @@ type Mutation {
   createElement(input: CreateElementInput!): Element!
   updateElement(input: UpdateElementInput!): Element!
   updateUser(input: UpdateUserInput!): User!
+
+  """Iterates over all elements and applies tag mappings."""
+  applyAllTagMappings: Float!
 }
 
 input UpdateUserFavoriteElementInput {
@@ -494,20 +502,12 @@ input CreateElementInput {
 }
 
 input ElementTagsInput {
-  connect: [ElementTagWhereInput!]
-
   """Defines all tags of the element."""
-  set: [ElementTagSetInput!]
-}
-
-input ElementTagWhereInput {
-  id: ID
-  name: String
+  set: [ElementTagSetInput!]!
 }
 
 input ElementTagSetInput {
-  id: ID
-  name: String
+  name: String!
 }
 
 input UpdateElementInput {

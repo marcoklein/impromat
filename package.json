@@ -19,7 +19,7 @@
     "workspace:dev": "yarn foreach run dev",
     "workspace:lint": "yarn foreach --since --recursive run lint",
     "workspace:test": "yarn foreach --since --recursive run test",
-    "workspace:build": "yarn foreach --since --recursive run build",
+    "workspace:build": "yarn foreach --topological --since run build",
     "build": "yarn workspace:build",
     "docker-compose": "yarn workspace infrastructure docker-compose",
     "infra:config": "./packages/infrastructure/configure.sh",

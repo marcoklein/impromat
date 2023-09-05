@@ -20,6 +20,12 @@ Rebuild api image without cache
 yarn docker-compose build api --no-cache
 ```
 
+Print logs of all services
+
+```
+yarn docker-compose:logs
+```
+
 ### Configuration
 
 Allow execution of configuration script

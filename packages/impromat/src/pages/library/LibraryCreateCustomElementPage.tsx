@@ -145,9 +145,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             markdown: content,
             languageCode,
             tags: {
-              connect: tags.map((tag) => ({
-                id: tag.id,
-              })),
+              set: tags.map((tags) => ({ name: tags.name })),
             },
           },
         });

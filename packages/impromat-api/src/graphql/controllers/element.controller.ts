@@ -86,9 +86,7 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.elementService
-      .findElementById(userSessionId, element.id)
-      .owner();
+    return this.elementService.findElementOwner(userSessionId, element.id);
   }
 
   @UseGuards(GraphqlAuthGuard)
@@ -115,10 +113,7 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    return (
-      this.elementService.findElementById(userSessionId, element.id).tags() ??
-      []
-    );
+    return this.elementService.findElementTags(userSessionId, element.id);
   }
 
   @ResolveField(() => [WorkshopElement])

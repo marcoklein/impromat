@@ -6,6 +6,7 @@ import {
   ElementVisibility as PrismaElementVisibility,
   User,
 } from '@prisma/client';
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import {
   CreateElementInput,
   UpdateElementInput,
@@ -22,15 +23,20 @@ import {
   PrismaServiceMock,
   PrismaServiceMockProvider,
 } from 'test/prisma-service-mock';
-import { PrismaService } from './prisma.service';
-import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
-import { UserService } from './user.service';
+import { UUID4_REGEX } from 'test/test-utils/uuid4-regex';
 import { ElementAIService } from './element-ai.service';
+import { PrismaService } from './prisma.service';
+import { UserService } from './user.service';
+import { randomUUID as randomUUIDOriginal } from 'node:crypto';
+
+jest.mock('node:crypto');
+const randomUUID = randomUUIDOriginal as jest.Mock;
 
 describe('ElementService', () => {
   let service: ElementService;
   let prismaService: PrismaServiceMock;
   let userService: DeepMockProxy<UserService>;
+  const randomUUID4 = '2a4f6f7b-69c8-4e50-ab1d-6df4aad892f4';
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -153,6 +159,13 @@ describe('ElementService', () => {
             },
           ],
         },
+        include: {
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
+        },
         orderBy: [{ updatedAt: 'desc' }, { id: 'asc' }],
         skip: 1,
         take: 3,
@@ -169,28 +182,39 @@ describe('ElementService', () => {
       unknown,
       Parameters<typeof prismaService.element.create>
     >;
+    let transactionMock: jest.SpyInstance<
+      unknown,
+      Parameters<typeof prismaService.$transaction>
+    >;
 
     beforeEach(() => {
       // given default mocks
-      createMock = jest
-        .spyOn(prismaService.element, 'create')
-        .mockResolvedValueOnce({
-          id: 'test-element',
-          ownerId: 'test-user',
+      randomUUID.mockReturnValue(randomUUID4);
+      createMock = prismaService.element.create.mockResolvedValueOnce({
+        id: randomUUID4,
+        ownerId: 'test-user',
+        visibility: 'PRIVATE',
+      } as Partial<PrismaElement> as PrismaElement);
+
+      transactionMock = prismaService.$transaction.mockResolvedValue([
+        {
+          id: randomUUID4,
           visibility: 'PRIVATE',
-        } as Partial<PrismaElement> as PrismaElement);
+        } as Element,
+      ]);
     });
 
     it('should trigger expected create call', async () => {
       // when
       await service.createElement(userRequestId, createElementInput);
       // then
-      expect(createMock.mock.calls[0][0]).toEqual({
-        data: {
-          ...createElementInput,
-          sourceName: 'impromat',
-          ownerId: userRequestId,
-        },
+      const createCallData = createMock.mock.calls[0][0].data;
+      expect(createCallData).toEqual({
+        ...createElementInput,
+        id: '2a4f6f7b-69c8-4e50-ab1d-6df4aad892f4',
+        sourceName: 'impromat',
+        ownerId: userRequestId,
+        tags: undefined,
       });
     });
 
@@ -204,44 +228,6 @@ describe('ElementService', () => {
     });
 
     describe('with tags input', () => {
-      it('should call the expected SQL for connecting tags', async () => {
-        // given
-        const createElementInputWithTags = {
-          name: 'test-element-name',
-          tags: {
-            connect: [
-              {
-                name: 'first-tag',
-              },
-              {
-                id: 'second-tag-id',
-              },
-              {
-                id: 'last-tag-id',
-                name: 'last-tag',
-              },
-            ],
-          },
-        } as CreateElementInput;
-        // when
-        await service.createElement(userRequestId, createElementInputWithTags);
-        // then
-        expect(createMock.mock.calls[0][0].data.tags).toEqual({
-          connect: [
-            {
-              name: 'first-tag',
-            },
-            {
-              id: 'second-tag-id',
-            },
-            {
-              id: 'last-tag-id',
-              name: 'last-tag',
-            },
-          ],
-        });
-      });
-
       it('should call the expected SQL for setting tags', async () => {
         // given
         const createElementInputWithTags = {
@@ -252,88 +238,65 @@ describe('ElementService', () => {
                 name: 'first-tag',
               },
               {
-                id: 'second-tag-id',
-              },
-              {
-                id: 'last-tag-id',
-                name: 'last-tag',
+                name: 'second-tag',
               },
             ],
           },
         } as CreateElementInput;
         // when
-        await service.createElement(userRequestId, createElementInputWithTags);
+        const result = await service.createElement(
+          userRequestId,
+          createElementInputWithTags,
+        );
         // then
-        expect(createMock.mock.calls[0][0].data.tags).toEqual({
-          connectOrCreate: [
-            {
-              create: { name: 'first-tag' },
-              where: { name: 'first-tag' },
+        expect(
+          prismaService.elementToElementTag.create.mock.calls,
+        ).toHaveLength(2);
+        expect(
+          prismaService.elementToElementTag.create.mock.calls[0][0].data,
+        ).toEqual({
+          element: {
+            connect: {
+              id: result.id,
             },
-            {
-              create: { name: 'last-tag' },
-              where: { id: 'last-tag-id', name: 'last-tag' },
-            },
-          ],
-          connect: [
-            {
-              id: 'second-tag-id',
-            },
-          ],
-        });
-      });
-
-      it('should throw if set is called without any arguments', async () => {
-        // given
-        const createElementInputWithTags = {
-          name: 'test-element-name',
-          tags: {
-            set: [
-              {
-                name: undefined,
-                id: undefined,
-              },
-            ],
           },
-        } as unknown as CreateElementInput;
-        // when, then
-        await expect(
-          service.createElement(userRequestId, createElementInputWithTags),
-        ).rejects.toThrowError('Name and id undefined');
-      });
-
-      it('should not allow "connect" and "set" call for element tags', async () => {
-        // given
-        const createElementInputWithTags = {
-          name: 'test-element-name',
-          tags: {
-            set: [
-              {
+          tag: {
+            connectOrCreate: {
+              create: {
                 name: 'first-tag',
               },
-            ],
-            connect: [
-              {
-                id: 'test',
+              where: {
+                name: 'first-tag',
               },
-            ],
+            },
           },
-        } as CreateElementInput;
-        // when, then
-        await expect(
-          service.createElement(userRequestId, createElementInputWithTags),
-        ).rejects.toThrowError(
-          'Specify either "connect" or "set" for tags input.',
-        );
+        });
+        expect(
+          prismaService.elementToElementTag.create.mock.calls[1][0].data,
+        ).toEqual({
+          element: {
+            connect: {
+              id: result.id,
+            },
+          },
+          tag: {
+            connectOrCreate: {
+              create: {
+                name: 'second-tag',
+              },
+              where: {
+                name: 'second-tag',
+              },
+            },
+          },
+        });
       });
     });
   });
 
   describe('updateElement', () => {
     // given
-    let updateInput: UpdateElementInput = {
-      id: 'test-element',
-    };
+    let updateInput: UpdateElementInput;
     let existingMock: jest.SpyInstance<
       unknown,
       Parameters<typeof prismaService.element.findFirst>
@@ -352,13 +315,20 @@ describe('ElementService', () => {
     >;
     beforeEach(() => {
       // given default mocks
+      updateInput = {
+        id: 'test-element',
+        name: 'new-name',
+      };
       existingMock = jest
         .spyOn(prismaService.element, 'findFirst')
         .mockResolvedValue({
           id: 'test-element',
           ownerId: 'test-user',
           visibility: 'PRIVATE',
-          tags: [],
+          tags: [
+            { tag: { id: 'tag1-id', name: 'tag1' } },
+            { tag: { id: 'tag2-id', name: 'tag2' } },
+          ],
         } as Partial<PrismaElement> as PrismaElement);
       createSnapshotElementMock = jest
         .spyOn(prismaService.element, 'create')
@@ -369,7 +339,6 @@ describe('ElementService', () => {
       updateTransaction = jest
         .spyOn(prismaService, '$transaction')
         .mockResolvedValue([
-          null,
           {
             id: 'test-element',
             visibility: 'PRIVATE',
@@ -396,15 +365,16 @@ describe('ElementService', () => {
     });
 
     it('should create a snapshot element', async () => {
-      // when
+      // given beforeEach
       updateInput = {
         id: 'test-element',
         improbibIdentifier: 'improbib-identifier',
       };
+      // when
       await service.updateElement(userRequestId, updateInput);
       // then
       expect(createSnapshotElementMock.mock.calls[0][0].data).toEqual({
-        id: undefined,
+        id: expect.stringMatching(UUID4_REGEX), //  randomUUID4, 2a4f6f7b-69c8-4e50-ab1d-6df4aad892f4
         createdAt: undefined,
         updatedAt: undefined,
         metadata: {
@@ -415,8 +385,20 @@ describe('ElementService', () => {
         snapshotParentId: 'test-element',
         improbibIdentifier: undefined,
         snapshotUserId: userRequestId,
-        tags: { connect: [] },
+        tags: undefined,
       });
+    });
+
+    it('should not create a snapshot element if there is no change to tags', async () => {
+      // given beforeEach
+      updateInput = {
+        id: 'test-element',
+        tags: { set: [{ name: 'tag1' }, { name: 'tag2' }] },
+      };
+      // when
+      await service.updateElement(userRequestId, updateInput);
+      // then
+      expect(createSnapshotElementMock.mock.calls).toHaveLength(0);
     });
 
     it('should update the element', async () => {
@@ -429,12 +411,13 @@ describe('ElementService', () => {
         },
         data: {
           ...updateInput,
+          version: {
+            increment: 1,
+          },
           metadata: {
             connect: undefined,
           },
-          tags: {
-            connectOrCreate: [],
-          },
+          tags: undefined,
         },
       });
       expect(updateTransaction.mock.calls).toHaveLength(1);
@@ -497,34 +480,6 @@ describe('ElementService', () => {
       await expect(() =>
         service.updateElement(userRequestId, updateInput),
       ).rejects.toThrow('Cannot change visibility to private.');
-    });
-
-    describe('with tags input', () => {
-      it('should throw an error if calling set elements input', async () => {
-        // given
-        const updateElementInput = {
-          name: 'test-element-name',
-          tags: {
-            set: [
-              {
-                name: 'first-tag',
-              },
-              {
-                id: 'second-tag-id',
-              },
-              {
-                id: 'last-tag-id',
-                name: 'last-tag',
-              },
-            ],
-          },
-        } as UpdateElementInput;
-
-        // when, then
-        await expect(() =>
-          service.updateElement(userRequestId, updateElementInput),
-        ).rejects.toThrow('Not implemented yet');
-      });
     });
   });
 });

@@ -133,6 +133,7 @@ export type ElementQueryResult = {
 
 export type ElementSearchInput = {
   skip?: Scalars['Int'];
+  tagNames?: InputMaybe<Array<Scalars['String']>>;
   take?: Scalars['Int'];
   text?: InputMaybe<Scalars['String']>;
 };
@@ -160,6 +161,8 @@ export type ElementSnapshot = {
   /** Element of snapshot. */
   element: Element;
   id: Scalars['ID'];
+  /** Element this snapshot was created of. */
+  parent: Element;
   /** User that created the snapshot. */
   user?: Maybe<User>;
 };
@@ -175,24 +178,18 @@ export type ElementTag = {
 };
 
 export type ElementTagSetInput = {
-  id?: InputMaybe<Scalars['ID']>;
-  name?: InputMaybe<Scalars['String']>;
-};
-
-export type ElementTagWhereInput = {
-  id?: InputMaybe<Scalars['ID']>;
-  name?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 /** Filter tags of elements. */
 export type ElementTagsFilterInput = {
+  selectedTagNames?: InputMaybe<Array<Scalars['String']>>;
   text?: InputMaybe<Scalars['String']>;
 };
 
 export type ElementTagsInput = {
-  connect?: InputMaybe<Array<ElementTagWhereInput>>;
   /** Defines all tags of the element. */
-  set?: InputMaybe<Array<ElementTagSetInput>>;
+  set: Array<ElementTagSetInput>;
 };
 
 export enum ElementVisibility {
@@ -221,6 +218,8 @@ export type IdInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Iterates over all elements and applies tag mappings. */
+  applyAllTagMappings: Scalars['Float'];
   createElement: Element;
   createWorkshop: Workshop;
   deleteWorkshop?: Maybe<Workshop>;
@@ -339,8 +338,8 @@ export type QuerySearchElementsArgs = {
 
 export type QueryTagsArgs = {
   filter?: InputMaybe<ElementTagsFilterInput>;
-  skip?: InputMaybe<Scalars['Float']>;
-  take?: InputMaybe<Scalars['Float']>;
+  skip?: Scalars['Int'];
+  take?: Scalars['Int'];
 };
 
 

@@ -1,5 +1,5 @@
 import { IonSpinner } from "@ionic/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   GridItemContent,
   VirtuosoGrid,
@@ -15,6 +15,7 @@ interface ContainerProps<ItemData, Context> {
   items: readonly ItemData[];
   endReached?: () => void;
   isFetching: boolean;
+  scrollToTop: number;
 }
 
 /**
@@ -26,6 +27,7 @@ export const VirtualCardGrid = <ItemData, Context>({
   items,
   endReached,
   isFetching,
+  scrollToTop,
 }: ContainerProps<ItemData, Context>) => {
   const logger = useComponentLogger("PreviewCardGrid");
   const virtuosoRef = useRef<VirtuosoGridHandle>(null);
@@ -33,6 +35,13 @@ export const VirtualCardGrid = <ItemData, Context>({
     scrollStoreKey ? true : false,
   );
   const [scrollerRef, setScrollerRef] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    virtuosoRef.current?.scrollTo({
+      behavior: "smooth",
+      top: 0,
+    });
+  }, [scrollToTop]);
 
   return (
     <VirtuosoGrid
@@ -49,6 +58,12 @@ export const VirtualCardGrid = <ItemData, Context>({
             logger("Retrieved scroll options %o", scrollOptions);
             if (scrollOptions.totalCount === items.length) {
               logger("Restore scroll position");
+              setTimeout(() => {
+                virtuosoRef.current?.scrollTo({
+                  behavior: "auto",
+                  top: scrollOptions.top,
+                });
+              }, 0);
               setTimeout(() => {
                 virtuosoRef.current?.scrollTo({
                   behavior: "auto",
