@@ -1,5 +1,18 @@
 # impromat-api
 
+## 0.19.0
+
+### Minor Changes
+
+- a1f55ea: Standardize element tags through English and German mappings
+- a1f55ea: Filter by element tags
+- 9cecddd: Add basic ChatGPT integration for predicting level tags of improv elements.
+
+### Patch Changes
+
+- Updated dependencies [9cecddd]
+  - impromat-ai@0.1.0
+
 ## 0.18.0
 
 ### Minor Changes

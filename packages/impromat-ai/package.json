@@ -1,7 +1,7 @@
 {
   "name": "impromat-ai",
   "type": "commonjs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "main": "./build/src/lib/index.js",
   "types": "./build/src/lib/index.d.ts",

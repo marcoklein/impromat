@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.45.0
+
+### Minor Changes
+
+- a1f55ea: Filter by element tags
+
+### Patch Changes
+
+- Updated dependencies [a1f55ea]
+- Updated dependencies [a1f55ea]
+- Updated dependencies [9cecddd]
+  - impromat-api@0.19.0
+
 ## 0.44.0
 
 ### Minor Changes
