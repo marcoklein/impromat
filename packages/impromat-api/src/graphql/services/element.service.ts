@@ -365,7 +365,7 @@ export class ElementService {
       return existingElement;
     }
 
-    const saveSnapshotQuery = this.createSnapshotQuery(
+    const createElementSnapshotQueries = this.createSnapshotQuery(
       userRequestId,
       existingElement,
     );
@@ -373,45 +373,88 @@ export class ElementService {
       where: { id: updateElementInput.id },
       data: {
         ...updateElementInput,
+        version: {
+          // TODO filter for optimistic concurrency control exception
+          // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#optimistic-concurrency-control-on-updates
+          increment: 1,
+        },
         metadata: {
           connect: existingElement.metadata?.map((metadata) => ({
             id: metadata.id,
           })),
         },
-        tags: {
-          set: [], // ensure tags are removed, so connectOrCreate creates missing tags
-        },
+        tags: undefined,
       },
     });
+    const existingElementTagNames = existingElement.tags.map(
+      ({ tag }) => tag.name,
+    );
+    const deletedTagNames = existingElementTagNames.filter(
+      (existingTagName) => !transformedTagNames.includes(existingTagName),
+    );
+    const createdTagNames = transformedTagNames.filter(
+      (transformedTagName) =>
+        !existingElementTagNames.includes(transformedTagName),
+    );
 
-    const elementQueries = transformedTagNames.map((tagName) =>
+    const deleteElementTagsQuery =
+      this.prismaService.elementToElementTag.deleteMany({
+        where: {
+          elementId: updateElementInput.id,
+          tag: { name: { in: deletedTagNames } },
+        },
+      });
+
+    const createElementTagsQuery = this.prismaService.elementTag.createMany({
+      data: createdTagNames.map((tagName) => ({ name: tagName })),
+      skipDuplicates: true,
+    });
+
+    const createElementToElementTagQueries = createdTagNames.map((tagName) =>
       this.prismaService.elementToElementTag.create({
         data: {
-          element: { connect: { id: updateElementInput.id } },
+          element: {
+            connect: { id: updateElementInput.id },
+          },
           tag: {
-            connectOrCreate: {
-              create: { name: tagName },
-              where: { name: tagName },
+            connect: {
+              name: tagName,
             },
           },
         },
       }),
     );
+    console.log('create query', createElementToElementTagQueries);
 
-    const [, updateResult] = await this.prismaService.$transaction([
-      saveSnapshotQuery,
+    console.log({
+      element: {
+        connect: { id: updateElementInput.id },
+      },
+      tag: {
+        connect: {
+          name: createdTagNames.at(0),
+        },
+      },
+    });
+
+    const [updateResult] = await this.prismaService.$transaction([
       updateElementQuery,
-      ...elementQueries,
+      deleteElementTagsQuery,
+      createElementTagsQuery,
+      ...createElementToElementTagQueries,
+      ...createElementSnapshotQueries,
     ]);
 
     return updateResult;
   }
 
   private transformTags(tagNames: string[], languageCode: string | undefined) {
-    return tagNames.flatMap(
+    const transformedTags = tagNames.flatMap(
       (tagName) =>
         transformTagNames([tagName], languageCode)?.tags ?? [tagName],
     );
+    const uniqueTags = [...new Set(transformedTags)];
+    return uniqueTags;
   }
 
   private createSnapshotQuery(
@@ -421,13 +464,14 @@ export class ElementService {
       tags: (ElementToElementTag & { tag: ElementTag })[];
     },
   ) {
-    return this.prismaService.element.create({
+    const snapshotElementId = randomUUID();
+    const createElementQuery = this.prismaService.element.create({
       data: {
         ...existing,
         ...{
           snapshotParentId: existing.id,
           snapshotUserId: userRequestId,
-          id: undefined,
+          id: snapshotElementId,
           updatedAt: undefined,
           createdAt: undefined,
           improbibIdentifier: undefined,
@@ -437,14 +481,20 @@ export class ElementService {
               id: metadata.id,
             })),
           },
-          tags: {
-            create: existing.tags.map((existingTag) => ({
-              // TODO add data of relationship if relevant
-              tag: { connect: { name: existingTag.tag.name } },
-            })),
-          },
+          tags: undefined,
         },
       },
     });
+
+    const elementToElementTagQueries = existing.tags.map((existingTag) =>
+      this.prismaService.elementToElementTag.create({
+        data: {
+          // TODO copy createdAt and updatedAt
+          element: { connect: { id: snapshotElementId } },
+          tag: { connect: { name: existingTag.tag.name } },
+        },
+      }),
+    );
+    return [createElementQuery, ...elementToElementTagQueries];
   }
 }

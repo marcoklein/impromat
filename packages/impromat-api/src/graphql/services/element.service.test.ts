@@ -339,7 +339,6 @@ describe('ElementService', () => {
       updateTransaction = jest
         .spyOn(prismaService, '$transaction')
         .mockResolvedValue([
-          null,
           {
             id: 'test-element',
             visibility: 'PRIVATE',
@@ -375,7 +374,7 @@ describe('ElementService', () => {
       await service.updateElement(userRequestId, updateInput);
       // then
       expect(createSnapshotElementMock.mock.calls[0][0].data).toEqual({
-        id: undefined,
+        id: expect.stringMatching(UUID4_REGEX), //  randomUUID4, 2a4f6f7b-69c8-4e50-ab1d-6df4aad892f4
         createdAt: undefined,
         updatedAt: undefined,
         metadata: {
@@ -386,12 +385,7 @@ describe('ElementService', () => {
         snapshotParentId: 'test-element',
         improbibIdentifier: undefined,
         snapshotUserId: userRequestId,
-        tags: {
-          create: [
-            { tag: { connect: { name: 'tag1' } } },
-            { tag: { connect: { name: 'tag2' } } },
-          ],
-        },
+        tags: undefined,
       });
     });
 
@@ -417,12 +411,13 @@ describe('ElementService', () => {
         },
         data: {
           ...updateInput,
+          version: {
+            increment: 1,
+          },
           metadata: {
             connect: undefined,
           },
-          tags: {
-            set: [],
-          },
+          tags: undefined,
         },
       });
       expect(updateTransaction.mock.calls).toHaveLength(1);
