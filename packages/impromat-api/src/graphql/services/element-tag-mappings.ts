@@ -81,13 +81,13 @@ const mappingTableDe: Record<string, string[]> = {
 
 const mappingTableEn: Record<string, string[]> = {
   // guideline: singular, lowercase, no special characters
-  game: ['Improv Games', 'Handle'],
+  game: ['Improv Games', 'Handle', 'improv game'],
   warmup: ['Warm-ups', 'Warm-Up', 'Warm Ups'],
   exercise: ['Improv Exercises', 'Exercise'],
   icebreaker: ['Icebreaker Games'],
   show: ['Improv Forms', 'Shows', 'Improv Shows'],
 
-  longform: ['Long-Form', 'Longform'],
+  longform: ['Long-Form', 'Longform', 'Long Form'],
 
   switch: ['Switches'],
   accepting: ['Accepting'],
