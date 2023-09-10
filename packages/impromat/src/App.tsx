@@ -10,14 +10,12 @@ import { MenuComponent } from "./pages/navigation/MenuComponent";
 import { RootNavigation } from "./pages/navigation/RootNavigation";
 import { HIDE_MENU_SIZE } from "./pages/navigation/responsive-navigation";
 import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
-import { WorkshopPage } from "./pages/workshop/WorkshopPage";
 import {
   routeLibraryCreateCustomElement,
   routeLibraryElement,
 } from "./routes/library-routes";
 import {
   routeRootNavigation,
-  routeWorkshop,
   routeWorkshopElement,
 } from "./routes/shared-routes";
 
@@ -29,9 +27,6 @@ export const App: React.FC = () => {
           <MenuComponent></MenuComponent>
           <IonRouterOutlet id="main">
             <Redirect path="/" exact to={routeRootNavigation()}></Redirect>
-            <Route path={routeWorkshop()} exact>
-              <WorkshopPage></WorkshopPage>
-            </Route>
             <Route path={routeWorkshopElement()} exact>
               <WorkshopElementPage></WorkshopElementPage>
             </Route>

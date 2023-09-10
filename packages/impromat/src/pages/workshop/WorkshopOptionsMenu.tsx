@@ -84,7 +84,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
         }
         setDuplicatedWorkshop({ id: workshop.id, name: workshop.name });
         logger("Adding new workshop with id %s", id);
-        const navigateTo = `/workshop/${id}`;
+        const navigateTo = routeWorkshop(id);
         history.replace(navigateTo);
         logger("Navigating to %s", navigateTo);
       },

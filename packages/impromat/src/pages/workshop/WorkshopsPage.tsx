@@ -16,6 +16,7 @@ import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
+import { FEATURE_WORKSHOPS_FILTER_BAR } from "../../feature-toggles";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -131,18 +132,22 @@ export const WorkshopsPage: React.FC = () => {
         </IonButton>
       }
       bottomToolbar={
-        <WorkshopsFilterBar
-          filterInput={userWorkshopsFilterInput}
-          onFilterInputChange={(filterInput) => {
-            console.log("filter changed");
-            reexecuteWorkshopsQuery();
-            setUserWorkshopsFilterInput(filterInput);
-            localStorage.setItem(
-              "user-workshops-filter-input",
-              JSON.stringify(filterInput),
-            );
-          }}
-        ></WorkshopsFilterBar>
+        <>
+          {FEATURE_WORKSHOPS_FILTER_BAR && (
+            <WorkshopsFilterBar
+              filterInput={userWorkshopsFilterInput}
+              onFilterInputChange={(filterInput) => {
+                console.log("filter changed");
+                reexecuteWorkshopsQuery();
+                setUserWorkshopsFilterInput(filterInput);
+                localStorage.setItem(
+                  "user-workshops-filter-input",
+                  JSON.stringify(filterInput),
+                );
+              }}
+            ></WorkshopsFilterBar>
+          )}
+        </>
       }
     >
       <PageContentLoaderComponent

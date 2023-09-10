@@ -21,6 +21,7 @@ import {
   routeMoreInfo,
   routePrivacyPolicy,
   routeRootNavigation,
+  routeWorkshop,
   routeWorkshops,
 } from "../../routes/shared-routes";
 import { AboutPage } from "../AboutPage";
@@ -31,6 +32,7 @@ import { MoreInfoPage } from "../MoreInfoPage";
 import { PrivacyPolicyPage } from "../PrivacyPolicyPage";
 import { AccountPage } from "../account/AccountPage";
 import { LibraryPage } from "../library/LibraryPage";
+import { WorkshopPage } from "../workshop/WorkshopPage";
 import { WorkshopsPage } from "../workshop/WorkshopsPage";
 import { HIDE_MENU_SIZE } from "./responsive-navigation";
 
@@ -60,7 +62,7 @@ export const ROOT_TABS: Record<RootTabs, TabConfig> = {
     name: "Exercises & Games",
     icon: barbell,
     route: routeLibrary(),
-    element: <LibraryPage />,
+    element: <LibraryPage></LibraryPage>,
   },
   WORKSHOPS: {
     name: "Workshops",
@@ -121,6 +123,9 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
           </Route>
           <Route path={routeCommunity()} exact>
             <CommunityPage></CommunityPage>
+          </Route>
+          <Route path={routeWorkshop()} exact>
+            <WorkshopPage></WorkshopPage>
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom" className={`ion-hide-${HIDE_MENU_SIZE}-up`}>

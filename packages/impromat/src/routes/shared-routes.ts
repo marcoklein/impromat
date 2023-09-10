@@ -13,14 +13,19 @@ export const routePrivacyPolicy = () => `${routeMoreInfo()}/privacy`;
 export const routeAccount = () => `${routeMoreInfo()}/account`;
 export const routeLegal = () => `${routeMoreInfo()}/legal`;
 
-export const routeAccountSignin = () => "/account/signin";
+// routes for workshops tab
 export const routeWorkshops = () => `${routeRootNavigation()}/workshops`;
 export const routeWorkshop = (workshopId: string = ROUTE_WORKHOP_ID) =>
-  `/workshop/${workshopId}`;
+  `${routeWorkshops()}/workshop/${workshopId}`;
+
+// independent routes
 export const routeWorkshopElement = (
   workshopId: string = ROUTE_WORKHOP_ID,
   elementId: string = ROUTE_WORKHOP_ELEMENT_ID,
 ) => `/workshop/${workshopId}/part/${elementId}`;
+
+// not signed in
+export const routeAccountSignin = () => "/account/signin";
 
 // unused routes
 export const routeCommunity = () => `${routeRootNavigation()}/community`;

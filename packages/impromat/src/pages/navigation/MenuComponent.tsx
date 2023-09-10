@@ -1,10 +1,10 @@
 import { IonMenu } from "@ionic/react";
 import { useCallback, useRef } from "react";
-import { SignInMenuContentComponent } from "./menu/SignInMenuContentComponent";
 import { useHistoryListener } from "../../hooks/use-history-listener";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
-import { HIDE_MENU_SIZE } from "./responsive-navigation";
 import { MenuContentComponent } from "./menu/MenuContentComponent";
+import { SignInMenuContentComponent } from "./menu/SignInMenuContentComponent";
+import { HIDE_MENU_SIZE } from "./responsive-navigation";
 
 export const MenuComponent: React.FC = () => {
   const menuRef = useRef<any>();

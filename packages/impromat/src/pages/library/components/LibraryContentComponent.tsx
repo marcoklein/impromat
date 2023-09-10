@@ -1,5 +1,4 @@
 import {
-  IonContent,
   IonHeader,
   IonIcon,
   IonLabel,
@@ -8,19 +7,10 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { brush, heart, search } from "ionicons/icons";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Redirect,
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-  useRouteMatch,
-} from "react-router";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { usePersistedState } from "../../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
 import { COLOR_LIKE, COLOR_USER_CREATED } from "../../../theme/theme-colors";
-import { routeLibraryTab } from "../../../routes/library-routes";
 import { CustomElementsTabComponent } from "./CustomElementsTabComponent";
 import { FavoriteElementsTabComponent } from "./FavoriteElementsTabComponent";
 import { SearchElementTabComponent } from "./SearchElementTabComponent";
@@ -44,49 +34,29 @@ interface ContainerProps {
 export const LibraryContentComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
-  const hasWorkshopContext = useMemo(() => !!workshopId, [workshopId]);
-  const history = useHistory();
-  const routeMatch = useRouteMatch();
-  const { path } = routeMatch;
-  const location = useLocation();
   const logger = useComponentLogger("LibraryContentComponent");
   useStateChangeLogger(workshopId, "workshopId", logger);
 
-  const [tab, setTab] = useState(Tabs.SEARCH);
-  useEffect(() => {
-    logger("location pathname", location.pathname);
-    if (location.pathname.endsWith(Tabs.CREATE)) {
-      setTab(Tabs.CREATE);
-    } else if (location.pathname.endsWith(Tabs.LIKES)) {
-      setTab(Tabs.LIKES);
-    } else {
-      setTab(Tabs.SEARCH);
-    }
-  }, [location.pathname, hasWorkshopContext, logger]);
-
-  const createTabsRoute = useCallback(
-    (tab: Tabs) => {
-      logger("createTabsRoute workshopId=%s", workshopId);
-      return routeLibraryTab(tab, { workshopId });
-    },
-    [workshopId, logger],
+  const [tab, setTab] = usePersistedState<Tabs>(
+    "LibraryContentComponent",
+    Tabs.SEARCH,
   );
 
   return (
     <>
-      <IonHeader className="ion-hide-lg-up">
+      <IonHeader>
         <IonToolbar>
           <IonSegment value={tab}>
             <IonSegmentButton
               value={Tabs.SEARCH}
-              onClick={() => history.replace(createTabsRoute(Tabs.SEARCH))}
+              onClick={() => setTab(Tabs.SEARCH)}
             >
               <IonIcon icon={search}></IonIcon>
               <IonLabel>Explore</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton
               value={Tabs.LIKES}
-              onClick={() => history.replace(createTabsRoute(Tabs.LIKES))}
+              onClick={() => setTab(Tabs.LIKES)}
               color="red-5"
             >
               <IonIcon icon={heart} color={COLOR_LIKE}></IonIcon>
@@ -94,7 +64,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
             </IonSegmentButton>
             <IonSegmentButton
               value={Tabs.CREATE}
-              onClick={() => history.replace(createTabsRoute(Tabs.CREATE))}
+              onClick={() => setTab(Tabs.CREATE)}
             >
               <IonIcon icon={brush} color={COLOR_USER_CREATED}></IonIcon>
               <IonLabel>My Library</IonLabel>
@@ -102,32 +72,21 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
           </IonSegment>
         </IonToolbar>
       </IonHeader>
-      <Switch>
-        <Redirect
-          from={`${path}/`}
-          to={`${path}/${Tabs.SEARCH}${location.search}`}
-          exact
-        ></Redirect>
-        <Route path={`${path}/${Tabs.SEARCH}`} exact>
-          <SearchElementTabComponent
+      {(tab === Tabs.SEARCH && (
+        <SearchElementTabComponent
+          workshopId={workshopId}
+        ></SearchElementTabComponent>
+      )) ||
+        (tab === Tabs.LIKES && (
+          <FavoriteElementsTabComponent
             workshopId={workshopId}
-          ></SearchElementTabComponent>
-        </Route>
-        <Route path={`${path}/${Tabs.LIKES}`} exact>
-          <IonContent>
-            <FavoriteElementsTabComponent
-              workshopId={workshopId}
-            ></FavoriteElementsTabComponent>
-          </IonContent>
-        </Route>
-        <Route path={`${path}/${Tabs.CREATE}`} exact>
-          <IonContent>
-            <CustomElementsTabComponent
-              workshopId={workshopId}
-            ></CustomElementsTabComponent>
-          </IonContent>
-        </Route>
-      </Switch>
+          ></FavoriteElementsTabComponent>
+        )) ||
+        (tab === Tabs.CREATE && (
+          <CustomElementsTabComponent
+            workshopId={workshopId}
+          ></CustomElementsTabComponent>
+        ))}
     </>
   );
 };

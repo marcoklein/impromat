@@ -22,6 +22,7 @@ import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutat
 import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/local-storage-workshop-id";
 import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
 import { routeLibrary } from "../../routes/library-routes";
+import { routeWorkshop } from "../../routes/shared-routes";
 
 const LibraryElementPageQuery = graphql(`
   query LibraryElementQuery($userId: ID!, $elementId: ID!) {
@@ -131,7 +132,7 @@ export const LibraryElementPage: React.FC = () => {
         },
       },
     }).then(() => {
-      history.push(`/workshop/${workshop.id}`);
+      history.push(`${routeWorkshop(workshop.id)}`);
     });
   }
 

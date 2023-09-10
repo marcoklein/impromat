@@ -6,6 +6,7 @@ import {
   IonHeader,
   IonLabel,
   IonPage,
+  IonProgressBar,
   IonTitle,
   IonToolbar,
   useIonRouter,
@@ -27,6 +28,7 @@ interface ContainerProps extends PropsWithChildren {
   customContentWrapper?: boolean;
   bottomToolbar?: JSX.Element | null;
   footer?: JSX.Element | null;
+  showProgressBar?: boolean;
 }
 
 /**
@@ -41,6 +43,7 @@ export const PageScaffold: React.FC<ContainerProps> = ({
   toolbarButtons,
   defaultBackHref,
   footer,
+  showProgressBar,
 }) => {
   const router = useIonRouter();
   const isNavRoute = useMemo(
@@ -68,6 +71,9 @@ export const PageScaffold: React.FC<ContainerProps> = ({
       )}
       {customContentWrapper ? children : <IonContent>{children}</IonContent>}
       {footer && <IonFooter>{footer}</IonFooter>}
+      {showProgressBar && (
+        <IonProgressBar type="indeterminate"></IonProgressBar>
+      )}
     </IonPage>
   );
 };
