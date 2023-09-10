@@ -1,14 +1,4 @@
-import {
-  IonButton,
-  IonButtons,
-  IonHeader,
-  IonIcon,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
-import { arrowBack } from "ionicons/icons";
+import { PageScaffold } from "../../components/PageScaffold";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
@@ -21,28 +11,14 @@ export const LibraryPage: React.FC = () => {
   const logger = useComponentLogger("LibraryPage");
   useStateChangeLogger(workshopId, "workshopId from params", logger);
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            {workshopId ? (
-              <IonButton
-                routerLink={routeWorkshop(workshopId)}
-                routerDirection="back"
-              >
-                <IonIcon icon={arrowBack} slot="icon-only"></IonIcon>
-              </IonButton>
-            ) : (
-              <IonMenuButton></IonMenuButton>
-            )}
-          </IonButtons>
-          <IonTitle>{workshopId ? "Add Element" : "Element Library"}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
+    <PageScaffold
+      customContentWrapper
+      defaultBackHref={workshopId && routeWorkshop(workshopId)}
+      title={workshopId ? "Add Element" : "Element Library"}
+    >
       <LibraryContentComponent
         workshopId={workshopId}
       ></LibraryContentComponent>
-    </IonPage>
+    </PageScaffold>
   );
 };

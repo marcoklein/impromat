@@ -38,7 +38,7 @@ import { Tabs } from "./components/LibraryContentComponent";
 import {
   LIBRARY_ELEMENT_ID_SEARCH_PARAM,
   routeLibrary,
-} from "./library-routes";
+} from "../../routes/library-routes";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
 
 const LibraryCreateCustomElement_Query = graphql(`

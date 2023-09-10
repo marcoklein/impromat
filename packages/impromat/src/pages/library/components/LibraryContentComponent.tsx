@@ -1,6 +1,6 @@
 import {
   IonContent,
-  IonFooter,
+  IonHeader,
   IonIcon,
   IonLabel,
   IonSegment,
@@ -20,7 +20,7 @@ import {
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
 import { COLOR_LIKE, COLOR_USER_CREATED } from "../../../theme/theme-colors";
-import { routeLibraryTab } from "../library-routes";
+import { routeLibraryTab } from "../../../routes/library-routes";
 import { CustomElementsTabComponent } from "./CustomElementsTabComponent";
 import { FavoriteElementsTabComponent } from "./FavoriteElementsTabComponent";
 import { SearchElementTabComponent } from "./SearchElementTabComponent";
@@ -74,33 +74,7 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
 
   return (
     <>
-      <Switch>
-        <Redirect
-          from={`${path}/`}
-          to={`${path}/${Tabs.SEARCH}${location.search}`}
-          exact
-        ></Redirect>
-        <Route path={`${path}/${Tabs.SEARCH}`} exact>
-          <SearchElementTabComponent
-            workshopId={workshopId}
-          ></SearchElementTabComponent>
-        </Route>
-        <Route path={`${path}/${Tabs.LIKES}`} exact>
-          <IonContent>
-            <FavoriteElementsTabComponent
-              workshopId={workshopId}
-            ></FavoriteElementsTabComponent>
-          </IonContent>
-        </Route>
-        <Route path={`${path}/${Tabs.CREATE}`} exact>
-          <IonContent>
-            <CustomElementsTabComponent
-              workshopId={workshopId}
-            ></CustomElementsTabComponent>
-          </IonContent>
-        </Route>
-      </Switch>
-      <IonFooter className="ion-hide-lg-up">
+      <IonHeader className="ion-hide-lg-up">
         <IonToolbar>
           <IonSegment value={tab}>
             <IonSegmentButton
@@ -127,7 +101,33 @@ export const LibraryContentComponent: React.FC<ContainerProps> = ({
             </IonSegmentButton>
           </IonSegment>
         </IonToolbar>
-      </IonFooter>
+      </IonHeader>
+      <Switch>
+        <Redirect
+          from={`${path}/`}
+          to={`${path}/${Tabs.SEARCH}${location.search}`}
+          exact
+        ></Redirect>
+        <Route path={`${path}/${Tabs.SEARCH}`} exact>
+          <SearchElementTabComponent
+            workshopId={workshopId}
+          ></SearchElementTabComponent>
+        </Route>
+        <Route path={`${path}/${Tabs.LIKES}`} exact>
+          <IonContent>
+            <FavoriteElementsTabComponent
+              workshopId={workshopId}
+            ></FavoriteElementsTabComponent>
+          </IonContent>
+        </Route>
+        <Route path={`${path}/${Tabs.CREATE}`} exact>
+          <IonContent>
+            <CustomElementsTabComponent
+              workshopId={workshopId}
+            ></CustomElementsTabComponent>
+          </IonContent>
+        </Route>
+      </Switch>
     </>
   );
 };

@@ -1,17 +1,10 @@
 import {
-  IonBackButton,
   IonButton,
-  IonButtons,
   IonContent,
-  IonFooter,
-  IonHeader,
   IonIcon,
   IonItem,
-  IonLabel,
-  IonPage,
   IonSelect,
   IonSelectOption,
-  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
@@ -20,6 +13,7 @@ import { useHistory, useParams } from "react-router";
 import { useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { PageScaffold } from "../../components/PageScaffold";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
@@ -27,7 +21,7 @@ import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/local-storage-workshop-id";
 import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
-import { routeLibrary } from "./library-routes";
+import { routeLibrary } from "../../routes/library-routes";
 
 const LibraryElementPageQuery = graphql(`
   query LibraryElementQuery($userId: ID!, $elementId: ID!) {
@@ -142,38 +136,19 @@ export const LibraryElementPage: React.FC = () => {
   }
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton
-              defaultHref={routeLibrary({ workshopId: workshopContextId })}
-            ></IonBackButton>
-          </IonButtons>
-          <IonTitle>
-            <IonLabel className="ion-text-wrap">{element?.name}</IonLabel>
-          </IonTitle>
-          {element && (
-            <IonButtons slot="end">
-              <ElementFavoriteIconComponent
-                elementFragment={element}
-              ></ElementFavoriteIconComponent>
-            </IonButtons>
-          )}
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <PageContentLoaderComponent
-          queryResult={[elementPageQueryResult]}
-          reexecuteQuery={[reexecuteElementPageQuery]}
-        >
-          {element && (
-            <ElementComponent elementFragment={element}></ElementComponent>
-          )}
-        </PageContentLoaderComponent>
-      </IonContent>
-      {workshops && (
-        <IonFooter>
+    <PageScaffold
+      defaultBackHref={routeLibrary({ workshopId: workshopContextId })}
+      title={element?.name}
+      toolbarButtons={
+        element && (
+          <ElementFavoriteIconComponent
+            elementFragment={element}
+          ></ElementFavoriteIconComponent>
+        )
+      }
+      customContentWrapper
+      footer={
+        workshops && (
           <IonToolbar>
             <IonItem>
               <IonSelect
@@ -207,8 +182,19 @@ export const LibraryElementPage: React.FC = () => {
               </div>
             </IonItem>
           </IonToolbar>
-        </IonFooter>
-      )}
-    </IonPage>
+        )
+      }
+    >
+      <IonContent>
+        <PageContentLoaderComponent
+          queryResult={[elementPageQueryResult]}
+          reexecuteQuery={[reexecuteElementPageQuery]}
+        >
+          {element && (
+            <ElementComponent elementFragment={element}></ElementComponent>
+          )}
+        </PageContentLoaderComponent>
+      </IonContent>
+    </PageScaffold>
   );
 };

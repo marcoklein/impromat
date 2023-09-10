@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { NavLink } from "react-router-dom";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { TeaserGrid } from "../pages/community/TeaserGrid";
-import { routeLibraryEditCustomElement } from "../pages/library/library-routes";
+import { routeLibraryEditCustomElement } from "../routes/library-routes";
 import { COLOR_SHARED } from "../theme/theme-colors";
 import { CustomElementInfoItemComponent } from "./CustomElementInfoItemComponent";
 import { ElementPreviewCard } from "./ElementPreviewCard";

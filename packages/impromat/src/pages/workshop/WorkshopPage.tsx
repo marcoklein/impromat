@@ -42,7 +42,7 @@ import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateUserLikedWorkshopMutation } from "../../hooks/use-update-liked-workshop-mutation";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { COLOR_LIKE } from "../../theme/theme-colors";
-import { routeLibrary } from "../library/library-routes";
+import { routeLibrary } from "../../routes/library-routes";
 import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";

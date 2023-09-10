@@ -15,7 +15,7 @@ import { graphql } from "../../../graphql-client";
 import {
   routeLibraryCreateCustomElement,
   routeLibraryElement,
-} from "../library-routes";
+} from "../../../routes/library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 import { VirtualCardGrid } from "../../../components/VirtualCardGrid";

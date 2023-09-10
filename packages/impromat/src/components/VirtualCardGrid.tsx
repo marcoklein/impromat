@@ -15,7 +15,7 @@ interface ContainerProps<ItemData, Context> {
   items: readonly ItemData[];
   endReached?: () => void;
   isFetching: boolean;
-  scrollToTop: number;
+  scrollToTop?: number;
 }
 
 /**

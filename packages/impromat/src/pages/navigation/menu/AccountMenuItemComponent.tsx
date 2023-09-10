@@ -1,7 +1,7 @@
 import { IonItem, IonItemDivider, IonLabel, IonSpinner } from "@ionic/react";
 import { logIn, person } from "ionicons/icons";
-import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
-import { routeAccount, routeProfile } from "../../routes/shared-routes";
+import { useIsLoggedIn } from "../../../hooks/use-is-logged-in";
+import { routeAccount } from "../../../routes/shared-routes";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 interface ContainerProps {}
@@ -18,7 +18,7 @@ export const AccountMenuItemComponent: React.FC<ContainerProps> = () => {
         <MenuItemComponent
           icon={person}
           label="Profile"
-          routerLink={routeProfile()}
+          routerLink={routeAccount()}
         ></MenuItemComponent>
       </>
     );

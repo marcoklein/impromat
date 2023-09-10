@@ -12,7 +12,7 @@ import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
 import {
   routeLibraryCreateCustomElement,
   routeLibraryElement,
-} from "../library-routes";
+} from "../../../routes/library-routes";
 import { CustomElementsEmptyComponent } from "./CustomElementsEmptyComponent";
 
 const CustomElementsTab_WorkshopFragment = graphql(`

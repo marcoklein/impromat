@@ -15,7 +15,7 @@ import {
   routeWorkshops,
 } from "../../routes/shared-routes";
 import { Tabs } from "../library/components/LibraryContentComponent";
-import { routeLibrary, routeLibraryTab } from "../library/library-routes";
+import { routeLibrary, routeLibraryTab } from "../../routes/library-routes";
 
 export const HomeContent: React.FC = () => {
   return (

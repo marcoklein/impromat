@@ -1,30 +1,21 @@
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonButton, IonIcon } from "@ionic/react";
 import { add, filter } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { WorkshopsFilterBar } from "../../components/WorkshopsFilterBar";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { UserWorkshopsFilterInput } from "../../graphql-client/graphql";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
+import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
+import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
-import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
-import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -132,19 +123,14 @@ export const WorkshopsPage: React.FC = () => {
   }, [presentInputDialog, createWorkshopMutation, logger, history]);
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton></IonMenuButton>
-          </IonButtons>
-          <IonTitle>Workshops</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={() => createWorkshopClick()}>
-              <IonIcon slot="icon-only" icon={add}></IonIcon>
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
+    <PageScaffold
+      title="Workshops"
+      toolbarButtons={
+        <IonButton onClick={() => createWorkshopClick()}>
+          <IonIcon slot="icon-only" icon={add}></IonIcon>
+        </IonButton>
+      }
+      bottomToolbar={
         <WorkshopsFilterBar
           filterInput={userWorkshopsFilterInput}
           onFilterInputChange={(filterInput) => {
@@ -157,59 +143,57 @@ export const WorkshopsPage: React.FC = () => {
             );
           }}
         ></WorkshopsFilterBar>
-      </IonHeader>
-
-      <IonContent>
-        <PageContentLoaderComponent
-          queryResult={workshopsQueryResult}
-          reexecuteQuery={reexecuteWorkshopsQuery}
-        >
-          {availableWorkshops?.length ? (
-            <VirtualCardGrid
-              scrollStoreKey="workshops-page"
-              isFetching={false}
-              items={availableWorkshops}
-              itemContent={(_index, workshop) => (
-                <WorkshopPreviewCard
-                  workshopFragment={workshop}
-                ></WorkshopPreviewCard>
-              )}
-            ></VirtualCardGrid>
-          ) : !userWorkshopsFilterInput.liked ||
-            !userWorkshopsFilterInput.owned ? (
-            <div
-              className="ion-padding"
-              style={{
-                minHeight: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <p>The current filter selection returns no workshops</p>
-                <IonButton
-                  expand="full"
-                  onClick={() => {
-                    setUserWorkshopsFilterInput({
-                      liked: true,
-                      owned: true,
-                      isPublic: true,
-                    });
-                  }}
-                >
-                  <IonIcon slot="start" icon={filter}></IonIcon>
-                  Clear Filters
-                </IonButton>
-              </div>
+      }
+    >
+      <PageContentLoaderComponent
+        queryResult={workshopsQueryResult}
+        reexecuteQuery={reexecuteWorkshopsQuery}
+      >
+        {availableWorkshops?.length ? (
+          <VirtualCardGrid
+            scrollStoreKey="workshops-page"
+            isFetching={false}
+            items={availableWorkshops}
+            itemContent={(_index, workshop) => (
+              <WorkshopPreviewCard
+                workshopFragment={workshop}
+              ></WorkshopPreviewCard>
+            )}
+          ></VirtualCardGrid>
+        ) : !userWorkshopsFilterInput.liked ||
+          !userWorkshopsFilterInput.owned ? (
+          <div
+            className="ion-padding"
+            style={{
+              minHeight: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <p>The current filter selection returns no workshops</p>
+              <IonButton
+                expand="full"
+                onClick={() => {
+                  setUserWorkshopsFilterInput({
+                    liked: true,
+                    owned: true,
+                    isPublic: true,
+                  });
+                }}
+              >
+                <IonIcon slot="start" icon={filter}></IonIcon>
+                Clear Filters
+              </IonButton>
             </div>
-          ) : (
-            <WorkshopCreateFirstComponent
-              onCreateWorkshopClick={() => createWorkshopClick()}
-            ></WorkshopCreateFirstComponent>
-          )}
-        </PageContentLoaderComponent>
-      </IonContent>
-    </IonPage>
+          </div>
+        ) : (
+          <WorkshopCreateFirstComponent
+            onCreateWorkshopClick={() => createWorkshopClick()}
+          ></WorkshopCreateFirstComponent>
+        )}
+      </PageContentLoaderComponent>
+    </PageScaffold>
   );
 };
