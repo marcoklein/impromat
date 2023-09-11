@@ -9,6 +9,7 @@ import {
 import { barbell, documents, home } from "ionicons/icons";
 import { useMemo } from "react";
 import { Redirect, Route } from "react-router";
+import { ProtectedRouteComponent } from "../../components/ProtectedRoute";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeLibrary } from "../../routes/library-routes";
@@ -42,6 +43,7 @@ export interface TabConfig {
   route: string;
   element: JSX.Element;
   exact?: boolean;
+  protected?: boolean;
 }
 
 export enum RootTabs {
@@ -63,6 +65,8 @@ export const ROOT_TABS: Record<RootTabs, TabConfig> = {
     icon: barbell,
     route: routeLibrary(),
     element: <LibraryPage></LibraryPage>,
+    exact: true,
+    protected: true,
   },
   WORKSHOPS: {
     name: "Workshops",
@@ -70,6 +74,7 @@ export const ROOT_TABS: Record<RootTabs, TabConfig> = {
     route: routeWorkshops(),
     element: <WorkshopsPage></WorkshopsPage>,
     exact: true,
+    protected: true,
   },
 };
 
@@ -87,7 +92,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
   const logger = useComponentLogger("RootNavigation");
   useStateChangeLogger(workshopId, "workshopId", logger);
 
-  const defaultTab = useMemo(() => ROOT_TABS.WORKSHOPS, []);
+  const defaultTab = useMemo(() => ROOT_TABS.HOME, []);
 
   return (
     <>
@@ -98,14 +103,23 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
             to={`${defaultTab.route}`}
             exact
           ></Redirect>
-          {Object.entries(ROOT_TABS).map(([key, value]) => (
-            <Route
-              key={key}
-              path={`${value.route}`}
-              render={() => value.element}
-              exact={value.exact}
-            ></Route>
-          ))}
+          {Object.entries(ROOT_TABS).map(([key, value]) =>
+            value.protected ? (
+              <ProtectedRouteComponent
+                key={key}
+                path={`${value.route}`}
+                children={value.element}
+                exact={value.exact}
+              ></ProtectedRouteComponent>
+            ) : (
+              <Route
+                key={key}
+                path={`${value.route}`}
+                render={() => value.element}
+                exact={value.exact}
+              ></Route>
+            ),
+          )}
           <Route path={routeHome()} exact>
             <HomePage></HomePage>
           </Route>
@@ -130,19 +144,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
         </IonRouterOutlet>
         <IonTabBar slot="bottom" className={`ion-hide-${HIDE_MENU_SIZE}-up`}>
           {Object.entries(ROOT_TABS).map(([key, value]) => (
-            <IonTabButton
-              key={key}
-              tab={key}
-              href={`${value.route}`}
-              // TODO elements this causes a refresh of the page because the tab url changes
-              // could be fixed by updating the route to the current tab url
-              // selected={router.routeInfo.pathname.startsWith(value.route)}
-              // onClick={() => {
-              //   if (!router.routeInfo.pathname.startsWith(value.route)) {
-              //     router.push(value.route);
-              //   }
-              // }}
-            >
+            <IonTabButton key={key} tab={key} href={`${value.route}`}>
               <IonIcon icon={value.icon}></IonIcon>
               <IonLabel>{value.name}</IonLabel>
             </IonTabButton>

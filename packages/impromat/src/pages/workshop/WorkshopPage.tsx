@@ -232,9 +232,7 @@ export const WorkshopPage: React.FC = () => {
                   <IonIcon icon={add}></IonIcon>
                 </IonFabButton>
                 <IonFabList side="start">
-                  <IonButton routerLink={routeLibrary({ workshopId })}>
-                    Element
-                  </IonButton>
+                  <IonButton routerLink={routeLibrary()}>Element</IonButton>
                   <IonButton color="dark" onClick={() => onCreateSection()}>
                     Section
                   </IonButton>
@@ -268,7 +266,7 @@ export const WorkshopPage: React.FC = () => {
                   <IonButton
                     expand="full"
                     fill="clear"
-                    routerLink={routeLibrary({ workshopId })}
+                    routerLink={routeLibrary()}
                   >
                     Add First Element
                   </IonButton>

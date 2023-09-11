@@ -16,6 +16,7 @@ pageTest.describe("Shared Elements", () => {
       });
       await auth.loginAsRandomUser();
       await libraryPage.goto();
+      await libraryPage.gotoSearch();
       await libraryPage.searchForElement(uniqueElementName);
       await libraryPage.openElementCard(uniqueElementName);
       // then
@@ -27,13 +28,7 @@ pageTest.describe("Shared Elements", () => {
 
   pageTest(
     "should favorise a user created element",
-    async ({
-      page,
-      auth,
-      libraryPage,
-      libraryElementPage,
-      favoriteElementsPage,
-    }) => {
+    async ({ page, auth, libraryPage, libraryElementPage }) => {
       // given
       await auth.loginAsRandomUser();
       const uniqueElementName = randomUUID();
@@ -44,10 +39,11 @@ pageTest.describe("Shared Elements", () => {
       });
       await auth.loginAsRandomUser();
       await libraryPage.goto();
+      await libraryPage.gotoSearch();
       await libraryPage.searchForElement(uniqueElementName);
       await libraryPage.openElementCard(uniqueElementName);
       await libraryElementPage.addToLikedElements();
-      await favoriteElementsPage.goto();
+      await libraryPage.gotoLikedElements();
       // then
       await expect(page.getByText(uniqueElementName)).toBeVisible();
     },

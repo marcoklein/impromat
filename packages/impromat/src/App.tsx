@@ -43,9 +43,9 @@ export const App: React.FC = () => {
             >
               <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
             </ProtectedRouteComponent>
-            <ProtectedRouteComponent path={routeRootNavigation()}>
+            <Route path={routeRootNavigation()}>
               <RootNavigation></RootNavigation>
-            </ProtectedRouteComponent>
+            </Route>
 
             <Route>
               <NotFoundPage></NotFoundPage>

@@ -11,7 +11,7 @@ pageTest.describe("Liked Elements", () => {
       await libraryPage.gotoFirstElementFromSearch();
       // when
       await libraryElementPage.addToLikedElements();
-      await libraryPage.gotoFavorites();
+      await libraryPage.gotoLikedElements();
       // then
       await expect(page.getByText("Freeze").first()).toBeVisible();
     },
@@ -47,7 +47,7 @@ pageTest.describe("Liked Elements", () => {
       await libraryElementPage.addToLikedElements();
       // when
       await libraryElementPage.removeFromLikedElements();
-      await libraryPage.gotoFavorites();
+      await libraryPage.gotoLikedElements();
       // then
       await expect(page.locator("p").getByText("No likes yet.")).toBeVisible();
     },

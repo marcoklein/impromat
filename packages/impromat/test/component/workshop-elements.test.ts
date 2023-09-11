@@ -11,7 +11,9 @@ pageTest.describe("Workshop Elements Page", () => {
       // when
       await workshopPage.addElementFromSearch();
       // then
-      await expect(page.getByRole("heading").getByText("Freeze")).toBeVisible();
+      await expect(
+        page.getByRole("heading").getByText("Freeze").first(),
+      ).toBeVisible();
     },
   );
 

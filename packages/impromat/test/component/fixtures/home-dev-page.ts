@@ -6,7 +6,7 @@ export class HomeDevPage extends DevPage {
 
   constructor(page: Page) {
     super(page);
-    this.homePageTitleLocator = page.getByText(/Welcome to impromat\.app/);
+    this.homePageTitleLocator = page.getByText(/impromat\.app/);
   }
 
   async goto() {

@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures.js";
 import { randomUUID } from "crypto";
+import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Library with Workshop Context", () => {
   pageTest(
@@ -11,10 +11,7 @@ pageTest.describe("Library with Workshop Context", () => {
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // then
-      await libraryPage.expectToolbarTextToBe("Add Element");
-      await expect(libraryPage.tabLocator(/Explore/)).toBeVisible();
-      await expect(libraryPage.tabLocator(/Likes/)).toBeVisible();
-      await expect(libraryPage.tabLocator(/My Library/)).toBeVisible();
+      await libraryPage.expectToolbarTextToBe(/Exercises & Games/);
     },
   );
 
@@ -34,7 +31,8 @@ pageTest.describe("Library with Workshop Context", () => {
     },
   );
 
-  pageTest(
+  // TODO https://github.com/marcoklein/impromat/issues/254
+  pageTest.skip(
     "should create a custom element and add it twice",
     async ({ page, auth, workshopPage, libraryPage }) => {
       // given

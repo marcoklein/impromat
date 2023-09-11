@@ -35,11 +35,8 @@ import {
   LIBRARY_ELEMENT_ID_SEARCH_PARAM,
   routeLibrary,
 } from "../../routes/library-routes";
-import { routeWorkshop } from "../../routes/shared-routes";
 import { COLOR_SHARED } from "../../theme/theme-colors";
 import { ElementTagsItem } from "./components/ElementTagsItem";
-import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
-import { Tabs } from "./LibraryPage";
 
 const LibraryCreateCustomElement_Query = graphql(`
   query LibraryCreateCustomElement_Query($id: ID!) {
@@ -77,7 +74,6 @@ const CreateElementMutation = graphql(`
  * TODO split into CreateOrEditCustomElementPage
  */
 export const LibraryCreateCustomElementPage: React.FC = () => {
-  const workshopId = useSearchParam(WORKSHOP_CONTEXT_SEARCH_PARAM);
   const elementId = useSearchParam(LIBRARY_ELEMENT_ID_SEARCH_PARAM);
 
   const [existingElementQueryResult] = useQuery({
@@ -90,19 +86,6 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
   const [, executeMutation] = useMutation(UpdateElementMutation);
   const [, executeElementMutationResult] = useMutation(CreateElementMutation);
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
-  const [workshopQueryResult] = useQuery({
-    query: graphql(`
-      query LibraryCreateCustomElementWorkshopQuery($id: ID!) {
-        workshop(id: $id) {
-          sections {
-            id
-          }
-        }
-      }
-    `),
-    variables: { id: workshopId ?? "" },
-    pause: workshopId === undefined,
-  });
 
   const existingElement = existingElementQueryResult.data?.element;
   const editExistingItem = !!existingElement;
@@ -155,20 +138,13 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
           console.error("Could not create element");
           return;
         }
-        if (workshopId) {
-          history.push(routeWorkshop(workshopId), {
-            direction: "back",
-            newElement: newElementId,
-          });
+        if (history.length > 1) {
+          history.goBack();
         } else {
-          if (history.length > 1) {
-            history.goBack();
-          } else {
-            history.push({
-              pathname: `${routeLibrary()}/${Tabs.CREATE}`,
-              search: `?newElement=${newElementId}`,
-            });
-          }
+          history.push({
+            pathname: routeLibrary(),
+            search: `?newElement=${newElementId}`,
+          });
         }
       } else {
         if (!languageCode) throw new Error("No language code");
@@ -187,42 +163,13 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
           console.error("Could not create element");
           return;
         }
-        if (workshopId) {
-          logger("Last section result=%o", workshopQueryResult);
-          const lastSectionId =
-            workshopQueryResult.data?.workshop?.sections.at(-1)?.id;
-          if (!lastSectionId) {
-            throw new Error("no last section");
-          }
-          updateWorkshopMutation({
-            input: {
-              id: workshopId,
-              sections: {
-                update: [
-                  {
-                    id: lastSectionId,
-                    elements: {
-                      create: [{ basedOn: { connect: { id: newElement.id } } }],
-                    },
-                  },
-                ],
-              },
-            },
-          }).then(() => {
-            history.push(routeWorkshop(workshopId), {
-              direction: "back",
-              newElement: newElement.id,
-            });
-          });
-        } else {
-          history.push(
-            {
-              pathname: `${routeLibrary()}/${Tabs.CREATE}`,
-              search: `?newElement=${newElement.id}`,
-            },
-            { direction: "back" },
-          );
-        }
+        history.push(
+          {
+            pathname: routeLibrary(),
+            search: `?newElement=${newElement.id}`,
+          },
+          { direction: "back" },
+        );
       }
     })();
   };
@@ -232,9 +179,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton
-              defaultHref={`${routeLibrary({ workshopId })}/${Tabs.CREATE}`}
-            ></IonBackButton>
+            <IonBackButton defaultHref={routeLibrary()}></IonBackButton>
           </IonButtons>
           <IonTitle>
             {editExistingItem ? "Edit Custom Element" : "Create Custom Element"}
@@ -358,13 +303,14 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
         </IonList>
       </IonContent>
       <IonFooter>
+        {/* TODO add option to add to workshop see https://github.com/marcoklein/impromat/issues/254 */}
         {editExistingItem ? (
           <IonButton
             expand="full"
             onClick={onCreateElementClick}
             disabled={!isInputValid}
           >
-            {workshopId ? "Save and goto Workshop" : "Save Element"}
+            Save Element
           </IonButton>
         ) : (
           <IonButton
@@ -372,7 +318,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             onClick={onCreateElementClick}
             disabled={!isInputValid}
           >
-            {workshopId ? "Create and Add to Workshop" : "Create Element"}
+            Create Element
           </IonButton>
         )}
       </IonFooter>

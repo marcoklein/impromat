@@ -14,9 +14,9 @@ export const routeAccount = () => `${routeMoreInfo()}/account`;
 export const routeLegal = () => `${routeMoreInfo()}/legal`;
 
 // routes for workshops tab
-export const routeWorkshops = () => `${routeRootNavigation()}/workshops`;
+export const routeWorkshops = () => `${routeRootNavigation()}/workshop`;
 export const routeWorkshop = (workshopId: string = ROUTE_WORKHOP_ID) =>
-  `${routeWorkshops()}/workshop/${workshopId}`;
+  `${routeWorkshops()}/${workshopId}`;
 
 // independent routes
 export const routeWorkshopElement = (

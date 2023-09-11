@@ -7,6 +7,7 @@ import { PageContentLoaderComponent } from "../../components/PageContentLoaderCo
 import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { WorkshopsFilterBar } from "../../components/WorkshopsFilterBar";
+import { FEATURE_WORKSHOPS_FILTER_BAR } from "../../feature-toggles";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { UserWorkshopsFilterInput } from "../../graphql-client/graphql";
 import { useComponentLogger } from "../../hooks/use-component-logger";
@@ -14,9 +15,9 @@ import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
+import { routeWorkshop } from "../../routes/shared-routes";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
-import { FEATURE_WORKSHOPS_FILTER_BAR } from "../../feature-toggles";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -116,7 +117,7 @@ export const WorkshopsPage: React.FC = () => {
           return;
         }
         logger("Adding new workshop with id %s", id);
-        const navigateTo = `/workshop/${id}`;
+        const navigateTo = routeWorkshop(id);
         history.replace(navigateTo);
         logger("Navigating to %s", navigateTo);
       },

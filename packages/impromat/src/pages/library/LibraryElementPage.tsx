@@ -138,7 +138,7 @@ export const LibraryElementPage: React.FC = () => {
 
   return (
     <PageScaffold
-      defaultBackHref={routeLibrary({ workshopId: workshopContextId })}
+      defaultBackHref={routeLibrary()}
       title={element?.name}
       toolbarButtons={
         element && (

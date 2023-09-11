@@ -15,6 +15,7 @@ export class WorkshopElementDevPage extends DevPage {
     const workshopPage = new WorkshopDevPage(page);
     await workshopPage.createAndGoto();
     await workshopPage.addElementFromSearch();
+    await page.waitForTimeout(1000); // TODO fixme: page seems to flash
     await workshopPage.elementSelector.click();
   }
 }
