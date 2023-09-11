@@ -31,15 +31,15 @@ import { ElementVisibility } from "../../graphql-client/graphql";
 import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
-import { routeWorkshop } from "../../routes/shared-routes";
-import { COLOR_SHARED } from "../../theme/theme-colors";
-import { ElementTagsItem } from "./components/ElementTagsItem";
-import { Tabs } from "./components/LibraryContentComponent";
 import {
   LIBRARY_ELEMENT_ID_SEARCH_PARAM,
   routeLibrary,
 } from "../../routes/library-routes";
+import { routeWorkshop } from "../../routes/shared-routes";
+import { COLOR_SHARED } from "../../theme/theme-colors";
+import { ElementTagsItem } from "./components/ElementTagsItem";
 import { WORKSHOP_CONTEXT_SEARCH_PARAM } from "./workshop-context-search-param";
+import { Tabs } from "./LibraryPage";
 
 const LibraryCreateCustomElement_Query = graphql(`
   query LibraryCreateCustomElement_Query($id: ID!) {

@@ -1,4 +1,3 @@
-import { IonContent } from "@ionic/react";
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../../components/PageContentLoaderComponent";
@@ -43,22 +42,20 @@ export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
   const favoriteElements = user?.me.favoriteElements;
 
   return (
-    <IonContent>
-      <PageContentLoaderComponent
-        queryResult={queryResult}
-        reexecuteQuery={reexecuteQuery}
-      >
-        {!favoriteElements?.length ? (
-          <FavoriteElementsEmptyComponent></FavoriteElementsEmptyComponent>
-        ) : (
-          user && (
-            <FavoriteElementsListComponent
-              workshopId={workshopId}
-              favoriteElementsFragment={user.me}
-            ></FavoriteElementsListComponent>
-          )
-        )}
-      </PageContentLoaderComponent>
-    </IonContent>
+    <PageContentLoaderComponent
+      queryResult={queryResult}
+      reexecuteQuery={reexecuteQuery}
+    >
+      {!favoriteElements?.length ? (
+        <FavoriteElementsEmptyComponent></FavoriteElementsEmptyComponent>
+      ) : (
+        user && (
+          <FavoriteElementsListComponent
+            workshopId={workshopId}
+            favoriteElementsFragment={user.me}
+          ></FavoriteElementsListComponent>
+        )
+      )}
+    </PageContentLoaderComponent>
   );
 };

@@ -1,16 +1,18 @@
+import { Tabs } from "../pages/library/LibraryPage";
 import { addSearchParamsToUrl } from "./add-search-params-to-url";
 import {
   ROUTE_IMPROBIB_ELEMENT_ID,
   routeRootNavigation,
 } from "./shared-routes";
-import { Tabs } from "../pages/library/components/LibraryContentComponent";
 
 export const LIBRARY_ELEMENT_ID_SEARCH_PARAM = "elementId";
 
 const baseLibraryRoute = `${routeRootNavigation()}/elements`;
 
+// TODO remove all tab related routes
+
 export const routeLibrary = (params: { workshopId?: string } = {}) =>
-  addSearchParamsToUrl(baseLibraryRoute, params);
+  baseLibraryRoute;
 
 export const routeLibraryTab = (
   tab: Tabs,

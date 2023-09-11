@@ -6,7 +6,7 @@ import { ProtectedRouteComponent } from "./components/ProtectedRoute";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
 import { LibraryElementPage } from "./pages/library/LibraryElementPage";
-import { MenuComponent } from "./pages/navigation/MenuComponent";
+import { ResponsiveMenu } from "./pages/navigation/ResponsiveMenu";
 import { RootNavigation } from "./pages/navigation/RootNavigation";
 import { HIDE_MENU_SIZE } from "./pages/navigation/responsive-navigation";
 import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
@@ -22,9 +22,13 @@ import {
 export const App: React.FC = () => {
   return (
     <IonApp>
-      <IonSplitPane when={HIDE_MENU_SIZE} contentId="main">
+      <IonSplitPane
+        when={HIDE_MENU_SIZE}
+        contentId="main"
+        style={{ "--side-width": "20rem", "--side-max-width": "20rem" }}
+      >
         <IonReactRouter>
-          <MenuComponent></MenuComponent>
+          <ResponsiveMenu></ResponsiveMenu>
           <IonRouterOutlet id="main">
             <Redirect path="/" exact to={routeRootNavigation()}></Redirect>
             <Route path={routeWorkshopElement()} exact>

@@ -3,7 +3,6 @@ import {
   IonButtons,
   IonContent,
   IonFooter,
-  IonHeader,
   IonIcon,
   IonImg,
   IonMenuToggle,
@@ -21,28 +20,32 @@ import { MenuItemComponent } from "./MenuItemComponent";
 
 export const MenuContentComponent: React.FC = () => {
   return (
-    <>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <IonImg
-                style={{ width: "24px", height: "24px" }}
-                src="/assets/logo.svg"
-                alt="Impromat Logo"
-              ></IonImg>
-              <IonText className="ion-margin-start">impromat.app</IonText>
-            </div>
-          </IonTitle>
-          <IonButtons slot="end">
-            <IonMenuToggle>
-              <IonButton>
-                <IonIcon slot="icon-only" icon={close}></IonIcon>
-              </IonButton>
-            </IonMenuToggle>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+      }}
+    >
+      <IonToolbar color="primary">
+        <IonTitle>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <IonImg
+              style={{ width: "24px", height: "24px" }}
+              src="/assets/logo.svg"
+              alt="Impromat Logo"
+            ></IonImg>
+            <IonText className="ion-margin-start">impromat.app</IonText>
+          </div>
+        </IonTitle>
+        <IonButtons slot="end">
+          <IonMenuToggle>
+            <IonButton>
+              <IonIcon slot="icon-only" icon={close}></IonIcon>
+            </IonButton>
+          </IonMenuToggle>
+        </IonButtons>
+      </IonToolbar>
       <IonContent>
         {Object.entries(ROOT_TABS).map(([key, value]) => (
           <MenuItemComponent
@@ -71,6 +74,6 @@ export const MenuContentComponent: React.FC = () => {
           </IonNote>
         </IonToolbar>
       </IonFooter>
-    </>
+    </div>
   );
 };
