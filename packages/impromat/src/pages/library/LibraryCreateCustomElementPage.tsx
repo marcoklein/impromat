@@ -30,7 +30,6 @@ import { graphql } from "../../graphql-client";
 import { ElementVisibility } from "../../graphql-client/graphql";
 import { useLogger } from "../../hooks/use-logger";
 import { useSearchParam } from "../../hooks/use-search-params";
-import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import {
   LIBRARY_ELEMENT_ID_SEARCH_PARAM,
   routeLibrary,
@@ -85,7 +84,6 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
   });
   const [, executeMutation] = useMutation(UpdateElementMutation);
   const [, executeElementMutationResult] = useMutation(CreateElementMutation);
-  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
 
   const existingElement = existingElementQueryResult.data?.element;
   const editExistingItem = !!existingElement;
