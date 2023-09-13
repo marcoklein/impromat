@@ -31,10 +31,12 @@ export const MoreInfoPage: React.FC = () => {
             workshops.
           </IonCardSubtitle>
         </IonText>
-        <IonButton routerLink={routeWorkshops()} className="ion-margin-top">
-          <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-          Access Impromat
-        </IonButton>
+        {isLoggedIn && (
+          <IonButton routerLink={routeWorkshops()} className="ion-margin-top">
+            <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+            Access Impromat
+          </IonButton>
+        )}
       </ImpromatHero>
       {!isLoggedIn && (
         <div className="ion-padding">
@@ -48,12 +50,6 @@ export const MoreInfoPage: React.FC = () => {
         <IonItem routerLink={routeLegal()}>Legal Notice</IonItem>
         <IonItem routerLink={routePrivacyPolicy()}>Data Privacy</IonItem>
       </IonList>
-
-      {isLoggedIn && (
-        <div className="ion-padding">
-          <HomeContent></HomeContent>
-        </div>
-      )}
     </PageScaffold>
   );
 };

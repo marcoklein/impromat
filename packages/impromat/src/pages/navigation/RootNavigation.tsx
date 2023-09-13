@@ -17,7 +17,6 @@ import {
   routeAbout,
   routeAccount,
   routeCommunity,
-  routeHome,
   routeLegal,
   routeMoreInfo,
   routePrivacyPolicy,
@@ -27,7 +26,6 @@ import {
 } from "../../routes/shared-routes";
 import { AboutPage } from "../AboutPage";
 import { CommunityPage } from "../CommunityPage";
-import { HomePage } from "../HomePage";
 import { LegalPage } from "../LegalPage";
 import { MoreInfoPage } from "../MoreInfoPage";
 import { PrivacyPolicyPage } from "../PrivacyPolicyPage";
@@ -120,9 +118,6 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
               ></Route>
             ),
           )}
-          <Route path={routeHome()} exact>
-            <HomePage></HomePage>
-          </Route>
           <Route path={routeAbout()} exact>
             <AboutPage></AboutPage>
           </Route>
