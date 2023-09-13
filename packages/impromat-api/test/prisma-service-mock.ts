@@ -1,3 +1,4 @@
+import { beforeEach } from 'bun:test';
 import { DeepMockProxy, mockDeep, mockReset } from 'jest-mock-extended';
 import { PrismaService } from 'src/graphql/services/prisma.service';
 

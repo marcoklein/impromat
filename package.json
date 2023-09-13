@@ -4,31 +4,28 @@
   "private": true,
   "type": "module",
   "license": "GPL-3.0",
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@changesets/cli": "^2.25.2"
   },
   "scripts": {
-    "ci:version": "yarn changeset version && yarn install --mode=update-lockfile",
-    "ci:publish": "yarn changeset publish",
-    "dev": "yarn foreach --from '{impromat,impromat-api}' run dev",
-    "workspace:dev": "yarn foreach run dev",
-    "workspace:lint": "yarn foreach --since --recursive run lint",
-    "workspace:test": "yarn foreach --since --recursive run test",
-    "workspace:build": "yarn foreach --topological --since run build",
-    "build": "yarn workspace:build",
-    "docker-compose": "yarn workspace infrastructure docker-compose",
+    "ci:version": "bun changeset version && bun install",
+    "ci:publish": "bun changeset publish",
+    "dev": "bun foreach --from '{impromat,impromat-api}' run dev",
+    "workspace:dev": "bun foreach run dev",
+    "workspace:lint": "bun foreach --since --recursive run lint",
+    "workspace:test": "bun foreach --since --recursive run test",
+    "workspace:build": "bun foreach --topological --since run build",
+    "build": "bun workspace:build",
+    "docker-compose": "bun workspace infrastructure docker-compose",
     "infra:config": "./packages/infrastructure/configure.sh",
-    "foreach": "yarn workspaces foreach --parallel --verbose --interlaced --exclude root",
-    "codegen": "yarn workspaces foreach run codegen",
-    "changeset:add": "yarn changeset"
+    "foreach": "bun workspaces foreach --parallel --verbose --interlaced --exclude root",
+    "codegen": "bun workspaces foreach run codegen",
+    "changeset:add": "bun changeset"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",
-  "author": "Marco Klein <hello@marcoklein.dev>",
-  "packageManager": "yarn@3.4.1"
+  "author": "Marco Klein <hello@marcoklein.dev>"
 }
