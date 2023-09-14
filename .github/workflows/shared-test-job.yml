@@ -51,3 +51,4 @@ jobs:
         if: always()
         with:
           report_paths: "**/*unit-results.xml"
+          check_name: "test-report"
