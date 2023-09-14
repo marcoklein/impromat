@@ -4,14 +4,12 @@ export const ROUTE_IMPROBIB_ELEMENT_ID = ":libraryPartId";
 
 export const routeRootNavigation = () => "/nav";
 
-export const routeHome = () => `${routeMoreInfo()}/home`;
-
 // routes for home tab
-export const routeMoreInfo = () => `${routeRootNavigation()}/info`;
-export const routeAbout = () => `${routeMoreInfo()}/about`;
-export const routePrivacyPolicy = () => `${routeMoreInfo()}/privacy`;
-export const routeAccount = () => `${routeMoreInfo()}/account`;
-export const routeLegal = () => `${routeMoreInfo()}/legal`;
+export const routeHome = () => `${routeRootNavigation()}/home`;
+export const routeAbout = () => `${routeHome()}/about`;
+export const routePrivacyPolicy = () => `${routeHome()}/privacy`;
+export const routeAccount = () => `${routeHome()}/account`;
+export const routeLegal = () => `${routeHome()}/legal`;
 
 // routes for workshops tab
 export const routeWorkshops = () => `${routeRootNavigation()}/workshop`;

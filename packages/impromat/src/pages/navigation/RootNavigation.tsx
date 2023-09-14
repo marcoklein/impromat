@@ -18,7 +18,7 @@ import {
   routeAccount,
   routeCommunity,
   routeLegal,
-  routeMoreInfo,
+  routeHome,
   routePrivacyPolicy,
   routeRootNavigation,
   routeWorkshop,
@@ -26,8 +26,8 @@ import {
 } from "../../routes/shared-routes";
 import { AboutPage } from "../AboutPage";
 import { CommunityPage } from "../CommunityPage";
+import { HomePage } from "../HomePage";
 import { LegalPage } from "../LegalPage";
-import { MoreInfoPage } from "../MoreInfoPage";
 import { PrivacyPolicyPage } from "../PrivacyPolicyPage";
 import { AccountPage } from "../account/AccountPage";
 import { LibraryPage } from "../library/LibraryPage";
@@ -54,8 +54,8 @@ export const ROOT_TABS: Record<RootTabs, TabConfig> = {
   HOME: {
     name: "Home",
     icon: home,
-    route: routeMoreInfo(),
-    element: <MoreInfoPage></MoreInfoPage>,
+    route: routeHome(),
+    element: <HomePage></HomePage>,
     exact: true,
   },
   ELEMENTS: {
