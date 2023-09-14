@@ -11,9 +11,14 @@ jobs:
   statusCheck:
     runs-on: ubuntu-latest
     steps:
-      - name: Save SHA of changeset-release/main branch
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: refs/heads/changeset-release/main
+      - name: Get SHA of branch
         id: get_sha
-        run: echo ::set-output name=sha::$(git rev-parse HEAD)
+        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
       - name: Add status check
         uses: actions/github-script@v3
         with:
@@ -22,7 +27,7 @@ jobs:
             github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: ${{ steps.get_sha.outputs.sha }},
+              sha: '${{ steps.get_sha.outputs.sha }}',
               state: 'success',
               context: 'test-report',
               description: 'Generating status check for release pipeline'
