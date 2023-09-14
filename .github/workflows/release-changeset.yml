@@ -3,7 +3,7 @@ name: Changeset Release
 on:
   workflow_run:
     workflows: [Release]
-    # branches: [main]
+    branches: [main]
     types:
       - completed
 
