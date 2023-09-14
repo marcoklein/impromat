@@ -1,9 +1,11 @@
 name: Changeset Release
 
 on:
-  push:
-    branches:
-      - changeset-release/main
+  workflow_run:
+    workflows: ["Release"]
+    branches: [main]
+    types:
+      - completed
 
 jobs:
   statusCheck:
