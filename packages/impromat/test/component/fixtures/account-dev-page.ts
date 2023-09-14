@@ -9,7 +9,7 @@ export class AccountDevPage extends DevPage {
   }
 
   async goto() {
-    await this.page.goto("/nav/info/account");
+    await this.page.goto("/nav/home/account");
   }
 
   async login() {
