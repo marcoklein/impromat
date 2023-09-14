@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.46.0
+
+### Minor Changes
+
+- a5739df: Expand element tags filter bar
+- a5739df: Add bottom navigation bar
+
+### Patch Changes
+
+- 2d45c9a: Fix home page not showing Access Impromat
+
 ## 0.45.0
 
 ### Minor Changes
