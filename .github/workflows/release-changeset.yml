@@ -2,8 +2,8 @@ name: Changeset Release
 
 on:
   workflow_run:
-    workflows: ["Release"]
-    branches: [changeset-release/main]
+    workflows: [Release]
+    branches: [main]
     types:
       - completed
 
@@ -11,6 +11,9 @@ jobs:
   statusCheck:
     runs-on: ubuntu-latest
     steps:
+      - name: Save SHA of changeset-release/main branch
+        id: get_sha
+        run: echo ::set-output name=sha::$(git rev-parse HEAD)
       - name: Add status check
         uses: actions/github-script@v3
         with:
@@ -19,9 +22,8 @@ jobs:
             github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: context.sha,
+              sha: ${{ steps.get_sha.outputs.sha }},
               state: 'success',
               context: 'test-report',
-              description: 'Generated status check for release pipeline'
+              description: 'Generating status check for release pipeline'
             })
-
