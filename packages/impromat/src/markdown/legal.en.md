@@ -1,6 +1,6 @@
 ## Contact information according to § 5 TMG
 
-Email: [impromat@marcoklein.de](mailto:impromat@marcoklein.de)
+Email: [impromat@marcoklein.dev](mailto:impromat@marcoklein.dev)
 
 Marco Klein  
 Grünwalderstr. 41  

@@ -1,30 +1,13 @@
-import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
 import ReactMarkdown from "react-markdown";
+import { PageScaffold } from "../components/PageScaffold";
 import { aboutMarkdownEn } from "../markdown/about.en.md.gen";
 
 export const AboutPage: React.FC = () => {
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton></IonMenuButton>
-          </IonButtons>
-          <IonTitle>About</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent className="ion-padding">
+    <PageScaffold title="About">
+      <div className="ion-padding">
         <ReactMarkdown>{aboutMarkdownEn}</ReactMarkdown>
-      </IonContent>
-    </IonPage>
+      </div>
+    </PageScaffold>
   );
 };

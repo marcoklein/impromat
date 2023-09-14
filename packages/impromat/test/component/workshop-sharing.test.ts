@@ -73,7 +73,8 @@ pageTest.describe("Workshop Sharing", () => {
       },
     );
 
-    pageTest(
+    // community page is currently disabled
+    pageTest.skip(
       "should list workshop and show in community page",
       async ({ auth, page, communityPage }) => {
         // given beforeEach

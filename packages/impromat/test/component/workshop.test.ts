@@ -41,7 +41,7 @@ pageTest.describe("Workshop Page", () => {
       .getByRole("button", { name: "Delete" })
       .click();
     // then
-    await page.waitForURL("./workshop");
+    await page.waitForURL("/nav/workshop");
     await expect(page.getByText("Add Workshop")).toBeVisible();
   });
 });

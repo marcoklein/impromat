@@ -1,6 +1,6 @@
-import { IonSpinner } from "@ionic/react";
 import { useMemo } from "react";
 import { useQuery } from "urql";
+import { PageContentLoaderComponent } from "../../../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { FavoriteElementsEmptyComponent } from "./FavoriteElementsEmptyComponent";
 import { FavoriteElementsListComponent } from "./FavoriteElementsListComponent";
@@ -33,28 +33,29 @@ export const FavoriteElementsTabComponent: React.FC<ContainerProps> = ({
   workshopId,
 }) => {
   const context = useMemo(() => ({ additionalTypenames: ["Element"] }), []);
-  const [{ data, fetching: isFetching, error }] = useQuery({
+  const [queryResult, reexecuteQuery] = useQuery({
     query: MyUser_Query,
     context,
     requestPolicy: "cache-and-network", // and network because isFavorite state of elements might change
   });
-  const user = getFragmentData(MyUser_QueryFragment, data);
+  const user = getFragmentData(MyUser_QueryFragment, queryResult.data);
   const favoriteElements = user?.me.favoriteElements;
 
-  if (error) {
-    return <div>Error: {error.toString()}</div>;
-  }
-
-  if (!user || isFetching) {
-    return <IonSpinner></IonSpinner>;
-  }
-  if (!favoriteElements?.length) {
-    return <FavoriteElementsEmptyComponent></FavoriteElementsEmptyComponent>;
-  }
   return (
-    <FavoriteElementsListComponent
-      workshopId={workshopId}
-      favoriteElementsFragment={user.me}
-    ></FavoriteElementsListComponent>
+    <PageContentLoaderComponent
+      queryResult={queryResult}
+      reexecuteQuery={reexecuteQuery}
+    >
+      {!favoriteElements?.length ? (
+        <FavoriteElementsEmptyComponent></FavoriteElementsEmptyComponent>
+      ) : (
+        user && (
+          <FavoriteElementsListComponent
+            workshopId={workshopId}
+            favoriteElementsFragment={user.me}
+          ></FavoriteElementsListComponent>
+        )
+      )}
+    </PageContentLoaderComponent>
   );
 };

@@ -120,6 +120,7 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
           <IonList>
             {elementTags?.map((tag) => (
               <IonItem
+                key={tag.id}
                 disabled={
                   !!tags.find(({ name: tagName }) => tagName === tag.name)
                 }

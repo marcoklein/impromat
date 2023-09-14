@@ -3,14 +3,13 @@ import {
   IonContent,
   IonIcon,
   IonMenuToggle,
-  IonPage,
   IonText,
   ScrollCustomEvent,
 } from "@ionic/react";
 import { arrowForwardOutline, menu } from "ionicons/icons";
 import { useState } from "react";
-import { ImpromatLogoComponent } from "../../components/ImpromatLogoComponent";
-import { MainTitleComponent } from "../../components/MainTitleComponent";
+import { ImpromatHero } from "../../components/ImpromatHero";
+import { PageScaffold } from "../../components/PageScaffold";
 import { routeWorkshops } from "../../routes/shared-routes";
 import { HomeContent } from "./HomeContent";
 
@@ -21,7 +20,7 @@ export const HomeLoggedOut: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <PageScaffold noHeader customContentWrapper>
       <IonContent
         className="ion-padding"
         scrollEvents
@@ -46,42 +45,21 @@ export const HomeLoggedOut: React.FC = () => {
           </IonMenuToggle>
         </div>
 
-        <div
-          style={{
-            minHeight: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            className="ion-text-center ion-margin-top"
-            style={{ maxWidth: "768px" }}
-          >
-            <div
-              style={{
-                maxHeight: "20%",
-                maxWidth: "128px",
-                margin: "0 auto",
-              }}
-            >
-              <ImpromatLogoComponent></ImpromatLogoComponent>
-            </div>
-            <MainTitleComponent>Welcome to impromat.app</MainTitleComponent>
-            <IonText color="dark">
-              <h1>
-                App for planning, giving and sharing improvisational theatre
-                workshops.
-              </h1>
-            </IonText>
-            <IonButton routerLink={routeWorkshops()}>
-              <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-              Access Impromat
-            </IonButton>
-          </div>
-        </div>
+        <ImpromatHero title="Welcome to impromat.app">
+          <IonText color="dark">
+            <h1>
+              App for planning, giving and sharing improvisational theatre
+              workshops.
+            </h1>
+          </IonText>
+          <IonButton routerLink={routeWorkshops()}>
+            <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+            Access Impromat
+          </IonButton>
+        </ImpromatHero>
+
         <HomeContent></HomeContent>
       </IonContent>
-    </IonPage>
+    </PageScaffold>
   );
 };

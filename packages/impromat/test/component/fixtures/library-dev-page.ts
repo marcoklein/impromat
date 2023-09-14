@@ -1,12 +1,11 @@
 import { DevPage } from "./dev-page.js";
-import { FavoriteElementsDevPage } from "./favorite-elements-dev-page.js";
 
 const NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX =
   /^((?!library-add-custom-element).)*$/;
 
 export class LibraryDevPage extends DevPage {
   async goto() {
-    await this.page.goto(`./library`);
+    await this.page.goto(`/nav/elements`);
   }
 
   async searchForElement(searchText: string) {
@@ -37,11 +36,13 @@ export class LibraryDevPage extends DevPage {
   }
 
   async gotoSearch() {
-    await this.page.goto("./library/search");
+    await this.goto();
+    await this.page.getByText("SearchExplore").click();
   }
 
-  async gotoFavorites() {
-    await new FavoriteElementsDevPage(this.page).goto();
+  async gotoLikedElements() {
+    await this.goto();
+    await this.page.getByText("HeartLikes").click();
   }
 
   searchTabLocator() {
@@ -70,6 +71,7 @@ export class LibraryDevPage extends DevPage {
     await page.waitForURL(NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX);
   }
 
+  // TODO refactor when https://github.com/marcoklein/impromat/issues/254 is resolved
   async createCustomElementAndAddToWorkshop(
     name: string,
     options?: { isPublic?: boolean },

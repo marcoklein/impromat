@@ -19,6 +19,17 @@ Start server with watching changes. Useful for development.
 yarn dev
 ```
 
+## Running tests
+
+For running against the local database and not the Docker database you might want to create a `.env.test.local` to override the `DATABASE_URL`. And set the `TEST_GOOGLE_AUTH_URL` to a local test login endpoint.
+
+```sh
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres?schema=impromat-api-test
+TEST_GOOGLE_AUTH_URL=http://localhost:8080/auth/testlogin?redirectUrl=http://localhost:3003
+```
+
+> With this configuration you will have to run a Postgres database locally.
+
 Start all tests
 
 > Requires PostgreSQL

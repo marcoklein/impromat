@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonContent,
   IonFab,
   IonFabButton,
@@ -6,7 +7,7 @@ import {
   IonList,
   IonProgressBar,
 } from "@ionic/react";
-import { add, informationCircle } from "ionicons/icons";
+import { add, caretDown, caretUp, informationCircle } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../../components/ElementPreviewCard";
@@ -15,7 +16,7 @@ import { graphql } from "../../../graphql-client";
 import {
   routeLibraryCreateCustomElement,
   routeLibraryElement,
-} from "../library-routes";
+} from "../../../routes/library-routes";
 import { ElementSearchBarComponent } from "./ElementSearchBarComponent";
 
 import { VirtualCardGrid } from "../../../components/VirtualCardGrid";
@@ -104,6 +105,8 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
     }
   }, [pageNumber, searchElementsQueryResult, logger]);
 
+  const [isFilterBarExpanded, setIsFilterBarExpanded] = useState(false);
+
   return (
     <>
       <ElementSearchBarComponent
@@ -114,7 +117,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
           window.localStorage.setItem("lastSearch", text);
         }}
       ></ElementSearchBarComponent>
-      <IonContent style={{ maxHeight: "5rem" }}>
+      <IonContent style={{ maxHeight: isFilterBarExpanded ? "80%" : "5rem" }}>
         {searchElementsQueryResult.data && (
           <ElementFilterBar
             selectedTagNames={selectedTagNames}
@@ -129,6 +132,19 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
             }
           ></ElementFilterBar>
         )}
+        <IonFab vertical="bottom" horizontal="end" slot="fixed">
+          <IonButton
+            fill="solid"
+            size="small"
+            color="primary"
+            onClick={() => setIsFilterBarExpanded((expanded) => !expanded)}
+          >
+            <IonIcon
+              slot="icon-only"
+              icon={isFilterBarExpanded ? caretUp : caretDown}
+            ></IonIcon>
+          </IonButton>
+        </IonFab>
       </IonContent>
       <div>
         {(searchElementsQueryResult.stale ||

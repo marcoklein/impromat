@@ -1,17 +1,9 @@
-import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonSpinner,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonSpinner } from "@ionic/react";
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { PageScaffold } from "../../components/PageScaffold";
 import { graphql } from "../../graphql-client";
 import { useGoogleLoginHref } from "../../hooks/use-google-login-href";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
@@ -47,45 +39,35 @@ export const AccountPage: React.FC = () => {
   const myUser = useMemo(() => queryResult.data?.user, [queryResult]);
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton></IonMenuButton>
-          </IonButtons>
-          <IonTitle>Profile</IonTitle>
-          <IonButtons slot="end">
-            {!!queryResult.data?.user && (
-              <AccountOptionsMenu
-                userFragment={queryResult.data.user}
-              ></AccountOptionsMenu>
-            )}
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        {isLoading && <IonSpinner></IonSpinner>}
-        {!isLoading && isLoggedIn && myUser && (
-          <PageContentLoaderComponent
-            queryResult={queryResult}
-            reexecuteQuery={reexecuteQuery}
-          >
-            <AccountSignedIn userFragment={myUser}></AccountSignedIn>
-          </PageContentLoaderComponent>
-        )}
-        {!isLoading &&
-          isNotLoggedIn &&
-          (!googleLoginHref ? (
-            <>
-              <InfoItemComponent
-                color="warning"
-                message="You need an active internet connection to login."
-              ></InfoItemComponent>
-            </>
-          ) : (
-            <AccountSignIn></AccountSignIn>
-          ))}
-      </IonContent>
-    </IonPage>
+    <PageScaffold
+      title="Profile"
+      toolbarButtons={
+        myUser && (
+          <AccountOptionsMenu userFragment={myUser}></AccountOptionsMenu>
+        )
+      }
+    >
+      {isLoading && <IonSpinner></IonSpinner>}
+      {!isLoading && isLoggedIn && myUser && (
+        <PageContentLoaderComponent
+          queryResult={queryResult}
+          reexecuteQuery={reexecuteQuery}
+        >
+          <AccountSignedIn userFragment={myUser}></AccountSignedIn>
+        </PageContentLoaderComponent>
+      )}
+      {!isLoading &&
+        isNotLoggedIn &&
+        (!googleLoginHref ? (
+          <>
+            <InfoItemComponent
+              color="warning"
+              message="You need an active internet connection to login."
+            ></InfoItemComponent>
+          </>
+        ) : (
+          <AccountSignIn></AccountSignIn>
+        ))}
+    </PageScaffold>
   );
 };

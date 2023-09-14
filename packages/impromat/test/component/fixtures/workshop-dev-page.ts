@@ -46,7 +46,7 @@ export class WorkshopDevPage extends DevPage {
   }
 
   async goto(workshopId: string) {
-    await this.page.goto(`./workshop/${workshopId}`);
+    await this.page.goto(`/nav/workshop/${workshopId}`);
   }
 
   async gotoElementFromSearch() {

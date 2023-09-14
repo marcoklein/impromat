@@ -3,7 +3,7 @@ import { DevPage } from "./dev-page.js";
 
 export class WorkshopsDevPage extends DevPage {
   async goto() {
-    await this.page.goto(`./workshop`);
+    await this.page.goto(`/nav/workshop`);
   }
 
   async addWorkshop(name: string = "Test Workshop") {
@@ -13,14 +13,16 @@ export class WorkshopsDevPage extends DevPage {
     // press for first time
     // await page.locator("text=AddAdd Workshop >> button").click();
     await page.getByRole("button", { name: "Add" }).first().click();
-    await expect(page).toHaveURL("./workshop?dialog");
+    await expect(page).toHaveURL("/nav/workshop?dialog");
     await page.locator('input[type="text"]').click();
     await page.locator('input[type="text"]').fill(name);
     await page.locator('button:has-text("Create")').click();
     await page.waitForSelector(`text="${name}"`);
     await page.waitForTimeout(1000);
     const workshopId = /[^/]*?$/.exec(page.url())![0];
-    await expect(page).toHaveURL(`./workshop/${workshopId}`, { timeout: 5000 });
+    await expect(page).toHaveURL(`/nav/workshop/${workshopId}`, {
+      timeout: 5000,
+    });
     return workshopId;
   }
 

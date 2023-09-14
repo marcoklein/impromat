@@ -33,8 +33,9 @@ export const TeaserGrid = <ItemData extends unknown>({
       <IonGrid>
         <IonRow>
           {items &&
-            items.map((item) => (
+            items.map((item, index) => (
               <IonCol
+                key={index}
                 sizeXs="12"
                 sizeSm="6"
                 sizeMd="4"

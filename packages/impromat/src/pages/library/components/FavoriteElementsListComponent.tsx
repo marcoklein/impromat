@@ -8,7 +8,7 @@ import {
 } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
-import { routeLibraryElement } from "../library-routes";
+import { routeLibraryElement } from "../../../routes/library-routes";
 
 const FavoriteElements_UserFragment = graphql(`
   fragment FavoriteElements_User on User {

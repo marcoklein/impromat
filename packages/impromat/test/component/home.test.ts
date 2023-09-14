@@ -9,24 +9,4 @@ pageTest.describe("Home Page", () => {
     // then
     await expect(homePage.homePageTitleLocator).toBeVisible();
   });
-
-  pageTest("should render jump pad if signed in", async ({ page, auth }) => {
-    // given
-    await auth.loginAsRandomUser();
-    // when
-    await page.goto("/");
-    // then
-    await expect(
-      page
-        .locator("div.ion-page")
-        .getByRole("link", { name: "Workshops" })
-        .first(),
-    ).toBeVisible();
-    await expect(
-      page
-        .locator("div.ion-page")
-        .getByRole("link", { name: "Elements" })
-        .first(),
-    ).toBeVisible();
-  });
 });

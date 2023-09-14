@@ -11,7 +11,7 @@ import { ElementVisibility } from "../graphql-client/graphql";
 import {
   routeLibraryEditCustomElement,
   routeLibraryElement,
-} from "../pages/library/library-routes";
+} from "../routes/library-routes";
 import { COLOR_SHARED } from "../theme/theme-colors";
 
 const CustomElement_ElementFragment = graphql(`

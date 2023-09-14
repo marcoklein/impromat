@@ -19,16 +19,16 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { close, home, information, logIn } from "ionicons/icons";
-import { environment } from "../../environment";
-import { useGoogleLogin } from "../../hooks/use-google-login";
+import { environment } from "../../../environment";
+import { useGoogleLogin } from "../../../hooks/use-google-login";
 import {
   routeAbout,
   routeAccount,
   routeHome,
   routeLegal,
   routePrivacyPolicy,
-} from "../../routes/shared-routes";
-import { GoogleSignInButton } from "../GoogleSignInButton";
+} from "../../../routes/shared-routes";
+import { GoogleSignInButton } from "../../../components/GoogleSignInButton";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 export const SignInMenuContentComponent: React.FC = () => {

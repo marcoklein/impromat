@@ -44,11 +44,35 @@ yarn lint:fix
 
 ## Tests
 
+Run only unit tests via
+
+```sh
+yarn test:unit
+```
+
+For all other tests you have to start the backend infrastructure.
+
+### Start backend infrastructure
+
 Start test infrastructure via
 
 ```sh
 yarn test:backend-up
 ```
+
+Alternatively, run the backend and database locally and change `.env.test` to point to the local API endpoint:
+
+```sh
+yarn workspace impromat-api dev
+```
+
+And `.env.test.local`:
+
+```sh
+VITE_API_URL=http://localhost:8080
+```
+
+### Run tests
 
 Playwright executes frontend tests.
 
@@ -66,7 +90,7 @@ yarn playwright:codegen
 
 Debug tests by using
 
-```
+```sh
 yarn test:debug
 ```
 

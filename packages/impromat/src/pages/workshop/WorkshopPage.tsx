@@ -1,29 +1,18 @@
 import {
   IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
-  IonCheckbox,
-  IonContent,
   IonFab,
   IonFabButton,
   IonFabList,
-  IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
   IonLoading,
-  IonMenuButton,
-  IonModal,
-  IonPage,
-  IonProgressBar,
   IonText,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import {
   add,
-  checkmark,
   globe,
   heart,
   heartOutline,
@@ -33,21 +22,24 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
+import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { Icon } from "../../components/Icon";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { PageScaffold } from "../../components/PageScaffold";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateUserLikedWorkshopMutation } from "../../hooks/use-update-liked-workshop-mutation";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
+import { routeLibrary } from "../../routes/library-routes";
+import { routeWorkshops } from "../../routes/shared-routes";
 import { COLOR_LIKE } from "../../theme/theme-colors";
-import { routeLibrary } from "../library/library-routes";
+import { TeaserGrid } from "../community/TeaserGrid";
 import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
+import { ShareWorkshopModal } from "./components/ShareWorkshopModal";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";
-import { TeaserGrid } from "../community/TeaserGrid";
-import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -74,6 +66,7 @@ const WorkshopPage_Workshop = graphql(`
     }
     ...WorkshopElementsComponent_Workshop
     ...WorkshopOptionsMenu_Workshop
+    ...ShareWorkshopModal_Workshop
   }
 `);
 
@@ -164,30 +157,7 @@ export const WorkshopPage: React.FC = () => {
     logger("Showing add section dialog");
   };
 
-  const onPublicClick = useCallback(
-    (isPublic: boolean) => {
-      if (!workshop) return;
-      logger("update public workshop state to %s", isPublic);
-      updateWorkshopMutation({
-        input: { id: workshop.id, isPublic },
-      });
-    },
-    [logger, updateWorkshopMutation, workshop],
-  );
-
-  const onListClick = useCallback(
-    (isListed: boolean) => {
-      if (!workshop) return;
-      logger("update workshop listed state to %s", isListed);
-      updateWorkshopMutation({
-        input: { id: workshop.id, isListed },
-      });
-    },
-    [logger, updateWorkshopMutation, workshop],
-  );
-
   const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
 
   const [updateUserLikedWorkshopResult, updateUserLikedWorkshop] =
     useUpdateUserLikedWorkshopMutation();
@@ -201,253 +171,141 @@ export const WorkshopPage: React.FC = () => {
   }, [updateUserLikedWorkshop, workshop]);
 
   return (
-    <>
-      <IonPage>
-        <IonHeader>
-          <IonToolbar>
-            <IonButtons slot="start">
-              <IonMenuButton></IonMenuButton>
-            </IonButtons>
-            <IonTitle>
-              Workshop {workshop && !workshop.canEdit && "(View)"}
-            </IonTitle>
-            {isReorderingElements && (
-              <IonProgressBar type="indeterminate"></IonProgressBar>
-            )}
-            <IonButtons slot="end">
-              {workshop && isLoggedIn && (
-                <IonButton onClick={() => toggleWorkshopLike()}>
-                  <IonIcon
-                    icon={workshop.isLiked ? heart : heartOutline}
-                    color={COLOR_LIKE}
-                    slot="icon-only"
-                    aria-label={
-                      workshop?.isLiked ? "Remove from likes." : "Add to likes."
-                    }
-                  ></IonIcon>
-                  <IonLoading
-                    isOpen={updateUserLikedWorkshopResult.fetching}
-                    message="Updating Like"
-                  />
-                </IonButton>
-              )}
-              {workshop && workshop.canEdit && (
-                <>
-                  <IonButton
-                    onClick={() => setIsSharingModalOpen(true)}
-                    aria-label="Share"
-                  >
-                    <Icon
-                      slot="start"
-                      icon={
-                        workshop.isPublic
-                          ? workshop.isListed
-                            ? globe
-                            : link
-                          : lockClosed
-                      }
-                    ></Icon>
-                    <span className="ion-hide-sm-down"> Share</span>
+    <PageScaffold
+      defaultBackHref={routeWorkshops()}
+      showProgressBar={isReorderingElements}
+      title={`Workshop ${workshop && !workshop.canEdit ? "(View)" : ""}`}
+      toolbarButtons={
+        <>
+          {workshop && isLoggedIn && (
+            <IonButton onClick={() => toggleWorkshopLike()}>
+              <IonIcon
+                icon={workshop.isLiked ? heart : heartOutline}
+                color={COLOR_LIKE}
+                slot="icon-only"
+                aria-label={
+                  workshop?.isLiked ? "Remove from likes." : "Add to likes."
+                }
+              ></IonIcon>
+              <IonLoading
+                isOpen={updateUserLikedWorkshopResult.fetching}
+                message="Updating Like"
+              />
+            </IonButton>
+          )}
+          {workshop && workshop.canEdit && (
+            <>
+              <IonButton
+                onClick={() => setIsSharingModalOpen(true)}
+                aria-label="Share"
+              >
+                <Icon
+                  slot="start"
+                  icon={
+                    workshop.isPublic
+                      ? workshop.isListed
+                        ? globe
+                        : link
+                      : lockClosed
+                  }
+                ></Icon>
+                <span className="ion-hide-sm-down"> Share</span>
+              </IonButton>
+              <WorkshopOptionsMenu
+                goBackAfterDeletion
+                workshopFragment={workshop}
+              ></WorkshopOptionsMenu>
+            </>
+          )}
+        </>
+      }
+    >
+      <PageContentLoaderComponent
+        queryResult={workshopQueryResult}
+        reexecuteQuery={reexecuteWorkshopQuery}
+      >
+        {workshop && (
+          <>
+            {workshop.canEdit && (
+              <IonFab slot="fixed" vertical="bottom" horizontal="end">
+                <IonFabButton>
+                  <IonIcon icon={add}></IonIcon>
+                </IonFabButton>
+                <IonFabList side="start">
+                  <IonButton routerLink={routeLibrary()}>Element</IonButton>
+                  <IonButton color="dark" onClick={() => onCreateSection()}>
+                    Section
                   </IonButton>
-                  <IonModal
-                    isOpen={isSharingModalOpen}
-                    onDidDismiss={() => setIsSharingModalOpen(false)}
-                    style={{ "--max-height": "50%", "--max-width": "95%" }}
-                  >
-                    <IonHeader>
-                      <IonToolbar>
-                        <IonTitle>Share Workshop</IonTitle>
-                        <IonButtons slot="end">
-                          <IonButton
-                            onClick={() => setIsSharingModalOpen(false)}
-                          >
-                            Close
-                          </IonButton>
-                        </IonButtons>
-                      </IonToolbar>
-                    </IonHeader>
-                    <IonContent className="ion-padding" scrollY={true}>
-                      <IonItem
-                        lines="none"
-                        color={workshop.isPublic ? "success" : undefined}
-                        disabled={workshop.isListed}
-                      >
-                        <Icon icon={link} slot="start"></Icon>
-                        <IonCheckbox
-                          checked={workshop.isPublic ?? false}
-                          labelPlacement="start"
-                          onIonChange={(event) =>
-                            onPublicClick(event.detail.checked)
-                          }
-                        >
-                          <IonLabel className="ion-text-wrap">
-                            Anyone with the link can view
-                          </IonLabel>
-                        </IonCheckbox>
-                      </IonItem>
-                      {!workshop.isPublic && !workshop.isListed && (
-                        <p>
-                          Activate the checkbox to share your workshop via url.
-                          Visitors will need the link to see your workshop but
-                          will not require an Impromat account.
-                        </p>
-                      )}
-                      {(workshop.isPublic || workshop.isListed) && (
-                        <>
-                          <IonItem
-                            lines="none"
-                            color={workshop.isListed ? "success" : undefined}
-                          >
-                            <Icon icon={globe} slot="start"></Icon>
-                            <IonCheckbox
-                              checked={workshop.isListed ?? false}
-                              labelPlacement="start"
-                              onIonChange={(event) =>
-                                onListClick(event.detail.checked)
-                              }
-                            >
-                              <IonLabel className="ion-text-wrap">
-                                Share with community
-                              </IonLabel>
-                            </IonCheckbox>
-                          </IonItem>
-                          {!workshop.isListed && (
-                            <p>
-                              Your workshop is available to everyone that
-                              follows the workshop link. Visitors do not require
-                              an account and can view your workshop including
-                              sections, elements, and notes.
-                            </p>
-                          )}
-                          {workshop.isListed && (
-                            <p>
-                              Thanks for your awesome contribution! Your
-                              workshop is visible and publicly listed in the
-                              Impromat community. Visitors do not require an
-                              account and can view your workshop including
-                              sections, elements, and notes.
-                            </p>
-                          )}
-                          <IonButton
-                            expand="full"
-                            color={!isCopied ? "primary" : "medium"}
-                            onClick={() => {
-                              setIsCopied(true);
-                              navigator.clipboard.writeText(
-                                window.location.href,
-                              );
-                            }}
-                          >
-                            {isCopied ? (
-                              <>
-                                <IonIcon
-                                  slot="start"
-                                  icon={checkmark}
-                                ></IonIcon>
-                                Copied workshop link
-                              </>
-                            ) : (
-                              "Copy workshop link"
-                            )}
-                          </IonButton>
-                        </>
-                      )}
-                    </IonContent>
-                  </IonModal>
-                  <WorkshopOptionsMenu
-                    goBackAfterDeletion
-                    workshopFragment={workshop}
-                  ></WorkshopOptionsMenu>
-                </>
-              )}
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-
-        <IonContent>
-          <PageContentLoaderComponent
-            queryResult={workshopQueryResult}
-            reexecuteQuery={reexecuteWorkshopQuery}
-          >
-            {workshop && (
-              <>
-                {workshop.canEdit && (
-                  <IonFab slot="fixed" vertical="bottom" horizontal="end">
-                    <IonFabButton>
-                      <IonIcon icon={add}></IonIcon>
-                    </IonFabButton>
-                    <IonFabList side="start">
-                      <IonButton routerLink={routeLibrary({ workshopId })}>
-                        Element
-                      </IonButton>
-                      <IonButton color="dark" onClick={() => onCreateSection()}>
-                        Section
-                      </IonButton>
-                    </IonFabList>
-                  </IonFab>
-                )}
-
-                <IonItem lines="none">
-                  <IonLabel className="ion-text-wrap">
-                    <h1 style={{ padding: 0, margin: 0 }}>{workshop.name}</h1>
-                  </IonLabel>
-                </IonItem>
-                {workshop.description && (
-                  <IonItem lines="none">
-                    <IonLabel className="ion-text-wrap">
-                      {workshop.description}
-                    </IonLabel>
-                  </IonItem>
-                )}
-
-                {workshop.sections.length === 1 &&
-                workshop.sections[0].elements.length === 0 &&
-                workshop.canEdit &&
-                !workshop.sections[0].name ? (
-                  <IonCard>
-                    <IonCardContent className="ion-padding">
-                      <IonText>
-                        Use the bottom right button to add elements. Enjoy
-                        designing your workshop!
-                      </IonText>
-                      <IonButton
-                        expand="full"
-                        fill="clear"
-                        routerLink={routeLibrary({ workshopId })}
-                      >
-                        Add First Element
-                      </IonButton>
-                    </IonCardContent>
-                  </IonCard>
-                ) : (
-                  <WorkshopElementsComponent
-                    key={workshop.id}
-                    workshopId={workshopId}
-                    workshopFragment={workshop}
-                    onChangeOrder={(fromIndex, toIndex) =>
-                      changeSectionsOrder(fromIndex, toIndex)
-                    }
-                  ></WorkshopElementsComponent>
-                )}
-                {WORKSHOP_SIMILAR_ELEMENTS_FEATURE_TOGGLE &&
-                  workshop.elementRecommendations.length > 0 &&
-                  workshop.canEdit && (
-                    <TeaserGrid
-                      title="Elements that might match"
-                      items={workshop.elementRecommendations}
-                      itemContent={(element) => (
-                        <ElementPreviewCard
-                          key={element.id}
-                          elementFragment={element}
-                        ></ElementPreviewCard>
-                      )}
-                    ></TeaserGrid>
-                  )}
-              </>
+                </IonFabList>
+              </IonFab>
             )}
-          </PageContentLoaderComponent>
-        </IonContent>
-      </IonPage>
-    </>
+
+            <IonItem lines="none">
+              <IonLabel className="ion-text-wrap">
+                <h1 style={{ padding: 0, margin: 0 }}>{workshop.name}</h1>
+              </IonLabel>
+            </IonItem>
+            {workshop.description && (
+              <IonItem lines="none">
+                <IonLabel className="ion-text-wrap">
+                  {workshop.description}
+                </IonLabel>
+              </IonItem>
+            )}
+
+            {workshop.sections.length === 1 &&
+            workshop.sections[0].elements.length === 0 &&
+            workshop.canEdit &&
+            !workshop.sections[0].name ? (
+              <IonCard>
+                <IonCardContent className="ion-padding">
+                  <IonText>
+                    Use the bottom right button to add elements. Enjoy designing
+                    your workshop!
+                  </IonText>
+                  <IonButton
+                    expand="full"
+                    fill="clear"
+                    routerLink={routeLibrary()}
+                  >
+                    Add First Element
+                  </IonButton>
+                </IonCardContent>
+              </IonCard>
+            ) : (
+              <WorkshopElementsComponent
+                key={workshop.id}
+                workshopId={workshopId}
+                workshopFragment={workshop}
+                onChangeOrder={(fromIndex, toIndex) =>
+                  changeSectionsOrder(fromIndex, toIndex)
+                }
+              ></WorkshopElementsComponent>
+            )}
+            {WORKSHOP_SIMILAR_ELEMENTS_FEATURE_TOGGLE &&
+              workshop.elementRecommendations.length > 0 &&
+              workshop.canEdit && (
+                <TeaserGrid
+                  title="Elements that might match"
+                  items={workshop.elementRecommendations}
+                  itemContent={(element) => (
+                    <ElementPreviewCard
+                      key={element.id}
+                      elementFragment={element}
+                    ></ElementPreviewCard>
+                  )}
+                ></TeaserGrid>
+              )}
+          </>
+        )}
+      </PageContentLoaderComponent>
+      {workshop && workshop.canEdit && (
+        <ShareWorkshopModal
+          isSharingModalOpen={isSharingModalOpen}
+          setIsSharingModalOpen={setIsSharingModalOpen}
+          workshopFragment={workshop}
+        ></ShareWorkshopModal>
+      )}
+    </PageScaffold>
   );
 };
