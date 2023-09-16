@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.47.0
+
+### Minor Changes
+
+- cf9ba62: Add well known asset link for PWA Google Play support
+- 41953d3: Expand content area for element text.
+
+### Patch Changes
+
+- 41953d3: Hide similar element title if there are none.
+
 ## 0.46.0
 
 ### Minor Changes
