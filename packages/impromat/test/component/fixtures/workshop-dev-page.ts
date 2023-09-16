@@ -25,9 +25,9 @@ export class WorkshopDevPage extends DevPage {
       .getByText("Freeze")
       .first();
     this.addFabButtonToggleLocator = page
+      .locator("ion-fab-button")
       .getByRole("img")
-      .filter({ hasText: "Add" })
-      .locator("path");
+      .locator("svg");
 
     this.addElementButtonLocator = page
       .locator("ion-fab-list")
