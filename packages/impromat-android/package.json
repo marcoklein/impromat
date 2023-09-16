@@ -1,0 +1,12 @@
+{
+  "name": "impromat-android",
+  "packageManager": "yarn@3.4.1",
+  "scripts": {
+    "update": "bubblewrap update",
+    "build": "bubblewrap build",
+    "clean": "rm -r app gradle .gradle *.aab *.apk *.idsig build.gradle gradle.properties gradlew gradlew.bat manifest-checksum.txt settings.gradle store_icon.png"
+  },
+  "devDependencies": {
+    "@bubblewrap/cli": "^1.21.0"
+  }
+}

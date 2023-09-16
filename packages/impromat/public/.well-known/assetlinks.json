@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.impromat.twa",
+        "sha256_cert_fingerprints": ["DC:84:4D:B2:0F:89:4E:24:F1:93:98:DE:47:2C:B1:25:13:27:28:FF:F0:65:9C:AE:95:5A:E7:5E:26:EE:52:C9"]
+      }
+    }]

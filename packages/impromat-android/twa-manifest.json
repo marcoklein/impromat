@@ -1,0 +1,47 @@
+{
+  "packageId": "app.impromat.twa",
+  "host": "impromat.app",
+  "name": "Impromat",
+  "launcherName": "Impromat",
+  "display": "standalone",
+  "themeColor": "#3880FF",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#FFFFFF",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://impromat.app/assets/icon/icon.png",
+  "maskableIconUrl": "https://impromat.app/assets/icon/icon.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "4",
+  "appVersionCode": 4,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://impromat.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://impromat.app/",
+  "minSdkVersion": 19,
+  "orientation": "portrait",
+  "fingerprints": [
+    {
+      "value": "DC:84:4D:B2:0F:89:4E:24:F1:93:98:DE:47:2C:B1:25:13:27:28:FF:F0:65:9C:AE:95:5A:E7:5E:26:EE:52:C9"
+    }
+  ],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "4"
+}
