@@ -1,13 +1,10 @@
 import { IonButton, IonIcon } from "@ionic/react";
 import { add } from "ionicons/icons";
+import { routeCreateWorkshop } from "../../../routes/shared-routes";
 
-interface ContainerProps {
-  onCreateWorkshopClick: () => void;
-}
+interface ContainerProps {}
 
-export const WorkshopCreateFirstComponent: React.FC<ContainerProps> = ({
-  onCreateWorkshopClick,
-}) => (
+export const WorkshopCreateFirstComponent: React.FC<ContainerProps> = ({}) => (
   <div
     className="ion-padding"
     style={{
@@ -19,7 +16,7 @@ export const WorkshopCreateFirstComponent: React.FC<ContainerProps> = ({
     }}
   >
     <p>Start by creating your very first workshop:</p>
-    <IonButton expand="full" onClick={() => onCreateWorkshopClick()}>
+    <IonButton expand="full" routerLink={routeCreateWorkshop()}>
       <IonIcon slot="start" icon={add}></IonIcon>
       Add Workshop
     </IonButton>

@@ -1,19 +1,15 @@
 import {
   IonButton,
-  IonButtons,
   IonCheckbox,
   IonContent,
-  IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
-  IonModal,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import { checkmark, globe, link } from "ionicons/icons";
 import React, { useCallback, useState } from "react";
 import { Icon } from "../../../components/Icon";
+import { ModalScaffold } from "../../../components/ModalScaffold";
 import {
   FragmentType,
   getFragmentData,
@@ -74,21 +70,11 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
   );
 
   return (
-    <IonModal
-      isOpen={isSharingModalOpen}
-      onDidDismiss={() => setIsSharingModalOpen(false)}
-      style={{ "--max-height": "50%", "--max-width": "95%" }}
+    <ModalScaffold
+      isModalOpen={isSharingModalOpen}
+      setIsModalOpen={setIsSharingModalOpen}
+      title="Share Workshop"
     >
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Share Workshop</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={() => setIsSharingModalOpen(false)}>
-              Close
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
       <IonContent className="ion-padding" scrollY={true}>
         <IonItem
           lines="none"
@@ -165,6 +151,6 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
           </>
         )}
       </IonContent>
-    </IonModal>
+    </ModalScaffold>
   );
 };
