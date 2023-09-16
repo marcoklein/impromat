@@ -9,7 +9,6 @@ import {
   IonIcon,
   IonInput,
   IonItem,
-  IonItemDivider,
   IonLabel,
   IonList,
   IonNote,
@@ -21,7 +20,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { caretUp, chevronCollapse, chevronExpand, globe } from "ionicons/icons";
+import { chevronCollapse, chevronExpand, globe } from "ionicons/icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
