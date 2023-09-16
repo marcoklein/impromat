@@ -20,8 +20,8 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { globe } from "ionicons/icons";
-import { useEffect, useMemo, useState } from "react";
+import { chevronCollapse, chevronExpand, globe } from "ionicons/icons";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { Icon } from "../../components/Icon";
@@ -172,6 +172,12 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
     })();
   };
 
+  const [contentRows, setContentRows] = useState(10);
+
+  const expandContent = useCallback(() => {
+    setContentRows((rows) => (rows === 10 ? 20 : 10));
+  }, []);
+
   return (
     <IonPage>
       <IonHeader>
@@ -185,7 +191,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
+      <IonContent>
         <IonList>
           <IonItem>
             <IonInput
@@ -203,10 +209,20 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             onTagsChange={(tags) => setTags(tags)}
           ></ElementTagsItem>
           <IonItem>
+            <IonButton
+              fill="clear"
+              onClick={() => expandContent()}
+              style={{ position: "absolute", top: 0, right: 0, zIndex: 100 }}
+            >
+              <IonIcon
+                slot="icon-only"
+                icon={contentRows === 10 ? chevronExpand : chevronCollapse}
+              ></IonIcon>
+            </IonButton>
             <IonTextarea
               label="Content"
               labelPlacement="floating"
-              rows={10}
+              rows={contentRows}
               value={content}
               onIonInput={(event) => setContent(event.detail.value!)}
             ></IonTextarea>
