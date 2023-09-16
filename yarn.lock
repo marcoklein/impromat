@@ -5208,15 +5208,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stencil/core@npm:~2.10.0":
-  version: 2.10.0
-  resolution: "@stencil/core@npm:2.10.0"
-  bin:
-    stencil: bin/stencil
-  checksum: 035f74e71c2428a69f15df2a3e234845e3105f3481a352a7aed65f64714fc8b4b3b135a6bb90dfd90aca559d7f80b488cf7b5b2247e96e94fccb5e1bee676634
-  languageName: node
-  linkType: hard
-
 "@surma/rollup-plugin-off-main-thread@npm:^2.2.3":
   version: 2.2.3
   resolution: "@surma/rollup-plugin-off-main-thread@npm:2.2.3"
@@ -12007,7 +11998,7 @@ __metadata:
     history: ^4.0.0
     immer: ^9.0.15
     impromat-api: 0.19.0
-    ionicons: ^5.4.0
+    ionicons: ^7.1.2
     jsdom: ^22.0.0
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -12215,21 +12206,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ionicons@npm:^5.4.0":
-  version: 5.5.4
-  resolution: "ionicons@npm:5.5.4"
-  dependencies:
-    "@stencil/core": ~2.10.0
-  checksum: 02d59b7d3a380a52b6c65ebf1ef56c8ba62f1db70fad474b1171c1ec0988b80d6a6cc4ca2a37a26768a4afaa38fa08f4af3499d222dd60e235a89fe7f37fae37
-  languageName: node
-  linkType: hard
-
 "ionicons@npm:^7.0.0, ionicons@npm:^7.1.0":
   version: 7.1.0
   resolution: "ionicons@npm:7.1.0"
   dependencies:
     "@stencil/core": ^2.18.0
   checksum: 66e05b7d7c9625085cad9640ff2e1bb2e7737fa25855911bd2e516b50f1cf441761cec6e894dfbc2a9770e577f1d83d851d1453cb210d6bb0064ad15fa484e9c
+  languageName: node
+  linkType: hard
+
+"ionicons@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "ionicons@npm:7.1.2"
+  dependencies:
+    "@stencil/core": ^2.18.0
+  checksum: 5462bab32a4ce7b5ecf84d55f44c7110791dfdf7233aec32b08f0baed88fdde3a3c3053e9b08074f72b3a1d080763e95c22fba350c518215a3df8c744b2b229a
   languageName: node
   linkType: hard
 

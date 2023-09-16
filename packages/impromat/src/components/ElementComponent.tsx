@@ -104,16 +104,18 @@ export const ElementComponent: React.FC<ContainerProps> = ({
         </IonItem>
       )}
 
-      <TeaserGrid
-        title="Similar Elements"
-        items={element.recommendations}
-        itemContent={(element) => (
-          <ElementPreviewCard
-            key={element.id}
-            elementFragment={element}
-          ></ElementPreviewCard>
-        )}
-      ></TeaserGrid>
+      {element.recommendations.length > 0 && (
+        <TeaserGrid
+          title="Similar Elements"
+          items={element.recommendations}
+          itemContent={(element) => (
+            <ElementPreviewCard
+              key={element.id}
+              elementFragment={element}
+            ></ElementPreviewCard>
+          )}
+        ></TeaserGrid>
+      )}
     </>
   );
 };
