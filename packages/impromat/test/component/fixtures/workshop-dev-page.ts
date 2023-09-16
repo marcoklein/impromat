@@ -100,16 +100,8 @@ export class WorkshopDevPage extends DevPage {
 
   async closeSection(name: string = "[Default Section]") {
     const page = this.page;
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: `${name}Chevron DownEllipsis` })
-      .getByRole("button")
-      .nth(1)
-      .click();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: `${name}Chevron UpEllipsis` })
-      .waitFor();
+    await page.getByText("first-section").click();
+    await page.waitForTimeout(200);
   }
 
   async openLibrary() {

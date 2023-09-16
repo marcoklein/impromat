@@ -42,9 +42,12 @@ pageTest.describe("Workshop Elements Page", () => {
       await page.locator("textarea").fill(noteText);
       await page.getByRole("button", { name: "Save" }).click();
       // then
-      await page.waitForSelector(
-        `ion-item[role="listitem"]:has-text("${noteText}Pencil") >> role=paragraph`,
-      );
+      await expect(
+        page
+          .getByRole("listitem")
+          .filter({ hasText: "My Note" })
+          .locator("ion-buttons"),
+      ).toBeVisible();
     },
   );
 
