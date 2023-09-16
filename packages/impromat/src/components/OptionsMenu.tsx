@@ -39,7 +39,11 @@ export const OptionsMenu: React.FC<ContainerProps> = ({
   return (
     <>
       {buttonElement ?? (
-        <IonButton fill="clear" onClick={(event) => openPopover(event)}>
+        <IonButton
+          fill="clear"
+          onClick={(event) => openPopover(event)}
+          data-testid="menu-button"
+        >
           <IonIcon icon={ellipsisVertical}></IonIcon>
         </IonButton>
       )}

@@ -19,7 +19,7 @@ pageTest.describe("Workshop Likes", () => {
       await workshopsPage.goto();
       // then
       await expect(page.getByText(uniqueWorkshopName)).toBeVisible();
-      await expect(page.getByText("Heart liked")).toBeVisible();
+      await expect(page.getByText("liked")).toBeVisible();
     },
   );
 });

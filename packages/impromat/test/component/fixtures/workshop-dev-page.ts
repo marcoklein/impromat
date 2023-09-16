@@ -14,9 +14,7 @@ export class WorkshopDevPage extends DevPage {
 
   constructor(page: Page) {
     super(page);
-    this.optionsLocator = page
-      .locator('ion-button:has-text("Ellipsis Vertical")')
-      .getByRole("button");
+    this.optionsLocator = page.getByTestId("menu-button");
     this.addFirstElementLocator = page.getByRole("link", {
       name: "Add First Element",
     });
@@ -25,9 +23,9 @@ export class WorkshopDevPage extends DevPage {
       .getByText("Freeze")
       .first();
     this.addFabButtonToggleLocator = page
+      .locator("ion-fab-button")
       .getByRole("img")
-      .filter({ hasText: "Add" })
-      .locator("path");
+      .locator("svg");
 
     this.addElementButtonLocator = page
       .locator("ion-fab-list")
@@ -100,16 +98,8 @@ export class WorkshopDevPage extends DevPage {
 
   async closeSection(name: string = "[Default Section]") {
     const page = this.page;
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: `${name}Chevron DownEllipsis` })
-      .getByRole("button")
-      .nth(1)
-      .click();
-    await page
-      .getByRole("listitem")
-      .filter({ hasText: `${name}Chevron UpEllipsis` })
-      .waitFor();
+    await page.getByText("first-section").click();
+    await page.waitForTimeout(200);
   }
 
   async openLibrary() {
