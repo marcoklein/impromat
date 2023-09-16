@@ -7679,13 +7679,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assertion-error@npm:1.0.0":
-  version: 1.0.0
-  resolution: "assertion-error@npm:1.0.0"
-  checksum: 184cab8706bd17299b13278e86040f796c46608b5ade2e5162ed639bec02f9529bb3ca0f5ee2fb11c30cac40668098f130ccde3b8263dc4e4e812d992e1a36cb
-  languageName: node
-  linkType: hard
-
 "assertion-error@npm:^1.1.0":
   version: 1.1.0
   resolution: "assertion-error@npm:1.1.0"
@@ -8218,18 +8211,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bubblewrap@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "bubblewrap@npm:0.2.0"
-  dependencies:
-    chai: ^1.10.0
-    harmony-reflect: ^1.1.1
-    object-assign: ^2.0.0
-    wassat: ^2.2.3
-  checksum: 158ba4259f468b94a518004c75a423a92aaefd70d7a4402a6e381c027de4f50cc19acdc446b45eb2a621f07e9374062431f8299c8456fc81350c53f128ad1b0b
-  languageName: node
-  linkType: hard
-
 "buffer-crc32@npm:~0.2.3":
   version: 0.2.13
   resolution: "buffer-crc32@npm:0.2.13"
@@ -8419,16 +8400,6 @@ __metadata:
   version: 2.0.1
   resolution: "ccount@npm:2.0.1"
   checksum: 48193dada54c9e260e0acf57fc16171a225305548f9ad20d5471e0f7a8c026aedd8747091dccb0d900cde7df4e4ddbd235df0d8de4a64c71b12f0d3303eeafd4
-  languageName: node
-  linkType: hard
-
-"chai@npm:^1.10.0":
-  version: 1.10.0
-  resolution: "chai@npm:1.10.0"
-  dependencies:
-    assertion-error: 1.0.0
-    deep-eql: 0.1.3
-  checksum: 96674f6a143728f827d77a00e81df059f3afaf2c409e960616597ee21283fe34c4f0f7e8755ca738807f8810144f89306a8d6d1d1d4e20286708260aa1484ac8
   languageName: node
   linkType: hard
 
@@ -9438,15 +9409,6 @@ __metadata:
     babel-plugin-macros:
       optional: true
   checksum: c3c300a14edf1bdf5a873f9e4b22e839d62490bc5c8d6169c1f15858a1a76733d06a9a56930e963d677a2ceeca4b6b0894cc5ea2f501aa382ca5b92af3413c2a
-  languageName: node
-  linkType: hard
-
-"deep-eql@npm:0.1.3":
-  version: 0.1.3
-  resolution: "deep-eql@npm:0.1.3"
-  dependencies:
-    type-detect: 0.1.1
-  checksum: 959734acb233d00727b3e64c8c803d233315ad8d4f7ccf89455a8a12f745055e78df087d1afabbe8931a9387f585d3bc4bf57bdb94e5e52055b38f5ae9360ca7
   languageName: node
   linkType: hard
 
@@ -11865,13 +11827,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"harmony-reflect@npm:^1.1.1":
-  version: 1.6.2
-  resolution: "harmony-reflect@npm:1.6.2"
-  checksum: 2e5bae414cd2bfae5476147f9935dc69ee9b9a413206994dcb94c5b3208d4555da3d4313aff6fd14bd9991c1e3ef69cdda5c8fac1eb1d7afc064925839339b8c
-  languageName: node
-  linkType: hard
-
 "has-bigints@npm:^1.0.1, has-bigints@npm:^1.0.2":
   version: 1.0.2
   resolution: "has-bigints@npm:1.0.2"
@@ -12511,7 +12466,6 @@ __metadata:
     "@babel/plugin-syntax-import-assertions": ^7.20.0
     "@babel/plugin-transform-react-jsx": ^7.19.0
     "@babel/preset-env": ^7.21.5
-    "@bubblewrap/cli": ^1.21.0
     "@capacitor/app": 4.0.1
     "@capacitor/cli": 4.1.0
     "@capacitor/core": 4.1.0
@@ -12541,7 +12495,6 @@ __metadata:
     "@urql/exchange-retry": ^1.1.1
     "@vitejs/plugin-legacy": ^4.0.3
     "@vitejs/plugin-react": ^3.1.0
-    bubblewrap: ^0.2.0
     concurrently: ^7.6.0
     debug: ^4.3.4
     dependency-cruiser: ^12.11.1
@@ -16283,13 +16236,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-assign@npm:^2.0.0":
-  version: 2.1.1
-  resolution: "object-assign@npm:2.1.1"
-  checksum: d37a7d7173408e07ee225116437592d92b584b2a5f38cafe608400b43efd9b78878dbd545b524aff5b4118d88e39466b9038b2d3de8885e212adad497d656c46
-  languageName: node
-  linkType: hard
-
 "object-assign@npm:^4, object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
@@ -19779,13 +19725,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-detect@npm:0.1.1":
-  version: 0.1.1
-  resolution: "type-detect@npm:0.1.1"
-  checksum: 3660c29269d15d4cb7d8a6ed26b1cf8cb5789ec9b8ca78c99aef642a83794aba662c57d303e2eb0c2910af57de00db8f38dba8bd7bce13d30c49b0b5fa6b7bde
-  languageName: node
-  linkType: hard
-
 "type-detect@npm:4.0.8, type-detect@npm:^4.0.0, type-detect@npm:^4.0.5":
   version: 4.0.8
   resolution: "type-detect@npm:4.0.8"
@@ -20569,13 +20508,6 @@ __metadata:
   dependencies:
     makeerror: 1.0.12
   checksum: ad7a257ea1e662e57ef2e018f97b3c02a7240ad5093c392186ce0bcf1f1a60bbadd520d073b9beb921ed99f64f065efb63dfc8eec689a80e569f93c1c5d5e16c
-  languageName: node
-  linkType: hard
-
-"wassat@npm:^2.2.3":
-  version: 2.3.0
-  resolution: "wassat@npm:2.3.0"
-  checksum: 047d8b7998ca75dcdd990195d1f58c7d9e47c621e0a837f9fa9e0e80cc936d1ea7176739f27cec2893fc15cf337d459ad899893eb6aefccf1de1e4a219720feb
   languageName: node
   linkType: hard
 
