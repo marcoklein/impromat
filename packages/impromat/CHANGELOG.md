@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.47.1
+
+### Patch Changes
+
+- fb959f9: Show empty section to fix reordering issue.
+
 ## 0.47.0
 
 ### Minor Changes
