@@ -146,13 +146,14 @@ export const WorkshopElementsComponent: React.FC<ContainerProps> = ({
         >
           {sections.map((section, index) => (
             <Fragment key={section.id}>
-              {!(index === 0 && !section.name) && (
-                <WorkshopSectionComponent
-                  workshopSectionFragment={section}
-                  isReordering={reorderWorkshopElements}
-                  {...workshopSectionHandlers}
-                ></WorkshopSectionComponent>
-              )}
+              {/* TODO this exclusion causes the list to not re-order properly as the order index is wrong */}
+              {/* {!(index === 0 && !section.name) && ( */}
+              <WorkshopSectionComponent
+                workshopSectionFragment={section}
+                isReordering={reorderWorkshopElements}
+                {...workshopSectionHandlers}
+              ></WorkshopSectionComponent>
+              {/* )} */}
               <SectionElementsComponent
                 workshopId={workshopId}
                 sectionFragment={section}
