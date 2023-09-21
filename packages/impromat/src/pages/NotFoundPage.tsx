@@ -1,4 +1,5 @@
 import { IonButton } from "@ionic/react";
+import { useTranslation } from "react-i18next";
 import { routeRootNavigation } from "../routes/shared-routes";
 
 /**
@@ -6,6 +7,7 @@ import { routeRootNavigation } from "../routes/shared-routes";
  * The user needs to sign in to use the app. Therefore, it should only point to the sign in page.
  */
 export const NotFoundPage: React.FC = () => {
+  const { t } = useTranslation("NotFoundPage");
   return (
     <div
       style={{
@@ -16,9 +18,9 @@ export const NotFoundPage: React.FC = () => {
       }}
     >
       <div>
-        <h1>Uups, this page does not exist.</h1>
+        <h1>{t("Page does not exist")}</h1>
         <IonButton routerLink={routeRootNavigation()} expand="full">
-          Go to home page
+          {t("Go to home page")}
         </IonButton>
       </div>
     </div>

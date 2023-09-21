@@ -34,6 +34,7 @@ import { LibraryPage } from "../library/LibraryPage";
 import { WorkshopPage } from "../workshop/WorkshopPage";
 import { WorkshopsPage } from "../workshop/WorkshopsPage";
 import { HIDE_MENU_SIZE } from "./responsive-navigation";
+import { NotFoundPage } from "../NotFoundPage";
 
 export interface TabConfig {
   name: string;
@@ -95,12 +96,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
   return (
     <>
       <IonTabs>
-        <IonRouterOutlet>
-          <Redirect
-            from={`${routeRootNavigation()}/`}
-            to={`${defaultTab.route}`}
-            exact
-          ></Redirect>
+        <IonRouterOutlet animated={true}>
           {Object.entries(ROOT_TABS).map(([key, value]) =>
             value.protected ? (
               <ProtectedRouteComponent
@@ -121,21 +117,25 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
           <Route path={routeAbout()} exact>
             <AboutPage></AboutPage>
           </Route>
-          <Route path={routePrivacyPolicy()} exact>
-            <PrivacyPolicyPage></PrivacyPolicyPage>
-          </Route>
-          <Route path={routeLegal()} exact>
-            <LegalPage></LegalPage>
-          </Route>
-          <Route path={routeAccount()} exact>
-            <AccountPage></AccountPage>
-          </Route>
-          <Route path={routeCommunity()} exact>
-            <CommunityPage></CommunityPage>
-          </Route>
-          <Route path={routeWorkshop()} exact>
-            <WorkshopPage></WorkshopPage>
-          </Route>
+          <Route
+            path={routePrivacyPolicy()}
+            exact
+            component={PrivacyPolicyPage}
+          ></Route>
+          <Route path={routeLegal()} exact component={LegalPage}></Route>
+          <Route path={routeAccount()} exact component={AccountPage}></Route>
+          <Route
+            path={routeCommunity()}
+            exact
+            component={CommunityPage}
+          ></Route>
+          <Route path={routeWorkshop()} exact component={WorkshopPage}></Route>
+          <Redirect
+            from={`${routeRootNavigation()}/`}
+            to={`${defaultTab.route}`}
+            exact
+          ></Redirect>
+          <Route component={NotFoundPage}></Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom" className={`ion-hide-${HIDE_MENU_SIZE}-up`}>
           {Object.entries(ROOT_TABS).map(([key, value]) => (
