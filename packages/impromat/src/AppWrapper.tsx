@@ -1,4 +1,3 @@
-import { setupIonicReact } from "@ionic/react";
 import { CombinedError, Provider as UrqlProvider } from "urql";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -20,8 +19,6 @@ import { useComponentLogger } from "./hooks/use-component-logger";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import "./theme/colors.css";
 import "./theme/variables.css";
-
-setupIonicReact();
 
 export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
   const logger = useComponentLogger("AppWrapper");

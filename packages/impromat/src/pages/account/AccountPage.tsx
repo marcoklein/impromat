@@ -7,6 +7,7 @@ import { PageScaffold } from "../../components/PageScaffold";
 import { graphql } from "../../graphql-client";
 import { useGoogleLoginHref } from "../../hooks/use-google-login-href";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
+import { routeHome } from "../../routes/shared-routes";
 import { AccountOptionsMenu } from "./components/AccountOptionsMenu";
 import { AccountSignIn } from "./components/AccountSignIn";
 import { AccountSignedIn } from "./components/AccountSignedIn";
@@ -46,6 +47,7 @@ export const AccountPage: React.FC = () => {
           <AccountOptionsMenu userFragment={myUser}></AccountOptionsMenu>
         )
       }
+      defaultBackHref={routeHome()}
     >
       {isLoading && <IonSpinner></IonSpinner>}
       {!isLoading && isLoggedIn && myUser && (

@@ -29,27 +29,31 @@ export const App: React.FC = () => {
       >
         <IonReactRouter>
           <ResponsiveMenu></ResponsiveMenu>
-          <IonRouterOutlet id="main">
-            <Redirect path="/" exact to={routeRootNavigation()}></Redirect>
-            <Route path={routeWorkshopElement()} exact>
-              <WorkshopElementPage></WorkshopElementPage>
-            </Route>
-            <ProtectedRouteComponent path={routeLibraryElement()} exact>
-              <LibraryElementPage></LibraryElementPage>
-            </ProtectedRouteComponent>
+          <IonRouterOutlet id="main" animated={true}>
+            <Route
+              path={routeWorkshopElement()}
+              exact
+              component={WorkshopElementPage}
+            ></Route>
+            <ProtectedRouteComponent
+              path={routeLibraryElement()}
+              exact
+              children={<LibraryElementPage></LibraryElementPage>}
+            ></ProtectedRouteComponent>
             <ProtectedRouteComponent
               path={routeLibraryCreateCustomElement()}
               exact
-            >
-              <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
-            </ProtectedRouteComponent>
-            <Route path={routeRootNavigation()}>
-              <RootNavigation></RootNavigation>
-            </Route>
+              children={
+                <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
+              }
+            ></ProtectedRouteComponent>
+            <Route
+              path={routeRootNavigation()}
+              component={RootNavigation}
+            ></Route>
 
-            <Route>
-              <NotFoundPage></NotFoundPage>
-            </Route>
+            <Route component={NotFoundPage}></Route>
+            <Redirect path="/" exact to={routeRootNavigation()}></Redirect>
           </IonRouterOutlet>
         </IonReactRouter>
       </IonSplitPane>

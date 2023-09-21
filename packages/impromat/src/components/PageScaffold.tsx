@@ -9,10 +9,8 @@ import {
   IonProgressBar,
   IonTitle,
   IonToolbar,
-  useIonRouter,
 } from "@ionic/react";
-import { PropsWithChildren, useMemo } from "react";
-import { routeRootNavigation } from "../routes/shared-routes";
+import { PropsWithChildren } from "react";
 
 interface ContainerProps extends PropsWithChildren {
   defaultBackHref?: string;
@@ -45,21 +43,13 @@ export const PageScaffold: React.FC<ContainerProps> = ({
   footer,
   showProgressBar,
 }) => {
-  const router = useIonRouter();
-  const isNavRoute = useMemo(
-    () => router.routeInfo.pathname.startsWith(routeRootNavigation()),
-    [router],
-  );
-
   return (
     <IonPage>
       {!noHeader && (
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
-              {!isNavRoute && (
-                <IonBackButton defaultHref={defaultBackHref}></IonBackButton>
-              )}
+              <IonBackButton defaultHref={defaultBackHref}></IonBackButton>
             </IonButtons>
             <IonTitle>
               <IonLabel className="ion-text-wrap">{title}</IonLabel>

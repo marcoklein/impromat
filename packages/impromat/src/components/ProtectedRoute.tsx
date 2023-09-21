@@ -30,8 +30,10 @@ export const ProtectedRouteComponent: React.FC<ContainerProps> = ({
   }
 
   return (
-    <Route path={path} exact={exact}>
-      {isLoggedIn ? children : <AccountPage></AccountPage>}
-    </Route>
+    <Route
+      path={path}
+      exact={exact}
+      render={() => (isLoggedIn ? children : <AccountPage></AccountPage>)}
+    ></Route>
   );
 };

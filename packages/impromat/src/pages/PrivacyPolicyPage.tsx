@@ -1,39 +1,25 @@
-import {
-  IonBackButton,
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  useIonRouter,
-} from "@ionic/react";
+import { IonButton, IonContent } from "@ionic/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
+import { PageScaffold } from "../components/PageScaffold";
 import { privacyPolicyMarkdownDe } from "../markdown/privacy-policy.de.md.gen";
 import { privacyPolicyMarkdownEn } from "../markdown/privacy-policy.en.md.gen";
+import { routeHome } from "../routes/shared-routes";
 
 export const PrivacyPolicyPage: React.FC = () => {
-  const router = useIonRouter();
+  const { t, i18n } = useTranslation("PrivacyPolicyPage");
 
-  const [language, setLanguage] = useState<"en" | "de">("en");
+  const [language, setLanguage] = useState<"en" | "de">(
+    i18n.language === "de" ? "de" : "en",
+  );
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            {router.canGoBack() ? (
-              <IonBackButton></IonBackButton>
-            ) : (
-              <IonMenuButton></IonMenuButton>
-            )}
-          </IonButtons>
-          <IonTitle>Privacy Policy</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <PageScaffold
+      title={t("Privacy Policy")}
+      customContentWrapper
+      defaultBackHref={routeHome()}
+    >
       <IonContent className="ion-padding">
         {language === "en" && (
           <>
@@ -52,6 +38,6 @@ export const PrivacyPolicyPage: React.FC = () => {
           </>
         )}
       </IonContent>
-    </IonPage>
+    </PageScaffold>
   );
 };
