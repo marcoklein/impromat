@@ -30,6 +30,7 @@ src/version.gen.ts
 src/markdown/**.gen.*
 test/component/database/outputs/*.json
 public/assets/improbib.json
+test-results
 
 junit-results.xml
 vitest-junit-results.xml

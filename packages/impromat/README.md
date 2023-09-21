@@ -100,6 +100,20 @@ Print debug results for webServer config errors:
 DEBUG=pw:webserver yarn test
 ```
 
+### Screenshot tests
+
+Screenshot tests are executed via
+
+```sh
+yarn test:screenshots
+```
+
+To update the screenshots run
+
+```sh
+yarn test:screenshots:update
+```
+
 ## End-to-End (e2e) Tests
 
 End-to-end tests run directly against a deployed Impromat version (e.g. `dev` or `prod` deployment).

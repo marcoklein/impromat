@@ -10,6 +10,10 @@ export class WorkshopElementDevPage extends DevPage {
     this.addNoteLocator = page.getByRole("button", { name: "Add Note" });
   }
 
+  async goto() {
+    await this.createAndGoto();
+  }
+
   async createAndGoto() {
     const page = this.page;
     const workshopPage = new WorkshopDevPage(page);

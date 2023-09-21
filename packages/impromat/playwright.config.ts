@@ -33,7 +33,7 @@ const config: PlaywrightTestConfig = {
   testDir: "test/component",
   reporter: [["list"], ["junit", { outputFile: "junit-results.xml" }]],
   fullyParallel: false,
-  retries: 2,
+  retries: 1,
   timeout: 30 * 1000,
 };
 

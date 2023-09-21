@@ -67,6 +67,8 @@
     "build": "yarn build:prepare && vite build",
     "build:prepare": "yarn copy-improbib && yarn compile-markdown && genversion src/version.gen.ts --es6",
     "test": "yarn test:vitest:ci && yarn test:backend-up --no-recreate && yarn playwright:install && playwright test",
+    "test:screenshots": "playwright test --grep Screenshots",
+    "test:screenshots:update": "yarn test:screenshots --update-snapshots",
     "test:vitest:ci": "yarn vitest --reporter=junit --output-file=vitest-junit-results.xml --watch=false",
     "test:vitest": "vitest",
     "test:unit": "yarn test:vitest",
