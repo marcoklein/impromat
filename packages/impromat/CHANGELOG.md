@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.49.0
+
+### Minor Changes
+
+- d452213: Show menu button for workshop items
+
 ## 0.48.0
 
 ### Minor Changes
