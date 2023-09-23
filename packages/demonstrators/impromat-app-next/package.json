@@ -38,7 +38,7 @@
     "cookies-next": "^2.1.1",
     "dayjs": "^1.11.6",
     "embla-carousel-react": "^7.0.3",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "graphql-request": "^5.2.0",
     "next": "latest",
     "next-urql": "^4.0.3",
