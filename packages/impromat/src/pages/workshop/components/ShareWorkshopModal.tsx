@@ -22,7 +22,7 @@ import {
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useUpdateWorkshopMutation } from "../../../hooks/use-update-workshop-mutation";
 
-const ShareWorkshopModal_Workshop = graphql(`
+export const ShareWorkshopModal_Workshop = graphql(`
   fragment ShareWorkshopModal_Workshop on Workshop {
     id
     isPublic
@@ -77,7 +77,6 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
     <IonModal
       isOpen={isSharingModalOpen}
       onDidDismiss={() => setIsSharingModalOpen(false)}
-      style={{ "--max-height": "50%", "--max-width": "95%" }}
     >
       <IonHeader>
         <IonToolbar>

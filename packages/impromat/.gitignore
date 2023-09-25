@@ -32,7 +32,11 @@ test/component/database/outputs/*.json
 public/assets/improbib.json
 
 junit-results.xml
-vitest-junit-results.xml
+*-junit-results.xml
+
 
 # Optional eslint cache
 .eslintcache
+/test-results/
+/playwright-report/
+/playwright/.cache/
