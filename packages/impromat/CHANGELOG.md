@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.49.1
+
+### Patch Changes
+
+- b7c9f02: Redirection called after "not found" page
+
 ## 0.49.0
 
 ### Minor Changes
