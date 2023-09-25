@@ -2,6 +2,7 @@ name: Shared Test Job
 
 on:
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -51,4 +52,31 @@ jobs:
         if: always()
         with:
           report_paths: "**/*unit-results.xml"
-          check_name: "test-report"
+      - name: Add succss status check
+        uses: actions/github-script@v3
+        if: success()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success',
+              context: 'test-report',
+              description: 'Generated status check for release pipeline'
+            })
+      - name: Add failure status check
+        uses: actions/github-script@v3
+        if: failure()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'failure',
+              context: 'test-report',
+              description: 'Generated status check for release pipeline',
+            })
