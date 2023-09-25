@@ -48,7 +48,7 @@
     "express-session": "^1.17.3",
     "fuse.js": "^6.6.2",
     "google-auth-library": "^8.7.0",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "improbib": "0.4.3",
     "impromat-ai": "workspace:^",
     "reflect-metadata": "^0.1.13",

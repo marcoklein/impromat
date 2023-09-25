@@ -11035,10 +11035,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.6.0, graphql@npm:^16.7.1":
-  version: 16.7.1
-  resolution: "graphql@npm:16.7.1"
-  checksum: c924d8428daf0e96a5ea43e9bc3cd1b6802899907d284478ac8f705c8fd233a0a51eef915f7569fb5de8acb2e85b802ccc6c85c2b157ad805c1e9adba5a299bd
+"graphql@npm:^16.8.1":
+  version: 16.8.1
+  resolution: "graphql@npm:16.8.1"
+  checksum: 8d304b7b6f708c8c5cc164b06e92467dfe36aff6d4f2cf31dd19c4c2905a0e7b89edac4b7e225871131fd24e21460836b369de0c06532644d15b461d55b1ccc0
   languageName: node
   linkType: hard
 
@@ -11603,7 +11603,7 @@ __metadata:
     "@types/diff": ^5.0.3
     commander: ^11.0.0
     diff: ^5.1.0
-    graphql: ^16.7.1
+    graphql: ^16.8.1
     graphql-request: ^6.1.0
     improbib: "workspace:^"
     ts-node: ^10.9.1
@@ -11701,7 +11701,7 @@ __metadata:
     express-session: ^1.17.3
     fuse.js: ^6.6.2
     google-auth-library: ^8.7.0
-    graphql: ^16.6.0
+    graphql: ^16.8.1
     improbib: 0.4.3
     impromat-ai: "workspace:^"
     jest: 29.3.1
@@ -11778,7 +11778,7 @@ __metadata:
     eslint-config-react-app: ^7.0.1
     flag-icons: ^6.6.6
     genversion: ^3.1.1
-    graphql: ^16.6.0
+    graphql: ^16.8.1
     history: ^4.0.0
     i18next: ^23.5.1
     immer: ^9.0.15
