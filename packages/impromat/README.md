@@ -50,6 +50,12 @@ Run only unit tests via
 yarn test:unit
 ```
 
+Update snapshots via
+
+```sh
+yarn test:unit:update-snapshots
+```
+
 For all other tests you have to start the backend infrastructure.
 
 ### Start backend infrastructure
