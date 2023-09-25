@@ -2,6 +2,7 @@ name: Shared Test Job
 
 on:
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   test:
