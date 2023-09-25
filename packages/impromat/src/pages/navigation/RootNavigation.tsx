@@ -97,6 +97,11 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
     <>
       <IonTabs>
         <IonRouterOutlet animated={true}>
+          <Redirect
+            from={`${routeRootNavigation()}/`}
+            to={`${defaultTab.route}`}
+            exact
+          ></Redirect>
           {Object.entries(ROOT_TABS).map(([key, value]) =>
             value.protected ? (
               <ProtectedRouteComponent
@@ -130,11 +135,6 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
             component={CommunityPage}
           ></Route>
           <Route path={routeWorkshop()} exact component={WorkshopPage}></Route>
-          <Redirect
-            from={`${routeRootNavigation()}/`}
-            to={`${defaultTab.route}`}
-            exact
-          ></Redirect>
           <Route component={NotFoundPage}></Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom" className={`ion-hide-${HIDE_MENU_SIZE}-up`}>

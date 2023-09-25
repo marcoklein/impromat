@@ -30,6 +30,7 @@ export const App: React.FC = () => {
         <IonReactRouter>
           <ResponsiveMenu></ResponsiveMenu>
           <IonRouterOutlet id="main" animated={true}>
+            <Redirect path="/" exact to={routeRootNavigation()}></Redirect>
             <Route
               path={routeWorkshopElement()}
               exact
@@ -51,9 +52,7 @@ export const App: React.FC = () => {
               path={routeRootNavigation()}
               component={RootNavigation}
             ></Route>
-
             <Route component={NotFoundPage}></Route>
-            <Redirect path="/" exact to={routeRootNavigation()}></Redirect>
           </IonRouterOutlet>
         </IonReactRouter>
       </IonSplitPane>
