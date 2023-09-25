@@ -1,8 +1,9 @@
-import { expect, test } from "@playwright/experimental-ct-react";
+import { describe, expect, test } from "vitest";
 import { usePersistedState } from "./use-persisted-state";
+import { renderHook } from "@testing-library/react-hooks";
 
-test.describe("usePersistedState", () => {
-  test("should return default value", async ({ mount }) => {
+describe("usePersistedState", () => {
+  test("should return default value", async () => {
     // given
     const hook = renderHook(() =>
       usePersistedState<{ hello: string }>("test-key", {

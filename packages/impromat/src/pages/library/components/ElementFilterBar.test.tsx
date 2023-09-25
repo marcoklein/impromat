@@ -1,23 +1,21 @@
-import { expect, test } from "@playwright/experimental-ct-react";
+import { render, screen } from "@testing-library/react";
+import { expect } from "vitest";
 import { makeFragmentData } from "../../../graphql-client";
-import {
-  ElementFilterBar_QueryFragment,
-  ElementFilterBar_QueryFragmentDoc,
-} from "../../../graphql-client/graphql";
-import { ElementFilterBar } from "./ElementFilterBar";
+import { ElementFilterBar_QueryFragment } from "../../../graphql-client/graphql";
+import { ElementFilterBar, ElementFilterBar_Query } from "./ElementFilterBar";
 
-test.describe("ElementFilterBar", () => {
-  // given
-  const elementFilterBarFragment: ElementFilterBar_QueryFragment = {
-    tags: [{ id: "first-tag-id", name: "test-tag-game" }],
-  };
-  const fragmentData = makeFragmentData(
-    elementFilterBarFragment,
-    ElementFilterBar_QueryFragmentDoc,
-  );
-  test("should have test tag game in component", async ({ mount }) => {
+describe("ElementFilterBar", () => {
+  it("renders", () => {
+    // given
+    const elementFilterBarFragment: ElementFilterBar_QueryFragment = {
+      tags: [{ id: "first-tag-id", name: "test-tag-game" }],
+    };
+    const fragmentData = makeFragmentData(
+      elementFilterBarFragment,
+      ElementFilterBar_Query,
+    );
     // when
-    const component = await mount(
+    render(
       <ElementFilterBar
         queryFragment={fragmentData}
         loadingAvailableTags={false}
@@ -26,6 +24,7 @@ test.describe("ElementFilterBar", () => {
       ></ElementFilterBar>,
     );
     // then
-    await expect(component).toContainText("test-tag-game");
+    const text = screen.getByText("test-tag-game");
+    expect(text).toBeInTheDocument();
   });
 });

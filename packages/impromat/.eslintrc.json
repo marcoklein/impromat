@@ -3,7 +3,7 @@
   "extends": ["react-app"],
   "overrides": [
     {
-      "files": ["test/**/*.ts", "src/**/*.test.ts", "src/**/*.test.tsx"],
+      "files": ["test/**/*.ts"],
       "parserOptions": {
         "project": "./tsconfig.test.json"
       },
