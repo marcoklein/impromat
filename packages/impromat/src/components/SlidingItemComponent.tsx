@@ -62,7 +62,7 @@ export const SlidingItemComponent: React.FC<ContainerProps> = ({
     }
   }, [isReordering]);
 
-  const hasOptionsButtons = onRemoveClick && onEditClick;
+  const hasOptionsButtons = onRemoveClick || onEditClick;
 
   return (
     <IonItemSliding ref={optionsRef} disabled={isReordering}>

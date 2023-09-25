@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.49.0
+
+### Minor Changes
+
+- d452213: Show menu button for workshop items
+
+## 0.48.0
+
+### Minor Changes
+
+- 1ef6c14: First iteration of translation library
+- 1ef6c14: Automatically update application
+
+### Patch Changes
+
+- 1ef6c14: Fix some screen flickering
+
 ## 0.47.1
 
 ### Patch Changes

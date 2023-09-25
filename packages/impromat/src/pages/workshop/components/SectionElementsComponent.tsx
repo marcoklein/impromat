@@ -63,6 +63,9 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
           key={element.id}
           routerLink={`/workshop/${workshopId}/part/${element.id}`}
           onRemoveClick={() => onRemoveClick(element.id)}
+          // onEditClick={() => {
+          //   router.push(`/workshop/${workshopId}/part/${element.id}`);
+          // }}
           isReordering={isReordering}
         ></WorkshopElementItemComponent>
       ))}
