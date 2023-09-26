@@ -20,8 +20,19 @@ import "../src/theme/variables.css";
 import { IonApp, IonPage, setupIonicReact } from "@ionic/react";
 import { beforeMount } from "@playwright/experimental-ct-react/hooks";
 
-beforeMount(async ({ App: TestApp }) => {
+import React from "react";
+import { TestHooksConfig } from "../src/test-hooks-config";
+
+beforeMount<TestHooksConfig>(async ({ App: TestApp, hooksConfig }) => {
   setupIonicReact();
+
+  if (hooksConfig?.noPageElement) {
+    return (
+      <IonApp>
+        <TestApp></TestApp>
+      </IonApp>
+    );
+  }
 
   return (
     <IonApp>
