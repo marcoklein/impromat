@@ -251,6 +251,9 @@ type Query {
 input ElementSearchInput {
   text: String
   tagNames: [String!]
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
   take: Int! = 20
   skip: Int! = 0
 }
@@ -343,6 +346,9 @@ input ElementsOrderByInput {
 input ElementTagsFilterInput {
   text: String
   selectedTagNames: [String!]
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
 }
 
 type Mutation {

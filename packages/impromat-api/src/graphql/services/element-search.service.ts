@@ -59,7 +59,12 @@ export class ElementSearchService {
         AND: [
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
           noSnapshotElementFilterQuery,
-          elementLanguageFilterQuery(userRequestId, user.languageCodes),
+          elementLanguageFilterQuery(
+            userRequestId,
+            searchElementsInput.languageCode
+              ? [searchElementsInput.languageCode]
+              : user.languageCodes,
+          ),
           {
             OR: [
               {

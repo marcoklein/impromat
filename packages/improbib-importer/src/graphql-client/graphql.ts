@@ -132,6 +132,8 @@ export type ElementQueryResult = {
 };
 
 export type ElementSearchInput = {
+  /** Language code (e.g. en, de) for results. */
+  languageCode?: InputMaybe<Scalars['String']>;
   skip?: Scalars['Int'];
   tagNames?: InputMaybe<Array<Scalars['String']>>;
   take?: Scalars['Int'];
@@ -183,6 +185,8 @@ export type ElementTagSetInput = {
 
 /** Filter tags of elements. */
 export type ElementTagsFilterInput = {
+  /** Language code (e.g. en, de) for results. */
+  languageCode?: InputMaybe<Scalars['String']>;
   selectedTagNames?: InputMaybe<Array<Scalars['String']>>;
   text?: InputMaybe<Scalars['String']>;
 };

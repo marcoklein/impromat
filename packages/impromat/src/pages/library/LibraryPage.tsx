@@ -29,24 +29,27 @@ export const LibraryPage: React.FC = () => {
   return (
     <PageScaffold
       customContentWrapper
-      title={"Browse Exercises & Games"}
       bottomToolbar={
         <IonToolbar>
           <IonSegment
             value={tab}
             onIonChange={(e) => setTab(e.detail.value as Tabs)}
           >
-            <IonSegmentButton value={Tabs.SEARCH}>
+            <IonSegmentButton value={Tabs.SEARCH} layout="icon-bottom">
               <IonIcon icon={search}></IonIcon>
-              <IonLabel>Explore</IonLabel>
+              <IonLabel>Search</IonLabel>
             </IonSegmentButton>
-            <IonSegmentButton value={Tabs.LIKES} color="red-5">
+            <IonSegmentButton
+              value={Tabs.LIKES}
+              color="red-5"
+              layout="icon-bottom"
+            >
               <IonIcon icon={heart} color={COLOR_LIKE}></IonIcon>
-              <IonLabel>Likes</IonLabel>
+              <IonLabel class="ion-tex-wrap">Likes</IonLabel>
             </IonSegmentButton>
-            <IonSegmentButton value={Tabs.CREATE}>
+            <IonSegmentButton value={Tabs.CREATE} layout="icon-bottom">
               <IonIcon icon={brush} color={COLOR_USER_CREATED}></IonIcon>
-              <IonLabel>My Library</IonLabel>
+              <IonLabel>My Elements</IonLabel>
             </IonSegmentButton>
           </IonSegment>
         </IonToolbar>

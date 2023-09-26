@@ -1,4 +1,4 @@
-import { IonChip, IonLabel } from "@ionic/react";
+import { IonChip, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
 import {
   FragmentType,
   getFragmentData,
@@ -7,7 +7,7 @@ import {
 
 export const ElementFilterBar_Query = graphql(`
   fragment ElementFilterBar_Query on Query {
-    tags(take: 200, filter: { selectedTagNames: $selectedTagNames }) {
+    tags(take: 200, filter: $elementFilterBarInput) {
       id
       name
     }
@@ -19,6 +19,8 @@ interface ContainerProps {
   selectedTagNames: string[];
   loadingAvailableTags: boolean;
   onTagsChange: (tags: string[]) => void;
+  selectedLanguage: string;
+  onLanguageChange: (language: string) => void;
 }
 
 /**
@@ -29,21 +31,22 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
   selectedTagNames,
   loadingAvailableTags,
   onTagsChange,
+  selectedLanguage,
+  onLanguageChange,
 }) => {
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
 
   return (
     <div>
-      {/* <IonChip>
-        <IonIcon icon={filter}></IonIcon>
-        <IonLabel>Filter</IonLabel>
-      </IonChip> */}
-      {/* <IonChip>
-        <IonSelect value="en">
+      <IonChip>
+        <IonSelect
+          value={selectedLanguage}
+          onIonChange={(event) => onLanguageChange(event.detail.value)}
+        >
           <IonSelectOption value="en">EN</IonSelectOption>
           <IonSelectOption value="de">DE</IonSelectOption>
         </IonSelect>
-      </IonChip> */}
+      </IonChip>
       {/* <IonChip outline>
         <IonIcon color={COLOR_LIKE} icon={heart}></IonIcon>
         <IonLabel>liked</IonLabel>

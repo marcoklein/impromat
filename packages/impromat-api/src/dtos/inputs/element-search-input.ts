@@ -1,5 +1,13 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { ArrayMaxSize, IsArray, Max, MaxLength, Min } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsIn,
+  Length,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
 @InputType()
 export class ElementSearchInput {
@@ -11,6 +19,14 @@ export class ElementSearchInput {
   @IsArray()
   @ArrayMaxSize(10)
   tagNames?: string[];
+
+  @Field(() => String, {
+    description: 'Language code (e.g. en, de) for results.',
+    nullable: true,
+  })
+  @Length(2)
+  @IsIn(['en', 'de'])
+  languageCode?: string;
 
   @Field(() => Int, { defaultValue: 20 })
   @Min(1)

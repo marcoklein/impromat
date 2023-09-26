@@ -27,9 +27,9 @@ import { ElementFilterBar } from "./ElementFilterBar";
 const SearchElementTabQuery = graphql(`
   query SearchElements(
     $input: ElementSearchInput!
+    $elementFilterBarInput: ElementTagsFilterInput!
     $skip: Int!
     $take: Int!
-    $selectedTagNames: [String!]!
   ) {
     searchElements(input: $input, skip: $skip, take: $take) {
       element {
@@ -56,6 +56,10 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   const [restoredSearchText] = useState(
     window.localStorage.getItem("lastSearch") ?? "",
   );
+  const [selectedLanguage, setSelectedLanguage] = usePersistedState<string>(
+    "lastSelectedLanguage",
+    "en", // TODO get available languages from user profile
+  );
   const [selectedTagNames, setSelectedTagNames] = usePersistedState<string[]>(
     "lastSelectedTags",
     [],
@@ -74,10 +78,14 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
       input: {
         text: trimmedSearchText,
         tagNames: selectedTagNames,
+        languageCode: selectedLanguage,
+      },
+      elementFilterBarInput: {
+        selectedTagNames: selectedTagNames,
+        languageCode: selectedLanguage,
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
-      selectedTagNames,
     },
   });
 
@@ -120,6 +128,11 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
       <IonContent style={{ maxHeight: isFilterBarExpanded ? "80%" : "5rem" }}>
         {searchElementsQueryResult.data && (
           <ElementFilterBar
+            onLanguageChange={(language) => {
+              resetScroll();
+              setSelectedLanguage(language);
+            }}
+            selectedLanguage={selectedLanguage}
             selectedTagNames={selectedTagNames}
             onTagsChange={(selectedTagNames) => {
               resetScroll();
