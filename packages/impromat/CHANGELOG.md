@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.49.2
+
+### Patch Changes
+
+- ad3be42: Bigger modal for workshop sharing
+
 ## 0.49.1
 
 ### Patch Changes
