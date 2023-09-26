@@ -24,6 +24,7 @@ export const ElementSearchBarComponent: React.FC<ContainerProps> = ({
     <IonSearchbar
       disabled={disabled}
       ref={searchInputRef}
+      placeholder="Search for elements"
       debounce={1000}
       onIonInput={(e) => {
         onSearchTextChange(e.detail.value ?? "");

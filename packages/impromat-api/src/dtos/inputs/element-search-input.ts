@@ -28,6 +28,18 @@ export class ElementSearchInput {
   @IsIn(['en', 'de'])
   languageCode?: string;
 
+  @Field(() => Boolean, {
+    description: 'Filter for liked elements of the user.',
+    nullable: true,
+  })
+  isLiked?: boolean;
+
+  @Field(() => Boolean, {
+    description: 'Filter for elements of the user.',
+    nullable: true,
+  })
+  isOwned?: boolean;
+
   @Field(() => Int, { defaultValue: 20 })
   @Min(1)
   @Max(100)

@@ -254,6 +254,12 @@ input ElementSearchInput {
 
   """Language code (e.g. en, de) for results."""
   languageCode: String
+
+  """Filter for liked elements of the user."""
+  isLiked: Boolean
+
+  """Filter for elements of the user."""
+  isOwned: Boolean
   take: Int! = 20
   skip: Int! = 0
 }

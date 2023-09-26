@@ -37,27 +37,15 @@ export class LibraryDevPage extends DevPage {
 
   async gotoSearch() {
     await this.goto();
-    await this.searchTabLocator().click();
   }
 
   async gotoLikedElements() {
     await this.goto();
-    await this.page
-      .locator("ion-segment-button")
-      .filter({ hasText: "Likes" })
-      .click();
-  }
-
-  searchTabLocator() {
-    return this.page
-      .locator("ion-segment-button")
-      .filter({ hasText: "Explore" });
+    await this.page.locator("ion-chip").filter({ hasText: "like" }).click();
   }
 
   libraryTabLocator() {
-    return this.page
-      .locator("ion-segment-button")
-      .filter({ hasText: "My Library" });
+    return this.page.locator("ion-chip").filter({ hasText: "my element" });
   }
 
   tabLocator(name: string | RegExp) {

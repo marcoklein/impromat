@@ -1,9 +1,17 @@
-import { IonChip, IonLabel, IonSelect, IonSelectOption } from "@ionic/react";
+import {
+  IonChip,
+  IonIcon,
+  IonLabel,
+  IonSelect,
+  IonSelectOption,
+} from "@ionic/react";
+import { brush, closeCircle, heart } from "ionicons/icons";
 import {
   FragmentType,
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
+import { COLOR_LIKE, COLOR_USER_CREATED } from "../../../theme/theme-colors";
 
 export const ElementFilterBar_Query = graphql(`
   fragment ElementFilterBar_Query on Query {
@@ -21,6 +29,11 @@ interface ContainerProps {
   onTagsChange: (tags: string[]) => void;
   selectedLanguage: string;
   onLanguageChange: (language: string) => void;
+  additionalFilter: { liked: boolean; userCreated: boolean };
+  onAdditionalFilterChange: (additionalFilter: {
+    liked: boolean;
+    userCreated: boolean;
+  }) => void;
 }
 
 /**
@@ -33,53 +46,106 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
   onTagsChange,
   selectedLanguage,
   onLanguageChange,
+  additionalFilter,
+
+  onAdditionalFilterChange,
 }) => {
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
 
   return (
     <div>
-      <IonChip>
-        <IonSelect
-          value={selectedLanguage}
-          onIonChange={(event) => onLanguageChange(event.detail.value)}
-        >
-          <IonSelectOption value="en">EN</IonSelectOption>
-          <IonSelectOption value="de">DE</IonSelectOption>
-        </IonSelect>
-      </IonChip>
-      {/* <IonChip outline>
-        <IonIcon color={COLOR_LIKE} icon={heart}></IonIcon>
-        <IonLabel>liked</IonLabel>
-      </IonChip> */}
-      {selectedTagNames.map((tagName) => (
-        <IonChip
-          style={{ "--background": "var(--ion-color-primary)" }}
-          key={tagName}
-          onClick={() => {
-            const newSelectedTagNames = selectedTagNames.filter(
-              (selectedTagName) => selectedTagName !== tagName,
-            );
-            onTagsChange(newSelectedTagNames);
-          }}
-        >
-          <IonLabel color="light">{tagName}</IonLabel>
+      {!selectedTagNames.length && (
+        <IonChip>
+          <IonSelect
+            value={selectedLanguage}
+            onIonChange={(event) => onLanguageChange(event.detail.value)}
+          >
+            <IonSelectOption value="en">EN</IonSelectOption>
+            <IonSelectOption value="de">DE</IonSelectOption>
+          </IonSelect>
         </IonChip>
-      ))}
-      {tags.map((tag) => (
-        <IonChip
-          outline
-          key={tag.id}
-          onClick={() => {
-            onTagsChange([...new Set([...selectedTagNames, tag.name])]);
-          }}
-          disabled={loadingAvailableTags}
-        >
-          <IonLabel>
-            {tag.name}
-            {/* <IonNote>DE</IonNote> */}
-          </IonLabel>
-        </IonChip>
-      ))}
+      )}
+      {!selectedTagNames.length && (
+        <>
+          <IonChip
+            outline={!additionalFilter.liked}
+            style={{
+              "--background": additionalFilter.liked
+                ? "var(--ion-color-primary)"
+                : undefined,
+            }}
+            onClick={() => {
+              onAdditionalFilterChange({
+                ...additionalFilter,
+                liked: !additionalFilter.liked,
+              });
+            }}
+          >
+            <IonIcon color={COLOR_LIKE} icon={heart}></IonIcon>
+            <IonLabel>like</IonLabel>
+          </IonChip>
+          <IonChip
+            outline={!additionalFilter.userCreated}
+            style={{
+              "--background": additionalFilter.userCreated
+                ? "var(--ion-color-primary)"
+                : undefined,
+            }}
+            onClick={() => {
+              onAdditionalFilterChange({
+                ...additionalFilter,
+                userCreated: !additionalFilter.userCreated,
+              });
+            }}
+          >
+            <IonIcon color={COLOR_USER_CREATED} icon={brush}></IonIcon>
+            <IonLabel>my element</IonLabel>
+          </IonChip>
+        </>
+      )}
+      {!additionalFilter.liked && !additionalFilter.userCreated && (
+        <div>
+          {selectedTagNames.length > 0 && (
+            <IonChip
+              onClick={() => {
+                onTagsChange([]);
+              }}
+            >
+              <IonIcon icon={closeCircle}></IonIcon>
+              <IonLabel>Clear</IonLabel>
+            </IonChip>
+          )}
+          {selectedTagNames.map((tagName) => (
+            <IonChip
+              style={{ "--background": "var(--ion-color-primary)" }}
+              key={tagName}
+              onClick={() => {
+                const newSelectedTagNames = selectedTagNames.filter(
+                  (selectedTagName) => selectedTagName !== tagName,
+                );
+                onTagsChange(newSelectedTagNames);
+              }}
+            >
+              <IonLabel color="light">{tagName}</IonLabel>
+            </IonChip>
+          ))}
+          {tags.map((tag) => (
+            <IonChip
+              outline
+              key={tag.id}
+              onClick={() => {
+                onTagsChange([...new Set([...selectedTagNames, tag.name])]);
+              }}
+              disabled={loadingAvailableTags}
+            >
+              <IonLabel>
+                {tag.name}
+                {/* <IonNote>DE</IonNote> */}
+              </IonLabel>
+            </IonChip>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

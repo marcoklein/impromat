@@ -132,6 +132,10 @@ export type ElementQueryResult = {
 };
 
 export type ElementSearchInput = {
+  /** Filter for liked elements of the user. */
+  isLiked?: InputMaybe<Scalars['Boolean']>;
+  /** Filter for elements of the user. */
+  isOwned?: InputMaybe<Scalars['Boolean']>;
   /** Language code (e.g. en, de) for results. */
   languageCode?: InputMaybe<Scalars['String']>;
   skip?: Scalars['Int'];

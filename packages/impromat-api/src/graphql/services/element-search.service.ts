@@ -76,6 +76,20 @@ export class ElementSearchService {
             ],
           },
           createFilterTagNamesQuery(searchElementsInput.tagNames),
+          searchElementsInput.isLiked
+            ? {
+                userFavoriteElement: {
+                  some: {
+                    userId: userRequestId,
+                  },
+                },
+              }
+            : {},
+          searchElementsInput.isOwned
+            ? {
+                ownerId: userRequestId,
+              }
+            : {},
         ],
       },
       include: { tags: true },

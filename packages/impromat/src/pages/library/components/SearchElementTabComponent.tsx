@@ -56,6 +56,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
   const [restoredSearchText] = useState(
     window.localStorage.getItem("lastSearch") ?? "",
   );
+
   const [selectedLanguage, setSelectedLanguage] = usePersistedState<string>(
     "lastSelectedLanguage",
     "en", // TODO get available languages from user profile
@@ -64,6 +65,11 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
     "lastSelectedTags",
     [],
   );
+  const [additionalFilter, setAdditionalFilter] = usePersistedState<{
+    liked: boolean;
+    userCreated: boolean;
+  }>("lastAdditionalFilter", { liked: false, userCreated: false });
+
   const [searchText, setSearchText] = useState(restoredSearchText);
   const [pageNumber, setPageNumber] = useState(0);
   const [scrollToTop, setScrollToTop] = useState(0);
@@ -79,6 +85,8 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
         text: trimmedSearchText,
         tagNames: selectedTagNames,
         languageCode: selectedLanguage,
+        isLiked: additionalFilter.liked,
+        isOwned: additionalFilter.userCreated,
       },
       elementFilterBarInput: {
         selectedTagNames: selectedTagNames,
@@ -125,7 +133,7 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
           window.localStorage.setItem("lastSearch", text);
         }}
       ></ElementSearchBarComponent>
-      <IonContent style={{ maxHeight: isFilterBarExpanded ? "80%" : "5rem" }}>
+      <IonContent style={{ maxHeight: isFilterBarExpanded ? "80%" : "7rem" }}>
         {searchElementsQueryResult.data && (
           <ElementFilterBar
             onLanguageChange={(language) => {
@@ -137,6 +145,13 @@ export const SearchElementTabComponent: React.FC<ContainerProps> = ({
             onTagsChange={(selectedTagNames) => {
               resetScroll();
               setSelectedTagNames(selectedTagNames);
+              setIsFilterBarExpanded(false);
+            }}
+            additionalFilter={additionalFilter}
+            onAdditionalFilterChange={(additionalFilter) => {
+              resetScroll();
+              setAdditionalFilter(additionalFilter);
+              setIsFilterBarExpanded(false);
             }}
             queryFragment={searchElementsQueryResult.data}
             loadingAvailableTags={
