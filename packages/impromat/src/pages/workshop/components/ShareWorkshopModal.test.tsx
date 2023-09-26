@@ -14,6 +14,21 @@ test.describe("ShareWorkshopModal", () => {
     },
     ShareWorkshopModal_WorkshopFragmentDoc,
   );
+
+  test("should close modal", async ({ mount }) => {
+    // given
+    // when
+    const component = await mount(
+      <ShareWorkshopModal
+        isSharingModalOpen={false}
+        setIsSharingModalOpen={undefined as any}
+        workshopFragment={workshopFragment}
+      ></ShareWorkshopModal>,
+    );
+    // then
+    await expect(component.getByText("Share Workshop")).not.toBeVisible();
+  });
+
   test("should render on small screen", async ({ mount }) => {
     // when
     const component = await mount(
@@ -28,6 +43,7 @@ test.describe("ShareWorkshopModal", () => {
   });
 
   test("should render on large screen", async ({ mount, page }) => {
+    // given
     await page.setViewportSize({ width: 1920, height: 1080 });
     // when
     const component = await mount(

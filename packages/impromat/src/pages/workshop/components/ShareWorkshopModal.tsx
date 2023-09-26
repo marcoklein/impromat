@@ -74,7 +74,10 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
   );
 
   return (
-    <IonModal isOpen={true} onDidDismiss={() => setIsSharingModalOpen(false)}>
+    <IonModal
+      isOpen={isSharingModalOpen}
+      onDidDismiss={() => setIsSharingModalOpen(false)}
+    >
       <IonHeader>
         <IonToolbar>
           <IonTitle>Share Workshop</IonTitle>
