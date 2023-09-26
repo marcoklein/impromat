@@ -61,7 +61,7 @@
     "build": "yarn build:prepare && vite build",
     "build:prepare": "yarn copy-improbib && yarn compile-markdown && genversion src/version.gen.ts --es6",
     "test": "yarn test:unit && yarn test:backend-up --no-recreate && yarn playwright:install && playwright test",
-    "test:unit": "yarn playwright install && playwright test -c playwright-unit.config.ts",
+    "test:unit": "yarn playwright install chromium-mobile && playwright test -c playwright-unit.config.ts",
     "test:unit:update-snapshots": "yarn test:unit --update-snapshots",
     "test:e2e": "yarn playwright:install && playwright test --config playwright-e2e.config.ts",
     "test:headed": "yarn test --headed",
