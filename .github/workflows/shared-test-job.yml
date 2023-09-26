@@ -52,6 +52,13 @@ jobs:
         if: always()
         with:
           report_paths: "**/*unit-results.xml"
+      - uses: actions/upload-artifact@v3
+        name: Publish Impromat Unit Test Report
+        if: always()
+        with:
+          name: playwright-impromat-screenshots
+          path: packages/impromat/playwright-report
+          retention-days: 30
       - name: Add succss status check
         uses: actions/github-script@v3
         if: success()
