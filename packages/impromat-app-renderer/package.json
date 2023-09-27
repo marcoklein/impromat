@@ -1,6 +1,6 @@
 {
   "name": "impromat-app-renderer",
-  "version": "0.1.46",
+  "version": "0.1.47",
   "description": "Render Impromat application.",
   "author": "Marco Klein <hello@marcoklein.dev>",
   "type": "module",
@@ -11,7 +11,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "express": "^4.18.2",
-    "impromat": "0.49.2",
+    "impromat": "0.50.0",
     "puppeteer": "^19.4.0",
     "ts-node": "^10.9.1"
   },
