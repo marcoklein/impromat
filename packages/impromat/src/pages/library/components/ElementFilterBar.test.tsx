@@ -23,6 +23,10 @@ test.describe("ElementFilterBar", () => {
         loadingAvailableTags={false}
         onTagsChange={() => {}}
         selectedTagNames={[]}
+        additionalFilter={{ liked: false, userCreated: false }}
+        onAdditionalFilterChange={() => {}}
+        onLanguageChange={() => {}}
+        selectedLanguage="en"
       ></ElementFilterBar>,
     );
     // then

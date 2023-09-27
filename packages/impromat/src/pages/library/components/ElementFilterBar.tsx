@@ -47,7 +47,6 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
   selectedLanguage,
   onLanguageChange,
   additionalFilter,
-
   onAdditionalFilterChange,
 }) => {
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
