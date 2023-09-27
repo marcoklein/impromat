@@ -49,7 +49,11 @@ pageTest.describe("Liked Elements", () => {
       await libraryElementPage.removeFromLikedElements();
       await libraryPage.gotoLikedElements();
       // then
-      await expect(page.locator("p").getByText("No likes yet.")).toBeVisible();
+      await expect(
+        page.getByText(
+          "Use the search bar to find elements from various sources.",
+        ),
+      ).toBeVisible();
     },
   );
 });

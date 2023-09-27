@@ -10,8 +10,7 @@ export class LibraryDevPage extends DevPage {
 
   async searchForElement(searchText: string) {
     const page = this.page;
-    await page.getByPlaceholder("Search").click();
-    await page.getByPlaceholder("Search").fill(searchText);
+    await page.locator("ion-input").getByPlaceholder("Search").fill(searchText);
     await page.getByText(new RegExp(searchText, "i")).first().waitFor();
   }
 
@@ -41,11 +40,11 @@ export class LibraryDevPage extends DevPage {
 
   async gotoLikedElements() {
     await this.goto();
-    await this.page.locator("ion-chip").filter({ hasText: "like" }).click();
+    await this.page.locator("ion-chip").filter({ hasText: "Like" }).click();
   }
 
   libraryTabLocator() {
-    return this.page.locator("ion-chip").filter({ hasText: "my element" });
+    return this.page.locator("ion-chip").filter({ hasText: "My Element" });
   }
 
   tabLocator(name: string | RegExp) {
