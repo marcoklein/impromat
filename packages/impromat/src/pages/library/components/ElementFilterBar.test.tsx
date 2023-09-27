@@ -27,6 +27,9 @@ test.describe("ElementFilterBar", () => {
         onAdditionalFilterChange={() => {}}
         onLanguageChange={() => {}}
         selectedLanguage="en"
+        isExpanded={false}
+        onSearchInputChange={() => {}}
+        searchInput=""
       ></ElementFilterBar>,
     );
     // then

@@ -12,6 +12,7 @@ import {
   graphql,
 } from "../../../graphql-client";
 import { COLOR_LIKE, COLOR_USER_CREATED } from "../../../theme/theme-colors";
+import { SearchInputChip } from "./SearchInputChip";
 
 export const ElementFilterBar_Query = graphql(`
   fragment ElementFilterBar_Query on Query {
@@ -34,6 +35,9 @@ interface ContainerProps {
     liked: boolean;
     userCreated: boolean;
   }) => void;
+  isExpanded: boolean;
+  searchInput: string;
+  onSearchInputChange: (input: string) => void;
 }
 
 /**
@@ -48,6 +52,9 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
   onLanguageChange,
   additionalFilter,
   onAdditionalFilterChange,
+  isExpanded,
+  searchInput,
+  onSearchInputChange,
 }) => {
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
 
@@ -64,6 +71,10 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
           </IonSelect>
         </IonChip>
       )}
+      <SearchInputChip
+        input={searchInput}
+        onInputChange={(input) => onSearchInputChange(input)}
+      ></SearchInputChip>
       {!selectedTagNames.length && (
         <>
           <IonChip
@@ -81,7 +92,7 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
             }}
           >
             <IonIcon color={COLOR_LIKE} icon={heart}></IonIcon>
-            <IonLabel>like</IonLabel>
+            <IonLabel>Like</IonLabel>
           </IonChip>
           <IonChip
             outline={!additionalFilter.userCreated}
@@ -98,12 +109,16 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
             }}
           >
             <IonIcon color={COLOR_USER_CREATED} icon={brush}></IonIcon>
-            <IonLabel>my element</IonLabel>
+            <IonLabel>My Element</IonLabel>
           </IonChip>
         </>
       )}
       {!additionalFilter.liked && !additionalFilter.userCreated && (
-        <div>
+        <div
+          style={{
+            display: isExpanded ? "block" : "inline",
+          }}
+        >
           {selectedTagNames.length > 0 && (
             <IonChip
               onClick={() => {
@@ -137,10 +152,7 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
               }}
               disabled={loadingAvailableTags}
             >
-              <IonLabel>
-                {tag.name}
-                {/* <IonNote>DE</IonNote> */}
-              </IonLabel>
+              <IonLabel>{tag.name}</IonLabel>
             </IonChip>
           ))}
         </div>
