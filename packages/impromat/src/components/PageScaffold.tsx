@@ -47,15 +47,17 @@ export const PageScaffold: React.FC<ContainerProps> = ({
     <IonPage>
       {!noHeader && (
         <IonHeader>
-          <IonToolbar>
-            <IonButtons slot="start">
-              <IonBackButton defaultHref={defaultBackHref}></IonBackButton>
-            </IonButtons>
-            <IonTitle>
-              <IonLabel className="ion-text-wrap">{title}</IonLabel>
-            </IonTitle>
-            <IonButtons slot="end">{toolbarButtons}</IonButtons>
-          </IonToolbar>
+          {(defaultBackHref || title || toolbarButtons) && (
+            <IonToolbar>
+              <IonButtons slot="start">
+                <IonBackButton defaultHref={defaultBackHref}></IonBackButton>
+              </IonButtons>
+              <IonTitle>
+                <IonLabel className="ion-text-wrap">{title}</IonLabel>
+              </IonTitle>
+              <IonButtons slot="end">{toolbarButtons}</IonButtons>
+            </IonToolbar>
+          )}
           {bottomToolbar}
         </IonHeader>
       )}

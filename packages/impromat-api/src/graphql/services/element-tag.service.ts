@@ -5,8 +5,8 @@ import { ElementTagsFilterInput } from 'src/dtos/inputs/element-tags-filter-inpu
 import { Nullable } from 'src/utils/nullish';
 import { defineAbilityForUser } from '../abilities';
 import { PrismaService } from './prisma.service';
-import { UserService } from './user.service';
 import { elementLanguageFilterQuery } from './shared-prisma-queries';
+import { UserService } from './user.service';
 
 /**
  * Business logic for `ElementTags`.
@@ -68,6 +68,16 @@ export class ElementTagService {
         userRequestId,
       );
       if (!user) throw new Error('User not found');
+      let languageQuery: Prisma.ElementToElementTagWhereInput = {};
+      if (filter?.languageCode) {
+        languageQuery = {
+          element: { languageCode: filter.languageCode },
+        };
+      } else if (user.languageCodes && user.languageCodes.length > 0) {
+        languageQuery = {
+          element: elementLanguageFilterQuery(user.id, user.languageCodes),
+        };
+      }
       const groupByResult =
         await this.prismaService.elementToElementTag.groupBy({
           by: ['tagId'],
@@ -75,14 +85,7 @@ export class ElementTagService {
             AND: [
               accessibleBy(ability).ElementToElementTag,
               { element: { snapshotParentId: null } },
-              user.languageCodes && user.languageCodes.length > 0
-                ? {
-                    element: elementLanguageFilterQuery(
-                      user.id,
-                      user.languageCodes,
-                    ),
-                  }
-                : {},
+              languageQuery,
               filter?.selectedTagNames && filter.selectedTagNames.length > 0
                 ? {
                     tag: {

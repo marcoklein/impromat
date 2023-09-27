@@ -59,7 +59,12 @@ export class ElementSearchService {
         AND: [
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
           noSnapshotElementFilterQuery,
-          elementLanguageFilterQuery(userRequestId, user.languageCodes),
+          elementLanguageFilterQuery(
+            userRequestId,
+            searchElementsInput.languageCode
+              ? [searchElementsInput.languageCode]
+              : user.languageCodes,
+          ),
           {
             OR: [
               {
@@ -71,6 +76,20 @@ export class ElementSearchService {
             ],
           },
           createFilterTagNamesQuery(searchElementsInput.tagNames),
+          searchElementsInput.isLiked
+            ? {
+                userFavoriteElement: {
+                  some: {
+                    userId: userRequestId,
+                  },
+                },
+              }
+            : {},
+          searchElementsInput.isOwned
+            ? {
+                ownerId: userRequestId,
+              }
+            : {},
         ],
       },
       include: { tags: true },
