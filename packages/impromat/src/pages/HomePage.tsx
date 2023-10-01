@@ -7,6 +7,7 @@ import {
   IonText,
 } from "@ionic/react";
 import { arrowForwardOutline } from "ionicons/icons";
+import { useTranslation } from "react-i18next";
 import { ImpromatHero } from "../components/ImpromatHero";
 import { PageScaffold } from "../components/PageScaffold";
 import { useIsLoggedIn } from "../hooks/use-is-logged-in";
@@ -22,13 +23,16 @@ import { HomeContent } from "./home/HomeContent";
 export const HomePage: React.FC = () => {
   const { isLoggedIn } = useIsLoggedIn();
 
+  const { t } = useTranslation("HomePage");
+
   return (
     <PageScaffold noHeader>
       <ImpromatHero>
         <IonText color="dark">
           <IonCardSubtitle>
-            App for planning, giving and sharing improvisational theatre
-            workshops.
+            {t(
+              "App for planning, giving and sharing improvisational theatre workshops.",
+            )}
           </IonCardSubtitle>
         </IonText>
         {!isLoggedIn && (
@@ -45,10 +49,12 @@ export const HomePage: React.FC = () => {
       )}
 
       <IonList>
-        <IonItem routerLink={routeAccount()}>Account</IonItem>
-        <IonItem routerLink={routeAbout()}>About the Project</IonItem>
-        <IonItem routerLink={routeLegal()}>Legal Notice</IonItem>
-        <IonItem routerLink={routePrivacyPolicy()}>Data Privacy</IonItem>
+        <IonItem routerLink={routeAccount()}>{t("Profile")}</IonItem>
+        <IonItem routerLink={routeAbout()}>{t("About the Project")}</IonItem>
+        <IonItem routerLink={routeLegal()}>{t("Legal Notice")}</IonItem>
+        <IonItem routerLink={routePrivacyPolicy()}>
+          {t("Privacy Policy", { ns: "common" })}
+        </IonItem>
       </IonList>
 
       {isLoggedIn && (

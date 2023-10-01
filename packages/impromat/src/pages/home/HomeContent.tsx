@@ -9,6 +9,7 @@ import {
   IonText,
 } from "@ionic/react";
 import { arrowForwardOutline, information } from "ionicons/icons";
+import { Trans, useTranslation } from "react-i18next";
 import { routeLibrary } from "../../routes/library-routes";
 import {
   routeAbout,
@@ -17,16 +18,20 @@ import {
 } from "../../routes/shared-routes";
 
 export const HomeContent: React.FC = () => {
+  const { t } = useTranslation("HomeContent");
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ maxWidth: "900px" }} className="ion-margin-top">
           <IonText color="dark">
-            <h1>Improving Improv</h1>
+            <h1>{t("Improving Improv")}</h1>
           </IonText>
           <IonText color="dark">
-            <b>Developed by improvisers — made for improvisers.</b> Impromat
-            offers all necessary features to plan your upcoming improv sessions.
+            <Trans
+              t={t}
+              i18nKey="madeForImprovisers"
+              components={{ b: <b></b> }}
+            ></Trans>
           </IonText>
           <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
             <IonCardHeader>
