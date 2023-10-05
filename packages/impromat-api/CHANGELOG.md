@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.20.0
+
+### Minor Changes
+
+- 2c88226: Filter by language for element search
+
 ## 0.19.0
 
 ### Minor Changes

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.50.0
+
+### Minor Changes
+
+- 2c88226: Redesign elements search page
+- 2c88226: Filter by language for element search
+
+### Patch Changes
+
+- Updated dependencies [2c88226]
+  - impromat-api@0.20.0
+
 ## 0.49.2
 
 ### Patch Changes
