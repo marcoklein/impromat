@@ -8,12 +8,14 @@ import {
   IonPopover,
 } from "@ionic/react";
 import { ellipsisVertical } from "ionicons/icons";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 interface ContainerProps {
   header: string;
   options: Option[];
   buttonElement?: JSX.Element;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 export interface Option {
@@ -27,8 +29,9 @@ export const OptionsMenu: React.FC<ContainerProps> = ({
   header,
   options,
   buttonElement,
+  isOpen,
+  setIsOpen,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const popover = useRef<HTMLIonPopoverElement>(null);
 
   const openPopover = (e: any) => {
@@ -74,6 +77,9 @@ export const OptionsMenu: React.FC<ContainerProps> = ({
         isOpen={isOpen}
         header={header}
         buttons={options}
+        // TODO: fix the bug that the popover closes immediately because the action
+        // sheet shows and closes immediately
+        // reproducible by right-clicking
         onDidDismiss={() => setIsOpen(false)}
       ></IonActionSheet>
     </>

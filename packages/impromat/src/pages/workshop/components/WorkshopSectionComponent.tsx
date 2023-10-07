@@ -7,7 +7,6 @@ import {
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
-import "./WorkshopElementItemComponent.css";
 
 const WorkshopSectionComponent_WorkshopSection = graphql(`
   fragment WorkshopSectionComponent_WorkshopSection on WorkshopSection {

@@ -40,6 +40,8 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
     workshopFragment,
   );
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const history = useHistory();
 
   const [presentInputDialog] = useInputDialog();
@@ -116,6 +118,8 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   return (
     <>
       <OptionsMenu
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
         header="Options"
         options={[
           {
