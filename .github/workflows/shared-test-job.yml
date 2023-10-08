@@ -71,7 +71,7 @@ jobs:
               sha: context.sha,
               state: 'success',
               context: 'test-report',
-              description: 'Generated status check for release pipeline'
+              description: 'Generated status check for release pipeline',
               target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             })
       - name: Add failure status check
