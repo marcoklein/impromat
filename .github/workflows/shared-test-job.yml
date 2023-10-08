@@ -59,7 +59,7 @@ jobs:
           name: playwright-impromat-screenshots
           path: packages/impromat/playwright-report
           retention-days: 30
-      - name: Add succss status check
+      - name: Add success status check
         uses: actions/github-script@v3
         if: success()
         with:

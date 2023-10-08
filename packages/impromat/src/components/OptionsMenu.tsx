@@ -9,6 +9,7 @@ import {
 } from "@ionic/react";
 import { ellipsisVertical } from "ionicons/icons";
 import { useRef } from "react";
+import { useBreakpoints } from "../hooks/use-breakpoints";
 
 interface ContainerProps {
   header: string;
@@ -25,6 +26,9 @@ export interface Option {
   handler: () => void;
 }
 
+/**
+ * General component for displaying a menu with options.
+ */
 export const OptionsMenu: React.FC<ContainerProps> = ({
   header,
   options,
@@ -39,6 +43,8 @@ export const OptionsMenu: React.FC<ContainerProps> = ({
     setIsOpen(true);
   };
 
+  const { md } = useBreakpoints();
+
   return (
     <>
       {buttonElement ?? (
@@ -50,38 +56,36 @@ export const OptionsMenu: React.FC<ContainerProps> = ({
           <IonIcon icon={ellipsisVertical}></IonIcon>
         </IonButton>
       )}
-      <IonPopover
-        className="ion-hide-xl-down"
-        isOpen={isOpen}
-        ref={popover}
-        onDidDismiss={() => setIsOpen(false)}
-      >
-        <IonList lines="none">
-          {options.map((option, index) => (
-            <IonItem
-              key={index}
-              button
-              onClick={() => {
-                option.handler();
-                setIsOpen(false);
-              }}
-            >
-              <IonIcon icon={option.icon} slot="start"></IonIcon>
-              <IonLabel>{option.text}</IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
-      </IonPopover>
-      <IonActionSheet
-        className="ion-hide-xl-up"
-        isOpen={isOpen}
-        header={header}
-        buttons={options}
-        // TODO: fix the bug that the popover closes immediately because the action
-        // sheet shows and closes immediately
-        // reproducible by right-clicking
-        onDidDismiss={() => setIsOpen(false)}
-      ></IonActionSheet>
+      {md ? (
+        <IonActionSheet
+          isOpen={isOpen}
+          header={header}
+          buttons={options}
+          onDidDismiss={() => setIsOpen(false)}
+        ></IonActionSheet>
+      ) : (
+        <IonPopover
+          isOpen={isOpen}
+          ref={popover}
+          onDidDismiss={() => setIsOpen(false)}
+        >
+          <IonList lines="none">
+            {options.map((option, index) => (
+              <IonItem
+                key={index}
+                button
+                onClick={() => {
+                  option.handler();
+                  setIsOpen(false);
+                }}
+              >
+                <IonIcon icon={option.icon} slot="start"></IonIcon>
+                <IonLabel>{option.text}</IonLabel>
+              </IonItem>
+            ))}
+          </IonList>
+        </IonPopover>
+      )}
     </>
   );
 };
