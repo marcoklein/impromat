@@ -8,7 +8,7 @@ import {
   IonPopover,
 } from "@ionic/react";
 import { ellipsisVertical } from "ionicons/icons";
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useBreakpoints } from "../hooks/use-breakpoints";
 
 interface ContainerProps {
@@ -36,12 +36,22 @@ export const OptionsMenu: React.FC<ContainerProps> = ({
   isOpen,
   setIsOpen,
 }) => {
+  const [menuEvent, setMenuEvent] = useState<any>();
   const popover = useRef<HTMLIonPopoverElement>(null);
 
-  const openPopover = (e: any) => {
-    popover.current!.event = e;
-    setIsOpen(true);
-  };
+  useEffect(() => {
+    if (menuEvent && popover.current) {
+      popover.current.event = menuEvent;
+    }
+  }, [menuEvent, popover]);
+
+  const openPopover = useCallback(
+    (e: any) => {
+      setMenuEvent(e);
+      setIsOpen(true);
+    },
+    [setIsOpen, setMenuEvent],
+  );
 
   const { md } = useBreakpoints();
 

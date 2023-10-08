@@ -72,6 +72,7 @@ jobs:
               state: 'success',
               context: 'test-report',
               description: 'Generated status check for release pipeline'
+              target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             })
       - name: Add failure status check
         uses: actions/github-script@v3
@@ -86,4 +87,5 @@ jobs:
               state: 'failure',
               context: 'test-report',
               description: 'Generated status check for release pipeline',
+              target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             })
