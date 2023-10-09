@@ -62,6 +62,8 @@ jobs:
       - name: Add success status check
         uses: actions/github-script@v3
         if: success()
+        env:
+          TARGET_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -72,11 +74,13 @@ jobs:
               state: 'success',
               context: 'test-report',
               description: 'Generated status check for release pipeline',
+              target_url: process.env.TARGET_URL,
             })
-          # target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
       - name: Add failure status check
         uses: actions/github-script@v3
         if: failure()
+        env:
+          TARGET_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -87,5 +91,5 @@ jobs:
               state: 'failure',
               context: 'test-report',
               description: 'Generated status check for release pipeline',
+              target_url: process.env.TARGET_URL,
             })
-          # target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
