@@ -211,6 +211,11 @@ export const WorkshopPage: React.FC = () => {
                 ></Icon>
                 <span className="ion-hide-sm-down"> Share</span>
               </IonButton>
+              <ShareWorkshopModal
+                isSharingModalOpen={isSharingModalOpen}
+                setIsSharingModalOpen={setIsSharingModalOpen}
+                workshopFragment={workshop}
+              ></ShareWorkshopModal>
               <WorkshopOptionsMenu
                 goBackAfterDeletion
                 workshopFragment={workshop}
@@ -299,13 +304,6 @@ export const WorkshopPage: React.FC = () => {
           </>
         )}
       </PageContentLoaderComponent>
-      {workshop && workshop.canEdit && (
-        <ShareWorkshopModal
-          isSharingModalOpen={isSharingModalOpen}
-          setIsSharingModalOpen={setIsSharingModalOpen}
-          workshopFragment={workshop}
-        ></ShareWorkshopModal>
-      )}
     </PageScaffold>
   );
 };
