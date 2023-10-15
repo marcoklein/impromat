@@ -225,6 +225,7 @@ describe('WorkshopService', () => {
           expect(workshopCreateData).toEqual({
             name: 'test-workshop Copy',
             description: 'original workshop',
+            dateOfWorkshop: new Date(1),
             ownerId: userId,
             isListed: false,
             isPublic: false,
