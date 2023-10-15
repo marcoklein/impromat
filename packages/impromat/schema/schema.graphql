@@ -88,6 +88,9 @@ type Workshop {
   """
   isOwnerMe: Boolean
   elementRecommendations: [Element!]!
+
+  """Optional metadata date when this workshop was planned (or held)."""
+  dateOfWorkshop: DateTime
 }
 
 type UserLikedWorkshop {
@@ -398,6 +401,9 @@ input CreateWorkshopInput {
   Publicly list workshop within impromat. Worshop must be public in order to list it.
   """
   isListed: Boolean
+
+  """Date for which workshop is planned or was held."""
+  dateOfWorkshop: DateTime
 }
 
 input WorkshopSectionListCreateInput {
@@ -420,6 +426,9 @@ input UpdateWorkshopInput {
   Publicly list workshop within impromat. Worshop must be public in order to list it.
   """
   isListed: Boolean
+
+  """Date for which workshop is planned or was held."""
+  dateOfWorkshop: DateTime
   id: ID!
 }
 

@@ -138,10 +138,11 @@ model Workshop {
   version   Int      @default(0)
   deleted   Boolean  @default(false)
 
-  name        String
-  description String?
-  isPublic    Boolean @default(false)
-  isListed    Boolean @default(false)
+  name           String
+  description    String?
+  isPublic       Boolean   @default(false)
+  isListed       Boolean   @default(false)
+  dateOfWorkshop DateTime?
 
   ownerId String
 
