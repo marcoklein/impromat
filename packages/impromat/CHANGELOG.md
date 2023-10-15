@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.51.0
+
+### Minor Changes
+
+- 6385836: Rendering of workshop elements
+- 4182c5f: Set date of workshop
+
+### Patch Changes
+
+- Updated dependencies [4182c5f]
+  - impromat-api@0.21.0
+
 ## 0.50.0
 
 ### Minor Changes
