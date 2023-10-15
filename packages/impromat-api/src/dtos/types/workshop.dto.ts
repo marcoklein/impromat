@@ -61,4 +61,11 @@ export class Workshop extends BaseDto {
 
   @Field(() => [Element])
   elementRecommendations: Element[];
+
+  @Field(() => Date, {
+    nullable: true,
+    description:
+      'Optional metadata date when this workshop was planned (or held).',
+  })
+  dateOfWorkshop: Nullable<Date>;
 }

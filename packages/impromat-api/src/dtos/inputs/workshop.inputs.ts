@@ -33,6 +33,12 @@ export class CreateWorkshopInput {
       'Publicly list workshop within impromat. Worshop must be public in order to list it.',
   })
   isListed?: boolean;
+
+  @Field(() => Date, {
+    nullable: true,
+    description: 'Date for which workshop is planned or was held.',
+  })
+  dateOfWorkshop?: Date;
 }
 
 @InputType()

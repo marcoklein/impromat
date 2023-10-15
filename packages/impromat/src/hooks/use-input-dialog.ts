@@ -16,6 +16,12 @@ interface DialogProps {
   inputRegex?: RegExp;
   inputRegexMessage?: string;
   minlength?: number;
+  /**
+   * Input type.
+   *
+   * @default text
+   */
+  inputType?: "text" | "date";
 }
 
 /**
@@ -46,11 +52,14 @@ export function useInputDialog() {
     inputRegex,
     minlength,
     inputRegexMessage,
+    inputType,
   }: DialogProps) => {
     history.push({
       pathname: history.location.pathname,
       search: "dialog",
     });
+    const buttonInputType =
+      inputType === "text" ? (isMultiline ? "textarea" : "text") : "date";
     presentAlert({
       header: `${displayName}`,
       message,
@@ -95,7 +104,7 @@ export function useInputDialog() {
       ],
       inputs: [
         {
-          type: isMultiline ? "textarea" : "text",
+          type: buttonInputType,
           name: "text",
           placeholder: placeholder ?? "",
           value: text,

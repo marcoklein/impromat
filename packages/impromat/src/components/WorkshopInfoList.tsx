@@ -1,9 +1,7 @@
-import { IonContent, IonIcon, IonPopover } from "@ionic/react";
 import { calendar, globe, heart, link, person } from "ionicons/icons";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
-import { Icon } from "./Icon";
 import { InfoListItem } from "./InfoListItem";
 const WorkshopInfoList_Workshop = graphql(`
   fragment WorkshopInfoList_Workshop on Workshop {
@@ -15,6 +13,7 @@ const WorkshopInfoList_Workshop = graphql(`
     canEdit
     isOwnerMe
     isLiked
+    dateOfWorkshop
     owner {
       id
       name
@@ -31,12 +30,10 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
 }) => {
   const workshop = getFragmentData(WorkshopInfoList_Workshop, workshopFragment);
 
-  const workshopCreatedAtText = useMemo(
-    () => new Date(workshop.createdAt).toLocaleDateString(),
-    [workshop],
-  );
-  const workshopUpdatedAtText = useMemo(
-    () => new Date(workshop.updatedAt).toLocaleDateString(),
+  const dateOfWorkshopText = useMemo(
+    () =>
+      workshop.dateOfWorkshop &&
+      new Date(workshop.dateOfWorkshop).toLocaleDateString(),
     [workshop],
   );
 
@@ -71,27 +68,12 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
           displayText={workshop.owner.name ?? "impromat"}
         ></InfoListItem>
       )}
-      <div>
-        <span
-          id={`updated-and-created-popover-${workshop.id}`}
-          style={{ cursor: "pointer" }}
-        >
-          <Icon icon={calendar}></Icon> {workshopUpdatedAtText}
-        </span>
-        <IonPopover
-          trigger={`updated-and-created-popover-${workshop.id}`}
-          triggerAction="click"
-        >
-          <IonContent class="ion-padding">
-            <IonIcon icon={calendar}></IonIcon> {workshopUpdatedAtText}{" "}
-            (updated)
-          </IonContent>
-          <IonContent class="ion-padding">
-            <IonIcon icon={calendar}></IonIcon> {workshopCreatedAtText}{" "}
-            (created)
-          </IonContent>
-        </IonPopover>
-      </div>
+      {dateOfWorkshopText && (
+        <InfoListItem
+          ionicIcon={calendar}
+          displayText={dateOfWorkshopText}
+        ></InfoListItem>
+      )}
     </>
   );
 };

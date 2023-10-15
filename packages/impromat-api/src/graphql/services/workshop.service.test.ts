@@ -160,6 +160,7 @@ describe('WorkshopService', () => {
           isListed: true,
           isPublic: true,
           name: 'test-workshop',
+          dateOfWorkshop: new Date(1),
           version: 10,
           sections: [
             {

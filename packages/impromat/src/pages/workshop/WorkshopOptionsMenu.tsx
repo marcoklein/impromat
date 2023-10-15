@@ -1,5 +1,5 @@
 import { IonToast } from "@ionic/react";
-import { close, copy, create, pencil, trash } from "ionicons/icons";
+import { calendar, close, copy, create, pencil, trash } from "ionicons/icons";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { ConfirmationAlert } from "../../components/ConfirmationAlert";
@@ -17,6 +17,7 @@ const WorkshopOptionsMenu_Workshop = graphql(`
     id
     name
     description
+    dateOfWorkshop
   }
 `);
 
@@ -65,6 +66,31 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
     if (!workshop) return;
     updateWorkshopMutation({
       input: { id: workshop.id, description: newDescription },
+    });
+  };
+  const onSetWorkshopDate = async () => {
+    if (!workshop) return;
+    presentInputDialog({
+      header: "Set Date",
+      initialText: workshop.dateOfWorkshop
+        ? new Date(workshop.dateOfWorkshop).toISOString().slice(0, 10)
+        : // ? new Date(workshop.dateOfWorkshop).toLocaleDateString()
+          "",
+      message: "Enter the date of your workshop:",
+      placeholder: "Date...",
+      // emptyInputMessage: "Please enter a date for your workshop.",
+      buttonText: "Set",
+      inputType: "date",
+      onAccept: async (date) => {
+        logger("Setting date of workshop to %s", date);
+        const { error } = await updateWorkshopMutation({
+          input: { id: workshop.id, dateOfWorkshop: date.length ? date : null },
+        });
+        if (error) {
+          logger("Error setting date of workshop: %s", error.message);
+          return;
+        }
+      },
     });
   };
   const onDuplicateWorkshop = async () => {
@@ -122,6 +148,13 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
         setIsOpen={setIsOpen}
         header="Options"
         options={[
+          {
+            icon: calendar,
+            text: "Set Date",
+            handler: () => {
+              onSetWorkshopDate();
+            },
+          },
           {
             icon: copy,
             text: "Duplicate",
