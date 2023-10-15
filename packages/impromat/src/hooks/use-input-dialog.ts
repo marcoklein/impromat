@@ -58,8 +58,13 @@ export function useInputDialog() {
       pathname: history.location.pathname,
       search: "dialog",
     });
+    const DEFAULT_INPUT_TYPE = "text";
     const buttonInputType =
-      inputType === "text" ? (isMultiline ? "textarea" : "text") : "date";
+      (inputType ?? DEFAULT_INPUT_TYPE) === "text"
+        ? isMultiline
+          ? "textarea"
+          : "text"
+        : "date";
     presentAlert({
       header: `${displayName}`,
       message,
