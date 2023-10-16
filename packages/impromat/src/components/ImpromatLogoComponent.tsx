@@ -1,7 +1,9 @@
-import { IonImg } from "@ionic/react";
-
 interface ContainerProps {}
 
 export const ImpromatLogoComponent: React.FC<ContainerProps> = () => (
-  <IonImg src="/assets/logo.svg" alt="Impromat Logo" />
+  <img
+    style={{ width: "128px", height: "128px" }}
+    src="/assets/logo.svg"
+    alt="Impromat Logo"
+  />
 );
