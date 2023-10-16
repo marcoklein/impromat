@@ -39,6 +39,7 @@ export default defineConfig({
       filename: "service-worker.js",
       registerType: "prompt",
       includeManifestIcons: true,
+      includeAssets: ["assets/**/*.svg", "assets/**/*.png"],
     }),
   ],
   server: {
