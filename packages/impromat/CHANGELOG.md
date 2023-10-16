@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.51.1
+
+### Patch Changes
+
+- 1b5755a: Cache images to prevent flashing on load
+
 ## 0.51.0
 
 ### Minor Changes
