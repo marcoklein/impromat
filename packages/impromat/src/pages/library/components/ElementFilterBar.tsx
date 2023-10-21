@@ -6,6 +6,7 @@ import {
   IonSelectOption,
 } from "@ionic/react";
 import { brush, closeCircle, heart } from "ionicons/icons";
+import { useCallback, useMemo } from "react";
 import {
   FragmentType,
   getFragmentData,
@@ -58,19 +59,42 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
 }) => {
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
 
+  const showClearButton = useMemo(
+    () =>
+      selectedTagNames.length > 0 ||
+      additionalFilter.liked ||
+      additionalFilter.userCreated ||
+      searchInput.length > 0,
+    [selectedTagNames, additionalFilter, searchInput],
+  );
+
+  const clearInput = useCallback(() => {
+    onTagsChange([]);
+    onAdditionalFilterChange({ liked: false, userCreated: false });
+    onSearchInputChange("");
+  }, [onAdditionalFilterChange, onSearchInputChange, onTagsChange]);
+
   return (
     <div>
-      {!selectedTagNames.length && (
-        <IonChip>
-          <IonSelect
-            value={selectedLanguage}
-            onIonChange={(event) => onLanguageChange(event.detail.value)}
-          >
-            <IonSelectOption value="en">EN</IonSelectOption>
-            <IonSelectOption value="de">DE</IonSelectOption>
-          </IonSelect>
+      {showClearButton && (
+        <IonChip onClick={clearInput}>
+          <IonIcon icon={closeCircle}></IonIcon>
+          <IonLabel>Clear</IonLabel>
         </IonChip>
       )}
+      {!selectedTagNames.length &&
+        !additionalFilter.liked &&
+        !additionalFilter.userCreated && (
+          <IonChip>
+            <IonSelect
+              value={selectedLanguage}
+              onIonChange={(event) => onLanguageChange(event.detail.value)}
+            >
+              <IonSelectOption value="en">EN</IonSelectOption>
+              <IonSelectOption value="de">DE</IonSelectOption>
+            </IonSelect>
+          </IonChip>
+        )}
       <SearchInputChip
         input={searchInput}
         onInputChange={(input) => onSearchInputChange(input)}
@@ -119,16 +143,6 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
             display: isExpanded ? "block" : "inline",
           }}
         >
-          {selectedTagNames.length > 0 && (
-            <IonChip
-              onClick={() => {
-                onTagsChange([]);
-              }}
-            >
-              <IonIcon icon={closeCircle}></IonIcon>
-              <IonLabel>Clear</IonLabel>
-            </IonChip>
-          )}
           {selectedTagNames.map((tagName) => (
             <IonChip
               style={{ "--background": "var(--ion-color-primary)" }}
