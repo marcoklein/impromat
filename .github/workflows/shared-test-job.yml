@@ -62,8 +62,8 @@ jobs:
       - name: Add success status check
         uses: actions/github-script@v3
         if: success()
-        env:
-          TARGET_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        # env:
+        #   TARGET_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -78,8 +78,8 @@ jobs:
       - name: Add failure status check
         uses: actions/github-script@v3
         if: failure()
-        env:
-          TARGET_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        # env:
+        #   TARGET_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
