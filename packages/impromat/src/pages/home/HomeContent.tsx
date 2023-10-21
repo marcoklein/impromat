@@ -44,36 +44,37 @@ export const HomeContent: React.FC = () => {
               <p>
                 <Trans
                   t={t}
-                  i18nKey="ImprovBibDescription_1"
-                  components={{ b: <b></b> }}
-                ></Trans>
-                <a
-                  href="https://improwiki.com"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Improwiki
-                </a>
-                ,{" "}
-                <a
-                  href="https://www.learnimprov.com"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Learnimprov
-                </a>{" "}
-                <Trans t={t} i18nKey="ImprovBibLinks"></Trans>
-                <a
-                  href="https://wiki.improvresourcecenter.com"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Improv resource center
-                </a>
-                <Trans
-                  t={t}
-                  i18nKey="ImprovBibDescription_2"
-                  components={{ b: <b></b> }}
+                  i18nKey="ImprovBibDescription"
+                  components={{
+                    b: <b></b>,
+                    ImprowikiLink: (
+                      <a
+                        href="https://improwiki.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        placeholder
+                      </a>
+                    ),
+                    LearnimprovLink: (
+                      <a
+                        href="https://www.learnimprov.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        placeholder
+                      </a>
+                    ),
+                    ImprovRCLink: (
+                      <a
+                        href="https://wiki.improvresourcecenter.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        placeholder
+                      </a>
+                    ),
+                  }}
                 ></Trans>
               </p>
 
@@ -119,9 +120,7 @@ export const HomeContent: React.FC = () => {
                 ></Trans>
               </p>
               {/* <p>
-                  For optimal time keeping, you can specify the <b>timeframe</b>{" "}
-                  of every element in advance and use the{" "}
-                  <b>presentation mode</b> during the workshop.
+                  
                 </p> */}
             </IonCardContent>
           </IonCard>
