@@ -7,8 +7,10 @@ import {
   IonList,
   IonProgressBar,
 } from "@ionic/react";
+import { t } from "i18next";
 import { add, caretDown, caretUp, informationCircle } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
@@ -113,8 +115,13 @@ export const LibraryPage: React.FC = () => {
 
   const [isFilterBarExpanded, setIsFilterBarExpanded] = useState(false);
 
+  const { t } = useTranslation("LibraryPage");
+
   return (
-    <PageScaffold customContentWrapper title="Exercises & Games">
+    <PageScaffold
+      customContentWrapper
+      title={t("Exercises & Games", { ns: "common" })}
+    >
       <div
         style={{
           position: "relative",

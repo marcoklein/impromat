@@ -26,7 +26,7 @@ export const HomeContent: React.FC = () => {
           <IonText color="dark">
             <h1>{t("Improving Improv")}</h1>
           </IonText>
-          <IonText color="dark">
+          <IonText color="dark" className="ion-margin-bottom">
             <Trans
               t={t}
               i18nKey="madeForImprovisers"
@@ -36,50 +36,17 @@ export const HomeContent: React.FC = () => {
           <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
             <IonCardHeader>
               <IonCardTitle>
-                <h3 style={{ margin: 0 }}>Improv Workshops</h3>
+                <h3 style={{ margin: 0 }}>{t("Exercises-Games")}</h3>
               </IonCardTitle>
             </IonCardHeader>
 
             <IonCardContent>
               <p>
-                <b>Plan and manage</b> your own improvisational theatre
-                workshops, <b>share</b> them with the community or <b>find</b>{" "}
-                inspiring workshops from other improvisers.
-              </p>
-              <IonButton
-                fill="solid"
-                routerLink={routeWorkshops()}
-                className="ion-margin-vertical"
-              >
-                <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-                Create a Workshop
-              </IonButton>
-              <p>
-                Improv workshops often have an overall <b>topic</b> and are
-                built up by <b>sections</b> (e.g. warm-up), in which different
-                elements (exercises and games) are ordered. You can add your own{" "}
-                <b>notes</b> to the workshop as well as to every single element
-                to adapt the exercises to your workshop topic and style.
-              </p>
-              {/* <p>
-                  For optimal time keeping, you can specify the <b>timeframe</b>{" "}
-                  of every element in advance and use the{" "}
-                  <b>presentation mode</b> during the workshop.
-                </p> */}
-            </IonCardContent>
-          </IonCard>
-          <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
-            <IonCardHeader>
-              <IonCardTitle>
-                <h3 style={{ margin: 0 }}>Improv Library</h3>
-              </IonCardTitle>
-            </IonCardHeader>
-
-            <IonCardContent>
-              <p>
-                Explore over 1000 existing improv exercises and games in the{" "}
-                <b>Element Library</b>. They have beeen extracted from different{" "}
-                <b>wiki sources</b> in German and English:{" "}
+                <Trans
+                  t={t}
+                  i18nKey="ImprovBibDescription_1"
+                  components={{ b: <b></b> }}
+                ></Trans>
                 <a
                   href="https://improwiki.com"
                   target="_blank"
@@ -95,7 +62,7 @@ export const HomeContent: React.FC = () => {
                 >
                   Learnimprov
                 </a>{" "}
-                and{" "}
+                <Trans t={t} i18nKey="ImprovBibLinks"></Trans>
                 <a
                   href="https://wiki.improvresourcecenter.com"
                   target="_blank"
@@ -103,8 +70,11 @@ export const HomeContent: React.FC = () => {
                 >
                   Improv resource center
                 </a>
-                . Use the <b>Recommendations</b> feature to find similiar
-                elements to add to your workshop.
+                <Trans
+                  t={t}
+                  i18nKey="ImprovBibDescription_2"
+                  components={{ b: <b></b> }}
+                ></Trans>
               </p>
 
               <IonButton
@@ -118,6 +88,44 @@ export const HomeContent: React.FC = () => {
               </IonButton>
             </IonCardContent>
           </IonCard>
+          <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
+            <IonCardHeader>
+              <IonCardTitle>
+                <h3 style={{ margin: 0 }}>{t("Improv Workshops")}</h3>
+              </IonCardTitle>
+            </IonCardHeader>
+
+            <IonCardContent>
+              <p>
+                <Trans
+                  t={t}
+                  i18nKey="ImprovWorkshops_1"
+                  components={{ b: <b></b> }}
+                ></Trans>
+              </p>
+              <IonButton
+                fill="solid"
+                routerLink={routeWorkshops()}
+                className="ion-margin-vertical"
+              >
+                <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+                {t("CreateWorkshop")}
+              </IonButton>
+              <p>
+                <Trans
+                  t={t}
+                  i18nKey="ImprovWorkshops_2"
+                  components={{ b: <b></b> }}
+                ></Trans>
+              </p>
+              {/* <p>
+                  For optimal time keeping, you can specify the <b>timeframe</b>{" "}
+                  of every element in advance and use the{" "}
+                  <b>presentation mode</b> during the workshop.
+                </p> */}
+            </IonCardContent>
+          </IonCard>
+
           <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
             <IonCardHeader>
               <IonCardTitle>

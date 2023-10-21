@@ -3,6 +3,7 @@ export const TRANSLATIONS = {
     // namespaces have same name as component
     common: {
       "Privacy Policy": "Privacy Policy",
+      "Exercises & Games": "Exercises & Games",
     },
     NotFoundPage: {
       "Page does not exist": "Ups, this page does not exist.",
@@ -17,13 +18,29 @@ export const TRANSLATIONS = {
       "Legal Notice": "Legal Notice",
     },
     HomeContent: {
+      "Improving Improv": "Improving Improv",
       madeForImprovisers: `<b>Developed by improvisers — made for improvisers.</b> Impromat
       offers all necessary features to plan your upcoming improv sessions.`,
+      "Exercises-Games": "Exercises & Games",
+      ImprovBibDescription_1:
+        "Explore over 1000 existing improv exercises and games in the <b>Element Library</b>. They have been extracted from different <b>wiki sources</b> in German and English: ",
+      ImprovBibLinks: "and ",
+      ImprovBibDescription_2:
+        ". Use the <b>Recommendations</b> feature to find similiar elements to add to your workshop.",
+      "Improv Workshops": "Improv Workshops",
+      ImprovWorkshops_1: `<b>Plan and manage</b> your own improvisational theatre workshops, 
+      <b>share</b> them with the community or <b>find</b> inspiring workshops from other improvisers.`,
+      CreateWorkshop: "Create a Workshop",
+      ImprovWorkshops_2: `Improv workshops often have an overall <b>topic</b> and are
+      built up by <b>sections</b> (e.g. warm-up), in which different 
+      elements (exercises and games) are ordered. You can add your own <b>notes</b> to the workshop as well as to every single element
+      to adapt the exercises to your workshop topic and style.`,
     },
   },
   de: {
     common: {
       "Privacy Policy": "Datenschutzerklärung",
+      "Exercises & Games": "Übungen & Spiele",
     },
     NotFoundPage: {
       "Page does not exist": "Ups, diese Seite existiert nicht.",
@@ -40,8 +57,18 @@ export const TRANSLATIONS = {
       "Legal Notice": "Impressum",
     },
     HomeContent: {
-      madeForImprovisers: `<b>Entwickelt von Improvisierenden — für Improvisierende.</b> Impromat
+      "Improving Improv": "Dein Helfer fürs Improvisationstheater",
+      madeForImprovisers: `<b>Entwickelt von Improvisierenden — für Improvisierende</b>. Der Impromat
       bietet alle notwendigen Funktionen, um deine Impro-Workshops zu planen.`,
+      "Exercises-Games": "Übungen & Spiele",
+      //ImprovBibDescription:
+      //  "Entdecke über 1000 bestehende Improvisationsübungen und -spiele in der Bibliothek der Elemente. Die Elemente wurden aus verschiedenen Wiki-Quellen in Deutsch und Englisch extrahiert: Improwiki, Learnimprov und Improv Resource Center. Nutze die Filterkategorien in der Suche und die Empfehlungsfunktion, um ähnliche Elemente zu finden, die du in deinen Workshop einbauen kannst.",
+      "Improv Workshops": "Impro-Workshops",
+      ImprovWorkshops_1: `<b>Plane und leite</b> deine eigenen Impro-Workshops an, 
+      <b>teile</b> Sie sie mit der Gruppe oder <b>finde</b> inspirierende Workshops von anderen Improvisierenden.`,
+      CreateWorkshop: "Workshop erstellen",
+      ImprovWorkshops_2: `Improvisationsworkshops haben oft ein übergeordnetes <b>Thema</b> und sind in <b>Abschnitte</b> (z.B. Aufwärmen) gegliedert, in denen verschiedene Elemente (Übungen und Spiele) angeordnet sind. 
+      Du kannst deine eigenen <b>Notizen</b> zum Workshop sowie zu jedem einzelnen Element hinzufügen, um die Übungen an dein Workshop-Thema und deinen Stil anzupassen.`,
     },
   },
 };
