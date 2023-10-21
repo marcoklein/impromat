@@ -129,16 +129,17 @@ export const HomeContent: React.FC = () => {
           <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
             <IonCardHeader>
               <IonCardTitle>
-                <h3 style={{ margin: 0 }}>Customize Your Improv</h3>
+                <h3 style={{ margin: 0 }}>{t("Customize Your Improv")}</h3>
               </IonCardTitle>
             </IonCardHeader>
 
             <IonCardContent>
               <p>
-                For easy access, tag certain elements, e.g. <b>like</b>{" "}
-                exercises you commonly use in your workshops. If you cannot find
-                an exercise or game in the library, <b>create</b> your own
-                element and incorporate them in your workshop(s).
+                <Trans
+                  t={t}
+                  i18nKey={"CustomizeImprov_1"}
+                  components={{ b: <b></b> }}
+                ></Trans>
               </p>
               <IonButton
                 className="ion-margin-vertical"
@@ -147,21 +148,21 @@ export const HomeContent: React.FC = () => {
                 routerLink={routeLibrary()}
               >
                 <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-                Open Liked Elements
+                {t("Open Liked Elements")}
               </IonButton>
               <p>
-                The <b>Login</b> via Google account allows you to{" "}
-                <b>synchronize</b> your workshops, liked elements and personally
-                created elements on all devices. Thus, you can plan a workshop
-                on your computer with the desktop version of Impromat and use
-                the <b>mobile app</b> on your smartphone during the workshop.
-                (Don't worry, your improv data is not shared with Google and
-                safely hosted on a server based in Germany — the Impromat server
-                does not collect personal information. See our{" "}
-                <IonRouterLink routerLink={routePrivacyPolicy()}>
-                  Privacy Policy
-                </IonRouterLink>{" "}
-                for more information.)
+                <Trans
+                  t={t}
+                  i18nKey="CustomizeImprov_2"
+                  components={{
+                    b: <b></b>,
+                    privacyPolicyLink: (
+                      <IonRouterLink
+                        routerLink={routePrivacyPolicy()}
+                      ></IonRouterLink>
+                    ),
+                  }}
+                ></Trans>
               </p>
             </IonCardContent>
           </IonCard>
