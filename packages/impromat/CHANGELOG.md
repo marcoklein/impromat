@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.52.0
+
+### Minor Changes
+
+- d2ecc77: Show workshop date in workshops overview page
+- a1c2482: Add element to newly created workshop
+
 ## 0.51.1
 
 ### Patch Changes
