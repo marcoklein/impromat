@@ -59,35 +59,10 @@ jobs:
           name: playwright-impromat-screenshots
           path: packages/impromat/playwright-report
           retention-days: 30
-      - name: Add success status check
-        uses: actions/github-script@v3
-        if: success()
-        # env:
-        #   TARGET_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Set final commit status
+        uses: myrotvorets/set-commit-status-action@master
+        if: always()
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: context.sha,
-              state: 'success',
-              context: 'test-report',
-              description: 'Generated status check for release pipeline',
-            })
-      - name: Add failure status check
-        uses: actions/github-script@v3
-        if: failure()
-        # env:
-        #   TARGET_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: context.sha,
-              state: 'failure',
-              context: 'test-report',
-              description: 'Generated status check for release pipeline',
-            })
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          context: test-report
