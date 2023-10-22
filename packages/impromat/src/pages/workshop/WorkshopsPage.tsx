@@ -1,8 +1,7 @@
 import { IonButton, IonIcon } from "@ionic/react";
 import { add, filter } from "ionicons/icons";
-import { useCallback, useMemo } from "react";
-import { useHistory } from "react-router";
-import { useMutation, useQuery } from "urql";
+import { useMemo } from "react";
+import { useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
@@ -10,12 +9,11 @@ import { WorkshopsFilterBar } from "../../components/WorkshopsFilterBar";
 import { FEATURE_WORKSHOPS_FILTER_BAR } from "../../feature-toggles";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { UserWorkshopsFilterInput } from "../../graphql-client/graphql";
+import { useCreateWorkshopInputDialog } from "../../hooks/use-add-workshop-input-dialog";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
-import { routeWorkshop } from "../../routes/shared-routes";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 
@@ -36,14 +34,6 @@ const WorkshopsQuery = graphql(`
       workshops(input: $userWorkshopsFilterInput) {
         ...WorkshopFields_Workshop
       }
-    }
-  }
-`);
-
-const CreateWorkshopMutation = graphql(`
-  mutation CreateWorkshopMutation($input: CreateWorkshopInput!) {
-    createWorkshop(input: $input) {
-      id
     }
   }
 `);
@@ -91,44 +81,19 @@ export const WorkshopsPage: React.FC = () => {
     "workshopsQueryResult.fetching",
     logger,
   );
-  const [, createWorkshopMutation] = useMutation(CreateWorkshopMutation);
 
   const availableWorkshops = getFragmentData(
     WorkshopFields_WorkshopFragment,
     workshopsQueryResult.data?.user.workshops,
   );
 
-  const history = useHistory();
-  const [presentInputDialog] = useInputDialog();
-
-  const createWorkshopClick = useCallback(() => {
-    presentInputDialog({
-      header: "Workshop Name",
-      message: "Enter a name for your workshop. You can change it later:",
-      placeholder: "Workshop name...",
-      buttonText: "Create",
-      emptyInputMessage: "Please enter a name for your workshop.",
-      onAccept: async (text) => {
-        const { error, data } = await createWorkshopMutation({
-          input: { name: text },
-        });
-        const id = data?.createWorkshop.id;
-        if (error || !id) {
-          return;
-        }
-        logger("Adding new workshop with id %s", id);
-        const navigateTo = routeWorkshop(id);
-        history.replace(navigateTo);
-        logger("Navigating to %s", navigateTo);
-      },
-    });
-  }, [presentInputDialog, createWorkshopMutation, logger, history]);
+  const presentWorkshopInputDialog = useCreateWorkshopInputDialog();
 
   return (
     <PageScaffold
       title="Workshops"
       toolbarButtons={
-        <IonButton onClick={() => createWorkshopClick()}>
+        <IonButton onClick={() => presentWorkshopInputDialog()}>
           <IonIcon slot="icon-only" icon={add}></IonIcon>
         </IonButton>
       }
@@ -196,7 +161,7 @@ export const WorkshopsPage: React.FC = () => {
           </div>
         ) : (
           <WorkshopCreateFirstComponent
-            onCreateWorkshopClick={() => createWorkshopClick()}
+            onCreateWorkshopClick={() => presentWorkshopInputDialog()}
           ></WorkshopCreateFirstComponent>
         )}
       </PageContentLoaderComponent>
