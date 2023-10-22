@@ -11603,7 +11603,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"impromat-ai@workspace:^, impromat-ai@workspace:packages/impromat-ai":
+"impromat-ai@0.1.0, impromat-ai@workspace:packages/impromat-ai":
   version: 0.0.0-use.local
   resolution: "impromat-ai@workspace:packages/impromat-ai"
   dependencies:
@@ -11668,7 +11668,7 @@ __metadata:
     google-auth-library: ^8.7.0
     graphql: ^16.6.0
     improbib: 0.4.3
-    impromat-ai: "workspace:^"
+    impromat-ai: 0.1.0
     jest: 29.3.1
     jest-junit: ^16.0.0
     jest-mock-extended: ^3.0.4

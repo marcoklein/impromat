@@ -13,6 +13,7 @@ import {
 } from "@ionic/react";
 import {
   add,
+  calendar,
   globe,
   heart,
   heartOutline,
@@ -54,6 +55,7 @@ const WorkshopPage_Workshop = graphql(`
     description
     canEdit
     isLiked
+    dateOfWorkshop
     sections {
       name
       elements {
@@ -245,11 +247,18 @@ export const WorkshopPage: React.FC = () => {
               </IonFab>
             )}
 
-            <IonItem lines="none">
-              <IonLabel className="ion-text-wrap">
-                <h1 style={{ padding: 0, margin: 0 }}>{workshop.name}</h1>
-              </IonLabel>
-            </IonItem>
+            <div className="ion-padding-horizontal">
+              <h1 className="ion-no-padding ion-no-margin ion-padding-vertical">
+                {workshop.name}
+              </h1>
+              {workshop.dateOfWorkshop && (
+                <div>
+                  <IonIcon icon={calendar}></IonIcon>{" "}
+                  {new Date(workshop.dateOfWorkshop).toLocaleDateString()}
+                </div>
+              )}
+            </div>
+
             {workshop.description && (
               <IonItem lines="none">
                 <IonLabel className="ion-text-wrap">
