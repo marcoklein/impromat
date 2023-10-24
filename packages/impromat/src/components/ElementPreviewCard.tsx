@@ -1,10 +1,15 @@
-import { IonBadge, IonButton, IonCardContent, IonText } from "@ionic/react";
 import { useMemo } from "react";
 import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { routeLibraryElement } from "../routes/library-routes";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
+
+import { IonBadge, IonText } from "@ionic/react";
+import { Box, CardContent } from "@mui/material";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 
 const ElementPreviewItem_ElementSearchResultFragment = graphql(`
   fragment ElementPreviewItem_ElementSearchResult on ElementSearchResult {
@@ -106,7 +111,7 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
         ></ElementInfoList>
       }
       titleElement={
-        <IonText
+        <Typography
           style={{
             fontWeight: searchResult?.matches.find(
               (match) => match.key === "name",
@@ -116,22 +121,23 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
           }}
         >
           {element.name}
-        </IonText>
+        </Typography>
       }
       buttonsElement={
         <>
-          <IonButton
-            style={{ flexGrow: 1 }}
-            fill="clear"
-            routerLink={routerLink}
+          <Button
+            sx={{ flexGrow: 1 }}
+            variant="text"
+            component={Link}
+            to={routerLink}
           >
             Open
-          </IonButton>
+          </Button>
         </>
       }
     >
-      <IonCardContent>
-        <div>
+      <CardContent>
+        <Box>
           {tags.map(({ id, name, isMatch }) => (
             <IonBadge
               key={id}
@@ -141,9 +147,9 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
               <IonText color={isMatch ? "light" : "medium"}>{name}</IonText>
             </IonBadge>
           ))}
-        </div>
-        <IonText>{element.markdownShort}</IonText>
-      </IonCardContent>
+        </Box>
+        <Typography>{element.markdownShort}</Typography>
+      </CardContent>
     </PreviewCard>
   );
 };

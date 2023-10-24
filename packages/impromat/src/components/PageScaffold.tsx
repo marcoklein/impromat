@@ -1,16 +1,17 @@
-import {
-  IonBackButton,
-  IonButtons,
-  IonContent,
-  IonFooter,
-  IonHeader,
-  IonLabel,
-  IonPage,
-  IonProgressBar,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
 import { PropsWithChildren } from "react";
+
+import { IonPage } from "@ionic/react";
+import { ArrowBack } from "@mui/icons-material";
+import {
+  AppBar,
+  Box,
+  CircularProgress,
+  Container,
+  IconButton,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
 interface ContainerProps extends PropsWithChildren {
   defaultBackHref?: string;
@@ -45,27 +46,43 @@ export const PageScaffold: React.FC<ContainerProps> = ({
 }) => {
   return (
     <IonPage>
-      {!noHeader && (
-        <IonHeader>
-          {(defaultBackHref || title || toolbarButtons) && (
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonBackButton defaultHref={defaultBackHref}></IonBackButton>
-              </IonButtons>
-              <IonTitle>
-                <IonLabel className="ion-text-wrap">{title}</IonLabel>
-              </IonTitle>
-              <IonButtons slot="end">{toolbarButtons}</IonButtons>
-            </IonToolbar>
-          )}
-          {bottomToolbar}
-        </IonHeader>
-      )}
-      {customContentWrapper ? children : <IonContent>{children}</IonContent>}
-      {footer && <IonFooter>{footer}</IonFooter>}
-      {showProgressBar && (
-        <IonProgressBar type="indeterminate"></IonProgressBar>
-      )}
+      <Box sx={{ flexGrow: 1 }}>
+        {!noHeader && (
+          <AppBar position="static">
+            <Toolbar>
+              {defaultBackHref && (
+                <IconButton
+                  component={Link}
+                  to={defaultBackHref}
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="Back"
+                  sx={{ mr: 2 }}
+                >
+                  <ArrowBack></ArrowBack>
+                </IconButton>
+              )}
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                {title}
+              </Typography>
+              {toolbarButtons}
+            </Toolbar>
+          </AppBar>
+        )}
+        {bottomToolbar}
+        {customContentWrapper ? (
+          children
+        ) : (
+          <Container sx={{ paddingTop: 2 }}>{children}</Container>
+        )}
+        {footer}
+        {showProgressBar && (
+          <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+            <CircularProgress />
+          </Box>
+        )}
+      </Box>
     </IonPage>
   );
 };

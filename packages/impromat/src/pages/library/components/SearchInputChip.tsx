@@ -1,6 +1,6 @@
-import { IonChip, IonIcon, IonInput } from "@ionic/react";
-import { search } from "ionicons/icons";
-import React, { useMemo, useRef, useState } from "react";
+import { Search } from "@mui/icons-material";
+import { InputAdornment, TextField } from "@mui/material";
+import React from "react";
 
 interface ContainerProps {
   input: string;
@@ -11,44 +11,23 @@ export const SearchInputChip: React.FC<ContainerProps> = ({
   input,
   onInputChange,
 }) => {
-  const inputRef = useRef<HTMLIonInputElement>(null);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-
-  const isActive = useMemo(() => {
-    return input.length > 0 || isSearchFocused;
-  }, [input, isSearchFocused]);
-
-  const inputWidth = useMemo(() => {
-    if (isActive) {
-      return undefined;
-    }
-    return "3rem";
-  }, [isActive]);
-
   return (
-    <IonChip
-      onClick={() => {
-        inputRef.current?.setFocus();
+    <TextField
+      sx={{ ml: 1 }}
+      variant="outlined"
+      size="small"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <Search></Search>
+          </InputAdornment>
+        ),
       }}
-      outline={!isActive}
-    >
-      <IonIcon icon={search}></IonIcon>
-      <IonInput
-        ref={inputRef}
-        placeholder="Search"
-        onIonFocus={() => {
-          setIsSearchFocused(true);
-        }}
-        onIonBlur={() => {
-          setIsSearchFocused(false);
-        }}
-        style={{ width: inputWidth }}
-        value={input}
-        clearInput={isActive}
-        onIonInput={(event) => {
-          onInputChange(event.detail.value ?? "");
-        }}
-      ></IonInput>
-    </IonChip>
+      placeholder="Search"
+      value={input}
+      onChange={(event) => {
+        onInputChange(event.target.value);
+      }}
+    ></TextField>
   );
 };

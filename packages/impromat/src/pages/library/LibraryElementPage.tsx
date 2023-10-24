@@ -1,11 +1,6 @@
-import {
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonToolbar,
-} from "@ionic/react";
-import { add } from "ionicons/icons";
+import { IonContent, IonItem, IonToolbar } from "@ionic/react";
+import { Add } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useQuery } from "urql";
@@ -168,8 +163,8 @@ export const LibraryElementPage: React.FC = () => {
                 onWorkshopIdChange={(id) => setAddToWorkshopSelectId(id)}
               ></AddToWorkshopDropdown>
               <div slot="end">
-                <IonButton
-                  size="default"
+                <IconButton
+                  size="medium"
                   aria-label="Add to workshop"
                   onClick={() => {
                     if (addToWorkshopSelectId === "create-new-workshop") {
@@ -180,8 +175,8 @@ export const LibraryElementPage: React.FC = () => {
                   }}
                   disabled={!addToWorkshopSelectId}
                 >
-                  <IonIcon icon={add} slot="icon-only"></IonIcon>
-                </IonButton>
+                  <Add></Add>
+                </IconButton>
               </div>
             </IonItem>
           </IonToolbar>

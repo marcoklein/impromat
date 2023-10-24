@@ -1,4 +1,7 @@
-import { IonCard, IonCardHeader, IonCardTitle } from "@ionic/react";
+import { CardHeader, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import CardActions from "@mui/material/CardActions";
+import Paper from "@mui/material/Paper";
 import { PropsWithChildren } from "react";
 
 interface ContainerProps extends PropsWithChildren {
@@ -20,26 +23,29 @@ export const PreviewCard: React.FC<ContainerProps> = ({
   onCardClick,
 }) => {
   return (
-    <IonCard
-      className="ion-no-margin"
-      style={{ height: "100%", display: "flex", flexDirection: "column" }}
+    <Paper
+      sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+      elevation={2}
     >
-      <div style={{ overflow: "hidden", flexGrow: 1 }}>
-        <div
-          className="ion-margin-end ion-margin-top ion-float-right"
-          style={{
+      <Box sx={{ overflow: "hidden", flexGrow: 1, p: 1 }}>
+        <Box
+          sx={{
+            // mt: 2,
+            // mr: 2,
+            ml: 1,
+            float: "right",
             maxWidth: "50%",
             textOverflow: "ellipsis",
           }}
         >
           {infoListElement}
-        </div>
-        <IonCardHeader onClick={() => onCardClick && onCardClick()}>
-          <IonCardTitle>{titleElement}</IonCardTitle>
-        </IonCardHeader>
+        </Box>
+        <Typography variant="h6" component="div">
+          {titleElement}
+        </Typography>
         <span onClick={() => onCardClick && onCardClick()}>{children}</span>
-      </div>
-      <div style={{ display: "flex" }}>{buttons}</div>
-    </IonCard>
+      </Box>
+      <CardActions>{buttons}</CardActions>
+    </Paper>
   );
 };

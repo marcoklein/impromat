@@ -112,6 +112,7 @@ export const LibraryPage: React.FC = () => {
   }, [pageNumber, searchElementsQueryResult, logger]);
 
   const [isFilterBarExpanded, setIsFilterBarExpanded] = useState(false);
+  const expandedHeight = 90;
 
   return (
     <PageScaffold customContentWrapper title="Exercises & Games">
@@ -120,66 +121,70 @@ export const LibraryPage: React.FC = () => {
           position: "relative",
         }}
       >
-        <div
-          style={{
-            overflow: "auto",
-            height: isFilterBarExpanded ? "100%" : "40px",
-            maxHeight: "60vh",
-          }}
-          className="side-scrolling-list"
-        >
-          {searchElementsQueryResult.data && (
-            <ElementFilterBar
-              onLanguageChange={(language) => {
-                resetScroll();
-                setSelectedLanguage(language);
+        {searchElementsQueryResult.data && (
+          <>
+            <div
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: isFilterBarExpanded
+                  ? undefined
+                  : `${expandedHeight * 0.6}px`,
+                bottom: isFilterBarExpanded ? "10px" : undefined,
               }}
-              selectedLanguage={selectedLanguage}
-              selectedTagNames={selectedTagNames}
-              onTagsChange={(selectedTagNames) => {
-                resetScroll();
-                setSelectedTagNames(selectedTagNames);
-                setIsFilterBarExpanded(false);
+            >
+              <IonButton
+                fill="solid"
+                size="small"
+                color="secondary"
+                onClick={() => setIsFilterBarExpanded((expanded) => !expanded)}
+              >
+                <IonIcon
+                  slot="icon-only"
+                  icon={isFilterBarExpanded ? caretUp : caretDown}
+                ></IonIcon>
+              </IonButton>
+            </div>
+            <div
+              style={{
+                overflow: "auto",
+                maxHeight: isFilterBarExpanded ? "100%" : `${expandedHeight}px`,
               }}
-              additionalFilter={additionalFilter}
-              onAdditionalFilterChange={(additionalFilter) => {
-                resetScroll();
-                setAdditionalFilter(additionalFilter);
-                setIsFilterBarExpanded(false);
-              }}
-              queryFragment={searchElementsQueryResult.data}
-              loadingAvailableTags={
-                searchElementsQueryResult.fetching ||
-                searchElementsQueryResult.stale
-              }
-              isExpanded={isFilterBarExpanded}
-              searchInput={searchText}
-              onSearchInputChange={(text) => {
-                resetScroll();
-                setSearchText(text);
-              }}
-            ></ElementFilterBar>
-          )}
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            right: "10px",
-            bottom: "0px",
-          }}
-        >
-          <IonButton
-            fill="solid"
-            size="small"
-            color="secondary"
-            onClick={() => setIsFilterBarExpanded((expanded) => !expanded)}
-          >
-            <IonIcon
-              slot="icon-only"
-              icon={isFilterBarExpanded ? caretUp : caretDown}
-            ></IonIcon>
-          </IonButton>
-        </div>
+              className="side-scrolling-list"
+            >
+              <ElementFilterBar
+                onLanguageChange={(language) => {
+                  resetScroll();
+                  setSelectedLanguage(language);
+                }}
+                selectedLanguage={selectedLanguage}
+                selectedTagNames={selectedTagNames}
+                onTagsChange={(selectedTagNames) => {
+                  resetScroll();
+                  setSelectedTagNames(selectedTagNames);
+                  setIsFilterBarExpanded(false);
+                }}
+                additionalFilter={additionalFilter}
+                onAdditionalFilterChange={(additionalFilter) => {
+                  resetScroll();
+                  setAdditionalFilter(additionalFilter);
+                  setIsFilterBarExpanded(false);
+                }}
+                queryFragment={searchElementsQueryResult.data}
+                loadingAvailableTags={
+                  searchElementsQueryResult.fetching ||
+                  searchElementsQueryResult.stale
+                }
+                isExpanded={isFilterBarExpanded}
+                searchInput={searchText}
+                onSearchInputChange={(text) => {
+                  resetScroll();
+                  setSearchText(text);
+                }}
+              ></ElementFilterBar>
+            </div>
+          </>
+        )}
       </div>
       <div>
         {(searchElementsQueryResult.stale ||

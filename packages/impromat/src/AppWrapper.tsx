@@ -20,6 +20,11 @@ import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import "./theme/colors.css";
 import "./theme/variables.css";
 
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+
 export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
   const logger = useComponentLogger("AppWrapper");
   const onGraphqlError = useCallback(

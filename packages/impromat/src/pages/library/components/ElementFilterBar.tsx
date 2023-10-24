@@ -1,11 +1,7 @@
-import {
-  IonChip,
-  IonIcon,
-  IonLabel,
-  IonSelect,
-  IonSelectOption,
-} from "@ionic/react";
-import { brush, closeCircle, heart } from "ionicons/icons";
+import { IonChip, IonIcon, IonLabel } from "@ionic/react";
+import { Cancel, Language } from "@mui/icons-material";
+import { Box, Chip } from "@mui/material";
+import { brush, heart } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
 import {
   FragmentType,
@@ -74,26 +70,33 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
     onSearchInputChange("");
   }, [onAdditionalFilterChange, onSearchInputChange, onTagsChange]);
 
+  const onLanguageToggle = useCallback(() => {
+    if (selectedLanguage === "en") {
+      onLanguageChange("de");
+    } else {
+      onLanguageChange("en");
+    }
+  }, [selectedLanguage, onLanguageChange]);
+
   return (
-    <div>
+    <Box sx={{ m: 1 }}>
       {showClearButton && (
-        <IonChip onClick={clearInput}>
-          <IonIcon icon={closeCircle}></IonIcon>
-          <IonLabel>Clear</IonLabel>
-        </IonChip>
+        <Chip
+          onClick={clearInput}
+          label="Clear"
+          color="default"
+          icon={<Cancel></Cancel>}
+        ></Chip>
       )}
       {!selectedTagNames.length &&
         !additionalFilter.liked &&
         !additionalFilter.userCreated && (
-          <IonChip>
-            <IonSelect
-              value={selectedLanguage}
-              onIonChange={(event) => onLanguageChange(event.detail.value)}
-            >
-              <IonSelectOption value="en">EN</IonSelectOption>
-              <IonSelectOption value="de">DE</IonSelectOption>
-            </IonSelect>
-          </IonChip>
+          <Chip
+            icon={<Language></Language>}
+            label={selectedLanguage.toUpperCase()}
+            color="default"
+            onClick={onLanguageToggle}
+          ></Chip>
         )}
       <SearchInputChip
         input={searchInput}
@@ -171,6 +174,6 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
           ))}
         </div>
       )}
-    </div>
+    </Box>
   );
 };

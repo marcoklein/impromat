@@ -1,5 +1,10 @@
-import { IonIcon, IonSelect, IonSelectOption } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+
+interface ContainerProps {
+  workshopId: string | undefined;
+  onWorkshopIdChange: (workshopId: string) => void;
+  workshops: { id: string; name: string }[];
+}
 
 interface ContainerProps {
   workshopId: string | undefined;
@@ -13,23 +18,22 @@ export const AddToWorkshopDropdown: React.FC<ContainerProps> = ({
   workshops,
 }) => {
   return (
-    <IonSelect
-      labelPlacement="floating"
-      label="Add to Workshop"
-      interface="action-sheet"
-      aria-label="Select workshop to add"
-      value={workshopId}
-      onIonChange={(e) => {
-        onWorkshopIdChange(e.detail.value);
-      }}
-      placeholder="Select workshop"
-    >
-      {workshops.map(({ id, name }) => (
-        <IonSelectOption key={id} value={id}>
-          <IonIcon icon={add}></IonIcon>
-          {name}
-        </IonSelectOption>
-      ))}
-    </IonSelect>
+    <FormControl fullWidth>
+      <InputLabel id="add-to-workshop-label">Add to Workshop</InputLabel>
+      <Select
+        labelId="add-to-workshop-label"
+        value={workshopId}
+        onChange={(e) => {
+          onWorkshopIdChange(e.target.value as string);
+        }}
+        placeholder="Select workshop"
+      >
+        {workshops.map(({ id, name }) => (
+          <MenuItem key={id} value={id}>
+            {name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
