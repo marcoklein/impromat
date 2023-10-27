@@ -1,0 +1,5 @@
+---
+"impromat": minor
+---
+
+Disable animations

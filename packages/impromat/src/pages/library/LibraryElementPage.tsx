@@ -140,7 +140,8 @@ export const LibraryElementPage: React.FC = () => {
 
   const availableWorkshops = useMemo(
     () => [
-      { id: "create-new-workshop", name: "+ Create new workshop" },
+      // FIXME: workshop is created but element is not added to it
+      // { id: "create-new-workshop", name: "+ Create new workshop" },
       ...(workshops?.user.workshops ?? []),
     ],
     [workshops?.user.workshops],

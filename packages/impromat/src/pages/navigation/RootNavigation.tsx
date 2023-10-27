@@ -10,6 +10,7 @@ import { barbell, documents, home } from "ionicons/icons";
 import { useMemo } from "react";
 import { Redirect, Route } from "react-router";
 import { ProtectedRouteComponent } from "../../components/ProtectedRoute";
+import { ANIMATE_PAGE_TRANSITIONS } from "../../feature-toggles";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeLibrary } from "../../routes/library-routes";
@@ -95,7 +96,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
   return (
     <>
       <IonTabs>
-        <IonRouterOutlet animated={true}>
+        <IonRouterOutlet animated={ANIMATE_PAGE_TRANSITIONS}>
           <Redirect
             from={`${routeRootNavigation()}/`}
             to={`${defaultTab.route}`}

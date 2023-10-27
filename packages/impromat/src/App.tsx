@@ -3,6 +3,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import React from "react";
 import { Redirect, Route } from "react-router";
 import { ProtectedRouteComponent } from "./components/ProtectedRoute";
+import { ANIMATE_PAGE_TRANSITIONS } from "./feature-toggles";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
 import { LibraryElementPage } from "./pages/library/LibraryElementPage";
@@ -29,7 +30,7 @@ export const App: React.FC = () => {
       >
         <IonReactRouter>
           <ResponsiveMenu></ResponsiveMenu>
-          <IonRouterOutlet id="main" animated={true}>
+          <IonRouterOutlet id="main" animated={ANIMATE_PAGE_TRANSITIONS}>
             <Redirect path="/" exact to={routeRootNavigation()}></Redirect>
             <Route
               path={routeWorkshopElement()}
