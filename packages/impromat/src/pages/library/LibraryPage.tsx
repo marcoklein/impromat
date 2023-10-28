@@ -1,16 +1,16 @@
 import {
   IonButton,
+  IonCheckbox,
   IonContent,
   IonFab,
   IonFabButton,
   IonIcon,
   IonList,
   IonProgressBar,
+  IonToolbar,
 } from "@ionic/react";
-import { t } from "i18next";
-import { add, caretDown, caretUp, informationCircle } from "ionicons/icons";
+import { add, chevronUp, filter, informationCircle } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
@@ -114,80 +114,115 @@ export const LibraryPage: React.FC = () => {
   }, [pageNumber, searchElementsQueryResult, logger]);
 
   const [isFilterBarExpanded, setIsFilterBarExpanded] = useState(false);
+  const foldedFilterBarHeight = 80;
 
-  const { t } = useTranslation("LibraryPage");
+  const [keepFilterBarOpen, setKeepFilterBarOpen] = usePersistedState<boolean>(
+    "keepFilterBarOpen",
+    false,
+  );
+
+  // const { t } = useTranslation("LibraryPage");
 
   return (
     <PageScaffold
       customContentWrapper
-      title={t("Exercises & Games", { ns: "common" })}
-    >
-      <div
-        style={{
-          position: "relative",
-        }}
-      >
-        <div
-          style={{
-            overflow: "auto",
-            height: isFilterBarExpanded ? "100%" : "40px",
-            maxHeight: "60vh",
-          }}
-          className="side-scrolling-list"
-        >
-          {searchElementsQueryResult.data && (
-            <ElementFilterBar
-              onLanguageChange={(language) => {
-                resetScroll();
-                setSelectedLanguage(language);
-              }}
-              selectedLanguage={selectedLanguage}
-              selectedTagNames={selectedTagNames}
-              onTagsChange={(selectedTagNames) => {
-                resetScroll();
-                setSelectedTagNames(selectedTagNames);
-                setIsFilterBarExpanded(false);
-              }}
-              additionalFilter={additionalFilter}
-              onAdditionalFilterChange={(additionalFilter) => {
-                resetScroll();
-                setAdditionalFilter(additionalFilter);
-                setIsFilterBarExpanded(false);
-              }}
-              queryFragment={searchElementsQueryResult.data}
-              loadingAvailableTags={
-                searchElementsQueryResult.fetching ||
-                searchElementsQueryResult.stale
-              }
-              isExpanded={isFilterBarExpanded}
-              searchInput={searchText}
-              onSearchInputChange={(text) => {
-                resetScroll();
-                setSearchText(text);
-              }}
-            ></ElementFilterBar>
-          )}
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            right: "10px",
-            bottom: "0px",
-          }}
-        >
-          <IonButton
-            fill="solid"
-            size="small"
-            color="secondary"
-            onClick={() => setIsFilterBarExpanded((expanded) => !expanded)}
+      bottomToolbar={
+        <IonToolbar className="ion-no-margin ion-no-padding">
+          <div
+            style={{
+              overflow: "auto",
+              maxHeight: isFilterBarExpanded
+                ? "55vh"
+                : `${foldedFilterBarHeight}px`,
+            }}
+            className="side-scrolling-list"
           >
-            <IonIcon
-              slot="icon-only"
-              icon={isFilterBarExpanded ? caretUp : caretDown}
-            ></IonIcon>
-          </IonButton>
-        </div>
-      </div>
+            {searchElementsQueryResult.data && (
+              <ElementFilterBar
+                onLanguageChange={(language) => {
+                  resetScroll();
+                  setSelectedLanguage(language);
+                }}
+                selectedLanguage={selectedLanguage}
+                selectedTagNames={selectedTagNames}
+                onTagsChange={(selectedTagNames) => {
+                  resetScroll();
+                  setSelectedTagNames(selectedTagNames);
+                  if (keepFilterBarOpen) return;
+                  setIsFilterBarExpanded(false);
+                }}
+                additionalFilter={additionalFilter}
+                onAdditionalFilterChange={(additionalFilter) => {
+                  resetScroll();
+                  setAdditionalFilter(additionalFilter);
+                  if (keepFilterBarOpen) return;
+                  setIsFilterBarExpanded(false);
+                }}
+                queryFragment={searchElementsQueryResult.data}
+                loadingAvailableTags={
+                  searchElementsQueryResult.fetching ||
+                  searchElementsQueryResult.stale
+                }
+                isExpanded={isFilterBarExpanded}
+                searchInput={searchText}
+                onSearchInputChange={(text) => {
+                  resetScroll();
+                  setSearchText(text);
+                }}
+              ></ElementFilterBar>
+            )}
+          </div>
+          {!isFilterBarExpanded && (
+            <div
+              style={{
+                position: "absolute",
+                right: "14px",
+                bottom: "2px",
+              }}
+            >
+              <IonButton
+                fill="solid"
+                shape="round"
+                size="small"
+                onClick={() => setIsFilterBarExpanded((expanded) => !expanded)}
+              >
+                <IonIcon slot="icon-only" icon={filter}></IonIcon>
+              </IonButton>
+            </div>
+          )}
+          {isFilterBarExpanded && (
+            <div
+              className="ion-margin-horizontal"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <IonCheckbox
+                labelPlacement="start"
+                checked={keepFilterBarOpen}
+                onIonChange={(event) =>
+                  setKeepFilterBarOpen(event.detail.checked)
+                }
+              >
+                Keep filter expanded
+              </IonCheckbox>
+              <div style={{ flex: 1 }}></div>
+              <IonButton
+                fill="outline"
+                expand="full"
+                shape="round"
+                size="small"
+                onClick={() => setIsFilterBarExpanded((expanded) => !expanded)}
+              >
+                <IonIcon slot="icon-only" icon={chevronUp}></IonIcon>
+              </IonButton>
+            </div>
+          )}
+        </IonToolbar>
+      }
+    >
       <div>
         {(searchElementsQueryResult.stale ||
           searchElementsQueryResult.fetching) && (

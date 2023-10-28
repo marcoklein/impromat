@@ -3,8 +3,6 @@ import {
   IonContent,
   IonIcon,
   IonItem,
-  IonSelect,
-  IonSelectOption,
   IonToolbar,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
@@ -15,14 +13,16 @@ import { ElementComponent } from "../../components/ElementComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { PageScaffold } from "../../components/PageScaffold";
 import { getFragmentData, graphql } from "../../graphql-client";
+import { useCreateWorkshopInputDialog } from "../../hooks/use-add-workshop-input-dialog";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
-import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/local-storage-workshop-id";
-import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
 import { routeLibrary } from "../../routes/library-routes";
 import { routeWorkshop } from "../../routes/shared-routes";
+import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/local-storage-workshop-id";
+import { AddToWorkshopDropdown } from "./components/AddToWorkshopDropdown";
+import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
 
 const LibraryElementPageQuery = graphql(`
   query LibraryElementQuery($userId: ID!, $elementId: ID!) {
@@ -136,6 +136,17 @@ export const LibraryElementPage: React.FC = () => {
     });
   }
 
+  const presentWorkshopInputDialog = useCreateWorkshopInputDialog();
+
+  const availableWorkshops = useMemo(
+    () => [
+      // FIXME: workshop is created but element is not added to it
+      // { id: "create-new-workshop", name: "+ Create new workshop" },
+      ...(workshops?.user.workshops ?? []),
+    ],
+    [workshops?.user.workshops],
+  );
+
   return (
     <PageScaffold
       defaultBackHref={routeLibrary()}
@@ -152,29 +163,21 @@ export const LibraryElementPage: React.FC = () => {
         workshops && (
           <IonToolbar>
             <IonItem>
-              <IonSelect
-                labelPlacement="floating"
-                label="Add to Workshop"
-                interface="action-sheet"
-                aria-label="Select workshop to add"
-                value={addToWorkshopSelectId}
-                onIonChange={(e) => {
-                  setAddToWorkshopSelectId(e.detail.value);
-                }}
-                placeholder="Select workshop"
-              >
-                {workshops.user.workshops.map(({ id, name }) => (
-                  <IonSelectOption key={id} value={id}>
-                    {name}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
+              <AddToWorkshopDropdown
+                workshops={availableWorkshops}
+                workshopId={addToWorkshopSelectId}
+                onWorkshopIdChange={(id) => setAddToWorkshopSelectId(id)}
+              ></AddToWorkshopDropdown>
               <div slot="end">
                 <IonButton
                   size="default"
                   aria-label="Add to workshop"
                   onClick={() => {
-                    addToWorkshop();
+                    if (addToWorkshopSelectId === "create-new-workshop") {
+                      presentWorkshopInputDialog();
+                    } else {
+                      addToWorkshop();
+                    }
                   }}
                   disabled={!addToWorkshopSelectId}
                 >

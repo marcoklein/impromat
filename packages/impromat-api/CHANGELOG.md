@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.21.0
+
+### Minor Changes
+
+- 4182c5f: Set date of workshop
+
 ## 0.20.0
 
 ### Minor Changes

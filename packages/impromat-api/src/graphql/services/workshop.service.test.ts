@@ -160,6 +160,7 @@ describe('WorkshopService', () => {
           isListed: true,
           isPublic: true,
           name: 'test-workshop',
+          dateOfWorkshop: new Date(1),
           version: 10,
           sections: [
             {
@@ -224,6 +225,7 @@ describe('WorkshopService', () => {
           expect(workshopCreateData).toEqual({
             name: 'test-workshop Copy',
             description: 'original workshop',
+            dateOfWorkshop: new Date(1),
             ownerId: userId,
             isListed: false,
             isPublic: false,

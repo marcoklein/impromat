@@ -1,7 +1,8 @@
 import { accessibleBy } from '@casl/prisma';
 import { Inject, Injectable } from '@nestjs/common';
-import { ElementTag, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { ElementTagsFilterInput } from 'src/dtos/inputs/element-tags-filter-input';
+import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import { Nullable } from 'src/utils/nullish';
 import { defineAbilityForUser } from '../abilities';
 import { PrismaService } from './prisma.service';
@@ -131,7 +132,7 @@ export class ElementTagService {
           skip: pagination.skip,
         });
 
-      const fetchedElementTags: ElementTag[] = [];
+      const fetchedElementTagDtos: ElementTag[] = [];
       for (const result of groupByResult) {
         const elementTag =
           await this.prismaService.elementTag.findUniqueOrThrow({
@@ -140,11 +141,14 @@ export class ElementTagService {
             },
           });
         if (elementTag) {
-          fetchedElementTags.push(elementTag);
+          fetchedElementTagDtos.push({
+            ...elementTag,
+            count: result._count.tagId,
+          });
         }
       }
 
-      return fetchedElementTags;
+      return fetchedElementTagDtos;
     }
   }
 }

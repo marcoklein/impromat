@@ -5,7 +5,7 @@ import {
 } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../../hooks/use-state-change-logger";
-import { WorkshopElementItemComponent } from "./WorkshopElementItemComponent";
+import { WorkshopElementItem } from "./WorkshopElementItem";
 
 const SectionElementsComponent_WorkshopSection = graphql(`
   fragment SectionElementsComponent_WorkshopSection on WorkshopSection {
@@ -58,16 +58,13 @@ export const SectionElementsComponent: React.FC<ContainerProps> = ({
   return (
     <>
       {elements.map((element) => (
-        <WorkshopElementItemComponent
+        <WorkshopElementItem
           workshopElementFragment={element}
           key={element.id}
           routerLink={`/workshop/${workshopId}/part/${element.id}`}
           onRemoveClick={() => onRemoveClick(element.id)}
-          // onEditClick={() => {
-          //   router.push(`/workshop/${workshopId}/part/${element.id}`);
-          // }}
           isReordering={isReordering}
-        ></WorkshopElementItemComponent>
+        ></WorkshopElementItem>
       ))}
     </>
   );

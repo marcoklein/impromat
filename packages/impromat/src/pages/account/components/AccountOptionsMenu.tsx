@@ -9,6 +9,7 @@ import {
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useInputDialog } from "../../../hooks/use-input-dialog";
 import { useUpdateUserMutation } from "../../../hooks/use-update-user-mutation";
+import { useState } from "react";
 
 const AccountOptionsMenu_User = graphql(`
   fragment AccountOptionsMenu_User on User {
@@ -26,6 +27,8 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
 }) => {
   const logger = useComponentLogger("AccountOptionsMenu");
   const user = getFragmentData(AccountOptionsMenu_User, userFragment);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const [presentInputDialog] = useInputDialog();
   const [presentToast] = useIonToast();
@@ -61,25 +64,25 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
   };
 
   return (
-    <>
-      <OptionsMenu
-        header="Options"
-        options={[
-          {
-            text: "Change Username",
-            icon: person,
-            handler: () => {
-              onRenameUser();
-            },
+    <OptionsMenu
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      header="Options"
+      options={[
+        {
+          text: "Change Username",
+          icon: person,
+          handler: () => {
+            onRenameUser();
           },
-          {
-            text: "Cancel",
-            role: "cancel",
-            handler: () => {},
-            icon: close,
-          },
-        ]}
-      ></OptionsMenu>
-    </>
+        },
+        {
+          text: "Cancel",
+          role: "cancel",
+          handler: () => {},
+          icon: close,
+        },
+      ]}
+    ></OptionsMenu>
   );
 };

@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.52.0
+
+### Minor Changes
+
+- d2ecc77: Show workshop date in workshops overview page
+- a1c2482: Add element to newly created workshop
+
+## 0.51.1
+
+### Patch Changes
+
+- 1b5755a: Cache images to prevent flashing on load
+
+## 0.51.0
+
+### Minor Changes
+
+- 6385836: Rendering of workshop elements
+- 4182c5f: Set date of workshop
+
+### Patch Changes
+
+- Updated dependencies [4182c5f]
+  - impromat-api@0.21.0
+
 ## 0.50.0
 
 ### Minor Changes
