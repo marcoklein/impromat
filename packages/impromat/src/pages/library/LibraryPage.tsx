@@ -3,13 +3,13 @@ import {
   IonCheckbox,
   IonContent,
   IonFab,
-  IonFabButton,
   IonIcon,
+  IonLabel,
   IonList,
   IonProgressBar,
   IonToolbar,
 } from "@ionic/react";
-import { add, chevronUp, filter, informationCircle } from "ionicons/icons";
+import { chevronUp, filter, informationCircle } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
@@ -124,7 +124,7 @@ export const LibraryPage: React.FC = () => {
   return (
     <PageScaffold
       customContentWrapper
-      bottomToolbar={
+      secondaryToolbar={
         <IonToolbar className="ion-no-margin ion-no-padding">
           <div
             style={{
@@ -229,12 +229,12 @@ export const LibraryPage: React.FC = () => {
       </div>
       <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonFabButton
-            color="primary"
+          <IonButton
+            color="medium"
             routerLink={routeLibraryCreateCustomElement()}
           >
-            <IonIcon icon={add}></IonIcon>
-          </IonFabButton>
+            <IonLabel>Create Element</IonLabel>
+          </IonButton>
         </IonFab>
         {!searchElementsQueryResult.stale &&
           !searchElementsQueryResult.fetching &&

@@ -14,7 +14,7 @@ export const routeLegal = () => `${routeHome()}/legal`;
 // routes for workshops tab
 export const routeWorkshops = () => `${routeRootNavigation()}/workshop`;
 export const routeWorkshop = (workshopId: string = ROUTE_WORKHOP_ID) =>
-  `${routeWorkshops()}/${workshopId}`;
+  `/workshop/${workshopId}`;
 
 // independent routes
 export const routeWorkshopElement = (

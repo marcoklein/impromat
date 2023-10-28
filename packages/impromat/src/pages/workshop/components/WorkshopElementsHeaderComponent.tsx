@@ -1,5 +1,5 @@
 import { IonButton, IonIcon, IonLabel, IonListHeader } from "@ionic/react";
-import { closeOutline } from "ionicons/icons";
+import { checkmark } from "ionicons/icons";
 
 interface ContainerProps {
   isReordering: boolean;
@@ -26,7 +26,10 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
 
   if (!isReordering) {
     return (
-      <IonListHeader color="medium">
+      <IonListHeader
+        color="medium"
+        style={{ position: "sticky", top: 0, zIndex: 2 }}
+      >
         <IonLabel>Elements</IonLabel>
         {canEdit && (
           <IonButton
@@ -43,7 +46,10 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
   }
 
   return (
-    <IonListHeader color="primary">
+    <IonListHeader
+      color="primary"
+      style={{ position: "sticky", top: 0, zIndex: 2 }}
+    >
       <IonLabel>Change order with right handle</IonLabel>
       <IonButton
         color="light"
@@ -51,8 +57,8 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
         fill="solid"
         onClick={() => onReorderClick()}
       >
-        <IonIcon slot="icon-only" icon={closeOutline}></IonIcon>
-        Stop Ordering
+        <IonIcon slot="icon-only" icon={checkmark}></IonIcon>
+        Save Order
       </IonButton>
     </IonListHeader>
   );

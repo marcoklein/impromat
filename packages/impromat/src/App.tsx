@@ -11,12 +11,14 @@ import { ResponsiveMenu } from "./pages/navigation/ResponsiveMenu";
 import { RootNavigation } from "./pages/navigation/RootNavigation";
 import { HIDE_MENU_SIZE } from "./pages/navigation/responsive-navigation";
 import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
+import { WorkshopPage } from "./pages/workshop/WorkshopPage";
 import {
   routeLibraryCreateCustomElement,
   routeLibraryElement,
 } from "./routes/library-routes";
 import {
   routeRootNavigation,
+  routeWorkshop,
   routeWorkshopElement,
 } from "./routes/shared-routes";
 
@@ -49,6 +51,11 @@ export const App: React.FC = () => {
                 <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
               }
             ></ProtectedRouteComponent>
+            <Route
+              path={routeWorkshop()}
+              exact
+              component={WorkshopPage}
+            ></Route>
             <Route
               path={routeRootNavigation()}
               component={RootNavigation}

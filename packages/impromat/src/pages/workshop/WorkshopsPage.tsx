@@ -1,5 +1,5 @@
-import { IonButton, IonIcon } from "@ionic/react";
-import { add, filter } from "ionicons/icons";
+import { IonButton, IonFab, IonIcon, IonLabel } from "@ionic/react";
+import { filter } from "ionicons/icons";
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
@@ -91,13 +91,7 @@ export const WorkshopsPage: React.FC = () => {
 
   return (
     <PageScaffold
-      title="Workshops"
-      toolbarButtons={
-        <IonButton onClick={() => presentWorkshopInputDialog()}>
-          <IonIcon slot="icon-only" icon={add}></IonIcon>
-        </IonButton>
-      }
-      bottomToolbar={
+      secondaryToolbar={
         <>
           {FEATURE_WORKSHOPS_FILTER_BAR && (
             <WorkshopsFilterBar
@@ -120,6 +114,14 @@ export const WorkshopsPage: React.FC = () => {
         queryResult={workshopsQueryResult}
         reexecuteQuery={reexecuteWorkshopsQuery}
       >
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonButton
+            color="primary"
+            onClick={() => presentWorkshopInputDialog()}
+          >
+            <IonLabel>New Workshop</IonLabel>
+          </IonButton>
+        </IonFab>
         {availableWorkshops?.length ? (
           <VirtualCardGrid
             scrollStoreKey="workshops-page"
