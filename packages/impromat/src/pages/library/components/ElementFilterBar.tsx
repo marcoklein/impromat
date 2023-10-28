@@ -20,6 +20,7 @@ export const ElementFilterBar_Query = graphql(`
     tags(take: 200, filter: $elementFilterBarInput) {
       id
       name
+      count
     }
   }
 `);
@@ -166,7 +167,9 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
               }}
               disabled={loadingAvailableTags}
             >
-              <IonLabel>{tag.name}</IonLabel>
+              <IonLabel>
+                {tag.name} ({tag.count})
+              </IonLabel>
             </IonChip>
           ))}
         </div>
