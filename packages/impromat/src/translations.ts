@@ -100,17 +100,24 @@ export const TRANSLATIONS = {
       "Open Liked Elements": "Favorisierte Elemente öffnen",
       CustomizeImprov_2: `Die <b>Anmeldung</b> über ein Google-Konto ermöglicht es dir, deine Workshops, favorisierten Elemente und persönlich erstellten Elemente auf allen Geräten zu <b>synchronisieren</b>. So kannst du einen Workshop an deinem Computer mit der Desktop-Version des Impromats planen und die <b>Mobile App</b> auf deinem Smartphone während des Workshops nutzen. (Keine Sorge, deine Impro-Daten werden nicht mit Google geteilt und sicher auf einem Server in Deutschland gehostet — der Impromat-Server sammelt keine persönlichen Informationen. Siehe unsere <privacyPolicyLink>Datenschutzerklärung</privacyPolicyLink> für weitere Informationen.)`,
       MadeForImprovisers: "Für Impro-Fans gemacht",
-      //ImproviserText: "",
-      TryItOut: "Probiere es aus",
+      ImproviserText:
+        "Impromat ist für <b>alle Levels</b> gemacht: Impro-Anfänger*innen, die ihren ersten Impro-Workshop vorbereiten wollen, etablierte Gruppen, die sich weiter inspirieren lassen wollen, und erfahrene Workshop-Leiter*innen, die eine App suchen, um ihre Impro-Workshops zu verwalten.",
+      TryItOut: "Probier es aus",
       ImprovBeginners: "Impro-Anfänger*innen",
-      //BeginnerText: "",
+      BeginnerText:
+        "Du bist neu im Improvisationstheater und möchtest es mit ein paar Leuten ausprobieren? Impromat <b>hilft</b> dir dabei, Übungen und Spiele für deine erste Impro-Session zu finden. Nutze die empfohlenen Elemente oder bereits bestehende Workshops, um vom <b>kollektiven Impro-Wissen</b> zu profitieren.",
       EstablishedGroups: "Etablierte Gruppen",
-      //GroupText: "",
+      GroupText:
+        "Du spielst in einer Impro-Gruppe und möchtest zusammen <b>neue Spiele</b> entdecken? Oder möchtest du mehr <b>Struktur</b> in deine regelmäßigen Sessions bringen, indem du <b>spezifische Themen</b> wählst (z.B. Charakterentwicklung, Fokus), an denen du mit deiner Gruppe arbeiten möchtest.<br></br>Impromat hilft dir dabei, <b>neue Übungen und Spiele</b> zu bestimmten Themen zu finden. Es ermöglicht dir auch, die Elemente in Abschnitte zu ordnen, um einen <b>fertig geplanten Workshop</b> in kürzester Zeit zu haben.",
+
       WorkshopLeaders: "Workshop-Leiter*innen",
-      //LeaderText: "",
-      ImprovTool: "Impromat — dein Improwerkzeug",
-      YouWantMore: "Willst du noch mehr?",
-      //MoreText: "",
+      LeaderText:
+        "Gibst du regelmäßig Impro-Workshops innerhalb deiner Gruppe oder für andere? Mit Impromat kannst du deine Workshops einfach <b>planen, durchführen und verwalten</b>, indem du vorhandene Workshop-Strukturen duplizierst und anpasst, deine persönlichen Favoriten hinzufügst und eigene Elemente erstellst. Wenn Teilnehmer*innen oder andere Workshop-Leiter*innen dich nach deinen Notizen zu einem Workshop fragen, kannst du deinen Impromat-Workshop in kürzester Zeit mit ihnen <b>teilen</b>.",
+      ImprovTool: "Lass Impromat dein Impro-Tool sein!",
+      OpenWorkshops: "Offene Workshops",
+      YouWantMore: "Du willst mehr?",
+      MoreText:
+        "Impromat und die Impro-Community leben von deinen Workshop- und Element-<b>Beiträgen</b>. Jede*r kann teilnehmen und sein Impro-Wissen teilen! <br></br>Wenn du <b>Feedback oder neue Ideen</b> hast, was Impromat tun könnte, lass es uns bitte per E-Mail an <MailadressLink>impromat@marcoklein.dev</MailadressLink> wissen oder besuche die <b>Über das Projekt</b>-Seite, um mehr zu erfahren.",
       AboutProject: "Über das Projekt",
     },
   },
