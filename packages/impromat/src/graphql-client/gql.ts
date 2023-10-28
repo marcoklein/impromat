@@ -44,7 +44,7 @@ const documents = {
     "\n  fragment LibraryElementPage_Query on Query {\n    user(id: $userId) {\n      id\n      workshops(input: { owned: true }) {\n        id\n        name\n        sections {\n          id\n        }\n      }\n    }\n  }\n": types.LibraryElementPage_QueryFragmentDoc,
     "\n  query SearchElements(\n    $input: ElementSearchInput!\n    $elementFilterBarInput: ElementTagsFilterInput!\n    $skip: Int!\n    $take: Int!\n  ) {\n    searchElements(input: $input, skip: $skip, take: $take) {\n      element {\n        id\n        ...ElementPreviewItem_Element\n      }\n      ...ElementPreviewItem_ElementSearchResult\n    }\n    ...ElementFilterBar_Query\n  }\n": types.SearchElementsDocument,
     "\n  fragment ElementFavoriteIcon_Element on Element {\n    id\n    isFavorite\n  }\n": types.ElementFavoriteIcon_ElementFragmentDoc,
-    "\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200, filter: $elementFilterBarInput) {\n      id\n      name\n    }\n  }\n": types.ElementFilterBar_QueryFragmentDoc,
+    "\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200, filter: $elementFilterBarInput) {\n      id\n      name\n      count\n    }\n  }\n": types.ElementFilterBar_QueryFragmentDoc,
     "\n  query LibraryCreateCustomElementTags_Query($filter: ElementTagsFilterInput!) {\n    tags(filter: $filter) {\n      ...ElementTagsItem_ElementTag\n    }\n  }\n": types.LibraryCreateCustomElementTags_QueryDocument,
     "\n  fragment ElementTagsItem_ElementTag on ElementTag {\n    id\n    name\n  }\n": types.ElementTagsItem_ElementTagFragmentDoc,
     "\n  query WorkshopElementPage($id: ID!) {\n    workshopElement(id: $id) {\n      id\n      note\n      basedOn {\n        id\n        name\n        markdown\n        sourceUrl\n        sourceName\n        sourceBaseUrl\n        licenseName\n        licenseUrl\n        owner {\n          id\n        }\n        isOwnerMe\n        ...CustomElement_Element\n        ...Element_Element\n      }\n      section {\n        id\n        workshop {\n          id\n          canEdit\n        }\n      }\n    }\n  }\n": types.WorkshopElementPageDocument,
@@ -204,7 +204,7 @@ export function graphql(source: "\n  fragment ElementFavoriteIcon_Element on Ele
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200, filter: $elementFilterBarInput) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200, filter: $elementFilterBarInput) {\n      id\n      name\n    }\n  }\n"];
+export function graphql(source: "\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200, filter: $elementFilterBarInput) {\n      id\n      name\n      count\n    }\n  }\n"): (typeof documents)["\n  fragment ElementFilterBar_Query on Query {\n    tags(take: 200, filter: $elementFilterBarInput) {\n      id\n      name\n      count\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

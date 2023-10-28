@@ -14,6 +14,6 @@ export class BaseDto {
   @Field(() => Int)
   version: number;
 
-  @Field(() => Boolean)
-  deleted: boolean;
+  @Field(() => Boolean, { nullable: true })
+  deleted?: boolean;
 }

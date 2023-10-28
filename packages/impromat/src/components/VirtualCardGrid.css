@@ -7,9 +7,9 @@
 
 @media (min-width: 768px) {
   /* MD */
-  .item-class-name {
+  /* .item-class-name {
     width: 50%;
-  }
+  } */
 }
 
 @media (min-width: 1200px) {

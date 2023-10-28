@@ -16,8 +16,13 @@ type ElementTag {
   createdAt: DateTime!
   updatedAt: DateTime!
   version: Int!
-  deleted: Boolean!
+  deleted: Boolean
   name: String!
+
+  """
+  Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter.
+  """
+  count: Float!
 }
 
 """
@@ -36,7 +41,7 @@ type WorkshopElement {
   createdAt: DateTime!
   updatedAt: DateTime!
   version: Int!
-  deleted: Boolean!
+  deleted: Boolean
   note: String
   basedOn: Element!
   section: WorkshopSection!
@@ -47,7 +52,7 @@ type WorkshopSection {
   createdAt: DateTime!
   updatedAt: DateTime!
   version: Int!
-  deleted: Boolean!
+  deleted: Boolean
   name: String
   color: String
   isCollapsed: Boolean!
@@ -61,7 +66,7 @@ type Workshop {
   createdAt: DateTime!
   updatedAt: DateTime!
   version: Int!
-  deleted: Boolean!
+  deleted: Boolean
   name: String!
   description: String
   sections: [WorkshopSection!]!
@@ -104,7 +109,7 @@ type User {
   createdAt: DateTime!
   updatedAt: DateTime!
   version: Int!
-  deleted: Boolean!
+  deleted: Boolean
 
   """All workshops that this user has access to."""
   workshops(input: UserWorkshopsFilterInput, skip: Int! = 0, take: Int! = 20): [Workshop!]!
@@ -140,7 +145,7 @@ type Element {
   createdAt: DateTime!
   updatedAt: DateTime!
   version: Int!
-  deleted: Boolean!
+  deleted: Boolean
   name: String!
   markdown: String
 
