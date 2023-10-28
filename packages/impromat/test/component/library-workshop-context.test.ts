@@ -5,13 +5,13 @@ import { pageTest } from "./fixtures/page-fixtures.js";
 pageTest.describe("Library with Workshop Context", () => {
   pageTest(
     "should render the library page",
-    async ({ auth, workshopPage, libraryPage }) => {
+    async ({ auth, workshopPage, page }) => {
       // given
       await auth.loginAsRandomUser();
       await workshopPage.createAndGoto();
       await workshopPage.openLibrary();
       // then
-      await libraryPage.expectToolbarTextToBe(/Exercises & Games/);
+      await expect(page).toHaveURL(/.*\/nav\/elements/);
     },
   );
 

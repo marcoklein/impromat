@@ -130,7 +130,7 @@ export const LibraryPage: React.FC = () => {
             style={{
               overflow: "auto",
               maxHeight: isFilterBarExpanded
-                ? "57vh"
+                ? "55vh"
                 : `${foldedFilterBarHeight}px`,
             }}
             className="side-scrolling-list"
