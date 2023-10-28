@@ -85,7 +85,7 @@ export const HomeContent: React.FC = () => {
                 routerLink={routeLibrary()}
               >
                 <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-                Open Element Library
+                {t("GoToElements")}
               </IonButton>
             </IonCardContent>
           </IonCard>
@@ -170,91 +170,93 @@ export const HomeContent: React.FC = () => {
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ maxWidth: "900px" }} className="ion-margin-top">
           <IonText>
-            <h1>Made For Improvisers</h1>
+            <h1>{t("MadeForImprovisers")}</h1>
           </IonText>
           <p>
             <IonText color="dark">
-              Impromat is made for <b>all levels</b>: Improv beginners who want
-              to prepare their first improv workshops, established groups that
-              want further inspiration and experienced workshop leaders who look
-              for a one-stop app for managing their improv workshops.
+              <Trans
+                t={t}
+                i18nKey={"ImproviserText"}
+                components={{ b: <b></b> }}
+              ></Trans>
             </IonText>
           </p>
           <IonButton routerLink={routeWorkshops()}>
             <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-            Try it out
+            {t("TryItOut")}
           </IonButton>
           <IonText color="dark">
-            <h3>Improv Beginners</h3>
+            <h3>{t("ImprovBeginners")}</h3>
           </IonText>
           <IonText color="dark">
             <p>
-              Are you new to improvisational theatre and want to try it out with
-              some people? Impromat <b>guides</b> you in finding exercises and
-              games for your first improv session. Use the recommended elements
-              or already existing workshops to benefit from the{" "}
-              <b>collective improv knowledge</b>.
+              <Trans
+                t={t}
+                i18nKey={"BeginnerText"}
+                components={{ b: <b></b> }}
+              ></Trans>
             </p>
           </IonText>
           <IonText color="dark">
-            <h3>Established Groups</h3>
+            <h3>{t("EstablishedGroups")}</h3>
           </IonText>
           <IonText color="dark">
             <p>
-              Are you playing in an improv group and want to{" "}
-              <b>discover new games</b> together? Or do you want to bring more{" "}
-              <b>structure</b> into your regular sessions by choosing{" "}
-              <b>specific topics</b>
-              (e.g. character building, focus) to work on with your group.
-              Impromat helps you with finding new exercises and games around
-              certain topics. It also allows you to arrange the elements in
-              sections to have a ready-planned workshop in no time.
+              <Trans
+                t={t}
+                i18nKey={"GroupText"}
+                components={{ b: <b></b>, br: <br></br> }}
+              ></Trans>
             </p>
           </IonText>
           <IonText color="dark">
-            <h3>Workshop Leaders</h3>
+            <h3>{t("WorkshopLeaders")}</h3>
           </IonText>
           <IonText color="dark">
             <p>
-              Are you regularly giving improv workshops within your own group or
-              for others? With Impromat you can easily{" "}
-              <b>plan, guide through and manage your workshops</b>,{" "}
-              <i className="a"></i> by duplicating and adapting given workshop
-              structures, adding your personal liked ones and creating your own
-              elements — plus, when participants or other workshop leaders ask
-              you for your notes on a workshop, you can <b>share</b> your
-              Impromat workshop with them in no time.
+              <Trans
+                t={t}
+                i18nKey={"LeaderText"}
+                components={{ b: <b></b> }}
+              ></Trans>
             </p>
             <p>
-              <b>Let Impromat be your improv tool!</b>
+              <b>{t("ImprovTool")}</b>
             </p>
           </IonText>
           <IonButton fill="solid" routerLink={routeWorkshops()}>
             <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-            Open Workshops
+            {t("OpenWorkshops")}
           </IonButton>
 
           <IonText color="dark">
-            <h1>You Want More?</h1>
+            <h1>{t("YouWantMore")}</h1>
           </IonText>
           <IonText color="dark">
             <p>
-              Impromat and the improv community thrive from your workshop and
-              element <b>contributions</b>. Everyone can take part in sharing
-              their improv knowledge!
+              <Trans
+                t={t}
+                i18nKey={"MoreText"}
+                components={{
+                  b: <b></b>,
+                  br: <br></br>,
+                  MailadressLink: (
+                    <a
+                      href="mailto:impromat@marcoklein.dev"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      placeholder
+                    </a>
+                  ),
+                }}
+              ></Trans>
             </p>
-            <p>
-              If you have <b>feedback or new ideas</b>, what the Impromat could
-              do, please let us know via email at{" "}
-              <a href="mailto:impromat@marcoklein.dev">
-                impromat@marcoklein.dev
-              </a>{" "}
-              or head over to the <b>About</b> page to find out more.
-            </p>
+            <p></p>
           </IonText>
           <IonButton fill="outline" routerLink={routeAbout()}>
             <IonIcon slot="start" icon={information}></IonIcon>
-            About the Project
+            {t("AboutProject")}
           </IonButton>
         </div>
       </div>
