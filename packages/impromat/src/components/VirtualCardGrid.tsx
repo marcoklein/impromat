@@ -51,13 +51,16 @@ export const VirtualCardGrid = <ItemData, Context>({
     "isRestoringScrollPosition",
     logger,
   );
+  useStateChangeLogger(scrollRestoreOptions, "scrollRestoreOptions", logger);
 
   useEffect(() => {
     logger("Scroll to top %o", scrollToTop);
-    virtuosoRef.current?.scrollTo({
-      behavior: "smooth",
-      top: 0,
-    });
+    if (scrollToTop) {
+      virtuosoRef.current?.scrollTo({
+        behavior: "smooth",
+        top: 0,
+      });
+    }
   }, [scrollToTop, logger]);
 
   return (

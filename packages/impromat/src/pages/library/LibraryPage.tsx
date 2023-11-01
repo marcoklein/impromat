@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
+import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { graphql } from "../../graphql-client";
@@ -70,7 +71,7 @@ export const LibraryPage: React.FC = () => {
 
   const trimmedSearchText = useMemo(() => searchText.trim(), [searchText]);
 
-  const [searchElementsQueryResult] = useQuery({
+  const [searchElementsQueryResult, reexecuteSearchElementsQuery] = useQuery({
     query: LibraryPageQuery,
     variables: {
       input: {
@@ -218,77 +219,85 @@ export const LibraryPage: React.FC = () => {
               </IonButton>
             </div>
           )}
+          <div>
+            {(searchElementsQueryResult.stale ||
+              searchElementsQueryResult.fetching) && (
+              <IonProgressBar
+                type="indeterminate"
+                color="dark"
+              ></IonProgressBar>
+            )}
+          </div>
         </IonToolbar>
       }
     >
-      <div>
-        {(searchElementsQueryResult.stale ||
-          searchElementsQueryResult.fetching) && (
-          <IonProgressBar type="indeterminate" color="dark"></IonProgressBar>
-        )}
-      </div>
-      <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
-        <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonButton
-            color="medium"
-            routerLink={routeLibraryCreateCustomElement()}
-          >
-            <IonLabel>Create Element</IonLabel>
-          </IonButton>
-        </IonFab>
-        {!searchElementsQueryResult.stale &&
-          !searchElementsQueryResult.fetching &&
-          !searchElementsQueryResult.data?.searchElements.length &&
-          searchText.length > 0 && (
-            <IonList>
-              <InfoItemComponent
-                message="No matching elements found."
-                icon={informationCircle}
-                color="warning"
-              ></InfoItemComponent>
-            </IonList>
-          )}
-        {searchElementsQueryResult.data &&
-          searchElementsQueryResult.data.searchElements.length > 0 && (
-            <VirtualCardGrid
-              scrollStoreKey="search-element-tab-component"
-              isFetching={
-                searchElementsQueryResult.fetching ||
-                searchElementsQueryResult.stale
-              }
-              scrollToTop={scrollToTop}
-              endReached={() => {
-                logger(
-                  "end reached, queryResult.stale=%s",
-                  searchElementsQueryResult.stale,
-                );
-                if (!searchElementsQueryResult.stale) {
-                  setPageNumber((currentPageNumber) => currentPageNumber + 1);
-                  logger("setting page number to %s", pageNumber + 1);
+      <PageContentLoaderComponent
+        queryResult={searchElementsQueryResult}
+        reexecuteQuery={reexecuteSearchElementsQuery}
+      >
+        <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
+          <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonButton
+              color="medium"
+              routerLink={routeLibraryCreateCustomElement()}
+            >
+              <IonLabel>Create Element</IonLabel>
+            </IonButton>
+          </IonFab>
+          {!searchElementsQueryResult.stale &&
+            !searchElementsQueryResult.fetching &&
+            !searchElementsQueryResult.data?.searchElements.length &&
+            searchText.length > 0 && (
+              <IonList>
+                <InfoItemComponent
+                  message="No matching elements found."
+                  icon={informationCircle}
+                  color="warning"
+                ></InfoItemComponent>
+              </IonList>
+            )}
+          {searchElementsQueryResult.data &&
+            searchElementsQueryResult.data.searchElements.length > 0 && (
+              <VirtualCardGrid
+                scrollStoreKey="search-element-tab-component"
+                isFetching={
+                  searchElementsQueryResult.fetching ||
+                  searchElementsQueryResult.stale
                 }
-              }}
-              items={searchElementsQueryResult.data.searchElements ?? []}
-              itemContent={(_index, searchResult) => (
-                <ElementPreviewCard
-                  routerLink={routeLibraryElement(searchResult.element.id)}
-                  elementFragment={searchResult.element}
-                  elementSearchResultFragment={searchResult}
-                ></ElementPreviewCard>
-              )}
-            ></VirtualCardGrid>
-          )}
-        {!searchElementsQueryResult.fetching &&
-          !searchElementsQueryResult.stale &&
-          !searchElementsQueryResult.data?.searchElements.length &&
-          !searchText.length && (
-            <InfoItemComponent
-              message={
-                "Use the search bar to find elements from various sources."
-              }
-              icon={informationCircle}
-            ></InfoItemComponent>
-          )}
-      </IonContent>
+                scrollToTop={scrollToTop}
+                endReached={() => {
+                  logger(
+                    "end reached, queryResult.stale=%s",
+                    searchElementsQueryResult.stale,
+                  );
+                  if (!searchElementsQueryResult.stale) {
+                    setPageNumber((currentPageNumber) => currentPageNumber + 1);
+                    logger("setting page number to %s", pageNumber + 1);
+                  }
+                }}
+                items={searchElementsQueryResult.data.searchElements ?? []}
+                itemContent={(_index, searchResult) => (
+                  <ElementPreviewCard
+                    routerLink={routeLibraryElement(searchResult.element.id)}
+                    elementFragment={searchResult.element}
+                    elementSearchResultFragment={searchResult}
+                  ></ElementPreviewCard>
+                )}
+              ></VirtualCardGrid>
+            )}
+          {!searchElementsQueryResult.fetching &&
+            !searchElementsQueryResult.stale &&
+            !searchElementsQueryResult.data?.searchElements.length &&
+            !searchText.length && (
+              <InfoItemComponent
+                message={
+                  "Use the search bar to find elements from various sources."
+                }
+                icon={informationCircle}
+              ></InfoItemComponent>
+            )}
+        </IonContent>
+      </PageContentLoaderComponent>
     </PageScaffold>
   );
 };
