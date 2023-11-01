@@ -35,6 +35,7 @@ import { LibraryPage } from "../library/LibraryPage";
 import { WorkshopPage } from "../workshop/WorkshopPage";
 import { WorkshopsPage } from "../workshop/WorkshopsPage";
 import { HIDE_MENU_SIZE } from "./responsive-navigation";
+import { useTranslation } from "react-i18next";
 
 export interface TabConfig {
   name: string;

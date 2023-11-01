@@ -13,6 +13,7 @@ export const TRANSLATIONS = {
     HomePage: {
       "App for planning, giving and sharing improvisational theatre workshops.":
         "App for planning, giving and sharing improvisational theatre workshops.",
+      "Access Impromat": "Access Impromat",
       Profile: "Profile",
       "About the Project": "About the Project",
       "Legal Notice": "Legal Notice",
@@ -61,6 +62,10 @@ export const TRANSLATIONS = {
         "Impromat and the improv community thrive from your workshop and element <b>contributions</b>. Everyone can take part in sharing their improv knowledge! <br></br>If you have <b>feedback or new ideas</b>, what the Impromat could do, please let us know via email at <MailadressLink>impromat@marcoklein.dev</MailadressLink> or head over to the <b>About page</b> to find out more.",
       AboutProject: "About the Project",
     },
+    ImproLibrary: {},
+    AboutPage: {
+      About: "About this project",
+    },
   },
   de: {
     common: {
@@ -77,6 +82,7 @@ export const TRANSLATIONS = {
     HomePage: {
       "App for planning, giving and sharing improvisational theatre workshops.":
         "App für die Planung, Durchführung und das Teilen von Improtheater-Workshops.",
+      "Access Impromat": "Gehe zum Impromat",
       Profile: "Profil",
       "About the Project": "Über das Projekt",
       "Legal Notice": "Impressum",
@@ -96,9 +102,9 @@ export const TRANSLATIONS = {
       ImprovWorkshops_2: `Improvisationsworkshops haben oft ein übergeordnetes <b>Thema</b> und sind in <b>Abschnitte</b> (z.B. Aufwärmen) gegliedert, in denen verschiedene Elemente (Übungen und Spiele) angeordnet sind. 
       Du kannst deine eigenen <b>Notizen</b> zum Workshop sowie zu jedem einzelnen Element hinzufügen, um die Übungen an dein Workshop-Thema und deinen Stil anzupassen.`,
       "Customize Your Improv": "Dein Improvisationstheater",
-      CustomizeImprov_1: `Für einen einfachen Zugang kannst du bestimmte Elemente mit <b>Tags</b> versehen, z.B. Übungen, die du häufig in deinen Workshops verwendest. Wenn du eine Übung oder ein Spiel nicht in der Bibliothek findest, kannst du dein eigenes Element <b>erstellen</b> und in deinen Workshop(s) einbauen.`,
+      CustomizeImprov_1: `Für einen einfachen Zugang kannst du die Elemente mit bestimmten <b>Stichwörtern</b> versehen, z.B. Übungen, die du häufig in deinen Workshops verwendest. Wenn du eine Übung oder ein Spiel nicht in der Bibliothek findest, kannst du dein eigenes Element <b>erstellen</b> und in deinen Workshop(s) einbauen.`,
       "Open Liked Elements": "Favorisierte Elemente öffnen",
-      CustomizeImprov_2: `Die <b>Anmeldung</b> über ein Google-Konto ermöglicht es dir, deine Workshops, favorisierten Elemente und persönlich erstellten Elemente auf allen Geräten zu <b>synchronisieren</b>. So kannst du einen Workshop an deinem Computer mit der Desktop-Version des Impromats planen und die <b>Mobile App</b> auf deinem Smartphone während des Workshops nutzen. (Keine Sorge, deine Impro-Daten werden nicht mit Google geteilt und sicher auf einem Server in Deutschland gehostet — der Impromat-Server sammelt keine persönlichen Informationen. Siehe unsere <privacyPolicyLink>Datenschutzerklärung</privacyPolicyLink> für weitere Informationen.)`,
+      CustomizeImprov_2: `Die <b>Anmeldung</b> über ein Google-Konto ermöglicht es dir, deine Workshops, favorisierten Elemente und persönlich erstellten Elemente auf allen Geräten zu <b>synchronisieren</b>. So kannst du einen Workshop an deinem Computer mit der Desktop-Version des Impromats planen und die <b>mobile App</b> auf deinem Smartphone während des Workshops nutzen. (Keine Sorge, deine Impro-Daten werden nicht mit Google geteilt und sind auf einem Server in Deutschland gesichert — der Impromat-Server sammelt keine persönlichen Informationen. Siehe unsere <privacyPolicyLink>Datenschutzerklärung</privacyPolicyLink> für weitere Informationen.)`,
       MadeForImprovisers: "Für Impro-Fans gemacht",
       ImproviserText:
         "Impromat ist für <b>alle Levels</b> gemacht: Impro-Anfänger*innen, die ihren ersten Impro-Workshop vorbereiten wollen, etablierte Gruppen, die sich weiter inspirieren lassen wollen, und erfahrene Workshop-Leiter*innen, die eine App suchen, um ihre Impro-Workshops zu verwalten.",
@@ -119,6 +125,10 @@ export const TRANSLATIONS = {
       MoreText:
         "Impromat und die Impro-Community leben von deinen Workshop- und Element-<b>Beiträgen</b>. Jede*r kann teilnehmen und sein Impro-Wissen teilen! <br></br>Wenn du <b>Feedback oder neue Ideen</b> hast, was Impromat tun könnte, lass es uns bitte per E-Mail an <MailadressLink>impromat@marcoklein.dev</MailadressLink> wissen oder besuche die <b>Über das Projekt</b>-Seite, um mehr zu erfahren.",
       AboutProject: "Über das Projekt",
+    },
+    ImproLibrary: {},
+    AboutPage: {
+      About: "Über das Projekt",
     },
   },
 };

@@ -38,7 +38,7 @@ export const HomePage: React.FC = () => {
         {!isLoggedIn && (
           <IonButton routerLink={routeWorkshops()} className="ion-margin-top">
             <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
-            Access Impromat
+            {t("Access Impromat")}
           </IonButton>
         )}
       </ImpromatHero>

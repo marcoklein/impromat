@@ -49,6 +49,8 @@ export type CreateWorkshopElementInput = {
 };
 
 export type CreateWorkshopInput = {
+  /** Date for which workshop is planned or was held. */
+  dateOfWorkshop?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   /** Publicly list workshop within impromat. Worshop must be public in order to list it. */
   isListed?: InputMaybe<Scalars['Boolean']>;
@@ -80,7 +82,7 @@ export type DuplicateWorkshopInput = {
 export type Element = {
   __typename?: 'Element';
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   /** Set if the element was imported from improbib, a project that collects existing improv resources. */
   improbibIdentifier?: Maybe<Scalars['String']>;
@@ -175,8 +177,10 @@ export type ElementSnapshot = {
 
 export type ElementTag = {
   __typename?: 'ElementTag';
+  /** Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter. */
+  count: Scalars['Float'];
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
@@ -438,6 +442,8 @@ export type UpdateWorkshopElementInput = {
 };
 
 export type UpdateWorkshopInput = {
+  /** Date for which workshop is planned or was held. */
+  dateOfWorkshop?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   /** Publicly list workshop within impromat. Worshop must be public in order to list it. */
@@ -467,7 +473,7 @@ export type UpdateWorkshopSectionInput = {
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   /** Elements owned by this user. */
   elements: Array<Element>;
   favoriteElements: Array<UserFavoriteElement>;
@@ -530,7 +536,9 @@ export type Workshop = {
   /** If true, the client is authorized to edit the workshop. */
   canEdit?: Maybe<Scalars['Boolean']>;
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  /** Optional metadata date when this workshop was planned (or held). */
+  dateOfWorkshop?: Maybe<Scalars['DateTime']>;
+  deleted?: Maybe<Scalars['Boolean']>;
   description?: Maybe<Scalars['String']>;
   elementRecommendations: Array<Element>;
   id: Scalars['ID'];
@@ -553,7 +561,7 @@ export type WorkshopElement = {
   __typename?: 'WorkshopElement';
   basedOn: Element;
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   note?: Maybe<Scalars['String']>;
   section: WorkshopSection;
@@ -571,7 +579,7 @@ export type WorkshopSection = {
   __typename?: 'WorkshopSection';
   color?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   elements: Array<WorkshopElement>;
   id: Scalars['ID'];
   isCollapsed: Scalars['Boolean'];
@@ -609,14 +617,14 @@ export type WorkshopsWhereInput = {
   userLikedWorkshops?: InputMaybe<UserLikedWorkshopListRelationFilter>;
 };
 
-export type ElementFieldsFragment = { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null };
+export type ElementFieldsFragment = { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null };
 
 export type ElementByIdQueryQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type ElementByIdQueryQuery = { __typename?: 'Query', element?: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } | null };
+export type ElementByIdQueryQuery = { __typename?: 'Query', element?: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } | null };
 
 export type ElementsQueryQueryVariables = Exact<{
   filter?: InputMaybe<ElementsFilterInput>;
@@ -626,21 +634,21 @@ export type ElementsQueryQueryVariables = Exact<{
 }>;
 
 
-export type ElementsQueryQuery = { __typename?: 'Query', elements: Array<{ __typename?: 'ElementQueryResult', element: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } }> };
+export type ElementsQueryQuery = { __typename?: 'Query', elements: Array<{ __typename?: 'ElementQueryResult', element: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } }> };
 
 export type SearchElementsQueryQueryVariables = Exact<{
   input: ElementSearchInput;
 }>;
 
 
-export type SearchElementsQueryQuery = { __typename?: 'Query', searchElements: Array<{ __typename?: 'ElementSearchResult', element: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } }> };
+export type SearchElementsQueryQuery = { __typename?: 'Query', searchElements: Array<{ __typename?: 'ElementSearchResult', element: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } }> };
 
 export type CreateElementMutationMutationVariables = Exact<{
   input: CreateElementInput;
 }>;
 
 
-export type CreateElementMutationMutation = { __typename?: 'Mutation', createElement: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } };
+export type CreateElementMutationMutation = { __typename?: 'Mutation', createElement: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } };
 
 export type UpdateElementMutationMutationVariables = Exact<{
   input: UpdateElementInput;
@@ -715,19 +723,19 @@ export type WorkshopElementByIdQueryQueryVariables = Exact<{
 
 export type WorkshopElementByIdQueryQuery = { __typename?: 'Query', workshopElement: { __typename?: 'WorkshopElement', id: string, version: number, note?: string | null } };
 
-export type WorkshopFieldsFragment = { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } };
+export type WorkshopFieldsFragment = { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } };
 
 export type UserWorkshopsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserWorkshopsQueryQuery = { __typename?: 'Query', workshops: Array<{ __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } }> };
+export type UserWorkshopsQueryQuery = { __typename?: 'Query', workshops: Array<{ __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } }> };
 
 export type WorkshopQueryQueryVariables = Exact<{
   workshopId: Scalars['ID'];
 }>;
 
 
-export type WorkshopQueryQuery = { __typename?: 'Query', workshop?: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } | null };
+export type WorkshopQueryQuery = { __typename?: 'Query', workshop?: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } | null };
 
 export type DeleteWorkshopMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -739,33 +747,33 @@ export type DeleteWorkshopMutation = { __typename?: 'Mutation', deleteWorkshop?:
 export type AddWorkshopWithEmptyNameMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AddWorkshopWithEmptyNameMutation = { __typename?: 'Mutation', createWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
+export type AddWorkshopWithEmptyNameMutation = { __typename?: 'Mutation', createWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
 
 export type AddWorkshopByNameMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
-export type AddWorkshopByNameMutation = { __typename?: 'Mutation', createWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
+export type AddWorkshopByNameMutation = { __typename?: 'Mutation', createWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
 
 export type AddWorkshopMutationVariables = Exact<{
   input: CreateWorkshopInput;
 }>;
 
 
-export type AddWorkshopMutation = { __typename?: 'Mutation', createWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
+export type AddWorkshopMutation = { __typename?: 'Mutation', createWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
 
 export type AddTestWorkshopMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AddTestWorkshopMutation = { __typename?: 'Mutation', createWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
+export type AddTestWorkshopMutation = { __typename?: 'Mutation', createWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
 
 export type UpdateWorkshopMutationVariables = Exact<{
   input: UpdateWorkshopInput;
 }>;
 
 
-export type UpdateWorkshopMutation = { __typename?: 'Mutation', updateWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted: boolean, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
+export type UpdateWorkshopMutation = { __typename?: 'Mutation', updateWorkshop: { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, orderIndex: number, name?: string | null, color?: string | null, isCollapsed: boolean, elements: Array<{ __typename?: 'WorkshopElement', id: string, note?: string | null, basedOn: { __typename?: 'Element', id: string, name: string } }>, workshop: { __typename?: 'Workshop', id: string } }>, owner: { __typename?: 'User', id: string } } };
 
 export const ElementFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ElementFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Element"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"version"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deleted"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"markdown"}},{"kind":"Field","name":{"kind":"Name","value":"markdownShort"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"usedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"owner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"isOwnerMe"}}]}}]} as unknown as DocumentNode<ElementFieldsFragment, unknown>;
 export const WorkshopElementFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WorkshopElementFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WorkshopElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"version"}},{"kind":"Field","name":{"kind":"Name","value":"note"}}]}}]} as unknown as DocumentNode<WorkshopElementFieldsFragment, unknown>;
