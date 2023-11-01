@@ -93,6 +93,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
   useStateChangeLogger(workshopId, "workshopId", logger);
 
   const defaultTab = useMemo(() => ROOT_TABS.HOME, []);
+  const { t } = useTranslation("RootNavigation");
 
   return (
     <>
@@ -141,7 +142,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
           {Object.entries(ROOT_TABS).map(([key, value]) => (
             <IonTabButton key={key} tab={key} href={`${value.route}`}>
               <IonIcon icon={value.icon}></IonIcon>
-              <IonLabel>{value.name}</IonLabel>
+              <IonLabel>{t(value.name)}</IonLabel>
             </IonTabButton>
           ))}
         </IonTabBar>

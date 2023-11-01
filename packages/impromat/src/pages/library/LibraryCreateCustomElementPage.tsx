@@ -36,6 +36,7 @@ import {
 } from "../../routes/library-routes";
 import { COLOR_SHARED } from "../../theme/theme-colors";
 import { ElementTagsItem } from "./components/ElementTagsItem";
+import { useTranslation } from "react-i18next";
 
 const LibraryCreateCustomElement_Query = graphql(`
   query LibraryCreateCustomElement_Query($id: ID!) {
@@ -178,6 +179,8 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
     setContentRows((rows) => (rows === 10 ? 20 : 10));
   }, []);
 
+  const { t } = useTranslation("LibraryCreateCustomElementPage");
+
   return (
     <IonPage>
       <IonHeader>
@@ -186,7 +189,9 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             <IonBackButton defaultHref={routeLibrary()}></IonBackButton>
           </IonButtons>
           <IonTitle>
-            {editExistingItem ? "Edit Custom Element" : "Create Custom Element"}
+            {editExistingItem
+              ? t("Edit Custom Element")
+              : t("Create Custom Element")}
           </IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -195,8 +200,8 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
         <IonList>
           <IonItem>
             <IonInput
-              placeholder="Please enter a name"
-              label="Name (required)"
+              placeholder={t("Please enter a name")}
+              label={t("Name (required)")}
               labelPlacement="floating"
               maxlength={200}
               value={name}
@@ -220,7 +225,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
               ></IonIcon>
             </IonButton>
             <IonTextarea
-              label="Content"
+              label={t("Content")}
               labelPlacement="floating"
               rows={contentRows}
               value={content}
@@ -232,9 +237,9 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             <IonSelect
               value={languageCode}
               onIonChange={(event) => setLanguageCode(event.detail.value)}
-              label="Language (required)"
+              label={t("Language (required)")}
               labelPlacement="floating"
-              placeholder="Select language"
+              placeholder={t("Select language")}
             >
               <IonSelectOption value="en">English</IonSelectOption>
               <IonSelectOption value="de">Deutsch</IonSelectOption>
@@ -250,12 +255,9 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
                   color={COLOR_SHARED}
                 ></IonIcon>
                 <IonLabel className="ion-text-wrap">
-                  Community Element
+                  {t("CommunityElement")}
                   <div>
-                    <IonNote>
-                      This is a public community element of Impromat. It is
-                      shared with everyone and editable by Impromat users.
-                    </IonNote>
+                    <IonNote>{t("CommunityElementNote")}</IonNote>
                   </div>
                 </IonLabel>
               </IonItem>
@@ -281,16 +283,14 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
                   onIonChange={(e) => setIsPublic(e.detail.checked)}
                 ></IonCheckbox>
                 <IonLabel className="ion-text-wrap">
-                  Add to Public Impromat Elements
+                  {t("AddtoPublicElements")}
                   <IonNote>
-                    <div>
-                      Contribute your element to the public Impromat community.
-                      Shared elements are visible, searchable, and editable by
-                      Impromat users.
-                    </div>
+                    <div>{t("AddtoPublicElementsNote")}</div>
                   </IonNote>
                   <IonNote>
-                    <IonText color="danger">Sharing cannot be undone.</IonText>
+                    <IonText color="danger">
+                      {t("Sharing cannot be undone.")}
+                    </IonText>
                   </IonNote>
                 </IonLabel>
               </IonItem>
@@ -299,17 +299,9 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
           {editExistingItem && (
             <InfoItemComponent>
               <>
-                Custom Elements Are Unique
+                {t("CustomElementsAreUnique")}
                 <IonNote>
-                  <div>
-                    Saving will update name and content changes for all
-                    workshops that use this element.
-                  </div>
-                  <div>
-                    If you want to change name or content for an individual
-                    workshop you should create a new element or add a note in
-                    the workshop.
-                  </div>
+                  <div>{t("CustomElementNote")}</div>
                 </IonNote>
               </>
             </InfoItemComponent>
@@ -324,7 +316,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             onClick={onCreateElementClick}
             disabled={!isInputValid}
           >
-            Save Element
+            {t("SaveElement")}
           </IonButton>
         ) : (
           <IonButton
@@ -332,7 +324,7 @@ export const LibraryCreateCustomElementPage: React.FC = () => {
             onClick={onCreateElementClick}
             disabled={!isInputValid}
           >
-            Create Element
+            {t("CreateElement")}
           </IonButton>
         )}
       </IonFooter>

@@ -14,6 +14,7 @@ import {
 } from "../../../graphql-client";
 import { COLOR_LIKE, COLOR_USER_CREATED } from "../../../theme/theme-colors";
 import { SearchInputChip } from "./SearchInputChip";
+import { useTranslation } from "react-i18next";
 
 export const ElementFilterBar_Query = graphql(`
   fragment ElementFilterBar_Query on Query {
@@ -75,12 +76,14 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
     onSearchInputChange("");
   }, [onAdditionalFilterChange, onSearchInputChange, onTagsChange]);
 
+  const { t } = useTranslation("ElementFilterBar");
+
   return (
     <div>
       {showClearButton && (
         <IonChip onClick={clearInput}>
           <IonIcon icon={closeCircle}></IonIcon>
-          <IonLabel>Clear</IonLabel>
+          <IonLabel>{t("Clear")}</IonLabel>
         </IonChip>
       )}
       {!selectedTagNames.length &&
@@ -117,7 +120,7 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
             }}
           >
             <IonIcon color={COLOR_LIKE} icon={heart}></IonIcon>
-            <IonLabel>Like</IonLabel>
+            <IonLabel>{t("Like")}</IonLabel>
           </IonChip>
           <IonChip
             outline={!additionalFilter.userCreated}
@@ -134,7 +137,7 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
             }}
           >
             <IonIcon color={COLOR_USER_CREATED} icon={brush}></IonIcon>
-            <IonLabel>My Element</IonLabel>
+            <IonLabel>{t("MyElement")}</IonLabel>
           </IonChip>
         </>
       )}

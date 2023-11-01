@@ -9,6 +9,11 @@ export const TRANSLATIONS = {
       "Page does not exist": "Ups, this page does not exist.",
       "Go to home page": "Go to home page",
     },
+    RootNavigation: {
+      Home: "Home",
+      "Exercises & Games": "Exercises & Games",
+      Workshops: "Workshops",
+    },
     PrivacyPolicyPage: {},
     HomePage: {
       "App for planning, giving and sharing improvisational theatre workshops.":
@@ -62,7 +67,44 @@ export const TRANSLATIONS = {
         "Impromat and the improv community thrive from your workshop and element <b>contributions</b>. Everyone can take part in sharing their improv knowledge! <br></br>If you have <b>feedback or new ideas</b>, what the Impromat could do, please let us know via email at <MailadressLink>impromat@marcoklein.dev</MailadressLink> or head over to the <b>About page</b> to find out more.",
       AboutProject: "About the Project",
     },
-    ImproLibrary: {},
+    LibraryPage: {
+      "Keep filter expanded": "Keep filters expanded",
+      "No matching elements found.": "No matching elements found.",
+      "Use the search bar to find elements from various sources.":
+        "Use the search bar to find elements from various sources.",
+    },
+    ElementFilterBar: {
+      Clear: "Clear Filters",
+      Like: "Like",
+      MyElement: "My Element",
+    },
+    LibraryCreateCustomElementPage: {
+      "Edit Custom Element": "Edit my Element",
+      "Create Custom Element": "Create my Element",
+      "Name (required)": "Name (required)",
+      "Please enter a name": "Please enter a name for your element",
+      Content: "Content",
+      "Language (required)": "Language",
+      CommunityElement: "Community Element",
+      CommunityElementNote:
+        "This is a public community element of Impromat. It is shared with everyone and editable by Impromat users.",
+      AddtoPublicElements: "Add to Community Impromat Elements",
+      AddtoPublicElementsNote:
+        "Contribute your element to the public Impromat community. Community elements are visible, searchable, and editable by Impromat users.",
+      "Sharing cannot be undone.": "Sharing cannot be undone.",
+      CustomElementsAreUnique: "Custom Elements Are Unique",
+      CustomElementNote:
+        "Saving will update name and content changes for all workshops that use this element. If you want to change name or content for an individual workshop you should create a new element or add a note in the workshop.",
+      SaveElement: "Save Element",
+      CreateElement: "Create Element",
+    },
+    ElementTagsItem: {
+      "Add Tag": "Add Tag",
+      "Enter Tag": "Enter Tag",
+      Cancel: "Cancel",
+    },
+    SearchInputChip: { Search: "Search" },
+
     AboutPage: {
       About: "About this project",
     },
@@ -75,6 +117,11 @@ export const TRANSLATIONS = {
     NotFoundPage: {
       "Page does not exist": "Ups, diese Seite existiert nicht.",
       "Go to home page": "Zur Startseite",
+    },
+    RootNavigation: {
+      Home: "Startseite",
+      "Exercises & Games": "Übungen & Spiele",
+      Workshops: "Workshops",
     },
     PrivacyPolicyPage: {
       "Privacy Policy": "Datenschutzerklärung",
@@ -126,7 +173,45 @@ export const TRANSLATIONS = {
         "Impromat und die Impro-Community leben von deinen Workshop- und Element-<b>Beiträgen</b>. Jede*r kann teilnehmen und sein Impro-Wissen teilen! <br></br>Wenn du <b>Feedback oder neue Ideen</b> hast, was Impromat tun könnte, lass es uns bitte per E-Mail an <MailadressLink>impromat@marcoklein.dev</MailadressLink> wissen oder besuche die <b>Über das Projekt</b>-Seite, um mehr zu erfahren.",
       AboutProject: "Über das Projekt",
     },
-    ImproLibrary: {},
+    LibraryPage: {
+      "Keep filter expanded": "Filter ausgeklappt lassen",
+      "No matching elements found.": "Keine passenden Elemente gefunden.",
+      "Use the search bar to find elements from various sources.":
+        "Nutze die Suchleiste, um Improelemente aus verschiedenen Quellen zu finden.",
+    },
+    ElementFilterBar: {
+      Clear: "Filter zurücksetzen",
+      Like: "Favouriten",
+      MyElement: "Meine Elemente",
+    },
+    LibraryCreateCustomElementPage: {
+      "Edit Custom Element": "Mein Element bearbeiten",
+      "Create Custom Element": "Eigenes Element erstellen",
+      "Name (required)": "Name (erforderlich)",
+      "Please enter a name": "Bitte gebe einen Namen für dein Element ein",
+      Content: "Inhalt",
+      "Language (required)": "Sprachauswahl",
+      CommunityElement: "Gemeinschafts-Element",
+      CommunityElementNote:
+        "Dies ist ein öffentliches Gemeinschafts-Element des Impromats. Es wird mir allen geteilt und kann von allen Impromat-Nutzenden bearbeitet werden.",
+      AddtoPublicElements: "Als Gemeinschafts-Element hinzufügen",
+      AddtoPublicElementsNote:
+        "Veröffentliche dein Element als Gemeinschafts-Element innerhalb des Impromats, damit andere von deinen Ideen davon profitieren können. Veröffentlichte Elemente können von allen Impromat-Nutzenden angeschaut, gefunden und bearbeitet werden.",
+      "Sharing cannot be undone.":
+        "Die Veröffentlichung kann nicht rückgängig gemacht werden.",
+      CustomElementsAreUnique: "Eigene Elemente sind einzigartig",
+      CustomElementNote:
+        "Speichern aktualisiert den Namen und alle inhaltlichen Änderungen für alle Workshops, in denen dieses Element verwendet wird. Falls du den Namen oder Inhalt nur für einen einzelnen Workshop anpassen willst, solltest du ein neues Element anlegen oder eine Notiz in deinem Workshop eintragen.",
+
+      SaveElement: "Element speichern",
+      CreateElement: "Element erstellen",
+    },
+    ElementTagsItem: {
+      "Add Tag": "Kategorie hinzufügen",
+      "Enter Tag": "Kategorie eingeben",
+      Cancel: "Abbrechen",
+    },
+    SearchInputChip: { Search: "Suche" },
     AboutPage: {
       About: "Über das Projekt",
     },
