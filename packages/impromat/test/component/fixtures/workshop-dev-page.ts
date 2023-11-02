@@ -27,7 +27,7 @@ export class WorkshopDevPage extends DevPage {
       name: "Element",
       exact: true,
     });
-    this.addSectionButtonLocator = page.getByRole("link", {
+    this.addSectionButtonLocator = page.getByRole("button", {
       name: "Section",
       exact: true,
     });

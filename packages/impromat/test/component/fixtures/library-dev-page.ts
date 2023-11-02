@@ -51,8 +51,11 @@ export class LibraryDevPage extends DevPage {
     await this.page.locator("ion-chip").filter({ hasText: "Like" }).click();
   }
 
-  libraryTabLocator() {
-    return this.page.locator("ion-chip").filter({ hasText: "My Element" });
+  async clickMyElementsFilter() {
+    await this.page
+      .locator("ion-chip")
+      .filter({ hasText: "My Element" })
+      .click();
   }
 
   tabLocator(name: string | RegExp) {

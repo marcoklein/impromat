@@ -18,9 +18,6 @@ pageTest.describe("Shared Elements", () => {
       await libraryPage.goto();
       await libraryPage.gotoSearch();
 
-      // TODO add clear button to search bar if "My Elements" icon is selected
-      await libraryPage.libraryTabLocator().click();
-
       await libraryPage.searchForElement(uniqueElementName);
       await libraryPage.openElementCard(uniqueElementName);
       // then
@@ -44,9 +41,6 @@ pageTest.describe("Shared Elements", () => {
       await auth.loginAsRandomUser();
       await libraryPage.goto();
       await libraryPage.gotoSearch();
-
-      // TODO add clear button to search bar if "My Elements" icon is selected
-      await libraryPage.libraryTabLocator().click();
 
       await libraryPage.searchForElement(uniqueElementName);
       await libraryPage.openElementCard(uniqueElementName);

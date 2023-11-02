@@ -1,5 +1,8 @@
 import { useIonAlert, useIonLoading, useIonToast } from "@ionic/react";
+import { useCallback } from "react";
 import { useMutation } from "urql";
+import { APP_LOCAL_STORAGE_PREFIX } from "../app-local-storage-prefix";
+import { clearLocalStorageWithPrefix } from "../functions/clear-local-storage";
 import { graphql } from "../graphql-client";
 import { useIsLoggedIn } from "./use-is-logged-in";
 import { useLogger } from "./use-logger";
@@ -19,7 +22,7 @@ export function useLogout() {
     `),
   );
 
-  const startLogout = async () => {
+  const startLogout = useCallback(async () => {
     presentIonLoading("Logging out...");
     const result = await logoutMutation({});
     if (result.error?.networkError) {
@@ -30,7 +33,18 @@ export function useLogout() {
     }
     retriggerLogInQuery();
     dismissIonLoading();
-  };
+    if (result.data?.logout) {
+      logger("Cleared all impromat prefixed localStorage keys");
+      clearLocalStorageWithPrefix(APP_LOCAL_STORAGE_PREFIX);
+    }
+  }, [
+    dismissIonLoading,
+    displayToast,
+    logger,
+    logoutMutation,
+    presentIonLoading,
+    retriggerLogInQuery,
+  ]);
 
   const triggerLogout = async (params?: { force: boolean }) => {
     if (!isLoggedIn) {

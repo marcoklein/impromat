@@ -14,7 +14,7 @@ pageTest.describe("Workshops Page", () => {
       await page.getByRole("link", { name: "Open" }).last().click();
 
       // then
-      await expect(page).toHaveURL(`/nav/workshop/${workshopId}`);
+      await expect(page).toHaveURL(`/workshop/${workshopId}`);
     },
   );
 
