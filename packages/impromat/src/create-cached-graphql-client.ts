@@ -38,6 +38,9 @@ export function createCachedGraphqlClient(
         },
         updates: {
           Mutation: {
+            logout(_result, _args, cache, _info) {
+              cache.invalidate("Query");
+            },
             createElement(_result, _args, cache, _info) {
               cache.invalidate("Query", "elements");
               invalidateMeUser(cache, "elements");
