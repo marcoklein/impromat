@@ -22,7 +22,7 @@ pageTest.describe("Library", () => {
       await libraryPage.goto();
       await libraryPage.createCustomElement(name);
       await libraryPage.goto();
-      await libraryPage.libraryTabLocator().click();
+      await libraryPage.clickMyElementsFilter();
       // then
       await expect(page.getByText(new RegExp(name))).toBeVisible();
     },

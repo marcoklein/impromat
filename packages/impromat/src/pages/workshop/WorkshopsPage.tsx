@@ -1,5 +1,5 @@
-import { IonButton, IonIcon } from "@ionic/react";
-import { add, filter } from "ionicons/icons";
+import { IonButton, IonContent, IonFab, IonIcon, IonLabel } from "@ionic/react";
+import { filter } from "ionicons/icons";
 import { useMemo } from "react";
 import { useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
@@ -91,13 +91,8 @@ export const WorkshopsPage: React.FC = () => {
 
   return (
     <PageScaffold
-      title="Workshops"
-      toolbarButtons={
-        <IonButton onClick={() => presentWorkshopInputDialog()}>
-          <IonIcon slot="icon-only" icon={add}></IonIcon>
-        </IonButton>
-      }
-      bottomToolbar={
+      customContentWrapper
+      secondaryToolbar={
         <>
           {FEATURE_WORKSHOPS_FILTER_BAR && (
             <WorkshopsFilterBar
@@ -120,50 +115,62 @@ export const WorkshopsPage: React.FC = () => {
         queryResult={workshopsQueryResult}
         reexecuteQuery={reexecuteWorkshopsQuery}
       >
-        {availableWorkshops?.length ? (
-          <VirtualCardGrid
-            scrollStoreKey="workshops-page"
-            isFetching={false}
-            items={availableWorkshops}
-            itemContent={(_index, workshop) => (
-              <WorkshopPreviewCard
-                workshopFragment={workshop}
-              ></WorkshopPreviewCard>
-            )}
-          ></VirtualCardGrid>
-        ) : !userWorkshopsFilterInput.liked ||
-          !userWorkshopsFilterInput.owned ? (
-          <div
-            className="ion-padding"
-            style={{
-              minHeight: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <p>The current filter selection returns no workshops</p>
-              <IonButton
-                expand="full"
-                onClick={() => {
-                  setUserWorkshopsFilterInput({
-                    liked: true,
-                    owned: true,
-                    isPublic: true,
-                  });
-                }}
-              >
-                <IonIcon slot="start" icon={filter}></IonIcon>
-                Clear Filters
-              </IonButton>
+        <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
+          <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonButton
+              color="primary"
+              onClick={() => presentWorkshopInputDialog()}
+            >
+              <IonLabel>New Workshop</IonLabel>
+            </IonButton>
+          </IonFab>
+          {availableWorkshops?.length ? (
+            <VirtualCardGrid
+              scrollStoreKey="workshops-page"
+              isFetching={
+                workshopsQueryResult.fetching || workshopsQueryResult.stale
+              }
+              items={availableWorkshops}
+              itemContent={(_index, workshop) => (
+                <WorkshopPreviewCard
+                  workshopFragment={workshop}
+                ></WorkshopPreviewCard>
+              )}
+            ></VirtualCardGrid>
+          ) : !userWorkshopsFilterInput.liked ||
+            !userWorkshopsFilterInput.owned ? (
+            <div
+              className="ion-padding"
+              style={{
+                minHeight: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <p>The current filter selection returns no workshops</p>
+                <IonButton
+                  expand="full"
+                  onClick={() => {
+                    setUserWorkshopsFilterInput({
+                      liked: true,
+                      owned: true,
+                      isPublic: true,
+                    });
+                  }}
+                >
+                  <IonIcon slot="start" icon={filter}></IonIcon>
+                  Clear Filters
+                </IonButton>
+              </div>
             </div>
-          </div>
-        ) : (
-          <WorkshopCreateFirstComponent
-            onCreateWorkshopClick={() => presentWorkshopInputDialog()}
-          ></WorkshopCreateFirstComponent>
-        )}
+          ) : (
+            <WorkshopCreateFirstComponent
+              onCreateWorkshopClick={() => presentWorkshopInputDialog()}
+            ></WorkshopCreateFirstComponent>
+          )}
+        </IonContent>
       </PageContentLoaderComponent>
     </PageScaffold>
   );

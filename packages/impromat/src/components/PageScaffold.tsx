@@ -24,7 +24,7 @@ interface ContainerProps extends PropsWithChildren {
    * @default false
    */
   customContentWrapper?: boolean;
-  bottomToolbar?: JSX.Element | null;
+  secondaryToolbar?: JSX.Element | null;
   footer?: JSX.Element | null;
   showProgressBar?: boolean;
 }
@@ -36,7 +36,7 @@ export const PageScaffold: React.FC<ContainerProps> = ({
   children,
   title,
   noHeader,
-  bottomToolbar,
+  secondaryToolbar,
   customContentWrapper,
   toolbarButtons,
   defaultBackHref,
@@ -58,7 +58,7 @@ export const PageScaffold: React.FC<ContainerProps> = ({
               <IonButtons slot="end">{toolbarButtons}</IonButtons>
             </IonToolbar>
           )}
-          {bottomToolbar}
+          {secondaryToolbar}
         </IonHeader>
       )}
       {customContentWrapper ? children : <IonContent>{children}</IonContent>}

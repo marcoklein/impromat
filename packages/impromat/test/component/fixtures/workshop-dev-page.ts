@@ -7,8 +7,8 @@ export class WorkshopDevPage extends DevPage {
   readonly optionsLocator: Locator;
   readonly addFirstElementLocator: Locator;
   readonly elementSelector: Locator;
-  readonly addFabButtonToggleLocator: Locator;
   readonly addElementButtonLocator: Locator;
+  readonly addSectionButtonLocator: Locator;
   readonly addToLikesButtonLocator: Locator;
   readonly removeFromLikesButtonLocator: Locator;
 
@@ -22,14 +22,15 @@ export class WorkshopDevPage extends DevPage {
       .getByRole("heading")
       .getByText("Freeze")
       .first();
-    this.addFabButtonToggleLocator = page
-      .locator("ion-fab-button")
-      .getByRole("img")
-      .locator("svg");
 
-    this.addElementButtonLocator = page
-      .locator("ion-fab-list")
-      .getByRole("link", { name: "Element" });
+    this.addElementButtonLocator = page.getByRole("link", {
+      name: "Element",
+      exact: true,
+    });
+    this.addSectionButtonLocator = page.getByRole("button", {
+      name: "Section",
+      exact: true,
+    });
 
     this.addToLikesButtonLocator = page.getByRole("button", {
       name: "Add to likes.",
@@ -44,12 +45,12 @@ export class WorkshopDevPage extends DevPage {
   }
 
   async goto(workshopId: string) {
-    await this.page.goto(`/nav/workshop/${workshopId}`);
+    await this.page.goto(`/workshop/${workshopId}`);
   }
 
   async gotoElementFromSearch() {
     const page = this.page;
-    await this.clickLocatorInFabMenu(this.addElementButtonLocator);
+    await this.addElementButtonLocator.click();
     await new LibraryDevPage(page).gotoFirstElementFromSearch();
   }
 
@@ -64,11 +65,7 @@ export class WorkshopDevPage extends DevPage {
   async addSection(name: string) {
     const page = this.page;
 
-    const addSectionLocator = page
-      .locator("ion-fab-list")
-      .getByRole("button", { name: "Section" });
-
-    await this.clickLocatorInFabMenu(addSectionLocator);
+    await this.addSectionButtonLocator.click();
 
     await page.locator('input[type="text"]').click();
     await page.locator('input[type="text"]').fill(name);
@@ -105,7 +102,7 @@ export class WorkshopDevPage extends DevPage {
   async openLibrary() {
     const page = this.page;
 
-    await this.clickLocatorInFabMenu(this.addElementButtonLocator);
+    await this.addElementButtonLocator.click();
 
     return new LibraryDevPage(page);
   }
@@ -116,15 +113,6 @@ export class WorkshopDevPage extends DevPage {
     await page.getByRole("button", { name: "Rename" }).click();
     await page.locator('input[type="text"]').fill(newName);
     await page.getByRole("button", { name: "Save" }).click();
-  }
-
-  protected async clickLocatorInFabMenu(locator: Locator) {
-    try {
-      await locator.click({ timeout: 1000 });
-    } catch {
-      await this.addFabButtonToggleLocator.click();
-      await locator.click();
-    }
   }
 
   async like() {

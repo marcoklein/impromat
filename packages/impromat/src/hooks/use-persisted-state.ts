@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { APP_LOCAL_STORAGE_PREFIX } from "../app-local-storage-prefix";
 import { useLogger } from "./use-logger";
 
 /**
- *
  * Alternative to `useState` to persist changes to `localStorage`.
  *
- * @param key
- * @param defaultValue
- * @returns
+ * @template T - The type of the state object.
+ * @param {string | undefined} key - The key to use for storing the state in localStorage.
+ * @param {Required<T>} defaultValue - The default value for the state object.
+ * @param {string} [prefix="impromat"] - The prefix to use for the key in localStorage.
+ * @returns {[T, (valueToPersist: T) => void]} - A tuple containing the current state object and a function to update and persist the state object.
  */
 export function usePersistedState<
   T extends Partial<
@@ -16,8 +18,12 @@ export function usePersistedState<
 >(
   key: string | undefined,
   defaultValue: Required<T>,
+  prefix = APP_LOCAL_STORAGE_PREFIX,
 ): [T, (valueToPersist: T) => void] {
   const logger = useLogger("usePersistedState");
+  if (key) {
+    key = `${prefix}${key}`;
+  }
   const [state, setState] = useState<T>(() => {
     logger("key=%s: loading initial state", key);
     if (!key) return defaultValue;
