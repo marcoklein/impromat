@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.53.0
+
+### Minor Changes
+
+- a886461: Show number of results for a specific tag.
+- 99351c3: Replace floating action button with bottom toolbar in workshop page
+- 1b6eb2e: Enhance exercise filter
+- a48f95b: Add display language switch to profile page
+- 99351c3: Show sticky header for elements bar in workshop page
+- 99351c3: Replace FAB button in workshops page with button
+- 1b6eb2e: Disable animations
+- 99351c3: Show workshop page as standalone page
+
+### Patch Changes
+
+- 99351c3: Fix workshops page not showing all elements when scrolling
+- 99351c3: Delete impromat local storage entries
+- Updated dependencies [a886461]
+  - impromat-api@0.22.0
+
 ## 0.52.0
 
 ### Minor Changes

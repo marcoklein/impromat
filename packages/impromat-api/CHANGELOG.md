@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.22.0
+
+### Minor Changes
+
+- a886461: Show number of results for a specific tag.
+
 ## 0.21.0
 
 ### Minor Changes
