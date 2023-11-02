@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { add, chevronUp, filter, informationCircle } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
@@ -24,7 +25,6 @@ import {
   routeLibraryElement,
 } from "../../routes/library-routes";
 import { ElementFilterBar } from "./components/ElementFilterBar";
-import { useTranslation } from "react-i18next";
 
 const LibraryPageQuery = graphql(`
   query SearchElements(

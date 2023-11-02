@@ -49,6 +49,8 @@ export type CreateWorkshopElementInput = {
 };
 
 export type CreateWorkshopInput = {
+  /** Date for which workshop is planned or was held. */
+  dateOfWorkshop?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   /** Publicly list workshop within impromat. Worshop must be public in order to list it. */
   isListed?: InputMaybe<Scalars['Boolean']>;
@@ -80,7 +82,7 @@ export type DuplicateWorkshopInput = {
 export type Element = {
   __typename?: 'Element';
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   /** Set if the element was imported from improbib, a project that collects existing improv resources. */
   improbibIdentifier?: Maybe<Scalars['String']>;
@@ -175,8 +177,10 @@ export type ElementSnapshot = {
 
 export type ElementTag = {
   __typename?: 'ElementTag';
+  /** Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter. */
+  count: Scalars['Float'];
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
@@ -438,6 +442,8 @@ export type UpdateWorkshopElementInput = {
 };
 
 export type UpdateWorkshopInput = {
+  /** Date for which workshop is planned or was held. */
+  dateOfWorkshop?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   /** Publicly list workshop within impromat. Worshop must be public in order to list it. */
@@ -467,7 +473,7 @@ export type UpdateWorkshopSectionInput = {
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   /** Elements owned by this user. */
   elements: Array<Element>;
   favoriteElements: Array<UserFavoriteElement>;
@@ -530,7 +536,9 @@ export type Workshop = {
   /** If true, the client is authorized to edit the workshop. */
   canEdit?: Maybe<Scalars['Boolean']>;
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  /** Optional metadata date when this workshop was planned (or held). */
+  dateOfWorkshop?: Maybe<Scalars['DateTime']>;
+  deleted?: Maybe<Scalars['Boolean']>;
   description?: Maybe<Scalars['String']>;
   elementRecommendations: Array<Element>;
   id: Scalars['ID'];
@@ -553,7 +561,7 @@ export type WorkshopElement = {
   __typename?: 'WorkshopElement';
   basedOn: Element;
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   note?: Maybe<Scalars['String']>;
   section: WorkshopSection;
@@ -571,7 +579,7 @@ export type WorkshopSection = {
   __typename?: 'WorkshopSection';
   color?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  deleted: Scalars['Boolean'];
+  deleted?: Maybe<Scalars['Boolean']>;
   elements: Array<WorkshopElement>;
   id: Scalars['ID'];
   isCollapsed: Scalars['Boolean'];

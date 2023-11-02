@@ -104,9 +104,26 @@ export const TRANSLATIONS = {
       Cancel: "Cancel",
     },
     SearchInputChip: { Search: "Search" },
-
     AboutPage: {
       About: "About this project",
+    },
+    AccountSignedIn: {
+      "Display Name": "Display Name",
+      "Change via menu on top right": "Change via menu on top right",
+      Logout: "Logout",
+      Profile: "Profile",
+    },
+    AccountLanguageSection: {
+      "Display Language": "Display Language",
+      "Select Language": "Select Language",
+      English: "English",
+      German: "German",
+      Save: "Save",
+      Cancel: "Cancel",
+      Language: "Language",
+      showAdditionalLanguageContent: "Show German content",
+      showAdditionalLanguageNote:
+        "As there is also German exercises and games available you can choose to show the German content as well.",
     },
   },
   de: {
@@ -214,6 +231,26 @@ export const TRANSLATIONS = {
     SearchInputChip: { Search: "Suche" },
     AboutPage: {
       About: "Über das Projekt",
+    },
+    AccountSignedIn: {
+      "Only workshops and elements with your selected languages will be shown.":
+        "Nur Workshops und Elemente mit deinen ausgewählten Sprachen werden angezeigt.",
+      "Display Name": "Anzeigename",
+      "Change via menu on top right": "Ändere über das Menü oben rechts",
+      Profile: "Profil",
+      Logout: "Abmelden",
+    },
+    AccountLanguageSection: {
+      "Display Language": "Anzeigesprache",
+      "Select Language": "Sprache auswählen",
+      English: "Englisch",
+      German: "Deutsch",
+      Save: "Speichern",
+      Cancel: "Abbrechen",
+      Language: "Sprache",
+      showAdditionalLanguageContent: "Auch englische Inhalte anzeigen",
+      showAdditionalLanguageNote:
+        "Da es auch englische Übungen und Spiele gibt, kannst du auswählen, ob du die englischen Inhalte auch sehen willst.",
     },
   },
 };

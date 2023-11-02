@@ -42,10 +42,14 @@ const updateSW = registerSW({
 
 i18n.use(initReactI18next).init({
   resources: TRANSLATIONS,
-  lng: "de",
+  lng: localStorage.getItem("language") || "en",
   fallbackLng: "en",
   interpolation: {
     escapeValue: false,
+  },
+  saveMissing: true,
+  missingKeyHandler: (lng, ns, key, fallbackValue) => {
+    console.warn("Missing translation", { lng, ns, key, fallbackValue });
   },
 });
 
