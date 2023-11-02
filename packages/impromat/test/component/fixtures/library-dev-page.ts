@@ -102,10 +102,9 @@ export class LibraryDevPage extends DevPage {
     if (options.isPublic) {
       await page
         .getByRole("checkbox", {
-          name: "Add to Public Impromat Elements",
+          name: "Add to Community Impromat Elements",
           exact: true,
         })
-        .getByText("Contribute your element to the public Impromat community.")
         .click();
     }
   }
