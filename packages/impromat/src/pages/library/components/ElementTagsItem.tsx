@@ -17,6 +17,7 @@ import { useRef, useState } from "react";
 import { useQuery } from "urql";
 import { getFragmentData, graphql } from "../../../graphql-client";
 import { ElementTagsItem_ElementTagFragment } from "../../../graphql-client/graphql";
+import { useTranslation } from "react-i18next";
 
 const ElementTagsItem_Query = graphql(`
   query LibraryCreateCustomElementTags_Query($filter: ElementTagsFilterInput!) {
@@ -76,6 +77,8 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
     );
     onTagsChange(newTags);
   };
+  const { t } = useTranslation("ElementTagsItem");
+
   return (
     <>
       <IonItem className="ion-text-wrap">
@@ -87,7 +90,7 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
             </IonChip>
           ))}
         </div>
-        <IonButton id="open-modal">Add Tag</IonButton>
+        <IonButton id="open-modal">{t("Add Tag")}</IonButton>
       </IonItem>
       <IonModal
         ref={modal}
@@ -101,10 +104,10 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
       >
         <IonContent className="ion-padding">
           <IonToolbar>
-            <IonTitle>Add Tag</IonTitle>
+            <IonTitle>{t("Add Tag")}</IonTitle>
             <IonButtons slot="end">
               <IonButton onClick={() => modal.current?.dismiss()}>
-                Cancel
+                {t("Cancel")}
               </IonButton>
             </IonButtons>
           </IonToolbar>
@@ -115,7 +118,7 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
               reexecuteElementTagsQuery();
             }}
             onClick={() => modal.current?.setCurrentBreakpoint(0.75)}
-            placeholder="Enter Tag"
+            placeholder={t("Enter Tag")}
           ></IonSearchbar>
           <IonList>
             {elementTags?.map((tag) => (

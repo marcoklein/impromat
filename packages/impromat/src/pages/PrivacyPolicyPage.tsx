@@ -16,7 +16,7 @@ export const PrivacyPolicyPage: React.FC = () => {
 
   return (
     <PageScaffold
-      title={t("Privacy Policy")}
+      title={t("Privacy Policy", { ns: "common" })}
       customContentWrapper
       defaultBackHref={routeHome()}
     >

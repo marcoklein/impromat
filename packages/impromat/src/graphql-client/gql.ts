@@ -34,8 +34,9 @@ const documents = {
     "\n  fragment CommunityPage_Element on Element {\n    id\n    ...ElementPreviewItem_Element\n  }\n": types.CommunityPage_ElementFragmentDoc,
     "\n  query CommunityPageQuery(\n    $workshopsWhereInput: WorkshopsWhereInput\n    $elementsFilterInput: ElementsFilterInput\n    $take: Int!\n  ) {\n    workshops(where: $workshopsWhereInput, take: $take) {\n      ...CommunityPage_Workshop\n    }\n    elements(filter: $elementsFilterInput, take: $take) {\n      element {\n        ...CommunityPage_Element\n      }\n    }\n  }\n": types.CommunityPageQueryDocument,
     "\n  query AccountPage_Query($userId: ID!) {\n    user(id: $userId) {\n      id\n      ...AccountOptionsMenu_User\n      ...AccountSignedIn_User\n    }\n  }\n": types.AccountPage_QueryDocument,
+    "\n  fragment AccountLanguageSection_User on User {\n    id\n    languageCodes\n  }\n": types.AccountLanguageSection_UserFragmentDoc,
     "\n  fragment AccountOptionsMenu_User on User {\n    id\n    name\n  }\n": types.AccountOptionsMenu_UserFragmentDoc,
-    "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n  }\n": types.AccountSignedIn_UserFragmentDoc,
+    "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n    ...AccountLanguageSection_User\n  }\n": types.AccountSignedIn_UserFragmentDoc,
     "\n  query LibraryCreateCustomElement_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n  }\n": types.LibraryCreateCustomElement_QueryDocument,
     "\n  mutation UpdateElementMutation($input: UpdateElementInput!) {\n    updateElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateElementMutationDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      id\n    }\n  }\n": types.CreateElementMutationDocument,
@@ -164,11 +165,15 @@ export function graphql(source: "\n  query AccountPage_Query($userId: ID!) {\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  fragment AccountLanguageSection_User on User {\n    id\n    languageCodes\n  }\n"): (typeof documents)["\n  fragment AccountLanguageSection_User on User {\n    id\n    languageCodes\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  fragment AccountOptionsMenu_User on User {\n    id\n    name\n  }\n"): (typeof documents)["\n  fragment AccountOptionsMenu_User on User {\n    id\n    name\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n  }\n"): (typeof documents)["\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n  }\n"];
+export function graphql(source: "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n    ...AccountLanguageSection_User\n  }\n"): (typeof documents)["\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n    ...AccountLanguageSection_User\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

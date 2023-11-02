@@ -15,8 +15,10 @@ function generateMarkdownTypescript {
 
 echo "Generating markdown files"
 
-generateMarkdownTypescript "legal.de.md" "legalMarkdownDe"
+
 generateMarkdownTypescript "legal.en.md" "legalMarkdownEn"
-generateMarkdownTypescript "privacy-policy.de.md" "privacyPolicyMarkdownDe"
+generateMarkdownTypescript "legal.de.md" "legalMarkdownDe"
 generateMarkdownTypescript "privacy-policy.en.md" "privacyPolicyMarkdownEn"
+generateMarkdownTypescript "privacy-policy.de.md" "privacyPolicyMarkdownDe"
 generateMarkdownTypescript "about.en.md" "aboutMarkdownEn"
+generateMarkdownTypescript "about.de.md" "aboutMarkdownDe"

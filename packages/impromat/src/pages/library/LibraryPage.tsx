@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { chevronUp, filter, informationCircle } from "ionicons/icons";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
@@ -122,6 +123,8 @@ export const LibraryPage: React.FC = () => {
     false,
   );
 
+  const { t } = useTranslation("LibraryPage");
+
   return (
     <PageScaffold
       customContentWrapper
@@ -205,7 +208,7 @@ export const LibraryPage: React.FC = () => {
                   setKeepFilterBarOpen(event.detail.checked)
                 }
               >
-                Keep filter expanded
+                {t("Keep filter expanded")}
               </IonCheckbox>
               <div style={{ flex: 1 }}></div>
               <IonButton
@@ -250,7 +253,7 @@ export const LibraryPage: React.FC = () => {
             searchText.length > 0 && (
               <IonList>
                 <InfoItemComponent
-                  message="No matching elements found."
+                  message={t("No matching elements found.")}
                   icon={informationCircle}
                   color="warning"
                 ></InfoItemComponent>
@@ -290,9 +293,9 @@ export const LibraryPage: React.FC = () => {
             !searchElementsQueryResult.data?.searchElements.length &&
             !searchText.length && (
               <InfoItemComponent
-                message={
-                  "Use the search bar to find elements from various sources."
-                }
+                message={t(
+                  "Use the search bar to find elements from various sources.",
+                )}
                 icon={informationCircle}
               ></InfoItemComponent>
             )}

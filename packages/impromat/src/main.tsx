@@ -8,6 +8,7 @@ import { App } from "./App";
 import { AppWrapper } from "./AppWrapper";
 import { rootLogger } from "./logger";
 import reportWebVitals from "./reportWebVitals";
+import { TRANSLATIONS } from "./translations";
 
 if (process.env.NODE_ENV === "development") {
   localStorage.setItem("debug", "impromat:*");
@@ -40,31 +41,15 @@ const updateSW = registerSW({
 });
 
 i18n.use(initReactI18next).init({
-  resources: {
-    en: {
-      // namespaces have same name as component
-      NotFoundPage: {
-        "Page does not exist": "Ups, this page does not exist.",
-        "Go to home page": "Go to home page",
-      },
-      PrivacyPolicyPage: {
-        "Privacy Policy": "Privacy Policy",
-      },
-    },
-    de: {
-      NotFoundPage: {
-        "Page does not exist": "Ups, diese Seite existiert nicht.",
-        "Go to home page": "Zur Startseite",
-      },
-      PrivacyPolicyPage: {
-        "Privacy Policy": "Datenschutzerklärung",
-      },
-    },
-  },
-  lng: "en",
+  resources: TRANSLATIONS,
+  lng: localStorage.getItem("language") || "en",
   fallbackLng: "en",
   interpolation: {
     escapeValue: false,
+  },
+  saveMissing: true,
+  missingKeyHandler: (lng, ns, key, fallbackValue) => {
+    console.warn("Missing translation", { lng, ns, key, fallbackValue });
   },
 });
 

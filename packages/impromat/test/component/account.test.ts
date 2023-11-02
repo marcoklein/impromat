@@ -9,7 +9,7 @@ pageTest.describe("Account Page", () => {
     await accountPage.login();
     await accountPage.goto();
     // then
-    await expect(page.getByText(/You are signed in/)).toBeVisible();
+    await expect(page.getByText(/Logout/).first()).toBeVisible();
   });
 
   pageTest(

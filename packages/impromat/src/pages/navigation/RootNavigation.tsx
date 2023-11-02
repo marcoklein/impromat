@@ -33,6 +33,7 @@ import { AccountPage } from "../account/AccountPage";
 import { LibraryPage } from "../library/LibraryPage";
 import { WorkshopsPage } from "../workshop/WorkshopsPage";
 import { HIDE_MENU_SIZE } from "./responsive-navigation";
+import { useTranslation } from "react-i18next";
 
 export interface TabConfig {
   name: string;
@@ -90,6 +91,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
   useStateChangeLogger(workshopId, "workshopId", logger);
 
   const defaultTab = useMemo(() => ROOT_TABS.HOME, []);
+  const { t } = useTranslation("RootNavigation");
 
   return (
     <>
@@ -137,7 +139,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
           {Object.entries(ROOT_TABS).map(([key, value]) => (
             <IonTabButton key={key} tab={key} href={`${value.route}`}>
               <IonIcon icon={value.icon}></IonIcon>
-              <IonLabel>{value.name}</IonLabel>
+              <IonLabel>{t(value.name)}</IonLabel>
             </IonTabButton>
           ))}
         </IonTabBar>

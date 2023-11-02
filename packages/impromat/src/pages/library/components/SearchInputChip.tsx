@@ -1,6 +1,7 @@
 import { IonChip, IonIcon, IonInput } from "@ionic/react";
 import { search } from "ionicons/icons";
 import React, { useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ContainerProps {
   input: string;
@@ -24,6 +25,7 @@ export const SearchInputChip: React.FC<ContainerProps> = ({
     }
     return "3rem";
   }, [isActive]);
+  const { t } = useTranslation("SearchInputChip");
 
   return (
     <IonChip
@@ -35,7 +37,7 @@ export const SearchInputChip: React.FC<ContainerProps> = ({
       <IonIcon icon={search}></IonIcon>
       <IonInput
         ref={inputRef}
-        placeholder="Search"
+        placeholder={t("Search")}
         onIonFocus={() => {
           setIsSearchFocused(true);
         }}
