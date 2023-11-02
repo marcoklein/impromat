@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.53.1
+
+### Patch Changes
+
+- 66d56a2: Invalidate cache on logout
+
 ## 0.53.0
 
 ### Minor Changes
