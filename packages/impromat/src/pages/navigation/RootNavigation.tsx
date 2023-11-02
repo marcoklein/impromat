@@ -22,7 +22,6 @@ import {
   routeLegal,
   routePrivacyPolicy,
   routeRootNavigation,
-  routeWorkshop,
   routeWorkshops,
 } from "../../routes/shared-routes";
 import { AboutPage } from "../AboutPage";
@@ -32,7 +31,6 @@ import { LegalPage } from "../LegalPage";
 import { PrivacyPolicyPage } from "../PrivacyPolicyPage";
 import { AccountPage } from "../account/AccountPage";
 import { LibraryPage } from "../library/LibraryPage";
-import { WorkshopPage } from "../workshop/WorkshopPage";
 import { WorkshopsPage } from "../workshop/WorkshopsPage";
 import { HIDE_MENU_SIZE } from "./responsive-navigation";
 import { useTranslation } from "react-i18next";
@@ -136,7 +134,6 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
             exact
             component={CommunityPage}
           ></Route>
-          <Route path={routeWorkshop()} exact component={WorkshopPage}></Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom" className={`ion-hide-${HIDE_MENU_SIZE}-up`}>
           {Object.entries(ROOT_TABS).map(([key, value]) => (

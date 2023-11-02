@@ -2,17 +2,14 @@ import {
   IonButton,
   IonCard,
   IonCardContent,
-  IonFab,
-  IonFabButton,
-  IonFabList,
   IonIcon,
   IonItem,
   IonLabel,
   IonLoading,
   IonText,
+  IonToolbar,
 } from "@ionic/react";
 import {
-  add,
   calendar,
   globe,
   heart,
@@ -177,6 +174,29 @@ export const WorkshopPage: React.FC = () => {
       defaultBackHref={routeWorkshops()}
       showProgressBar={isReorderingElements}
       title={`Workshop ${workshop && !workshop.canEdit ? "(View)" : ""}`}
+      footer={
+        workshop?.canEdit ? (
+          <IonToolbar>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <IonLabel style={{ marginRight: "0.5rem" }}>Add</IonLabel>
+              <div style={{ display: "flex" }}>
+                <IonButton onClick={() => onCreateSection()} size="small">
+                  Section
+                </IonButton>
+                <IonButton routerLink={routeLibrary()} size="small">
+                  Element
+                </IonButton>
+              </div>
+            </div>
+          </IonToolbar>
+        ) : undefined
+      }
       toolbarButtons={
         <>
           {workshop && isLoggedIn && (
@@ -233,20 +253,6 @@ export const WorkshopPage: React.FC = () => {
       >
         {workshop && (
           <>
-            {workshop.canEdit && (
-              <IonFab slot="fixed" vertical="bottom" horizontal="end">
-                <IonFabButton>
-                  <IonIcon icon={add}></IonIcon>
-                </IonFabButton>
-                <IonFabList side="start">
-                  <IonButton routerLink={routeLibrary()}>Element</IonButton>
-                  <IonButton color="dark" onClick={() => onCreateSection()}>
-                    Section
-                  </IonButton>
-                </IonFabList>
-              </IonFab>
-            )}
-
             <div className="ion-padding-horizontal">
               <h1 className="ion-no-padding ion-no-margin ion-padding-vertical">
                 {workshop.name}

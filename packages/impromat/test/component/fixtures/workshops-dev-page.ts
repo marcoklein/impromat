@@ -20,7 +20,7 @@ export class WorkshopsDevPage extends DevPage {
     await page.waitForSelector(`text="${name}"`);
     await page.waitForTimeout(1000);
     const workshopId = /[^/]*?$/.exec(page.url())![0];
-    await expect(page).toHaveURL(`/nav/workshop/${workshopId}`, {
+    await expect(page).toHaveURL(`/workshop/${workshopId}`, {
       timeout: 5000,
     });
     return workshopId;

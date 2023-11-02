@@ -1,3 +1,6 @@
+/**
+ * @deprecated Replace with `i18n` package.
+ */
 export const TRANSLATIONS = {
   // shared
   inputMessageEnterValue: (thingToEnter: string) =>

@@ -38,7 +38,8 @@ pageTest.describe("Workshop Sharing", () => {
         await page.goto(workshopUrl);
         // then
         await workshopPage.expectToolbarTextToBe("Workshop (View)");
-        await expect(workshopPage.addFabButtonToggleLocator).toBeHidden();
+        await expect(workshopPage.addSectionButtonLocator).toBeHidden();
+        await expect(workshopPage.addElementButtonLocator).toBeHidden();
         await expect(workshopPage.addFirstElementLocator).toBeHidden();
       },
     );
@@ -53,7 +54,8 @@ pageTest.describe("Workshop Sharing", () => {
         await page.goto(workshopUrl);
         // then
         await workshopPage.expectToolbarTextToBe("Workshop (View)");
-        await expect(workshopPage.addFabButtonToggleLocator).toBeHidden();
+        await expect(workshopPage.addSectionButtonLocator).toBeHidden();
+        await expect(workshopPage.addElementButtonLocator).toBeHidden();
         await expect(workshopPage.addFirstElementLocator).toBeHidden();
       },
     );
@@ -68,7 +70,8 @@ pageTest.describe("Workshop Sharing", () => {
         await page.goto(workshopUrl);
         // then
         await workshopPage.expectToolbarTextToBe("Workshop (View)");
-        await expect(workshopPage.addFabButtonToggleLocator).toBeHidden();
+        await expect(workshopPage.addSectionButtonLocator).toBeHidden();
+        await expect(workshopPage.addElementButtonLocator).toBeHidden();
         await expect(workshopPage.addFirstElementLocator).toBeHidden();
       },
     );
@@ -110,7 +113,8 @@ pageTest.describe("Workshop Sharing", () => {
       await page.goto(workshopUrl);
       // then
       await workshopPage.expectToolbarTextToBe("Workshop (View)");
-      await expect(workshopPage.addFabButtonToggleLocator).toBeHidden();
+      await expect(workshopPage.addSectionButtonLocator).toBeHidden();
+      await expect(workshopPage.addElementButtonLocator).toBeHidden();
       await expect(workshopPage.addFirstElementLocator).toBeHidden();
     },
   );

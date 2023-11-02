@@ -1,9 +1,17 @@
+import { Locator, Page } from "@playwright/test";
 import { DevPage } from "./dev-page.js";
 
 const NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX =
   /^((?!library-add-custom-element).)*$/;
 
 export class LibraryDevPage extends DevPage {
+  readonly createElementButtonLocator: Locator;
+
+  constructor(page: Page) {
+    super(page);
+    this.createElementButtonLocator = page.getByText("Create Element");
+  }
+
   async goto() {
     await this.page.goto(`/nav/elements`);
   }
@@ -43,8 +51,11 @@ export class LibraryDevPage extends DevPage {
     await this.page.locator("ion-chip").filter({ hasText: "Like" }).click();
   }
 
-  libraryTabLocator() {
-    return this.page.locator("ion-chip").filter({ hasText: "My Element" });
+  async clickMyElementsFilter() {
+    await this.page
+      .locator("ion-chip")
+      .filter({ hasText: "My Element" })
+      .click();
   }
 
   tabLocator(name: string | RegExp) {
@@ -84,10 +95,8 @@ export class LibraryDevPage extends DevPage {
     name: string;
     isPublic: boolean;
   }) {
-    const libraryPage = this;
     const page = this.page;
-    await libraryPage.libraryTabLocator().click();
-    await page.locator("ion-fab-button").last().click();
+    await this.createElementButtonLocator.click();
     await page.getByRole("textbox", { name: "Name" }).fill(options.name);
 
     if (options.isPublic) {
