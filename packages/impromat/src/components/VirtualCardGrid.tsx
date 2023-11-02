@@ -5,6 +5,7 @@ import {
   VirtuosoGrid,
   VirtuosoGridHandle,
 } from "react-virtuoso";
+import { APP_LOCAL_STORAGE_PREFIX } from "../app-local-storage-prefix";
 import { useComponentLogger } from "../hooks/use-component-logger";
 import { usePersistedState } from "../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../hooks/use-state-change-logger";
@@ -115,7 +116,10 @@ export const VirtualCardGrid = <ItemData, Context>({
           };
           logger("Save scroll position %o", scrollOptions);
           logger("isRestoringScrollPosition %o", isRestoringScrollPosition);
-          localStorage.setItem(scrollStoreKey, JSON.stringify(scrollOptions));
+          localStorage.setItem(
+            `${APP_LOCAL_STORAGE_PREFIX}${scrollStoreKey}`,
+            JSON.stringify(scrollOptions),
+          );
         }
       }}
       style={{

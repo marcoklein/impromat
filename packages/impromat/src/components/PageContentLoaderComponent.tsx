@@ -1,14 +1,8 @@
-import {
-  IonButton,
-  IonIcon,
-  IonRefresher,
-  IonRefresherContent,
-  IonSpinner,
-  IonText,
-} from "@ionic/react";
+import { IonButton, IonIcon, IonSpinner, IonText } from "@ionic/react";
 import { reload } from "ionicons/icons";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useCallback, useMemo } from "react";
 import { OperationContext, UseQueryState } from "urql";
+import { Refresher } from "./Refresher";
 
 interface ContainerProps extends PropsWithChildren {
   /**
@@ -29,14 +23,17 @@ interface ContainerProps extends PropsWithChildren {
  * @returns
  */
 export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
-  queryResult,
+  queryResult: queryResultInput,
   reexecuteQuery,
   children,
 }) => {
-  if (!Array.isArray(queryResult)) {
-    queryResult = [queryResult];
-  }
-  function reexecuteQueries() {
+  const queryResult = useMemo(
+    () =>
+      Array.isArray(queryResultInput) ? queryResultInput : [queryResultInput],
+    [queryResultInput],
+  );
+
+  const reexecuteQueries = useCallback(() => {
     if (Array.isArray(reexecuteQuery)) {
       for (const fn of reexecuteQuery) {
         fn({ requestPolicy: "network-only" });
@@ -44,70 +41,57 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
     } else {
       reexecuteQuery({ requestPolicy: "network-only" });
     }
-  }
-  function renderRefresher() {
-    return (
-      <IonRefresher
-        slot="fixed"
-        onIonRefresh={(event) => {
-          reexecuteQueries();
-          setTimeout(() => {
-            event.detail.complete();
-          }, 500);
-        }}
-      >
-        <IonRefresherContent></IonRefresherContent>
-      </IonRefresher>
-    );
-  }
+  }, [reexecuteQuery]);
 
-  const allHaveData = queryResult.every((result) => result.data);
-  const fetching = queryResult.some((result) => result.fetching);
-  const networkError = queryResult.some((result) => result.error?.networkError);
-  const nonNetworkError = queryResult.find(
-    (result) => !result.error?.networkError,
-  );
-  const error = networkError || nonNetworkError;
+  const { allHaveData, fetching, networkError, nonNetworkError, error } =
+    useMemo(() => {
+      const allHaveData = queryResult.every((result) => result.data);
+      const fetching = queryResult.some((result) => result.fetching);
+      const networkError = queryResult.some(
+        (result) => result.error?.networkError,
+      );
+      const nonNetworkError = queryResult.find(
+        (result) => !result.error?.networkError,
+      );
+      const error = networkError || nonNetworkError;
+      return { allHaveData, fetching, networkError, nonNetworkError, error };
+    }, [queryResult]);
 
-  if (allHaveData) {
-    return (
-      <>
-        {renderRefresher()}
-        {children}
-      </>
-    );
-  }
   return (
     <>
-      {renderRefresher()}
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {fetching && <IonSpinner></IonSpinner>}
-        {!fetching && error && (
-          <>
-            <div>
+      <Refresher onRefresh={reexecuteQueries}></Refresher>
+      {allHaveData ? (
+        children
+      ) : (
+        <div
+          style={{
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {fetching && <IonSpinner></IonSpinner>}
+          {!fetching && error && (
+            <>
               <div>
-                {networkError ? (
-                  <IonText>Network is not reachable.</IonText>
-                ) : (
-                  <IonText>
-                    Unknown error: {nonNetworkError?.error?.message}
-                  </IonText>
-                )}
+                <div>
+                  {networkError ? (
+                    <IonText>Network is not reachable.</IonText>
+                  ) : (
+                    <IonText>
+                      Unknown error: {nonNetworkError?.error?.message}
+                    </IonText>
+                  )}
+                </div>
+                <IonButton expand="full" onClick={() => reexecuteQueries()}>
+                  <IonIcon icon={reload} slot="start"></IonIcon> Retry
+                </IonButton>
               </div>
-              <IonButton expand="full" onClick={() => reexecuteQueries()}>
-                <IonIcon icon={reload} slot="start"></IonIcon> Retry
-              </IonButton>
-            </div>
-          </>
-        )}
-      </div>
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 };

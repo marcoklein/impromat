@@ -15,7 +15,6 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
-import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { graphql } from "../../graphql-client";
@@ -234,73 +233,68 @@ export const LibraryPage: React.FC = () => {
         </IonToolbar>
       }
     >
-      <PageContentLoaderComponent
-        queryResult={searchElementsQueryResult}
-        reexecuteQuery={reexecuteSearchElementsQuery}
-      >
-        <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
-          <IonFab slot="fixed" vertical="bottom" horizontal="end">
-            <IonButton
-              color="medium"
-              routerLink={routeLibraryCreateCustomElement()}
-            >
-              <IonLabel>Create Element</IonLabel>
-            </IonButton>
-          </IonFab>
-          {!searchElementsQueryResult.stale &&
-            !searchElementsQueryResult.fetching &&
-            !searchElementsQueryResult.data?.searchElements.length &&
-            searchText.length > 0 && (
-              <IonList>
-                <InfoItemComponent
-                  message={t("No matching elements found.")}
-                  icon={informationCircle}
-                  color="warning"
-                ></InfoItemComponent>
-              </IonList>
-            )}
-          {searchElementsQueryResult.data &&
-            searchElementsQueryResult.data.searchElements.length > 0 && (
-              <VirtualCardGrid
-                scrollStoreKey="search-element-tab-component"
-                isFetching={
-                  searchElementsQueryResult.fetching ||
-                  searchElementsQueryResult.stale
-                }
-                scrollToTop={scrollToTop}
-                endReached={() => {
-                  logger(
-                    "end reached, queryResult.stale=%s",
-                    searchElementsQueryResult.stale,
-                  );
-                  if (!searchElementsQueryResult.stale) {
-                    setPageNumber((currentPageNumber) => currentPageNumber + 1);
-                    logger("setting page number to %s", pageNumber + 1);
-                  }
-                }}
-                items={searchElementsQueryResult.data.searchElements ?? []}
-                itemContent={(_index, searchResult) => (
-                  <ElementPreviewCard
-                    routerLink={routeLibraryElement(searchResult.element.id)}
-                    elementFragment={searchResult.element}
-                    elementSearchResultFragment={searchResult}
-                  ></ElementPreviewCard>
-                )}
-              ></VirtualCardGrid>
-            )}
-          {!searchElementsQueryResult.fetching &&
-            !searchElementsQueryResult.stale &&
-            !searchElementsQueryResult.data?.searchElements.length &&
-            !searchText.length && (
+      <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonButton
+            color="medium"
+            routerLink={routeLibraryCreateCustomElement()}
+          >
+            <IonLabel>Create Element</IonLabel>
+          </IonButton>
+        </IonFab>
+        {!searchElementsQueryResult.stale &&
+          !searchElementsQueryResult.fetching &&
+          !searchElementsQueryResult.data?.searchElements.length &&
+          searchText.length > 0 && (
+            <IonList>
               <InfoItemComponent
-                message={t(
-                  "Use the search bar to find elements from various sources.",
-                )}
+                message={t("No matching elements found.")}
                 icon={informationCircle}
+                color="warning"
               ></InfoItemComponent>
-            )}
-        </IonContent>
-      </PageContentLoaderComponent>
+            </IonList>
+          )}
+        {searchElementsQueryResult.data &&
+          searchElementsQueryResult.data.searchElements.length > 0 && (
+            <VirtualCardGrid
+              scrollStoreKey="search-element-tab-component"
+              isFetching={
+                searchElementsQueryResult.fetching ||
+                searchElementsQueryResult.stale
+              }
+              scrollToTop={scrollToTop}
+              endReached={() => {
+                logger(
+                  "end reached, queryResult.stale=%s",
+                  searchElementsQueryResult.stale,
+                );
+                if (!searchElementsQueryResult.stale) {
+                  setPageNumber((currentPageNumber) => currentPageNumber + 1);
+                  logger("setting page number to %s", pageNumber + 1);
+                }
+              }}
+              items={searchElementsQueryResult.data.searchElements ?? []}
+              itemContent={(_index, searchResult) => (
+                <ElementPreviewCard
+                  routerLink={routeLibraryElement(searchResult.element.id)}
+                  elementFragment={searchResult.element}
+                  elementSearchResultFragment={searchResult}
+                ></ElementPreviewCard>
+              )}
+            ></VirtualCardGrid>
+          )}
+        {!searchElementsQueryResult.fetching &&
+          !searchElementsQueryResult.stale &&
+          !searchElementsQueryResult.data?.searchElements.length &&
+          !searchText.length && (
+            <InfoItemComponent
+              message={t(
+                "Use the search bar to find elements from various sources.",
+              )}
+              icon={informationCircle}
+            ></InfoItemComponent>
+          )}
+      </IonContent>
     </PageScaffold>
   );
 };
