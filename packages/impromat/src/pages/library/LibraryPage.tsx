@@ -71,7 +71,7 @@ export const LibraryPage: React.FC = () => {
 
   const trimmedSearchText = useMemo(() => searchText.trim(), [searchText]);
 
-  const [searchElementsQueryResult, reexecuteSearchElementsQuery] = useQuery({
+  const [searchElementsQueryResult] = useQuery({
     query: LibraryPageQuery,
     variables: {
       input: {
