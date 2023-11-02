@@ -16,6 +16,7 @@ import {
   graphql,
 } from "../../../graphql-client";
 import { useUpdateUserMutation } from "../../../hooks/use-update-user-mutation";
+import { InfoItemComponent } from "../../../components/InfoItemComponent";
 
 const AccountLanguageSection_User = graphql(`
   fragment AccountLanguageSection_User on User {
@@ -130,12 +131,20 @@ export const AccountLanguageSection: React.FC<ContainerProps> = ({
           checked={showAdditionalLanguage}
           onClick={onShowAdditionalLanguageClick}
         >
-          {t("showAdditionalLanguageContent")}
-          <div>
-            <IonNote>{t("showAdditionalLanguageNote")}</IonNote>
-          </div>
+          <IonLabel className="ion-text-wrap">
+            {t("showAdditionalLanguageContent")}
+            <div>
+              <IonNote>{t("showAdditionalLanguageNote")}</IonNote>
+            </div>
+          </IonLabel>
         </IonCheckbox>
       </IonItem>
+      {displayLanguageCode === "de" && (
+        <InfoItemComponent
+          color="warning"
+          message="Die deutsche Übersetzung ist noch unvollständig."
+        ></InfoItemComponent>
+      )}
     </>
   );
 };
