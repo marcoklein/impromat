@@ -236,10 +236,10 @@ export const LibraryPage: React.FC = () => {
       <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonButton
-            color="medium"
+            color="secondary"
             routerLink={routeLibraryCreateCustomElement()}
           >
-            <IonLabel>Create Element</IonLabel>
+            <IonLabel>{t("NewElement")}</IonLabel>
           </IonButton>
         </IonFab>
         {!searchElementsQueryResult.stale &&

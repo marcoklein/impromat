@@ -5,6 +5,7 @@ import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { routeLibraryElement } from "../routes/library-routes";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
+import { useTranslation } from "react-i18next";
 
 const ElementPreviewItem_ElementSearchResultFragment = graphql(`
   fragment ElementPreviewItem_ElementSearchResult on ElementSearchResult {
@@ -93,6 +94,7 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
   );
 
   const history = useHistory();
+  const { t } = useTranslation("ElementPreviewCard");
 
   return (
     <PreviewCard
@@ -125,7 +127,7 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
             fill="clear"
             routerLink={routerLink}
           >
-            Open
+            {t("Open")}
           </IonButton>
         </>
       }

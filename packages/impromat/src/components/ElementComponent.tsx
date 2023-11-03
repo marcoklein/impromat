@@ -11,6 +11,7 @@ import { ElementPreviewCard } from "./ElementPreviewCard";
 import { InfoItemComponent } from "./InfoItemComponent";
 import { LicenseItemComponent } from "./LicenseItemComponent";
 import { TagsComponent } from "./TagsComponent";
+import { Trans, useTranslation } from "react-i18next";
 
 const Element_ElementFragment = graphql(`
   fragment Element_Element on Element {
@@ -55,6 +56,7 @@ export const ElementComponent: React.FC<ContainerProps> = ({
   elementFragment,
 }) => {
   const element = getFragmentData(Element_ElementFragment, elementFragment);
+  const { t } = useTranslation("ElementComponent");
   return (
     <>
       <div className="ion-padding">
@@ -88,16 +90,24 @@ export const ElementComponent: React.FC<ContainerProps> = ({
         <IonItem>
           <IonIcon slot="start" icon={globe} color={COLOR_SHARED}></IonIcon>
           <IonLabel className="ion-text-wrap">
-            Community Element
+            {t("CommunityElement")}
             <div>
               <IonNote>
-                Want to improve this element? You can{" "}
-                <NavLink
-                  to={routeLibraryEditCustomElement({ elementId: element.id })}
-                >
-                  edit it here
-                </NavLink>
-                .
+                <Trans
+                  t={t}
+                  i18nKey="ImproveElement"
+                  components={{
+                    EditingLink: (
+                      <NavLink
+                        to={routeLibraryEditCustomElement({
+                          elementId: element.id,
+                        })}
+                      >
+                        placeholder
+                      </NavLink>
+                    ),
+                  }}
+                ></Trans>
               </IonNote>
             </div>
           </IonLabel>
@@ -106,7 +116,7 @@ export const ElementComponent: React.FC<ContainerProps> = ({
 
       {element.recommendations.length > 0 && (
         <TeaserGrid
-          title="Similar Elements"
+          title={t("SimilarElements")}
           items={element.recommendations}
           itemContent={(element) => (
             <ElementPreviewCard

@@ -72,12 +72,14 @@ export const TRANSLATIONS = {
       "No matching elements found.": "No matching elements found.",
       "Use the search bar to find elements from various sources.":
         "Use the search bar to find elements from various sources.",
+      NewElement: "New Element",
     },
     ElementFilterBar: {
       Clear: "Clear Filters",
       Like: "Like",
       MyElement: "My Element",
     },
+    ElementPreviewCard: { Open: "Open" },
     LibraryCreateCustomElementPage: {
       "Edit Custom Element": "Edit my Element",
       "Create Custom Element": "Create my Element",
@@ -104,6 +106,12 @@ export const TRANSLATIONS = {
       Cancel: "Cancel",
     },
     SearchInputChip: { Search: "Search" },
+    ElementComponent: {
+      CommunityElement: "Community Element",
+      ImproveElement:
+        "Want to improve this element? You can <EditingLink>edit it here</EditingLink>.",
+      SimilarElements: "Similar Elements",
+    },
     AboutPage: {
       About: "About this project",
     },
@@ -195,12 +203,14 @@ export const TRANSLATIONS = {
       "No matching elements found.": "Keine passenden Elemente gefunden.",
       "Use the search bar to find elements from various sources.":
         "Nutze die Suchleiste, um Improelemente aus verschiedenen Quellen zu finden.",
+      NewElement: "Neues Element",
     },
     ElementFilterBar: {
       Clear: "Filter zurücksetzen",
       Like: "Favouriten",
       MyElement: "Meine Elemente",
     },
+    ElementPreviewCard: { Open: "Öffnen" },
     LibraryCreateCustomElementPage: {
       "Edit Custom Element": "Mein Element bearbeiten",
       "Create Custom Element": "Eigenes Element erstellen",
@@ -229,6 +239,12 @@ export const TRANSLATIONS = {
       Cancel: "Abbrechen",
     },
     SearchInputChip: { Search: "Suche" },
+    ElementComponent: {
+      CommunityElement: "Gemeinschafts-Element",
+      ImproveElement:
+        "Willst du dieses Element verbessern? Du kannst es <EditingLink>hier bearbeiten</EditingLink>.",
+      SimilarElements: "Ähnliche Elemente",
+    },
     AboutPage: {
       About: "Über das Projekt",
     },
