@@ -133,6 +133,11 @@ export const TRANSLATIONS = {
       showAdditionalLanguageNote:
         "As there is also German exercises and games available you can choose to show the German content as well.",
     },
+    LicenseItemComponent: {
+      "Based on": "Based on",
+      from: "from",
+      "licensed under": "licensed under",
+    },
   },
   de: {
     common: {
@@ -267,6 +272,11 @@ export const TRANSLATIONS = {
       showAdditionalLanguageContent: "Auch englische Inhalte anzeigen",
       showAdditionalLanguageNote:
         "Da es auch englische Übungen und Spiele gibt, kannst du auswählen, ob du die englischen Inhalte auch sehen willst.",
+    },
+    LicenseItemComponent: {
+      "Based on": "Basiert auf",
+      from: "von",
+      "licensed under": "lizensiert unter",
     },
   },
 };
