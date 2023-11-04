@@ -32,7 +32,7 @@ export const PrivacyPolicyPage: React.FC = () => {
         {language === "de" && (
           <>
             <IonButton onClick={() => setLanguage("en")} fill="outline">
-              Switch to English Version
+              {t('switchToEnglishVersion')}
             </IonButton>
             <ReactMarkdown>{privacyPolicyMarkdownDe}</ReactMarkdown>
           </>
