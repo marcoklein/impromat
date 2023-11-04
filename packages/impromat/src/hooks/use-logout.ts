@@ -6,6 +6,7 @@ import { clearLocalStorageWithPrefix } from "../functions/clear-local-storage";
 import { graphql } from "../graphql-client";
 import { useIsLoggedIn } from "./use-is-logged-in";
 import { useLogger } from "./use-logger";
+import { useTranslation } from "react-i18next";
 
 export function useLogout() {
   const [presentIonLoading, dismissIonLoading] = useIonLoading();
@@ -45,6 +46,7 @@ export function useLogout() {
     presentIonLoading,
     retriggerLogInQuery,
   ]);
+  const { t } = useTranslation("use-logout");
 
   const triggerLogout = async (params?: { force: boolean }) => {
     if (!isLoggedIn) {
@@ -57,17 +59,16 @@ export function useLogout() {
       return;
     }
     presentAlert({
-      header: "Logout",
-      message:
-        "Are you sure you want to log out? All data on this device will be deleted.",
+      header: t("Logout"),
+      message: t("LogoutMessage"),
       buttons: [
         {
-          text: "Cancel",
+          text: t("Cancel", { ns: "common" }),
           role: "cancel",
           handler: () => {},
         },
         {
-          text: "Logout",
+          text: t("Logout"),
           role: "confirm",
           handler: () => {
             startLogout();

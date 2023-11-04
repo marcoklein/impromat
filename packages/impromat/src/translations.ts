@@ -4,10 +4,7 @@ export const TRANSLATIONS = {
     common: {
       "Privacy Policy": "Privacy Policy",
       "Exercises & Games": "Exercises & Games",
-    },
-    NotFoundPage: {
-      "Page does not exist": "Ups, this page does not exist.",
-      "Go to home page": "Go to home page",
+      Cancel: "Cancel",
     },
     RootNavigation: {
       Home: "Home",
@@ -101,9 +98,8 @@ export const TRANSLATIONS = {
       CreateElement: "Create Element",
     },
     ElementTagsItem: {
-      "Add Tag": "Add Tag",
-      "Enter Tag": "Enter Tag",
-      Cancel: "Cancel",
+      AddTag: "Add Tag",
+      EnterTag: "Enter Tag",
     },
     SearchInputChip: { Search: "Search" },
     ElementComponent: {
@@ -121,6 +117,15 @@ export const TRANSLATIONS = {
       Logout: "Logout",
       Profile: "Profile",
     },
+    AccountOptionsMenu: {
+      InputMessage: "Please type a user name.",
+      LetterUseMessage: "Please only use letters, numbers, -, or _.",
+      Rename: "Rename",
+      FailMessage:
+        "User name change failed. Please verify your internet connection and retry.",
+      Options: "Options",
+      ChangeUsername: "Change Username",
+    },
     AccountLanguageSection: {
       "Display Language": "Display Language",
       "Select Language": "Select Language",
@@ -128,11 +133,22 @@ export const TRANSLATIONS = {
       German: "German",
       Save: "Save",
       Cancel: "Cancel",
+      //To DO: refactor cancel to common for all pages
       Language: "Language",
       showAdditionalLanguageContent: "Show German content",
       showAdditionalLanguageNote:
         "As there is also German exercises and games available you can choose to show the German content as well.",
     },
+    "use-logout": {
+      Logout: "Logout",
+      LogoutMessage:
+        "Are you sure you want to log out? All Impromat data on this device will be deleted.",
+    },
+    NotFoundPage: {
+      "Page does not exist": "Ups, this page does not exist.",
+      "Go to home page": "Go to home page",
+    },
+
     LicenseItemComponent: {
       "Based on": "Based on",
       from: "from",
@@ -143,11 +159,9 @@ export const TRANSLATIONS = {
     common: {
       "Privacy Policy": "Datenschutzerklärung",
       "Exercises & Games": "Übungen & Spiele",
+      Cancel: "Abbrechen",
     },
-    NotFoundPage: {
-      "Page does not exist": "Ups, diese Seite existiert nicht.",
-      "Go to home page": "Zur Startseite",
-    },
+
     RootNavigation: {
       Home: "Startseite",
       "Exercises & Games": "Übungen & Spiele",
@@ -239,9 +253,8 @@ export const TRANSLATIONS = {
       CreateElement: "Element erstellen",
     },
     ElementTagsItem: {
-      "Add Tag": "Kategorie hinzufügen",
-      "Enter Tag": "Kategorie eingeben",
-      Cancel: "Abbrechen",
+      AddTag: "Kategorie hinzufügen",
+      EnterTag: "Kategorie eingeben",
     },
     SearchInputChip: { Search: "Suche" },
     ElementComponent: {
@@ -249,6 +262,11 @@ export const TRANSLATIONS = {
       ImproveElement:
         "Willst du dieses Element verbessern? Du kannst es <EditingLink>hier bearbeiten</EditingLink>.",
       SimilarElements: "Ähnliche Elemente",
+    },
+    LicenseItemComponent: {
+      "Based on": "Basiert auf",
+      from: "von",
+      "licensed under": "lizensiert unter",
     },
     AboutPage: {
       About: "Über das Projekt",
@@ -260,6 +278,15 @@ export const TRANSLATIONS = {
       "Change via menu on top right": "Ändere über das Menü oben rechts",
       Profile: "Profil",
       Logout: "Abmelden",
+    },
+    AccountOptionsMenu: {
+      InputMessage: "Bitte gebe einen Anzeigenamen ein.",
+      LetterUseMessage: "Bitte verwende nur Buchstaben, Zahlen, -, oder _.",
+      Rename: "Umbenennen",
+      FailMessage:
+        "Die Änderung des Anzeigenamens ist fehlgeschlagen. Bitte prüfe deine Internetverbindung und versuche es dann erneut.",
+      Options: "Optionen",
+      ChangeUsername: "Anzeigenamen ändern",
     },
     AccountLanguageSection: {
       "Display Language": "Anzeigesprache",
@@ -273,10 +300,14 @@ export const TRANSLATIONS = {
       showAdditionalLanguageNote:
         "Da es auch englische Übungen und Spiele gibt, kannst du auswählen, ob du die englischen Inhalte auch sehen willst.",
     },
-    LicenseItemComponent: {
-      "Based on": "Basiert auf",
-      from: "von",
-      "licensed under": "lizensiert unter",
+    "use-logout": {
+      Logout: "Abmelden",
+      LogoutMessage:
+        "Bist du sicher, dass du dich abmelden willst? Alle Impromat-Daten auf diesem Gerät werden gelöscht.",
+    },
+    NotFoundPage: {
+      "Page does not exist": "Ups, diese Seite existiert nicht.",
+      "Go to home page": "Zur Startseite",
     },
   },
 };

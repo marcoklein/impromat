@@ -104,10 +104,10 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
       >
         <IonContent className="ion-padding">
           <IonToolbar>
-            <IonTitle>{t("Add Tag")}</IonTitle>
+            <IonTitle>{t("AddTag")}</IonTitle>
             <IonButtons slot="end">
               <IonButton onClick={() => modal.current?.dismiss()}>
-                {t("Cancel")}
+                {t("Cancel", { ns: "common" })}
               </IonButton>
             </IonButtons>
           </IonToolbar>
@@ -118,7 +118,7 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
               reexecuteElementTagsQuery();
             }}
             onClick={() => modal.current?.setCurrentBreakpoint(0.75)}
-            placeholder={t("Enter Tag")}
+            placeholder={t("EnterTag")}
           ></IonSearchbar>
           <IonList>
             {elementTags?.map((tag) => (

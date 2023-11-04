@@ -31,7 +31,7 @@ export const LicenseItemComponent: React.FC<ContainerProps> = ({
       text
     );
 
-  const { t } = useTranslation();
+  const { t } = useTranslation("LicenseItemComponent");
 
   return (
     <IonItem color="" lines="none">
