@@ -1,5 +1,6 @@
 import { IonButton, IonIcon, IonLabel, IonListHeader } from "@ionic/react";
 import { checkmark } from "ionicons/icons";
+import { useTranslation } from "react-i18next";
 
 interface ContainerProps {
   isReordering: boolean;
@@ -23,6 +24,7 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
       if (onReorderEvent) onReorderEvent("start", true);
     }
   };
+  const { t } = useTranslation("WorkshopElementsHeaderComponent");
 
   if (!isReordering) {
     return (
@@ -30,7 +32,7 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
         color="medium"
         style={{ position: "sticky", top: 0, zIndex: 2 }}
       >
-        <IonLabel>Elements</IonLabel>
+        <IonLabel>{t("Elements")}</IonLabel>
         {canEdit && (
           <IonButton
             expand="block"
@@ -38,7 +40,7 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
             onClick={() => onReorderClick()}
             fill="outline"
           >
-            Reorder
+            {t("Reorder")}
           </IonButton>
         )}
       </IonListHeader>
@@ -50,7 +52,7 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
       color="primary"
       style={{ position: "sticky", top: 0, zIndex: 2 }}
     >
-      <IonLabel>Change order with right handle</IonLabel>
+      <IonLabel>{t("ChangeOrder")}</IonLabel>
       <IonButton
         color="light"
         size="default"
@@ -58,7 +60,7 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
         onClick={() => onReorderClick()}
       >
         <IonIcon slot="icon-only" icon={checkmark}></IonIcon>
-        Save Order
+        {t("SaveOrder")}
       </IonButton>
     </IonListHeader>
   );

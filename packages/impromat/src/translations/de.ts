@@ -12,7 +12,7 @@ export default {
     Workshops: "Workshops",
   },
   PrivacyPolicyPage: {
-    "switchToEnglishVersion": "Zur deutschen Version wechseln"
+    switchToEnglishVersion: "Zur deutschen Version wechseln",
   },
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
@@ -112,6 +112,59 @@ export default {
     from: "von",
     "licensed under": "lizensiert unter",
   },
+  WorkshopPage: {
+    Add: "Hinzufügen:",
+    Section: "Abschnitt",
+    Element: "Element",
+    RemoveLike: "Aus Favoriten entfernen",
+    AddLike: "ZU Favoriten hinzufügen",
+    UpdatingLike: "Favoriten werden aktualisiert",
+    Share: "Teilen",
+    AddElement: "Füge Elemente hinzu",
+    AddElementMessage:
+      "Nutze das Feld unten rechts, um Elemente hinzuzufügen. Viel Spaß beim Workshop-Konzipieren!",
+  },
+  WorkshopElementPage: { AddNote: "Notiz hinzufügen" },
+  WorkshopsPage: {
+    NewWorkshop: "Neuer Workshop",
+    FilterNoWorkshops: "Die momentane Filterauswahl enthält keine Workshops.",
+    ClearFilters: "Filter zurücksetzen",
+  },
+  WorkshopOptionsMenu: {
+    SetDate: "Datum einstellen",
+    EnterDate: "Gebe ein Datum für deinen Workshop ein:",
+    DatePlaceholder: "Datum...",
+    Set: "Speichern",
+    DuplicateWorkshopName: "Neuer Workshop-Name",
+    EnterNameMessage: "Gebe einen Namen für den duplizierten Workshop ein:",
+    NamePlaceholder: "Workshop-Namen...",
+    EnterWorkshopName: "Bitte wähle einen Namen für deinen Workshop.",
+    Duplicate: "Duplizieren",
+    WorkshopDescription: "Beschreibung",
+    Rename: "Umbenennen",
+    TypeName: "Please type a workshop name.",
+    Options: "Optionen",
+    ChangeDescription: "Beschreibung ändern",
+    AddDescription: "Beschreibung hinzufügen",
+    Delete: "Löschen",
+    Cancel: "Abbrechen",
+    DeleteWorkshop: "Workshop löschen?",
+    Duplicated: '"{{workshopName}}" dupliziert',
+    Open: "Öffnen",
+  },
+  WorkshopElementOptionsMenu: {
+    Options: "Optionen",
+    Remove: "Entfernen",
+    RemoveElement: "Element aus dem Workshop entfernen?",
+  },
+  WorkshopElementsHeaderComponent: {
+    Elements: "Elemente",
+    Reorder: "Umsortieren",
+    ChangeOrder:
+      "Ändere die Reihenfolge der Abschnitte und Elemente über die Balken rechts.",
+    SaveOrder: "Sortierung speichern",
+  },
+
   AboutPage: {
     About: "Über das Projekt",
   },

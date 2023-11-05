@@ -12,7 +12,7 @@ export default {
     Workshops: "Workshops",
   },
   PrivacyPolicyPage: {
-    "switchToEnglishVersion": "Switch to English version",
+    switchToEnglishVersion: "Switch to English version",
   },
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
@@ -110,6 +110,58 @@ export default {
       "Want to improve this element? You can <EditingLink>edit it here</EditingLink>.",
     SimilarElements: "Similar Elements",
   },
+  WorkshopPage: {
+    Add: "Add",
+    Section: "Section",
+    Element: "Element",
+    RemoveLike: "Remove from likes.",
+    AddLike: "Add to likes.",
+    UpdatingLike: "Updating Like",
+    Share: "Share",
+    AddElement: "Add First Element",
+    AddElementMessage:
+      "Use the bottom right button to add elements. Enjoy designing your workshop!",
+  },
+  WorkshopElementPage: { AddNote: "Add Note" },
+  WorkshopsPage: {
+    NewWorkshop: "New Workshop",
+    FilterNoWorkshops: "The current filter selection returns no workshops",
+    ClearFilters: "Clear Filters",
+  },
+  WorkshopOptionsMenu: {
+    SetDate: "Set Date",
+    EnterDate: "Enter the date of your workshop:",
+    DatePlaceholder: "Date...",
+    Set: "Set",
+    DuplicateWorkshopName: "New Workshop Name",
+    EnterNameMessage: "Enter a name for your duplicated workshop:",
+    NamePlaceholder: "Workshop name...",
+    EnterWorkshopName: "Please enter a name for your workshop.",
+    Duplicate: "Duplicate",
+    WorkshopDescription: "Description",
+    Rename: "Rename",
+    TypeName: "Please type a workshop name.",
+    Options: "Options",
+    ChangeDescription: "Change Description",
+    AddDescription: "Add Description",
+    Delete: "Delete",
+    Cancel: "Cancel",
+    DeleteWorkshop: "Delete Workshop?",
+    Duplicated: 'Duplicated "{{workshopName}}"',
+    Open: "Open",
+  },
+  WorkshopElementOptionsMenu: {
+    Options: "Options", //Refactor common commands like Options in common namespace
+    Remove: "Remove",
+    RemoveElement: "Remove Element from Workshop?",
+  },
+  WorkshopElementsHeaderComponent: {
+    Elements: "Elements",
+    Reorder: "Reorder",
+    ChangeOrder: "Change order with right handle",
+    SaveOrder: "Save Order",
+  },
+
   AboutPage: {
     About: "About this project",
   },

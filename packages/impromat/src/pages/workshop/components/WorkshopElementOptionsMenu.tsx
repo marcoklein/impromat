@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ConfirmationAlert } from "../../../components/ConfirmationAlert";
 import { OptionsMenu } from "../../../components/OptionsMenu";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { useTranslation } from "react-i18next";
 
 interface ContainerProps {
   isOpen: boolean;
@@ -25,15 +26,17 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
 
   const [isRemoveAlertOpen, setIsRemoveAlertOpen] = useState(false);
 
+  const { t } = useTranslation("WorkshopElementOptionsMenu");
+
   return (
     <>
       <OptionsMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        header="Options"
+        header={t("Options")}
         options={[
           {
-            text: "Remove",
+            text: t("Remove"),
             role: "destructive",
             icon: trash,
             handler: () => {
@@ -41,7 +44,7 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
             },
           },
           {
-            text: "Cancel",
+            text: t("Cancel"),
             role: "cancel",
             handler: () => {},
             icon: close,
@@ -49,8 +52,8 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
         ]}
       ></OptionsMenu>
       <ConfirmationAlert
-        header="Remove Element from Workshop?"
-        confirmText="Remove"
+        header={t("RemoveElement")}
+        confirmText={t("Remove")}
         isOpen={isRemoveAlertOpen}
         onConfirm={() => {
           logger("Removal confirmed");

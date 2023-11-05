@@ -11,6 +11,7 @@ import { useDuplicateWorkshopMutation } from "../../hooks/use-duplicate-workshop
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshop, routeWorkshops } from "../../routes/shared-routes";
+import { useTranslation } from "react-i18next";
 
 const WorkshopOptionsMenu_Workshop = graphql(`
   fragment WorkshopOptionsMenu_Workshop on Workshop {
@@ -68,18 +69,20 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       input: { id: workshop.id, description: newDescription },
     });
   };
+  const { t } = useTranslation("WorkshopOptionsMenu");
+
   const onSetWorkshopDate = async () => {
     if (!workshop) return;
     presentInputDialog({
-      header: "Set Date",
+      header: t("SetDate"),
       initialText: workshop.dateOfWorkshop
         ? new Date(workshop.dateOfWorkshop).toISOString().slice(0, 10)
         : // ? new Date(workshop.dateOfWorkshop).toLocaleDateString()
           "",
-      message: "Enter the date of your workshop:",
-      placeholder: "Date...",
+      message: t("EnterDate"),
+      placeholder: t("DatePlaceholder"),
       // emptyInputMessage: "Please enter a date for your workshop.",
-      buttonText: "Set",
+      buttonText: t("Set"),
       inputType: "date",
       onAccept: async (date) => {
         logger("Setting date of workshop to %s", date);
@@ -96,12 +99,12 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   const onDuplicateWorkshop = async () => {
     if (!workshop) return;
     presentInputDialog({
-      header: "New Workshop Name",
+      header: t("DuplicateWorkshopName"),
       initialText: workshop.name,
-      message: "Enter a name for your duplicated workshop:",
-      placeholder: "Workshop name...",
-      emptyInputMessage: "Please enter a name for your workshop.",
-      buttonText: "Duplicate",
+      message: t("EnterNameMessage"),
+      placeholder: t("NamePlaceholder"),
+      emptyInputMessage: t("EnterWorkshopName"),
+      buttonText: t("Duplicate"),
       onAccept: async (newWorkshopName) => {
         const { error, data } = await duplicateWorkshopMutation({
           input: { workshopId: workshop.id, name: newWorkshopName },
@@ -124,7 +127,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
     presentInputDialog({
       initialText: workshop.description ?? "",
       isMultiline: true,
-      header: "Description",
+      header: t("WorkshopDescription"),
       onAccept: (text) => changeWorkshopDescription(text),
     });
     logger("Showing change description dialog");
@@ -133,9 +136,9 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   const onRenameWorkshop = () => {
     if (!workshop) return;
     presentInputDialog({
-      header: "Rename",
+      header: t("Rename"),
       initialText: workshop.name,
-      emptyInputMessage: "Please type a workshop name.",
+      emptyInputMessage: t("TypeName"),
       onAccept: (text) => changeWorkshopName(text),
     });
     logger("Showing rename Workshop dialog");
@@ -146,40 +149,40 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       <OptionsMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        header="Options"
+        header={t("Options")}
         options={[
           {
             icon: calendar,
-            text: "Set Date",
+            text: t("SetDate"),
             handler: () => {
               onSetWorkshopDate();
             },
           },
           {
             icon: copy,
-            text: "Duplicate",
+            text: t("Duplicate"),
             handler: () => {
               onDuplicateWorkshop();
             },
           },
           {
             icon: pencil,
-            text: "Rename",
+            text: t("Rename"),
             handler: () => {
               onRenameWorkshop();
             },
           },
           {
             icon: create,
-            text: `${
-              workshop.description?.length ? "Change" : "Add"
-            } Description`,
+            text: workshop.description?.length
+              ? t("AddDescription")
+              : t("ChangeDescription"),
             handler: () => {
               onChangeDescription();
             },
           },
           {
-            text: "Delete",
+            text: t("Delete"),
             role: "destructive",
             icon: trash,
             handler: () => {
@@ -187,7 +190,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
             },
           },
           {
-            text: "Cancel",
+            text: t("Cancel", { ns: "common" }),
             role: "cancel",
             handler: () => {},
             icon: close,
@@ -195,8 +198,8 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
         ]}
       ></OptionsMenu>
       <ConfirmationAlert
-        header="Delete Workshop?"
-        confirmText="Delete"
+        header={t("DeleteWorkshop")}
+        confirmText={t("Delete")}
         isOpen={isWorkshopDeleteAlertOpen}
         onConfirm={() => {
           logger("Deletion confirmed");
@@ -211,11 +214,11 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       ></ConfirmationAlert>
       <IonToast
         isOpen={!!duplicatedWorkshop}
-        message={`Duplicated "${workshop.name}"`}
+        message={t("Duplicated", { workshopName: workshop.name })}
         onDidDismiss={() => setDuplicatedWorkshop(undefined)}
         buttons={[
           {
-            text: "Open",
+            text: t("Open"),
             handler: () => history.push(routeWorkshop(duplicatedWorkshop!.id)),
           },
           {
