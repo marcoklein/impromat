@@ -149,7 +149,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       <OptionsMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        header={t("Options")}
+        header={t("Options", { ns: "common" })}
         options={[
           {
             icon: calendar,
@@ -182,7 +182,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
             },
           },
           {
-            text: t("Delete"),
+            text: t("Delete", { ns: "common" }),
             role: "destructive",
             icon: trash,
             handler: () => {
@@ -199,7 +199,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       ></OptionsMenu>
       <ConfirmationAlert
         header={t("DeleteWorkshop")}
-        confirmText={t("Delete")}
+        confirmText={t("Delete", { ns: "common" })}
         isOpen={isWorkshopDeleteAlertOpen}
         onConfirm={() => {
           logger("Deletion confirmed");
@@ -218,7 +218,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
         onDidDismiss={() => setDuplicatedWorkshop(undefined)}
         buttons={[
           {
-            text: t("Open"),
+            text: t("Open", { ns: "common" }),
             handler: () => history.push(routeWorkshop(duplicatedWorkshop!.id)),
           },
           {

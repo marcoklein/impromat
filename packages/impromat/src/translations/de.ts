@@ -4,6 +4,17 @@ export default {
     "Privacy Policy": "Datenschutzerklärung",
     "Exercises & Games": "Übungen & Spiele",
     Cancel: "Abbrechen",
+    Close: "Schließen",
+    Delete: "Löschen",
+    Remove: "Entfernen",
+    Open: "Öffnen",
+    Duplicate: "Duplizieren",
+    Rename: "Umbenennen",
+    Share: "Teilen",
+    Options: "Optionen",
+    Section: "Abschnitt",
+    Element: "Element",
+    Elements: "Elemente",
   },
 
   RootNavigation: {
@@ -112,14 +123,23 @@ export default {
     from: "von",
     "licensed under": "lizensiert unter",
   },
+  WorkshopsCreateFirstComponent: {
+    AddWorkshop: "Workshop hinzufügen",
+    StartWorkshop: "Starte damit, deinen ersten Workshop zu erstellen:",
+  },
+  "use-add-workshop-input-dialog": {
+    WorkshopName: "Workshop-Name",
+    NamePlaceholder: "Workshop-Name...",
+    NameMessage:
+      "Gib einen Namen für deinen Workshop ein (Du kannst ihn später noch ändern):",
+    EmptyNameMessage: "Bitte gib einen Namen für deinen Workshop ein.",
+    Create: "Erstellen",
+  },
   WorkshopPage: {
     Add: "Hinzufügen:",
-    Section: "Abschnitt",
-    Element: "Element",
     RemoveLike: "Aus Favoriten entfernen",
     AddLike: "ZU Favoriten hinzufügen",
     UpdatingLike: "Favoriten werden aktualisiert",
-    Share: "Teilen",
     AddElement: "Füge Elemente hinzu",
     AddElementMessage:
       "Nutze das Feld unten rechts, um Elemente hinzuzufügen. Viel Spaß beim Workshop-Konzipieren!",
@@ -130,6 +150,10 @@ export default {
     FilterNoWorkshops: "Die momentane Filterauswahl enthält keine Workshops.",
     ClearFilters: "Filter zurücksetzen",
   },
+  WorkshopPreviewCard: {
+    OpenWorkshop: "Öffne den Workshop, um Elemente hinzuzufügen.",
+    Games: "Elemente: ",
+  },
   WorkshopOptionsMenu: {
     SetDate: "Datum einstellen",
     EnterDate: "Gebe ein Datum für deinen Workshop ein:",
@@ -139,32 +163,36 @@ export default {
     EnterNameMessage: "Gebe einen Namen für den duplizierten Workshop ein:",
     NamePlaceholder: "Workshop-Namen...",
     EnterWorkshopName: "Bitte wähle einen Namen für deinen Workshop.",
-    Duplicate: "Duplizieren",
+    Duplicated: '"{{workshopName}}" dupliziert',
     WorkshopDescription: "Beschreibung",
     Rename: "Umbenennen",
     TypeName: "Please type a workshop name.",
-    Options: "Optionen",
     ChangeDescription: "Beschreibung ändern",
     AddDescription: "Beschreibung hinzufügen",
-    Delete: "Löschen",
-    Cancel: "Abbrechen",
     DeleteWorkshop: "Workshop löschen?",
-    Duplicated: '"{{workshopName}}" dupliziert',
-    Open: "Öffnen",
   },
   WorkshopElementOptionsMenu: {
-    Options: "Optionen",
-    Remove: "Entfernen",
     RemoveElement: "Element aus dem Workshop entfernen?",
   },
   WorkshopElementsHeaderComponent: {
-    Elements: "Elemente",
     Reorder: "Umsortieren",
     ChangeOrder:
       "Ändere die Reihenfolge der Abschnitte und Elemente über die Balken rechts.",
     SaveOrder: "Sortierung speichern",
   },
-
+  ShareWorkshopModal: {
+    ShareWorkshop: "Workshop teilen",
+    AnyoneCanView: "Jede*r mit dem Link kann anschauen",
+    CheckboxMessage:
+      "Aktiviere die Box oben, um deinen Workshop via URL zu teilen. Besucher*innen benötigen nur den Link, doch nicht unbedingt einen Impromat Account, damit sie deinen Workshop sehen können.",
+    ShareWithCommunity: "Mit der Gemeinschaft teilen",
+    ShareInfo:
+      "Dein Workshop steht jeder*m mit dem Link zur Verfügung. Besucher*innen benötigen keinen Impromat Account, um deinen Workshop inklusive Abschnitten, Elementen und Notizen sehen zu können.",
+    ThankyouInfo:
+      "Danke für deinen wertvollen Beitrag! Dein Workshop ist öffentlich sichtbar innerhalb der Impromat-Gemeinschaft. Besucher*innen benötigen keinen Impromat Account, um deinen Workshop inklusive Abschnitten, Elementen und Notizen sehen zu können.",
+    CopiedWorkshopLink: "Workshop-Link kopiert",
+    CopyWorkshopLink: "Workshop-Link kopieren",
+  },
   AboutPage: {
     About: "Über das Projekt",
   },
@@ -205,5 +233,11 @@ export default {
   NotFoundPage: {
     "Page does not exist": "Ups, diese Seite existiert nicht.",
     "Go to home page": "Zur Startseite",
+  },
+  ErrorFallbackPage: {
+    Error: "Fehler",
+    OhNo: "Oh nein, etwas ist schief gelaufen ",
+    ErrorMessage: "Fehlermeldung:",
+    ReloadPage: "Seite neu laden",
   },
 };

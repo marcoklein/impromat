@@ -21,6 +21,7 @@ import {
 } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useUpdateWorkshopMutation } from "../../../hooks/use-update-workshop-mutation";
+import { useTranslation } from "react-i18next";
 
 export const ShareWorkshopModal_Workshop = graphql(`
   fragment ShareWorkshopModal_Workshop on Workshop {
@@ -72,6 +73,7 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
     },
     [logger, updateWorkshopMutation, workshop],
   );
+  const { t } = useTranslation("ShareWorkshopModal");
 
   return (
     <IonModal
@@ -80,10 +82,10 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
     >
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Share Workshop</IonTitle>
+          <IonTitle>{t("ShareWorkshop")}</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={() => setIsSharingModalOpen(false)}>
-              Close
+              {t("Close", { ns: "common" })}
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -100,17 +102,11 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
             labelPlacement="start"
             onIonChange={(event) => onPublicClick(event.detail.checked)}
           >
-            <IonLabel className="ion-text-wrap">
-              Anyone with the link can view
-            </IonLabel>
+            <IonLabel className="ion-text-wrap">{t("AnyoneCanView")}</IonLabel>
           </IonCheckbox>
         </IonItem>
         {!workshop.isPublic && !workshop.isListed && (
-          <p>
-            Activate the checkbox to share your workshop via url. Visitors will
-            need the link to see your workshop but will not require an Impromat
-            account.
-          </p>
+          <p>{t("CheckboxMessage")}</p>
         )}
         {(workshop.isPublic || workshop.isListed) && (
           <>
@@ -125,25 +121,12 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
                 onIonChange={(event) => onListClick(event.detail.checked)}
               >
                 <IonLabel className="ion-text-wrap">
-                  Share with community
+                  {t("ShareWithCommunity")}
                 </IonLabel>
               </IonCheckbox>
             </IonItem>
-            {!workshop.isListed && (
-              <p>
-                Your workshop is available to everyone that follows the workshop
-                link. Visitors do not require an account and can view your
-                workshop including sections, elements, and notes.
-              </p>
-            )}
-            {workshop.isListed && (
-              <p>
-                Thanks for your awesome contribution! Your workshop is visible
-                and publicly listed in the Impromat community. Visitors do not
-                require an account and can view your workshop including
-                sections, elements, and notes.
-              </p>
-            )}
+            {!workshop.isListed && <p>{t("ShareInfo")}</p>}
+            {workshop.isListed && <p>{t("ThankyouInfo")}</p>}
             <IonButton
               expand="full"
               color={!isCopied ? "primary" : "medium"}
@@ -155,10 +138,10 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
               {isCopied ? (
                 <>
                   <IonIcon slot="start" icon={checkmark}></IonIcon>
-                  Copied workshop link
+                  {t("CopiedWorkshopLink")}
                 </>
               ) : (
-                "Copy workshop link"
+                t("CopyWorkshopLink")
               )}
             </IonButton>
           </>

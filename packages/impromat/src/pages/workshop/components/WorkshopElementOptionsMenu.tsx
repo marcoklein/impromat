@@ -33,10 +33,10 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
       <OptionsMenu
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        header={t("Options")}
+        header={t("Options", { ns: "common" })}
         options={[
           {
-            text: t("Remove"),
+            text: t("Remove", { ns: "common" }),
             role: "destructive",
             icon: trash,
             handler: () => {
@@ -44,7 +44,7 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
             },
           },
           {
-            text: t("Cancel"),
+            text: t("Cancel", { ns: "common" }),
             role: "cancel",
             handler: () => {},
             icon: close,
@@ -53,7 +53,7 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
       ></OptionsMenu>
       <ConfirmationAlert
         header={t("RemoveElement")}
-        confirmText={t("Remove")}
+        confirmText={t("Remove", { ns: "common" })}
         isOpen={isRemoveAlertOpen}
         onConfirm={() => {
           logger("Removal confirmed");

@@ -44,7 +44,7 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
       minlength: 3,
       inputRegex: /^[a-zA-Z \-_0-9]*$/,
       inputRegexMessage: t("LetterUseMessage"),
-      header: t("Rename"),
+      header: t("Rename", { ns: "common" }),
       initialText: user.name ?? "",
       emptyInputMessage: t("InputMessage"),
       onAccept: async (text) => {
@@ -69,7 +69,7 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
     <OptionsMenu
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      header={t("Options")}
+      header={t("Options", { ns: "common" })}
       options={[
         {
           text: t("ChangeUsername"),

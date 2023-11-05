@@ -5,6 +5,17 @@ export default {
     "Privacy Policy": "Privacy Policy",
     "Exercises & Games": "Exercises & Games",
     Cancel: "Cancel",
+    Close: "Close",
+    Delete: "Delete",
+    Remove: "Remove",
+    Open: "Open",
+    Duplicate: "Duplicate",
+    Rename: "Rename",
+    Share: "Share",
+    Options: "Options",
+    Section: "Section",
+    Element: "Element",
+    Elements: "Elements",
   },
   RootNavigation: {
     Home: "Home",
@@ -110,14 +121,27 @@ export default {
       "Want to improve this element? You can <EditingLink>edit it here</EditingLink>.",
     SimilarElements: "Similar Elements",
   },
+  LicenseItemComponent: {
+    "Based on": "Based on",
+    from: "from",
+    "licensed under": "licensed under",
+  },
+  WorkshopsCreateFirstComponent: {
+    AddWorkshop: "Add Workshop",
+    StartWorkshop: "Start by creating your very first workshop:",
+  },
+  "use-add-workshop-input-dialog": {
+    WorkshopName: "Workshop Name",
+    NamePlaceholder: "Workshop name...",
+    NameMessage: "Enter a name for your workshop (You can change it later):",
+    EmptyNameMessage: "Please enter a name for your workshop.",
+    Create: "Create",
+  },
   WorkshopPage: {
     Add: "Add",
-    Section: "Section",
-    Element: "Element",
     RemoveLike: "Remove from likes.",
     AddLike: "Add to likes.",
     UpdatingLike: "Updating Like",
-    Share: "Share",
     AddElement: "Add First Element",
     AddElementMessage:
       "Use the bottom right button to add elements. Enjoy designing your workshop!",
@@ -128,6 +152,10 @@ export default {
     FilterNoWorkshops: "The current filter selection returns no workshops",
     ClearFilters: "Clear Filters",
   },
+  WorkshopPreviewCard: {
+    OpenWorkshop: "Open the workshop to add elements.",
+    Games: "Elements: ",
+  },
   WorkshopOptionsMenu: {
     SetDate: "Set Date",
     EnterDate: "Enter the date of your workshop:",
@@ -137,29 +165,33 @@ export default {
     EnterNameMessage: "Enter a name for your duplicated workshop:",
     NamePlaceholder: "Workshop name...",
     EnterWorkshopName: "Please enter a name for your workshop.",
-    Duplicate: "Duplicate",
+    Duplicated: 'Duplicated "{{workshopName}}"',
     WorkshopDescription: "Description",
-    Rename: "Rename",
     TypeName: "Please type a workshop name.",
-    Options: "Options",
     ChangeDescription: "Change Description",
     AddDescription: "Add Description",
-    Delete: "Delete",
-    Cancel: "Cancel",
     DeleteWorkshop: "Delete Workshop?",
-    Duplicated: 'Duplicated "{{workshopName}}"',
-    Open: "Open",
   },
   WorkshopElementOptionsMenu: {
-    Options: "Options", //Refactor common commands like Options in common namespace
-    Remove: "Remove",
     RemoveElement: "Remove Element from Workshop?",
   },
   WorkshopElementsHeaderComponent: {
-    Elements: "Elements",
     Reorder: "Reorder",
     ChangeOrder: "Change order with right handle",
     SaveOrder: "Save Order",
+  },
+  ShareWorkshopModal: {
+    ShareWorkshop: "Share Workshop",
+    AnyoneCanView: "Anyone with the link can view",
+    CheckboxMessage:
+      "Activate the checkbox to share your workshop via URL. Visitors will need the link to see your workshop but will not require an Impromat account.",
+    ShareWithCommunity: "Share with community",
+    ShareInfo:
+      "Your workshop is available to everyone that follows the workshop link. Visitors do not require an account and can view your workshop including sections, elements, and notes.",
+    ThankyouInfo:
+      "Thanks for your awesome contribution! Your workshop is visible and publicly listed in the Impromat community. Visitors do not require an account and can view your workshop including sections, elements, and notes.",
+    CopiedWorkshopLink: "Copied workshop link",
+    CopyWorkshopLink: "Copy workshop link",
   },
 
   AboutPage: {
@@ -174,10 +206,8 @@ export default {
   AccountOptionsMenu: {
     InputMessage: "Please type a user name.",
     LetterUseMessage: "Please only use letters, numbers, -, or _.",
-    Rename: "Rename",
     FailMessage:
       "User name change failed. Please verify your internet connection and retry.",
-    Options: "Options",
     ChangeUsername: "Change Username",
   },
   AccountLanguageSection: {
@@ -203,9 +233,10 @@ export default {
     "Go to home page": "Go to home page",
   },
 
-  LicenseItemComponent: {
-    "Based on": "Based on",
-    from: "from",
-    "licensed under": "licensed under",
+  ErrorFallbackPage: {
+    Error: "Error",
+    OhNo: "Oh no, something went wrong ",
+    ErrorMessage: "Error Message:",
+    ReloadPage: "Reload Page",
   },
 };

@@ -32,7 +32,7 @@ export const WorkshopElementsHeaderComponent: React.FC<ContainerProps> = ({
         color="medium"
         style={{ position: "sticky", top: 0, zIndex: 2 }}
       >
-        <IonLabel>{t("Elements")}</IonLabel>
+        <IonLabel>{t("Elements", { ns: "common" })}</IonLabel>
         {canEdit && (
           <IonButton
             expand="block"

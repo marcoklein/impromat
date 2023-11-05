@@ -190,14 +190,14 @@ export const WorkshopPage: React.FC = () => {
               <IonLabel style={{ marginRight: "0.5rem" }}>{t("Add")}</IonLabel>
               <div style={{ display: "flex" }}>
                 <IonButton onClick={() => onCreateSection()} size="small">
-                  {t("Section")}
+                  {t("Section", { ns: "common" })}
                 </IonButton>
                 <IonButton
                   routerLink={routeLibrary()}
                   size="small"
                   color="secondary"
                 >
-                  {t("Element")}
+                  {t("Element", { ns: "common" })}
                 </IonButton>
               </div>
             </div>
@@ -236,7 +236,9 @@ export const WorkshopPage: React.FC = () => {
                       : lockClosed
                   }
                 ></Icon>
-                <span className="ion-hide-sm-down">{t("Share")}</span>
+                <span className="ion-hide-sm-down">
+                  {t("Share", { ns: "common" })}
+                </span>
               </IonButton>
               <ShareWorkshopModal
                 isSharingModalOpen={isSharingModalOpen}
