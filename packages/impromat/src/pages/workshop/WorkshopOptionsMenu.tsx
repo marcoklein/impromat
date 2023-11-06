@@ -1,6 +1,7 @@
 import { IonToast } from "@ionic/react";
 import { calendar, close, copy, create, pencil, trash } from "ionicons/icons";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { ConfirmationAlert } from "../../components/ConfirmationAlert";
 import { OptionsMenu } from "../../components/OptionsMenu";
@@ -11,7 +12,6 @@ import { useDuplicateWorkshopMutation } from "../../hooks/use-duplicate-workshop
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeWorkshop, routeWorkshops } from "../../routes/shared-routes";
-import { useTranslation } from "react-i18next";
 
 const WorkshopOptionsMenu_Workshop = graphql(`
   fragment WorkshopOptionsMenu_Workshop on Workshop {
@@ -175,8 +175,8 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           {
             icon: create,
             text: workshop.description?.length
-              ? t("AddDescription")
-              : t("ChangeDescription"),
+              ? t("ChangeDescription")
+              : t("AddDescription"),
             handler: () => {
               onChangeDescription();
             },

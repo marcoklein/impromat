@@ -9,7 +9,7 @@ export class LibraryDevPage extends DevPage {
 
   constructor(page: Page) {
     super(page);
-    this.createElementButtonLocator = page.getByText("Create Element");
+    this.createElementButtonLocator = page.getByText("New Element");
   }
 
   async goto() {
@@ -72,7 +72,7 @@ export class LibraryDevPage extends DevPage {
       isPublic: options?.isPublic ?? false,
     });
 
-    await page.getByRole("button", { name: "New Element" }).click();
+    await page.getByRole("button", { name: "Create Element" }).click();
     await page.waitForURL(NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX);
   }
 
