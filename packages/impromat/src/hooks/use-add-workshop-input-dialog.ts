@@ -34,7 +34,7 @@ export function useCreateWorkshopInputDialog() {
         logger("Navigating to %s", navigateTo);
       },
     });
-  }, [presentInputDialog, createWorkshopMutation, logger, history]);
+  }, [presentInputDialog, t, createWorkshopMutation, logger, history]);
 
   return presentWorkshopInputDialog;
 }
