@@ -20,9 +20,7 @@ test.describe("ElementFilterBar", () => {
     await component.getByText("Remove").last().click();
 
     // then
-    await expect(
-      component.getByText("Remove Element from Workshop?"),
-    ).toBeVisible();
+    await expect(component.getByText("RemoveElement")).toBeVisible();
   });
 
   test("should trigger remove callback", async ({ mount }) => {
