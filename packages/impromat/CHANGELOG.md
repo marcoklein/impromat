@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.54.0
+
+### Minor Changes
+
+- 4aea1d5: Add remaining German translations
+
 ## 0.53.1
 
 ### Patch Changes
