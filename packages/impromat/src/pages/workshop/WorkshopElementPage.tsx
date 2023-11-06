@@ -24,6 +24,7 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { routeWorkshop } from "../../routes/shared-routes";
+import { useTranslation } from "react-i18next";
 
 const WorkshopElementPageQuery = graphql(`
   query WorkshopElementPage($id: ID!) {
@@ -135,6 +136,8 @@ export const WorkshopElementPage: React.FC = () => {
     [workshopElement],
   );
 
+  const { t } = useTranslation("WorkshopElementPage");
+
   return (
     <IonPage>
       <IonHeader>
@@ -183,7 +186,7 @@ export const WorkshopElementPage: React.FC = () => {
                             color="primary"
                           >
                             <IonIcon icon={document} slot="start"></IonIcon>
-                            Add Note
+                            {t("AddNote")}
                           </IonButton>
                         )}
                       </>

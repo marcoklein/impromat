@@ -9,7 +9,7 @@ export class LibraryDevPage extends DevPage {
 
   constructor(page: Page) {
     super(page);
-    this.createElementButtonLocator = page.getByText("Create Element");
+    this.createElementButtonLocator = page.getByText("New Element");
   }
 
   async goto() {

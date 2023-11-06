@@ -81,7 +81,7 @@ export const HomeContent: React.FC = () => {
               <IonButton
                 className="ion-margin-top"
                 fill="solid"
-                color="pink-4"
+                color="secondary"
                 routerLink={routeLibrary()}
               >
                 <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
@@ -143,7 +143,7 @@ export const HomeContent: React.FC = () => {
               <IonButton
                 className="ion-margin-vertical"
                 fill="solid"
-                color="yellow-4"
+                color="tertiary"
                 routerLink={routeLibrary()}
               >
                 <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>

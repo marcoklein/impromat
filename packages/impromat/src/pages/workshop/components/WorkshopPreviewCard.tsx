@@ -10,6 +10,7 @@ import {
 } from "../../../graphql-client";
 import { routeWorkshop } from "../../../routes/shared-routes";
 import { WorkshopOptionsMenu } from "../WorkshopOptionsMenu";
+import { useTranslation } from "react-i18next";
 
 const WorkshopPreviewItem_WorkshopFragment = graphql(`
   fragment WorkshopPreviewItem_Workshop on Workshop {
@@ -58,6 +59,8 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
       ),
     [workshop],
   );
+  const { t } = useTranslation("WorkshopPreviewCard");
+
   return (
     <PreviewCard
       onCardClick={() => {
@@ -74,7 +77,7 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
             fill="clear"
             routerLink={routeWorkshop(workshop.id)}
           >
-            Open
+            {t("Open", { ns: "common" })}
           </IonButton>
           {workshop.canEdit && (
             <WorkshopOptionsMenu
@@ -86,10 +89,13 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
     >
       <IonCardContent>{workshop.description}</IonCardContent>
       {elementNames.length === 0 && (
-        <IonCardContent>Open the workshop to add elements.</IonCardContent>
+        <IonCardContent>{t("OpenWorkshop")}</IonCardContent>
       )}
       {elementNames.length > 0 && (
-        <IonCardContent>Games: {elementNames.join(", ")}</IonCardContent>
+        <IonCardContent>
+          {t("Games")}
+          {elementNames.join(", ")}
+        </IonCardContent>
       )}
     </PreviewCard>
   );

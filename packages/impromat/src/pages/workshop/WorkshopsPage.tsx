@@ -15,6 +15,7 @@ import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
+import { useTranslation } from "react-i18next";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -88,6 +89,8 @@ export const WorkshopsPage: React.FC = () => {
 
   const presentWorkshopInputDialog = useCreateWorkshopInputDialog();
 
+  const { t } = useTranslation("WorkshopsPage");
+
   return (
     <PageScaffold
       customContentWrapper
@@ -116,7 +119,7 @@ export const WorkshopsPage: React.FC = () => {
             color="primary"
             onClick={() => presentWorkshopInputDialog()}
           >
-            <IonLabel>New Workshop</IonLabel>
+            <IonLabel>{t("NewWorkshop")}</IonLabel>
           </IonButton>
         </IonFab>
         {availableWorkshops?.length ? (
@@ -144,7 +147,7 @@ export const WorkshopsPage: React.FC = () => {
             }}
           >
             <div>
-              <p>The current filter selection returns no workshops</p>
+              <p>{t("FilterNoWorkshops")}</p>
               <IonButton
                 expand="full"
                 onClick={() => {
@@ -156,7 +159,7 @@ export const WorkshopsPage: React.FC = () => {
                 }}
               >
                 <IonIcon slot="start" icon={filter}></IonIcon>
-                Clear Filters
+                {t("ClearFilters")}
               </IonButton>
             </div>
           </div>

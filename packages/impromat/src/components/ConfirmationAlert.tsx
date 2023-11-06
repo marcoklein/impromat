@@ -1,4 +1,5 @@
 import { IonAlert } from "@ionic/react";
+import { useTranslation } from "react-i18next";
 
 interface ContainerProps {
   isOpen: boolean;
@@ -15,13 +16,15 @@ export const ConfirmationAlert: React.FC<ContainerProps> = ({
   header,
   confirmText,
 }) => {
+  const { t } = useTranslation("common");
+
   return (
     <IonAlert
       header={header}
       isOpen={isOpen}
       buttons={[
         {
-          text: "Cancel",
+          text: t("Cancel"),
           role: "cancel",
         },
         {

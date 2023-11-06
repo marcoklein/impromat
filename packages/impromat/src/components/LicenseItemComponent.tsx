@@ -1,4 +1,5 @@
 import { IonItem, IonLabel } from "@ionic/react";
+import { useTranslation } from "react-i18next";
 import { Icon } from "./Icon";
 
 interface ContainerProps {
@@ -30,17 +31,21 @@ export const LicenseItemComponent: React.FC<ContainerProps> = ({
       text
     );
 
+  const { t } = useTranslation("LicenseItemComponent");
+
   return (
     <IonItem color="" lines="none">
       <Icon tablerIcon="license" slot="start"></Icon>
       <IonLabel className="ion-text-wrap">
-        Based on "{OptionalLink(name, sourceUrl)}"
+        {t("Based on")} "{OptionalLink(name, sourceUrl)}"
         {authorName && (
           <>
             {" "}
-            from {OptionalLink(authorName, authorUrl)}
+            {t("from")} {OptionalLink(authorName, authorUrl)}
             {licenseName && (
-              <>, licensed under {OptionalLink(licenseName, licenseUrl)}</>
+              <>
+                , {t("licensed under")} {OptionalLink(licenseName, licenseUrl)}
+              </>
             )}
           </>
         )}

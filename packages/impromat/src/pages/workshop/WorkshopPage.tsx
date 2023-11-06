@@ -38,6 +38,7 @@ import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 import { ShareWorkshopModal } from "./components/ShareWorkshopModal";
 import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
 import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";
+import { useTranslation } from "react-i18next";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -169,6 +170,8 @@ export const WorkshopPage: React.FC = () => {
     });
   }, [updateUserLikedWorkshop, workshop]);
 
+  const { t } = useTranslation("WorkshopPage");
+
   return (
     <PageScaffold
       defaultBackHref={routeWorkshops()}
@@ -184,13 +187,17 @@ export const WorkshopPage: React.FC = () => {
                 justifyContent: "center",
               }}
             >
-              <IonLabel style={{ marginRight: "0.5rem" }}>Add</IonLabel>
+              <IonLabel style={{ marginRight: "0.5rem" }}>{t("Add")}</IonLabel>
               <div style={{ display: "flex" }}>
                 <IonButton onClick={() => onCreateSection()} size="small">
-                  Section
+                  {t("Section", { ns: "common" })}
                 </IonButton>
-                <IonButton routerLink={routeLibrary()} size="small">
-                  Element
+                <IonButton
+                  routerLink={routeLibrary()}
+                  size="small"
+                  color="secondary"
+                >
+                  {t("Element", { ns: "common" })}
                 </IonButton>
               </div>
             </div>
@@ -205,13 +212,11 @@ export const WorkshopPage: React.FC = () => {
                 icon={workshop.isLiked ? heart : heartOutline}
                 color={COLOR_LIKE}
                 slot="icon-only"
-                aria-label={
-                  workshop?.isLiked ? "Remove from likes." : "Add to likes."
-                }
+                aria-label={workshop?.isLiked ? t("RemoveLike") : t("AddLike")}
               ></IonIcon>
               <IonLoading
                 isOpen={updateUserLikedWorkshopResult.fetching}
-                message="Updating Like"
+                message={t("UpdatingLike")}
               />
             </IonButton>
           )}
@@ -231,7 +236,9 @@ export const WorkshopPage: React.FC = () => {
                       : lockClosed
                   }
                 ></Icon>
-                <span className="ion-hide-sm-down"> Share</span>
+                <span className="ion-hide-sm-down">
+                  {t("Share", { ns: "common" })}
+                </span>
               </IonButton>
               <ShareWorkshopModal
                 isSharingModalOpen={isSharingModalOpen}
@@ -279,16 +286,13 @@ export const WorkshopPage: React.FC = () => {
             !workshop.sections[0].name ? (
               <IonCard>
                 <IonCardContent className="ion-padding">
-                  <IonText>
-                    Use the bottom right button to add elements. Enjoy designing
-                    your workshop!
-                  </IonText>
+                  <IonText>{t("AddElementMessage")}</IonText>
                   <IonButton
                     expand="full"
                     fill="clear"
                     routerLink={routeLibrary()}
                   >
-                    Add First Element
+                    {t("AddElement")}
                   </IonButton>
                 </IonCardContent>
               </IonCard>

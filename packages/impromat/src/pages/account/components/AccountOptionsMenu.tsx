@@ -10,6 +10,7 @@ import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useInputDialog } from "../../../hooks/use-input-dialog";
 import { useUpdateUserMutation } from "../../../hooks/use-update-user-mutation";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const AccountOptionsMenu_User = graphql(`
   fragment AccountOptionsMenu_User on User {
@@ -35,15 +36,17 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
 
   const [, updateUserMutation] = useUpdateUserMutation();
 
+  const { t } = useTranslation("AccountOptionsMenu");
+
   const onRenameUser = () => {
     presentInputDialog({
       maxlength: 20,
       minlength: 3,
       inputRegex: /^[a-zA-Z \-_0-9]*$/,
-      inputRegexMessage: "Please only use letters, numbers, -, or _.",
-      header: "Rename",
+      inputRegexMessage: t("LetterUseMessage"),
+      header: t("Rename", { ns: "common" }),
       initialText: user.name ?? "",
-      emptyInputMessage: "Please type a user name.",
+      emptyInputMessage: t("InputMessage"),
       onAccept: async (text) => {
         const result = await updateUserMutation({
           input: { id: user.id, name: text },
@@ -51,8 +54,7 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
         if (!result.data) {
           presentToast({
             color: "warning",
-            message:
-              "User name change failed. Please verify your internet connection and retry.",
+            message: t("FailMessage"),
             duration: 2000,
           });
           return false;
@@ -67,17 +69,17 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
     <OptionsMenu
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      header="Options"
+      header={t("Options", { ns: "common" })}
       options={[
         {
-          text: "Change Username",
+          text: t("ChangeUsername"),
           icon: person,
           handler: () => {
             onRenameUser();
           },
         },
         {
-          text: "Cancel",
+          text: t("Cancel", { ns: "common" }),
           role: "cancel",
           handler: () => {},
           icon: close,
