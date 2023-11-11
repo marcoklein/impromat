@@ -1,0 +1,2 @@
+# Ignore the virtual import for the Progressive Web App registration (from vite-pwa plugin)
+ignores: ["virtual:pwa-register"]

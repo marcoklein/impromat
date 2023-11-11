@@ -42,37 +42,43 @@ The following section describes the technical quick start for running Impromat l
 
 Clone repository via SSH:
 
-```
+```sh
 git clone git@github.com:marcoklein/impromat.git
 ```
 
 ...or via HTTPS
 
-```
+```sh
 git clone https://github.com/marcoklein/impromat.git
 ```
 
 Install all dependencies:
 
-```
+```sh
 yarn install
 ```
 
 Build impromat frontend and impromat backend:
 
-```
+```sh
 yarn workspaces foreach --from '{impromat,impromat-api}' run build
+```
+
+Run database migrations:
+
+```sh
+yarn workspace impromat-api run prisma:migrate
 ```
 
 Seed database:
 
-```
+```sh
 yarn workspace impromat-api run prisma db seed
 ```
 
 Start the development server for frontend and backend:
 
-```
+```sh
 yarn dev
 ```
 
@@ -80,7 +86,7 @@ Now you should have a running local version of the impromat application at http:
 
 Explore project graph:
 
-```
+```sh
 yarn dlx nx graph
 ```
 
@@ -96,7 +102,7 @@ The project uses [changesets](https://github.com/changesets/changesets) for main
 
 For adding a changeset run the following command from any workspace:
 
-```
+```sh
 yarn changeset:add
 ```
 
