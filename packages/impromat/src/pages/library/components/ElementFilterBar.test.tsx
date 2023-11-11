@@ -48,5 +48,10 @@ test.describe("ElementFilterBar", () => {
       // then
       await expect(component).toContainText("4711");
     });
+
+    test("should have expected screenshot", async () => {
+      // then
+      await expect(component).toHaveScreenshot();
+    });
   });
 });

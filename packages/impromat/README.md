@@ -122,6 +122,14 @@ COOKIE_DOMAIN=localhost
 BASE_URL=http://localhost:3000/
 ```
 
+## Dependency Management
+
+We use `depcheck` for verifying dependencies. Run the following command to check for unused dependencies:
+
+```sh
+yarn deps:check
+```
+
 ### Page Object Models
 
 Tests are structured using https://playwright.dev/docs/pom.
