@@ -28,50 +28,75 @@ describe('ElementSearchService', () => {
     userService = moduleRef.get(UserService);
   });
 
-  beforeEach(() => {
-    userService.findUserById.mockResolvedValueOnce({
-      id: 'userId',
-      languageCodes: ['en', 'de'],
-    } as User);
+  describe('given no user', () => {
+    it('should return all existing elements for empty text', async () => {
+      // given
+      const searchText = undefined;
+      const dbElements = [{ id: '1' }, { id: '2' }] as Element[];
+      jest
+        .spyOn(prismaService.element, 'findMany')
+        .mockResolvedValue(dbElements);
+      // when
+      const result = await service.searchElements(undefined, {
+        text: searchText,
+        take: 20,
+        skip: 0,
+      });
+      // then
+      expect(result).toHaveLength(2);
+    });
   });
 
-  it('should return all existing elements for empty text', async () => {
-    // given
-    const searchText = undefined;
-    const dbElements = [{ id: '1' }, { id: '2' }] as Element[];
-    jest.spyOn(prismaService.element, 'findMany').mockResolvedValue(dbElements);
-    // when
-    const result = await service.searchElements('userId', {
-      text: searchText,
-      take: 20,
-      skip: 0,
+  describe('given a user with language codes', () => {
+    beforeEach(() => {
+      userService.findUserById.mockResolvedValueOnce({
+        id: 'userId',
+        languageCodes: ['en', 'de'],
+      } as User);
     });
-    // then
-    expect(result).toHaveLength(2);
-    expect(result).toEqual([
-      { element: { id: '1' }, score: 1, matches: [] },
-      { element: { id: '2' }, score: 1, matches: [] },
-    ]);
-  });
 
-  it('should return score and matches for elements', async () => {
-    // given
-    const searchText = 'frez tag';
-    const dbElements = [
-      { id: '1', name: 'freeze' },
-      { id: '2', name: 'freeze tag' },
-      { id: '3', name: 'different' },
-    ] as Element[];
-    jest.spyOn(prismaService.element, 'findMany').mockResolvedValue(dbElements);
-    // when
-    const result = await service.searchElements('userId', {
-      text: searchText,
-      take: 20,
-      skip: 0,
+    it('should return all existing elements for empty text', async () => {
+      // given
+      const searchText = undefined;
+      const dbElements = [{ id: '1' }, { id: '2' }] as Element[];
+      jest
+        .spyOn(prismaService.element, 'findMany')
+        .mockResolvedValue(dbElements);
+      // when
+      const result = await service.searchElements('userId', {
+        text: searchText,
+        take: 20,
+        skip: 0,
+      });
+      // then
+      expect(result).toHaveLength(2);
+      expect(result).toEqual([
+        { element: { id: '1' }, score: 1, matches: [] },
+        { element: { id: '2' }, score: 1, matches: [] },
+      ]);
     });
-    // then
-    expect(result[0].score).toBeGreaterThan(0.1);
-    expect(result[0].score).toBeLessThan(0.4);
-    expect(result[0].element.id).toBe('2');
+
+    it('should return score and matches for elements', async () => {
+      // given
+      const searchText = 'frez tag';
+      const dbElements = [
+        { id: '1', name: 'freeze' },
+        { id: '2', name: 'freeze tag' },
+        { id: '3', name: 'different' },
+      ] as Element[];
+      jest
+        .spyOn(prismaService.element, 'findMany')
+        .mockResolvedValue(dbElements);
+      // when
+      const result = await service.searchElements('userId', {
+        text: searchText,
+        take: 20,
+        skip: 0,
+      });
+      // then
+      expect(result[0].score).toBeGreaterThan(0.1);
+      expect(result[0].score).toBeLessThan(0.4);
+      expect(result[0].element.id).toBe('2');
+    });
   });
 });

@@ -24,6 +24,7 @@ test.describe("ElementFilterBar", () => {
       // when
       component = await mount(
         <ElementFilterBar
+          enableUserSpecificFilters={true}
           queryFragment={fragmentData}
           loadingAvailableTags={false}
           onTagsChange={() => {}}

@@ -13,7 +13,7 @@ export const routeLibrary = () => baseLibraryRoute;
 export const routeLibraryElement = (
   libraryElementId = ROUTE_IMPROBIB_ELEMENT_ID,
   params: { workshopId?: string } = {},
-) => addSearchParamsToUrl(`/library-element/${libraryElementId}`, params);
+) => addSearchParamsToUrl(`/element/${libraryElementId}`, params);
 
 export const routeLibraryCreateCustomElement = (
   params: {

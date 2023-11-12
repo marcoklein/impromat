@@ -2,9 +2,7 @@ import {
   IonButton,
   IonCheckbox,
   IonContent,
-  IonFab,
   IonIcon,
-  IonLabel,
   IonList,
   IonProgressBar,
   IonToolbar,
@@ -19,12 +17,11 @@ import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
-import {
-  routeLibraryCreateCustomElement,
-  routeLibraryElement,
-} from "../../routes/library-routes";
+import { routeLibraryElement } from "../../routes/library-routes";
 import { ElementFilterBar } from "./components/ElementFilterBar";
+import { NewElementButton } from "./components/NewElementButton";
 
 const LibraryPageQuery = graphql(`
   query SearchElements(
@@ -66,6 +63,7 @@ export const LibraryPage: React.FC = () => {
   const [searchText, setSearchText] = useState(restoredSearchText);
   const [pageNumber, setPageNumber] = useState(0);
   const [scrollToTop, setScrollToTop] = useState(0);
+  const { isLoggedIn } = useIsLoggedIn();
 
   const itemsPerPage = 20;
 
@@ -140,6 +138,7 @@ export const LibraryPage: React.FC = () => {
           >
             {searchElementsQueryResult.data && (
               <ElementFilterBar
+                enableUserSpecificFilters={isLoggedIn}
                 onLanguageChange={(language) => {
                   resetScroll();
                   setSelectedLanguage(language);
@@ -234,14 +233,7 @@ export const LibraryPage: React.FC = () => {
       }
     >
       <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
-        <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonButton
-            color="secondary"
-            routerLink={routeLibraryCreateCustomElement()}
-          >
-            <IonLabel>{t("NewElement")}</IonLabel>
-          </IonButton>
-        </IonFab>
+        {isLoggedIn && <NewElementButton></NewElementButton>}
         {!searchElementsQueryResult.stale &&
           !searchElementsQueryResult.fetching &&
           !searchElementsQueryResult.data?.searchElements.length &&

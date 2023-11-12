@@ -60,6 +60,8 @@ export class WorkshopDevPage extends DevPage {
     await page
       .getByRole("button", { name: "Add to workshop", exact: true })
       .click();
+    await page.waitForURL(/\/workshop\/.*/);
+    await page.getByRole("heading", { name: "Freeze" }).last().waitFor();
   }
 
   async addSection(name: string) {
@@ -89,7 +91,11 @@ export class WorkshopDevPage extends DevPage {
   async share() {
     const page = this.page;
     await page.getByRole("button", { name: "Share" }).click();
-    await page.locator("label").click();
+    await page
+      .locator("ion-checkbox")
+      .filter({ hasText: "Anyone with the link can view" })
+      .getByRole("img")
+      .click();
     await page.getByRole("button", { name: "Copy workshop link" }).click();
   }
 

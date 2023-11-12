@@ -6,7 +6,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useQuery } from "urql";
 import { ElementComponent } from "../../components/ElementComponent";
@@ -25,7 +25,7 @@ import { AddToWorkshopDropdown } from "./components/AddToWorkshopDropdown";
 import { ElementFavoriteIconComponent } from "./components/ElementFavoriteIconComponent";
 
 const LibraryElementPageQuery = graphql(`
-  query LibraryElementQuery($userId: ID!, $elementId: ID!) {
+  query LibraryElementQuery($userId: ID, $elementId: ID!) {
     element(id: $elementId) {
       ...LibraryElement_Element
     }
@@ -62,24 +62,27 @@ export const LibraryElementPage: React.FC = () => {
   const { libraryPartId } = useParams<{
     libraryPartId: string;
   }>();
-  const { myUserId } = useIsLoggedIn();
   const logger = useComponentLogger("ImprobibElementPage");
   const workshopContextId = useMemo(
     () => localStorage.getItem(STORAGE_LAST_WORKSHOP_ID) ?? undefined,
     [],
   );
+  const history = useHistory();
+  const { isLoggedIn, myUserId } = useIsLoggedIn();
+  const [, addToWorkshopMutation] = useUpdateWorkshopMutation();
+  const [addToWorkshopSelectId, setAddToWorkshopSelectId] = useState<string>();
+  const presentWorkshopInputDialog = useCreateWorkshopInputDialog();
+
   useStateChangeLogger(workshopContextId, "workshopId", logger);
   useStateChangeLogger(libraryPartId, "libraryPartId", logger);
 
   const [elementPageQueryResult, reexecuteElementPageQuery] = useQuery({
     query: LibraryElementPageQuery,
-    pause: !myUserId,
     variables: {
       elementId: libraryPartId,
       userId: myUserId!,
     },
   });
-  const [, addToWorkshopMutation] = useUpdateWorkshopMutation();
   const element = getFragmentData(
     LibraryElement_Element,
     elementPageQueryResult.data?.element,
@@ -89,19 +92,16 @@ export const LibraryElementPage: React.FC = () => {
     elementPageQueryResult.data,
   );
 
-  const [addToWorkshopSelectId, setAddToWorkshopSelectId] = useState<string>();
   useEffect(() => {
     setAddToWorkshopSelectId(
-      workshopContextId ?? workshops?.user.workshops.at(0)?.id ?? undefined,
+      workshopContextId ?? workshops?.user?.workshops.at(0)?.id ?? undefined,
     );
-  }, [workshopContextId, workshops?.user.workshops]);
+  }, [workshopContextId, workshops?.user?.workshops]);
 
-  const history = useHistory();
-
-  function addToWorkshop() {
+  const addToWorkshop = useCallback(() => {
     if (!element) return;
     if (!workshops) throw new Error("no workshops response");
-    const workshop = workshops.user.workshops.find(
+    const workshop = workshops.user?.workshops.find(
       ({ id }) => id === addToWorkshopSelectId,
     );
     if (!workshop) throw new Error("invalid select id");
@@ -134,17 +134,21 @@ export const LibraryElementPage: React.FC = () => {
     }).then(() => {
       history.push(`${routeWorkshop(workshop.id)}`);
     });
-  }
-
-  const presentWorkshopInputDialog = useCreateWorkshopInputDialog();
+  }, [
+    addToWorkshopMutation,
+    addToWorkshopSelectId,
+    element,
+    history,
+    workshops,
+  ]);
 
   const availableWorkshops = useMemo(
     () => [
       // FIXME: workshop is created but element is not added to it
       // { id: "create-new-workshop", name: "+ Create new workshop" },
-      ...(workshops?.user.workshops ?? []),
+      ...(workshops?.user?.workshops ?? []),
     ],
-    [workshops?.user.workshops],
+    [workshops?.user?.workshops],
   );
 
   return (
@@ -152,47 +156,51 @@ export const LibraryElementPage: React.FC = () => {
       defaultBackHref={routeLibrary()}
       title={element?.name}
       toolbarButtons={
-        element && (
-          <ElementFavoriteIconComponent
-            elementFragment={element}
-          ></ElementFavoriteIconComponent>
-        )
+        <>
+          {element && isLoggedIn && (
+            <ElementFavoriteIconComponent
+              elementFragment={element}
+            ></ElementFavoriteIconComponent>
+          )}
+        </>
       }
       customContentWrapper
       footer={
-        workshops && (
-          <IonToolbar>
-            <IonItem>
-              <AddToWorkshopDropdown
-                workshops={availableWorkshops}
-                workshopId={addToWorkshopSelectId}
-                onWorkshopIdChange={(id) => setAddToWorkshopSelectId(id)}
-              ></AddToWorkshopDropdown>
-              <div slot="end">
-                <IonButton
-                  size="default"
-                  aria-label="Add to workshop"
-                  onClick={() => {
-                    if (addToWorkshopSelectId === "create-new-workshop") {
-                      presentWorkshopInputDialog();
-                    } else {
-                      addToWorkshop();
-                    }
-                  }}
-                  disabled={!addToWorkshopSelectId}
-                >
-                  <IonIcon icon={add} slot="icon-only"></IonIcon>
-                </IonButton>
-              </div>
-            </IonItem>
-          </IonToolbar>
-        )
+        <>
+          {workshops && isLoggedIn && (
+            <IonToolbar>
+              <IonItem>
+                <AddToWorkshopDropdown
+                  workshops={availableWorkshops}
+                  workshopId={addToWorkshopSelectId}
+                  onWorkshopIdChange={(id) => setAddToWorkshopSelectId(id)}
+                ></AddToWorkshopDropdown>
+                <div slot="end">
+                  <IonButton
+                    size="default"
+                    aria-label="Add to workshop"
+                    onClick={() => {
+                      if (addToWorkshopSelectId === "create-new-workshop") {
+                        presentWorkshopInputDialog();
+                      } else {
+                        addToWorkshop();
+                      }
+                    }}
+                    disabled={!addToWorkshopSelectId}
+                  >
+                    <IonIcon icon={add} slot="icon-only"></IonIcon>
+                  </IonButton>
+                </div>
+              </IonItem>
+            </IonToolbar>
+          )}
+        </>
       }
     >
       <IonContent>
         <PageContentLoaderComponent
-          queryResult={[elementPageQueryResult]}
-          reexecuteQuery={[reexecuteElementPageQuery]}
+          queryResult={elementPageQueryResult}
+          reexecuteQuery={reexecuteElementPageQuery}
         >
           {element && (
             <ElementComponent elementFragment={element}></ElementComponent>

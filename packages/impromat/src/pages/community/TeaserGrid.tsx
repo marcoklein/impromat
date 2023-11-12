@@ -37,8 +37,7 @@ export const TeaserGrid = <ItemData extends unknown>({
               <IonCol
                 key={index}
                 sizeXs="12"
-                sizeSm="6"
-                sizeMd="4"
+                sizeLg="4"
                 style={{ height: "200px", width: "300px", padding: "4px" }}
               >
                 {itemContent(item)}

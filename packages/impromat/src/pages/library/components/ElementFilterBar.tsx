@@ -41,6 +41,11 @@ interface ContainerProps {
   isExpanded: boolean;
   searchInput: string;
   onSearchInputChange: (input: string) => void;
+  /**
+   * If true, user specific filters (my element, liked) are shown.
+   * False indicates that the user is not logged in.
+   */
+  enableUserSpecificFilters: boolean;
 }
 
 /**
@@ -58,6 +63,7 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
   isExpanded,
   searchInput,
   onSearchInputChange,
+  enableUserSpecificFilters,
 }) => {
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
 
@@ -103,7 +109,7 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
         input={searchInput}
         onInputChange={(input) => onSearchInputChange(input)}
       ></SearchInputChip>
-      {!selectedTagNames.length && (
+      {!selectedTagNames.length && enableUserSpecificFilters && (
         <>
           <IonChip
             outline={!additionalFilter.liked}

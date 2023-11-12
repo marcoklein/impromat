@@ -1,5 +1,5 @@
 import { accessibleBy } from '@casl/prisma';
-import { Inject, UseGuards } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import {
   Args,
   ID,
@@ -11,7 +11,6 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
-import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { UpdateUserInput } from 'src/dtos/inputs/update-user-input';
 import { UserWorkshopsFilterInput } from 'src/dtos/inputs/user-workshops-filter-input';
 import { UserFavoriteElementDto } from 'src/dtos/types/user-favorite-element.dto';
@@ -25,7 +24,6 @@ import { ElementService } from '../services/element.service';
 import { UserService } from '../services/user.service';
 
 @Resolver(User)
-@UseGuards(GraphqlAuthGuard)
 export class UserController {
   constructor(
     @Inject(PrismaService) private prismaService: PrismaService,
@@ -108,16 +106,22 @@ export class UserController {
     });
   }
 
-  @Query(() => User, {})
+  @Query(() => User, {
+    nullable: true,
+    description:
+      'Get information about a user. Returns null if not found or not logged in.',
+  })
   async user(
     @SessionUserId() sessionUserId: string,
-    @Args('id', { type: () => ID }) userId: string,
+    @Args('id', { type: () => ID, nullable: true }) userId: string | undefined,
   ): Promise<Omit<User, UserDtoComputedFields> | null | undefined> {
     return this.userService.findUserById(sessionUserId, userId);
   }
 
   @Query(() => User, {
-    description: 'Get information about the current user.',
+    description:
+      'Get information about the current user. Returns null if not logged in.',
+    nullable: true,
   })
   async me(
     @SessionUserId() userId: string,

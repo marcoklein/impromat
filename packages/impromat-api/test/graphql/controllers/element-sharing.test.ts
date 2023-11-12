@@ -166,7 +166,7 @@ describe('Sharing Elements', () => {
     expect(response.data?.element!.markdown).toBe('updated-description');
   });
 
-  it('should dissallow changes to the visibility state for other users', async () => {
+  it('should disallow changes to the visibility state for other users', async () => {
     // given
     const uniqueElementName = `shared-test-user-element-${randomUUID()}`;
     // when

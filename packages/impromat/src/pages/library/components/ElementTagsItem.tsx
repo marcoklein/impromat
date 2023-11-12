@@ -90,7 +90,7 @@ export const ElementTagsItem: React.FC<ContainerProps> = ({
             </IonChip>
           ))}
         </div>
-        <IonButton id="open-modal">{t("Add Tag")}</IonButton>
+        <IonButton id="open-modal">{t("AddTag")}</IonButton>
       </IonItem>
       <IonModal
         ref={modal}

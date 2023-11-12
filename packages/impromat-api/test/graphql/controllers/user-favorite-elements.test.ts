@@ -110,8 +110,8 @@ describe('User Favorite Elements', () => {
     const response = await api.graphqlRequest(meFavoriteElementsQuery);
     // then
     expect(response.errors).toBeUndefined();
-    expect(response.data?.me.favoriteElements).toHaveLength(1);
-    expect(response.data?.me.favoriteElements[0].element.id).toBe(
+    expect(response.data?.me?.favoriteElements).toHaveLength(1);
+    expect(response.data?.me?.favoriteElements[0].element.id).toBe(
       createdElementId,
     );
   });
@@ -163,6 +163,6 @@ describe('User Favorite Elements', () => {
     const response = await api.graphqlRequest(meFavoriteElementsQuery);
     // then
     expect(response.errors).toBeUndefined();
-    expect(response.data?.me.favoriteElements).toHaveLength(0);
+    expect(response.data?.me?.favoriteElements).toHaveLength(0);
   });
 });

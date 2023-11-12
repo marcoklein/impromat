@@ -128,6 +128,10 @@ export const defineAbilityForUser = (userId: string | undefined) => {
       },
     }).because(REASON_PART_OF_PUBLIC_WORKSHOP);
   } else {
+    can(
+      [ABILITY_ACTION_READ, ABILITY_ACTION_LIST],
+      'ElementToElementTag',
+    ).because(REASON_PUBLIC);
     can(ABILITY_ACTION_READ, 'Workshop', { isPublic: true }).because(
       REASON_PUBLIC,
     );

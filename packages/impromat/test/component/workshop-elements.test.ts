@@ -1,6 +1,8 @@
 import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures.js";
 
+pageTest.describe.configure({ mode: "parallel" });
+
 pageTest.describe("Workshop Elements Page", () => {
   pageTest(
     "should add an element from the search",
@@ -25,7 +27,9 @@ pageTest.describe("Workshop Elements Page", () => {
       // when
       await workshopElementPage.createAndGoto();
       // then
-      await expect(page.locator("ion-title").getByText("Freeze")).toBeVisible();
+      await expect(
+        page.locator("ion-toolbar ion-title").getByText("Freeze").last(),
+      ).toBeVisible();
     },
   );
 

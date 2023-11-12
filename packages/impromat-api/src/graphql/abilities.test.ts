@@ -82,6 +82,7 @@ describe('Abilities', () => {
       ],
       ['Element', 'write', []],
       ['Element', 'list', [REASON_PUBLICLY_LISTED]],
+      ['ElementToElementTag', 'read', [REASON_PUBLIC]],
       ['Workshop', 'read', [REASON_PUBLIC, REASON_PUBLICLY_LISTED]],
       ['Workshop', 'write', []],
       ['Workshop', 'list', [REASON_PUBLICLY_LISTED]],

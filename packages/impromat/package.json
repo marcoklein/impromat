@@ -8,7 +8,7 @@
   "dependencies": {
     "@ionic/react": "^7.4.1",
     "@ionic/react-router": "^7.4.1",
-    "@types/node": "^12.19.15",
+    "@types/node": "^17.0.0",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
@@ -43,6 +43,7 @@
     "test": "yarn test:unit && yarn test:backend-up --no-recreate && yarn test:component",
     "test:component": "yarn playwright:install && playwright test",
     "test:unit": "yarn playwright:install && playwright test -c playwright-unit.config.ts",
+    "test:unit:ui": "yarn test:unit --ui",
     "test:unit:update-snapshots": "yarn test:unit --update-snapshots",
     "test:e2e": "yarn playwright:install && playwright test --config playwright-e2e.config.ts",
     "test:headed": "yarn test --headed",

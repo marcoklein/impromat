@@ -77,6 +77,8 @@ export default {
     "No matching elements found.": "Keine passenden Elemente gefunden.",
     "Use the search bar to find elements from various sources.":
       "Nutze die Suchleiste, um Improelemente aus verschiedenen Quellen zu finden.",
+  },
+  NewElementButton: {
     NewElement: "Neues Element",
   },
   ElementFilterBar: {
@@ -86,6 +88,7 @@ export default {
   },
   ElementPreviewCard: { Open: "Öffnen" },
   LibraryCreateCustomElementPage: {
+    "Select language": "Sprache auswählen",
     "Edit Custom Element": "Mein Element bearbeiten",
     "Create Custom Element": "Eigenes Element erstellen",
     "Name (required)": "Name (erforderlich)",
@@ -144,6 +147,10 @@ export default {
     AddElementMessage:
       "Nutze das Feld unten rechts, um Elemente hinzuzufügen. Viel Spaß beim Workshop-Konzipieren!",
   },
+  AddToWorkshopDropdown: {
+    AddToWorkshop: "Zum Workshop hinzufügen",
+    SelectWorkshop: "Wähle einen Workshop aus",
+  },
   WorkshopElementPage: { AddNote: "Notiz hinzufügen" },
   WorkshopsPage: {
     NewWorkshop: "Neuer Workshop",
@@ -155,7 +162,7 @@ export default {
     Games: "Elemente: ",
   },
   WorkshopOptionsMenu: {
-    SetDate: "Datum einstellen",
+    SetDate: "Datum des Workshops",
     EnterDate: "Gebe ein Datum für deinen Workshop ein:",
     DatePlaceholder: "Datum...",
     Set: "Speichern",

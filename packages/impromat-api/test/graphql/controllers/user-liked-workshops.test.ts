@@ -105,8 +105,8 @@ describe('User Liked Workshops', () => {
       const response = await api.graphqlRequest(meFavoriteElementsQuery);
       // then
       expect(response.errors).toBeUndefined();
-      expect(response.data?.me.likedWorkshops).toHaveLength(1);
-      expect(response.data?.me.likedWorkshops[0].workshop.id).toBe(
+      expect(response.data?.me?.likedWorkshops).toHaveLength(1);
+      expect(response.data?.me?.likedWorkshops[0].workshop.id).toBe(
         createdWorkshopId,
       );
     });
@@ -158,7 +158,7 @@ describe('User Liked Workshops', () => {
       const response = await api.graphqlRequest(meFavoriteElementsQuery);
       // then
       expect(response.errors).toBeUndefined();
-      expect(response.data?.me.likedWorkshops).toHaveLength(0);
+      expect(response.data?.me?.likedWorkshops).toHaveLength(0);
     });
   });
 
@@ -179,7 +179,7 @@ describe('User Liked Workshops', () => {
       });
       const response = await api.graphqlRequest(meFavoriteElementsQuery);
       // then
-      expect(response.data?.me.likedWorkshops.at(0)?.workshop.id).toBe(
+      expect(response.data?.me?.likedWorkshops.at(0)?.workshop.id).toBe(
         workshopId,
       );
     });

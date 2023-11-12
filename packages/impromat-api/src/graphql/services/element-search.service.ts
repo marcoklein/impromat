@@ -20,7 +20,7 @@ export class ElementSearchService {
   ) {}
 
   async searchElements(
-    userRequestId: string,
+    userRequestId: string | undefined,
     searchElementsInput: ElementSearchInput,
   ): Promise<
     {
@@ -33,7 +33,6 @@ export class ElementSearchService {
       userRequestId,
       userRequestId,
     );
-    if (!user) throw new Error('User not found');
 
     const ability = defineAbilityForUser(userRequestId);
 
@@ -54,42 +53,46 @@ export class ElementSearchService {
       };
     }
 
+    const FALLBACK_LANGUAGE_CODE = 'en';
+    const languageCodes = searchElementsInput.languageCode
+      ? [searchElementsInput.languageCode]
+      : user?.languageCodes ?? [FALLBACK_LANGUAGE_CODE];
+
+    const userSpecificElementFilterQueries: Prisma.ElementWhereInput[] = [
+      {
+        OR: [
+          {
+            ownerId: userRequestId,
+          },
+          {
+            visibility: 'PUBLIC',
+          },
+        ],
+      },
+      searchElementsInput.isLiked
+        ? {
+            userFavoriteElement: {
+              some: {
+                userId: userRequestId,
+              },
+            },
+          }
+        : {},
+      searchElementsInput.isOwned
+        ? {
+            ownerId: userRequestId,
+          }
+        : {},
+    ];
+
     const elementsToSearch = await this.prismaService.element.findMany({
       where: {
         AND: [
           accessibleBy(ability, ABILITY_ACTION_LIST).Element,
           noSnapshotElementFilterQuery,
-          elementLanguageFilterQuery(
-            userRequestId,
-            searchElementsInput.languageCode
-              ? [searchElementsInput.languageCode]
-              : user.languageCodes,
-          ),
-          {
-            OR: [
-              {
-                ownerId: userRequestId,
-              },
-              {
-                visibility: 'PUBLIC',
-              },
-            ],
-          },
+          elementLanguageFilterQuery(userRequestId, languageCodes),
           createFilterTagNamesQuery(searchElementsInput.tagNames),
-          searchElementsInput.isLiked
-            ? {
-                userFavoriteElement: {
-                  some: {
-                    userId: userRequestId,
-                  },
-                },
-              }
-            : {},
-          searchElementsInput.isOwned
-            ? {
-                ownerId: userRequestId,
-              }
-            : {},
+          ...(user ? userSpecificElementFilterQueries : []),
         ],
       },
       include: { tags: true },
