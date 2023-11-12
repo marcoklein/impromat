@@ -1,5 +1,15 @@
 # impromat-api
 
+## 0.23.0
+
+### Minor Changes
+
+- 808f4e0: Elements and exercises are publicly available
+
+### Patch Changes
+
+- 31434be: All English tags are lower case
+
 ## 0.22.1
 
 ### Patch Changes
