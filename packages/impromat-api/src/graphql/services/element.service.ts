@@ -121,6 +121,7 @@ export class ElementService {
   }
 
   async findElementOwner(userRequestId: string | undefined, id: string) {
+    if (!userRequestId) return null;
     const ability = defineAbilityForUser(userRequestId);
     const result = await this.prismaService.element.findFirstOrThrow({
       where: {

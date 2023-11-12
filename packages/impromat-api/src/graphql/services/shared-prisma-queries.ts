@@ -1,23 +1,31 @@
 import { Prisma } from '@prisma/client';
 
+/**
+ * Returns a Prisma.ElementWhereInput object that can be used to filter elements based on user language codes and ownership.
+ *
+ * @param userId - The ID of the user.
+ * @param languageCodes - An array of language codes.
+ * @returns A Prisma.ElementWhereInput object.
+ */
 export const elementLanguageFilterQuery = (
-  userId: string,
-  userLanguageCodes: string[] | undefined,
+  userId: string | undefined,
+  languageCodes: string[] | undefined,
 ): Prisma.ElementWhereInput => {
-  if (userLanguageCodes === undefined || userLanguageCodes.length === 0) {
+  if (languageCodes === undefined || languageCodes.length === 0) {
     return {};
   }
-  return {
-    OR: [
-      {
-        languageCode: {
-          in: userLanguageCodes,
-        },
+  const languageCodeQuery: Prisma.ElementWhereInput[] = [
+    {
+      languageCode: {
+        in: languageCodes,
       },
-      {
-        languageCode: null,
-      },
-      // ignore language for owned requests and liked elements
+    },
+    {
+      languageCode: null,
+    },
+  ];
+  const ignoreLanguageCodeForOwnedAndLikedElementsQuery: Prisma.ElementWhereInput[] =
+    [
       {
         ownerId: userId,
       },
@@ -28,7 +36,17 @@ export const elementLanguageFilterQuery = (
           },
         },
       },
-    ],
+    ];
+  if (userId) {
+    return {
+      OR: [
+        ...languageCodeQuery,
+        ...ignoreLanguageCodeForOwnedAndLikedElementsQuery,
+      ],
+    };
+  }
+  return {
+    OR: [...languageCodeQuery],
   };
 };
 

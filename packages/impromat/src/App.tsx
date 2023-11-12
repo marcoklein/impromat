@@ -13,6 +13,7 @@ import { HIDE_MENU_SIZE } from "./pages/navigation/responsive-navigation";
 import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
 import { WorkshopPage } from "./pages/workshop/WorkshopPage";
 import {
+  routeLibrary,
   routeLibraryCreateCustomElement,
   routeLibraryElement,
 } from "./routes/library-routes";
@@ -33,17 +34,17 @@ export const App: React.FC = () => {
         <IonReactRouter>
           <ResponsiveMenu></ResponsiveMenu>
           <IonRouterOutlet id="main" animated={ANIMATE_PAGE_TRANSITIONS}>
-            <Redirect path="/" exact to={routeRootNavigation()}></Redirect>
+            <Redirect path={"/"} exact to={routeLibrary()}></Redirect>
             <Route
               path={routeWorkshopElement()}
               exact
               component={WorkshopElementPage}
             ></Route>
-            <ProtectedRouteComponent
+            <Route
               path={routeLibraryElement()}
               exact
               children={<LibraryElementPage></LibraryElementPage>}
-            ></ProtectedRouteComponent>
+            ></Route>
             <ProtectedRouteComponent
               path={routeLibraryCreateCustomElement()}
               exact

@@ -50,6 +50,9 @@ i18n.use(initReactI18next).init({
   saveMissing: true,
   missingKeyHandler: (lng, ns, key, fallbackValue) => {
     console.warn("Missing translation", { lng, ns, key, fallbackValue });
+    if (process.env.NODE_ENV === "development") {
+      throw new Error(`Missing translation: ${key}`);
+    }
   },
 });
 

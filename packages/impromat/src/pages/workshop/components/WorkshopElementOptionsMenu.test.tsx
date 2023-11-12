@@ -17,7 +17,7 @@ test.describe("ElementFilterBar", () => {
     );
 
     // when
-    await component.getByText("Remove").last().click();
+    await component.getByText("Remove").click();
 
     // then
     await expect(component.getByText("RemoveElement")).toBeVisible();

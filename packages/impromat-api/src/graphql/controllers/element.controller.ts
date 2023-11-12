@@ -1,4 +1,3 @@
-import { UseGuards } from '@nestjs/common';
 import {
   Args,
   ID,
@@ -8,7 +7,6 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { ElementsQueryArgs } from 'src/dtos/args/elements-query-args';
 import { PaginationArgs } from 'src/dtos/args/pagination-args';
 import {
@@ -80,20 +78,18 @@ export class ElementController {
     return element.markdown?.substring(0, 300);
   }
 
-  @UseGuards(GraphqlAuthGuard)
   @ResolveField(() => [User])
   async owner(
     @Parent() element: Element,
-    @SessionUserId() userSessionId: string,
+    @SessionUserId() userSessionId: string | undefined,
   ) {
     return this.elementService.findElementOwner(userSessionId, element.id);
   }
 
-  @UseGuards(GraphqlAuthGuard)
   @ResolveField(() => Boolean)
   async isOwnerMe(
     @Parent() element: Element,
-    @SessionUserId() userSessionId: string,
+    @SessionUserId() userSessionId: string | undefined,
   ) {
     if (userSessionId) {
       const owner = await this.elementService

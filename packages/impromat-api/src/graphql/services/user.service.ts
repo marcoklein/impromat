@@ -1,5 +1,6 @@
 import { accessibleBy } from '@casl/prisma';
 import { Inject, Injectable } from '@nestjs/common';
+import Prisma from '@prisma/client';
 import { UpdateUserInput } from 'src/dtos/inputs/update-user-input';
 import { ABILITY_ACTION_READ, defineAbilityForUser } from '../abilities';
 import { PrismaService } from './prisma.service';
@@ -11,7 +12,7 @@ export class UserService {
   async findUserById(
     userRequestId: string | undefined,
     userId: string | undefined,
-  ) {
+  ): Promise<Prisma.User | undefined | null> {
     if (!userRequestId || !userId) return undefined;
     const ability = defineAbilityForUser(userRequestId);
     return await this.prismaService.user.findFirst({

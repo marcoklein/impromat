@@ -8,6 +8,7 @@ import {
 } from "@ionic/react";
 import { barbell, documents, home } from "ionicons/icons";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Redirect, Route } from "react-router";
 import { ProtectedRouteComponent } from "../../components/ProtectedRoute";
 import { ANIMATE_PAGE_TRANSITIONS } from "../../feature-toggles";
@@ -33,7 +34,6 @@ import { AccountPage } from "../account/AccountPage";
 import { LibraryPage } from "../library/LibraryPage";
 import { WorkshopsPage } from "../workshop/WorkshopsPage";
 import { HIDE_MENU_SIZE } from "./responsive-navigation";
-import { useTranslation } from "react-i18next";
 
 export interface TabConfig {
   name: string;
@@ -64,7 +64,7 @@ export const ROOT_TABS: Record<RootTabs, TabConfig> = {
     route: routeLibrary(),
     element: <LibraryPage></LibraryPage>,
     exact: true,
-    protected: true,
+    protected: false,
   },
   WORKSHOPS: {
     name: "Workshops",

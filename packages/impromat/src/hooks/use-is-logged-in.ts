@@ -41,6 +41,6 @@ export function useIsLoggedIn() {
     isLoggedIn: cachedIsLoggedIn || !!meQueryResult.data?.me,
     retriggerLogInQuery: () =>
       retriggerLogInQuery({ requestPolicy: "network-only" }),
-    myUserId: meQueryResult.data?.me.id,
+    myUserId: meQueryResult.data?.me?.id,
   };
 }

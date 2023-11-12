@@ -104,7 +104,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       message: t("EnterNameMessage"),
       placeholder: t("NamePlaceholder"),
       emptyInputMessage: t("EnterWorkshopName"),
-      buttonText: t("Duplicate"),
+      buttonText: t("Duplicate", { ns: "common" }),
       onAccept: async (newWorkshopName) => {
         const { error, data } = await duplicateWorkshopMutation({
           input: { workshopId: workshop.id, name: newWorkshopName },
@@ -160,7 +160,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           },
           {
             icon: copy,
-            text: t("Duplicate"),
+            text: t("Duplicate", { ns: "common" }),
             handler: () => {
               onDuplicateWorkshop();
             },

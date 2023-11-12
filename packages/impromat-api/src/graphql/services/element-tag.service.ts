@@ -1,6 +1,6 @@
 import { accessibleBy } from '@casl/prisma';
 import { Inject, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, User as PrismaUser } from '@prisma/client';
 import { ElementTagsFilterInput } from 'src/dtos/inputs/element-tags-filter-input';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import { Nullable } from 'src/utils/nullish';
@@ -9,9 +9,6 @@ import { PrismaService } from './prisma.service';
 import { elementLanguageFilterQuery } from './shared-prisma-queries';
 import { UserService } from './user.service';
 
-/**
- * Business logic for `ElementTags`.
- */
 @Injectable()
 export class ElementTagService {
   constructor(
@@ -19,6 +16,14 @@ export class ElementTagService {
     private userService: UserService,
   ) {}
 
+  /**
+   * Finds available element tags based on the provided filter and pagination options.
+   *
+   * @param userRequestId The ID of the user making the request.
+   * @param filter The filter options.
+   * @param pagination The pagination options.
+   * @returns The available element tags.
+   */
   async findAvailableTags(
     userRequestId: string | undefined,
     filter: Nullable<ElementTagsFilterInput>,
@@ -68,17 +73,13 @@ export class ElementTagService {
         userRequestId,
         userRequestId,
       );
-      if (!user) throw new Error('User not found');
-      let languageQuery: Prisma.ElementToElementTagWhereInput = {};
-      if (filter?.languageCode) {
-        languageQuery = {
-          element: { languageCode: filter.languageCode },
-        };
-      } else if (user.languageCodes && user.languageCodes.length > 0) {
-        languageQuery = {
-          element: elementLanguageFilterQuery(user.id, user.languageCodes),
-        };
+
+      const languageQuery = this.getLanguageQuery(user, filter?.languageCode);
+
+      if (!languageQuery) {
+        throw new Error('You have to provide a language code.');
       }
+
       const groupByResult =
         await this.prismaService.elementToElementTag.groupBy({
           by: ['tagId'],
@@ -118,6 +119,7 @@ export class ElementTagService {
             },
           },
           orderBy: [
+            // TODO order tags by name instead of count?
             {
               _count: {
                 tagId: 'desc',
@@ -150,5 +152,21 @@ export class ElementTagService {
 
       return fetchedElementTagDtos;
     }
+  }
+
+  private getLanguageQuery(
+    user: PrismaUser | undefined | null,
+    filterLanguageCode: Nullable<string>,
+  ): Prisma.ElementToElementTagWhereInput | undefined {
+    if (filterLanguageCode) {
+      return {
+        element: { languageCode: filterLanguageCode },
+      };
+    } else if (user?.languageCodes && user.languageCodes.length > 0) {
+      return {
+        element: elementLanguageFilterQuery(user.id, user.languageCodes),
+      };
+    }
+    return undefined;
   }
 }

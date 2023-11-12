@@ -82,6 +82,8 @@ export default {
     "No matching elements found.": "No matching elements found.",
     "Use the search bar to find elements from various sources.":
       "Use the search bar to find elements from various sources.",
+  },
+  NewElementButton: {
     NewElement: "New Element",
   },
   ElementFilterBar: {
@@ -91,6 +93,7 @@ export default {
   },
   ElementPreviewCard: { Open: "Open" },
   LibraryCreateCustomElementPage: {
+    "Select language": "Select language",
     "Edit Custom Element": "Edit my Element",
     "Create Custom Element": "Create my Element",
     "Name (required)": "Name (required)",
@@ -145,6 +148,10 @@ export default {
     AddElement: "Add First Element",
     AddElementMessage:
       "Use the bottom right button to add elements. Enjoy designing your workshop!",
+  },
+  AddToWorkshopDropdown: {
+    AddToWorkshop: "Add to Workshop",
+    SelectWorkshop: "Select Workshop",
   },
   WorkshopElementPage: { AddNote: "Add Note" },
   WorkshopsPage: {

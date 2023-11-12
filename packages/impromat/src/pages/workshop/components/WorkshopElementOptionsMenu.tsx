@@ -23,9 +23,7 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
   onRemoveClick,
 }) => {
   const logger = useComponentLogger("WorkshopElementOptionsMenu");
-
   const [isRemoveAlertOpen, setIsRemoveAlertOpen] = useState(false);
-
   const { t } = useTranslation("WorkshopElementOptionsMenu");
 
   return (
