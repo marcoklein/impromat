@@ -39,7 +39,7 @@ export default {
     offers all necessary features to plan your upcoming improv sessions.`,
     "Exercises-Games": "Exercises & Games",
     ImprovBibDescription:
-      "Explore over 1000 existing improv exercises and games in the <b>Element Library</b>. They have been extracted from different <b>wiki sources</b> in German and English: <ImprowikiLink>Improwiki</ImprowikiLink>, <LearnimprovLink>Learnimprov</LearnimprovLink> and <ImprovRCLink>Improv resource center</ImprovRCLink>. Use the <b>Filter functioncd ..</b> in the search and the <b>Recommendations</b> feature to find similiar elements to add to your workshop.",
+      "Explore over 1000 existing improv exercises and games in the <b>Element Library</b>. They have been extracted from different <b>wiki sources</b> in German and English: <ImprowikiLink>Improwiki</ImprowikiLink>, <LearnimprovLink>Learnimprov</LearnimprovLink> and <ImprovRCLink>Improv resource center</ImprovRCLink>. Use the <b>Filter function ..</b> in the search and the <b>Recommendations</b> feature to find similar elements to add to your workshop.",
     "Improv Workshops": "Improv Workshops",
     GoToElements: "Go to Exercises & Games",
     ImprovWorkshops_1: `<b>Plan and manage</b> your own improvisational theatre workshops, 
