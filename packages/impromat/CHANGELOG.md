@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.54.1
+
+### Patch Changes
+
+- f4dddf3: Cleanup unused dependencies in impromat package
+- f7d4627: Add graphql client preset
+
 ## 0.54.0
 
 ### Minor Changes
