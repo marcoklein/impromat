@@ -267,7 +267,7 @@ export function transformTagNames(
           return targetTag;
         }
       }
-      return existingTag;
+      return existingTag.toLocaleLowerCase();
     });
   }
 
