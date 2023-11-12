@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { graphql } from 'test/graphql-client/gql';
 import { NON_EXISTING_USER_ID } from 'test/test-utils/prepare-test-database';
 import {
@@ -55,23 +56,23 @@ describe('me', () => {
       expect(response.errors).toBeUndefined();
       expect(response.data).toBeDefined();
       const me = response.data!.me;
-      expect(me.id).toBe(api.userId);
-      expect(me.workshops).toEqual([]);
-      expect(me.elements).toEqual([]);
-      expect(me.favoriteElements).toEqual([]);
+      expect(me?.id).toBe(api.userId);
+      expect(me?.workshops).toEqual([]);
+      expect(me?.elements).toEqual([]);
+      expect(me?.favoriteElements).toEqual([]);
     });
 
     it('should update user name', async () => {
       // given
       api.impersonateActiveUser();
-      const newName = 'test';
+      const newName = `${randomUUID().slice(0, 12)}-test`;
       // when
       const response = await api.graphqlRequest(mutation, {
         input: { id: api.userId, name: newName },
       });
       // then
       expect(response.errors).toBeUndefined();
-      expect(response.data?.updateUser.name).toBe('test');
+      expect(response.data?.updateUser.name).toBe(newName);
     });
 
     it('should not allow user name with @', async () => {
@@ -89,15 +90,14 @@ describe('me', () => {
   });
 
   describe('unhappy', () => {
-    it('should throw if the user does not exist', async () => {
+    it('should return null if user does not exist', async () => {
       // given
       api.impersonateUser(NON_EXISTING_USER_ID);
       const query = meQuery;
       // when
       const response = await api.graphqlRequest(query);
       // then
-      expect(response.errors).toHaveLength(1);
-      expect(response.errors![0].extensions.code).toBe('INTERNAL_SERVER_ERROR');
+      expect(response.data?.me).toBeNull();
     });
   });
 });
