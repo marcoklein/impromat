@@ -10,6 +10,6 @@ export class HomeDevPage extends DevPage {
   }
 
   async goto() {
-    await this.page.goto(`/`);
+    await this.page.goto(`/nav/home`);
   }
 }

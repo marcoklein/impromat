@@ -2,6 +2,8 @@ import { expect } from "@playwright/test";
 import { randomUUID } from "crypto";
 import { pageTest } from "./fixtures/page-fixtures.js";
 
+pageTest.describe.configure({ mode: "parallel" });
+
 pageTest.describe("Workshop Sharing", () => {
   pageTest(
     "should share a workshop and copy url to clipboard",

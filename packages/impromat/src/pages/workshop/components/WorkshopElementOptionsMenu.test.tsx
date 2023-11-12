@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 import { WorkshopElementOptionsMenu } from "./WorkshopElementOptionsMenu";
 
-test.describe("ElementFilterBar", () => {
+test.describe("WorkshopElementOptionsMenu", () => {
   test("should open remove confirmation", async ({ mount }) => {
     // given
     const component = await mount(
@@ -17,7 +17,7 @@ test.describe("ElementFilterBar", () => {
     );
 
     // when
-    await component.getByText("Remove").click();
+    await component.getByRole("button").getByText("Remove").click();
 
     // then
     await expect(component.getByText("RemoveElement")).toBeVisible();
@@ -39,8 +39,8 @@ test.describe("ElementFilterBar", () => {
     );
 
     // when
-    await component.getByText("Remove").last().click();
-    await component.getByRole("button", { name: "Remove" }).last().click();
+    await component.getByRole("button").getByText("Remove").click();
+    await component.getByRole("button").getByText("Remove").last().click();
 
     // then
     expect(removeCalls).toBe(1);

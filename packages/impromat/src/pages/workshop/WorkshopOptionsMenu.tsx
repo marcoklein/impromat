@@ -136,7 +136,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   const onRenameWorkshop = () => {
     if (!workshop) return;
     presentInputDialog({
-      header: t("Rename"),
+      header: t("Rename", { ns: "common" }),
       initialText: workshop.name,
       emptyInputMessage: t("TypeName"),
       onAccept: (text) => changeWorkshopName(text),
@@ -167,7 +167,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           },
           {
             icon: pencil,
-            text: t("Rename"),
+            text: t("Rename", { ns: "common" }),
             handler: () => {
               onRenameWorkshop();
             },
