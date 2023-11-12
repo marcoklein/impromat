@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.55.0
+
+### Minor Changes
+
+- 808f4e0: Elements and exercises are publicly available
+
+### Patch Changes
+
+- 31434be: Fix typo in home page
+
 ## 0.54.1
 
 ### Patch Changes
