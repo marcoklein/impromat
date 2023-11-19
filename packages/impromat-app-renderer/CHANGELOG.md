@@ -1,5 +1,11 @@
 # impromat-app-renderer
 
+## 0.2.0
+
+### Minor Changes
+
+- d474ffc: Generate sitemap.txt in impromat renderer
+
 ## 0.1.55
 
 ### Patch Changes
