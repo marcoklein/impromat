@@ -5,7 +5,7 @@ on:
     branches:
       - main
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency: development-environment
 
 jobs:
   release:
@@ -15,24 +15,13 @@ jobs:
       triggerDeployment: ${{ steps.changesets.outputs.hasChangesets == 'false' }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: yarn
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
 
       - name: Install Dependencies
         run: yarn install
@@ -46,6 +35,51 @@ jobs:
           publish: echo "Publishing..." && yarn ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+  test:
+    if: needs.release.outputs.triggerDeployment == 'false'
+    needs:
+      - release
+    uses: ./.github/workflows/shared-test-job.yml
+
+  deploy-development:
+    needs:
+      - test
+    uses: ./.github/workflows/shared-deploy-job.yml
+    secrets: inherit
+    with:
+      environment: development
+
+  development-e2e-test:
+    needs:
+      - deploy-development
+    uses: ./.github/workflows/shared-e2e-test-job.yml
+    secrets: inherit
+
+  release-status-check:
+    runs-on: ubuntu-latest
+    needs: development-e2e-test
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: refs/heads/changeset-release/main
+      - name: Get SHA of release branch
+        id: get_sha
+        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+      - name: Add successfull status check to allow pull request policy
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.get_sha.outputs.sha }}',
+              state: 'success',
+              context: 'test-report',
+              description: 'Generating status check for release pipeline'
+            })
 
   deploy-production:
     if: needs.release.outputs.triggerDeployment == 'true'

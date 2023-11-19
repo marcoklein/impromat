@@ -11,7 +11,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
@@ -20,8 +20,6 @@ jobs:
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - name: Print Branch Name
-        run: echo "$BRANCH_NAME"
       - name: Configure Enviroment
         run: bash -e ./packages/infrastructure/configure-${{ inputs.environment }}.sh
         env:
