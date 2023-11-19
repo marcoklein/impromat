@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.5.1
+
+### Patch Changes
+
+- be40a54: Upgrade node version of impromat app to 18 to use fetch api
+
 ## 0.5.0
 
 ### Minor Changes
