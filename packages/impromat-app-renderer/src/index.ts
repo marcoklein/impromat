@@ -2,9 +2,11 @@ import { startClientApp } from "./start-client-app";
 import { startPrerenderApp } from "./start-prerender-app";
 
 const port = parseInt(process.env.PORT ?? "3080");
+const apiEndpoint =
+  process.env.API_ENDPOINT ?? "https://api.impromat.app/graphql";
 const clientPort = port + 1;
 
-await startPrerenderApp(port, clientPort, "http://localhost:8080/graphql");
+await startPrerenderApp(port, clientPort, apiEndpoint);
 await startClientApp(clientPort);
 
 async function prerenderPage(url: string) {

@@ -65,4 +65,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
+          sha: ${{ github.sha }}
           context: test-report
