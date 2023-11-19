@@ -1,2 +1,3 @@
 # Ignore the virtual import for the Progressive Web App registration (from vite-pwa plugin)
-ignores: ["virtual:pwa-register", "@graphql-codegen/client-preset"]
+ignores:
+  ["virtual:pwa-register", "@graphql-codegen/client-preset", "impromat-api"]

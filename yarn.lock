@@ -12239,7 +12239,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"impromat-api@workspace:packages/impromat-api":
+"impromat-api@0.23.0, impromat-api@workspace:packages/impromat-api":
   version: 0.0.0-use.local
   resolution: "impromat-api@workspace:packages/impromat-api"
   dependencies:
@@ -12303,6 +12303,7 @@ __metadata:
     cheerio: ^1.0.0-rc.12
     express: ^4.18.2
     impromat: 0.55.0
+    impromat-api: 0.23.0
     puppeteer: ^19.4.0
     ts-node: ^10.9.1
   languageName: unknown
@@ -12339,6 +12340,7 @@ __metadata:
     genversion: ^3.1.1
     graphql: ^16.6.0
     i18next: ^23.5.1
+    impromat-api: 0.23.0
     ionicons: ^7.1.2
     react: ^18.2.0
     react-dom: ^18.2.0

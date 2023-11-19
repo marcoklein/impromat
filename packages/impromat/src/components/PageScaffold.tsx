@@ -10,7 +10,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 
 interface ContainerProps extends PropsWithChildren {
   defaultBackHref?: string;
@@ -43,6 +43,9 @@ export const PageScaffold: React.FC<ContainerProps> = ({
   footer,
   showProgressBar,
 }) => {
+  useEffect(() => {
+    document.title = title || "";
+  }, [title]);
   return (
     <IonPage>
       {!noHeader && (
