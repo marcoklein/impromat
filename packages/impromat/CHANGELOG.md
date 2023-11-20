@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.56.0
+
+### Minor Changes
+
+- 73244c6: Add GoatCounter to count visitors
+
 ## 0.55.0
 
 ### Minor Changes
