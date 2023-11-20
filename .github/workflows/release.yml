@@ -35,7 +35,7 @@ jobs:
           publish: echo "Publishing..." && yarn ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
   test:
     if: needs.release.outputs.triggerDeployment == 'false'
     needs:
@@ -72,7 +72,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.repos.createCommitStatus({
+            github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: '${{ steps.get_sha.outputs.sha }}',
