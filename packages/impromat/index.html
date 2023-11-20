@@ -41,4 +41,18 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
+  <script
+    data-goatcounter="https://impromat.goatcounter.com/count"
+    async="async"
+    src="//gc.zgo.at/count.js"
+  ></script>
+  <script>
+    window.goatcounter = { no_onload: true };
+
+    window.addEventListener("hashchange", function (e) {
+      window.goatcounter.count({
+        path: location.pathname + location.search + location.hash,
+      });
+    });
+  </script>
 </html>
