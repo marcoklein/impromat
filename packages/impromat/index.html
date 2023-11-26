@@ -47,12 +47,18 @@
     src="//gc.zgo.at/count.js"
   ></script>
   <script>
-    window.goatcounter = { no_onload: true };
-
-    window.addEventListener("hashchange", function (e) {
-      window.goatcounter.count({
-        path: location.pathname + location.search + location.hash,
-      });
-    });
+    window.goatcounter = { no_onload: false };
+    let previousPath = location.pathname + location.search + location.hash;
+    setInterval(() => {
+      if (
+        previousPath !==
+        location.pathname + location.search + location.hash
+      ) {
+        previousPath = location.pathname + location.search + location.hash;
+        window.goatcounter.count({
+          path: location.pathname + location.search + location.hash,
+        });
+      }
+    }, 1000);
   </script>
 </html>
