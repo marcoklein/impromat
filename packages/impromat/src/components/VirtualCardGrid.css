@@ -1,3 +1,7 @@
+.ion-content-scroll-host {
+  overflow-y: auto;
+}
+
 .item-class-name {
   width: 100%;
 
