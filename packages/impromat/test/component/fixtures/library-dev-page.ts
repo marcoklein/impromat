@@ -28,6 +28,10 @@ export class LibraryDevPage extends DevPage {
     await this.openElementCard();
   }
 
+  async clearSearch() {
+    await this.page.getByLabel("reset").click();
+  }
+
   async scrollDownInElementsList() {
     const lastListItem = this.page
       .locator(".list-class-name>div") // .item-class-name
@@ -54,8 +58,7 @@ export class LibraryDevPage extends DevPage {
     await this.goto();
   }
 
-  async gotoLikedElements() {
-    await this.goto();
+  async toggleLikedFilter() {
     await this.page.locator("ion-chip").filter({ hasText: "Like" }).click();
   }
 

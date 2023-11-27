@@ -43,7 +43,7 @@ export const App: React.FC = () => {
             <Route
               path={routeLibraryElement()}
               exact
-              children={<LibraryElementPage></LibraryElementPage>}
+              component={LibraryElementPage}
             ></Route>
             <ProtectedRouteComponent
               path={routeLibraryCreateCustomElement()}

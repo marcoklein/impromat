@@ -46,7 +46,7 @@ pageTest.describe("Library", () => {
 
   pageTest(
     "should restore scroll position after navigating back",
-    async ({ page, auth, libraryPage }) => {
+    async ({ page, auth, libraryPage, libraryElementPage }) => {
       // given
       await auth.loginAsRandomUser();
       // when
@@ -54,7 +54,7 @@ pageTest.describe("Library", () => {
       await libraryPage.searchForElement("freeze");
       await libraryPage.scrollDownInElementsList();
       await page.getByRole("heading", { name: "Freeze-For All" }).click();
-      await page.getByLabel("back").click();
+      await libraryElementPage.clickBackButton();
       await page.getByRole("heading", { name: "Freeze-For All" }).waitFor();
       // then
       await expect(page).toHaveScreenshot({

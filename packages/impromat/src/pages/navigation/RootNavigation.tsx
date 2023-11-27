@@ -42,6 +42,7 @@ export interface TabConfig {
   element: FunctionComponent<{}>;
   exact?: boolean;
   protected?: boolean;
+  wrapInFragment?: boolean;
 }
 
 export enum RootTabs {
@@ -65,6 +66,8 @@ export const ROOT_TABS: Record<RootTabs, TabConfig> = {
     element: LibraryPage,
     exact: true,
     protected: false,
+    // FIXME this is a workaround to force the library page to re-render
+    wrapInFragment: true,
   },
   WORKSHOPS: {
     name: "Workshops",
@@ -90,7 +93,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
   const logger = useComponentLogger("RootNavigation");
   useStateChangeLogger(workshopId, "workshopId", logger);
 
-  const defaultTab = useMemo(() => ROOT_TABS.HOME, []);
+  const defaultTab = useMemo(() => ROOT_TABS.ELEMENTS, []);
   const { t } = useTranslation("RootNavigation");
 
   return (
@@ -110,7 +113,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
                 component={value.element}
                 exact={value.exact}
               ></ProtectedRouteComponent>
-            ) : (
+            ) : value.wrapInFragment ? (
               <Fragment key={key}>
                 <Route
                   path={`${value.route}`}
@@ -118,6 +121,13 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
                   exact={value.exact}
                 ></Route>
               </Fragment>
+            ) : (
+              <Route
+                key={key}
+                path={`${value.route}`}
+                component={value.element}
+                exact={value.exact}
+              ></Route>
             ),
           )}
           <Route path={routeAbout()} exact>
