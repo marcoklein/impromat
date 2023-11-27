@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
+import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { graphql } from "../../graphql-client";
@@ -43,9 +44,6 @@ const LibraryPageQuery = graphql(`
 
 export const LibraryPage: React.FC = () => {
   const logger = useComponentLogger("LibraryPage");
-  const [restoredSearchText] = useState(
-    window.localStorage.getItem("lastSearch") ?? "",
-  );
 
   const [selectedLanguage, setSelectedLanguage] = usePersistedState<string>(
     "lastSelectedLanguage",
@@ -60,7 +58,10 @@ export const LibraryPage: React.FC = () => {
     userCreated: boolean;
   }>("lastAdditionalFilter", { liked: false, userCreated: false });
 
-  const [searchText, setSearchText] = useState(restoredSearchText);
+  const [searchText, setSearchText] = usePersistedState<string>(
+    "lastSearch",
+    "",
+  );
   const [pageNumber, setPageNumber] = useState(0);
   const [scrollToTop, setScrollToTop] = useState(0);
   const { isLoggedIn } = useIsLoggedIn();
@@ -69,7 +70,7 @@ export const LibraryPage: React.FC = () => {
 
   const trimmedSearchText = useMemo(() => searchText.trim(), [searchText]);
 
-  const [searchElementsQueryResult] = useQuery({
+  const [searchElementsQueryResult, reexecuteSearchElementsQuery] = useQuery({
     query: LibraryPageQuery,
     variables: {
       input: {
@@ -233,59 +234,64 @@ export const LibraryPage: React.FC = () => {
       }
     >
       <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
-        {isLoggedIn && <NewElementButton></NewElementButton>}
-        {!searchElementsQueryResult.stale &&
-          !searchElementsQueryResult.fetching &&
-          !searchElementsQueryResult.data?.searchElements.length &&
-          searchText.length > 0 && (
-            <IonList>
-              <InfoItemComponent
-                message={t("No matching elements found.")}
-                icon={informationCircle}
-                color="warning"
-              ></InfoItemComponent>
-            </IonList>
-          )}
-        {searchElementsQueryResult.data &&
-          searchElementsQueryResult.data.searchElements.length > 0 && (
-            <VirtualCardGrid
-              scrollStoreKey="search-element-tab-component"
-              isFetching={
-                searchElementsQueryResult.fetching ||
-                searchElementsQueryResult.stale
-              }
-              scrollToTop={scrollToTop}
-              endReached={() => {
-                logger(
-                  "end reached, queryResult.stale=%s",
-                  searchElementsQueryResult.stale,
-                );
-                if (!searchElementsQueryResult.stale) {
-                  setPageNumber((currentPageNumber) => currentPageNumber + 1);
-                  logger("setting page number to %s", pageNumber + 1);
+        <PageContentLoaderComponent
+          queryResult={searchElementsQueryResult}
+          reexecuteQuery={reexecuteSearchElementsQuery}
+        >
+          {isLoggedIn && <NewElementButton></NewElementButton>}
+          {!searchElementsQueryResult.stale &&
+            !searchElementsQueryResult.fetching &&
+            !searchElementsQueryResult.data?.searchElements.length &&
+            searchText.length > 0 && (
+              <IonList>
+                <InfoItemComponent
+                  message={t("No matching elements found.")}
+                  icon={informationCircle}
+                  color="warning"
+                ></InfoItemComponent>
+              </IonList>
+            )}
+          {searchElementsQueryResult.data &&
+            searchElementsQueryResult.data.searchElements.length > 0 && (
+              <VirtualCardGrid
+                scrollStoreKey="search-element-tab-component"
+                isFetching={
+                  searchElementsQueryResult.fetching ||
+                  searchElementsQueryResult.stale
                 }
-              }}
-              items={searchElementsQueryResult.data.searchElements ?? []}
-              itemContent={(_index, searchResult) => (
-                <ElementPreviewCard
-                  routerLink={routeLibraryElement(searchResult.element.id)}
-                  elementFragment={searchResult.element}
-                  elementSearchResultFragment={searchResult}
-                ></ElementPreviewCard>
-              )}
-            ></VirtualCardGrid>
-          )}
-        {!searchElementsQueryResult.fetching &&
-          !searchElementsQueryResult.stale &&
-          !searchElementsQueryResult.data?.searchElements.length &&
-          !searchText.length && (
-            <InfoItemComponent
-              message={t(
-                "Use the search bar to find elements from various sources.",
-              )}
-              icon={informationCircle}
-            ></InfoItemComponent>
-          )}
+                scrollToTop={scrollToTop}
+                endReached={() => {
+                  logger(
+                    "end reached, queryResult.stale=%s",
+                    searchElementsQueryResult.stale,
+                  );
+                  if (!searchElementsQueryResult.stale) {
+                    setPageNumber((currentPageNumber) => currentPageNumber + 1);
+                    logger("setting page number to %s", pageNumber + 1);
+                  }
+                }}
+                items={searchElementsQueryResult.data.searchElements ?? []}
+                itemContent={(_index, searchResult) => (
+                  <ElementPreviewCard
+                    routerLink={routeLibraryElement(searchResult.element.id)}
+                    elementFragment={searchResult.element}
+                    elementSearchResultFragment={searchResult}
+                  ></ElementPreviewCard>
+                )}
+              ></VirtualCardGrid>
+            )}
+          {!searchElementsQueryResult.fetching &&
+            !searchElementsQueryResult.stale &&
+            !searchElementsQueryResult.data?.searchElements.length &&
+            !searchText.length && (
+              <InfoItemComponent
+                message={t(
+                  "Use the search bar to find elements from various sources.",
+                )}
+                icon={informationCircle}
+              ></InfoItemComponent>
+            )}
+        </PageContentLoaderComponent>
       </IonContent>
     </PageScaffold>
   );

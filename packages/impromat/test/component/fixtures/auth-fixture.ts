@@ -18,8 +18,11 @@ export class AuthFixture extends DevPage {
     await this.page.goto(
       `${process.env.VITE_API_URL}/auth/testlogin?redirectUrl=http://localhost:${process.env.PORT}&userId=${userId}`,
     );
-    await this.page.waitForURL(`http://localhost:${process.env.PORT}/`, {
-      waitUntil: "networkidle",
-    });
+    await this.page.waitForURL(
+      new RegExp(`http://localhost:${process.env.PORT}/.*`),
+      {
+        waitUntil: "networkidle",
+      },
+    );
   }
 }

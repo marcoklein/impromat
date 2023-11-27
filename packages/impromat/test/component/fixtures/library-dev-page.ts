@@ -28,6 +28,14 @@ export class LibraryDevPage extends DevPage {
     await this.openElementCard();
   }
 
+  async scrollDownInElementsList() {
+    const lastListItem = this.page
+      .locator(".list-class-name>div") // .item-class-name
+      .nth(-1);
+    await lastListItem.scrollIntoViewIfNeeded();
+    await this.page.waitForTimeout(300);
+  }
+
   async openElementCard(name?: string) {
     const page = this.page;
     if (name) {

@@ -1,11 +1,13 @@
 import { IonSpinner } from "@ionic/react";
-import { PropsWithChildren } from "react";
-import { Route } from "react-router";
+import { Route, RouteComponentProps, StaticContext } from "react-router";
 import { useIsLoggedIn } from "../hooks/use-is-logged-in";
 import { AccountPage } from "../pages/account/AccountPage";
 
-interface ContainerProps extends PropsWithChildren {
+interface ContainerProps {
   path: string;
+  component?:
+    | React.ComponentType<any>
+    | React.ComponentType<RouteComponentProps<any, StaticContext, unknown>>;
   exact?: boolean;
 }
 
@@ -16,7 +18,7 @@ interface ContainerProps extends PropsWithChildren {
 export const ProtectedRouteComponent: React.FC<ContainerProps> = ({
   path,
   exact,
-  children,
+  component,
 }) => {
   const { fetching, isLoggedIn } = useIsLoggedIn();
 
@@ -33,7 +35,7 @@ export const ProtectedRouteComponent: React.FC<ContainerProps> = ({
     <Route
       path={path}
       exact={exact}
-      render={() => (isLoggedIn ? children : <AccountPage></AccountPage>)}
+      component={isLoggedIn ? component : AccountPage}
     ></Route>
   );
 };

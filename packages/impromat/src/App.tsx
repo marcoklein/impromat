@@ -48,9 +48,7 @@ export const App: React.FC = () => {
             <ProtectedRouteComponent
               path={routeLibraryCreateCustomElement()}
               exact
-              children={
-                <LibraryCreateCustomElementPage></LibraryCreateCustomElementPage>
-              }
+              component={LibraryCreateCustomElementPage}
             ></ProtectedRouteComponent>
             <Route
               path={routeWorkshop()}
