@@ -1,5 +1,13 @@
 # impromat-api
 
+## 0.23.1
+
+### Patch Changes
+
+- c4f9500: Add nx as monorepo manager
+- Updated dependencies [c4f9500]
+  - improbib@0.4.4
+
 ## 0.23.0
 
 ### Minor Changes
