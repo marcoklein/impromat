@@ -18,6 +18,8 @@ jobs:
           node-version: 18
           cache: yarn
 
+      - run: yarn dedupe --check
+        name: Check for duplicate dependencies. Please run 'yarn dedupe' and commit changes.
       - run: yarn install
       - run: yarn codegen
       - run: |
@@ -54,5 +56,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
-          sha: ${{ github.sha }}
           context: test-report

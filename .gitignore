@@ -19,7 +19,6 @@ junit-results.xml
 
 *.ignore.*
 
-/.nx
 
 # for zero-installs cache folder is commited
 # .yarn/*
@@ -31,3 +30,5 @@ junit-results.xml
 # !.yarn/versions
 
 *-backups
+
+.nx/cache
