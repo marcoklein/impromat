@@ -60,7 +60,6 @@ pageTest.describe("Library", () => {
       await expect(page).toHaveScreenshot({
         animations: "disabled",
         fullPage: true,
-        maxDiffPixelRatio: 0.05,
       });
     },
   );
