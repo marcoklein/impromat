@@ -15,11 +15,35 @@ import "./VirtualCardGrid.css";
 const MAX_SCROLL_RESTORE_TIME_MS = 200;
 
 interface ContainerProps<ItemData, Context> {
+  /**
+   * The key to store the scroll position in local storage.
+   */
   scrollStoreKey?: string;
+  /**
+   * The item content to render.
+   */
   itemContent: GridItemContent<ItemData, Context>;
+  /**
+   * The items to render.
+   */
   items: readonly ItemData[];
+  /**
+   * Callback for the end reached event.
+   */
   endReached?: () => void;
+  /**
+   * Callback for the top state change.
+   *
+   * @param atTop True if the grid is at the top. False otherwise.
+   */
+  onTopStateChange?: (atTop: boolean) => void;
+  /**
+   * If true, the loading footer is rendered.
+   */
   isFetching: boolean;
+  /**
+   * Grid scrolls to top if this value changes.
+   */
   scrollToTop?: number;
 }
 
@@ -31,6 +55,7 @@ export const VirtualCardGrid = <ItemData, Context>({
   itemContent,
   items,
   endReached,
+  onTopStateChange,
   isFetching,
   scrollToTop,
 }: ContainerProps<ItemData, Context>) => {
@@ -127,6 +152,7 @@ export const VirtualCardGrid = <ItemData, Context>({
         visibility: isRestoringScrollPosition ? "hidden" : "visible",
       }}
       totalCount={items.length}
+      atTopStateChange={(atTop) => onTopStateChange && onTopStateChange(atTop)}
       endReached={() => endReached && endReached()}
       overscan={200}
       data={items}

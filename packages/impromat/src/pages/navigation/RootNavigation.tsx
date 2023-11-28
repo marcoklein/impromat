@@ -7,7 +7,7 @@ import {
   IonTabs,
 } from "@ionic/react";
 import { barbell, documents, home } from "ionicons/icons";
-import { useMemo } from "react";
+import { Fragment, FunctionComponent, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Redirect, Route } from "react-router";
 import { ProtectedRouteComponent } from "../../components/ProtectedRoute";
@@ -39,9 +39,10 @@ export interface TabConfig {
   name: string;
   icon: string;
   route: string;
-  element: JSX.Element;
+  element: FunctionComponent<{}>;
   exact?: boolean;
   protected?: boolean;
+  wrapInFragment?: boolean;
 }
 
 export enum RootTabs {
@@ -55,22 +56,24 @@ export const ROOT_TABS: Record<RootTabs, TabConfig> = {
     name: "Home",
     icon: home,
     route: routeHome(),
-    element: <HomePage></HomePage>,
+    element: HomePage,
     exact: true,
   },
   ELEMENTS: {
     name: "Exercises & Games",
     icon: barbell,
     route: routeLibrary(),
-    element: <LibraryPage></LibraryPage>,
+    element: LibraryPage,
     exact: true,
     protected: false,
+    // FIXME this is a workaround to force the library page to re-render
+    wrapInFragment: true,
   },
   WORKSHOPS: {
     name: "Workshops",
     icon: documents,
     route: routeWorkshops(),
-    element: <WorkshopsPage></WorkshopsPage>,
+    element: WorkshopsPage,
     exact: true,
     protected: true,
   },
@@ -90,7 +93,7 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
   const logger = useComponentLogger("RootNavigation");
   useStateChangeLogger(workshopId, "workshopId", logger);
 
-  const defaultTab = useMemo(() => ROOT_TABS.HOME, []);
+  const defaultTab = useMemo(() => ROOT_TABS.ELEMENTS, []);
   const { t } = useTranslation("RootNavigation");
 
   return (
@@ -107,14 +110,22 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
               <ProtectedRouteComponent
                 key={key}
                 path={`${value.route}`}
-                children={value.element}
+                component={value.element}
                 exact={value.exact}
               ></ProtectedRouteComponent>
+            ) : value.wrapInFragment ? (
+              <Fragment key={key}>
+                <Route
+                  path={`${value.route}`}
+                  component={value.element}
+                  exact={value.exact}
+                ></Route>
+              </Fragment>
             ) : (
               <Route
                 key={key}
                 path={`${value.route}`}
-                render={() => value.element}
+                component={value.element}
                 exact={value.exact}
               ></Route>
             ),

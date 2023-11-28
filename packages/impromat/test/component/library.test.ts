@@ -43,4 +43,24 @@ pageTest.describe("Library", () => {
       await expect(page.getByText(new RegExp(name))).toBeVisible();
     },
   );
+
+  pageTest(
+    "should restore scroll position after navigating back",
+    async ({ page, auth, libraryPage, libraryElementPage }) => {
+      // given
+      await auth.loginAsRandomUser();
+      // when
+      await libraryPage.goto();
+      await libraryPage.searchForElement("freeze");
+      await libraryPage.scrollDownInElementsList();
+      await page.getByRole("heading", { name: "Freeze-For All" }).click();
+      await libraryElementPage.clickBackButton();
+      await page.getByRole("heading", { name: "Freeze-For All" }).waitFor();
+      // then
+      await expect(page).toHaveScreenshot({
+        animations: "disabled",
+        fullPage: true,
+      });
+    },
+  );
 });

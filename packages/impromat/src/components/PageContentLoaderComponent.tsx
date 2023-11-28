@@ -2,6 +2,8 @@ import { IonButton, IonIcon, IonSpinner, IonText } from "@ionic/react";
 import { reload } from "ionicons/icons";
 import { PropsWithChildren, useCallback, useMemo } from "react";
 import { OperationContext, UseQueryState } from "urql";
+import { useComponentLogger } from "../hooks/use-component-logger";
+import { useStateChangeLogger } from "../hooks/use-state-change-logger";
 import { Refresher } from "./Refresher";
 
 interface ContainerProps extends PropsWithChildren {
@@ -15,23 +17,41 @@ interface ContainerProps extends PropsWithChildren {
   reexecuteQuery:
     | ((opts?: Partial<OperationContext>) => void)
     | Array<(opts?: Partial<OperationContext>) => void>;
+  /**
+   * If true, the refresher is not rendered.
+   */
+  noRefresher?: boolean;
 }
 
 /**
- * Presents a loading spinner and shows a button for a manual retry if there is a network error.
+ * Renders a component that displays loading, error, or data based on the query result.
  *
- * @returns
+ * @example
+ * ```tsx
+ * <PageContentLoaderComponent
+ *   queryResult={queryResult}
+ *   reexecuteQuery={reexecuteQuery}
+ * >
+ *   <ContentComponent />
+ * </PageContentLoaderComponent>
+ * ```
+ *
+ * @param props The component props.
+ * @returns The rendered component.
  */
 export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
   queryResult: queryResultInput,
   reexecuteQuery,
+  noRefresher,
   children,
 }) => {
+  const logger = useComponentLogger("PageContentLoaderComponent");
   const queryResult = useMemo(
     () =>
       Array.isArray(queryResultInput) ? queryResultInput : [queryResultInput],
     [queryResultInput],
   );
+  useStateChangeLogger(queryResult, "queryResult", logger);
 
   const reexecuteQueries = useCallback(() => {
     if (Array.isArray(reexecuteQuery)) {
@@ -43,23 +63,40 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
     }
   }, [reexecuteQuery]);
 
-  const { allHaveData, fetching, networkError, nonNetworkError, error } =
+  const { allHaveData, fetching, stale, networkError, nonNetworkError, error } =
     useMemo(() => {
       const allHaveData = queryResult.every((result) => result.data);
       const fetching = queryResult.some((result) => result.fetching);
+      const stale = queryResult.some((result) => result.stale);
       const networkError = queryResult.some(
         (result) => result.error?.networkError,
       );
       const nonNetworkError = queryResult.find(
-        (result) => !result.error?.networkError,
+        (result) => result.error && !result.error.networkError,
       );
       const error = networkError || nonNetworkError;
-      return { allHaveData, fetching, networkError, nonNetworkError, error };
+      return {
+        allHaveData,
+        fetching,
+        stale,
+        networkError,
+        nonNetworkError,
+        error,
+      };
     }, [queryResult]);
+
+  const isRefreshing = useMemo(
+    () => fetching || (!error && (!allHaveData || stale)),
+    [allHaveData, fetching, stale, error],
+  );
 
   return (
     <>
-      <Refresher onRefresh={reexecuteQueries}></Refresher>
+      <Refresher
+        disabled={noRefresher}
+        onRefresh={reexecuteQueries}
+        isRefreshing={isRefreshing}
+      />
       {allHaveData ? (
         children
       ) : (

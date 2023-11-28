@@ -25,6 +25,7 @@ export function createCachedGraphqlClient(
       // devtoolsExchange,
       cacheExchange({
         keys: {
+          ElementSearchMatch: () => null,
           ElementSearchResult: () => null, // do not cache search results
           ElementTag: () => null, // do not cache tags separately
         },

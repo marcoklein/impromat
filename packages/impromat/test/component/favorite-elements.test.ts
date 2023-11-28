@@ -11,7 +11,9 @@ pageTest.describe("Liked Elements", () => {
       await libraryPage.gotoFirstElementFromSearch();
       // when
       await libraryElementPage.addToLikedElements();
-      await libraryPage.gotoLikedElements();
+      await libraryElementPage.clickBackButton();
+      await libraryPage.clearSearch();
+      await libraryPage.toggleLikedFilter();
       // then
       await expect(page.getByText("Freeze").first()).toBeVisible();
     },
@@ -47,10 +49,13 @@ pageTest.describe("Liked Elements", () => {
       await libraryElementPage.addToLikedElements();
       // when
       await libraryElementPage.removeFromLikedElements();
-      await libraryPage.gotoLikedElements();
+      await libraryElementPage.clickBackButton();
+      await libraryPage.clearSearch();
+      await libraryPage.toggleLikedFilter();
       // then
       await expect(
         page.getByText(
+          // TODO show a better message
           "Use the search bar to find elements from various sources.",
         ),
       ).toBeVisible();

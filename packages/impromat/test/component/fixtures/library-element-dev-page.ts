@@ -24,4 +24,8 @@ export class LibraryElementDevPage extends DevPage {
     await this.removeFromLikesButtonLocator.click();
     await this.addToLikesButtonLocator.waitFor();
   }
+
+  async clickBackButton() {
+    await this.page.getByLabel("back").click();
+  }
 }
