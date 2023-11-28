@@ -45,7 +45,9 @@ pageTest.describe("Shared Elements", () => {
       await libraryPage.searchForElement(uniqueElementName);
       await libraryPage.openElementCard(uniqueElementName);
       await libraryElementPage.addToLikedElements();
-      await libraryPage.gotoLikedElements();
+      await libraryElementPage.clickBackButton();
+      await libraryPage.clearSearch();
+      await libraryPage.toggleLikedFilter();
       // then
       await expect(page.getByText(uniqueElementName)).toBeVisible();
     },
