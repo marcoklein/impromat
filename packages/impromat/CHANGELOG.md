@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.57.0
+
+### Minor Changes
+
+- 575b9c3: Add network check and pull to refresh functions to element library
+- 575b9c3: Add refreshing option to Workshops page by pulling down to refresh.
+
+### Patch Changes
+
+- 575b9c3: Workshops page would not show loading spinner properly.
+- 575b9c3: Fix last elements search not persisted
+- 575b9c3: Fix elements in library disappearing on back navigation
+
 ## 0.56.1
 
 ### Patch Changes
