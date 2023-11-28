@@ -53,6 +53,7 @@ jobs:
       - name: Set final commit status
         uses: myrotvorets/set-commit-status-action@master
         if: always()
+        continue-on-error: True
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
