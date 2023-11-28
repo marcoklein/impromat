@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.4
+
+### Patch Changes
+
+- c4f9500: Add nx as monorepo manager
+
 ## 0.4.3
 
 ### Patch Changes
