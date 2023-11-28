@@ -29,9 +29,19 @@ const config: PlaywrightTestConfig = {
   },
   expect: {
     timeout: 15 * 1000,
+    toHaveScreenshot: {
+      // There are differences between browsers, so we allow a small difference.
+      maxDiffPixelRatio: 0.1,
+    },
   },
   testDir: "test/component",
-  reporter: [["list"], ["junit", { outputFile: "junit-results.xml" }]],
+  snapshotDir: "./__snapshots__",
+  snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}{ext}",
+  reporter: [
+    ["list"],
+    ["html"],
+    ["junit", { outputFile: "junit-results.xml" }],
+  ],
   fullyParallel: false,
   retries: 2,
   timeout: 30 * 1000,
