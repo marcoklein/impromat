@@ -35,6 +35,8 @@ const config: PlaywrightTestConfig = {
     },
   },
   testDir: "test/component",
+  snapshotDir: "./__snapshots__",
+  snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}{ext}",
   reporter: [
     ["list"],
     ["html"],
