@@ -139,7 +139,6 @@ export const LibraryPage: React.FC = () => {
                 }}
                 className="side-scrolling-list"
               >
-                (
                 <ElementFilterBar
                   enableUserSpecificFilters={isLoggedIn}
                   onLanguageChange={(language) => {
@@ -173,7 +172,6 @@ export const LibraryPage: React.FC = () => {
                     setSearchText(text);
                   }}
                 ></ElementFilterBar>
-                )
               </div>
               {!isFilterBarExpanded && (
                 <div
