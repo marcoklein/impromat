@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.57.1
+
+### Patch Changes
+
+- ec961d9: User is redirected to home page when logged out
+- aba50bd: Hide filter bar in library if there is a network error
+
 ## 0.57.0
 
 ### Minor Changes
