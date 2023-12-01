@@ -20,4 +20,18 @@ pageTest.describe("Logout Flow", () => {
       ).not.toBeVisible();
     },
   );
+
+  pageTest(
+    "should show logout confirmation page on logout",
+    async ({ auth, page, accountPage }) => {
+      // given
+      await auth.loginAsRandomUser();
+      // when
+      await accountPage.goto();
+      await accountPage.logout();
+      // then
+      await expect(page).toHaveURL("/nav/home");
+      await expect(page.getByText("You have been logged out.")).toBeVisible();
+    },
+  );
 });

@@ -3,10 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useComponentLogger } from "../hooks/use-component-logger";
 import { routeRootNavigation } from "../routes/shared-routes";
 
-/**
- * Purpose of the landing/home page is to provide a quick overview of the app and inform the user about all available features.
- * The user needs to sign in to use the app. Therefore, it should only point to the sign in page.
- */
 export const NotFoundPage: React.FC = () => {
   useComponentLogger("NotFoundPage");
   const { t } = useTranslation("NotFoundPage");

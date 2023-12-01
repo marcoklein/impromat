@@ -1,12 +1,18 @@
-import { useIonAlert, useIonLoading, useIonToast } from "@ionic/react";
+import {
+  useIonAlert,
+  useIonLoading,
+  useIonRouter,
+  useIonToast,
+} from "@ionic/react";
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useMutation } from "urql";
 import { APP_LOCAL_STORAGE_PREFIX } from "../app-local-storage-prefix";
 import { clearLocalStorageWithPrefix } from "../functions/clear-local-storage";
 import { graphql } from "../graphql-client";
+import { routeHome } from "../routes/shared-routes";
 import { useIsLoggedIn } from "./use-is-logged-in";
 import { useLogger } from "./use-logger";
-import { useTranslation } from "react-i18next";
 
 export function useLogout() {
   const [presentIonLoading, dismissIonLoading] = useIonLoading();
@@ -14,6 +20,8 @@ export function useLogout() {
   const logger = useLogger("useLogout");
   const [presentAlert] = useIonAlert();
   const { isLoggedIn, retriggerLogInQuery } = useIsLoggedIn();
+  const router = useIonRouter();
+  const { t } = useTranslation("use-logout");
 
   const [, logoutMutation] = useMutation(
     graphql(`
@@ -37,16 +45,20 @@ export function useLogout() {
     if (result.data?.logout) {
       logger("Cleared all impromat prefixed localStorage keys");
       clearLocalStorageWithPrefix(APP_LOCAL_STORAGE_PREFIX);
+      displayToast(t("You have been logged out"), 5000);
+      router.push(routeHome());
+      // router.push(routeLoggedOut());
     }
   }, [
+    presentIonLoading,
+    logoutMutation,
+    retriggerLogInQuery,
     dismissIonLoading,
     displayToast,
     logger,
-    logoutMutation,
-    presentIonLoading,
-    retriggerLogInQuery,
+    t,
+    router,
   ]);
-  const { t } = useTranslation("use-logout");
 
   const triggerLogout = async (params?: { force: boolean }) => {
     if (!isLoggedIn) {
