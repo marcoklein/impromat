@@ -234,6 +234,7 @@ export default {
     Logout: "Logout",
     LogoutMessage:
       "Are you sure you want to log out? All Impromat data on this device will be deleted.",
+    "You have been logged out": "You have been logged out.",
   },
   NotFoundPage: {
     "Page does not exist": "Ups, this page does not exist.",

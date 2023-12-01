@@ -236,11 +236,13 @@ export default {
     Logout: "Abmelden",
     LogoutMessage:
       "Bist du sicher, dass du dich abmelden willst? Alle Impromat-Daten auf diesem Gerät werden gelöscht.",
+    "You have been logged out": "Du hast dich erfolgreich abgemeldet.",
   },
   NotFoundPage: {
     "Page does not exist": "Ups, diese Seite existiert nicht.",
     "Go to home page": "Zur Startseite",
   },
+
   ErrorFallbackPage: {
     Error: "Fehler",
     OhNo: "Oh nein, etwas ist schief gelaufen ",
