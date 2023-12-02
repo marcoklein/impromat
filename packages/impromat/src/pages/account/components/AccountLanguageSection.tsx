@@ -10,13 +10,13 @@ import {
 } from "@ionic/react";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { InfoItemComponent } from "../../../components/InfoItemComponent";
 import {
   FragmentType,
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
 import { useUpdateUserMutation } from "../../../hooks/use-update-user-mutation";
-import { InfoItemComponent } from "../../../components/InfoItemComponent";
 
 const AccountLanguageSection_User = graphql(`
   fragment AccountLanguageSection_User on User {
@@ -87,7 +87,7 @@ export const AccountLanguageSection: React.FC<ContainerProps> = ({
   const onLanguageCodeChange = useCallback(
     (languageCode: string) => {
       i18n.changeLanguage(languageCode);
-      localStorage.setItem("language", languageCode);
+      localStorage.setItem("i18nextLng", languageCode);
 
       sendLanguageMutation(languageCode, showAdditionalLanguage);
     },

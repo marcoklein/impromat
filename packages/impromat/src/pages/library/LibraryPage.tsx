@@ -22,6 +22,7 @@ import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { routeLibraryElement } from "../../routes/library-routes";
 import { ElementFilterBar } from "./components/ElementFilterBar";
+import { FilterInspirations } from "./components/FilterInspirations";
 import { NewElementButton } from "./components/NewElementButton";
 
 const LibraryPageQuery = graphql(`
@@ -44,10 +45,11 @@ const LibraryPageQuery = graphql(`
 
 export const LibraryPage: React.FC = () => {
   const logger = useComponentLogger("LibraryPage");
+  const { t, i18n } = useTranslation("LibraryPage");
 
   const [selectedLanguage, setSelectedLanguage] = usePersistedState<string>(
     "lastSelectedLanguage",
-    "en", // TODO get available languages from user profile
+    i18n.language.split("-")[0],
   );
   const [selectedTagNames, setSelectedTagNames] = usePersistedState<string[]>(
     "lastSelectedTags",
@@ -61,6 +63,14 @@ export const LibraryPage: React.FC = () => {
   const [searchText, setSearchText] = usePersistedState<string>(
     "lastSearch",
     "",
+  );
+  const isEmptyFilter = useMemo(
+    () =>
+      !searchText.trim() &&
+      !selectedTagNames.length &&
+      !additionalFilter.liked &&
+      !additionalFilter.userCreated,
+    [searchText, selectedTagNames, additionalFilter],
   );
   const [pageNumber, setPageNumber] = useState(0);
   const [scrollToTop, setScrollToTop] = useState(0);
@@ -120,8 +130,6 @@ export const LibraryPage: React.FC = () => {
     "keepFilterBarOpen",
     false,
   );
-
-  const { t } = useTranslation("LibraryPage");
 
   return (
     <PageScaffold
@@ -257,7 +265,14 @@ export const LibraryPage: React.FC = () => {
                 ></InfoItemComponent>
               </IonList>
             )}
-          {searchElementsQueryResult.data &&
+          {isEmptyFilter && (
+            <FilterInspirations
+              filterLanguage={selectedLanguage}
+              onTagsChange={(tags) => setSelectedTagNames(tags)}
+            ></FilterInspirations>
+          )}
+          {!isEmptyFilter &&
+            searchElementsQueryResult.data &&
             searchElementsQueryResult.data.searchElements.length > 0 && (
               <VirtualCardGrid
                 scrollStoreKey="search-element-tab-component"
