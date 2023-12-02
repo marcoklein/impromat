@@ -49,7 +49,7 @@ export const LibraryPage: React.FC = () => {
 
   const [selectedLanguage, setSelectedLanguage] = usePersistedState<string>(
     "lastSelectedLanguage",
-    i18n.language,
+    i18n.language.split("-")[0],
   );
   const [selectedTagNames, setSelectedTagNames] = usePersistedState<string[]>(
     "lastSelectedTags",
