@@ -1,9 +1,15 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 import { TRANSLATIONS } from "./translations";
 
-test("translations should be consistent", async () => {
-  const en = TRANSLATIONS.en;
-  const de: typeof TRANSLATIONS.en = TRANSLATIONS.de;
+test("translations should have consistent key order", async () => {
+  const enKeys = Object.keys(TRANSLATIONS.en);
+  const deKeys = Object.keys(TRANSLATIONS.de);
 
-  expect(Object.keys(en).sort()).toEqual(Object.keys(de).sort());
+  expect(enKeys).toStrictEqual(deKeys);
+
+  for (const key of enKeys) {
+    expect(Object.keys((TRANSLATIONS.en as any)[key])).toStrictEqual(
+      Object.keys((TRANSLATIONS.de as any)[key]),
+    );
+  }
 });

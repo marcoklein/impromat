@@ -83,6 +83,15 @@ export default {
     "Use the search bar to find elements from various sources.":
       "Use the search bar to find elements from various sources.",
   },
+  FilterInspirations: {
+    tagsInspiration0: "<Tag>{{tagA}}</Tag> with <Tag>{{tagB}}</Tag> focus",
+    tagsInspiration1: "<Tag>{{tagA}}</Tag> to improve <Tag>{{tagB}}</Tag>",
+    tagsInspiration2: "<Tag>{{tagA}}</Tag> with <Tag>{{tagB}}</Tag> elements",
+
+    "Use the top filter bar to search over 1000 improv exercises and games.":
+      "Use the top filter bar to search over 1000 improv exercises and games.",
+    "or start with these inspirations:": "or start with these inspirations:",
+  },
   NewElementButton: {
     NewElement: "New Element",
   },

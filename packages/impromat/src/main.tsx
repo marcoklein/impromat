@@ -1,5 +1,6 @@
 import { setupIonicReact } from "@ionic/react";
 import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { initReactI18next } from "react-i18next";
@@ -40,21 +41,23 @@ const updateSW = registerSW({
   onOfflineReady() {},
 });
 
-i18n.use(initReactI18next).init({
-  resources: TRANSLATIONS,
-  lng: localStorage.getItem("language") || "en",
-  fallbackLng: "en",
-  interpolation: {
-    escapeValue: false,
-  },
-  saveMissing: true,
-  missingKeyHandler: (lng, ns, key, fallbackValue) => {
-    console.warn("Missing translation", { lng, ns, key, fallbackValue });
-    if (process.env.NODE_ENV === "development") {
-      throw new Error(`Missing translation: ${key}`);
-    }
-  },
-});
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources: TRANSLATIONS,
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false,
+    },
+    saveMissing: true,
+    missingKeyHandler: (lng, ns, key, fallbackValue) => {
+      console.warn("Missing translation", { lng, ns, key, fallbackValue });
+      if (process.env.NODE_ENV === "development") {
+        throw new Error(`Missing translation: ${key}`);
+      }
+    },
+  });
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

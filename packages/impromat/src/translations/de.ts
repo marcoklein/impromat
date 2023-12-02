@@ -78,6 +78,17 @@ export default {
     "Use the search bar to find elements from various sources.":
       "Nutze die Suchleiste, um Improelemente aus verschiedenen Quellen zu finden.",
   },
+  FilterInspirations: {
+    tagsInspiration0: "<Tag>{{tagA}}</Tag> mit <Tag>{{tagB}}</Tag> Fokus",
+    tagsInspiration1:
+      "<Tag>{{tagA}}</Tag> um <Tag>{{tagB}}</Tag> zu verbessern",
+    tagsInspiration2: "<Tag>{{tagA}}</Tag> mit <Tag>{{tagB}}</Tag>!",
+
+    "Use the top filter bar to search over 1000 improv exercises and games.":
+      "Nutze die Filterleiste oben, um über 1000 Improübungen und -spiele zu durchsuchen.",
+    "or start with these inspirations:":
+      "oder starte mit diesen Inspirationen:",
+  },
   NewElementButton: {
     NewElement: "Neues Element",
   },
@@ -172,7 +183,6 @@ export default {
     EnterWorkshopName: "Bitte wähle einen Namen für deinen Workshop.",
     Duplicated: '"{{workshopName}}" dupliziert',
     WorkshopDescription: "Beschreibung",
-    Rename: "Umbenennen",
     TypeName: "Please type a workshop name.",
     ChangeDescription: "Beschreibung ändern",
     AddDescription: "Beschreibung hinzufügen",
@@ -204,20 +214,16 @@ export default {
     About: "Über das Projekt",
   },
   AccountSignedIn: {
-    "Only workshops and elements with your selected languages will be shown.":
-      "Nur Workshops und Elemente mit deinen ausgewählten Sprachen werden angezeigt.",
     "Display Name": "Anzeigename",
     "Change via menu on top right": "Ändere über das Menü oben rechts",
-    Profile: "Profil",
     Logout: "Abmelden",
+    Profile: "Profil",
   },
   AccountOptionsMenu: {
     InputMessage: "Bitte gebe einen Anzeigenamen ein.",
     LetterUseMessage: "Bitte verwende nur Buchstaben, Zahlen, -, oder _.",
-    Rename: "Umbenennen",
     FailMessage:
       "Die Änderung des Anzeigenamens ist fehlgeschlagen. Bitte prüfe deine Internetverbindung und versuche es dann erneut.",
-    Options: "Optionen",
     ChangeUsername: "Anzeigenamen ändern",
   },
   AccountLanguageSection: {
