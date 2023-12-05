@@ -46,4 +46,8 @@ export class AdminService {
     }
     return MAX_ELEMENTS_COUNT;
   }
+
+  async createAllSummaries(userRequestId: string | undefined) {
+    return await this.elementService.generateElementSummaries(userRequestId);
+  }
 }

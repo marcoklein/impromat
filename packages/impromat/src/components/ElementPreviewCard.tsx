@@ -1,11 +1,11 @@
-import { IonBadge, IonButton, IonCardContent, IonText } from "@ionic/react";
+import { IonBadge, IonCardContent, IonText } from "@ionic/react";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { routeLibraryElement } from "../routes/library-routes";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
-import { useTranslation } from "react-i18next";
 
 const ElementPreviewItem_ElementSearchResultFragment = graphql(`
   fragment ElementPreviewItem_ElementSearchResult on ElementSearchResult {
@@ -25,7 +25,7 @@ const ElementPreviewItem_ElementFragment = graphql(`
     version
     deleted
     name
-    markdownShort
+    summary
     tags {
       id
       name
@@ -120,17 +120,7 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
           {element.name}
         </IonText>
       }
-      buttonsElement={
-        <>
-          <IonButton
-            style={{ flexGrow: 1 }}
-            fill="clear"
-            routerLink={routerLink}
-          >
-            {t("Open")}
-          </IonButton>
-        </>
-      }
+      buttonsElement={<></>}
     >
       <IonCardContent>
         <div>
@@ -144,7 +134,7 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
             </IonBadge>
           ))}
         </div>
-        <IonText>{element.markdownShort}</IonText>
+        <IonText>{element.summary}</IonText>
       </IonCardContent>
     </PreviewCard>
   );

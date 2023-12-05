@@ -16,6 +16,7 @@ model Element {
 
   name               String
   markdown           String?
+  summary            String?
   languageCode       String?
   sourceUrl          String?
   sourceName         String

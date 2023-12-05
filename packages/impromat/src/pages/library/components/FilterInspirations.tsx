@@ -63,14 +63,16 @@ export const FilterInspirations: React.FC<ContainerProps> = ({
             onClick={() => onFilterInspirationClick(tags)}
             button
           >
-            <Trans
-              t={t}
-              i18nKey={`tagsInspiration${index}`}
-              values={{ tagA: tags[0], tagB: tags[1] }}
-              components={{
-                Tag: <IonChip outline />,
-              }}
-            ></Trans>
+            <div>
+              <Trans
+                t={t}
+                i18nKey={`tagsInspiration${index}`}
+                values={{ tagA: tags[0], tagB: tags[1] }}
+                components={{
+                  Tag: <IonChip outline />,
+                }}
+              ></Trans>
+            </div>
           </IonItem>
         ))}
       </IonList>

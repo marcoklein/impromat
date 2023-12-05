@@ -185,6 +185,7 @@ type Element {
   Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.
   """
   predictedLevelTags: [ElementPredictedTag!]
+  summary: String!
 }
 
 enum ElementVisibility {
