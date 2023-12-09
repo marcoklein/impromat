@@ -24,8 +24,6 @@ export interface Improbib {
   elements: ImprobibElement[];
 }
 
-export type ImprobibEntry = ImprobibElement;
-
 export interface BaseImprovEntry {
   type: string;
 
@@ -49,5 +47,5 @@ export interface ImprobibElement extends BaseImprovEntry {
    */
   changes: string[];
   identifier: string;
-  outgoingLinks: [{ title: string; url: string }];
+  outgoingLinks: { title: string | undefined; url: string }[];
 }
