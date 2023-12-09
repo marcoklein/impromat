@@ -75,7 +75,9 @@ export class ImprovresourcecenterEntryPagePipeline implements WikiPipeline {
   private async htmlToImprovElement(
     $: CheerioAPI,
   ): Promise<
-    Array<Pick<ImprovElement, "type" | "name" | "markdown" | "tags">>
+    Array<
+      Pick<ImprovElement, "type" | "name" | "markdown" | "tags" | "customData">
+    >
   > {
     const title = $("#firstHeading").text().trim();
 
@@ -94,6 +96,7 @@ export class ImprovresourcecenterEntryPagePipeline implements WikiPipeline {
         markdown,
         name: title,
         tags,
+        customData: {},
       },
     ];
   }

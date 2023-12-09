@@ -49,13 +49,5 @@ export interface ImprobibElement extends BaseImprovEntry {
    */
   changes: string[];
   identifier: string;
-  // Themenbloecke?
-  // e.g. requirements,...
-  // allgemeingueltige attributes
-  // e.g. number of players
-  // e.g. time estimation
-  // e.g. level
-  // e.g. inspo Spielebox (was steht auf der Spielebox (alter, spieleranzahl))
-  // custom: Record<string, string | number>;
-  // methode: refactor on the go
+  outgoingLinks: [{ title: string; url: string }];
 }

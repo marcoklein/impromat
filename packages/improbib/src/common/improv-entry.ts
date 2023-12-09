@@ -19,4 +19,5 @@ export interface ImprovElement extends BaseImprovEntry {
   name: string;
   markdown: string;
   tags: string[];
+  customData: Record<string, any | undefined>;
 }

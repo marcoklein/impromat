@@ -3,7 +3,7 @@ import { htmlToMarkdownParser } from "../../common/html-to-markdown-parser";
 import { ImprovElement, ImprovEntry } from "../../common/improv-entry";
 import { toAbsoluteUrl } from "../../common/to-absolute-url";
 import { toBaseUrl } from "../../common/to-base-url";
-import { WikiPipeline, PipelineRunParameters } from "../wiki-pipeline";
+import { PipelineRunParameters, WikiPipeline } from "../wiki-pipeline";
 import { EntryPage } from "./entry-page";
 import { improwikiHtmlTransformers } from "./html-transformers";
 
@@ -86,7 +86,9 @@ export class ImprowikiEntryPagePipeline implements WikiPipeline {
   private async htmlToImprovElement(
     $: CheerioAPI,
   ): Promise<
-    Array<Pick<ImprovElement, "type" | "name" | "markdown" | "tags">>
+    Array<
+      Pick<ImprovElement, "type" | "name" | "markdown" | "tags" | "customData">
+    >
   > {
     if ($(".wikipage").length !== 1) return [];
 
@@ -102,12 +104,35 @@ export class ImprowikiEntryPagePipeline implements WikiPipeline {
       .filter((text) => text.includes("#"))
       .map((text) => text.replaceAll("#", "").trim());
 
+    const lastUpdate = $("small").text().split(":")[1].split("by")[0].trim();
+
+    const translationLinkEn = $("li:contains('englische Version')")
+      .find("a")
+      .attr("href");
+
+    const translationLinkDe = $("li:contains('german version')")
+      .find("a")
+      .attr("href");
+
+    const fields: Record<string, string> = {};
+    $(".card-body dl.row dt").each(function () {
+      const key = $(this).text().trim();
+      const value = $(this).next("dd").text().trim();
+      fields[key] = value;
+    });
+
     return [
       {
         type: "element",
         name,
         markdown,
         tags,
+        customData: {
+          lastUpdate,
+          translationLinkEn,
+          translationLinkDe,
+          cardData: fields,
+        },
       },
     ];
   }
