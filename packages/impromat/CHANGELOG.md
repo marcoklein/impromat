@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.58.0
+
+### Minor Changes
+
+- 0e5eb85: Detect language from user browser settings
+- 0e5eb85: Sample filters on exercises & games page
+
 ## 0.57.1
 
 ### Patch Changes
