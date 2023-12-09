@@ -77,6 +77,8 @@ export default {
     "No matching elements found.": "Keine passenden Elemente gefunden.",
     "Use the search bar to find elements from various sources.":
       "Nutze die Suchleiste, um Improelemente aus verschiedenen Quellen zu finden.",
+    "Use the filter bar to search for elements from various sources.":
+      "Nutze die Filterleiste, um nach Elementen aus verschiedenen Quellen zu suchen.",
   },
   FilterInspirations: {
     tagsInspiration0: "<Tag>{{tagA}}</Tag> mit <Tag>{{tagB}}</Tag> Fokus",

@@ -5,9 +5,10 @@ import { routeLibraryCreateCustomElement } from "../../../routes/library-routes"
 interface ContainerProps {}
 
 export const NewElementButton: React.FC<ContainerProps> = () => {
-  const { t } = useTranslation("NewElementButton");
+  const name = "NewElementButton";
+  const { t } = useTranslation(name);
   return (
-    <IonFab slot="fixed" vertical="bottom" horizontal="end">
+    <IonFab slot="fixed" vertical="bottom" horizontal="end" className={name}>
       <IonButton
         color="secondary"
         routerLink={routeLibraryCreateCustomElement()}

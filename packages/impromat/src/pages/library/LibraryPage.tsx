@@ -24,6 +24,7 @@ import { routeLibraryElement } from "../../routes/library-routes";
 import { ElementFilterBar } from "./components/ElementFilterBar";
 import { FilterInspirations } from "./components/FilterInspirations";
 import { NewElementButton } from "./components/NewElementButton";
+import { Steps, Hints } from "intro.js-react";
 
 const LibraryPageQuery = graphql(`
   query SearchElements(
@@ -131,6 +132,17 @@ export const LibraryPage: React.FC = () => {
     false,
   );
 
+  const [stepsEnabled, setStepsEnabled] = useState(false);
+  // enable steps after 1 second
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setStepsEnabled(true);
+    }, 1000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <PageScaffold
       customContentWrapper
@@ -145,7 +157,7 @@ export const LibraryPage: React.FC = () => {
                     ? "55vh"
                     : `${foldedFilterBarHeight}px`,
                 }}
-                className="side-scrolling-list"
+                className="FilterBarContainer"
               >
                 <ElementFilterBar
                   enableUserSpecificFilters={isLoggedIn}
@@ -221,6 +233,7 @@ export const LibraryPage: React.FC = () => {
                   </IonCheckbox>
                   <div style={{ flex: 1 }}></div>
                   <IonButton
+                    className="FilterBarCollapseButton"
                     fill="outline"
                     expand="full"
                     shape="round"
@@ -248,6 +261,47 @@ export const LibraryPage: React.FC = () => {
       }
     >
       <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
+        <Steps
+          enabled={stepsEnabled}
+          initialStep={0}
+          steps={[
+            {
+              element: ".FilterBarContainer",
+              position: "bottom",
+              intro: t(
+                "Use the filter bar to search for elements from various sources.",
+              ),
+            },
+            // {
+            //   element: ".element-preview-card",
+            //   intro: t(
+            //     "Click on an element to see more details and to use it in your own projects.",
+            //   ),
+            // },
+            // {
+            //   element: ".new-element-button",
+            //   intro: t(
+            //     "Click here to create your own element and share it with the community.",
+            //   ),
+            // },
+          ]}
+          onExit={() => {
+            setStepsEnabled(false);
+          }}
+        ></Steps>
+        <Hints
+          enabled={stepsEnabled}
+          hints={[
+            {
+              element: ".element-filter-bar",
+              hint: "Click on an element to see more details and to use it in your own projects.",
+            },
+            {
+              element: ".NewElementButton",
+              hint: "Click here to create your own element and share it with the community.",
+            },
+          ]}
+        ></Hints>
         <PageContentLoaderComponent
           queryResult={searchElementsQueryResult}
           reexecuteQuery={reexecuteSearchElementsQuery}

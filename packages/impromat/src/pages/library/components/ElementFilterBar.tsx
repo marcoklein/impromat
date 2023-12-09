@@ -7,6 +7,7 @@ import {
 } from "@ionic/react";
 import { brush, closeCircle, heart } from "ionicons/icons";
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FragmentType,
   getFragmentData,
@@ -14,7 +15,6 @@ import {
 } from "../../../graphql-client";
 import { COLOR_LIKE, COLOR_USER_CREATED } from "../../../theme/theme-colors";
 import { SearchInputChip } from "./SearchInputChip";
-import { useTranslation } from "react-i18next";
 
 export const ElementFilterBar_Query = graphql(`
   fragment ElementFilterBar_Query on Query {
@@ -65,6 +65,7 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
   onSearchInputChange,
   enableUserSpecificFilters,
 }) => {
+  const componentName = "ElementFilterBar";
   const tags = getFragmentData(ElementFilterBar_Query, queryFragment).tags;
 
   const showClearButton = useMemo(
@@ -82,10 +83,10 @@ export const ElementFilterBar: React.FC<ContainerProps> = ({
     onSearchInputChange("");
   }, [onAdditionalFilterChange, onSearchInputChange, onTagsChange]);
 
-  const { t } = useTranslation("ElementFilterBar");
+  const { t } = useTranslation(componentName);
 
   return (
-    <div>
+    <div className={componentName}>
       {showClearButton && (
         <IonChip onClick={clearInput}>
           <IonIcon icon={closeCircle}></IonIcon>

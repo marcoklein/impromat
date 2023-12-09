@@ -11868,6 +11868,8 @@ __metadata:
     i18next: ^23.5.1
     i18next-browser-languagedetector: ^7.2.0
     impromat-api: 0.23.1
+    intro.js: ^7.2.0
+    intro.js-react: ^1.0.0
     ionicons: ^7.1.2
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -12049,6 +12051,23 @@ __metadata:
   version: 3.1.1
   resolution: "interpret@npm:3.1.1"
   checksum: 35cebcf48c7351130437596d9ab8c8fe131ce4038da4561e6d665f25640e0034702a031cf7e3a5cea60ac7ac548bf17465e0571ede126f3d3a6933152171ac82
+  languageName: node
+  linkType: hard
+
+"intro.js-react@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "intro.js-react@npm:1.0.0"
+  peerDependencies:
+    intro.js: ">=2.5.0"
+    react: ">=0.14.0"
+  checksum: 97e1526965de95832f57a1a7b53ebeb8bba0ca101becf49840a88ff70dd2d07bd9b616a61a6af63824a6c2d8e4ac0db57597d96e2b309560fc0f1a6a59cd14e5
+  languageName: node
+  linkType: hard
+
+"intro.js@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "intro.js@npm:7.2.0"
+  checksum: 466b95f64d746890e1dce20c28c9813e74ea238fbd7270abf90997c1e70d8ad146a7035feee02f47a5b9328b65fdc54a4b2c204bfca07c605f18122d888de3a3
   languageName: node
   linkType: hard
 

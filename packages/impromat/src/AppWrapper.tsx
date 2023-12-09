@@ -12,6 +12,7 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
+import "intro.js/introjs.css";
 import React, { PropsWithChildren, useCallback, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { createCachedGraphqlClient } from "./create-cached-graphql-client";

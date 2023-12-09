@@ -82,6 +82,8 @@ export default {
     "No matching elements found.": "No matching elements found.",
     "Use the search bar to find elements from various sources.":
       "Use the search bar to find elements from various sources.",
+    "Use the filter bar to search for elements from various sources.":
+      "Use the filter bar to search for elements from various sources.",
   },
   FilterInspirations: {
     tagsInspiration0: "<Tag>{{tagA}}</Tag> with <Tag>{{tagB}}</Tag> focus",
