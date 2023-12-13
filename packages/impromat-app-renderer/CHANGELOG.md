@@ -1,5 +1,12 @@
 # impromat-app-renderer
 
+## 0.2.6
+
+### Patch Changes
+
+- impromat-api@0.23.2
+- impromat@0.58.1
+
 ## 0.2.5
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # impromat-api
 
+## 0.23.2
+
+### Patch Changes
+
+- Updated dependencies [71d1723]
+  - improbib@0.5.0
+
 ## 0.23.1
 
 ### Patch Changes
