@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { defineAbilityForUser } from '../abilities';
 import { ElementService } from './element.service';
 
@@ -47,7 +48,12 @@ export class AdminService {
     return MAX_ELEMENTS_COUNT;
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_2AM)
   async createAllSummaries(userRequestId: string | undefined) {
+    const ability = defineAbilityForUser(userRequestId);
+    if (!ability.can('write', 'Element')) {
+      throw new ForbiddenException();
+    }
     return await this.elementService.generateElementSummaries(userRequestId);
   }
 }

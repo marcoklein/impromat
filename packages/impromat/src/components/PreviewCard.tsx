@@ -22,24 +22,70 @@ export const PreviewCard: React.FC<ContainerProps> = ({
   return (
     <IonCard
       className="ion-no-margin"
-      style={{ height: "100%", display: "flex", flexDirection: "column" }}
+      style={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "0",
+      }}
     >
-      <div style={{ overflow: "hidden", flexGrow: 1 }}>
+      <div
+        style={{
+          flexGrow: 1,
+          display: "flex",
+          minHeight: "0",
+        }}
+      >
         <div
-          className="ion-margin-end ion-margin-top ion-float-right"
           style={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "0",
+            overflow: "scroll",
+          }}
+        >
+          <IonCardHeader
+            onClick={() => onCardClick && onCardClick()}
+            style={{
+              marginBottom: "0px",
+              paddingBottom: "0px",
+            }}
+          >
+            <IonCardTitle>{titleElement}</IonCardTitle>
+          </IonCardHeader>
+          <div
+            style={{ flexGrow: 1, minHeight: "0" }}
+            onClick={() => onCardClick && onCardClick()}
+          >
+            {children}
+          </div>
+        </div>
+        <div
+          className="ion-padding"
+          style={{
+            flexGrow: 1,
             maxWidth: "50%",
             textOverflow: "ellipsis",
+            minHeight: "0",
+            borderLeft: "1px solid var(--ion-color-light)",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           {infoListElement}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+              flexGrow: 1,
+            }}
+          >
+            {buttons}
+          </div>
         </div>
-        <IonCardHeader onClick={() => onCardClick && onCardClick()}>
-          <IonCardTitle>{titleElement}</IonCardTitle>
-        </IonCardHeader>
-        <span onClick={() => onCardClick && onCardClick()}>{children}</span>
       </div>
-      <div style={{ display: "flex" }}>{buttons}</div>
     </IonCard>
   );
 };

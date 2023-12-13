@@ -3,9 +3,15 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { GraphqlModule } from './graphql/graphql.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, GraphqlModule],
+  imports: [
+    ConfigModule.forRoot(),
+    AuthModule,
+    GraphqlModule,
+    ScheduleModule.forRoot(),
+  ],
   controllers: [],
   providers: [
     {

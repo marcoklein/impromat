@@ -1,4 +1,5 @@
-import { IonBadge, IonCardContent, IonText } from "@ionic/react";
+import { IonBadge, IonCardContent, IonIcon, IonText } from "@ionic/react";
+import { sparkles } from "ionicons/icons";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
@@ -122,7 +123,14 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
       }
       buttonsElement={<></>}
     >
-      <IonCardContent>
+      <IonCardContent
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          overflow: "inherit",
+        }}
+      >
         <div>
           {tags.map(({ id, name, isMatch }) => (
             <IonBadge
@@ -134,7 +142,13 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
             </IonBadge>
           ))}
         </div>
-        <IonText>{element.summary}</IonText>
+        <IonText>
+          {/* TODO poll summary field until it is available */}
+          {element.summary === undefined ?? t("Summary not available")}
+        </IonText>
+        <IonText className="ion-margin-top">
+          <IonIcon icon={sparkles}></IonIcon> {t("AI generated")}
+        </IonText>
       </IonCardContent>
     </PreviewCard>
   );

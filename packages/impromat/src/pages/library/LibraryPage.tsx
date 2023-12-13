@@ -266,10 +266,12 @@ export const LibraryPage: React.FC = () => {
               </IonList>
             )}
           {isEmptyFilter && (
-            <FilterInspirations
-              filterLanguage={selectedLanguage}
-              onTagsChange={(tags) => setSelectedTagNames(tags)}
-            ></FilterInspirations>
+            <div style={{ overflowY: "scroll", height: "100%" }}>
+              <FilterInspirations
+                filterLanguage={selectedLanguage}
+                onTagsChange={(tags) => setSelectedTagNames(tags)}
+              ></FilterInspirations>
+            </div>
           )}
           {!isEmptyFilter &&
             searchElementsQueryResult.data &&

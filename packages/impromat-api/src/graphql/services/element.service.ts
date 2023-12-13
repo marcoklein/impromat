@@ -138,7 +138,6 @@ export class ElementService {
     return result.owner;
   }
 
-  // TODO run this in CRON job (or on regular basis at least)
   async generateElementSummaries(userSessionId: string | undefined) {
     const ability = defineAbilityForUser(userSessionId);
     const elementsWithoutSummary = await this.prismaService.element.findMany({
@@ -181,21 +180,29 @@ export class ElementService {
     if (dbElement.summary && !forceRefresh) {
       return dbElement.summary;
     }
-    const newSummary = await this.elementSummaryService.createSummary({
-      elementId: dbElement.id,
-      name: dbElement.name,
-      markdown: dbElement.markdown ?? '',
-      languageCode: dbElement.languageCode ?? 'en',
-    });
+    if (!dbElement.markdown) {
+      return '';
+    }
 
-    await this.prismaService.element.update({
-      where: { id: dbElement.id },
-      data: {
-        summary: newSummary,
-      },
-    });
+    // TODO return immediately and dispatch summary creation in background
+    void this.elementSummaryService
+      .createSummary({
+        elementId: dbElement.id,
+        name: dbElement.name,
+        markdown: dbElement.markdown ?? '',
+        languageCode: dbElement.languageCode ?? 'en',
+      })
+      .then((summary) => {
+        this.logger.debug('Updating summary for element %s', dbElement.id);
+        return this.prismaService.element.update({
+          where: { id: dbElement.id },
+          data: {
+            summary,
+          },
+        });
+      });
 
-    return newSummary ?? dbElement.markdown?.slice(0, 300) ?? '';
+    return undefined;
   }
 
   async findElements(

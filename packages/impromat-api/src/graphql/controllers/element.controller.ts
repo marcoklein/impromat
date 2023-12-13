@@ -23,7 +23,6 @@ import {
 } from 'src/dtos/types/element.dto';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
-import { ElementSummaryService } from 'src/modules/element-summary/element-summary.service';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ElementRecommendationService } from '../services/element-recommendation.service';
 import { ElementSnapshotService } from '../services/element-snapshot.service';
@@ -35,7 +34,6 @@ export class ElementController {
     private elementService: ElementService,
     private elementRecommendationService: ElementRecommendationService,
     private elementSnapshotService: ElementSnapshotService,
-    private elementSummaryService: ElementSummaryService,
   ) {}
 
   @ResolveField(() => [ElementPredictedTag])
@@ -80,12 +78,17 @@ export class ElementController {
     return element.markdown?.substring(0, 300);
   }
 
-  @ResolveField(() => String)
+  @ResolveField(() => String, {
+    description:
+      'The summary of the element. This is generated asynchronously and might not be available immediately.',
+  })
   async summary(
     @Args('forceRefresh', {
+      nullable: true,
       type: () => Boolean,
       defaultValue: false,
-      description: 'Force a refresh of the summary. Will take longer.',
+      description:
+        'Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.',
     })
     forceRefresh: boolean,
     @Parent() element: Element,

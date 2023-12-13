@@ -44,6 +44,9 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
           ionicIcon={heart}
           color={COLOR_LIKE}
           displayText="liked"
+          xs={{
+            hideText: true,
+          }}
         ></InfoListItem>
       )}
       {workshop.isPublic && (
@@ -53,6 +56,9 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
           displayText={
             workshop.isListed ? "publicly shared" : "shared via link"
           }
+          xs={{
+            hideText: true,
+          }}
         ></InfoListItem>
       )}
       {workshop.isOwnerMe && (
@@ -60,12 +66,18 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
           ionicIcon={person}
           color={COLOR_USER_CREATED}
           displayText="my workshop"
+          xs={{
+            hideText: true,
+          }}
         ></InfoListItem>
       )}
       {!workshop.isOwnerMe && (
         <InfoListItem
           ionicIcon={person}
           displayText={workshop.owner.name ?? "impromat"}
+          xs={{
+            hideText: true,
+          }}
         ></InfoListItem>
       )}
       {dateOfWorkshopText && (

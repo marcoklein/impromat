@@ -108,6 +108,7 @@ export type Element = {
   sourceBaseUrl?: Maybe<Scalars['String']['output']>;
   sourceName?: Maybe<Scalars['String']['output']>;
   sourceUrl?: Maybe<Scalars['String']['output']>;
+  /** The summary of the element. This is generated asynchronously and might not be available immediately. */
   summary: Scalars['String']['output'];
   tags: Array<ElementTag>;
   updatedAt: Scalars['DateTime']['output'];
@@ -120,6 +121,11 @@ export type Element = {
 export type ElementSnapshotsArgs = {
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
+};
+
+
+export type ElementSummaryArgs = {
+  forceRefresh?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Predicted tag for an element. */
@@ -235,6 +241,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Iterates over all elements and applies tag mappings. */
   applyAllTagMappings: Scalars['Float']['output'];
+  /** Iterates over all elements and creates summaries. */
+  createAllSummaries: Scalars['Float']['output'];
   createElement: Element;
   createWorkshop: Workshop;
   deleteWorkshop?: Maybe<Workshop>;

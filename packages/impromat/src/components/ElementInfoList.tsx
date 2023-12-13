@@ -57,6 +57,7 @@ export const ElementInfoList: React.FC<ContainerProps> = ({
           displayText="high match"
           ionicIcon={search}
           color="primary"
+          xs={{ hideText: true }}
         ></InfoListItem>
       )}
       {element.isFavorite && (
@@ -64,6 +65,7 @@ export const ElementInfoList: React.FC<ContainerProps> = ({
           displayText="liked"
           ionicIcon={heart}
           color={COLOR_LIKE}
+          xs={{ hideText: true }}
         ></InfoListItem>
       )}
       {element.isOwnerMe && element.visibility === ElementVisibility.Public && (
@@ -71,6 +73,7 @@ export const ElementInfoList: React.FC<ContainerProps> = ({
           ionicIcon={eye}
           color="tertiary"
           displayText="public"
+          xs={{ hideText: true }}
         ></InfoListItem>
       )}
 
@@ -79,18 +82,21 @@ export const ElementInfoList: React.FC<ContainerProps> = ({
           ionicIcon={brush}
           color={COLOR_USER_CREATED}
           displayText="my element"
+          xs={{ hideText: true }}
         ></InfoListItem>
       )}
       {!!element.sourceName && !element.isOwnerMe && (
         <InfoListItem
           tablerIcon="license"
           displayText={element.sourceName}
+          xs={{ hideText: true }}
         ></InfoListItem>
       )}
       {!!element.languageCode && (
         <InfoListItem
           tablerIcon="language"
           displayText={element.languageCode.toUpperCase()}
+          xs={{ hideIcon: true }}
         ></InfoListItem>
       )}
     </>
