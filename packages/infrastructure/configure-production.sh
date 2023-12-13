@@ -8,6 +8,9 @@ source $WORKDIR/scripts/common.sh
 
 log "Configuring Dokku applications"
 
+log "Configuring ollama"
+bash -e $WORKDIR/scripts/configure-ollama.sh production
+
 log "Configuring impromat-app"
 bash -e $WORKDIR/scripts/configure-impromat-app.sh production "impromat.app" api.impromat.app
 

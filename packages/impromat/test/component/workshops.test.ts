@@ -11,7 +11,7 @@ pageTest.describe("Workshops Page", () => {
 
       // when
       await workshopsPage.goto();
-      await page.getByRole("link", { name: "Open" }).last().click();
+      await page.locator("ion-card").last().click();
 
       // then
       await expect(page).toHaveURL(`/workshop/${workshopId}`);

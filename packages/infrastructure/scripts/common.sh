@@ -37,11 +37,28 @@ function ensureAppExists {
   local appName=$1
 
   log "Ensure Application Exists"
+  set +e
   dokku apps:exists $appName
   if [ ! $? -eq 0 ]; then
+    set -e
     log "Creating app $appName"
     dokku apps:create $appName
   fi
+  set -e
+}
+
+function ensureNetworkExists {
+  local networkName=$1
+
+  log "Ensure Network Exists"
+  set +e
+  dokku network:exists $networkName
+  if [ ! $? -eq 0 ]; then
+    set -e
+    log "Creating network $appName"
+    dokku network:create $networkName
+  fi
+  set -e
 }
 
 function ensurePostgresDatabaseExists {

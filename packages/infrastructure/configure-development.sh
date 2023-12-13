@@ -8,15 +8,19 @@ source $WORKDIR/scripts/common.sh
 
 log "Configuring Dokku applications"
 
+log "Configuring ollama"
+bash -e $WORKDIR/scripts/configure-ollama.sh development
+
 log "Configuring impromat-app"
 bash -e $WORKDIR/scripts/configure-impromat-app.sh development "dev.impromat.app" api.dev.impromat.app
 
 log "Configuring impromat-api"
 bash -e $WORKDIR/scripts/configure-impromat-api.sh development api.dev.impromat.app
 
-######################################
-### Development specific configuration
-######################################
+
+##################################################
+### Development environment specific configuration
+##################################################
 
 appName=impromat-app-development
 echo "Adding development configuration"

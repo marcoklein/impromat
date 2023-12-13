@@ -78,6 +78,29 @@ export class ElementController {
     return element.markdown?.substring(0, 300);
   }
 
+  @ResolveField(() => String, {
+    nullable: true,
+    description:
+      'The summary of the element. This is generated asynchronously and might not be available immediately.',
+  })
+  async summary(
+    @Args('forceRefresh', {
+      type: () => Boolean,
+      defaultValue: false,
+      description:
+        'Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.',
+    })
+    forceRefresh: boolean,
+    @Parent() element: Element,
+    @SessionUserId() userSessionId: string,
+  ) {
+    return this.elementService.getElementSummary(
+      userSessionId,
+      element.id,
+      forceRefresh,
+    );
+  }
+
   @ResolveField(() => [User])
   async owner(
     @Parent() element: Element,

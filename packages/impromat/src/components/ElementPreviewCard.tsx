@@ -1,11 +1,12 @@
-import { IonBadge, IonButton, IonCardContent, IonText } from "@ionic/react";
+import { IonBadge, IonCardContent, IonIcon, IonText } from "@ionic/react";
+import { sparkles } from "ionicons/icons";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { routeLibraryElement } from "../routes/library-routes";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
-import { useTranslation } from "react-i18next";
 
 const ElementPreviewItem_ElementSearchResultFragment = graphql(`
   fragment ElementPreviewItem_ElementSearchResult on ElementSearchResult {
@@ -25,7 +26,7 @@ const ElementPreviewItem_ElementFragment = graphql(`
     version
     deleted
     name
-    markdownShort
+    summary
     tags {
       id
       name
@@ -120,19 +121,16 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
           {element.name}
         </IonText>
       }
-      buttonsElement={
-        <>
-          <IonButton
-            style={{ flexGrow: 1 }}
-            fill="clear"
-            routerLink={routerLink}
-          >
-            {t("Open")}
-          </IonButton>
-        </>
-      }
+      buttonsElement={<></>}
     >
-      <IonCardContent>
+      <IonCardContent
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          overflow: "inherit",
+        }}
+      >
         <div>
           {tags.map(({ id, name, isMatch }) => (
             <IonBadge
@@ -144,7 +142,15 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
             </IonBadge>
           ))}
         </div>
-        <IonText>{element.markdownShort}</IonText>
+        <IonText>
+          {/* TODO poll summary field until it is available */}
+          {element.summary === undefined
+            ? t("Summary not available")
+            : element.summary}
+        </IonText>
+        <IonText className="ion-margin-top">
+          <IonIcon icon={sparkles}></IonIcon> {t("AI generated")}
+        </IonText>
       </IonCardContent>
     </PreviewCard>
   );

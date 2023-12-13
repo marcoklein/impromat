@@ -97,7 +97,11 @@ export default {
     Like: "Favouriten",
     MyElement: "Meine Elemente",
   },
-  ElementPreviewCard: { Open: "Öffnen" },
+  ElementPreviewCard: {
+    Open: "Öffnen",
+    "AI generated": "AI generiert",
+    "Summary not available": "Zusammenfassung wird generiert. Bitte warten.",
+  },
   LibraryCreateCustomElementPage: {
     "Select language": "Sprache auswählen",
     "Edit Custom Element": "Mein Element bearbeiten",

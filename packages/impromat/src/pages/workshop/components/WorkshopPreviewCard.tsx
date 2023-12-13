@@ -1,5 +1,6 @@
-import { IonButton, IonCardContent } from "@ionic/react";
+import { IonCardContent } from "@ionic/react";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { PreviewCard } from "../../../components/PreviewCard";
 import { WorkshopInfoList } from "../../../components/WorkshopInfoList";
@@ -10,7 +11,6 @@ import {
 } from "../../../graphql-client";
 import { routeWorkshop } from "../../../routes/shared-routes";
 import { WorkshopOptionsMenu } from "../WorkshopOptionsMenu";
-import { useTranslation } from "react-i18next";
 
 const WorkshopPreviewItem_WorkshopFragment = graphql(`
   fragment WorkshopPreviewItem_Workshop on Workshop {
@@ -72,13 +72,6 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
       titleElement={<>{workshop.name}</>}
       buttonsElement={
         <>
-          <IonButton
-            style={{ flexGrow: 1 }}
-            fill="clear"
-            routerLink={routeWorkshop(workshop.id)}
-          >
-            {t("Open", { ns: "common" })}
-          </IonButton>
           {workshop.canEdit && (
             <WorkshopOptionsMenu
               workshopFragment={workshop}

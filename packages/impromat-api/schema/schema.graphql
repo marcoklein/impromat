@@ -185,6 +185,16 @@ type Element {
   Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.
   """
   predictedLevelTags: [ElementPredictedTag!]
+
+  """
+  The summary of the element. This is generated asynchronously and might not be available immediately.
+  """
+  summary(
+    """
+    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
+    """
+    forceRefresh: Boolean! = false
+  ): String
 }
 
 enum ElementVisibility {
@@ -388,6 +398,9 @@ type Mutation {
 
   """Iterates over all elements and applies tag mappings."""
   applyAllTagMappings: Float!
+
+  """Iterates over all elements and creates summaries."""
+  createAllSummaries: Float!
 }
 
 input UpdateUserFavoriteElementInput {

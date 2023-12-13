@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   CreateElementInput,
   UpdateElementInput,
@@ -18,6 +18,7 @@ import {
 import { randomUUID } from 'node:crypto';
 import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
 import { ElementPredictedTag } from 'src/dtos/types/element-predicted-tag.dto';
+import { ElementSummaryService } from 'src/modules/element-summary/element-summary.service';
 import { ElementsFilterInput } from 'test/graphql-client/graphql';
 import {
   ABILITY_ACTION_LIST,
@@ -33,8 +34,11 @@ const IMPROMAT_SOURCE_NAME = 'impromat';
 
 @Injectable()
 export class ElementService {
+  private readonly logger = new Logger(ElementService.name);
+
   constructor(
     @Inject(PrismaService) private prismaService: PrismaService,
+    private elementSummaryService: ElementSummaryService,
     private elementAiService: ElementAIService,
     private userService: UserService,
   ) {}
@@ -132,6 +136,73 @@ export class ElementService {
       },
     });
     return result.owner;
+  }
+
+  async generateElementSummaries(userSessionId: string | undefined) {
+    const ability = defineAbilityForUser(userSessionId);
+    const elementsWithoutSummary = await this.prismaService.element.findMany({
+      where: {
+        AND: [
+          accessibleBy(ability, ABILITY_ACTION_LIST).Element,
+          {
+            snapshotParentId: null,
+          },
+          {
+            summary: null,
+          },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        markdown: true,
+        languageCode: true,
+      },
+    });
+    this.logger.log(
+      `Found ${elementsWithoutSummary.length} elements without summary.`,
+    );
+    for (const element of elementsWithoutSummary) {
+      this.logger.debug(
+        `Creating summary for element ${element.id} (${element.name}))`,
+      );
+      await this.getElementSummary(userSessionId, element.id);
+    }
+    return elementsWithoutSummary.length;
+  }
+
+  async getElementSummary(
+    userSessionId: string | undefined,
+    elementId: string,
+    forceRefresh = false,
+  ) {
+    const dbElement = await this.findElementById(userSessionId, elementId);
+    if (dbElement.summary && !forceRefresh) {
+      return dbElement.summary;
+    }
+    if (!dbElement.markdown) {
+      return '';
+    }
+
+    // TODO return immediately and dispatch summary creation in background
+    void this.elementSummaryService
+      .createSummary({
+        elementId: dbElement.id,
+        name: dbElement.name,
+        markdown: dbElement.markdown ?? '',
+        languageCode: dbElement.languageCode ?? 'en',
+      })
+      .then((summary) => {
+        this.logger.debug(`Updating summary for element ${dbElement.id}`);
+        return this.prismaService.element.update({
+          where: { id: dbElement.id },
+          data: {
+            summary,
+          },
+        });
+      });
+
+    return undefined;
   }
 
   async findElements(

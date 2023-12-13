@@ -7,6 +7,7 @@ import {
   User,
 } from '@prisma/client';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
+import { randomUUID as randomUUIDOriginal } from 'node:crypto';
 import {
   CreateElementInput,
   UpdateElementInput,
@@ -19,6 +20,7 @@ import {
   defineAbilityForUser,
 } from 'src/graphql/abilities';
 import { ElementService } from 'src/graphql/services/element.service';
+import { ElementSummaryService } from 'src/modules/element-summary/element-summary.service';
 import {
   PrismaServiceMock,
   PrismaServiceMockProvider,
@@ -27,7 +29,6 @@ import { UUID4_REGEX } from 'test/test-utils/uuid4-regex';
 import { ElementAIService } from './element-ai.service';
 import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
-import { randomUUID as randomUUIDOriginal } from 'node:crypto';
 
 jest.mock('node:crypto');
 const randomUUID = randomUUIDOriginal as jest.Mock;
@@ -43,6 +44,7 @@ describe('ElementService', () => {
       providers: [
         ElementService,
         { provide: ElementAIService, useValue: {} },
+        { provide: ElementSummaryService, useValue: {} },
         PrismaServiceMockProvider,
         { provide: UserService, useValue: mockDeep(UserService) },
       ],
