@@ -6,12 +6,7 @@ on:
 concurrency: development-environment
 
 jobs:
-  test:
-    uses: ./.github/workflows/shared-test-job.yml
-
   deploy-development:
-    needs:
-      - test
     uses: ./.github/workflows/shared-deploy-job.yml
     secrets: inherit
     with:

@@ -48,11 +48,31 @@ export class LLMService {
     request: LLMRequest,
   ): Promise<LLMResponse | undefined> {
     const { model, system, prompt, template, temperature } = request;
+    const url = 'http://0.0.0.0:11434';
+    const generateEndpoint = '/api/generate';
+    try {
+      this.logger.debug('Verifying that ollama is running...');
+      const response = await fetch(`${url}`);
+      if (!response.ok) {
+        throw new Error('Ollama is not running.');
+      }
+      this.logger.debug('Ollama is running.');
+    } catch (e) {
+      this.logger.error(
+        'Ollama is not running. Please start it with `ollama serve`.',
+      );
+      if (e instanceof Error) {
+        this.logger.error(e.name);
+        this.logger.error(e.stack);
+        this.logger.error(e.message);
+      }
+      return undefined;
+    }
     try {
       this.logger.debug('Sending request to ollama with the following text:');
       this.logger.verbose(system);
       this.logger.verbose(prompt);
-      const response = await fetch('http://127.0.0.1:11434/api/generate', {
+      const response = await fetch(`${url}${generateEndpoint}`, {
         body: JSON.stringify({
           model,
           system,
@@ -72,7 +92,13 @@ export class LLMService {
       this.logger.verbose(json.response);
       return json;
     } catch (e) {
+      this.logger.error('Error while sending request to ollama:');
       this.logger.error(e);
+      if (e instanceof Error) {
+        this.logger.error(e.name);
+        this.logger.error(e.stack);
+        this.logger.error(e.message);
+      }
     }
     return undefined;
   }

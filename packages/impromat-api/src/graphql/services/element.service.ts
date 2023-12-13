@@ -193,7 +193,7 @@ export class ElementService {
         languageCode: dbElement.languageCode ?? 'en',
       })
       .then((summary) => {
-        this.logger.debug('Updating summary for element %s', dbElement.id);
+        this.logger.debug(`Updating summary for element ${dbElement.id}`);
         return this.prismaService.element.update({
           where: { id: dbElement.id },
           data: {

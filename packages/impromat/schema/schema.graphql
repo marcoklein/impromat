@@ -193,8 +193,8 @@ type Element {
     """
     Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
     """
-    forceRefresh: Boolean = false
-  ): String!
+    forceRefresh: Boolean! = false
+  ): String
 }
 
 enum ElementVisibility {

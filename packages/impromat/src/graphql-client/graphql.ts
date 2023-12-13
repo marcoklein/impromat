@@ -109,7 +109,7 @@ export type Element = {
   sourceName?: Maybe<Scalars['String']['output']>;
   sourceUrl?: Maybe<Scalars['String']['output']>;
   /** The summary of the element. This is generated asynchronously and might not be available immediately. */
-  summary: Scalars['String']['output'];
+  summary?: Maybe<Scalars['String']['output']>;
   tags: Array<ElementTag>;
   updatedAt: Scalars['DateTime']['output'];
   usedBy: Array<WorkshopElement>;
@@ -125,7 +125,7 @@ export type ElementSnapshotsArgs = {
 
 
 export type ElementSummaryArgs = {
-  forceRefresh?: InputMaybe<Scalars['Boolean']['input']>;
+  forceRefresh?: Scalars['Boolean']['input'];
 };
 
 /** Predicted tag for an element. */
@@ -649,7 +649,7 @@ export type ElementPreviewItem_ElementSearchResultFragment = (
 ) & { ' $fragmentName'?: 'ElementPreviewItem_ElementSearchResultFragment' };
 
 export type ElementPreviewItem_ElementFragment = (
-  { __typename?: 'Element', id: string, createdAt: any, updatedAt: any, version: number, deleted?: boolean | null, name: string, summary: string, languageCode?: string | null, sourceUrl?: string | null, sourceName?: string | null, sourceBaseUrl?: string | null, licenseName?: string | null, licenseUrl?: string | null, visibility: ElementVisibility, isFavorite?: boolean | null, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string, name: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null }
+  { __typename?: 'Element', id: string, createdAt: any, updatedAt: any, version: number, deleted?: boolean | null, name: string, summary?: string | null, languageCode?: string | null, sourceUrl?: string | null, sourceName?: string | null, sourceBaseUrl?: string | null, licenseName?: string | null, licenseUrl?: string | null, visibility: ElementVisibility, isFavorite?: boolean | null, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string, name: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null }
   & { ' $fragmentRefs'?: { 'CustomElement_ElementFragment': CustomElement_ElementFragment;'ElementFavoriteIcon_ElementFragment': ElementFavoriteIcon_ElementFragment;'ElementInfoList_ElementFragment': ElementInfoList_ElementFragment } }
 ) & { ' $fragmentName'?: 'ElementPreviewItem_ElementFragment' };
 
