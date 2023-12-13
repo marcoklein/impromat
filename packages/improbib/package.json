@@ -1,7 +1,7 @@
 {
   "name": "improbib",
   "type": "module",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "private": true,
   "description": "Uniting improvisational theatre games and excercises for easy improv access.",
   "author": "Marco Klein <hello@marcoklein.dev>",

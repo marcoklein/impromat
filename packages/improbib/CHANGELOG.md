@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- 71d1723: Fetch card meta data from Improwiki
+
 ## 0.4.4
 
 ### Patch Changes

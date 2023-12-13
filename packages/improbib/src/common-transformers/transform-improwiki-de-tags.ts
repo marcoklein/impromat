@@ -1,4 +1,4 @@
-import { ImprobibElement, ImprobibEntry } from "../improbib";
+import { ImprovEntry } from "../common/improv-entry";
 
 /**
  * Mapping table from original tag => new tag entries
@@ -104,7 +104,7 @@ const finalMappingTable: Record<string, string[]> = {
  * @param improbibElement
  * @returns
  */
-export function transformImprowikiDeTags(improbibElement: ImprobibElement) {
+export function transformImprowikiDeTags(improbibElement: ImprovEntry) {
   if (
     improbibElement.sourceName === "improwiki" &&
     improbibElement.languageCode === "de"

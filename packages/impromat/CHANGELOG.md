@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.58.1
+
+### Patch Changes
+
+- impromat-api@0.23.2
+
 ## 0.58.0
 
 ### Minor Changes

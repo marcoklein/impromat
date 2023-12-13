@@ -7,7 +7,7 @@ Collection of publicly available improvisation theatre exercises and games from 
 Build latest improbib:
 
 ```
-yarn build
+yarn start
 ```
 
 For development run tests in watch mode:
