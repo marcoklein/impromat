@@ -34,6 +34,7 @@ export class LLMService {
   private async runNextRequest(): Promise<LLMResponse | undefined> {
     this.logger.log(`Running next request. Queue length: ${this.queue.length}`);
     const request = this.queue.shift();
+    this.requestPrompts.delete(request?.prompt ?? '');
     if (!request) {
       this.currentPromise = undefined;
       return undefined;
