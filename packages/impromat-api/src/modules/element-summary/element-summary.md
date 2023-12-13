@@ -63,6 +63,20 @@ Pull the model from the OLLAMA instance.
 ollama pull mistral
 ```
 
+## Dokku Deployment
+
+To enter the Dokku container:
+
+```sh
+dokku enter impromat-api-development
+```
+
+Curl is not available, so use node to test the API:
+
+```sh
+node -e "fetch('http://ollama-development.web:11434')"
+```
+
 ## Ollama API
 
 [Documentation of API](https://github.com/jmorganca/ollama/blob/main/docs/api.md)
