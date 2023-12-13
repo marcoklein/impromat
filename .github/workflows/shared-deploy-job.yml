@@ -31,7 +31,7 @@ jobs:
       - uses: EndBug/latest-tag@latest
         with:
           ref: impromat-app-${{ inputs.environment }}
-      - run: git push impromat-api-${{ inputs.environment }} ${{ github.sha }}:main --force
+      - run: git push impromat-api-${{ inputs.environment }} ${{ github.sha }}:refs/heads/main --force
       - uses: EndBug/latest-tag@latest
         with:
           ref: impromat-api-${{ inputs.environment }}
