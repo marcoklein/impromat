@@ -79,12 +79,12 @@ export class ElementController {
   }
 
   @ResolveField(() => String, {
+    nullable: true,
     description:
       'The summary of the element. This is generated asynchronously and might not be available immediately.',
   })
   async summary(
     @Args('forceRefresh', {
-      nullable: true,
       type: () => Boolean,
       defaultValue: false,
       description:

@@ -19,7 +19,20 @@ For German texts we use [EM German Mistral](https://huggingface.co/jphme/em_germ
 Download GGUF via: https://huggingface.co/TheBloke/em_german_leo_mistral-GGUF/blob/main/em_german_leo_mistral.Q4_0.gguf
 
 ```sh
-ollama create example -f Modelfile
+curl -O -L https://huggingface.co/TheBloke/em_german_leo_mistral-GGUF/resolve/main/em_german_leo_mistral.Q4_0.gguf
+```
+
+## Create Model
+
+Create `Modelfile` with the following content:
+
+```
+FROM ./em_german_leo_mistral.Q4_0.gguf
+TEMPLATE "{{.System}} USER: {{ .Prompt }} ASSISTANT:"
+```
+
+```sh
+ollama create mistral-de -f Modelfile
 ```
 
 ## Getting started

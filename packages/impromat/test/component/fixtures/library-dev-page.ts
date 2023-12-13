@@ -25,7 +25,7 @@ export class LibraryDevPage extends DevPage {
   async gotoFirstElementFromSearch() {
     const searchText = "freeze";
     await this.searchForElement(searchText);
-    await this.openElementCard();
+    await this.openElementCard("freeze");
   }
 
   async clearSearch() {
@@ -47,10 +47,11 @@ export class LibraryDevPage extends DevPage {
         .locator("ion-card", {
           hasText: name,
         })
-        .getByRole("link", { name: "Open" })
+        .first()
         .click();
     } else {
-      await page.getByRole("link", { name: "Open" }).first().click();
+      await page.waitForTimeout(500);
+      await page.locator("ion-card").first().click();
     }
   }
 
