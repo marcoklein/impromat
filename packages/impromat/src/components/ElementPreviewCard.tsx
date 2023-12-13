@@ -144,7 +144,9 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
         </div>
         <IonText>
           {/* TODO poll summary field until it is available */}
-          {element.summary === undefined ?? t("Summary not available")}
+          {element.summary === undefined
+            ? t("Summary not available")
+            : element.summary}
         </IonText>
         <IonText className="ion-margin-top">
           <IonIcon icon={sparkles}></IonIcon> {t("AI generated")}
