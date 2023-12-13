@@ -48,8 +48,9 @@ export class LLMService {
     request: LLMRequest,
   ): Promise<LLMResponse | undefined> {
     const { model, system, prompt, template, temperature } = request;
-    const url = 'http://0.0.0.0:11434';
+    const url = process.env.OLLAMA_ENDPOINT ?? 'http://0.0.0.0:11434';
     const generateEndpoint = '/api/generate';
+    this.logger.debug('Using ollama endpoint: ' + url);
     try {
       this.logger.debug('Verifying that ollama is running...');
       const response = await fetch(`${url}`);
