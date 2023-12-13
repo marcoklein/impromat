@@ -6,21 +6,21 @@ import { extractOutgoingLinks } from "../common-transformers/extract-outgoing-li
 import { hashIdentifier } from "../common-transformers/hash-identifiers";
 import { removeMarkdownComments } from "../common-transformers/remove-markdown-comments";
 import { removeMarkdownLinks } from "../common-transformers/remove-markdown-links";
+import { transformImprowikiDeTags } from "../common-transformers/transform-improwiki-de-tags";
 import { trimMarkdown } from "../common-transformers/trim-markdown";
 import { uniqueTagList } from "../common-transformers/unique-tag-list";
 import { ImprovEntry } from "../common/improv-entry";
 import { TransformerChain } from "../common/transformer-chain";
 import { UnpackArray } from "../common/unpack-array";
-import { ImprobibEntry } from "../improbib";
+import { ImprobibElement } from "../improbib";
 import { changeImprowikiMarkdown } from "./improwiki/change-improwiki-markdown";
 import { WebsiteExtractor } from "./website-extractor";
 import { PipelineRunParameters, WikiPipeline } from "./wiki-pipeline";
-import { transformImprowikiDeTags } from "../common-transformers/transform-improwiki-de-tags";
 
 export class PipelineAggregator {
   constructor(private readonly pipelines: WikiPipeline[]) {}
 
-  async run(): Promise<ImprobibEntry[]> {
+  async run(): Promise<ImprobibElement[]> {
     const websiteExtractor = new WebsiteExtractor();
     const runParameters: PipelineRunParameters = { websiteExtractor };
 

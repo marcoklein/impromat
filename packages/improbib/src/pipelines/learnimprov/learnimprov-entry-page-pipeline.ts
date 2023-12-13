@@ -56,6 +56,7 @@ export class LearnImprovEntryPagePipeline implements WikiPipeline {
           sourceUrl: entryUrl,
           sourceAccessDate: accessDate,
           baseUrl,
+          customData: {},
         }),
       );
       for (const entry of entriesWithSourceContext) {

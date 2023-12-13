@@ -1,4 +1,3 @@
-import fs from "node:fs/promises";
 import {
   debug,
   desc,
@@ -12,12 +11,13 @@ import {
   tidy,
 } from "@tidyjs/tidy";
 import { expect } from "chai";
+import fs from "node:fs/promises";
 import { environment } from "../src/environment";
-import { Improbib, ImprobibEntry } from "../src/improbib";
+import { Improbib, ImprobibElement } from "../src/improbib";
 import { getPackageJsonVersion } from "../src/version";
 
 describe("data sanity", () => {
-  let improbibEntries: ImprobibEntry[];
+  let improbibEntries: ImprobibElement[];
   let improbib: Improbib;
 
   before(async function () {
