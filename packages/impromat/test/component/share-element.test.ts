@@ -32,7 +32,7 @@ pageTest.describe("Shared Elements", () => {
     async ({ page, auth, libraryPage, libraryElementPage }) => {
       // given
       await auth.loginAsRandomUser();
-      const uniqueElementName = randomUUID();
+      const uniqueElementName = randomUUID().slice(0, 12);
       // when
       await libraryPage.goto();
       await libraryPage.createCustomElement(uniqueElementName, {
@@ -49,7 +49,9 @@ pageTest.describe("Shared Elements", () => {
       await libraryPage.clearSearch();
       await libraryPage.toggleLikedFilter();
       // then
-      await expect(page.getByText(uniqueElementName)).toBeVisible();
+      await expect(
+        page.getByRole("heading").getByText(uniqueElementName),
+      ).toBeVisible();
     },
   );
 });

@@ -1,91 +1,93 @@
-import { IonCard, IonCardHeader, IonCardTitle } from "@ionic/react";
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+} from "@ionic/react";
 import { PropsWithChildren } from "react";
+import { useHistory } from "react-router";
 
 interface ContainerProps extends PropsWithChildren {
-  buttonsElement: JSX.Element;
+  menuButtonElement?: JSX.Element;
   infoListElement?: JSX.Element;
-  titleElement: JSX.Element;
-  /**
-   * Triggered, if card header or content is clicked.
-   * Will not trigger if a button or the info list is clicked.
-   */
-  onCardClick: () => void;
+  title: string;
+  content?: string;
+  routerLink?: string;
 }
 
 export const PreviewCard: React.FC<ContainerProps> = ({
-  buttonsElement: buttons,
+  menuButtonElement,
   infoListElement,
-  titleElement,
+  title,
+  content,
+  routerLink,
   children,
-  onCardClick,
 }) => {
+  const history = useHistory();
   return (
     <IonCard
-      className="ion-no-margin"
       style={{
-        height: "100%",
         display: "flex",
+        height: "100%",
         flexDirection: "column",
-        minHeight: "0",
+        alignContent: "stretch",
       }}
     >
       <div
+        onClick={routerLink ? () => history.push(routerLink) : undefined}
         style={{
-          flexGrow: 1,
+          cursor: { routerLink } ? "pointer" : undefined,
+          whiteSpace: "nowrap",
+          overflowX: "auto",
           display: "flex",
-          minHeight: "0",
+          alignItems: "center",
+          height: "2.5rem",
         }}
       >
-        <div
-          style={{
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "0",
-            overflow: "scroll",
-          }}
-        >
-          <IonCardHeader
-            onClick={() => onCardClick && onCardClick()}
-            style={{
-              marginBottom: "0px",
-              paddingBottom: "0px",
-            }}
-          >
-            <IonCardTitle>{titleElement}</IonCardTitle>
-          </IonCardHeader>
-          <div
-            style={{ flexGrow: 1, minHeight: "0" }}
-            onClick={() => onCardClick && onCardClick()}
-          >
-            {children}
-          </div>
-        </div>
-        <div
-          className="ion-padding"
-          style={{
-            flexGrow: 1,
-            maxWidth: "50%",
-            textOverflow: "ellipsis",
-            minHeight: "0",
-            borderLeft: "1px solid var(--ion-color-light)",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          {infoListElement}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-end",
-              flexGrow: 1,
-            }}
-          >
-            {buttons}
-          </div>
-        </div>
+        <div className="ion-margin-horizontal">{infoListElement}</div>
       </div>
+
+      <div
+        onClick={routerLink ? () => history.push(routerLink) : undefined}
+        style={{ cursor: { routerLink } ? "pointer" : undefined, flexGrow: 1 }}
+      >
+        <IonCardHeader style={{ paddingTop: 0, paddingBottom: "0.2rem" }}>
+          <IonCardTitle
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {title}
+          </IonCardTitle>
+        </IonCardHeader>
+        {content && (
+          <IonCardContent style={{ paddingBottom: "0.1rem" }}>
+            <span
+              style={{
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                WebkitLineClamp: 3,
+              }}
+            >
+              {content}
+            </span>
+          </IonCardContent>
+        )}
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+        }}
+      >
+        {menuButtonElement}
+      </div>
+      {children}
     </IonCard>
   );
 };

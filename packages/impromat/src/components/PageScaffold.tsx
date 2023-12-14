@@ -1,15 +1,19 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonFooter,
   IonHeader,
+  IonIcon,
   IonLabel,
   IonPage,
   IonProgressBar,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
+import { arrowBack, chevronBack } from "ionicons/icons";
 import { PropsWithChildren, useEffect } from "react";
 
 interface ContainerProps extends PropsWithChildren {
@@ -53,7 +57,24 @@ export const PageScaffold: React.FC<ContainerProps> = ({
           {(defaultBackHref || title || toolbarButtons) && (
             <IonToolbar>
               <IonButtons slot="start">
-                <IonBackButton defaultHref={defaultBackHref}></IonBackButton>
+                {isPlatform("ios") ? (
+                  <IonButton
+                    routerLink={defaultBackHref}
+                    shape="round"
+                    aria-label="back"
+                  >
+                    <IonIcon icon={chevronBack} slot="start"></IonIcon>
+                    Back
+                  </IonButton>
+                ) : (
+                  <IonButton
+                    routerLink={defaultBackHref}
+                    shape="round"
+                    aria-label="back"
+                  >
+                    <IonIcon icon={arrowBack} slot="icon-only"></IonIcon>
+                  </IonButton>
+                )}
               </IonButtons>
               <IonTitle>
                 <IonLabel className="ion-text-wrap">{title}</IonLabel>

@@ -1,5 +1,5 @@
 import { IonSpinner } from "@ionic/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   GridItemContent,
   VirtuosoGrid,
@@ -45,6 +45,7 @@ interface ContainerProps<ItemData, Context> {
    * Grid scrolls to top if this value changes.
    */
   scrollToTop?: number;
+  size?: "small" | "default";
 }
 
 /**
@@ -58,6 +59,7 @@ export const VirtualCardGrid = <ItemData, Context>({
   onTopStateChange,
   isFetching,
   scrollToTop,
+  size,
 }: ContainerProps<ItemData, Context>) => {
   const logger = useComponentLogger("VirtualCardGrid");
   const virtuosoRef = useRef<VirtuosoGridHandle>(null);
@@ -71,6 +73,11 @@ export const VirtualCardGrid = <ItemData, Context>({
   );
 
   const [scrollerRef, setScrollerRef] = useState<HTMLElement | null>(null);
+
+  const additionalItemClassName = useMemo(
+    () => (size === "small" ? "small" : ""),
+    [size],
+  );
 
   useStateChangeLogger(
     isRestoringScrollPosition,
@@ -156,7 +163,7 @@ export const VirtualCardGrid = <ItemData, Context>({
       endReached={() => endReached && endReached()}
       overscan={200}
       data={items}
-      itemClassName="item-class-name"
+      itemClassName={`item-class-name ${additionalItemClassName}`}
       listClassName="list-class-name"
       components={{
         Footer: () =>
