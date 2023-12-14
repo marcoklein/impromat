@@ -33,4 +33,4 @@ dokku enter ollama-$environmentName web ollama pull mistral
 dokku enter ollama-$environmentName web ollama pull marco/em_german_mistral_v01
 dokku enter ollama-$environmentName web ollama cp marco/em_german_mistral_v01 mistral-de
 
-log "Ollama finished
+log "Ollama finished"

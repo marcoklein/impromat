@@ -26,6 +26,6 @@ export class LibraryElementDevPage extends DevPage {
   }
 
   async clickBackButton() {
-    await this.page.getByLabel("back").click();
+    await this.page.getByRole("link", { name: "back" }).click();
   }
 }

@@ -1,5 +1,5 @@
 import { IonIcon, IonItem, IonLabel, IonNote } from "@ionic/react";
-import { globe } from "ionicons/icons";
+import { globe, sparkles } from "ionicons/icons";
 import { Trans, useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import { NavLink } from "react-router-dom";
@@ -23,6 +23,7 @@ const Element_ElementFragment = graphql(`
     deleted
     name
     markdown
+    summary
     tags {
       name
     }
@@ -67,6 +68,17 @@ export const ElementComponent: React.FC<ContainerProps> = ({
     <>
       <div className="ion-padding">
         <TagsComponent tags={element.tags.map((t) => t.name)}></TagsComponent>
+        {element.summary && (
+          <IonItem>
+            <IonLabel className="ion-text-wrap">
+              {element.summary}
+              <IonNote>
+                {" "}
+                <IonIcon icon={sparkles}></IonIcon> {t("AI generated")}
+              </IonNote>
+            </IonLabel>
+          </IonItem>
+        )}
         <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
       </div>
       {element.isOwnerMe ? (

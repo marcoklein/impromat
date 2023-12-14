@@ -1,23 +1,22 @@
 import { Test } from '@nestjs/testing';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
+import { ElementLLMService } from './element-llm.service';
 import { ElementSummaryService } from './element-summary.service';
-import { LLMResponse } from './llm-response';
-import { LLMService } from './llm.service';
 
 describe('ElementSummaryService', () => {
   let service: ElementSummaryService;
-  let llmService: DeepMockProxy<LLMService>;
+  let llmService: DeepMockProxy<ElementLLMService>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         ElementSummaryService,
-        { provide: LLMService, useValue: mockDeep(LLMService) },
+        { provide: ElementLLMService, useValue: mockDeep(ElementLLMService) },
       ],
     }).compile();
 
     service = moduleRef.get(ElementSummaryService);
-    llmService = moduleRef.get(LLMService);
+    llmService = moduleRef.get(ElementLLMService);
   });
 
   it('should return the input markdown if it is shorter than 300 characters', async () => {
@@ -34,7 +33,7 @@ describe('ElementSummaryService', () => {
     expect(result).toEqual('short');
   });
 
-  it('should trigger the expected LLM request for English', async () => {
+  it('should trigger the expected LLM request', async () => {
     // given
     const inputMarkdown = 'i'.repeat(301);
     const input = {
@@ -43,44 +42,18 @@ describe('ElementSummaryService', () => {
       name: 'name',
       languageCode: 'en',
     };
-    llmService.runRequest.mockResolvedValue({
-      done: true,
-      response: 'llm-response',
-    } as LLMResponse);
+    llmService.run.mockResolvedValue('llm-response');
     // when
     await service.createSummary(input);
     // then
-    expect(llmService.runRequest).toHaveBeenCalledWith({
-      model: 'mistral',
-      system:
-        'Your task is to create a VERY SHORT summary of the presented text. Keep it to a maximum of 20 words!',
-      prompt: inputMarkdown,
-    });
-  });
-
-  it('should trigger the expected LLM request for German', async () => {
-    // given
-    const inputMarkdown = 'i'.repeat(301);
-    const input = {
-      elementId: 'elementId',
-      markdown: inputMarkdown,
-      name: 'name',
-      languageCode: 'de',
-    };
-    llmService.runRequest.mockResolvedValue({
-      done: true,
-      response: 'llm-response',
-    } as LLMResponse);
-    // when
-    await service.createSummary(input);
-    // then
-    expect(llmService.runRequest).toHaveBeenCalledWith({
-      model: 'mistral-de',
-      system:
+    expect(llmService.run).toHaveBeenCalledWith({
+      languageCode: 'en',
+      temperature: undefined,
+      systemPromptDe:
         'Deine Aufgabe ist es den folgenden Text in zwei Sätzen zusammenzufassen',
-      prompt: inputMarkdown,
-      template: '{{ .System }} USER: {{ .Prompt }} ASSISTANT:',
-      temperature: 0.1,
+      systemPromptEn:
+        'Your task is to create a VERY SHORT summary of the presented text. Keep it to a maximum of 20 words!',
+      text: inputMarkdown,
     });
   });
 
@@ -93,7 +66,7 @@ describe('ElementSummaryService', () => {
       name: 'name',
       languageCode: 'en',
     };
-    llmService.runRequest.mockResolvedValue(undefined);
+    llmService.run.mockResolvedValue(undefined);
     // when
     const result = await service.createSummary(input);
     // then

@@ -1,7 +1,5 @@
-import { IonBadge, IonCardContent, IonIcon, IonText } from "@ionic/react";
-import { sparkles } from "ionicons/icons";
+import { IonBadge, IonText } from "@ionic/react";
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { routeLibraryElement } from "../routes/library-routes";
@@ -27,6 +25,7 @@ const ElementPreviewItem_ElementFragment = graphql(`
     deleted
     name
     summary
+    markdownShort
     tags {
       id
       name
@@ -95,63 +94,46 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
   );
 
   const history = useHistory();
-  const { t } = useTranslation("ElementPreviewCard");
 
   return (
     <PreviewCard
-      onCardClick={() => {
-        history.push(routerLink);
-      }}
+      routerLink={routerLink}
       infoListElement={
         <ElementInfoList
           elementFragment={element}
           elementSearchResultFragment={searchResult}
         ></ElementInfoList>
       }
-      titleElement={
-        <IonText
+      title={element.name}
+      content={element.summary ?? element.markdownShort ?? undefined}
+    >
+      {tags.length > 0 && (
+        <div
+          onClick={() => history.push(routerLink)}
           style={{
-            fontWeight: searchResult?.matches.find(
-              (match) => match.key === "name",
-            )
-              ? "bold"
-              : undefined,
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+            overflowX: "auto",
+            flexGrow: 1,
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          {element.name}
-        </IonText>
-      }
-      buttonsElement={<></>}
-    >
-      <IonCardContent
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          overflow: "inherit",
-        }}
-      >
-        <div>
-          {tags.map(({ id, name, isMatch }) => (
-            <IonBadge
-              key={id}
-              color={isMatch ? "medium" : "light"}
-              style={{ marginRight: "4px" }}
-            >
-              <IonText color={isMatch ? "light" : "medium"}>{name}</IonText>
-            </IonBadge>
-          ))}
+          <div className="ion-margin-horizontal">
+            {tags.map(({ id, name, isMatch }) => (
+              // TODO use IonChip and allow filtering by clicking on it
+              <IonBadge
+                key={id}
+                color={isMatch ? "primary" : "light"}
+                // outline={!isMatch}
+                style={{ marginRight: "4px" }}
+              >
+                <IonText color={isMatch ? "light" : "medium"}>{name}</IonText>
+              </IonBadge>
+            ))}
+          </div>
         </div>
-        <IonText>
-          {/* TODO poll summary field until it is available */}
-          {element.summary === undefined
-            ? t("Summary not available")
-            : element.summary}
-        </IonText>
-        <IonText className="ion-margin-top">
-          <IonIcon icon={sparkles}></IonIcon> {t("AI generated")}
-        </IonText>
-      </IonCardContent>
+      )}
     </PreviewCard>
   );
 };

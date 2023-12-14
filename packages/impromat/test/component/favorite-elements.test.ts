@@ -27,7 +27,7 @@ pageTest.describe("Liked Elements", () => {
       await libraryPage.goto();
       await libraryPage.gotoFirstElementFromSearch();
       // ensure page is not refreshed to use cached library state
-      await page.getByRole("button", { name: "back" }).click();
+      await libraryElementPage.clickBackButton();
       await libraryPage.gotoFirstElementFromSearch();
       // when
       await libraryElementPage.addToLikedElements();

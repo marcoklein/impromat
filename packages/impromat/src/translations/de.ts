@@ -97,11 +97,6 @@ export default {
     Like: "Favouriten",
     MyElement: "Meine Elemente",
   },
-  ElementPreviewCard: {
-    Open: "Öffnen",
-    "AI generated": "AI generiert",
-    "Summary not available": "Zusammenfassung wird generiert. Bitte warten.",
-  },
   LibraryCreateCustomElementPage: {
     "Select language": "Sprache auswählen",
     "Edit Custom Element": "Mein Element bearbeiten",
@@ -135,6 +130,7 @@ export default {
     ImproveElement:
       "Willst du dieses Element verbessern? Du kannst es <EditingLink>hier bearbeiten</EditingLink>.",
     SimilarElements: "Ähnliche Elemente",
+    "AI generated": "Automatisch generierte Zusammenfassung",
   },
   LicenseItemComponent: {
     "Based on": "Basiert auf",

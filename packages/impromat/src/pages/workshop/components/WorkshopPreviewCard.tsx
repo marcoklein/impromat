@@ -1,7 +1,5 @@
-import { IonCardContent } from "@ionic/react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router";
 import { PreviewCard } from "../../../components/PreviewCard";
 import { WorkshopInfoList } from "../../../components/WorkshopInfoList";
 import {
@@ -50,8 +48,6 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
     workshopFragment,
   );
 
-  const history = useHistory();
-
   const elementNames = useMemo(
     () =>
       workshop.sections.flatMap((section) =>
@@ -61,16 +57,25 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
   );
   const { t } = useTranslation("WorkshopPreviewCard");
 
+  const workshopContent = useMemo(() => {
+    const elementsText =
+      elementNames.length > 0
+        ? `${t("Games")}${elementNames.join(", ")}`
+        : t("OpenWorkshop");
+    if (workshop.description) {
+      return workshop.description + " " + elementsText;
+    }
+    return elementsText;
+  }, [workshop, elementNames, t]);
+
   return (
     <PreviewCard
-      onCardClick={() => {
-        history.push(routeWorkshop(workshop.id));
-      }}
+      routerLink={routeWorkshop(workshop.id)}
       infoListElement={
         <WorkshopInfoList workshopFragment={workshop}></WorkshopInfoList>
       }
-      titleElement={<>{workshop.name}</>}
-      buttonsElement={
+      title={workshop.name}
+      menuButtonElement={
         <>
           {workshop.canEdit && (
             <WorkshopOptionsMenu
@@ -79,17 +84,7 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
           )}
         </>
       }
-    >
-      <IonCardContent>{workshop.description}</IonCardContent>
-      {elementNames.length === 0 && (
-        <IonCardContent>{t("OpenWorkshop")}</IonCardContent>
-      )}
-      {elementNames.length > 0 && (
-        <IonCardContent>
-          {t("Games")}
-          {elementNames.join(", ")}
-        </IonCardContent>
-      )}
-    </PreviewCard>
+      content={workshopContent}
+    ></PreviewCard>
   );
 };

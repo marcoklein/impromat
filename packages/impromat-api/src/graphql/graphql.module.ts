@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { environment } from 'src/environment';
 import { PrismaService } from 'src/graphql/services/prisma.service';
-import { ElementSummaryModule } from 'src/modules/element-summary/element-summary.module';
+import { ElementAIModule } from 'src/modules/element-summary/element-summary.module';
 import { AdminController } from './controllers/admin.controller';
 import { ElementSearchController } from './controllers/element-search.controller';
 import { ElementSnapshotController } from './controllers/element-snapshot.controller';
@@ -48,7 +48,7 @@ import { WorkshopService } from './services/workshop.service';
         origin: true,
       },
     }),
-    ElementSummaryModule,
+    ElementAIModule,
   ],
   controllers: [],
   providers: [

@@ -28,15 +28,23 @@ export const InfoListItem: React.FC<ContainerProps> = ({
   xs,
 }) => {
   return (
-    <IonBadge color="light" style={{ marginBottom: "0.5em" }}>
-      <div style={{ whiteSpace: "nowrap" }}>
+    <IonBadge color="light">
+      <div
+        style={{
+          whiteSpace: "nowrap",
+          display: "flex",
+        }}
+      >
         <Icon
           className={xs?.hideIcon === true ? "ion-hide-sm-down" : ""}
           tablerIcon={tablerIcon}
           icon={ionicIcon}
           color={color}
-        ></Icon>{" "}
-        <span className={xs?.hideText === true ? "ion-hide-sm-down" : ""}>
+        ></Icon>
+        <span
+          style={{ paddingLeft: displayText ? "0.1rem" : undefined }}
+          className={xs?.hideText === true ? "ion-hide-sm-down" : ""}
+        >
           {displayText}
         </span>
         {children}

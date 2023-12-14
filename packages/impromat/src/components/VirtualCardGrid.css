@@ -9,6 +9,10 @@
   padding: 4px;
 }
 
+.item-class-name.small {
+  height: 150px;
+}
+
 @media (min-width: 768px) {
   /* MD */
   /* .item-class-name {
