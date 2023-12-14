@@ -1,0 +1,19 @@
+{
+  "name": "impromat-nlp",
+  "type": "module",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "graphql-client": "^2.0.1",
+    "retext": "^9.0.0",
+    "retext-keywords": "^8.0.1",
+    "retext-pos": "^5.0.0",
+    "to-vfile": "^8.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "yarn@3.4.1"
+}
