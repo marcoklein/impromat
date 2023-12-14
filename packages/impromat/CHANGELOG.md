@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.59.0
+
+### Minor Changes
+
+- cd25f1a: Show element summary in element page
+- 78be7f1: Generate summaries with mistral LLM for German and English texts
+- cd25f1a: Improved UX of element and workshop preview card
+- 78be7f1: Make element and workshop preview cards scrollable
+
+### Patch Changes
+
+- Updated dependencies [cd25f1a]
+- Updated dependencies [78be7f1]
+  - impromat-api@0.24.0
+
 ## 0.58.1
 
 ### Patch Changes
