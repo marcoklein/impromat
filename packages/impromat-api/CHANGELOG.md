@@ -1,5 +1,15 @@
 # impromat-api
 
+## 0.24.0
+
+### Minor Changes
+
+- 78be7f1: Generate summaries with mistral LLM for German and English texts
+
+### Patch Changes
+
+- cd25f1a: Element summary creation is triggered at 1am by CRON job
+
 ## 0.23.2
 
 ### Patch Changes

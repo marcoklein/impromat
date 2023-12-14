@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.6.0
+
+### Minor Changes
+
+- 78be7f1: Add ollama to infrastructure setup
+
 ## 0.5.1
 
 ### Patch Changes
