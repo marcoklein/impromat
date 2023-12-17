@@ -74,7 +74,9 @@ dokku enter impromat-api-development
 Curl is not available, so use node to test the API:
 
 ```sh
-node -e "fetch('http://ollama-development.web:11434')"
+dokku run impromat-api-development node -e "fetch('http://ollama-development.web:11434')"
+# or
+dokku run impromat-api-production node -e "fetch('http://ollama-production.web:11434')"
 ```
 
 ## Ollama API
