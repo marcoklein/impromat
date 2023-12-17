@@ -12,8 +12,13 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      - run: git branch --track main origin/main
-        name: Track main branch for `nx affected` support
+      - name: Ensure main branch is tracking origin/main
+        run: |
+          if git show-ref --verify --quiet refs/heads/main; then
+            git branch --set-upstream-to=origin/main main
+          else
+            git branch --track main origin/main
+          fi
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
