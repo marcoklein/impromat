@@ -34,7 +34,7 @@ jobs:
       - run: yarn workspace:lint
       - run: yarn workspace:build
       - name: Run tests for all packages
-        run: yarn workspace:test
+        run: yarn workspace:test --parallel 1
         env:
           DEBUG: pw:webserver
       - name: Print backend infrastructure logs if tests failed
