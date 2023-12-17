@@ -12,10 +12,12 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+      - run: git branch --track main origin/main
+        name: Track main branch for `nx affected` support
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 18.12.1
           cache: yarn
 
       - run: yarn dedupe --check
@@ -32,9 +34,7 @@ jobs:
       - run: yarn workspace:lint
       - run: yarn workspace:build
       - name: Run tests for all packages
-        run: yarn workspace:test
-        env:
-          DEBUG: pw:webserver
+        run: yarn workspace:test --parallel 1
       - name: Print backend infrastructure logs if tests failed
         if: failure()
         run: yarn docker-compose:logs

@@ -60,6 +60,6 @@ export class AdminService {
   @Cron(CronExpression.EVERY_DAY_AT_1AM)
   protected async createAllSummariesCron() {
     this.logger.log('Creating summaries triggered by cron job');
-    // await this.elementService.generateElementSummaries(undefined);
+    await this.elementService.generateElementSummaries(undefined);
   }
 }

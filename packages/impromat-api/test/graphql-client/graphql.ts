@@ -108,9 +108,13 @@ export type Element = {
   sourceBaseUrl?: Maybe<Scalars['String']['output']>;
   sourceName?: Maybe<Scalars['String']['output']>;
   sourceUrl?: Maybe<Scalars['String']['output']>;
+  /** The summary of the element. This is generated asynchronously and might not be available immediately. */
+  summary?: Maybe<Scalars['String']['output']>;
   tags: Array<ElementTag>;
   updatedAt: Scalars['DateTime']['output'];
   usedBy: Array<WorkshopElement>;
+  /** The summary of the element. This is generated asynchronously and might not be available immediately. */
+  variations?: Maybe<Array<Maybe<Variation>>>;
   version: Scalars['Int']['output'];
   visibility: ElementVisibility;
 };
@@ -119,6 +123,16 @@ export type Element = {
 export type ElementSnapshotsArgs = {
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
+};
+
+
+export type ElementSummaryArgs = {
+  forceRefresh?: Scalars['Boolean']['input'];
+};
+
+
+export type ElementVariationsArgs = {
+  forceRefresh?: Scalars['Boolean']['input'];
 };
 
 /** Predicted tag for an element. */
@@ -234,6 +248,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Iterates over all elements and applies tag mappings. */
   applyAllTagMappings: Scalars['Float']['output'];
+  /** Iterates over all elements and creates summaries. */
+  createAllSummaries: Scalars['Float']['output'];
   createElement: Element;
   createWorkshop: Workshop;
   deleteWorkshop?: Maybe<Workshop>;
@@ -532,6 +548,12 @@ export type UserWorkshopsFilterInput = {
   liked?: Scalars['Boolean']['input'];
   /** Filter for workshops that are owned by the user. */
   owned?: Scalars['Boolean']['input'];
+};
+
+export type Variation = {
+  __typename?: 'Variation';
+  description?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
 };
 
 export type Workshop = {
