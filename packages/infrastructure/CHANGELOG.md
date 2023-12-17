@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.6.1
+
+### Patch Changes
+
+- ea0750c: Restart OLLAMA to apply network configuration
+
 ## 0.6.0
 
 ### Minor Changes
