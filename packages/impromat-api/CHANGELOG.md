@@ -1,5 +1,12 @@
 # impromat-api
 
+## 0.24.1
+
+### Patch Changes
+
+- ea0750c: Start summary creation via CRON
+- ea0750c: Healthcheck uses port to fix failing healtcheck probe
+
 ## 0.24.0
 
 ### Minor Changes

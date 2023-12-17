@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.59.1
+
+### Patch Changes
+
+- Updated dependencies [ea0750c]
+- Updated dependencies [ea0750c]
+  - impromat-api@0.24.1
+
 ## 0.59.0
 
 ### Minor Changes
