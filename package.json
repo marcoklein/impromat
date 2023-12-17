@@ -19,7 +19,7 @@
     "dev": "yarn foreach --from '{impromat,impromat-api}' run dev",
     "workspace:dev": "yarn foreach run dev",
     "workspace:lint": "yarn nx run-many --target=lint --projects=impromat,impromat-api",
-    "workspace:test": "yarn foreach --since --recursive --topological run test",
+    "workspace:test": "yarn nx affected --target=test",
     "workspace:build": "yarn nx run-many --target=build --projects=impromat,impromat-api",
     "build": "yarn workspace:build",
     "docker-compose": "yarn workspace infrastructure docker-compose",
