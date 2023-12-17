@@ -1,4 +1,5 @@
-fetch(`http://localhost:${process.env.PORT ?? 8080}/graphql`, {
+const defaultPort = 8080;
+fetch(`http://localhost:${process.env.PORT ?? defaultPort}/graphql`, {
   method: 'POST',
   body: JSON.stringify({ query: '{googleAuthUrl}' }),
   headers: {

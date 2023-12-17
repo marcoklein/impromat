@@ -33,14 +33,8 @@ jobs:
 
       - run: yarn workspace:lint
       - run: yarn workspace:build
-      - name: Run tests for impromat packages
-        run: yarn workspace:test --exclude '*,!impromat'
-        env:
-          DEBUG: pw:webserver
-      - name: Run tests for impromat-api packages
-        run: yarn workspace:test --exclude '*,!impromat-api'
-      - name: Run tests for remaining packages
-        run: yarn workspace:test --exclude 'impromat,impromat-api'
+      - name: Run tests for all packages
+        run: yarn workspace:test --parallel 1
       - name: Print backend infrastructure logs if tests failed
         if: failure()
         run: yarn docker-compose:logs
