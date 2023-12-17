@@ -1,4 +1,4 @@
-fetch(`http://localhost:${process.env.PORT}/graphql`, {
+fetch(`http://localhost:${process.env.PORT ?? 8080}/graphql`, {
   method: 'POST',
   body: JSON.stringify({ query: '{googleAuthUrl}' }),
   headers: {
