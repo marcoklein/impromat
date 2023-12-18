@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ElementLLMService } from './element-llm.service';
 import { ElementSummaryService } from './element-summary.service';
-import { LLMService } from './llm.service';
-import { ElementVariationsController } from './variations-controller';
 import { ElementVariationsService } from './element-variations.service';
-import { PromiseQueue } from './promise-queue.service';
+import { LLMService } from './llm.service';
+import { PromiseQueue } from './promise-queue';
+import { ElementVariationsController } from './variations-controller';
 
 @Module({
   providers: [
