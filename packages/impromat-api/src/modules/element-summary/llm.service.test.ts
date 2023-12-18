@@ -62,5 +62,24 @@ describe('LLMService', () => {
       // then
       expect(response).toEqual(mockResponse);
     });
+
+    it('should run multiple requests sequentially', async () => {
+      // when
+      const firstRequest = service.runRequest(mockRequest);
+      mockRequest.prompt = 'test2';
+      const secondRequest = service.runRequest(mockRequest);
+      mockRequest.prompt = 'test3';
+      const thirdRequest = service.runRequest(mockRequest);
+
+      // then
+      const [firstResponse, secondResponse, thirdResponse] = await Promise.all([
+        firstRequest,
+        secondRequest,
+        thirdRequest,
+      ]);
+      expect(firstResponse).toEqual(mockResponse);
+      expect(secondResponse).toEqual(mockResponse);
+      expect(thirdResponse).toEqual(mockResponse);
+    });
   });
 });
