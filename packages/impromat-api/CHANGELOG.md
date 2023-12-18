@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.24.2
+
+### Patch Changes
+
+- 927fe25: Introduce promise queue to fix llm generation issue
+
 ## 0.24.1
 
 ### Patch Changes
