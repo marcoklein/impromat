@@ -1,5 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { LLMResponse } from './llm-response';
+import { PromiseQueue } from './promise-queue';
 
 export type LLMRequest = {
   model: string;
@@ -12,37 +13,24 @@ export type LLMRequest = {
 @Injectable()
 export class LLMService {
   private readonly logger = new Logger(LLMService.name);
-  private queue: LLMRequest[] = [];
-  private currentPromise: Promise<LLMResponse | undefined> | undefined;
-  private requestPrompts = new Set<string>();
+
+  constructor(
+    @Inject(PromiseQueue) private queue: PromiseQueue<LLMResponse | undefined>,
+  ) {}
 
   async runRequest(request: LLMRequest): Promise<LLMResponse | undefined> {
-    const requestId = request.prompt;
-    if (this.requestPrompts.has(requestId)) {
-      this.logger.log(`Request ${requestId} is already in progress. Skipping.`);
-      return undefined;
-    }
+    const promise = new Promise<LLMResponse | undefined>(
+      async (resolve, reject) => {
+        try {
+          const response = await this.processRequest(request);
+          resolve(response);
+        } catch (e) {
+          reject(e);
+        }
+      },
+    );
 
-    this.requestPrompts.add(requestId);
-    this.queue.push(request);
-    if (!this.currentPromise) {
-      void this.runNextRequest();
-    }
-    return this.currentPromise;
-  }
-
-  private async runNextRequest(): Promise<LLMResponse | undefined> {
-    this.logger.log(`Running next request. Queue length: ${this.queue.length}`);
-    const request = this.queue.shift();
-    this.requestPrompts.delete(request?.prompt ?? '');
-    if (!request) {
-      this.currentPromise = undefined;
-      return undefined;
-    }
-
-    this.currentPromise = this.processRequest(request);
-    await this.currentPromise;
-    void this.runNextRequest();
+    return this.queue.add(promise, request.prompt);
   }
 
   private async processRequest(
