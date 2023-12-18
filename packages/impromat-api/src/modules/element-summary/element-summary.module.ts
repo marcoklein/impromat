@@ -4,6 +4,7 @@ import { ElementSummaryService } from './element-summary.service';
 import { LLMService } from './llm.service';
 import { ElementVariationsController } from './variations-controller';
 import { ElementVariationsService } from './element-variations.service';
+import { PromiseQueue } from './promise-queue.service';
 
 @Module({
   providers: [
@@ -12,6 +13,7 @@ import { ElementVariationsService } from './element-variations.service';
     ElementSummaryService,
     ElementVariationsService,
     ElementVariationsController,
+    PromiseQueue,
   ],
   exports: [ElementSummaryService, ElementVariationsController],
 })
