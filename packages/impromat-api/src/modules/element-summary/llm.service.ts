@@ -25,6 +25,12 @@ export class LLMService {
           const response = await this.processRequest(request);
           resolve(response);
         } catch (e) {
+          this.logger.error('Error during runRequest:');
+          if (e instanceof Error) {
+            this.logger.error(e.name);
+            this.logger.error(e.stack);
+            this.logger.error(e.message);
+          }
           reject(e);
         }
       },

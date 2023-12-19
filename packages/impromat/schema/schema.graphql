@@ -195,6 +195,16 @@ type Element {
     """
     forceRefresh: Boolean! = false
   ): String
+
+  """
+  The summary of the element. This is generated asynchronously and might not be available immediately.
+  """
+  variations(
+    """
+    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
+    """
+    forceRefresh: Boolean! = false
+  ): [Variation]
 }
 
 enum ElementVisibility {
@@ -217,6 +227,11 @@ type ElementSnapshot {
 
   """Element this snapshot was created of."""
   parent: Element!
+}
+
+type Variation {
+  name: String!
+  description: String
 }
 
 type ElementSearchMatch {
