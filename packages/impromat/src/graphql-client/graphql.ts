@@ -113,6 +113,8 @@ export type Element = {
   tags: Array<ElementTag>;
   updatedAt: Scalars['DateTime']['output'];
   usedBy: Array<WorkshopElement>;
+  /** The summary of the element. This is generated asynchronously and might not be available immediately. */
+  variations?: Maybe<Array<Maybe<Variation>>>;
   version: Scalars['Int']['output'];
   visibility: ElementVisibility;
 };
@@ -125,6 +127,11 @@ export type ElementSnapshotsArgs = {
 
 
 export type ElementSummaryArgs = {
+  forceRefresh?: Scalars['Boolean']['input'];
+};
+
+
+export type ElementVariationsArgs = {
   forceRefresh?: Scalars['Boolean']['input'];
 };
 
@@ -541,6 +548,12 @@ export type UserWorkshopsFilterInput = {
   liked?: Scalars['Boolean']['input'];
   /** Filter for workshops that are owned by the user. */
   owned?: Scalars['Boolean']['input'];
+};
+
+export type Variation = {
+  __typename?: 'Variation';
+  description?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
 };
 
 export type Workshop = {
