@@ -19,8 +19,8 @@ export class LLMService {
   ) {}
 
   async runRequest(request: LLMRequest): Promise<LLMResponse | undefined> {
-    const promise = new Promise<LLMResponse | undefined>(
-      async (resolve, reject) => {
+    const promise = () =>
+      new Promise<LLMResponse | undefined>(async (resolve, reject) => {
         try {
           const response = await this.processRequest(request);
           resolve(response);
@@ -33,8 +33,7 @@ export class LLMService {
           }
           reject(e);
         }
-      },
-    );
+      });
 
     return this.queue.add(promise, request.prompt);
   }
