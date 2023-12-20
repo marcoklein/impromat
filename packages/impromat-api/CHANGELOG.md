@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.24.3
+
+### Patch Changes
+
+- 59f3af4: Allow sequential calling of the LLM by fixing the promise queue
+
 ## 0.24.2
 
 ### Patch Changes

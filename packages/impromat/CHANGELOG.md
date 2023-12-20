@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.59.3
+
+### Patch Changes
+
+- Updated dependencies [59f3af4]
+  - impromat-api@0.24.3
+
 ## 0.59.2
 
 ### Patch Changes
