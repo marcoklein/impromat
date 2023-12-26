@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
+    "module": "CommonJS",
+    "target": "es2021",
     "esModuleInterop": true,
     "strict": true,
     "strictNullChecks": true,
@@ -10,10 +10,6 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist"
-  },
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
   },
   "include": ["./src/**/*.ts"]
 }

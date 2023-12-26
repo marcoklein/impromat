@@ -27,6 +27,7 @@ export class WebBrowser {
       this.browser = await puppeteer.launch({
         // no need for sandbox as we only serve static files from the impromat app
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        headless: "new",
       });
       console.log("Created new browser");
     }
