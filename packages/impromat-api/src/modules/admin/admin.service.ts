@@ -65,8 +65,10 @@ export class AdminService {
 
   @Cron(CronExpression.EVERY_DAY_AT_1AM)
   protected async createAllSummariesCron() {
-    // TODO only run on production environment!
-    // Currently, the development enviroment is also running this cron job and blocks the ollama instance
+    if (process.env.NO_CRON_JOBS === '1') {
+      this.logger.log('Skipping cron job because of NO_CRON_JOBS');
+      return;
+    }
     this.logger.log('Creating summaries triggered by cron job');
     await this.elementSummaryService.generateElementSummaries(undefined);
   }

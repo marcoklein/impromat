@@ -29,3 +29,5 @@ echo "packageVersion=$packageVersion"
 appVersion="$packageVersion-$(($RANDOM % 999))"
 echo "appVersion=$appVersion"
 dokku docker-options:add $appName build "--build-arg VITE_VERSION=$packageVersion-$RANDOM"
+
+dokku config:set --no-restart impromat-api-development NO_CRON_JOBS=1
