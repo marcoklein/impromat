@@ -3,7 +3,6 @@
   "version": "0.2.10",
   "description": "Render Impromat application.",
   "author": "Marco Klein <hello@marcoklein.dev>",
-  "type": "module",
   "private": true,
   "scripts": {
     "start": "ts-node --transpile-only src/index.ts"

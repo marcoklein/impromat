@@ -10,7 +10,7 @@ import { sign } from 'cookie-signature';
 import { Request, Response } from 'express';
 import { Session } from 'express-session';
 import { environment } from 'src/environment';
-import { PrismaService } from 'src/graphql/services/prisma.service';
+import { PrismaService } from 'src/modules/database/prisma.service';
 import { UserSessionData } from './user-session-data';
 
 /**

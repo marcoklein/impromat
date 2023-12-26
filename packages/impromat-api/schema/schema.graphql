@@ -30,12 +30,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type UserFavoriteElement {
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  element: Element!
-}
-
 type WorkshopElement {
   id: ID!
   createdAt: DateTime!
@@ -189,22 +183,32 @@ type Element {
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
   """
-  summary(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): String
-
-  """
-  The summary of the element. This is generated asynchronously and might not be available immediately.
-  """
   variations(
     """
     Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
     """
     forceRefresh: Boolean! = false
   ): [Variation]
+
+  """
+  The keywords of the element. This is generated asynchronously and might not be available immediately.
+  """
+  keywords(
+    """
+    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
+    """
+    forceRefresh: Boolean! = false
+  ): [String]
+
+  """
+  The summary of the element. This is generated asynchronously and might not be available immediately.
+  """
+  summary(
+    """
+    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
+    """
+    forceRefresh: Boolean! = false
+  ): String
 }
 
 enum ElementVisibility {
@@ -229,9 +233,10 @@ type ElementSnapshot {
   parent: Element!
 }
 
-type Variation {
-  name: String!
-  description: String
+type UserFavoriteElement {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  element: Element!
 }
 
 type ElementSearchMatch {
@@ -256,6 +261,11 @@ type ElementQueryResult {
   element: Element!
 }
 
+type Variation {
+  name: String!
+  description: String
+}
+
 type Query {
   googleAuthUrl: String!
   searchElements(
@@ -267,11 +277,7 @@ type Query {
     """Helper field to pass take argument into input field."""
     take: Int
   ): [ElementSearchResult!]!
-  workshop(id: ID!): Workshop
-
-  """Find workshops."""
-  workshops(skip: Int! = 0, take: Int! = 20, where: WorkshopsWhereInput, orderBy: [WorkshopsOrderByInput!]): [Workshop!]!
-  workshopElement(id: ID!): WorkshopElement!
+  tags(filter: ElementTagsFilterInput, skip: Int! = 0, take: Int! = 20): [ElementTag!]!
   element(id: ID!): Element
   elements(skip: Int! = 0, take: Int! = 20, filter: ElementsFilterInput, orderBy: ElementsOrderByInput): [ElementQueryResult!]!
 
@@ -282,7 +288,11 @@ type Query {
 
   """Get information about the current user. Returns null if not logged in."""
   me: User
-  tags(filter: ElementTagsFilterInput, skip: Int! = 0, take: Int! = 20): [ElementTag!]!
+  workshop(id: ID!): Workshop
+
+  """Find workshops."""
+  workshops(skip: Int! = 0, take: Int! = 20, where: WorkshopsWhereInput, orderBy: [WorkshopsOrderByInput!]): [Workshop!]!
+  workshopElement(id: ID!): WorkshopElement!
 }
 
 input ElementSearchInput {
@@ -299,6 +309,32 @@ input ElementSearchInput {
   isOwned: Boolean
   take: Int! = 20
   skip: Int! = 0
+}
+
+"""Filter tags of elements."""
+input ElementTagsFilterInput {
+  text: String
+  selectedTagNames: [String!]
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
+}
+
+"""Filter for elements"""
+input ElementsFilterInput {
+  nameSearch: String
+
+  """Include all elements of the currently active user."""
+  isOwnerMe: Boolean
+
+  """
+  Include all elements that are publicly available to the logged-in user.
+  """
+  isPublic: Boolean
+}
+
+input ElementsOrderByInput {
+  notImplemented: Boolean!
 }
 
 input WorkshopsWhereInput {
@@ -368,64 +404,100 @@ enum SortOrder {
   desc
 }
 
-"""Filter for elements"""
-input ElementsFilterInput {
-  nameSearch: String
-
-  """Include all elements of the currently active user."""
-  isOwnerMe: Boolean
-
-  """
-  Include all elements that are publicly available to the logged-in user.
-  """
-  isPublic: Boolean
-}
-
-input ElementsOrderByInput {
-  notImplemented: Boolean!
-}
-
-"""Filter tags of elements."""
-input ElementTagsFilterInput {
-  text: String
-  selectedTagNames: [String!]
-
-  """Language code (e.g. en, de) for results."""
-  languageCode: String
-}
-
 type Mutation {
   logout: Boolean!
-
-  """Change the favorite state for element of the logged in user."""
-  updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Element
-
-  """Change the liked state for workshop of the logged in user."""
-  updateUserLikedWorkshop(input: UpdateUserLikedWorkshopInput!): Workshop
-  createWorkshop(input: CreateWorkshopInput!): Workshop!
-  updateWorkshop(input: UpdateWorkshopInput!): Workshop!
-  deleteWorkshop(id: ID!): Workshop
-  updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
-  duplicateWorkshop(input: DuplicateWorkshopInput!): Workshop!
-  createElement(input: CreateElementInput!): Element!
-  updateElement(input: UpdateElementInput!): Element!
-  updateUser(input: UpdateUserInput!): User!
 
   """Iterates over all elements and applies tag mappings."""
   applyAllTagMappings: Float!
 
   """Iterates over all elements and creates summaries."""
   createAllSummaries: Float!
+  createElement(input: CreateElementInput!): Element!
+  updateElement(input: UpdateElementInput!): Element!
+  updateUser(input: UpdateUserInput!): User!
+
+  """Change the liked state for workshop of the logged in user."""
+  updateUserLikedWorkshop(input: UpdateUserLikedWorkshopInput!): Workshop
+
+  """Change the favorite state for element of the logged in user."""
+  updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Element
+  createWorkshop(input: CreateWorkshopInput!): Workshop!
+  updateWorkshop(input: UpdateWorkshopInput!): Workshop!
+  deleteWorkshop(id: ID!): Workshop
+  updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
+  duplicateWorkshop(input: DuplicateWorkshopInput!): Workshop!
 }
 
-input UpdateUserFavoriteElementInput {
-  elementId: ID!
-  isFavorite: Boolean!
+input CreateElementInput {
+  name: String!
+  markdown: String
+
+  """Language code (e.g. en, de) of the element."""
+  languageCode: String!
+  sourceUrl: String
+  sourceName: String! = "impromat"
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  visibility: ElementVisibility!
+  orderIndex: Int
+  tags: ElementTagsInput
+  setPredictedLevelTags: Boolean
+}
+
+input ElementTagsInput {
+  """Defines all tags of the element."""
+  set: [ElementTagSetInput!]!
+}
+
+input ElementTagSetInput {
+  name: String!
+}
+
+input UpdateElementInput {
+  name: String
+  markdown: String
+
+  """Language code (e.g. en, de) of the element."""
+  languageCode: String
+  sourceUrl: String
+  sourceName: String = "impromat"
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  visibility: ElementVisibility
+  orderIndex: Int
+  tags: ElementTagsInput
+  setPredictedLevelTags: Boolean
+  id: ID!
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String
+
+  """Preferred languages of the user. E.g. de or en."""
+  languageCodes: [String!]
 }
 
 input UpdateUserLikedWorkshopInput {
   workshopId: ID!
   isLiked: Boolean!
+}
+
+input UpdateUserFavoriteElementInput {
+  elementId: ID!
+  isFavorite: Boolean!
 }
 
 input CreateWorkshopInput {
@@ -535,66 +607,4 @@ input UpdateWorkshopItemOrder {
 input DuplicateWorkshopInput {
   workshopId: ID!
   name: String!
-}
-
-input CreateElementInput {
-  name: String!
-  markdown: String
-
-  """Language code (e.g. en, de) of the element."""
-  languageCode: String!
-  sourceUrl: String
-  sourceName: String! = "impromat"
-  sourceBaseUrl: String
-  licenseName: String
-  licenseUrl: String
-
-  """
-  Set if the element was imported from improbib, a project that collects existing improv resources.
-  """
-  improbibIdentifier: String
-  visibility: ElementVisibility!
-  orderIndex: Int
-  tags: ElementTagsInput
-  setPredictedLevelTags: Boolean
-}
-
-input ElementTagsInput {
-  """Defines all tags of the element."""
-  set: [ElementTagSetInput!]!
-}
-
-input ElementTagSetInput {
-  name: String!
-}
-
-input UpdateElementInput {
-  name: String
-  markdown: String
-
-  """Language code (e.g. en, de) of the element."""
-  languageCode: String
-  sourceUrl: String
-  sourceName: String = "impromat"
-  sourceBaseUrl: String
-  licenseName: String
-  licenseUrl: String
-
-  """
-  Set if the element was imported from improbib, a project that collects existing improv resources.
-  """
-  improbibIdentifier: String
-  visibility: ElementVisibility
-  orderIndex: Int
-  tags: ElementTagsInput
-  setPredictedLevelTags: Boolean
-  id: ID!
-}
-
-input UpdateUserInput {
-  id: ID!
-  name: String
-
-  """Preferred languages of the user. E.g. de or en."""
-  languageCodes: [String!]
 }

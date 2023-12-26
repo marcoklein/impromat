@@ -1,4 +1,3 @@
-import { MdastRoot } from "rehype-remark/lib";
 import { visit } from "unist-util-visit";
 import { markdownParser } from "../common/markdown-parser";
 
@@ -16,7 +15,7 @@ export async function extractOutgoingLinks<T extends { markdown: string }>(
 }> {
   const outgoingLinks: Array<{ title: string | undefined; url: string }> = [];
   await markdownParser()
-    .use(() => (mdast: MdastRoot) => {
+    .use(() => (mdast: any) => {
       visit(mdast, "link", (node) => {
         const { url, title } = node;
         let titleText = title;

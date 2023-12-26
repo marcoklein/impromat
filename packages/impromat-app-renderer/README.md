@@ -6,7 +6,7 @@ Renders the impromat Single Page Application.
 
 Run with
 
-```
+```sh
 yarn start
 ```
 
