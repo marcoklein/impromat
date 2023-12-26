@@ -1,5 +1,20 @@
 # impromat-app-renderer
 
+## 0.3.0
+
+### Minor Changes
+
+- 33b9fc2: Switch to new headless chrome mode
+- 33b9fc2: Switch to commonjs module
+
+### Patch Changes
+
+- Updated dependencies [edc81fc]
+- Updated dependencies [33b9fc2]
+- Updated dependencies [33b9fc2]
+  - impromat-api@0.24.4
+  - impromat@0.59.4
+
 ## 0.2.10
 
 ### Patch Changes

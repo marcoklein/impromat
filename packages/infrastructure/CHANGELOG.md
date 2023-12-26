@@ -1,5 +1,15 @@
 # infrastructure
 
+## 0.7.0
+
+### Minor Changes
+
+- 33b9fc2: Switch to nodejs version 20
+
+### Patch Changes
+
+- edc81fc: Skip CRON job execution on development environment
+
 ## 0.6.1
 
 ### Patch Changes
