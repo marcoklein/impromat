@@ -24,9 +24,6 @@ describe('me', () => {
         workshops {
           id
         }
-        elements {
-          id
-        }
         favoriteElements {
           element {
             id
@@ -58,7 +55,6 @@ describe('me', () => {
       const me = response.data!.me;
       expect(me?.id).toBe(api.userId);
       expect(me?.workshops).toEqual([]);
-      expect(me?.elements).toEqual([]);
       expect(me?.favoriteElements).toEqual([]);
     });
 
