@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { User } from '@prisma/client';
-import { PrismaService } from 'src/graphql/services/prisma.service';
+import { PrismaService } from 'src/modules/database/prisma.service';
 import {
   PrismaServiceMock,
   PrismaServiceMockProvider,

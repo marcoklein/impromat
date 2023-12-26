@@ -1,5 +1,5 @@
 import { DeepMockProxy, mockDeep, mockReset } from 'jest-mock-extended';
-import { PrismaService } from 'src/graphql/services/prisma.service';
+import { PrismaService } from 'src/modules/database/prisma.service';
 
 export const prismaMock = mockDeep(PrismaService);
 

@@ -92,6 +92,8 @@ export type Element = {
   isFavorite?: Maybe<Scalars['Boolean']['output']>;
   /** Convenience field to determine if the owner of the element is the logged in user. */
   isOwnerMe?: Maybe<Scalars['Boolean']['output']>;
+  /** The keywords of the element. This is generated asynchronously and might not be available immediately. */
+  keywords?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   languageCode?: Maybe<Scalars['String']['output']>;
   licenseName?: Maybe<Scalars['String']['output']>;
   licenseUrl?: Maybe<Scalars['String']['output']>;
@@ -117,6 +119,11 @@ export type Element = {
   variations?: Maybe<Array<Maybe<Variation>>>;
   version: Scalars['Int']['output'];
   visibility: ElementVisibility;
+};
+
+
+export type ElementKeywordsArgs = {
+  forceRefresh?: Scalars['Boolean']['input'];
 };
 
 

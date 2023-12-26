@@ -2,7 +2,7 @@ import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { Test, TestingModule } from '@nestjs/testing';
 import { print, type ExecutionResult } from 'graphql';
 import { AppModule } from 'src/app.module';
-import { PrismaService } from 'src/graphql/services/prisma.service';
+import { PrismaService } from 'src/modules/database/prisma.service';
 import request from 'supertest';
 import { injectTestUserSessionMiddleware } from 'test/test-utils/inject-test-user-session-middleware';
 import { prepareTestDatabase } from './prepare-test-database';

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { environment } from 'src/environment';
-import { PrismaService } from 'src/graphql/services/prisma.service';
+import { PrismaService } from 'src/modules/database/prisma.service';
 import { AuthController } from './auth.controller';
 import { GoogleAuthUrlResolver } from './google-auth-url.resolver';
 import { GoogleOAuth2ClientService } from './google-oauth2-client-provider';
