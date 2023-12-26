@@ -1,5 +1,13 @@
 # impromat-api
 
+## 0.24.4
+
+### Patch Changes
+
+- edc81fc: Skip CRON job execution on development environment
+- 33b9fc2: Visualizing dependencies of modules via depcruiser
+- 33b9fc2: Refactor all services into smaller modules
+
 ## 0.24.3
 
 ### Patch Changes
