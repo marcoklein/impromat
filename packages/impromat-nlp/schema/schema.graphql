@@ -1,0 +1,607 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Predicted tag for an element."""
+type ElementPredictedTag {
+  """Name of the predicted tag."""
+  name: String!
+
+  """Reason for the predicted tag."""
+  reason: String!
+}
+
+type ElementTag {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  name: String!
+
+  """
+  Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter.
+  """
+  count: Float!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type WorkshopElement {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  note: String
+  basedOn: Element!
+  section: WorkshopSection!
+}
+
+type WorkshopSection {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  name: String
+  color: String
+  isCollapsed: Boolean!
+  elements: [WorkshopElement!]!
+  workshop: Workshop!
+  orderIndex: Float!
+}
+
+type Workshop {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  name: String!
+  description: String
+  sections: [WorkshopSection!]!
+  owner: User!
+
+  """If true, the client is authorized to edit the workshop."""
+  canEdit: Boolean
+
+  """
+  Public users can view the workshop but they require the direct link to the workshop. The url of the workshop does not change.
+  """
+  isPublic: Boolean
+
+  """True, if the workshop is listed publicly in the improv community."""
+  isListed: Boolean!
+
+  """
+  True, if liked by the logged in user. Undefined, if there is no user logged in.
+  """
+  isLiked: Boolean
+
+  """
+  Convenience field to determine if the owner of the workshop is the logged in user.
+  """
+  isOwnerMe: Boolean
+  elementRecommendations: [Element!]!
+
+  """Optional metadata date when this workshop was planned (or held)."""
+  dateOfWorkshop: DateTime
+}
+
+type UserLikedWorkshop {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  workshop: Workshop!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+
+  """All workshops that this user has access to."""
+  workshops(input: UserWorkshopsFilterInput, skip: Int! = 0, take: Int! = 20): [Workshop!]!
+  favoriteElements: [UserFavoriteElement!]!
+  likedWorkshops: [UserLikedWorkshop!]!
+
+  """Public display name of the user."""
+  name: String
+
+  """Preferred language codes of the user."""
+  languageCodes: [String!]!
+}
+
+"""Filter workshops of user."""
+input UserWorkshopsFilterInput {
+  liked: Boolean! = false
+
+  """Filter for workshops that are owned by the user."""
+  owned: Boolean! = false
+
+  """Publicly or listed workshops of user."""
+  isPublic: Boolean! = false
+
+  """Publicly accessible community workshop."""
+  isCommunity: Boolean! = false
+}
+
+type Element {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  name: String!
+  markdown: String
+
+  """
+  Shortened markdown text for preview purposes to avoid loading the whole content in a request.
+  """
+  markdownShort: String
+  tags: [ElementTag!]!
+  usedBy: [WorkshopElement!]!
+  languageCode: String
+  sourceUrl: String
+  sourceName: String
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  owner: User
+
+  """
+  Convenience field to determine if the owner of the element is the logged in user.
+  """
+  isOwnerMe: Boolean
+  visibility: ElementVisibility!
+
+  """Set if the element is called from a user context."""
+  isFavorite: Boolean
+
+  """Changes of the element."""
+  snapshots(skip: Int! = 0, take: Int! = 20): [ElementSnapshot!]!
+  recommendations: [Element!]!
+
+  """
+  Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.
+  """
+  predictedLevelTags: [ElementPredictedTag!]
+
+  """
+  The summary of the element. This is generated asynchronously and might not be available immediately.
+  """
+  variations(
+    """
+    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
+    """
+    forceRefresh: Boolean! = false
+  ): [Variation]
+
+  """
+  The keywords of the element. This is generated asynchronously and might not be available immediately.
+  """
+  keywords(
+    """
+    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
+    """
+    forceRefresh: Boolean! = false
+  ): [String]
+
+  """
+  The summary of the element. This is generated asynchronously and might not be available immediately.
+  """
+  summary(
+    """
+    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
+    """
+    forceRefresh: Boolean! = false
+  ): String
+}
+
+enum ElementVisibility {
+  """Element is only visible to its owning user."""
+  PRIVATE
+
+  """Element is publicly shared with the whole community."""
+  PUBLIC
+}
+
+type ElementSnapshot {
+  id: ID!
+  createdAt: DateTime!
+
+  """User that created the snapshot."""
+  user: User
+
+  """Element of snapshot."""
+  element: Element!
+
+  """Element this snapshot was created of."""
+  parent: Element!
+}
+
+type UserFavoriteElement {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  element: Element!
+}
+
+type ElementSearchMatch {
+  """Key of field where searched text was found."""
+  key: String
+  indices: [[Int!]!]!
+
+  """
+  If the matching field is an array this field points to the index of the matching element in the source array.
+  """
+  refIndex: Int
+  value: String!
+}
+
+type ElementSearchResult {
+  element: Element!
+  score: Float!
+  matches: [ElementSearchMatch!]!
+}
+
+type ElementQueryResult {
+  element: Element!
+}
+
+type Variation {
+  name: String!
+  description: String
+}
+
+type Query {
+  googleAuthUrl: String!
+  searchElements(
+    input: ElementSearchInput!
+
+    """Helper field to pass skip argument into input field."""
+    skip: Int
+
+    """Helper field to pass take argument into input field."""
+    take: Int
+  ): [ElementSearchResult!]!
+  tags(filter: ElementTagsFilterInput, skip: Int! = 0, take: Int! = 20): [ElementTag!]!
+  element(id: ID!): Element
+  elements(skip: Int! = 0, take: Int! = 20, filter: ElementsFilterInput, orderBy: ElementsOrderByInput): [ElementQueryResult!]!
+
+  """
+  Get information about a user. Returns null if not found or not logged in.
+  """
+  user(id: ID): User
+
+  """Get information about the current user. Returns null if not logged in."""
+  me: User
+  workshop(id: ID!): Workshop
+
+  """Find workshops."""
+  workshops(skip: Int! = 0, take: Int! = 20, where: WorkshopsWhereInput, orderBy: [WorkshopsOrderByInput!]): [Workshop!]!
+  workshopElement(id: ID!): WorkshopElement!
+}
+
+input ElementSearchInput {
+  text: String
+  tagNames: [String!]
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
+
+  """Filter for liked elements of the user."""
+  isLiked: Boolean
+
+  """Filter for elements of the user."""
+  isOwned: Boolean
+  take: Int! = 20
+  skip: Int! = 0
+}
+
+"""Filter tags of elements."""
+input ElementTagsFilterInput {
+  text: String
+  selectedTagNames: [String!]
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
+}
+
+"""Filter for elements"""
+input ElementsFilterInput {
+  nameSearch: String
+
+  """Include all elements of the currently active user."""
+  isOwnerMe: Boolean
+
+  """
+  Include all elements that are publicly available to the logged-in user.
+  """
+  isPublic: Boolean
+}
+
+input ElementsOrderByInput {
+  notImplemented: Boolean!
+}
+
+input WorkshopsWhereInput {
+  AND: [WorkshopsWhereInput!]
+  OR: [WorkshopsWhereInput!]
+  NOT: [WorkshopsWhereInput!]
+  id: StringFilter
+  ownerId: StringFilter
+  isPublic: BoolFilter
+  isListed: BoolFilter
+  userLikedWorkshops: UserLikedWorkshopListRelationFilter
+}
+
+input StringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringFilter
+}
+
+input NestedStringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringFilter
+}
+
+input BoolFilter {
+  equals: Boolean
+}
+
+input UserLikedWorkshopListRelationFilter {
+  every: UserLikedWorkshopWhereInput
+  some: UserLikedWorkshopWhereInput
+  none: UserLikedWorkshopWhereInput
+}
+
+input UserLikedWorkshopWhereInput {
+  userId: StringFilter
+}
+
+input WorkshopsOrderByInput {
+  updatedAt: SortOrder
+  name: SortOrder
+  createdAt: SortOrder
+}
+
+enum SortOrder {
+  """Ascending sort order."""
+  asc
+
+  """Descending sort order."""
+  desc
+}
+
+type Mutation {
+  logout: Boolean!
+
+  """Iterates over all elements and applies tag mappings."""
+  applyAllTagMappings: Float!
+
+  """Iterates over all elements and creates summaries."""
+  createAllSummaries: Float!
+  createElement(input: CreateElementInput!): Element!
+  updateElement(input: UpdateElementInput!): Element!
+  updateUser(input: UpdateUserInput!): User!
+
+  """Change the liked state for workshop of the logged in user."""
+  updateUserLikedWorkshop(input: UpdateUserLikedWorkshopInput!): Workshop
+
+  """Change the favorite state for element of the logged in user."""
+  updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Element
+  createWorkshop(input: CreateWorkshopInput!): Workshop!
+  updateWorkshop(input: UpdateWorkshopInput!): Workshop!
+  deleteWorkshop(id: ID!): Workshop
+  updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
+  duplicateWorkshop(input: DuplicateWorkshopInput!): Workshop!
+}
+
+input CreateElementInput {
+  name: String!
+  markdown: String
+
+  """Language code (e.g. en, de) of the element."""
+  languageCode: String!
+  sourceUrl: String
+  sourceName: String! = "impromat"
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  visibility: ElementVisibility!
+  orderIndex: Int
+  tags: ElementTagsInput
+  setPredictedLevelTags: Boolean
+}
+
+input ElementTagsInput {
+  """Defines all tags of the element."""
+  set: [ElementTagSetInput!]!
+}
+
+input ElementTagSetInput {
+  name: String!
+}
+
+input UpdateElementInput {
+  name: String
+  markdown: String
+
+  """Language code (e.g. en, de) of the element."""
+  languageCode: String
+  sourceUrl: String
+  sourceName: String = "impromat"
+  sourceBaseUrl: String
+  licenseName: String
+  licenseUrl: String
+
+  """
+  Set if the element was imported from improbib, a project that collects existing improv resources.
+  """
+  improbibIdentifier: String
+  visibility: ElementVisibility
+  orderIndex: Int
+  tags: ElementTagsInput
+  setPredictedLevelTags: Boolean
+  id: ID!
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String
+
+  """Preferred languages of the user. E.g. de or en."""
+  languageCodes: [String!]
+}
+
+input UpdateUserLikedWorkshopInput {
+  workshopId: ID!
+  isLiked: Boolean!
+}
+
+input UpdateUserFavoriteElementInput {
+  elementId: ID!
+  isFavorite: Boolean!
+}
+
+input CreateWorkshopInput {
+  name: String!
+  description: String
+  sections: WorkshopSectionListCreateInput
+  isPublic: Boolean
+
+  """
+  Publicly list workshop within impromat. Worshop must be public in order to list it.
+  """
+  isListed: Boolean
+
+  """Date for which workshop is planned or was held."""
+  dateOfWorkshop: DateTime
+}
+
+input WorkshopSectionListCreateInput {
+  create: [CreateWorkshopSectionInput!]
+}
+
+input CreateWorkshopSectionInput {
+  name: String!
+  orderIndex: Float
+  isCollapsed: Boolean
+}
+
+input UpdateWorkshopInput {
+  name: String
+  description: String
+  sections: WorkshopSectionListInput
+  isPublic: Boolean
+
+  """
+  Publicly list workshop within impromat. Worshop must be public in order to list it.
+  """
+  isListed: Boolean
+
+  """Date for which workshop is planned or was held."""
+  dateOfWorkshop: DateTime
+  id: ID!
+}
+
+input WorkshopSectionListInput {
+  create: [CreateWorkshopSectionInput!]
+  update: [UpdateWorkshopSectionInput!]
+  delete: [DeleteWorkshopSectionInput!]
+}
+
+input UpdateWorkshopSectionInput {
+  name: String
+  orderIndex: Float
+  isCollapsed: Boolean
+  id: ID!
+  elements: WorkshopElementListInput
+}
+
+input WorkshopElementListInput {
+  create: [CreateWorkshopElementInput!]
+  update: [UpdateWorkshopElementInput!]
+  delete: [DeleteWorkshopElementInput!]
+}
+
+input CreateWorkshopElementInput {
+  note: String
+  basedOn: BasedOnElementConnectInput!
+  orderIndex: Float
+}
+
+input BasedOnElementConnectInput {
+  connect: IdInput!
+}
+
+input IdInput {
+  id: ID!
+}
+
+input UpdateWorkshopElementInput {
+  note: String
+  basedOn: BasedOnElementConnectInput
+  orderIndex: Float
+  id: ID!
+}
+
+input DeleteWorkshopElementInput {
+  id: ID!
+}
+
+input DeleteWorkshopSectionInput {
+  id: ID!
+}
+
+"""
+Moves a workshop item (section or element) within a workshop considering collapsed sections.
+"""
+input UpdateWorkshopItemOrder {
+  workshopId: ID!
+
+  """From position."""
+  fromPosition: Int!
+
+  """To position."""
+  toPosition: Int!
+}
+
+"""Duplicates a workshop to allow changes to the new workshop."""
+input DuplicateWorkshopInput {
+  workshopId: ID!
+  name: String!
+}
