@@ -3,13 +3,14 @@ import { Box } from "@mui/material";
 import React from "react";
 import { Redirect, Route } from "react-router";
 import { BrowserRouter, Switch } from "react-router-dom";
-import { ProtectedRouteComponent } from "./components/ProtectedRoute";
+import { ProtectedPage } from "./components/ProtectedPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LibraryCreateElementPage } from "./pages/library-create-custom-element/LibraryCreateElementPage";
 import { LibraryUpdateElementPage } from "./pages/library-create-custom-element/LibraryUpdateElementPage";
 import { ResponsiveMenu } from "./pages/navigation/ResponsiveMenu";
 import { RootNavigation } from "./pages/navigation/RootNavigation";
-import { LegacyWorkshopElementPage } from "./pages/workshop/LegacyWorkshopElementPage";
+import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
+import { WorkshopPage } from "./pages/workshop/WorkshopPage";
 import {
   routeLibraryCreateCustomElement,
   routeLibraryEditCustomElement,
@@ -22,8 +23,6 @@ import {
   routeWorkshopElement,
 } from "./routes/shared-routes";
 import { useLanguageUpdateEffect } from "./use-language-update-effect";
-import { WorkshopPage } from "./pages/workshop/WorkshopPage";
-import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
 
 export const App: React.FC = () => {
   useLanguageUpdateEffect();
@@ -40,16 +39,16 @@ export const App: React.FC = () => {
               exact
               component={WorkshopElementPage}
             ></Route>
-            <ProtectedRouteComponent
-              path={routeLibraryCreateCustomElement()}
-              exact
-              component={LibraryCreateElementPage}
-            ></ProtectedRouteComponent>
-            <ProtectedRouteComponent
-              path={routeLibraryEditCustomElement()}
-              exact
-              component={LibraryUpdateElementPage}
-            ></ProtectedRouteComponent>
+            <Route path={routeLibraryCreateCustomElement()} exact>
+              <ProtectedPage>
+                <LibraryCreateElementPage />
+              </ProtectedPage>
+            </Route>
+            <Route path={routeLibraryEditCustomElement()} exact>
+              <ProtectedPage>
+                <LibraryUpdateElementPage />
+              </ProtectedPage>
+            </Route>
             <Route
               path={routeWorkshop()}
               exact

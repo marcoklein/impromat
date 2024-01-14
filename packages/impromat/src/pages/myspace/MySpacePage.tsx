@@ -94,6 +94,7 @@ export const MySpacePage: React.FC = () => {
           <IconButton
             color="inherit"
             onClick={() => setIsLogoutDialogOpen(true)}
+            aria-label={t("Logout")}
           >
             <Logout />
           </IconButton>

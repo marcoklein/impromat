@@ -32,8 +32,7 @@ export const routeLibraryElement = (
 ) => `${routeLibrary()}/${libraryElementId}`;
 
 // not signed in
-export const routeAccountSignin = () => "/account/signin";
-export const routeLogin = () => `${routeRootNavigation()}/login`;
+export const routeLogin = () => routeMySpace();
 
 // unused routes
 export const routeCommunity = () => `${routeRootNavigation()}/community`;

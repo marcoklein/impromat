@@ -33,10 +33,6 @@ const documents = {
     "\n  fragment CommunityPage_Workshop on Workshop {\n    id\n    ...WorkshopPreviewItem_Workshop\n  }\n": types.CommunityPage_WorkshopFragmentDoc,
     "\n  fragment CommunityPage_Element on Element {\n    id\n    ...ElementPreviewItem_Element\n  }\n": types.CommunityPage_ElementFragmentDoc,
     "\n  query CommunityPageQuery(\n    $workshopsWhereInput: WorkshopsWhereInput\n    $elementsFilterInput: ElementsFilterInput\n    $take: Int!\n  ) {\n    workshops(where: $workshopsWhereInput, take: $take) {\n      ...CommunityPage_Workshop\n    }\n    elements(filter: $elementsFilterInput, take: $take) {\n      element {\n        ...CommunityPage_Element\n      }\n    }\n  }\n": types.CommunityPageQueryDocument,
-    "\n  query AccountPage_Query($userId: ID!) {\n    user(id: $userId) {\n      id\n      ...AccountOptionsMenu_User\n      ...AccountSignedIn_User\n    }\n  }\n": types.AccountPage_QueryDocument,
-    "\n  fragment AccountLanguageSection_User on User {\n    id\n    languageCodes\n  }\n": types.AccountLanguageSection_UserFragmentDoc,
-    "\n  fragment AccountOptionsMenu_User on User {\n    id\n    name\n  }\n": types.AccountOptionsMenu_UserFragmentDoc,
-    "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n    ...AccountLanguageSection_User\n  }\n": types.AccountSignedIn_UserFragmentDoc,
     "\n  query LibraryCreateCustomElementTags_Query($filter: ElementTagsFilterInput!) {\n    tags(filter: $filter) {\n      ...ElementTagsItem_ElementTag\n    }\n  }\n": types.LibraryCreateCustomElementTags_QueryDocument,
     "\n  fragment ElementTagsItem_ElementTag on ElementTag {\n    id\n    name\n  }\n": types.ElementTagsItem_ElementTagFragmentDoc,
     "\n  query LibraryCreateElementPage_Query($tagsInput: ElementTagsFilterInput!) {\n    tags(filter: $tagsInput, take: 3) {\n      id\n      name\n    }\n  }\n": types.LibraryCreateElementPage_QueryDocument,
@@ -164,22 +160,6 @@ export function graphql(source: "\n  fragment CommunityPage_Element on Element {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query CommunityPageQuery(\n    $workshopsWhereInput: WorkshopsWhereInput\n    $elementsFilterInput: ElementsFilterInput\n    $take: Int!\n  ) {\n    workshops(where: $workshopsWhereInput, take: $take) {\n      ...CommunityPage_Workshop\n    }\n    elements(filter: $elementsFilterInput, take: $take) {\n      element {\n        ...CommunityPage_Element\n      }\n    }\n  }\n"): (typeof documents)["\n  query CommunityPageQuery(\n    $workshopsWhereInput: WorkshopsWhereInput\n    $elementsFilterInput: ElementsFilterInput\n    $take: Int!\n  ) {\n    workshops(where: $workshopsWhereInput, take: $take) {\n      ...CommunityPage_Workshop\n    }\n    elements(filter: $elementsFilterInput, take: $take) {\n      element {\n        ...CommunityPage_Element\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query AccountPage_Query($userId: ID!) {\n    user(id: $userId) {\n      id\n      ...AccountOptionsMenu_User\n      ...AccountSignedIn_User\n    }\n  }\n"): (typeof documents)["\n  query AccountPage_Query($userId: ID!) {\n    user(id: $userId) {\n      id\n      ...AccountOptionsMenu_User\n      ...AccountSignedIn_User\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  fragment AccountLanguageSection_User on User {\n    id\n    languageCodes\n  }\n"): (typeof documents)["\n  fragment AccountLanguageSection_User on User {\n    id\n    languageCodes\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  fragment AccountOptionsMenu_User on User {\n    id\n    name\n  }\n"): (typeof documents)["\n  fragment AccountOptionsMenu_User on User {\n    id\n    name\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n    ...AccountLanguageSection_User\n  }\n"): (typeof documents)["\n  fragment AccountSignedIn_User on User {\n    id\n    name\n    languageCodes\n    ...AccountLanguageSection_User\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

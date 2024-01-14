@@ -12,4 +12,11 @@ export class DevPage {
       this.page.locator(`ion-toolbar ion-title`).getByText(text),
     ).toBeVisible();
   }
+
+  async enableDebug() {
+    await this.page.evaluate(() => {
+      console.log("Setting DEBUG localStorage to impromat:*");
+      window.localStorage.setItem("debug", "impromat:*");
+    });
+  }
 }

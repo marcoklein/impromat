@@ -11,7 +11,6 @@ import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import {
   routeAbout,
-  routeAccount,
   routeCommunity,
   routeHome,
   routeLegal,
@@ -28,7 +27,6 @@ import { CommunityPage } from "../CommunityPage";
 import { HomePage } from "../HomePage";
 import { LegalPage } from "../LegalPage";
 import { PrivacyPolicyPage } from "../PrivacyPolicyPage";
-import { AccountPage } from "../account/AccountPage";
 import { MuiLibraryPage } from "../library-page/LibraryPage";
 import { LibraryElementPage } from "../library/LibraryElementPage";
 import { LoginPage } from "../login/LoginPage";
@@ -157,7 +155,6 @@ export const RootNavigation: React.FC<ContainerProps> = () => {
             component={PrivacyPolicyPage}
           ></Route>
           <Route path={routeLegal()} exact component={LegalPage}></Route>
-          <Route path={routeAccount()} exact component={AccountPage}></Route>
           <Route
             path={routeCommunity()}
             exact

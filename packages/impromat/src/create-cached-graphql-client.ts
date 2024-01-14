@@ -12,8 +12,8 @@ import { Cache, cacheExchange } from "@urql/exchange-graphcache";
 import { simplePagination } from "@urql/exchange-graphcache/extras";
 import { retryExchange } from "@urql/exchange-retry";
 import { createClient as createUrqlClient } from "urql";
-import { clearLocalStorageWithPrefix } from "./functions/clear-local-storage";
 import { APP_LOCAL_STORAGE_PREFIX } from "./app-local-storage-prefix";
+import { clearLocalStorageWithPrefix } from "./functions/clear-local-storage";
 
 export function createCachedGraphqlClient(
   onError: (
@@ -47,8 +47,8 @@ export function createCachedGraphqlClient(
         updates: {
           Mutation: {
             logout(_result, _args, cache, _info) {
-              cache.invalidate("Query");
               clearLocalStorageWithPrefix(APP_LOCAL_STORAGE_PREFIX);
+              cache.invalidate("Query");
             },
             createElement(_result, _args, cache, _info) {
               cache.invalidate("Query", "elements");

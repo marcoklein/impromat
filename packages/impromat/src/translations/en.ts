@@ -23,6 +23,7 @@ export default {
     "Exercises & Games": "Elements",
     Workshops: "Workshops",
     "My Space": "My Space",
+    Login: "Login",
   },
   PrivacyPolicyPage: {
     switchToEnglishVersion: "Switch to English version",
@@ -91,6 +92,7 @@ export default {
   MuiLibraryPage: {
     "different-page":
       "This page looks different because we are currently reworking our app design.",
+    Retry: "Retry",
   },
   MuiLibraryPageAppBar: {
     searchPlaceholder: "What are you looking for?",
