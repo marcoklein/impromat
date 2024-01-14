@@ -107,9 +107,6 @@ type User {
 
   """All workshops that this user has access to."""
   workshops(input: UserWorkshopsFilterInput, skip: Int! = 0, take: Int! = 20): [Workshop!]!
-
-  """Elements owned by this user."""
-  elements: [Element!]!
   favoriteElements: [UserFavoriteElement!]!
   likedWorkshops: [UserLikedWorkshop!]!
 
@@ -239,6 +236,15 @@ type UserFavoriteElement {
   element: Element!
 }
 
+type ElementQueryResult {
+  element: Element!
+}
+
+type Variation {
+  name: String!
+  description: String
+}
+
 type ElementSearchMatch {
   """Key of field where searched text was found."""
   key: String
@@ -257,26 +263,33 @@ type ElementSearchResult {
   matches: [ElementSearchMatch!]!
 }
 
-type ElementQueryResult {
-  element: Element!
+type SimilarKeyword {
+  keyword: String!
+  score: Float!
 }
 
-type Variation {
-  name: String!
-  description: String
+type ElementSearchKeywords {
+  keywords: [ElementSearchKeyword!]!
+  uniqueKeywordsCount: Int!
+  documentsCount: Int!
+  similarKeywords: [SimilarKeyword!]
+}
+
+type ElementSearchKeyword {
+  """The keyword in its stemmed form."""
+  keyword: String!
+
+  """
+  Inverse document frequency. Describes how important a word is to a document in a collection or corpus. The more common a word is in a document, the lower its idf.
+  """
+  idf: Float!
+
+  """The keyword in its original form(s) before stemming."""
+  originalKeywords: [String!]
 }
 
 type Query {
   googleAuthUrl: String!
-  searchElements(
-    input: ElementSearchInput!
-
-    """Helper field to pass skip argument into input field."""
-    skip: Int
-
-    """Helper field to pass take argument into input field."""
-    take: Int
-  ): [ElementSearchResult!]!
   tags(filter: ElementTagsFilterInput, skip: Int! = 0, take: Int! = 20): [ElementTag!]!
   element(id: ID!): Element
   elements(skip: Int! = 0, take: Int! = 20, filter: ElementsFilterInput, orderBy: ElementsOrderByInput): [ElementQueryResult!]!
@@ -288,27 +301,22 @@ type Query {
 
   """Get information about the current user. Returns null if not logged in."""
   me: User
+  searchElementsV2(skip: Int! = 0, take: Int! = 20, input: ElementSearchV2Input!): [Element!]!
+  searchElementsV2Keywords(input: ElementSearchV2Input!): ElementSearchKeywords!
+  searchElements(
+    input: ElementSearchInput!
+
+    """Helper field to pass skip argument into input field."""
+    skip: Int
+
+    """Helper field to pass take argument into input field."""
+    take: Int
+  ): [ElementSearchResult!]! @deprecated(reason: "Use searchElementsV2 instead")
   workshop(id: ID!): Workshop
 
   """Find workshops."""
   workshops(skip: Int! = 0, take: Int! = 20, where: WorkshopsWhereInput, orderBy: [WorkshopsOrderByInput!]): [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
-}
-
-input ElementSearchInput {
-  text: String
-  tagNames: [String!]
-
-  """Language code (e.g. en, de) for results."""
-  languageCode: String
-
-  """Filter for liked elements of the user."""
-  isLiked: Boolean
-
-  """Filter for elements of the user."""
-  isOwned: Boolean
-  take: Int! = 20
-  skip: Int! = 0
 }
 
 """Filter tags of elements."""
@@ -335,6 +343,29 @@ input ElementsFilterInput {
 
 input ElementsOrderByInput {
   notImplemented: Boolean!
+}
+
+input ElementSearchV2Input {
+  text: String
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
+}
+
+input ElementSearchInput {
+  text: String
+  tagNames: [String!]
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
+
+  """Filter for liked elements of the user."""
+  isLiked: Boolean
+
+  """Filter for elements of the user."""
+  isOwned: Boolean
+  take: Int! = 20
+  skip: Int! = 0
 }
 
 input WorkshopsWhereInput {

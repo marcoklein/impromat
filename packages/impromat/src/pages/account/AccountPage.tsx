@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useQuery } from "urql";
 import { InfoItemComponent } from "../../components/InfoItemComponent";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
-import { PageScaffold } from "../../components/PageScaffold";
+import { LegacyPageScaffold } from "../../components/LegacyPageScaffold";
 import { graphql } from "../../graphql-client";
 import { useGoogleLoginHref } from "../../hooks/use-google-login-href";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
@@ -40,7 +40,7 @@ export const AccountPage: React.FC = () => {
   const myUser = useMemo(() => queryResult.data?.user, [queryResult]);
 
   return (
-    <PageScaffold
+    <LegacyPageScaffold
       title="Profile"
       toolbarButtons={
         myUser && (
@@ -70,6 +70,6 @@ export const AccountPage: React.FC = () => {
         ) : (
           <AccountSignIn></AccountSignIn>
         ))}
-    </PageScaffold>
+    </LegacyPageScaffold>
   );
 };

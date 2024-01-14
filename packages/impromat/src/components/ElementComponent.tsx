@@ -116,11 +116,7 @@ export const ElementComponent: React.FC<ContainerProps> = ({
                   i18nKey="ImproveElement"
                   components={{
                     EditingLink: (
-                      <NavLink
-                        to={routeLibraryEditCustomElement({
-                          elementId: element.id,
-                        })}
-                      >
+                      <NavLink to={routeLibraryEditCustomElement(element.id)}>
                         placeholder
                       </NavLink>
                     ),

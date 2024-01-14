@@ -1,44 +1,40 @@
 import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonLoading,
-  IonText,
-  IonToolbar,
-} from "@ionic/react";
+  Event,
+  Link as LinkIcon,
+  Lock,
+  Public,
+  ViewDay,
+} from "@mui/icons-material";
 import {
-  calendar,
-  globe,
-  heart,
-  heartOutline,
-  link,
-  lockClosed,
-} from "ionicons/icons";
-import { useCallback, useEffect, useState } from "react";
+  Box,
+  Container,
+  Divider,
+  Fab,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
-import { useMutation, useQuery } from "urql";
-import { ElementPreviewCard } from "../../components/ElementPreviewCard";
-import { Icon } from "../../components/Icon";
-import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { Link } from "react-router-dom";
+import { useQuery } from "urql";
+import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { PageScaffold } from "../../components/PageScaffold";
+import { ElementsIcon } from "../../components/icons/ElementsIcon";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
-import { useUpdateUserLikedWorkshopMutation } from "../../hooks/use-update-liked-workshop-mutation";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
-import { routeLibrary } from "../../routes/library-routes";
-import { routeWorkshops } from "../../routes/shared-routes";
-import { COLOR_LIKE } from "../../theme/theme-colors";
-import { TeaserGrid } from "../community/TeaserGrid";
-import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
-import { ShareWorkshopModal } from "./components/ShareWorkshopModal";
-import { WorkshopElementsComponent } from "./components/WorkshopElementsComponent";
-import { STORAGE_LAST_WORKSHOP_ID } from "./local-storage-workshop-id";
-import { useTranslation } from "react-i18next";
+import { routeLibrary } from "../../routes/shared-routes";
+import { TextFieldDialog } from "./components/TextFieldDialog";
+import { WorkshopContent } from "./components/WorkshopContent";
+import { WorkshopLikeIconButton } from "./components/WorkshopLikeButton";
+import { WorkshopOptionsMenu } from "./components/WorkshopOptionsMenu";
+import { ShareWorkshopModal } from "./components/LegacyShareWorkshopModal";
+import { STORAGE_LAST_WORKSHOP_ID } from "./components/local-storage-workshop-id";
 
 const WorkshopPage_Workshop = graphql(`
   fragment WorkshopPage_Workshop on Workshop {
@@ -54,17 +50,13 @@ const WorkshopPage_Workshop = graphql(`
     canEdit
     isLiked
     dateOfWorkshop
-    sections {
-      name
-      elements {
-        id
-      }
-    }
+    ...WorkshopContent_Workshop
     elementRecommendations {
       id
       ...ElementPreviewItem_Element
     }
-    ...WorkshopElementsComponent_Workshop
+    ...WorkshopLikeIconButton_Workshop
+
     ...WorkshopOptionsMenu_Workshop
     ...ShareWorkshopModal_Workshop
   }
@@ -78,19 +70,21 @@ const WorkshopByIdQuery = graphql(`
   }
 `);
 
-/**
- * This feature toggle is used to enable/disable the similar elements feature.
- */
-const WORKSHOP_SIMILAR_ELEMENTS_FEATURE_TOGGLE = false;
-
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
-
+  const { t } = useTranslation("WorkshopPage");
   const { isLoggedIn } = useIsLoggedIn();
+  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
+  const logger = useComponentLogger("WorkshopPage");
+
+  const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
+  const [isCreateSectionDialogOpen, setIsCreateSectionDialogOpen] =
+    useState(false);
 
   useEffect(() => {
+    logger("writing last workshop id to local storage");
     window.localStorage.setItem(STORAGE_LAST_WORKSHOP_ID, workshopId);
-  }, [workshopId]);
+  }, [logger, workshopId]);
 
   const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
     query: WorkshopByIdQuery,
@@ -102,144 +96,37 @@ export const WorkshopPage: React.FC = () => {
     WorkshopPage_Workshop,
     workshopQueryResult.data?.workshop,
   );
-  const [isReorderingElements, setIsReorderingElements] = useState(false);
-
-  const [, updateWorkshopOrder] = useMutation(
-    graphql(`
-      mutation UpdateWorkshopItemOrder($input: UpdateWorkshopItemOrder!) {
-        updateWorkshopItemOrder(input: $input) {
-          id
-        }
-      }
-    `),
-  );
-  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
-
-  const logger = useComponentLogger("WorkshopPage");
-
-  useEffect(() => {
-    logger("Workshop changed to %O", workshop);
-  }, [workshop, logger]);
-
-  const [presentInputDialog] = useInputDialog();
-
-  const changeSectionsOrder = (fromIndex: number, toIndex: number) => {
-    if (!workshop) return;
-    logger("Change section order from %d to %d", fromIndex, toIndex);
-    setIsReorderingElements(true);
-    updateWorkshopOrder({
-      input: { fromPosition: fromIndex, toPosition: toIndex, workshopId },
-    }).finally(() => {
-      setTimeout(() => {
-        setIsReorderingElements(false);
-      }, 2000);
-    });
-    return true;
-  };
-
-  const onCreateSection = () => {
-    logger("not implemented");
-
-    if (!workshop) return;
-    presentInputDialog({
-      header: "Section",
-      initialText: "",
-      emptyInputMessage: "Please type a section name.",
-      placeholder: "e.g. Warmup or Games",
-      onAccept: (text) => {
-        updateWorkshopMutation({
-          input: { id: workshop.id, sections: { create: [{ name: text }] } },
-        }).then(() => {
-          logger('Created new section "%s"', text);
-        });
-      },
-    });
-    logger("Showing add section dialog");
-  };
-
-  const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
-
-  const [updateUserLikedWorkshopResult, updateUserLikedWorkshop] =
-    useUpdateUserLikedWorkshopMutation();
-
-  const toggleWorkshopLike = useCallback(() => {
-    if (!workshop) throw Error("no workshop");
-    const newLiked = !workshop.isLiked;
-    updateUserLikedWorkshop({
-      input: { isLiked: newLiked, workshopId: workshop.id },
-    });
-  }, [updateUserLikedWorkshop, workshop]);
-
-  const { t } = useTranslation("WorkshopPage");
 
   return (
     <PageScaffold
-      defaultBackHref={routeWorkshops()}
-      showProgressBar={isReorderingElements}
       title={`Workshop ${workshop && !workshop.canEdit ? "(View)" : ""}`}
-      footer={
-        workshop?.canEdit ? (
-          <IonToolbar>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <IonLabel style={{ marginRight: "0.5rem" }}>{t("Add")}</IonLabel>
-              <div style={{ display: "flex" }}>
-                <IonButton onClick={() => onCreateSection()} size="small">
-                  {t("Section", { ns: "common" })}
-                </IonButton>
-                <IonButton
-                  routerLink={routeLibrary()}
-                  size="small"
-                  color="secondary"
-                >
-                  {t("Element", { ns: "common" })}
-                </IonButton>
-              </div>
-            </div>
-          </IonToolbar>
-        ) : undefined
-      }
-      toolbarButtons={
+      backButton
+      buttons={
         <>
           {workshop && isLoggedIn && (
-            <IonButton onClick={() => toggleWorkshopLike()}>
-              <IonIcon
-                icon={workshop.isLiked ? heart : heartOutline}
-                color={COLOR_LIKE}
-                slot="icon-only"
-                aria-label={workshop?.isLiked ? t("RemoveLike") : t("AddLike")}
-              ></IonIcon>
-              <IonLoading
-                isOpen={updateUserLikedWorkshopResult.fetching}
-                message={t("UpdatingLike")}
-              />
-            </IonButton>
+            <IsLoggedIn>
+              {workshop && (
+                <WorkshopLikeIconButton workshopFragment={workshop} />
+              )}
+            </IsLoggedIn>
           )}
           {workshop && workshop.canEdit && (
             <>
-              <IonButton
+              <IconButton
                 onClick={() => setIsSharingModalOpen(true)}
-                aria-label="Share"
+                aria-label={t("Share", { ns: "common" })}
+                color="inherit"
               >
-                <Icon
-                  slot="start"
-                  icon={
-                    workshop.isPublic
-                      ? workshop.isListed
-                        ? globe
-                        : link
-                      : lockClosed
-                  }
-                ></Icon>
-                <span className="ion-hide-sm-down">
-                  {t("Share", { ns: "common" })}
-                </span>
-              </IonButton>
+                {workshop.isPublic ? (
+                  workshop.isListed ? (
+                    <Public />
+                  ) : (
+                    <LinkIcon />
+                  )
+                ) : (
+                  <Lock />
+                )}
+              </IconButton>
               <ShareWorkshopModal
                 isSharingModalOpen={isSharingModalOpen}
                 setIsSharingModalOpen={setIsSharingModalOpen}
@@ -254,75 +141,80 @@ export const WorkshopPage: React.FC = () => {
         </>
       }
     >
-      <PageContentLoaderComponent
-        queryResult={workshopQueryResult}
-        reexecuteQuery={reexecuteWorkshopQuery}
-      >
-        {workshop && (
-          <>
-            <div className="ion-padding-horizontal">
-              <h1 className="ion-no-padding ion-no-margin ion-padding-vertical">
-                {workshop.name}
-              </h1>
-              {workshop.dateOfWorkshop && (
-                <div>
-                  <IonIcon icon={calendar}></IonIcon>{" "}
-                  {new Date(workshop.dateOfWorkshop).toLocaleDateString()}
-                </div>
-              )}
-            </div>
-
-            {workshop.description && (
-              <IonItem lines="none">
-                <IonLabel className="ion-text-wrap">
-                  {workshop.description}
-                </IonLabel>
-              </IonItem>
-            )}
-
-            {workshop.sections.length === 1 &&
-            workshop.sections[0].elements.length === 0 &&
-            workshop.canEdit &&
-            !workshop.sections[0].name ? (
-              <IonCard>
-                <IonCardContent className="ion-padding">
-                  <IonText>{t("AddElementMessage")}</IonText>
-                  <IonButton
-                    expand="full"
-                    fill="clear"
-                    routerLink={routeLibrary()}
-                  >
-                    {t("AddElement")}
-                  </IonButton>
-                </IonCardContent>
-              </IonCard>
-            ) : (
-              <WorkshopElementsComponent
-                key={workshop.id}
-                workshopId={workshopId}
-                workshopFragment={workshop}
-                onChangeOrder={(fromIndex, toIndex) =>
-                  changeSectionsOrder(fromIndex, toIndex)
+      <Box sx={{ overflowY: "auto", height: "100%" }}>
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 16,
+            right: 16,
+            display: "flex",
+            alignItems: "end",
+          }}
+        >
+          {workshop && (
+            <>
+              <Fab
+                color="secondary"
+                onClick={() => setIsCreateSectionDialogOpen(true)}
+                sx={{ mr: 0.5 }}
+                size="small"
+                aria-label={t("Section", { ns: "common" })}
+              >
+                <ViewDay />
+              </Fab>
+              <TextFieldDialog
+                title={t("Section", { ns: "common" })}
+                handleClose={() => setIsCreateSectionDialogOpen(false)}
+                open={isCreateSectionDialogOpen}
+                handleSave={(text) =>
+                  updateWorkshopMutation({
+                    input: {
+                      id: workshop.id,
+                      sections: { create: [{ name: text }] },
+                    },
+                  })
                 }
-              ></WorkshopElementsComponent>
+              ></TextFieldDialog>
+              <Fab
+                color="primary"
+                component={Link}
+                to={routeLibrary()}
+                aria-label={t("Section", { ns: "common" })}
+              >
+                <ElementsIcon />
+              </Fab>
+            </>
+          )}
+        </Box>
+        {workshop && (
+          <Container sx={{ p: 0 }} maxWidth="sm">
+            <ListItem>
+              <ListItemText
+                primary={<Typography variant="h5">{workshop.name}</Typography>}
+                secondary={workshop.description}
+              ></ListItemText>
+            </ListItem>
+            {workshop.dateOfWorkshop && (
+              // TODO set with date picker directly https://mui.com/x/react-date-pickers/date-picker/
+              <ListItem>
+                <ListItemIcon>
+                  <Event />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Typography variant="subtitle1">
+                      {new Date(workshop.dateOfWorkshop).toLocaleDateString()}
+                    </Typography>
+                  }
+                ></ListItemText>
+              </ListItem>
             )}
-            {WORKSHOP_SIMILAR_ELEMENTS_FEATURE_TOGGLE &&
-              workshop.elementRecommendations.length > 0 &&
-              workshop.canEdit && (
-                <TeaserGrid
-                  title="Elements that might match"
-                  items={workshop.elementRecommendations}
-                  itemContent={(element) => (
-                    <ElementPreviewCard
-                      key={element.id}
-                      elementFragment={element}
-                    ></ElementPreviewCard>
-                  )}
-                ></TeaserGrid>
-              )}
-          </>
+
+            <Divider />
+            <WorkshopContent workshopFragment={workshop} />
+          </Container>
         )}
-      </PageContentLoaderComponent>
+      </Box>
     </PageScaffold>
   );
 };

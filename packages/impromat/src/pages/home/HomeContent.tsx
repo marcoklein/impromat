@@ -10,9 +10,9 @@ import {
 } from "@ionic/react";
 import { arrowForwardOutline, information } from "ionicons/icons";
 import { Trans, useTranslation } from "react-i18next";
-import { routeLibrary } from "../../routes/library-routes";
 import {
   routeAbout,
+  routeLibrary,
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";

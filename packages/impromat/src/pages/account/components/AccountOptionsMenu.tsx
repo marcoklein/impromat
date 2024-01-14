@@ -1,6 +1,6 @@
 import { useIonToast } from "@ionic/react";
 import { close, person } from "ionicons/icons";
-import { OptionsMenu } from "../../../components/OptionsMenu";
+import { LegacyOptionsMenu } from "../../../components/LegacyOptionsMenu";
 import {
   FragmentType,
   getFragmentData,
@@ -66,7 +66,7 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
   };
 
   return (
-    <OptionsMenu
+    <LegacyOptionsMenu
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       header={t("Options", { ns: "common" })}
@@ -85,6 +85,6 @@ export const AccountOptionsMenu: React.FC<ContainerProps> = ({
           icon: close,
         },
       ]}
-    ></OptionsMenu>
+    ></LegacyOptionsMenu>
   );
 };

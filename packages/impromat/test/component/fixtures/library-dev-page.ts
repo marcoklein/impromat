@@ -18,7 +18,7 @@ export class LibraryDevPage extends DevPage {
 
   async searchForElement(searchText: string) {
     const page = this.page;
-    await page.locator("ion-input").getByPlaceholder("Search").fill(searchText);
+    await page.locator("input").fill(searchText);
     await page.getByText(new RegExp(searchText, "i")).first().waitFor();
   }
 

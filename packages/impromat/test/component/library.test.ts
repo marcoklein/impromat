@@ -53,9 +53,11 @@ pageTest.describe("Library", () => {
       await libraryPage.goto();
       await libraryPage.searchForElement("freeze");
       await libraryPage.scrollDownInElementsList();
-      await page.getByRole("heading", { name: "Freeze-For All" }).click();
+      await page.getByRole("heading", { name: "Freeze Tag-Exercise" }).click();
       await libraryElementPage.clickBackButton();
-      await page.getByRole("heading", { name: "Freeze-For All" }).waitFor();
+      await page
+        .getByRole("heading", { name: "Freeze Tag-Exercise" })
+        .waitFor();
       // then
       await expect(page).toHaveScreenshot({
         animations: "disabled",

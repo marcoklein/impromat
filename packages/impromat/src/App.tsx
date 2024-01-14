@@ -1,54 +1,54 @@
-import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
+import { IonApp } from "@ionic/react";
+import { Box } from "@mui/material";
 import React from "react";
 import { Redirect, Route } from "react-router";
+import { BrowserRouter, Switch } from "react-router-dom";
 import { ProtectedRouteComponent } from "./components/ProtectedRoute";
-import { ANIMATE_PAGE_TRANSITIONS } from "./feature-toggles";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
-import { LibraryElementPage } from "./pages/library/LibraryElementPage";
+import { LibraryCreateElementPage } from "./pages/library-create-custom-element/LibraryCreateElementPage";
+import { LibraryUpdateElementPage } from "./pages/library-create-custom-element/LibraryUpdateElementPage";
 import { ResponsiveMenu } from "./pages/navigation/ResponsiveMenu";
 import { RootNavigation } from "./pages/navigation/RootNavigation";
-import { HIDE_MENU_SIZE } from "./pages/navigation/responsive-navigation";
-import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
-import { WorkshopPage } from "./pages/workshop/WorkshopPage";
+import { LegacyWorkshopElementPage } from "./pages/workshop/LegacyWorkshopElementPage";
 import {
-  routeLibrary,
   routeLibraryCreateCustomElement,
-  routeLibraryElement,
+  routeLibraryEditCustomElement,
 } from "./routes/library-routes";
 import {
+  routeHome,
+  routeLibrary,
   routeRootNavigation,
   routeWorkshop,
   routeWorkshopElement,
 } from "./routes/shared-routes";
+import { useLanguageUpdateEffect } from "./use-language-update-effect";
+import { WorkshopPage } from "./pages/workshop/WorkshopPage";
+import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
 
 export const App: React.FC = () => {
+  useLanguageUpdateEffect();
+
   return (
     <IonApp>
-      <IonSplitPane
-        when={HIDE_MENU_SIZE}
-        contentId="main"
-        style={{ "--side-width": "20rem", "--side-max-width": "20rem" }}
-      >
-        <IonReactRouter>
-          <ResponsiveMenu></ResponsiveMenu>
-          <IonRouterOutlet id="main" animated={ANIMATE_PAGE_TRANSITIONS}>
+      <BrowserRouter>
+        <ResponsiveMenu></ResponsiveMenu>
+        <Box id="main" height="100%" display="flex" flexDirection="column">
+          <Switch>
             <Redirect path={"/"} exact to={routeLibrary()}></Redirect>
             <Route
               path={routeWorkshopElement()}
               exact
               component={WorkshopElementPage}
             ></Route>
-            <Route
-              path={routeLibraryElement()}
-              exact
-              component={LibraryElementPage}
-            ></Route>
             <ProtectedRouteComponent
               path={routeLibraryCreateCustomElement()}
               exact
-              component={LibraryCreateCustomElementPage}
+              component={LibraryCreateElementPage}
+            ></ProtectedRouteComponent>
+            <ProtectedRouteComponent
+              path={routeLibraryEditCustomElement()}
+              exact
+              component={LibraryUpdateElementPage}
             ></ProtectedRouteComponent>
             <Route
               path={routeWorkshop()}
@@ -56,13 +56,18 @@ export const App: React.FC = () => {
               component={WorkshopPage}
             ></Route>
             <Route
-              path={routeRootNavigation()}
+              path={routeRootNavigation() + "/:tabName"}
               component={RootNavigation}
             ></Route>
+            <Redirect
+              path={routeRootNavigation()}
+              to={routeHome()}
+              exact
+            ></Redirect>
             <Route component={NotFoundPage}></Route>
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonSplitPane>
+          </Switch>
+        </Box>
+      </BrowserRouter>
     </IonApp>
   );
 };

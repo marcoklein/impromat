@@ -115,6 +115,9 @@ export function moveItemFromIndexToIndex(
       sections: newSections,
     };
   } else {
+    console.error(
+      `Reordering error: from: ${visibleFromIndex}, to: ${visibleToIndex}`,
+    );
     throw new Error('Reordering error');
   }
 }

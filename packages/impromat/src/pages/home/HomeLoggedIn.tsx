@@ -8,18 +8,18 @@ import {
 import { documents, globe, menu, person, search } from "ionicons/icons";
 import { Icon } from "../../components/Icon";
 import { ImpromatHero } from "../../components/ImpromatHero";
-import { PageScaffold } from "../../components/PageScaffold";
-import { routeLibrary } from "../../routes/library-routes";
+import { LegacyPageScaffold } from "../../components/LegacyPageScaffold";
 import {
   routeAccount,
   routeCommunity,
+  routeLibrary,
   routeWorkshops,
 } from "../../routes/shared-routes";
 import { HomeContent } from "./HomeContent";
 
 export const HomeLoggedIn: React.FC = () => {
   return (
-    <PageScaffold noHeader>
+    <LegacyPageScaffold noHeader>
       <ImpromatHero></ImpromatHero>
       <IonGrid style={{ maxWidth: "768px" }}>
         <IonRow>
@@ -61,6 +61,6 @@ export const HomeLoggedIn: React.FC = () => {
           <HomeContent></HomeContent>
         </div>
       </IonGrid>
-    </PageScaffold>
+    </LegacyPageScaffold>
   );
 };
