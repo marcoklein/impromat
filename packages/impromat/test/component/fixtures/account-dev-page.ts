@@ -28,11 +28,8 @@ export class AccountDevPage extends DevPage {
 
   async login() {
     await this.goto();
-    await this.page
-      .locator("#main")
-      .getByText("Google Sign In")
-      .last()
-      .click({ timeout: 30000 });
+    await this.page.locator("#main").getByText("Google Sign In").last().click();
+    await this.goto();
   }
 
   async logout() {

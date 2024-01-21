@@ -42,7 +42,7 @@ export const ElementLikeIconButton: React.FC<ContainerProps> = ({
   return (
     <LikeIconButton
       onClick={onStarElementClick}
-      isLiked={!element.isFavorite}
+      isLiked={!!element.isFavorite}
       disabled={updateUserFavoriteElementMutationResult.fetching}
     />
   );

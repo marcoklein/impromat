@@ -5,29 +5,34 @@ import { pageTest } from "./fixtures/page-fixtures.js";
 pageTest.describe("Library with Workshop Context", () => {
   pageTest(
     "should render the library page",
-    async ({ auth, workshopPage, page }) => {
+    async ({
+      auth,
+      workshopPage,
+      workshopsPage,
+      page,
+      libraryPage,
+      workshopElementPage,
+    }) => {
       // given
       await auth.loginAsRandomUser();
-      await workshopPage.createAndGoto();
-      await workshopPage.openLibrary();
-      // then
-      await expect(page).toHaveURL(/.*\/nav\/elements/);
-    },
-  );
+      await workshopsPage.goto();
+      const workshopName = `Test Workshop ${randomUUID()}`;
+      await workshopPage.createAndGoto(workshopName);
 
-  pageTest(
-    "should open an element",
-    async ({ page, auth, workshopPage, libraryPage }) => {
-      // given
-      await auth.loginAsRandomUser();
-      await workshopPage.createAndGoto();
-      await workshopPage.openLibrary();
-      // when
-      await libraryPage.gotoFirstElementFromSearch();
-      // then
-      await page
-        .getByRole("button", { name: "Add to workshop", exact: true })
-        .click();
+      await pageTest.step("should render the library page", async () => {
+        // when
+        await workshopPage.openLibrary();
+        // then
+        await expect(page).toHaveURL(/.*\/nav\/elements/);
+      });
+
+      await pageTest.step("should add Freeze to workshop", async () => {
+        // when
+        await libraryPage.gotoFirstElementFromSearch();
+        await workshopElementPage.addToWorkshop(workshopName);
+        // then
+        await expect(page.getByRole("link", { name: "Freeze" })).toBeVisible();
+      });
     },
   );
 

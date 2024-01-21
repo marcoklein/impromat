@@ -22,14 +22,11 @@ export class WorkshopDevPage extends DevPage {
       .getByRole("heading")
       .getByText("Freeze")
       .first();
-
     this.addElementButtonLocator = page.getByRole("link", {
       name: "Element",
-      exact: true,
     });
     this.addSectionButtonLocator = page.getByRole("button", {
       name: "Section",
-      exact: true,
     });
 
     this.addToLikesButtonLocator = page.getByRole("button", {
@@ -38,6 +35,10 @@ export class WorkshopDevPage extends DevPage {
     this.removeFromLikesButtonLocator = page.getByRole("button", {
       name: "Remove from likes.",
     });
+  }
+
+  getWorkshopNameLocator(workshopName: string) {
+    return this.page.getByRole("heading", { name: workshopName });
   }
 
   async createNew(name: string) {
@@ -113,12 +114,34 @@ export class WorkshopDevPage extends DevPage {
     return new LibraryDevPage(page);
   }
 
-  async rename(newName: string = "Renamed Workshop") {
+  async rename(newName: string) {
     const page = this.page;
     await this.optionsLocator.click();
     await page.getByRole("button", { name: "Rename" }).click();
     await page.locator('input[type="text"]').fill(newName);
     await page.getByRole("button", { name: "Save" }).click();
+  }
+
+  async addDescription(description: string) {
+    const page = this.page;
+    await this.optionsLocator.click();
+    await page.getByRole("button", { name: "Add Description" }).click();
+    await page.locator("textarea").fill(description);
+    await page.getByRole("button", { name: "Save" }).click();
+  }
+
+  /**
+   * Deletes the current workshop.
+   */
+  async delete() {
+    const page = this.page;
+    await this.optionsLocator.click();
+    await page.getByRole("button", { name: "Delete" }).click();
+    await page
+      .locator("ion-alert")
+      .getByRole("button", { name: "Delete" })
+      .click();
+    await page.waitForURL("/nav/workshop");
   }
 
   async like() {

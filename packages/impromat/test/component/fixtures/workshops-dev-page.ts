@@ -1,22 +1,29 @@
-import { expect } from "@playwright/test";
+import { Locator, expect } from "@playwright/test";
 import { DevPage } from "./dev-page.js";
 
 export class WorkshopsDevPage extends DevPage {
+  readonly workshopNameInputLocator: Locator;
+  readonly workshopCreateButtonLocator: Locator;
+  readonly newWorkshopButtonLocator: Locator;
+
+  constructor(page: any) {
+    super(page);
+    this.workshopNameInputLocator = page.getByPlaceholder("Workshop name...");
+    this.workshopCreateButtonLocator = page.getByRole("button", {
+      name: "Create",
+    });
+    this.newWorkshopButtonLocator = page.getByLabel("New Workshop");
+  }
+
   async goto() {
     await this.page.goto(`/nav/workshop`);
   }
 
   async addWorkshop(name: string = "Test Workshop") {
     const page = this.page;
-
-    await this.goto();
-    // press for first time
-    // await page.locator("text=AddAdd Workshop >> button").click();
-    await page.getByRole("button", { name: "Add" }).first().click();
-    await expect(page).toHaveURL("/nav/workshop?dialog");
-    await page.locator('input[type="text"]').click();
-    await page.locator('input[type="text"]').fill(name);
-    await page.locator('button:has-text("Create")').click();
+    await this.newWorkshopButtonLocator.click();
+    await this.workshopNameInputLocator.fill(name);
+    await this.workshopCreateButtonLocator.click();
     await page.waitForSelector(`text="${name}"`);
     await page.waitForTimeout(1000);
     const workshopId = /[^/]*?$/.exec(page.url())![0];

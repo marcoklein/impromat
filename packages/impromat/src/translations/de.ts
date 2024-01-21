@@ -17,7 +17,9 @@ export default {
     Elements: "Elemente",
     save: "Speichern",
   },
-
+  BackButton: {
+    back: "Zurück",
+  },
   RootNavigation: {
     Home: "Startseite",
     "Exercises & Games": "Elemente",

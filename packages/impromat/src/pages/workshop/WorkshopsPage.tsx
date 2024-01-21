@@ -88,7 +88,6 @@ export const WorkshopsPage: React.FC = () => {
   const [gridIsOnTop, setGridIsOnTop] = useState<boolean>(false);
   useStateChangeLogger(gridIsOnTop, "gridIsOnTop", logger);
 
-  // const presentWorkshopInputDialog = useCreateWorkshopInputDialog();
   const [isCreateWorkshopDialogOpen, setIsCreateWorkshopDialogOpen] =
     useState(false);
 

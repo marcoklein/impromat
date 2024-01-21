@@ -4,10 +4,12 @@ import { WorkshopDevPage } from "./workshop-dev-page.js";
 
 export class WorkshopElementDevPage extends DevPage {
   addNoteLocator: Locator;
+  addToWorkshopLocator: Locator;
 
   constructor(page: Page) {
     super(page);
     this.addNoteLocator = page.getByRole("button", { name: "Add Note" });
+    this.addToWorkshopLocator = page.getByLabel("add", { exact: true });
   }
 
   async createAndGoto() {
@@ -17,5 +19,12 @@ export class WorkshopElementDevPage extends DevPage {
     await workshopPage.addElementFromSearch();
     await page.waitForTimeout(1000); // TODO fixme: page seems to flash
     await workshopPage.elementSelector.click();
+  }
+
+  async addToWorkshop(workshopName: string) {
+    await this.addToWorkshopLocator.click();
+    await this.page
+      .getByRole("button", { name: workshopName, exact: true })
+      .click();
   }
 }

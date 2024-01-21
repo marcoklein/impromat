@@ -179,7 +179,7 @@ export const WorkshopPage: React.FC = () => {
                 color="primary"
                 component={Link}
                 to={routeLibrary()}
-                aria-label={t("Section", { ns: "common" })}
+                aria-label={t("Element", { ns: "common" })}
               >
                 <ElementsIcon />
               </Fab>

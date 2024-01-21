@@ -18,6 +18,9 @@ export default {
     Elements: "Elements",
     save: "Save",
   },
+  BackButton: {
+    back: "Back",
+  },
   RootNavigation: {
     Home: "Home",
     "Exercises & Games": "Elements",
@@ -168,7 +171,7 @@ export default {
     ImproveElement:
       "Want to improve this element? You can <EditingLink>edit it here</EditingLink>.",
     SimilarElements: "Similar Elements",
-    "AI generated": "Automatically generated summary",
+    "AI generated": "Generated summary",
   },
   LicenseItemComponent: {
     "Based on": "Based on",

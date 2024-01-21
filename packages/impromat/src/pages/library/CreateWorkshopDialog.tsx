@@ -1,15 +1,10 @@
-import {
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-} from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { DialogScaffold } from "../../components/DialogScaffold";
+import { useHistory } from "react-router";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useCreateWorkshopMutation } from "../../hooks/use-create-workshop-mutation";
+import { routeWorkshop } from "../../routes/shared-routes";
+import { TextFieldDialog } from "../workshop/components/TextFieldDialog";
 
 interface ContainerProps {
   open: boolean;
@@ -20,66 +15,48 @@ export const CreateWorkshopDialog: React.FC<ContainerProps> = ({
   open,
   handleClose,
 }) => {
-  // TODO update translations
   const { t } = useTranslation("CreateWorkshopDialog");
   const logger = useComponentLogger("CreateWorkshopDialog");
-
-  const [name, setName] = useState("");
+  const history = useHistory();
 
   const [createWorkshopMutationResult, createWorkshopMutation] =
     useCreateWorkshopMutation();
 
-  const handleCreateWorkshop = useCallback(async () => {
-    logger("Creating new workshop with name %s", name);
-    const { error, data } = await createWorkshopMutation({
-      input: { name },
-    });
-    logger("createWorkshopMutationResult", createWorkshopMutationResult);
-    const id = data?.createWorkshop.id;
-    if (error || !id) {
-      return;
-    }
-    logger("Added new workshop with id %s", id);
-    handleClose();
-  }, [
-    createWorkshopMutation,
-    createWorkshopMutationResult,
-    handleClose,
-    logger,
-    name,
-  ]);
+  const handleCreateWorkshop = useCallback(
+    async (name: string) => {
+      logger("Creating new workshop with name %s", name);
+      const { error, data } = await createWorkshopMutation({
+        input: { name },
+      });
+      logger("createWorkshopMutationResult", createWorkshopMutationResult);
+      const id = data?.createWorkshop.id;
+      if (error || !id) {
+        return;
+      }
+      logger("Added new workshop with id %s", id);
+      handleClose();
+      history.push(routeWorkshop(id));
+    },
+    [
+      createWorkshopMutation,
+      createWorkshopMutationResult,
+      handleClose,
+      history,
+      logger,
+    ],
+  );
 
   return (
-    <DialogScaffold
-      open={open}
+    <TextFieldDialog
       handleClose={handleClose}
+      open={open}
       title={t("workshopDialogTitle")}
-    >
-      <DialogTitle component="h4" sx={{ m: 0, py: 0 }} variant="body1">
-        {t("nameMessage")}
-      </DialogTitle>
-      <DialogContent>
-        <TextField
-          required
-          autoFocus
-          fullWidth
-          margin="dense"
-          placeholder={t("namePlaceholder")}
-          type="text"
-          variant="outlined"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          fullWidth
-          variant="outlined"
-          onClick={() => handleCreateWorkshop()}
-        >
-          {t("create")}
-        </Button>
-      </DialogActions>
-    </DialogScaffold>
+      handleSave={handleCreateWorkshop}
+      saveText={t("create")}
+      TextFieldProps={{
+        label: t("nameMessage"),
+        placeholder: t("namePlaceholder"),
+      }}
+    />
   );
 };

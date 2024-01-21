@@ -15,6 +15,7 @@ interface ComponentProps {
   handleSave: (value: string) => Promise<unknown> | void;
   initialValue?: string;
   TextFieldProps?: TextFieldProps;
+  saveText?: string;
 }
 
 /**
@@ -27,6 +28,7 @@ export const TextFieldDialog: React.FC<ComponentProps> = ({
   handleSave,
   initialValue,
   TextFieldProps,
+  saveText,
 }) => {
   const { t } = useTranslation("TextFieldDialog");
   const [value, setValue] = useState(initialValue ?? "");
@@ -53,7 +55,9 @@ export const TextFieldDialog: React.FC<ComponentProps> = ({
         {...TextFieldProps}
       />
       <DialogActions>
-        <Button onClick={handleSaveClick}>{t("save", { ns: "common" })}</Button>
+        <Button onClick={handleSaveClick}>
+          {saveText ?? t("save", { ns: "common" })}
+        </Button>
       </DialogActions>
     </DialogScaffold>
   );

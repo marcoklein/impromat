@@ -15,12 +15,13 @@ export const LikeIconButton: React.FC<ComponentProps> = ({
 }) => {
   const { t } = useTranslation("LikeIconButton");
   return (
-    <IconButton onClick={onClick} color="like" disabled={disabled}>
-      {isLiked === false ? (
-        <Favorite color="inherit" aria-label={t("removeLike")} />
-      ) : (
-        <FavoriteBorder color="inherit" aria-label={t("addLike")} />
-      )}
+    <IconButton
+      onClick={onClick}
+      color="like"
+      disabled={disabled}
+      aria-label={isLiked ? t("removeLike") : t("addLike")}
+    >
+      {isLiked ? <Favorite /> : <FavoriteBorder />}
     </IconButton>
   );
 };
