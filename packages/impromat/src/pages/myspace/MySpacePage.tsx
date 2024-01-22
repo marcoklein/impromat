@@ -122,6 +122,7 @@ export const MySpacePage: React.FC = () => {
         <List>
           <ListItem>
             <ListItemIcon>
+              {/* eslint-disable-next-line react/style-prop-object */}
               <Avvvatars value={queryUserName} size={40} style="shape" />
             </ListItemIcon>
             <UserNameTextField
