@@ -87,7 +87,7 @@ export const WorkshopContent: React.FC<ContainerProps> = ({
             })) ?? []),
       ];
     });
-  }, [hideFirstSectionTitle, workshop.sections]);
+  }, [hideFirstSectionTitle, workshop.canEdit, workshop.sections]);
 
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
 
