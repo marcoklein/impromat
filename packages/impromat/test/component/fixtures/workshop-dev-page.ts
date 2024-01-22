@@ -27,6 +27,7 @@ export class WorkshopDevPage extends DevPage {
     });
     this.addSectionButtonLocator = page.getByRole("button", {
       name: "Section",
+      exact: true,
     });
 
     this.addToLikesButtonLocator = page.getByRole("button", {
@@ -55,7 +56,7 @@ export class WorkshopDevPage extends DevPage {
     await new LibraryDevPage(page).gotoFirstElementFromSearch();
   }
 
-  async addElementFromSearch() {
+  async deprecated_addElementFromSearch() {
     const page = this.page;
     await this.gotoElementFromSearch();
     await page
@@ -80,7 +81,7 @@ export class WorkshopDevPage extends DevPage {
   }
 
   getElementByNameLocator(name: string) {
-    return this.page.getByRole("heading", { name });
+    return this.page.getByRole("link", { name });
   }
 
   async createAndGoto(name: string = "Test Workshop") {
@@ -106,12 +107,8 @@ export class WorkshopDevPage extends DevPage {
     await page.waitForTimeout(200);
   }
 
-  async openLibrary() {
-    const page = this.page;
-
+  async openLibraryToAddNewElement() {
     await this.addElementButtonLocator.click();
-
-    return new LibraryDevPage(page);
   }
 
   async rename(newName: string) {

@@ -46,7 +46,7 @@ export const WorkshopLikeIconButton: React.FC<ContainerProps> = ({
   return (
     <LikeIconButton
       onClick={onStarWorkshopClick}
-      isLiked={!workshop.isLiked}
+      isLiked={!!workshop.isLiked}
       disabled={updateUserFavoriteWorkshopMutationResult.fetching}
     />
   );

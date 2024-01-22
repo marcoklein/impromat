@@ -6,10 +6,14 @@ const NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX =
 
 export class LibraryDevPage extends DevPage {
   readonly createElementButtonLocator: Locator;
+  readonly createCustomElementButtonLocator: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.createElementButtonLocator = page.getByText("New Element");
+    this.createElementButtonLocator = page.getByLabel("New Element");
+    this.createCustomElementButtonLocator = page.getByLabel("add", {
+      exact: true,
+    });
   }
 
   async goto() {
@@ -84,23 +88,8 @@ export class LibraryDevPage extends DevPage {
       isPublic: options?.isPublic ?? false,
     });
 
-    await page.getByRole("button", { name: "Create Element" }).click();
+    await this.createCustomElementButtonLocator.click();
     await page.waitForURL(NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX);
-  }
-
-  // TODO refactor when https://github.com/marcoklein/impromat/issues/254 is resolved
-  async createCustomElementAndAddToWorkshop(
-    name: string,
-    options?: { isPublic?: boolean },
-  ) {
-    await this.fillCustomElementPage({
-      name,
-      isPublic: options?.isPublic ?? false,
-    });
-
-    await this.page
-      .getByRole("button", { name: "Create and Add to Workshop" })
-      .click();
   }
 
   private async fillCustomElementPage(options: {

@@ -29,6 +29,7 @@ import { WorkshopSectionItem } from "./WorkshopSectionItem";
 const WorkshopContent_Workshop = graphql(`
   fragment WorkshopContent_Workshop on Workshop {
     id
+    canEdit
     sections {
       id
       name
@@ -76,7 +77,7 @@ export const WorkshopContent: React.FC<ContainerProps> = ({
       const sectionHidden = index === 0 && hideFirstSectionTitle;
       return [
         { id: section.id, section: section },
-        ...(section.isCollapsed && !sectionHidden
+        ...(workshop.canEdit && section.isCollapsed && !sectionHidden
           ? []
           : section?.elements.map((element) => ({
               id: element.id,

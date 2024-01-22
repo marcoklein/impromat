@@ -2,42 +2,35 @@ import { expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Workshop Elements Page", () => {
-  // TODO https://github.com/marcoklein/impromat/issues/254
-  pageTest.skip(
-    "should add a custom element",
-    async ({ auth, workshopPage }) => {
+  pageTest(
+    "add custom element to workshop",
+    async ({
+      auth,
+      workshopPage,
+      workshopsPage,
+      libraryElementPage,
+      libraryPage,
+    }) => {
       // given
+      const workshopName = "test workshop name";
+      const customElementName = "my-custom-element";
       await auth.loginAsRandomUser();
-      await workshopPage.createAndGoto("workshop name");
-      // when
-      const libraryPage = await workshopPage.openLibrary();
-      await libraryPage.createCustomElementAndAddToWorkshop(
-        "my-custom-element",
-      );
-      // then
-      await expect(
-        workshopPage.getElementByNameLocator("my-custom-element"),
-      ).toBeVisible();
-    },
-  );
+      await workshopsPage.goto();
+      await workshopPage.createAndGoto(workshopName);
 
-  // TODO https://github.com/marcoklein/impromat/issues/254
-  pageTest.skip(
-    "should show an 'edit here' button",
-    async ({ auth, page, workshopPage }) => {
-      // given
-      await auth.loginAsRandomUser();
-      await workshopPage.createAndGoto("workshop name");
-
-      // when
-      const libraryPage = await workshopPage.openLibrary();
-      await libraryPage.createCustomElementAndAddToWorkshop(
-        "my-custom-element",
+      await pageTest.step(
+        "should add a custom element to workshop",
+        async () => {
+          // when
+          await workshopPage.openLibraryToAddNewElement();
+          await libraryPage.createCustomElement(customElementName);
+          await libraryElementPage.addToWorkshop(workshopName);
+          // then
+          await expect(
+            workshopPage.getElementByNameLocator(customElementName),
+          ).toBeVisible();
+        },
       );
-      await page.getByText("my-custom-element").click();
-      // then
-      await workshopPage.expectToolbarTextToBe("my-custom-element");
-      await expect(page.getByText("Edit Here")).toBeVisible();
     },
   );
 });

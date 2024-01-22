@@ -8,9 +8,7 @@ export class DevPage {
   }
 
   async expectToolbarTextToBe(text: string | RegExp) {
-    await expect(
-      this.page.locator(`ion-toolbar ion-title`).getByText(text),
-    ).toBeVisible();
+    await expect(this.page.getByRole("heading", { name: text })).toBeVisible();
   }
 
   async enableDebug() {

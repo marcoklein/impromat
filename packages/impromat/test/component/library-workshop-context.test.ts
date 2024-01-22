@@ -31,7 +31,9 @@ pageTest.describe("Library with Workshop Context", () => {
         await libraryPage.gotoFirstElementFromSearch();
         await workshopElementPage.addToWorkshop(workshopName);
         // then
-        await expect(page.getByRole("link", { name: "Freeze" })).toBeVisible();
+        await expect(
+          workshopPage.getElementByNameLocator("Freeze"),
+        ).toBeVisible();
       });
     },
   );

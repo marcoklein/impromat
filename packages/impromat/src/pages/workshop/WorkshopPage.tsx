@@ -29,11 +29,11 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeLibrary } from "../../routes/shared-routes";
+import { ShareWorkshopModal } from "./components/LegacyShareWorkshopModal";
 import { TextFieldDialog } from "./components/TextFieldDialog";
 import { WorkshopContent } from "./components/WorkshopContent";
 import { WorkshopLikeIconButton } from "./components/WorkshopLikeButton";
 import { WorkshopOptionsMenu } from "./components/WorkshopOptionsMenu";
-import { ShareWorkshopModal } from "./components/LegacyShareWorkshopModal";
 import { STORAGE_LAST_WORKSHOP_ID } from "./components/local-storage-workshop-id";
 
 const WorkshopPage_Workshop = graphql(`
@@ -105,9 +105,7 @@ export const WorkshopPage: React.FC = () => {
         <>
           {workshop && isLoggedIn && (
             <IsLoggedIn>
-              {workshop && (
-                <WorkshopLikeIconButton workshopFragment={workshop} />
-              )}
+              <WorkshopLikeIconButton workshopFragment={workshop} />
             </IsLoggedIn>
           )}
           {workshop && workshop.canEdit && (
@@ -151,7 +149,7 @@ export const WorkshopPage: React.FC = () => {
             alignItems: "end",
           }}
         >
-          {workshop && (
+          {workshop && workshop.canEdit && (
             <>
               <Fab
                 color="secondary"
