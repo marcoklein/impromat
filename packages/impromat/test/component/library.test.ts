@@ -30,9 +30,9 @@ pageTest.describe("Library", () => {
       await pageTest.step("should show custom elements in search", async () => {
         // when
         await libraryPage.gotoSearch();
-        await libraryPage.searchForElement("Freeze Tag-Exercise");
+        await libraryPage.searchForElement(name);
         // then
-        await expect(page.getByText(new RegExp(name))).toBeVisible();
+        await expect(page.getByText(name)).toBeVisible();
       });
     },
   );

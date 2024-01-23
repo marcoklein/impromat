@@ -6,7 +6,9 @@ pageTest.describe("Account", () => {
     await pageTest.step("should login", async () => {
       // given
       // when
+      await accountPage.goto();
       await accountPage.login();
+      await accountPage.goto();
       // then
       await accountPage.mySpaceTabLocator.click();
       await expect(accountPage.logoutLocator).toBeVisible();

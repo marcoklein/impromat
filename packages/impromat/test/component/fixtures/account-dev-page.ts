@@ -23,13 +23,10 @@ export class AccountDevPage extends DevPage {
 
   async goto() {
     await this.page.goto("/nav/my-space");
-    await this.enableDebug();
   }
 
   async login() {
-    await this.goto();
     await this.page.locator("#main").getByText("Google Sign In").last().click();
-    await this.goto();
   }
 
   async logout() {
