@@ -6,17 +6,15 @@ import {
   IonList,
   IonText,
 } from "@ionic/react";
+import { Box } from "@mui/material";
 import { arrowForwardOutline } from "ionicons/icons";
 import { useTranslation } from "react-i18next";
 import { ImpromatHero } from "../components/ImpromatHero";
-import { PageScaffold } from "../components/PageScaffold";
 import { useIsLoggedIn } from "../hooks/use-is-logged-in";
 import {
-  routeAbout,
-  routeAccount,
   routeLegal,
+  routeLibrary,
   routePrivacyPolicy,
-  routeWorkshops,
 } from "../routes/shared-routes";
 import { HomeContent } from "./home/HomeContent";
 
@@ -26,7 +24,15 @@ export const HomePage: React.FC = () => {
   const { t } = useTranslation("HomePage");
 
   return (
-    <PageScaffold noHeader>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        overflow: "auto",
+        position: "relative",
+        pt: 5,
+      }}
+    >
       <ImpromatHero>
         <IonText color="dark">
           <IonCardSubtitle>
@@ -36,32 +42,21 @@ export const HomePage: React.FC = () => {
           </IonCardSubtitle>
         </IonText>
         {!isLoggedIn && (
-          <IonButton routerLink={routeWorkshops()} className="ion-margin-top">
+          <IonButton routerLink={routeLibrary()} className="ion-margin-top">
             <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
             {t("Access Impromat")}
           </IonButton>
         )}
       </ImpromatHero>
-      {!isLoggedIn && (
-        <div className="ion-padding">
-          <HomeContent></HomeContent>
-        </div>
-      )}
-
+      <div className="ion-padding">
+        <HomeContent></HomeContent>
+      </div>
       <IonList>
-        <IonItem routerLink={routeAccount()}>{t("Profile")}</IonItem>
-        <IonItem routerLink={routeAbout()}>{t("About the Project")}</IonItem>
         <IonItem routerLink={routeLegal()}>{t("Legal Notice")}</IonItem>
         <IonItem routerLink={routePrivacyPolicy()}>
           {t("Privacy Policy", { ns: "common" })}
         </IonItem>
       </IonList>
-
-      {isLoggedIn && (
-        <div className="ion-padding">
-          <HomeContent></HomeContent>
-        </div>
-      )}
-    </PageScaffold>
+    </Box>
   );
 };

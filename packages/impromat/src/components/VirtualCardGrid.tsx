@@ -46,6 +46,7 @@ interface ContainerProps<ItemData, Context> {
    */
   scrollToTop?: number;
   size?: "small" | "default";
+  headerElement?: JSX.Element;
 }
 
 /**
@@ -60,6 +61,7 @@ export const VirtualCardGrid = <ItemData, Context>({
   isFetching,
   scrollToTop,
   size,
+  headerElement,
 }: ContainerProps<ItemData, Context>) => {
   const logger = useComponentLogger("VirtualCardGrid");
   const virtuosoRef = useRef<VirtuosoGridHandle>(null);
@@ -193,6 +195,7 @@ export const VirtualCardGrid = <ItemData, Context>({
             <LoadingCard></LoadingCard>
           </div>
         ),
+        Header: () => headerElement,
       }}
       itemContent={itemContent}
       scrollSeekConfiguration={{

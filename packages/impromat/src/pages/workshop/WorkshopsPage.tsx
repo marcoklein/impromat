@@ -1,22 +1,21 @@
-import { IonButton, IonContent, IonFab, IonIcon, IonLabel } from "@ionic/react";
+import { IonButton, IonIcon } from "@ionic/react";
+import { Box, Fab } from "@mui/material";
 import { filter } from "ionicons/icons";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
-import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
-import { WorkshopsFilterBar } from "../../components/WorkshopsFilterBar";
-import { FEATURE_WORKSHOPS_FILTER_BAR } from "../../feature-toggles";
+import { AddNewWorkshopIcon } from "../../components/icons/AddNewWorkshopIcon";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { UserWorkshopsFilterInput } from "../../graphql-client/graphql";
-import { useCreateWorkshopInputDialog } from "../../hooks/use-add-workshop-input-dialog";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
-import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
-import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
+import { CreateWorkshopDialog } from "../library/CreateWorkshopDialog";
+import { LegacyWorkshopCreateFirstComponent } from "./components/LegacyWorkshopCreateFirstComponent";
+import { WorkshopPreviewCard } from "./components/LegacyWorkshopPreviewCard";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -89,97 +88,82 @@ export const WorkshopsPage: React.FC = () => {
   const [gridIsOnTop, setGridIsOnTop] = useState<boolean>(false);
   useStateChangeLogger(gridIsOnTop, "gridIsOnTop", logger);
 
-  const presentWorkshopInputDialog = useCreateWorkshopInputDialog();
+  const [isCreateWorkshopDialogOpen, setIsCreateWorkshopDialogOpen] =
+    useState(false);
 
   const { t } = useTranslation("WorkshopsPage");
 
   return (
-    <PageScaffold
-      customContentWrapper
-      secondaryToolbar={
-        <>
-          {FEATURE_WORKSHOPS_FILTER_BAR && (
-            <WorkshopsFilterBar
-              filterInput={userWorkshopsFilterInput}
-              onFilterInputChange={(filterInput) => {
-                console.log("filter changed");
-                reexecuteWorkshopsQuery();
-                setUserWorkshopsFilterInput(filterInput);
-                localStorage.setItem(
-                  "user-workshops-filter-input",
-                  JSON.stringify(filterInput),
-                );
-              }}
-            ></WorkshopsFilterBar>
-          )}
-        </>
-      }
-    >
-      <IonContent scrollY={false} className="ion-no-padding ion-no-margin">
-        <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonButton
-            color="primary"
-            onClick={() => presentWorkshopInputDialog()}
-          >
-            <IonLabel>{t("NewWorkshop")}</IonLabel>
-          </IonButton>
-        </IonFab>
+    <Box sx={{ height: "100%", position: "relative" }}>
+      <Fab
+        color="primary"
+        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        onClick={() => {
+          setIsCreateWorkshopDialogOpen(true);
+        }}
+        aria-label={t("NewWorkshop")}
+      >
+        <AddNewWorkshopIcon />
+      </Fab>
 
-        <PageContentLoaderComponent
-          noRefresher={!gridIsOnTop}
-          queryResult={workshopsQueryResult}
-          reexecuteQuery={reexecuteWorkshopsQuery}
-        >
-          {availableWorkshops?.length ? (
-            <VirtualCardGrid
-              size="small"
-              scrollStoreKey="workshops-page"
-              isFetching={
-                workshopsQueryResult.fetching || workshopsQueryResult.stale
-              }
-              onTopStateChange={(atTop) => setGridIsOnTop(atTop)}
-              items={availableWorkshops}
-              itemContent={(_index, workshop) => (
-                <WorkshopPreviewCard
-                  workshopFragment={workshop}
-                ></WorkshopPreviewCard>
-              )}
-            ></VirtualCardGrid>
-          ) : !userWorkshopsFilterInput.liked ||
-            !userWorkshopsFilterInput.owned ? (
-            <div
-              className="ion-padding"
-              style={{
-                minHeight: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <p>{t("FilterNoWorkshops")}</p>
-                <IonButton
-                  expand="full"
-                  onClick={() => {
-                    setUserWorkshopsFilterInput({
-                      liked: true,
-                      owned: true,
-                      isPublic: true,
-                    });
-                  }}
-                >
-                  <IonIcon slot="start" icon={filter}></IonIcon>
-                  {t("ClearFilters")}
-                </IonButton>
-              </div>
+      <PageContentLoaderComponent
+        noRefresher={!gridIsOnTop}
+        queryResult={workshopsQueryResult}
+        reexecuteQuery={reexecuteWorkshopsQuery}
+      >
+        {availableWorkshops?.length ? (
+          <VirtualCardGrid
+            size="small"
+            scrollStoreKey="workshops-page"
+            isFetching={
+              workshopsQueryResult.fetching || workshopsQueryResult.stale
+            }
+            onTopStateChange={(atTop) => setGridIsOnTop(atTop)}
+            items={availableWorkshops}
+            itemContent={(_index, workshop) => (
+              <WorkshopPreviewCard
+                workshopFragment={workshop}
+              ></WorkshopPreviewCard>
+            )}
+          ></VirtualCardGrid>
+        ) : !userWorkshopsFilterInput.liked ||
+          !userWorkshopsFilterInput.owned ? (
+          <div
+            className="ion-padding"
+            style={{
+              minHeight: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <p>{t("FilterNoWorkshops")}</p>
+              <IonButton
+                expand="full"
+                onClick={() => {
+                  setUserWorkshopsFilterInput({
+                    liked: true,
+                    owned: true,
+                    isPublic: true,
+                  });
+                }}
+              >
+                <IonIcon slot="start" icon={filter}></IonIcon>
+                {t("ClearFilters")}
+              </IonButton>
             </div>
-          ) : (
-            <WorkshopCreateFirstComponent
-              onCreateWorkshopClick={() => presentWorkshopInputDialog()}
-            ></WorkshopCreateFirstComponent>
-          )}
-        </PageContentLoaderComponent>
-      </IonContent>
-    </PageScaffold>
+          </div>
+        ) : (
+          <LegacyWorkshopCreateFirstComponent
+            onCreateWorkshopClick={() => setIsCreateWorkshopDialogOpen(true)}
+          ></LegacyWorkshopCreateFirstComponent>
+        )}
+        <CreateWorkshopDialog
+          open={isCreateWorkshopDialogOpen}
+          handleClose={() => setIsCreateWorkshopDialogOpen(false)}
+        />
+      </PageContentLoaderComponent>
+    </Box>
   );
 };

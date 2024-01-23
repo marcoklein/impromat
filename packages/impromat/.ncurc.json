@@ -1,0 +1,6 @@
+{
+  "upgrade": false,
+  // "filter": ["*ionic*", "*react*"],
+  "format": "group",
+  "interactive": true
+}

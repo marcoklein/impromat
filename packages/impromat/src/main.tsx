@@ -65,7 +65,8 @@ i18n
 const logger = rootLogger.extend("reportWebVitals");
 reportWebVitals(logger);
 
-setupIonicReact();
+// as we are currently transitioning to MUI, we use the material design theme
+setupIonicReact({ mode: "md" });
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
