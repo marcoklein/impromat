@@ -2,7 +2,7 @@ import { IonButton, IonContent } from "@ionic/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { PageScaffold } from "../components/PageScaffold";
+import { LegacyPageScaffold } from "../components/LegacyPageScaffold";
 import { privacyPolicyMarkdownDe } from "../markdown/privacy-policy.de.md.gen";
 import { privacyPolicyMarkdownEn } from "../markdown/privacy-policy.en.md.gen";
 import { routeHome } from "../routes/shared-routes";
@@ -15,7 +15,7 @@ export const PrivacyPolicyPage: React.FC = () => {
   );
 
   return (
-    <PageScaffold
+    <LegacyPageScaffold
       title={t("Privacy Policy", { ns: "common" })}
       customContentWrapper
       defaultBackHref={routeHome()}
@@ -32,12 +32,12 @@ export const PrivacyPolicyPage: React.FC = () => {
         {language === "de" && (
           <>
             <IonButton onClick={() => setLanguage("en")} fill="outline">
-              {t('switchToEnglishVersion')}
+              {t("switchToEnglishVersion")}
             </IonButton>
             <ReactMarkdown>{privacyPolicyMarkdownDe}</ReactMarkdown>
           </>
         )}
       </IonContent>
-    </PageScaffold>
+    </LegacyPageScaffold>
   );
 };

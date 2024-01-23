@@ -8,8 +8,13 @@ export class DevPage {
   }
 
   async expectToolbarTextToBe(text: string | RegExp) {
-    await expect(
-      this.page.locator(`ion-toolbar ion-title`).getByText(text),
-    ).toBeVisible();
+    await expect(this.page.getByRole("heading", { name: text })).toBeVisible();
+  }
+
+  async enableDebug() {
+    await this.page.evaluate(() => {
+      console.log("Setting DEBUG localStorage to impromat:*");
+      window.localStorage.setItem("debug", "impromat:*");
+    });
   }
 }

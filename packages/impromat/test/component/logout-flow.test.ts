@@ -7,6 +7,7 @@ pageTest.describe("Logout Flow", () => {
     async ({ auth, workshopsPage, accountPage }) => {
       // given
       await auth.loginAsRandomUser();
+      await workshopsPage.goto();
       await workshopsPage.addWorkshop("test-workshop");
       await workshopsPage.goto();
       await workshopsPage.expectToShowWorkshopWithName("test-workshop");
@@ -21,17 +22,13 @@ pageTest.describe("Logout Flow", () => {
     },
   );
 
-  pageTest(
-    "should show logout confirmation page on logout",
-    async ({ auth, page, accountPage }) => {
-      // given
-      await auth.loginAsRandomUser();
-      // when
-      await accountPage.goto();
-      await accountPage.logout();
-      // then
-      await expect(page).toHaveURL("/nav/home");
-      await expect(page.getByText("You have been logged out.")).toBeVisible();
-    },
-  );
+  pageTest("should logout", async ({ auth, page, accountPage }) => {
+    // given
+    await auth.loginAsRandomUser();
+    // when
+    await accountPage.goto();
+    await accountPage.logout();
+    // then
+    await expect(page).toHaveURL("/nav/my-space");
+  });
 });

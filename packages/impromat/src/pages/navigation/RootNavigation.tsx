@@ -1,26 +1,23 @@
-import {
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-} from "@ionic/react";
-import { barbell, documents, home } from "ionicons/icons";
-import { Fragment, FunctionComponent, useMemo } from "react";
+import { Login, Person } from "@mui/icons-material";
+import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Redirect, Route } from "react-router";
-import { ProtectedRouteComponent } from "../../components/ProtectedRoute";
-import { ANIMATE_PAGE_TRANSITIONS } from "../../feature-toggles";
+import { Redirect, Route, useParams } from "react-router";
+import { Link, Switch } from "react-router-dom";
+import { ElementsIcon } from "../../components/icons/ElementsIcon";
+import { WorkshopsIcon } from "../../components/icons/WorkshopsIcon";
 import { useComponentLogger } from "../../hooks/use-component-logger";
+import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
-import { routeLibrary } from "../../routes/library-routes";
 import {
   routeAbout,
-  routeAccount,
   routeCommunity,
   routeHome,
   routeLegal,
+  routeLibrary,
+  routeLibraryElement,
+  routeLogin,
+  routeMySpace,
   routePrivacyPolicy,
   routeRootNavigation,
   routeWorkshops,
@@ -30,58 +27,65 @@ import { CommunityPage } from "../CommunityPage";
 import { HomePage } from "../HomePage";
 import { LegalPage } from "../LegalPage";
 import { PrivacyPolicyPage } from "../PrivacyPolicyPage";
-import { AccountPage } from "../account/AccountPage";
-import { LibraryPage } from "../library/LibraryPage";
+import { MuiLibraryPage } from "../library-page/LibraryPage";
+import { LibraryElementPage } from "../library/LibraryElementPage";
+import { LoginPage } from "../login/LoginPage";
+import { MySpacePage } from "../myspace/MySpacePage";
 import { WorkshopsPage } from "../workshop/WorkshopsPage";
-import { HIDE_MENU_SIZE } from "./responsive-navigation";
 
 export interface TabConfig {
   name: string;
-  icon: string;
+  icon: JSX.Element;
   route: string;
-  element: FunctionComponent<{}>;
+  // element: FunctionComponent<{}>;
+  element: JSX.Element;
   exact?: boolean;
-  protected?: boolean;
-  wrapInFragment?: boolean;
+  showForUser: "all" | "loggedIn" | "loggedOut";
 }
 
 export enum RootTabs {
-  HOME = "HOME",
   ELEMENTS = "ELEMENTS",
   WORKSHOPS = "WORKSHOPS",
+  MYSPACE = "MYSPACE",
+  LOGIN = "LOGIN",
 }
 
 export const ROOT_TABS: Record<RootTabs, TabConfig> = {
-  HOME: {
-    name: "Home",
-    icon: home,
-    route: routeHome(),
-    element: HomePage,
-    exact: true,
-  },
   ELEMENTS: {
     name: "Exercises & Games",
-    icon: barbell,
+    icon: <ElementsIcon />,
     route: routeLibrary(),
-    element: LibraryPage,
+    element: <MuiLibraryPage />,
     exact: true,
-    protected: false,
-    // FIXME this is a workaround to force the library page to re-render
-    wrapInFragment: true,
+    showForUser: "all",
   },
   WORKSHOPS: {
     name: "Workshops",
-    icon: documents,
+    icon: <WorkshopsIcon />,
     route: routeWorkshops(),
-    element: WorkshopsPage,
+    element: <WorkshopsPage />,
     exact: true,
-    protected: true,
+    showForUser: "all",
+  },
+  MYSPACE: {
+    name: "My Space",
+    icon: <Person />,
+    route: routeMySpace(),
+    element: <MySpacePage />,
+    exact: true,
+    showForUser: "loggedIn",
+  },
+  LOGIN: {
+    name: "Login",
+    icon: <Login />,
+    route: routeLogin(),
+    element: <LoginPage />,
+    exact: true,
+    showForUser: "loggedOut",
   },
 };
 
-interface ContainerProps {
-  workshopId?: string;
-}
+interface ContainerProps {}
 
 /**
  * Core component for the library page.
@@ -89,47 +93,59 @@ interface ContainerProps {
  *
  * @param workshopId if set, the library has been opened from a workshop.
  */
-export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
+export const RootNavigation: React.FC<ContainerProps> = () => {
   const logger = useComponentLogger("RootNavigation");
-  useStateChangeLogger(workshopId, "workshopId", logger);
-
-  const defaultTab = useMemo(() => ROOT_TABS.ELEMENTS, []);
   const { t } = useTranslation("RootNavigation");
+  const params = useParams<{ tabName: string }>();
+  const defaultTab = useMemo(() => ROOT_TABS.ELEMENTS, []);
+
+  const currentTab = params.tabName ?? defaultTab.route;
+  useStateChangeLogger(params.tabName, "tabName", logger);
+
+  const { isLoggedIn } = useIsLoggedIn();
+
+  const activeRouteTabs = useMemo(
+    () =>
+      Object.entries(ROOT_TABS).filter(
+        ([_key, tabConfig]) =>
+          tabConfig.showForUser === "all" ||
+          (tabConfig.showForUser === "loggedIn" && isLoggedIn) ||
+          (tabConfig.showForUser === "loggedOut" && !isLoggedIn),
+      ),
+    [isLoggedIn],
+  );
 
   return (
-    <>
-      <IonTabs>
-        <IonRouterOutlet animated={ANIMATE_PAGE_TRANSITIONS}>
+    <Box display="flex" flexDirection="column" flexGrow={1} height={"100%"}>
+      <Box
+        sx={{
+          display: "flex",
+          flexGrow: 1,
+          flexDirection: "column",
+          overflow: "auto",
+        }}
+      >
+        <Switch>
           <Redirect
             from={`${routeRootNavigation()}/`}
             to={`${defaultTab.route}`}
             exact
           ></Redirect>
-          {Object.entries(ROOT_TABS).map(([key, value]) =>
-            value.protected ? (
-              <ProtectedRouteComponent
-                key={key}
-                path={`${value.route}`}
-                component={value.element}
-                exact={value.exact}
-              ></ProtectedRouteComponent>
-            ) : value.wrapInFragment ? (
-              <Fragment key={key}>
-                <Route
-                  path={`${value.route}`}
-                  component={value.element}
-                  exact={value.exact}
-                ></Route>
-              </Fragment>
-            ) : (
-              <Route
-                key={key}
-                path={`${value.route}`}
-                component={value.element}
-                exact={value.exact}
-              ></Route>
-            ),
-          )}
+          {activeRouteTabs.map(([key, value]) => (
+            <Route
+              key={key}
+              path={value.route}
+              exact={value.exact}
+              children={value.element}
+            ></Route>
+          ))}
+
+          <Route path={routeLibraryElement()}>
+            <LibraryElementPage></LibraryElementPage>
+          </Route>
+          <Route path={routeHome()} exact>
+            <HomePage></HomePage>
+          </Route>
           <Route path={routeAbout()} exact>
             <AboutPage></AboutPage>
           </Route>
@@ -139,22 +155,58 @@ export const RootNavigation: React.FC<ContainerProps> = ({ workshopId }) => {
             component={PrivacyPolicyPage}
           ></Route>
           <Route path={routeLegal()} exact component={LegalPage}></Route>
-          <Route path={routeAccount()} exact component={AccountPage}></Route>
           <Route
             path={routeCommunity()}
             exact
             component={CommunityPage}
           ></Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom" className={`ion-hide-${HIDE_MENU_SIZE}-up`}>
-          {Object.entries(ROOT_TABS).map(([key, value]) => (
-            <IonTabButton key={key} tab={key} href={`${value.route}`}>
-              <IonIcon icon={value.icon}></IonIcon>
-              <IonLabel>{t(value.name)}</IonLabel>
-            </IonTabButton>
+          <Route path="*">
+            <Redirect to={routeHome()}></Redirect>
+          </Route>
+        </Switch>
+      </Box>
+      <Box>
+        <BottomNavigation showLabels value={currentTab}>
+          <BottomNavigationAction
+            sx={{
+              flexGrow: 0,
+              width: 40,
+              "&.Mui-selected>img": {
+                width: 32,
+                height: 32,
+                filter: "grayscale(0%)",
+              },
+            }}
+            component={Link}
+            value={"home"}
+            to={routeHome()}
+            aria-label="home"
+            icon={
+              <Box
+                component="img"
+                src="/assets/logo.svg"
+                sx={{
+                  filter: "grayscale(100%)",
+                  transition: "filter 0.3s ease-in-out",
+                  width: 30,
+                  height: 30,
+                }}
+              />
+            }
+          />
+          {activeRouteTabs.map(([key, value]) => (
+            <BottomNavigationAction
+              sx={{ textAlign: "center" }}
+              component={Link}
+              key={key}
+              value={value.route.match(/\/([^/]+)\/([^/]+)/)?.at(2) ?? ""}
+              to={value.route}
+              label={t(value.name)}
+              icon={value.icon}
+            />
           ))}
-        </IonTabBar>
-      </IonTabs>
-    </>
+        </BottomNavigation>
+      </Box>
+    </Box>
   );
 };
