@@ -4,54 +4,48 @@ import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Shared Elements", () => {
   pageTest(
-    "should create a shared element",
-    async ({ page, auth, libraryPage }) => {
+    "shared element flow",
+    async ({ page, auth, libraryPage, accountPage, libraryElementPage }) => {
       // given
       await auth.loginAsRandomUser();
       const uniqueElementName = randomUUID();
-      // when
-      await libraryPage.goto();
-      await libraryPage.createCustomElement(uniqueElementName, {
-        isPublic: true,
+      await pageTest.step("should create a shared element", async () => {
+        await libraryPage.goto();
+        await libraryPage.createCustomElement(uniqueElementName, {
+          isPublic: true,
+        });
+        await accountPage.goto();
+        await accountPage.logout();
+        await auth.loginAsRandomUser();
       });
-      await auth.loginAsRandomUser();
-      await libraryPage.goto();
-      await libraryPage.gotoSearch();
 
-      await libraryPage.searchForElement(uniqueElementName);
-      await libraryPage.openElementCard(uniqueElementName);
-      // then
-      await expect(
-        page.getByText("Created by a user in impromat"),
-      ).toBeVisible();
-    },
-  );
+      await pageTest.step(
+        "should open shared element of other user",
+        async () => {
+          // when
+          await libraryPage.gotoSearch();
+          await libraryPage.searchForElement(uniqueElementName);
+          await libraryPage.openElementCard(uniqueElementName);
+          // then
+          await expect(
+            page.getByText("Created by a user in impromat"),
+          ).toBeVisible();
+        },
+      );
 
-  pageTest(
-    "should favorise a user created element",
-    async ({ page, auth, libraryPage, libraryElementPage }) => {
-      // given
-      await auth.loginAsRandomUser();
-      const uniqueElementName = randomUUID().slice(0, 12);
-      // when
-      await libraryPage.goto();
-      await libraryPage.createCustomElement(uniqueElementName, {
-        isPublic: true,
-      });
-      await auth.loginAsRandomUser();
-      await libraryPage.goto();
-      await libraryPage.gotoSearch();
-
-      await libraryPage.searchForElement(uniqueElementName);
-      await libraryPage.openElementCard(uniqueElementName);
-      await libraryElementPage.addToLikedElements();
-      await libraryElementPage.clickBackButton();
-      await libraryPage.clearSearch();
-      await libraryPage.toggleLikedFilter();
-      // then
-      await expect(
-        page.getByRole("heading").getByText(uniqueElementName),
-      ).toBeVisible();
+      await pageTest.step(
+        "should like a shared element of other user",
+        async () => {
+          await libraryElementPage.addToLikedElements();
+          await libraryElementPage.backButtonLocator.click();
+          await libraryPage.searchForElement(uniqueElementName);
+          await libraryPage.openElementCard(uniqueElementName);
+          // then
+          await expect(
+            libraryElementPage.removeFromLikesButtonLocator,
+          ).toBeVisible();
+        },
+      );
     },
   );
 });

@@ -9,7 +9,7 @@ import {
 import { arrowForwardOutline, menu } from "ionicons/icons";
 import { useState } from "react";
 import { ImpromatHero } from "../../components/ImpromatHero";
-import { PageScaffold } from "../../components/PageScaffold";
+import { LegacyPageScaffold } from "../../components/LegacyPageScaffold";
 import { routeWorkshops } from "../../routes/shared-routes";
 import { HomeContent } from "./HomeContent";
 
@@ -20,7 +20,7 @@ export const HomeLoggedOut: React.FC = () => {
   };
 
   return (
-    <PageScaffold noHeader customContentWrapper>
+    <LegacyPageScaffold noHeader customContentWrapper>
       <IonContent
         className="ion-padding"
         scrollEvents
@@ -60,6 +60,6 @@ export const HomeLoggedOut: React.FC = () => {
 
         <HomeContent></HomeContent>
       </IonContent>
-    </PageScaffold>
+    </LegacyPageScaffold>
   );
 };

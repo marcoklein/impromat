@@ -2,9 +2,9 @@ import { IonBadge, IonText } from "@ionic/react";
 import { useMemo } from "react";
 import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
-import { routeLibraryElement } from "../routes/library-routes";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
+import { routeLibraryElement } from "../routes/shared-routes";
 
 const ElementPreviewItem_ElementSearchResultFragment = graphql(`
   fragment ElementPreviewItem_ElementSearchResult on ElementSearchResult {

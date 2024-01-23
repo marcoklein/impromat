@@ -169,6 +169,24 @@ export type ElementSearchInput = {
   text?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ElementSearchKeyword = {
+  __typename?: 'ElementSearchKeyword';
+  /** Inverse document frequency. Describes how important a word is to a document in a collection or corpus. The more common a word is in a document, the lower its idf. */
+  idf: Scalars['Float']['output'];
+  /** The keyword in its stemmed form. */
+  keyword: Scalars['String']['output'];
+  /** The keyword in its original form(s) before stemming. */
+  originalKeywords?: Maybe<Array<Scalars['String']['output']>>;
+};
+
+export type ElementSearchKeywords = {
+  __typename?: 'ElementSearchKeywords';
+  documentsCount: Scalars['Int']['output'];
+  keywords: Array<ElementSearchKeyword>;
+  similarKeywords?: Maybe<Array<SimilarKeyword>>;
+  uniqueKeywordsCount: Scalars['Int']['output'];
+};
+
 export type ElementSearchMatch = {
   __typename?: 'ElementSearchMatch';
   indices: Array<Array<Scalars['Int']['output']>>;
@@ -184,6 +202,12 @@ export type ElementSearchResult = {
   element: Element;
   matches: Array<ElementSearchMatch>;
   score: Scalars['Float']['output'];
+};
+
+export type ElementSearchV2Input = {
+  /** Language code (e.g. en, de) for results. */
+  languageCode?: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ElementSnapshot = {
@@ -343,7 +367,10 @@ export type Query = {
   googleAuthUrl: Scalars['String']['output'];
   /** Get information about the current user. Returns null if not logged in. */
   me?: Maybe<User>;
+  /** @deprecated Use searchElementsV2 instead */
   searchElements: Array<ElementSearchResult>;
+  searchElementsV2: Array<Element>;
+  searchElementsV2Keywords: ElementSearchKeywords;
   tags: Array<ElementTag>;
   /** Get information about a user. Returns null if not found or not logged in. */
   user?: Maybe<User>;
@@ -374,6 +401,18 @@ export type QuerySearchElementsArgs = {
 };
 
 
+export type QuerySearchElementsV2Args = {
+  input: ElementSearchV2Input;
+  skip?: Scalars['Int']['input'];
+  take?: Scalars['Int']['input'];
+};
+
+
+export type QuerySearchElementsV2KeywordsArgs = {
+  input: ElementSearchV2Input;
+};
+
+
 export type QueryTagsArgs = {
   filter?: InputMaybe<ElementTagsFilterInput>;
   skip?: Scalars['Int']['input'];
@@ -401,6 +440,12 @@ export type QueryWorkshopsArgs = {
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
   where?: InputMaybe<WorkshopsWhereInput>;
+};
+
+export type SimilarKeyword = {
+  __typename?: 'SimilarKeyword';
+  keyword: Scalars['String']['output'];
+  score: Scalars['Float']['output'];
 };
 
 export enum SortOrder {
@@ -500,8 +545,6 @@ export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime']['output'];
   deleted?: Maybe<Scalars['Boolean']['output']>;
-  /** Elements owned by this user. */
-  elements: Array<Element>;
   favoriteElements: Array<UserFavoriteElement>;
   id: Scalars['ID']['output'];
   /** Preferred language codes of the user. */

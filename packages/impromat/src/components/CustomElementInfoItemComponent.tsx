@@ -1,20 +1,15 @@
-import {
-  IonButton,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonRouterLink,
-} from "@ionic/react";
-import { brush, globe, pencil } from "ionicons/icons";
+import { IonIcon, IonItem, IonLabel, IonRouterLink } from "@ionic/react";
+import { Edit } from "@mui/icons-material";
+import { Button } from "@mui/material";
+import { brush, globe } from "ionicons/icons";
+import { Link } from "react-router-dom";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
-import {
-  routeLibraryEditCustomElement,
-  routeLibraryElement,
-} from "../routes/library-routes";
+import { routeLibraryEditCustomElement } from "../routes/library-routes";
+import { routeLibraryElement } from "../routes/shared-routes";
 import { COLOR_SHARED } from "../theme/theme-colors";
 
-const CustomElement_ElementFragment = graphql(`
+const CustomElement_Element = graphql(`
   fragment CustomElement_Element on Element {
     id
     name
@@ -23,7 +18,7 @@ const CustomElement_ElementFragment = graphql(`
 `);
 
 interface ContainerProps {
-  elementFragment: FragmentType<typeof CustomElement_ElementFragment>;
+  elementFragment: FragmentType<typeof CustomElement_Element>;
   workshopId?: string;
   showElementLink?: boolean;
 }
@@ -33,10 +28,7 @@ export const CustomElementInfoItemComponent: React.FC<ContainerProps> = ({
   workshopId,
   showElementLink,
 }) => {
-  const element = getFragmentData(
-    CustomElement_ElementFragment,
-    elementFragment,
-  );
+  const element = getFragmentData(CustomElement_Element, elementFragment);
   return (
     <>
       <IonItem lines="none">
@@ -52,18 +44,15 @@ export const CustomElementInfoItemComponent: React.FC<ContainerProps> = ({
             </>
           )}{" "}
           that you can{" "}
-          <IonButton
-            fill="outline"
+          <Button
+            variant="outlined"
             size="small"
-            className="ion-no-padding-vertical ion-no-margin"
-            routerLink={routeLibraryEditCustomElement({
-              elementId: element.id,
-              workshopId,
-            })}
+            component={Link}
+            to={routeLibraryEditCustomElement(element.id)}
+            startIcon={<Edit />}
           >
-            <IonIcon icon={pencil} slot="start"></IonIcon>
             edit here
-          </IonButton>
+          </Button>
         </IonLabel>
       </IonItem>
 

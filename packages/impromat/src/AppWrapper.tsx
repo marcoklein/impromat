@@ -20,6 +20,13 @@ import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
 import "./theme/colors.css";
 import "./theme/variables.css";
 
+// for MUI
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import { ThemeProvider, createTheme } from "@mui/material";
+
 export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
   const logger = useComponentLogger("AppWrapper");
   const onGraphqlError = useCallback(
@@ -30,11 +37,26 @@ export const AppWrapper: React.FC<PropsWithChildren> = ({ children }) => {
   );
   const graphqlClientRef = useRef(createCachedGraphqlClient(onGraphqlError));
 
+  let theme = createTheme({});
+
+  theme = createTheme({
+    palette: {
+      like: theme.palette.augmentColor({
+        color: {
+          main: "#FF5733",
+        },
+        name: "like",
+      }),
+    },
+  });
+
   return (
     <UrqlProvider value={graphqlClientRef.current}>
-      <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
-        {children}
-      </ErrorBoundary>
+      <ThemeProvider theme={theme}>
+        <ErrorBoundary FallbackComponent={ErrorFallbackPage}>
+          {children}
+        </ErrorBoundary>
+      </ThemeProvider>
     </UrqlProvider>
   );
 };
