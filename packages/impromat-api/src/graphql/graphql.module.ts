@@ -5,6 +5,7 @@ import { environment } from 'src/environment';
 import { AdminModule } from 'src/modules/admin/admin.module';
 import { DatabaseModule } from 'src/modules/database/database.module';
 import { ElementAIModule } from 'src/modules/element-ai/element-summary.module';
+import { ElementSearchModule } from 'src/modules/element-search/element-search.module';
 import { ElementModule } from 'src/modules/element/element.module';
 import { UserLikedModule } from 'src/modules/user-liked/user-liked.module';
 import { UserModule } from 'src/modules/user/user.module';
@@ -32,6 +33,7 @@ import { UserSessionService } from './services/user-session.service';
     AdminModule,
     DatabaseModule,
     ElementModule,
+    ElementSearchModule,
     ElementAIModule,
     UserModule,
     UserLikedModule,

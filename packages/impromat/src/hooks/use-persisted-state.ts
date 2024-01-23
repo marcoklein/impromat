@@ -24,6 +24,7 @@ export function usePersistedState<
   if (key) {
     key = `${prefix}${key}`;
   }
+
   const [state, setState] = useState<T>(() => {
     logger("key=%s: loading initial state", key);
     if (!key) return defaultValue;

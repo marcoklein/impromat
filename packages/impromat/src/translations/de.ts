@@ -15,22 +15,33 @@ export default {
     Section: "Abschnitt",
     Element: "Element",
     Elements: "Elemente",
+    save: "Speichern",
   },
-
+  BackButton: {
+    back: "Zurück",
+  },
   RootNavigation: {
     Home: "Startseite",
-    "Exercises & Games": "Übungen & Spiele",
+    "Exercises & Games": "Elemente",
     Workshops: "Workshops",
+    "My Space": "Mein Bereich",
+    Login: "Anmelden",
   },
   PrivacyPolicyPage: {
     switchToEnglishVersion: "Zur deutschen Version wechseln",
+  },
+  LoginPage: {
+    "sign in to access impromat":
+      "Melde dich an, um eigene Workshops und Elemente zu erstellen und zu teilen.",
+    "agree to privacy policy":
+      "Durch die Anmeldung stimmst du der <PrivacyPolicyLink>Datenschutzerklärung</PrivacyPolicyLink> zu. Deine Impro-Daten werden nicht mit Google geteilt und sicher auf einem Server in Deutschland gespeichert.",
+    learnMore: "Mehr erfahren",
   },
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
       "App für die Planung, Durchführung und das Teilen von Improtheater-Workshops.",
     "Access Impromat": "Gehe zum Impromat",
     Profile: "Profil",
-    "About the Project": "Über das Projekt",
     "Legal Notice": "Impressum",
   },
   HomeContent: {
@@ -72,6 +83,24 @@ export default {
       "Impromat und die Impro-Community leben von deinen Workshop- und Element-<b>Beiträgen</b>. Jede*r kann teilnehmen und sein Impro-Wissen teilen! <br></br>Wenn du <b>Feedback oder neue Ideen</b> hast, was Impromat tun könnte, lass es uns bitte per E-Mail an <MailadressLink>impromat@marcoklein.dev</MailadressLink> wissen oder besuche die <b>Über das Projekt</b>-Seite, um mehr zu erfahren.",
     AboutProject: "Über das Projekt",
   },
+  QueryErrorAlert: {
+    Retry: "Erneut versuchen",
+  },
+  MuiLibraryPage: {
+    "different-page":
+      "Diese Seite sieht anders aus, weil wir gerade unser App-Design überarbeiten.",
+    Retry: "Erneut versuchen",
+  },
+  MuiLibraryPageAppBar: {
+    searchPlaceholder: "Wonach suchst du?",
+    searchAriaLabel: "suche nach Elementen",
+  },
+  LibraryMenuDialog: {
+    en: "Englisch",
+    de: "Deutsch",
+    searchOptionsTitle: "Sucheinstellungen",
+    languageOfResults: "Sprache der Ergebnisse",
+  },
   LibraryPage: {
     "Keep filter expanded": "Filter ausgeklappt lassen",
     "No matching elements found.": "Keine passenden Elemente gefunden.",
@@ -97,14 +126,24 @@ export default {
     Like: "Favouriten",
     MyElement: "Meine Elemente",
   },
-  LibraryCreateCustomElementPage: {
+  LibraryCreateElementPage: {
+    "Create Custom Element": "Eigenes Element erstellen",
+    nameRequired: "Name ist erforderlich",
+  },
+  LibraryUpdateElementPage: {
+    "Edit Custom Element": "Eigenes Element bearbeiten",
+    nameRequired: "Name ist erforderlich",
+  },
+  LibraryElementEditForm: {
     "Select language": "Sprache auswählen",
     "Edit Custom Element": "Mein Element bearbeiten",
-    "Create Custom Element": "Eigenes Element erstellen",
-    "Name (required)": "Name (erforderlich)",
-    "Please enter a name": "Bitte gebe einen Namen für dein Element ein",
+    "Name (required)": "Name",
+    Tags: "Kategorien",
+    "Please enter a name": "Name des Elements",
     Content: "Inhalt",
-    "Language (required)": "Sprachauswahl",
+    "Language (required)": "Sprache des Elements",
+    en: "Englisch",
+    de: "Deutsch",
     CommunityElement: "Gemeinschafts-Element",
     CommunityElementNote:
       "Dies ist ein öffentliches Gemeinschafts-Element des Impromats. Es wird mir allen geteilt und kann von allen Impromat-Nutzenden bearbeitet werden.",
@@ -113,7 +152,7 @@ export default {
       "Veröffentliche dein Element als Gemeinschafts-Element innerhalb des Impromats, damit andere von deinen Ideen davon profitieren können. Veröffentlichte Elemente können von allen Impromat-Nutzenden angeschaut, gefunden und bearbeitet werden.",
     "Sharing cannot be undone.":
       "Die Veröffentlichung kann nicht rückgängig gemacht werden.",
-    CustomElementsAreUnique: "Eigene Elemente sind einzigartig",
+    elementsAreUnique: "Elemente sind einzigartig",
     CustomElementNote:
       "Speichern aktualisiert den Namen und alle inhaltlichen Änderungen für alle Workshops, in denen dieses Element verwendet wird. Falls du den Namen oder Inhalt nur für einen einzelnen Workshop anpassen willst, solltest du ein neues Element anlegen oder eine Notiz in deinem Workshop eintragen.",
 
@@ -130,7 +169,7 @@ export default {
     ImproveElement:
       "Willst du dieses Element verbessern? Du kannst es <EditingLink>hier bearbeiten</EditingLink>.",
     SimilarElements: "Ähnliche Elemente",
-    "AI generated": "Automatisch generierte Zusammenfassung",
+    "AI generated": "Generierte Zusammenfassung",
   },
   LicenseItemComponent: {
     "Based on": "Basiert auf",
@@ -141,28 +180,44 @@ export default {
     AddWorkshop: "Workshop hinzufügen",
     StartWorkshop: "Starte damit, deinen ersten Workshop zu erstellen:",
   },
-  "use-add-workshop-input-dialog": {
-    WorkshopName: "Workshop-Name",
-    NamePlaceholder: "Workshop-Name...",
-    NameMessage:
+  CreateWorkshopDialog: {
+    workshopDialogTitle: "Workshop erstellen",
+    namePlaceholder: "Workshop-Name...",
+    nameMessage:
       "Gib einen Namen für deinen Workshop ein (Du kannst ihn später noch ändern):",
-    EmptyNameMessage: "Bitte gib einen Namen für deinen Workshop ein.",
-    Create: "Erstellen",
+    emptyNameMessage: "Bitte gib einen Namen für deinen Workshop ein.",
+    create: "Erstellen",
+  },
+  LikeIconButton: {
+    removeLike: "Aus Favoriten entfernen",
+    addLike: "Zu Favoriten hinzufügen",
   },
   WorkshopPage: {
     Add: "Hinzufügen:",
-    RemoveLike: "Aus Favoriten entfernen",
-    AddLike: "ZU Favoriten hinzufügen",
-    UpdatingLike: "Favoriten werden aktualisiert",
     AddElement: "Füge Elemente hinzu",
     AddElementMessage:
       "Nutze das Feld unten rechts, um Elemente hinzuzufügen. Viel Spaß beim Workshop-Konzipieren!",
+  },
+  LibraryElementPage: {
+    Element: "Element",
+  },
+  AddToWorkshopSelectDialog: {
+    "Add to Workshop": "Zum Workshop hinzufügen",
+    "Select a workshop to add this element to.":
+      "Wähle einen Workshop aus, um dieses Element hinzuzufügen:",
+    "No workshops found.":
+      "Keine Workshops gefunden. Erstelle zuerst einen neuen Workshop.",
+    "Create new workshop": "Neuen Workshop erstellen",
   },
   AddToWorkshopDropdown: {
     AddToWorkshop: "Zum Workshop hinzufügen",
     SelectWorkshop: "Wähle einen Workshop aus",
   },
-  WorkshopElementPage: { AddNote: "Notiz hinzufügen" },
+  WorkshopElementPage: {},
+  WorkshopElementNote: {
+    note: "Notiz",
+    notePlaceholder: "Notiz hinzufügen",
+  },
   WorkshopsPage: {
     NewWorkshop: "Neuer Workshop",
     FilterNoWorkshops: "Die momentane Filterauswahl enthält keine Workshops.",
@@ -191,12 +246,6 @@ export default {
   WorkshopElementOptionsMenu: {
     RemoveElement: "Element aus dem Workshop entfernen?",
   },
-  WorkshopElementsHeaderComponent: {
-    Reorder: "Umsortieren",
-    ChangeOrder:
-      "Ändere die Reihenfolge der Abschnitte und Elemente über die Balken rechts.",
-    SaveOrder: "Sortierung speichern",
-  },
   ShareWorkshopModal: {
     ShareWorkshop: "Workshop teilen",
     AnyoneCanView: "Jede*r mit dem Link kann anschauen",
@@ -213,36 +262,39 @@ export default {
   AboutPage: {
     About: "Über das Projekt",
   },
+  MySpacePage: {
+    title: "Mein Impromat",
+    Creations: "Kreationen",
+    "My Elements": "Meine Elemente",
+    "My Workshops": "Meine Workshops",
+
+    Logout: "Abmelden",
+    LogoutMessage:
+      "Bist du sicher, dass du dich abmelden willst? Alle Impromat-Daten auf diesem Gerät werden gelöscht.",
+    "You have been logged out": "Du hast dich erfolgreich abgemeldet.",
+  },
+  LanguageSelect: {
+    "Display Language": "Anzeigesprache",
+    en: "Englisch",
+    de: "Deutsch",
+    showAdditionalLanguageContent: "Englische Inhalte anzeigen",
+    showAdditionalLanguageNote:
+      "Da es auch englische Übungen und Spiele gibt, kannst du auswählen, ob du die englischen Inhalte auch sehen willst.",
+  },
+  UserNameTextField: {
+    userNameOnlyLetters: "Bitte verwende nur Buchstaben, Zahlen, -, oder _.",
+    userNameIsPublic: "Dein Nutzername ist öffentlich sichtbar.",
+    userNameTooShort: "Bitte verwende mindestens 3 Zeichen.",
+    userNameTooLong: "Bitte verwende maximal 20 Zeichen.",
+    userNameChanged: "Speichere, um deinen Nutzernamen zu ändern.",
+    userName: "Nutzername",
+    endpointError: "Fehler beim Speichern. Bitte versuche es erneut.",
+  },
   AccountSignedIn: {
     "Display Name": "Anzeigename",
     "Change via menu on top right": "Ändere über das Menü oben rechts",
     Logout: "Abmelden",
     Profile: "Profil",
-  },
-  AccountOptionsMenu: {
-    InputMessage: "Bitte gebe einen Anzeigenamen ein.",
-    LetterUseMessage: "Bitte verwende nur Buchstaben, Zahlen, -, oder _.",
-    FailMessage:
-      "Die Änderung des Anzeigenamens ist fehlgeschlagen. Bitte prüfe deine Internetverbindung und versuche es dann erneut.",
-    ChangeUsername: "Anzeigenamen ändern",
-  },
-  AccountLanguageSection: {
-    "Display Language": "Anzeigesprache",
-    "Select Language": "Sprache auswählen",
-    English: "Englisch",
-    German: "Deutsch",
-    Save: "Speichern",
-    Cancel: "Abbrechen",
-    Language: "Sprache",
-    showAdditionalLanguageContent: "Auch englische Inhalte anzeigen",
-    showAdditionalLanguageNote:
-      "Da es auch englische Übungen und Spiele gibt, kannst du auswählen, ob du die englischen Inhalte auch sehen willst.",
-  },
-  "use-logout": {
-    Logout: "Abmelden",
-    LogoutMessage:
-      "Bist du sicher, dass du dich abmelden willst? Alle Impromat-Daten auf diesem Gerät werden gelöscht.",
-    "You have been logged out": "Du hast dich erfolgreich abgemeldet.",
   },
   NotFoundPage: {
     "Page does not exist": "Ups, diese Seite existiert nicht.",

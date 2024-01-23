@@ -1,33 +1,20 @@
-import {
-  IonButton,
-  IonButtons,
-  IonCard,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
-import { arrowBack, document, pencil } from "ionicons/icons";
-import React, { useCallback, useMemo } from "react";
-import ReactMarkdown from "react-markdown";
+import { ExpandMore } from "@mui/icons-material";
+import { Box, Container, Divider, IconButton } from "@mui/material";
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
-import { ElementComponent } from "../../components/ElementComponent";
-import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { IsLoggedIn } from "../../components/IsLoggedIn";
+import { PageScaffold } from "../../components/PageScaffold";
 import { graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { useInputDialog } from "../../hooks/use-input-dialog";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
-import { routeWorkshop } from "../../routes/shared-routes";
-import { useTranslation } from "react-i18next";
+import { ElementDetails } from "../library/ElementDetails";
+import { ElementLikeIconButton } from "../library/ElementLikeIconButton";
+import { WorkshopElementNote } from "./components/WorkshopElementNote";
 
-const WorkshopElementPageQuery = graphql(`
-  query WorkshopElementPage($id: ID!) {
+const WorkshopElementPage_Query = graphql(`
+  query WorkshopElementPage_Query($id: ID!) {
     workshopElement(id: $id) {
       id
       note
@@ -44,8 +31,10 @@ const WorkshopElementPageQuery = graphql(`
           id
         }
         isOwnerMe
+        ...ElementDetails_Element
         ...CustomElement_Element
         ...Element_Element
+        ...ElementLikeIconButton_Element
       }
       section {
         id
@@ -58,6 +47,9 @@ const WorkshopElementPageQuery = graphql(`
   }
 `);
 
+/**
+ * Previews an individual workshop element.
+ */
 export const WorkshopElementPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopElementPage");
   const { id: workshopId, partId: workshopElementId } = useParams<{
@@ -66,14 +58,13 @@ export const WorkshopElementPage: React.FC = () => {
   }>();
   const [workshopElementQueryResult, reexecuteWorkshopElementQueryResult] =
     useQuery({
-      query: WorkshopElementPageQuery,
+      query: WorkshopElementPage_Query,
       // TODO pass in workshop id
       variables: { id: workshopElementId },
     });
   const workshopElement = workshopElementQueryResult.data?.workshopElement;
   const basedOnElement = workshopElement?.basedOn;
-  const [presentInput] = useInputDialog();
-  const [, updateWorkshopElementNote] = useMutation(
+  const [, updateWorkshopElementNoteMutation] = useMutation(
     graphql(`
       mutation UpdateWorkshopElementNote($input: UpdateWorkshopInput!) {
         updateWorkshop(input: $input) {
@@ -94,9 +85,11 @@ export const WorkshopElementPage: React.FC = () => {
   useStateChangeLogger(basedOnElement, "basedOnElement", logger);
 
   const saveNotesChanges = useCallback(
-    (note: string) => {
+    (noteInput: string) => {
       if (!workshopElement) return;
-      updateWorkshopElementNote({
+      const note = noteInput.trim();
+      if (note === workshopElement.note) return;
+      return updateWorkshopElementNoteMutation({
         input: {
           id: workshopId,
           sections: {
@@ -110,98 +103,46 @@ export const WorkshopElementPage: React.FC = () => {
         },
       });
     },
-    [updateWorkshopElementNote, workshopElement, workshopId],
-  );
-
-  const onChangeNoteClick = () => {
-    if (!workshopElement) return;
-    presentInput({
-      header: "Note",
-      isMultiline: true,
-      onAccept: (text) => {
-        saveNotesChanges(text);
-      },
-      initialText: workshopElement.note ?? "",
-    });
-  };
-
-  const renderNote = useMemo(
-    () =>
-      (workshopElement &&
-        workshopElement.note &&
-        workshopElement.note.length > 0) ||
-      (workshopElement &&
-        !workshopElement.note?.length &&
-        !!workshopElement.section.workshop.canEdit),
-    [workshopElement],
+    [updateWorkshopElementNoteMutation, workshopElement, workshopId],
   );
 
   const { t } = useTranslation("WorkshopElementPage");
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton
-              routerLink={routeWorkshop(workshopId)}
-              routerDirection="back"
-            >
-              <IonIcon icon={arrowBack} slot="icon-only"></IonIcon>
-            </IonButton>
-          </IonButtons>
-          <IonTitle>{basedOnElement?.name}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent fullscreen>
-        <PageContentLoaderComponent
-          queryResult={workshopElementQueryResult}
-          reexecuteQuery={reexecuteWorkshopElementQueryResult}
-        >
-          {workshopElement && (
-            <IonList>
-              {renderNote && (
-                <IonCard>
-                  <IonItem lines="none">
-                    {workshopElement.note ? (
-                      <>
-                        <IonLabel className="ion-text-wrap">
-                          <ReactMarkdown>{workshopElement.note}</ReactMarkdown>
-                        </IonLabel>
-                        {workshopElement.section.workshop.canEdit && (
-                          <IonButtons>
-                            <IonButton onClick={() => onChangeNoteClick()}>
-                              <IonIcon size="small" icon={pencil}></IonIcon>
-                            </IonButton>
-                          </IonButtons>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {workshopElement.section.workshop.canEdit && (
-                          <IonButton
-                            fill="clear"
-                            onClick={onChangeNoteClick}
-                            color="primary"
-                          >
-                            <IonIcon icon={document} slot="start"></IonIcon>
-                            {t("AddNote")}
-                          </IonButton>
-                        )}
-                      </>
-                    )}
-                  </IonItem>
-                </IonCard>
-              )}
-
-              <ElementComponent
-                elementFragment={workshopElement.basedOn}
-              ></ElementComponent>
-            </IonList>
+    <PageScaffold
+      title={`Workshop Element ${
+        workshopElement && !workshopElement.section.workshop.canEdit
+          ? "(View)"
+          : ""
+      }`}
+      backButton
+      buttons={
+        <IsLoggedIn>
+          {workshopElement && workshopElement.section.workshop.canEdit && (
+            <ElementLikeIconButton elementFragment={workshopElement.basedOn} />
           )}
-        </PageContentLoaderComponent>
-      </IonContent>
-    </IonPage>
+        </IsLoggedIn>
+      }
+    >
+      <Box sx={{ overflowY: "auto", height: "100%" }}>
+        {workshopElement && (
+          <Container maxWidth="sm" sx={{ p: 0 }}>
+            {(workshopElement.section.workshop.canEdit ||
+              workshopElement.note?.length) && (
+              <>
+                <WorkshopElementNote
+                  note={workshopElement.note ?? ""}
+                  saveNotesChanges={saveNotesChanges}
+                />
+              </>
+            )}
+
+            <Box sx={{ p: 1 }}>
+              <ElementDetails elementFragment={workshopElement.basedOn} />
+            </Box>
+          </Container>
+        )}
+      </Box>
+    </PageScaffold>
   );
 };

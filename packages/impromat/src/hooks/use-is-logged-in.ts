@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQuery } from "urql";
+import { APP_LOCAL_STORAGE_PREFIX } from "../app-local-storage-prefix";
 import { graphql } from "../graphql-client";
+import { useLogger } from "./use-logger";
+import { usePersistedState } from "./use-persisted-state";
 
 const IsLoggedInQuery = graphql(`
   query IsLoggedIn {
@@ -14,27 +17,46 @@ export function useIsLoggedIn() {
   const [meQueryResult, retriggerLogInQuery] = useQuery({
     query: IsLoggedInQuery,
   });
-  // TODO store login cache in context?
-  const [cachedIsLoggedIn, setCachedIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn") === "1" ? true : false,
+  const [cachedIsLoggedIn, setCachedIsLoggedIn] = usePersistedState(
+    "isLoggedIn",
+    false,
+    APP_LOCAL_STORAGE_PREFIX,
   );
+  const logger = useLogger("useIsLoggedIn");
+
+  useEffect(() => {
+    // on logout the local resolver clears all storage keys
+    // so we need to check if the key is still there if a new query result is available
+    const storedValue =
+      localStorage.getItem(APP_LOCAL_STORAGE_PREFIX + "isLoggedIn") ?? false;
+    if (storedValue !== cachedIsLoggedIn) {
+      logger(
+        "cachedIsLoggedIn=%s: localStorage value changed to %s",
+        cachedIsLoggedIn,
+        storedValue,
+      );
+      setCachedIsLoggedIn(storedValue === "true");
+    }
+  }, [cachedIsLoggedIn, logger, meQueryResult, setCachedIsLoggedIn]);
 
   useEffect(() => {
     if (!meQueryResult.fetching) {
-      localStorage.setItem("isLoggedIn", meQueryResult.data?.me ? "1" : "0");
+      setCachedIsLoggedIn(!!meQueryResult.data?.me);
     }
     if (meQueryResult.error) {
-      console.log("Errors: ", meQueryResult.error.graphQLErrors);
+      logger(
+        "User is not logged in. Error: %j",
+        meQueryResult.error.graphQLErrors,
+      );
       if (
         meQueryResult.error.graphQLErrors.find(
           (e) => e.extensions.code === "FORBIDDEN",
         )
       ) {
-        localStorage.setItem("isLoggedIn", "0");
         setCachedIsLoggedIn(false);
       }
     }
-  }, [meQueryResult]);
+  }, [logger, meQueryResult, setCachedIsLoggedIn]);
 
   return {
     fetching: !cachedIsLoggedIn && meQueryResult.fetching,

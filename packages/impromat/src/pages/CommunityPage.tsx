@@ -15,7 +15,7 @@ import { ElementPreviewCard } from "../components/ElementPreviewCard";
 import { PageContentLoaderComponent } from "../components/PageContentLoaderComponent";
 import { getFragmentData, graphql } from "../graphql-client";
 import { TeaserGrid } from "./community/TeaserGrid";
-import { WorkshopPreviewCard } from "./workshop/components/WorkshopPreviewCard";
+import { WorkshopPreviewCard } from "./workshop/components/LegacyWorkshopPreviewCard";
 
 const CommunityPage_Workshop = graphql(`
   fragment CommunityPage_Workshop on Workshop {

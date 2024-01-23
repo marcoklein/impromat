@@ -1,7 +1,20 @@
-import { expect } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { DevPage } from "./dev-page.js";
 
 export class AccountDevPage extends DevPage {
+  readonly logoutLocator: Locator;
+  readonly logoutButtonLocator: Locator;
+  readonly loginTabLocator: Locator;
+  readonly mySpaceTabLocator: Locator;
+
+  constructor(page: Page) {
+    super(page);
+    this.logoutLocator = page.getByLabel("Logout");
+    this.logoutButtonLocator = page.getByRole("button", { name: "Logout" });
+    this.loginTabLocator = page.getByRole("link", { name: "Login" });
+    this.mySpaceTabLocator = page.getByRole("link", { name: "My Space" });
+  }
+
   async expectToBeSignedOut() {
     await expect(
       this.page.getByRole("heading", { name: "Sign In to Access Impromat" }),
@@ -9,25 +22,16 @@ export class AccountDevPage extends DevPage {
   }
 
   async goto() {
-    await this.page.goto("/nav/home/account");
+    await this.page.goto("/nav/my-space");
   }
 
   async login() {
-    await this.goto();
-    await this.page
-      .locator("#main")
-      .getByText("Google Sign In")
-      .last()
-      .click({ timeout: 30000 });
+    await this.page.locator("#main").getByText("Google Sign In").last().click();
   }
 
   async logout() {
     await this.goto();
-    const page = this.page;
-    await page.locator("ion-button").getByText("Logout").click();
-    await page
-      .locator("ion-alert")
-      .getByRole("button", { name: "Logout" })
-      .click();
+    await this.logoutLocator.click();
+    await this.logoutButtonLocator.click();
   }
 }
