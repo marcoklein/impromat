@@ -16,7 +16,7 @@ import {
 } from "../../../graphql-client";
 import { useUpdateWorkshopMutation } from "../../../hooks/use-update-workshop-mutation";
 import { routeWorkshopElement } from "../../../routes/shared-routes";
-import { LegacyWorkshopElementOptionsMenu } from "./LegacyWorkshopElementOptionsMenu";
+import { WorkshopElementOptionsMenu } from "./WorkshopElementOptionsMenu";
 
 const WorkshopElementItem_WorkshopElement = graphql(`
   fragment WorkshopElementItem_WorkshopElement on WorkshopElement {
@@ -111,12 +111,12 @@ export const WorkshopElementItem: React.FC<ContainerProps> = ({
               }}
             />
           </ListItemButton>
-          <LegacyWorkshopElementOptionsMenu
+          <WorkshopElementOptionsMenu
             disabled={isDragging}
             isOpen={isMenuOpen}
             setIsOpen={setIsMenuOpen}
             onRemoveClick={elementOnRemoveClick}
-          ></LegacyWorkshopElementOptionsMenu>
+          ></WorkshopElementOptionsMenu>
         </Box>
         <Divider variant="fullWidth" />
       </Stack>

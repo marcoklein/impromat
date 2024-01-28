@@ -1,16 +1,19 @@
-import { close, trash } from "ionicons/icons";
+import { Remove } from "@mui/icons-material";
+import {
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LegacyOptionsMenu } from "../../../components/LegacyOptionsMenu";
+import { ResponsiveOptions } from "../../../components/ResponsiveOptions";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { ConfirmDialog } from "./ConfirmationDialog";
 
 interface ContainerProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  /**
-   * Callback when the remove option is clicked.
-   */
   onRemoveClick: () => void;
   disabled?: boolean;
 }
@@ -18,7 +21,7 @@ interface ContainerProps {
 /**
  * Options menu for a workshop element (part of a workshop).
  */
-export const LegacyWorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
+export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
   setIsOpen,
   isOpen,
   onRemoveClick,
@@ -30,28 +33,26 @@ export const LegacyWorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
 
   return (
     <>
-      <LegacyOptionsMenu
-        disabled={disabled}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        header={t("Options", { ns: "common" })}
-        options={[
-          {
-            text: t("Remove", { ns: "common" }),
-            role: "destructive",
-            icon: trash,
-            handler: () => {
+      <ResponsiveOptions
+        title={t("Options", { ns: "common" })}
+        open={isOpen}
+        onOpenChange={setIsOpen}
+      >
+        <List disablePadding>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
               setIsRemoveAlertOpen(true);
-            },
-          },
-          {
-            text: t("Cancel", { ns: "common" }),
-            role: "cancel",
-            handler: () => {},
-            icon: close,
-          },
-        ]}
-      ></LegacyOptionsMenu>
+            }}
+          >
+            <ListItemIcon>
+              <Remove />
+            </ListItemIcon>
+            <ListItemText>{t("Remove", { ns: "common" })}</ListItemText>
+          </ListItemButton>
+        </List>
+      </ResponsiveOptions>
+
       <ConfirmDialog
         title={t("RemoveElement")}
         confirmText={t("Remove", { ns: "common" })}
