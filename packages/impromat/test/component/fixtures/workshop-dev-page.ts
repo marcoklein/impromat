@@ -14,7 +14,7 @@ export class WorkshopDevPage extends DevPage {
 
   constructor(page: Page) {
     super(page);
-    this.optionsLocator = page.getByTestId("menu-button");
+    this.optionsLocator = page.getByLabel("Options");
     this.addFirstElementLocator = page.getByRole("link", {
       name: "Add First Element",
     });
@@ -127,6 +127,13 @@ export class WorkshopDevPage extends DevPage {
     await page.getByRole("button", { name: "Save" }).click();
   }
 
+  async duplicate() {
+    const page = this.page;
+    await this.optionsLocator.click();
+    await page.getByRole("button", { name: "Duplicate" }).click();
+    await page.waitForURL(/\/workshop\/.*/);
+  }
+
   /**
    * Deletes the current workshop.
    */
@@ -134,10 +141,8 @@ export class WorkshopDevPage extends DevPage {
     const page = this.page;
     await this.optionsLocator.click();
     await page.getByRole("button", { name: "Delete" }).click();
-    await page
-      .locator("ion-alert")
-      .getByRole("button", { name: "Delete" })
-      .click();
+    await page.getByRole("button", { name: "Delete" }).click();
+
     await page.waitForURL("/nav/workshop");
   }
 

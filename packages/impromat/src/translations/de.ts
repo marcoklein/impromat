@@ -87,8 +87,6 @@ export default {
     Retry: "Erneut versuchen",
   },
   MuiLibraryPage: {
-    "different-page":
-      "Diese Seite sieht anders aus, weil wir gerade unser App-Design überarbeiten.",
     Retry: "Erneut versuchen",
   },
   MuiLibraryPageAppBar: {
@@ -232,9 +230,7 @@ export default {
     EnterDate: "Gebe ein Datum für deinen Workshop ein:",
     DatePlaceholder: "Datum...",
     Set: "Speichern",
-    DuplicateWorkshopName: "Neuer Workshop-Name",
-    EnterNameMessage: "Gebe einen Namen für den duplizierten Workshop ein:",
-    NamePlaceholder: "Workshop-Namen...",
+    duplicatePostfix: " (Kopie)",
     EnterWorkshopName: "Bitte wähle einen Namen für deinen Workshop.",
     Duplicated: '"{{workshopName}}" dupliziert',
     WorkshopDescription: "Beschreibung",

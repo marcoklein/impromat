@@ -9,7 +9,7 @@ interface ContainerProps {
   confirmText: string;
 }
 
-export const ConfirmationAlert: React.FC<ContainerProps> = ({
+export const LegacyConfirmationAlert: React.FC<ContainerProps> = ({
   isOpen,
   onOpenChange,
   onConfirm,

@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ReactNode, useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useBreakpoints } from "../hooks/use-breakpoints";
 
 interface ComponentProps {
@@ -18,12 +19,16 @@ interface ComponentProps {
   onOpenChange: (open: boolean) => void;
 }
 
+/**
+ * Displays a drawer on small screens and a popover on larger screens.
+ */
 export const ResponsiveOptions: React.FC<ComponentProps> = ({
   title,
   children,
   open,
   onOpenChange,
 }) => {
+  const { t } = useTranslation("ResponsiveOptions");
   const { sm } = useBreakpoints();
 
   const [internalAnchorElement, setInternalAnchorElement] =
@@ -37,12 +42,14 @@ export const ResponsiveOptions: React.FC<ComponentProps> = ({
   return (
     <>
       <IconButton
+        aria-label={t("Options", { ns: "common" })}
         onClick={(event) => {
           setInternalAnchorElement(event.currentTarget);
           onOpenChange(!open);
         }}
+        color="inherit"
       >
-        <MoreVert color="action" />
+        <MoreVert />
       </IconButton>
       {sm ? (
         <Drawer

@@ -1,10 +1,20 @@
-import { IonToast } from "@ionic/react";
-import { calendar, close, copy, create, pencil, trash } from "ionicons/icons";
+import {
+  ContentCopy,
+  Delete,
+  Description,
+  Edit,
+  Event,
+} from "@mui/icons-material";
+import {
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
-import { ConfirmationAlert } from "../../../components/ConfirmationAlert";
-import { LegacyOptionsMenu } from "../../../components/LegacyOptionsMenu";
+import { ResponsiveOptions } from "../../../components/ResponsiveOptions";
 import {
   FragmentType,
   getFragmentData,
@@ -16,6 +26,7 @@ import { useDuplicateWorkshopMutation } from "../../../hooks/use-duplicate-works
 import { useInputDialog } from "../../../hooks/use-input-dialog";
 import { useUpdateWorkshopMutation } from "../../../hooks/use-update-workshop-mutation";
 import { routeWorkshop, routeWorkshops } from "../../../routes/shared-routes";
+import { ConfirmDialog } from "./ConfirmationDialog";
 
 const WorkshopOptionsMenu_Workshop = graphql(`
   fragment WorkshopOptionsMenu_Workshop on Workshop {
@@ -30,8 +41,6 @@ interface ContainerProps {
   workshopFragment: FragmentType<typeof WorkshopOptionsMenu_Workshop>;
   goBackAfterDeletion?: boolean;
 }
-
-export interface Option {}
 
 /**
  * Options menu for manipulating a Workshop.
@@ -57,11 +66,6 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
 
   const [isWorkshopDeleteAlertOpen, setIsWorkshopDeleteAlertOpen] =
     useState(false);
-
-  const [duplicatedWorkshop, setDuplicatedWorkshop] = useState<{
-    id: string;
-    name: string;
-  }>();
 
   const changeWorkshopName = (newName: string) => {
     if (!workshop) return;
@@ -100,29 +104,32 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       },
     });
   };
-  const onDuplicateWorkshop = async () => {
+  const onDuplicateAndGotoWorkshop = async () => {
     if (!workshop) return;
-    presentInputDialog({
-      header: t("DuplicateWorkshopName"),
-      initialText: workshop.name,
-      message: t("EnterNameMessage"),
-      placeholder: t("NamePlaceholder"),
-      emptyInputMessage: t("EnterWorkshopName"),
-      buttonText: t("Duplicate", { ns: "common" }),
-      onAccept: async (newWorkshopName) => {
-        const { error, data } = await duplicateWorkshopMutation({
-          input: { workshopId: workshop.id, name: newWorkshopName },
-        });
-        const id = data?.duplicateWorkshop.id;
-        if (error || !id) {
-          return;
-        }
-        setDuplicatedWorkshop({ id: workshop.id, name: workshop.name });
-        logger("Adding new workshop with id %s", id);
-        const navigateTo = routeWorkshop(id);
-        history.replace(navigateTo);
-        logger("Navigating to %s", navigateTo);
+
+    const { error, data } = await duplicateWorkshopMutation({
+      input: {
+        workshopId: workshop.id,
+        name: `${workshop.name} ${t("duplicatePostfix")}`,
       },
+    });
+    const id = data?.duplicateWorkshop.id;
+    if (error || !id) {
+      return;
+    }
+    logger("Added new workshop with id %s", id);
+    const navigateTo = routeWorkshop(id);
+    logger("Navigating to %s", navigateTo);
+    history.push(navigateTo);
+  };
+
+  const onDeleteWorkshop = async () => {
+    logger("Deletion confirmed");
+    deleteWorkshopMutation({ id: workshop.id }).then(() => {
+      logger("Deleted workshop");
+      if (goBackAfterDeletion) {
+        history.push(routeWorkshops(), { direction: "back" });
+      }
     });
   };
 
@@ -150,88 +157,85 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
 
   return (
     <>
-      <LegacyOptionsMenu
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        header={t("Options", { ns: "common" })}
-        options={[
-          {
-            icon: calendar,
-            text: t("SetDate"),
-            handler: () => {
+      <ResponsiveOptions
+        title={t("Options", { ns: "common" })}
+        open={isOpen}
+        onOpenChange={setIsOpen}
+      >
+        <List disablePadding>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
               onSetWorkshopDate();
-            },
-          },
-          {
-            icon: copy,
-            text: t("Duplicate", { ns: "common" }),
-            handler: () => {
-              onDuplicateWorkshop();
-            },
-          },
-          {
-            icon: pencil,
-            text: t("Rename", { ns: "common" }),
-            handler: () => {
+            }}
+          >
+            <ListItemIcon>
+              <Event />
+            </ListItemIcon>
+            <ListItemText primary={t("SetDate")} />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
+              onDuplicateAndGotoWorkshop();
+            }}
+          >
+            <ListItemIcon>
+              <ContentCopy />
+            </ListItemIcon>
+            <ListItemText primary={t("Duplicate", { ns: "common" })} />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
               onRenameWorkshop();
-            },
-          },
-          {
-            icon: create,
-            text: workshop.description?.length
-              ? t("ChangeDescription")
-              : t("AddDescription"),
-            handler: () => {
+            }}
+          >
+            <ListItemIcon>
+              <Edit />
+            </ListItemIcon>
+            <ListItemText primary={t("Rename", { ns: "common" })} />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
               onChangeDescription();
-            },
-          },
-          {
-            text: t("Delete", { ns: "common" }),
-            role: "destructive",
-            icon: trash,
-            handler: () => {
+            }}
+          >
+            <ListItemIcon>
+              <Description />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                workshop.description?.length
+                  ? t("ChangeDescription")
+                  : t("AddDescription")
+              }
+            />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
               setIsWorkshopDeleteAlertOpen(true);
-            },
-          },
-          {
-            text: t("Cancel", { ns: "common" }),
-            role: "cancel",
-            handler: () => {},
-            icon: close,
-          },
-        ]}
-      ></LegacyOptionsMenu>
-      <ConfirmationAlert
-        header={t("DeleteWorkshop")}
+            }}
+          >
+            <ListItemIcon>
+              <Delete />
+            </ListItemIcon>
+            <ListItemText primary={t("Delete", { ns: "common" })} />
+          </ListItemButton>
+        </List>
+      </ResponsiveOptions>
+
+      <ConfirmDialog
+        title={t("DeleteWorkshop")}
         confirmText={t("Delete", { ns: "common" })}
-        isOpen={isWorkshopDeleteAlertOpen}
+        open={isWorkshopDeleteAlertOpen}
         onConfirm={() => {
-          logger("Deletion confirmed");
-          deleteWorkshopMutation({ id: workshop.id }).then(() => {
-            logger("Deleted workshop");
-            if (goBackAfterDeletion) {
-              history.push(routeWorkshops(), { direction: "back" });
-            }
-          });
+          onDeleteWorkshop();
         }}
-        onOpenChange={setIsWorkshopDeleteAlertOpen}
-      ></ConfirmationAlert>
-      <IonToast
-        isOpen={!!duplicatedWorkshop}
-        message={t("Duplicated", { workshopName: workshop.name })}
-        onDidDismiss={() => setDuplicatedWorkshop(undefined)}
-        buttons={[
-          {
-            text: t("Open", { ns: "common" }),
-            handler: () => history.push(routeWorkshop(duplicatedWorkshop!.id)),
-          },
-          {
-            role: "cancel",
-            icon: close,
-          },
-        ]}
-        duration={10000}
-      ></IonToast>
+        onClose={() => setIsWorkshopDeleteAlertOpen(false)}
+      />
     </>
   );
 };

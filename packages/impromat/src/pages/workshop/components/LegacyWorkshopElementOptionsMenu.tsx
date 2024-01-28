@@ -1,9 +1,9 @@
 import { close, trash } from "ionicons/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ConfirmationAlert } from "../../../components/ConfirmationAlert";
 import { LegacyOptionsMenu } from "../../../components/LegacyOptionsMenu";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { ConfirmDialog } from "./ConfirmationDialog";
 
 interface ContainerProps {
   isOpen: boolean;
@@ -52,16 +52,17 @@ export const LegacyWorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
           },
         ]}
       ></LegacyOptionsMenu>
-      <ConfirmationAlert
-        header={t("RemoveElement")}
+      <ConfirmDialog
+        title={t("RemoveElement")}
         confirmText={t("Remove", { ns: "common" })}
-        isOpen={isRemoveAlertOpen}
+        open={isRemoveAlertOpen}
         onConfirm={() => {
           logger("Removal confirmed");
           onRemoveClick();
+          setIsRemoveAlertOpen(false);
         }}
-        onOpenChange={setIsRemoveAlertOpen}
-      ></ConfirmationAlert>
+        onClose={() => setIsRemoveAlertOpen(false)}
+      ></ConfirmDialog>
     </>
   );
 };

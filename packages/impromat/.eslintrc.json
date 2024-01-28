@@ -1,6 +1,14 @@
 {
   "ignorePatterns": ["**/*.gen.ts"],
   "extends": ["react-app"],
+  "rules": {
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": ["@ionic/react", "ionicons", "**/Legacy*"]
+      }
+    ]
+  },
   "overrides": [
     {
       "files": ["test/**/*.ts", "src/**/*.test.ts", "src/**/*.test.tsx"],

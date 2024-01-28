@@ -85,7 +85,6 @@ export const MuiLibraryPage: React.FC = () => {
         menuDialogOpen={menuDialogOpen}
         setMenuDialogOpen={setMenuDialogOpen}
       ></MuiLibraryPageAppBar>
-      <NewFeatureInfo featureId="newUx" message={t("different-page")} />
       <QueryErrorAlert
         error={searchElementsQueryResult.error}
         onRetry={() => reexecuteSearchElementsQuery()}
