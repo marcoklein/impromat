@@ -93,11 +93,7 @@ export class WorkshopDevPage extends DevPage {
   async share() {
     const page = this.page;
     await page.getByRole("button", { name: "Share" }).click();
-    await page
-      .locator("ion-checkbox")
-      .filter({ hasText: "Anyone with the link can view" })
-      .getByRole("img")
-      .click();
+    await page.getByText("Anyone with the link can view").click();
     await page.getByRole("button", { name: "Copy workshop link" }).click();
   }
 

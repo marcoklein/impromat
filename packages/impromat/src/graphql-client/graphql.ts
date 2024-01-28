@@ -947,12 +947,12 @@ export type WorkshopsQueryQuery = { __typename?: 'Query', user?: { __typename?: 
       & { ' $fragmentRefs'?: { 'WorkshopFields_WorkshopFragment': WorkshopFields_WorkshopFragment } }
     )> } | null };
 
-export type ShareWorkshopModal_WorkshopFragment = { __typename?: 'Workshop', id: string, isPublic?: boolean | null, isListed: boolean } & { ' $fragmentName'?: 'ShareWorkshopModal_WorkshopFragment' };
-
 export type WorkshopPreviewItem_WorkshopFragment = (
   { __typename?: 'Workshop', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, description?: string | null, canEdit?: boolean | null, sections: Array<{ __typename?: 'WorkshopSection', id: string, name?: string | null, elements: Array<{ __typename?: 'WorkshopElement', id: string, basedOn: { __typename?: 'Element', id: string, name: string } }> }> }
   & { ' $fragmentRefs'?: { 'WorkshopInfoList_WorkshopFragment': WorkshopInfoList_WorkshopFragment;'WorkshopOptionsMenu_WorkshopFragment': WorkshopOptionsMenu_WorkshopFragment } }
 ) & { ' $fragmentName'?: 'WorkshopPreviewItem_WorkshopFragment' };
+
+export type ShareWorkshopModal_WorkshopFragment = { __typename?: 'Workshop', id: string, isPublic?: boolean | null, isListed: boolean } & { ' $fragmentName'?: 'ShareWorkshopModal_WorkshopFragment' };
 
 export type WorkshopContent_WorkshopFragment = { __typename?: 'Workshop', id: string, canEdit?: boolean | null, sections: Array<(
     { __typename?: 'WorkshopSection', id: string, name?: string | null, isCollapsed: boolean, elements: Array<(

@@ -29,7 +29,7 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeLibrary } from "../../routes/shared-routes";
-import { ShareWorkshopModal } from "./components/LegacyShareWorkshopModal";
+import { ShareWorkshopModal } from "./components/ShareWorkshopModal";
 import { TextFieldDialog } from "./components/TextFieldDialog";
 import { WorkshopContent } from "./components/WorkshopContent";
 import { WorkshopLikeIconButton } from "./components/WorkshopLikeButton";
