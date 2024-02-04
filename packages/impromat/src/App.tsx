@@ -7,7 +7,6 @@ import { ProtectedPage } from "./components/ProtectedPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LibraryCreateElementPage } from "./pages/library-create-custom-element/LibraryCreateElementPage";
 import { LibraryUpdateElementPage } from "./pages/library-create-custom-element/LibraryUpdateElementPage";
-import { ResponsiveMenu } from "./pages/navigation/ResponsiveMenu";
 import { RootNavigation } from "./pages/navigation/RootNavigation";
 import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
 import { WorkshopPage } from "./pages/workshop/WorkshopPage";
@@ -30,7 +29,6 @@ export const App: React.FC = () => {
   return (
     <IonApp>
       <BrowserRouter>
-        <ResponsiveMenu></ResponsiveMenu>
         <Box id="main" height="100%" display="flex" flexDirection="column">
           <Switch>
             <Redirect path={"/"} exact to={routeLibrary()}></Redirect>

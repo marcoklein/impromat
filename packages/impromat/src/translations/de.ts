@@ -40,7 +40,7 @@ export default {
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
       "App für die Planung, Durchführung und das Teilen von Improtheater-Workshops.",
-    "Access Impromat": "Gehe zum Impromat",
+    accessImpromat: "Öffne Übungen & Spiele",
     Profile: "Profil",
     "Legal Notice": "Impressum",
   },
@@ -98,6 +98,10 @@ export default {
     de: "Deutsch",
     searchOptionsTitle: "Sucheinstellungen",
     languageOfResults: "Sprache der Ergebnisse",
+  },
+  ElementDetails: {
+    createdByWithName: "Erstellt von {{name}}",
+    createdBy: "Erstellt von einem Impromat-Nutzenden",
   },
   LibraryPage: {
     "Keep filter expanded": "Filter ausgeklappt lassen",

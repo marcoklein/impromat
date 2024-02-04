@@ -1,7 +1,13 @@
-import { brush, eye, heart, search } from "ionicons/icons";
+import {
+  Attribution,
+  Brush,
+  Favorite,
+  Public,
+  Search,
+  Translate,
+} from "@mui/icons-material";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
-import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
 import { InfoListItem } from "./InfoListItem";
 
 const ElementInfoList_ElementSearchResult = graphql(`
@@ -55,41 +61,37 @@ export const ElementInfoList: React.FC<ContainerProps> = ({
       {searchResult && searchResult.score < 0.05 && (
         <InfoListItem
           displayText="high match"
-          ionicIcon={search}
-          color="primary"
+          icon={<Search color="primary" />}
         ></InfoListItem>
       )}
       {element.isFavorite && (
         <InfoListItem
           displayText="liked"
-          ionicIcon={heart}
-          color={COLOR_LIKE}
+          icon={<Favorite color="like" />}
         ></InfoListItem>
       )}
       {element.isOwnerMe && element.visibility === ElementVisibility.Public && (
         <InfoListItem
-          ionicIcon={eye}
-          color="tertiary"
+          icon={<Public color="secondary" />}
           displayText="public"
         ></InfoListItem>
       )}
 
       {element.isOwnerMe && (
         <InfoListItem
-          ionicIcon={brush}
-          color={COLOR_USER_CREATED}
+          icon={<Brush color="primary" />}
           displayText="my element"
         ></InfoListItem>
       )}
       {!!element.sourceName && !element.isOwnerMe && (
         <InfoListItem
-          tablerIcon="license"
+          icon={<Attribution />}
           displayText={element.sourceName}
         ></InfoListItem>
       )}
       {!!element.languageCode && (
         <InfoListItem
-          tablerIcon="language"
+          icon={<Translate />}
           displayText={element.languageCode.toUpperCase()}
         ></InfoListItem>
       )}

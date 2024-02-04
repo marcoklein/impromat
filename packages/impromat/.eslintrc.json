@@ -3,7 +3,7 @@
   "extends": ["react-app"],
   "rules": {
     "no-restricted-imports": [
-      "warn",
+      "error",
       {
         "patterns": ["@ionic/react", "ionicons", "**/Legacy*"]
       }

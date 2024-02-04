@@ -1,4 +1,4 @@
-import { IonSpinner } from "@ionic/react";
+import { CircularProgress } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   GridItemContent,
@@ -178,8 +178,7 @@ export const VirtualCardGrid = <ItemData, Context>({
                 justifyContent: "center",
               }}
             >
-              <IonSpinner className="ion-margin-end"></IonSpinner> Don't look at
-              me.
+              <CircularProgress />
             </div>
           ) : (
             <></>
@@ -195,7 +194,7 @@ export const VirtualCardGrid = <ItemData, Context>({
             <LoadingCard></LoadingCard>
           </div>
         ),
-        Header: () => headerElement,
+        Header: () => headerElement || null,
       }}
       itemContent={itemContent}
       scrollSeekConfiguration={{

@@ -1,6 +1,5 @@
-import { IonButton, IonIcon } from "@ionic/react";
-import { Box, Fab } from "@mui/material";
-import { filter } from "ionicons/icons";
+import { Filter } from "@mui/icons-material";
+import { Box, Button, Fab } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
@@ -14,8 +13,8 @@ import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { CreateWorkshopDialog } from "../library/CreateWorkshopDialog";
-import { LegacyWorkshopCreateFirstComponent } from "./components/LegacyWorkshopCreateFirstComponent";
-import { WorkshopPreviewCard } from "./components/LegacyWorkshopPreviewCard";
+import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
+import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -139,8 +138,7 @@ export const WorkshopsPage: React.FC = () => {
           >
             <div>
               <p>{t("FilterNoWorkshops")}</p>
-              <IonButton
-                expand="full"
+              <Button
                 onClick={() => {
                   setUserWorkshopsFilterInput({
                     liked: true,
@@ -148,16 +146,16 @@ export const WorkshopsPage: React.FC = () => {
                     isPublic: true,
                   });
                 }}
+                startIcon={<Filter />}
               >
-                <IonIcon slot="start" icon={filter}></IonIcon>
                 {t("ClearFilters")}
-              </IonButton>
+              </Button>
             </div>
           </div>
         ) : (
-          <LegacyWorkshopCreateFirstComponent
+          <WorkshopCreateFirstComponent
             onCreateWorkshopClick={() => setIsCreateWorkshopDialogOpen(true)}
-          ></LegacyWorkshopCreateFirstComponent>
+          ></WorkshopCreateFirstComponent>
         )}
         <CreateWorkshopDialog
           open={isCreateWorkshopDialogOpen}

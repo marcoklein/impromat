@@ -1,12 +1,12 @@
-import { IonButton, IonIcon } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { Add } from "@mui/icons-material";
+import { Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 interface ContainerProps {
   onCreateWorkshopClick: () => void;
 }
 
-export const LegacyWorkshopCreateFirstComponent: React.FC<ContainerProps> = ({
+export const WorkshopCreateFirstComponent: React.FC<ContainerProps> = ({
   onCreateWorkshopClick,
 }) => {
   const { t } = useTranslation("WorkshopsCreateFirstComponent");
@@ -22,10 +22,9 @@ export const LegacyWorkshopCreateFirstComponent: React.FC<ContainerProps> = ({
       }}
     >
       <p>{t("StartWorkshop")}</p>
-      <IonButton expand="full" onClick={() => onCreateWorkshopClick()}>
-        <IonIcon slot="start" icon={add}></IonIcon>
+      <Button onClick={() => onCreateWorkshopClick()} startIcon={<Add />}>
         {t("AddWorkshop")}
-      </IonButton>
+      </Button>
     </div>
   );
 };

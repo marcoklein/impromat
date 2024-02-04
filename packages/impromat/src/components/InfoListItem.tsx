@@ -1,12 +1,11 @@
-import { PropsWithChildren } from "react";
+import { Chip } from "@mui/material";
 import { Icon } from "./Icon";
-import { IonBadge } from "@ionic/react";
 
-interface ContainerProps extends PropsWithChildren {
-  tablerIcon?: string;
-  ionicIcon?: string;
+interface ContainerProps {
+  icon?: JSX.Element;
   color?: string;
   displayText: string;
+  tablerIcon?: string;
   /**
    * Display options for extra small screens.
    */
@@ -21,34 +20,29 @@ interface ContainerProps extends PropsWithChildren {
  */
 export const InfoListItem: React.FC<ContainerProps> = ({
   displayText,
-  children,
   color,
-  ionicIcon,
   tablerIcon,
+  icon,
   xs,
 }) => {
   return (
-    <IonBadge color="light">
-      <div
-        style={{
-          whiteSpace: "nowrap",
-          display: "flex",
-        }}
-      >
-        <Icon
-          className={xs?.hideIcon === true ? "ion-hide-sm-down" : ""}
-          tablerIcon={tablerIcon}
-          icon={ionicIcon}
-          color={color}
-        ></Icon>
-        <span
-          style={{ paddingLeft: displayText ? "0.1rem" : undefined }}
-          className={xs?.hideText === true ? "ion-hide-sm-down" : ""}
-        >
-          {displayText}
-        </span>
-        {children}
-      </div>
-    </IonBadge>
+    <Chip
+      sx={{ mr: 1, borderStyle: "none" }}
+      color="default"
+      variant="outlined"
+      size="small"
+      icon={
+        tablerIcon ? (
+          <Icon
+            className={xs?.hideIcon === true ? "ion-hide-sm-down" : ""}
+            color={color}
+            tablerIcon={tablerIcon}
+          ></Icon>
+        ) : (
+          icon
+        )
+      }
+      label={displayText}
+    ></Chip>
   );
 };

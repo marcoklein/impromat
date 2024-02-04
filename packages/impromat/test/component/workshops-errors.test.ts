@@ -1,5 +1,4 @@
 import { expect } from "@playwright/test";
-import { randomUUID } from "crypto";
 import {
   blockImpromatApiRequests,
   unblockImpromatApiRequests,

@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
+import { DatePickerDialog } from "../../../components/DatePickerDialog";
 import { ResponsiveOptions } from "../../../components/ResponsiveOptions";
 import {
   FragmentType,
@@ -23,10 +24,10 @@ import {
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useDeleteWorkshopMutation } from "../../../hooks/use-delete-workshop-mutation";
 import { useDuplicateWorkshopMutation } from "../../../hooks/use-duplicate-workshop-mutation";
-import { useInputDialog } from "../../../hooks/use-input-dialog";
 import { useUpdateWorkshopMutation } from "../../../hooks/use-update-workshop-mutation";
 import { routeWorkshop, routeWorkshops } from "../../../routes/shared-routes";
 import { ConfirmDialog } from "./ConfirmationDialog";
+import { TextFieldDialog } from "./TextFieldDialog";
 
 const WorkshopOptionsMenu_Workshop = graphql(`
   fragment WorkshopOptionsMenu_Workshop on Workshop {
@@ -59,7 +60,6 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
 
   const history = useHistory();
 
-  const [presentInputDialog] = useInputDialog();
   const [, deleteWorkshopMutation] = useDeleteWorkshopMutation();
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const [, duplicateWorkshopMutation] = useDuplicateWorkshopMutation();
@@ -79,31 +79,6 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   };
   const { t } = useTranslation("WorkshopOptionsMenu");
 
-  const onSetWorkshopDate = async () => {
-    if (!workshop) return;
-    presentInputDialog({
-      header: t("SetDate"),
-      initialText: workshop.dateOfWorkshop
-        ? new Date(workshop.dateOfWorkshop).toISOString().slice(0, 10)
-        : // ? new Date(workshop.dateOfWorkshop).toLocaleDateString()
-          "",
-      message: t("EnterDate"),
-      placeholder: t("DatePlaceholder"),
-      // emptyInputMessage: "Please enter a date for your workshop.",
-      buttonText: t("Set"),
-      inputType: "date",
-      onAccept: async (date) => {
-        logger("Setting date of workshop to %s", date);
-        const { error } = await updateWorkshopMutation({
-          input: { id: workshop.id, dateOfWorkshop: date.length ? date : null },
-        });
-        if (error) {
-          logger("Error setting date of workshop: %s", error.message);
-          return;
-        }
-      },
-    });
-  };
   const onDuplicateAndGotoWorkshop = async () => {
     if (!workshop) return;
 
@@ -133,27 +108,26 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
     });
   };
 
-  const onChangeDescription = () => {
-    if (!workshop) return;
-    presentInputDialog({
-      initialText: workshop.description ?? "",
-      isMultiline: true,
-      header: t("WorkshopDescription"),
-      onAccept: (text) => changeWorkshopDescription(text),
+  const onSaveWorkshopDate = async (date: string) => {
+    logger("Setting date of workshop to %s", date);
+    const { error } = await updateWorkshopMutation({
+      input: {
+        id: workshop.id,
+        dateOfWorkshop: date.length ? date : null,
+      },
     });
-    logger("Showing change description dialog");
+    if (error) {
+      logger("Error setting date of workshop: %s", error.message);
+      return;
+    }
   };
 
-  const onRenameWorkshop = () => {
-    if (!workshop) return;
-    presentInputDialog({
-      header: t("Rename", { ns: "common" }),
-      initialText: workshop.name,
-      emptyInputMessage: t("TypeName"),
-      onAccept: (text) => changeWorkshopName(text),
-    });
-    logger("Showing rename Workshop dialog");
-  };
+  const [isChangeDescriptionDialogOpen, setIsChangeDescriptionDialogOpen] =
+    useState(false);
+  const [isRenameWorkshopDialogOpen, setIsRenameWorkshopDialogOpen] =
+    useState(false);
+  const [isSetWorkshopDateDialogOpen, setIsSetWorkshopDateDialogOpen] =
+    useState(false);
 
   return (
     <>
@@ -166,7 +140,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           <ListItemButton
             onClick={() => {
               setIsOpen(false);
-              onSetWorkshopDate();
+              setIsSetWorkshopDateDialogOpen(true);
             }}
           >
             <ListItemIcon>
@@ -188,7 +162,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           <ListItemButton
             onClick={() => {
               setIsOpen(false);
-              onRenameWorkshop();
+              setIsRenameWorkshopDialogOpen(true);
             }}
           >
             <ListItemIcon>
@@ -199,7 +173,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           <ListItemButton
             onClick={() => {
               setIsOpen(false);
-              onChangeDescription();
+              setIsChangeDescriptionDialogOpen(true);
             }}
           >
             <ListItemIcon>
@@ -235,6 +209,31 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           onDeleteWorkshop();
         }}
         onClose={() => setIsWorkshopDeleteAlertOpen(false)}
+      />
+      <DatePickerDialog
+        title={t("SetDate")}
+        isOpen={isSetWorkshopDateDialogOpen}
+        onClose={() => setIsSetWorkshopDateDialogOpen(false)}
+        initialValue={workshop.dateOfWorkshop ?? ""}
+        onSave={onSaveWorkshopDate}
+      />
+      <TextFieldDialog
+        title={t("Rename", { ns: "common" })}
+        handleClose={() => setIsRenameWorkshopDialogOpen(false)}
+        open={isRenameWorkshopDialogOpen}
+        handleSave={changeWorkshopName}
+        initialValue={workshop.name}
+      />
+      <TextFieldDialog
+        title={t("ChangeDescription")}
+        handleClose={() => setIsChangeDescriptionDialogOpen(false)}
+        open={isChangeDescriptionDialogOpen}
+        handleSave={changeWorkshopDescription}
+        initialValue={workshop.description ?? ""}
+        TextFieldProps={{
+          multiline: true,
+          rows: 3,
+        }}
       />
     </>
   );

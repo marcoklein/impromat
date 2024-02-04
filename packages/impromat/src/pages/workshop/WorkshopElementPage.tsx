@@ -33,7 +33,6 @@ const WorkshopElementPage_Query = graphql(`
         isOwnerMe
         ...ElementDetails_Element
         ...CustomElement_Element
-        ...Element_Element
         ...ElementLikeIconButton_Element
       }
       section {

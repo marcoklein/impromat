@@ -24,4 +24,9 @@ declare global {
       like: true;
     }
   }
+  declare module "@mui/material/SvgIcon" {
+    interface SvgIconPropsColorOverrides {
+      like: true;
+    }
+  }
 }

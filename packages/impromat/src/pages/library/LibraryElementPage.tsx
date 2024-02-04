@@ -115,13 +115,11 @@ export const LibraryElementPage: React.FC = () => {
             handleClose={() => setIsAddToWorkshopDialogOpen(false)}
           ></AddToWorkshopSelectDialog>
         </IsLoggedIn>
-        <Box maxWidth="sm" sx={{ overflow: "auto" }}>
-          {element && (
-            <Container maxWidth="sm" sx={{ py: 1 }}>
-              <ElementDetails elementFragment={element}></ElementDetails>
-            </Container>
-          )}
-        </Box>
+        {element && (
+          <Container maxWidth="sm" sx={{ py: 1 }}>
+            <ElementDetails elementFragment={element}></ElementDetails>
+          </Container>
+        )}
       </Box>
     </PageScaffold>
   );

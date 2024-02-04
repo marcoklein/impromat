@@ -41,7 +41,7 @@ export default {
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
       "App for planning, giving and sharing improvisational theatre workshops.",
-    "Access Impromat": "Access Impromat",
+    accessImpromat: "Browse exercises and games",
     Profile: "Profile",
     "Legal Notice": "Legal Notice",
   },
@@ -104,6 +104,10 @@ export default {
     de: "German",
     searchOptionsTitle: "Search Options",
     languageOfResults: "Language of Results",
+  },
+  ElementDetails: {
+    createdByWithName: "Created by {{name}}",
+    createdBy: "Created by a user in impromat",
   },
   LibraryPage: {
     "Keep filter expanded": "Keep filters expanded",
