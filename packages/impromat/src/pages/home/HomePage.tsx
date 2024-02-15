@@ -10,15 +10,15 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { ImpromatHero } from "../components/ImpromatHero";
-import { environment } from "../environment";
-import { useIsLoggedIn } from "../hooks/use-is-logged-in";
+import { ImpromatHero } from "../../components/ImpromatHero";
+import { environment } from "../../environment";
+import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import {
   routeLegal,
   routeLibrary,
   routePrivacyPolicy,
-} from "../routes/shared-routes";
-import { HomeContent } from "./home/HomeContent";
+} from "../../routes/shared-routes";
+import { HomeContent } from "./HomeContent";
 
 export const HomePage: React.FC = () => {
   const { isLoggedIn } = useIsLoggedIn();

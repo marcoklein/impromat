@@ -1,11 +1,10 @@
-import { IonButton, IonContent } from "@ionic/react";
+import { Button, Container } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { LegacyPageScaffold } from "../components/LegacyPageScaffold";
+import { PageScaffold } from "../components/PageScaffold";
 import { privacyPolicyMarkdownDe } from "../markdown/privacy-policy.de.md.gen";
 import { privacyPolicyMarkdownEn } from "../markdown/privacy-policy.en.md.gen";
-import { routeHome } from "../routes/shared-routes";
 
 export const PrivacyPolicyPage: React.FC = () => {
   const { t, i18n } = useTranslation("PrivacyPolicyPage");
@@ -15,29 +14,25 @@ export const PrivacyPolicyPage: React.FC = () => {
   );
 
   return (
-    <LegacyPageScaffold
-      title={t("Privacy Policy", { ns: "common" })}
-      customContentWrapper
-      defaultBackHref={routeHome()}
-    >
-      <IonContent className="ion-padding">
+    <PageScaffold title={t("Privacy Policy", { ns: "common" })} backButton>
+      <Container maxWidth="md" sx={{ overflow: "auto" }}>
         {language === "en" && (
           <>
-            <IonButton onClick={() => setLanguage("de")} fill="outline">
+            <Button onClick={() => setLanguage("de")} variant="outlined">
               Switch to German Version
-            </IonButton>
+            </Button>
             <ReactMarkdown>{privacyPolicyMarkdownEn}</ReactMarkdown>
           </>
         )}
         {language === "de" && (
           <>
-            <IonButton onClick={() => setLanguage("en")} fill="outline">
+            <Button onClick={() => setLanguage("en")} variant="outlined">
               {t("switchToEnglishVersion")}
-            </IonButton>
+            </Button>
             <ReactMarkdown>{privacyPolicyMarkdownDe}</ReactMarkdown>
           </>
         )}
-      </IonContent>
-    </LegacyPageScaffold>
+      </Container>
+    </PageScaffold>
   );
 };

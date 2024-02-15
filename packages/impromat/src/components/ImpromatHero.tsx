@@ -18,7 +18,6 @@ export const ImpromatHero: React.FC<ComponentProps> = ({
   return (
     <Box
       sx={{
-        minHeight: "50%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

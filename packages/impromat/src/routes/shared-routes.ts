@@ -33,6 +33,3 @@ export const routeLibraryElement = (
 
 // not signed in
 export const routeLogin = () => routeMySpace();
-
-// unused routes
-export const routeCommunity = () => `${routeRootNavigation()}/community`;

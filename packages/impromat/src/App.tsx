@@ -1,4 +1,3 @@
-import { IonApp } from "@ionic/react";
 import { Box } from "@mui/material";
 import React from "react";
 import { Redirect, Route } from "react-router";
@@ -27,7 +26,21 @@ export const App: React.FC = () => {
   useLanguageUpdateEffect();
 
   return (
-    <IonApp>
+    <Box
+      sx={{
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        display: "flex",
+        position: "absolute",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        contain: "layout size style",
+        overflow: "hidden",
+        zIndex: 0,
+      }}
+    >
       <BrowserRouter>
         <Box id="main" height="100%" display="flex" flexDirection="column">
           <Switch>
@@ -61,10 +74,13 @@ export const App: React.FC = () => {
               to={routeHome()}
               exact
             ></Redirect>
-            <Route component={NotFoundPage}></Route>
+            <Route>
+              <NotFoundPage />
+            </Route>
+            {/* <Route component={NotFoundPage}></Route> */}
           </Switch>
         </Box>
       </BrowserRouter>
-    </IonApp>
+    </Box>
   );
 };
