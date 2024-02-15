@@ -132,11 +132,10 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
       )}
       {element.markdown && (
         <>
-          <Box>
+          <Typography>
             <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
-          </Box>
+          </Typography>
           <Divider />
-          {/* TODO show edit button if there is no markdown */}
         </>
       )}
 

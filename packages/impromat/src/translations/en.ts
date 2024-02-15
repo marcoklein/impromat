@@ -268,6 +268,7 @@ export default {
     Creations: "Kreationen",
     "My Elements": "My Elements",
     "My Workshops": "My Workshops",
+    profile: "Profile",
 
     Logout: "Logout",
     LogoutMessage:

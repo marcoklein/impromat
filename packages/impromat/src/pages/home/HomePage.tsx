@@ -58,10 +58,10 @@ export const HomePage: React.FC = () => {
       <Container maxWidth="md" sx={{ p: 0 }}>
         <List>
           <ListItemButton component={NavLink} to={routeLegal()}>
-            {t("Legal Notice")}
+            <Typography>{t("Legal Notice")}</Typography>
           </ListItemButton>
           <ListItemButton component={NavLink} to={routePrivacyPolicy()}>
-            {t("Privacy Policy", { ns: "common" })}
+            <Typography>{t("Privacy Policy", { ns: "common" })}</Typography>
           </ListItemButton>
           <ListItem>
             <Typography variant="caption">v{environment.VERSION}</Typography>

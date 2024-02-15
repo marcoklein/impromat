@@ -1,4 +1,3 @@
-import { setupIonicReact } from "@ionic/react";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import React from "react";
@@ -64,9 +63,6 @@ i18n
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 const logger = rootLogger.extend("reportWebVitals");
 reportWebVitals(logger);
-
-// as we are currently transitioning to MUI, we use the material design theme
-setupIonicReact({ mode: "md" });
 
 const container = document.getElementById("root");
 const root = createRoot(container!);

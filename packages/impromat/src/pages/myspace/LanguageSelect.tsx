@@ -107,7 +107,7 @@ export const LanguageSelect: React.FC<ComponentProps> = ({
         {updateState === "error" && <Error color="error" />}
         {updateState === "loading" && <CircularProgress size={24} />}
       </ListItemIcon>
-      <Box>
+      <Box sx={{ width: "100%" }}>
         <FormControl fullWidth>
           {availableLanguageCodes !== undefined && (
             <>

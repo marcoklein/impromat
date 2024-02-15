@@ -40,7 +40,7 @@ const WorkshopsQuery = graphql(`
 export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
 
-  const { myUserId } = useIsLoggedIn();
+  const { myUserId, isLoggedIn } = useIsLoggedIn();
 
   const defaultFilterInput: Required<UserWorkshopsFilterInput> = useMemo(
     () => ({
@@ -94,17 +94,31 @@ export const WorkshopsPage: React.FC = () => {
 
   return (
     <Box sx={{ height: "100%", position: "relative" }}>
-      <Fab
-        color="primary"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        onClick={() => {
-          setIsCreateWorkshopDialogOpen(true);
-        }}
-        aria-label={t("NewWorkshop")}
-      >
-        <AddNewWorkshopIcon />
-      </Fab>
-
+      {isLoggedIn && (
+        <Fab
+          color="primary"
+          sx={{ position: "absolute", bottom: 16, right: 16 }}
+          onClick={() => {
+            setIsCreateWorkshopDialogOpen(true);
+          }}
+          aria-label={t("NewWorkshop")}
+        >
+          <AddNewWorkshopIcon />
+        </Fab>
+      )}
+      {!isLoggedIn && (
+        <div
+          style={{
+            minHeight: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {/* TODO Provide a nicer message */}
+          Not Logged In
+        </div>
+      )}
       <PageContentLoaderComponent
         noRefresher={!gridIsOnTop}
         queryResult={workshopsQueryResult}
