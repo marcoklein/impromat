@@ -49,7 +49,7 @@ export const LibraryCreateElementPage: React.FC = () => {
     setTags([]);
   }, [languageCode]);
 
-  const [queryResult, reexecuteQuery] = useQuery({
+  const [queryResult] = useQuery({
     query: LibraryCreateElementPage_Query,
     variables: {
       tagsInput: {

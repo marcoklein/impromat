@@ -1,19 +1,19 @@
-import ReactMarkdown from "react-markdown";
-import { LegacyPageScaffold } from "../components/LegacyPageScaffold";
-import { aboutMarkdownEn } from "../markdown/about.en.md.gen";
-import { aboutMarkdownDe } from "../markdown/about.de.md.gen";
+import { Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { routeHome } from "../routes/shared-routes";
+import ReactMarkdown from "react-markdown";
+import { PageScaffold } from "../components/PageScaffold";
+import { aboutMarkdownDe } from "../markdown/about.de.md.gen";
+import { aboutMarkdownEn } from "../markdown/about.en.md.gen";
 
 export const AboutPage: React.FC = () => {
   const { t, i18n } = useTranslation("AboutPage");
   return (
-    <LegacyPageScaffold title={t("About")} defaultBackHref={routeHome()}>
-      <div className="ion-padding">
+    <PageScaffold title={t("About")} backButton>
+      <Container maxWidth="md" sx={{ overflow: "auto" }}>
         <ReactMarkdown>
           {i18n.language === "de" ? aboutMarkdownDe : aboutMarkdownEn}
         </ReactMarkdown>
-      </div>
-    </LegacyPageScaffold>
+      </Container>
+    </PageScaffold>
   );
 };

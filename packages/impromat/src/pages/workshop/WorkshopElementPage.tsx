@@ -1,7 +1,5 @@
-import { ExpandMore } from "@mui/icons-material";
-import { Box, Container, Divider, IconButton } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { useCallback } from "react";
-import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
@@ -33,7 +31,6 @@ const WorkshopElementPage_Query = graphql(`
         isOwnerMe
         ...ElementDetails_Element
         ...CustomElement_Element
-        ...Element_Element
         ...ElementLikeIconButton_Element
       }
       section {
@@ -56,12 +53,11 @@ export const WorkshopElementPage: React.FC = () => {
     id: string;
     partId: string;
   }>();
-  const [workshopElementQueryResult, reexecuteWorkshopElementQueryResult] =
-    useQuery({
-      query: WorkshopElementPage_Query,
-      // TODO pass in workshop id
-      variables: { id: workshopElementId },
-    });
+  const [workshopElementQueryResult] = useQuery({
+    query: WorkshopElementPage_Query,
+    // TODO pass in workshop id
+    variables: { id: workshopElementId },
+  });
   const workshopElement = workshopElementQueryResult.data?.workshopElement;
   const basedOnElement = workshopElement?.basedOn;
   const [, updateWorkshopElementNoteMutation] = useMutation(
@@ -105,8 +101,6 @@ export const WorkshopElementPage: React.FC = () => {
     },
     [updateWorkshopElementNoteMutation, workshopElement, workshopId],
   );
-
-  const { t } = useTranslation("WorkshopElementPage");
 
   return (
     <PageScaffold

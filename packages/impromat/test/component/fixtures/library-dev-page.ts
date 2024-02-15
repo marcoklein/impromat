@@ -48,14 +48,14 @@ export class LibraryDevPage extends DevPage {
     const page = this.page;
     if (name) {
       await page
-        .locator("ion-card", {
+        .locator("a", {
           hasText: name,
         })
         .first()
         .click();
     } else {
       await page.waitForTimeout(500);
-      await page.locator("ion-card").first().click();
+      await page.locator("a").first().click();
     }
   }
 

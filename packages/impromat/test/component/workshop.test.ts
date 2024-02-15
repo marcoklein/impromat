@@ -4,7 +4,7 @@ import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Workshop Page", () => {
   pageTest(
-    "should rename a new workshop",
+    "standard flow",
     async ({ page, auth, workshopPage, workshopsPage }) => {
       // given
       await auth.loginAsRandomUser();
@@ -40,6 +40,16 @@ pageTest.describe("Workshop Page", () => {
         await workshopPage.addDescription(description);
         // then
         await expect(page.getByText(description)).toBeVisible();
+      });
+
+      await pageTest.step("should duplicate the workshop", async () => {
+        // given
+        const copiedWorkshopName = workshopName + " (copy)";
+        // when
+        await page.waitForTimeout(200);
+        await workshopPage.duplicate();
+        // then
+        await expect(page.getByText(copiedWorkshopName)).toBeVisible();
       });
 
       await pageTest.step("should delete the workshop", async () => {

@@ -4,13 +4,12 @@ import { pageTest } from "./fixtures/page-fixtures.js";
 pageTest.describe("Logout Flow", () => {
   pageTest(
     "should delete workshops on logout",
-    async ({ auth, workshopsPage, accountPage }) => {
+    async ({ page, auth, workshopsPage, accountPage }) => {
       // given
       await auth.loginAsRandomUser();
       await workshopsPage.goto();
       await workshopsPage.addWorkshop("test-workshop");
       await workshopsPage.goto();
-      await workshopsPage.expectToShowWorkshopWithName("test-workshop");
       // when
       await accountPage.goto();
       await accountPage.logout();

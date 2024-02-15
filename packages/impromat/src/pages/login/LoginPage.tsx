@@ -28,7 +28,7 @@ export const LoginPage: React.FC = () => {
       }}
     >
       <Box sx={{ overflow: "auto", maxWidth: theme.breakpoints.values.sm }}>
-        <div className="ion-padding ion-text-center">
+        <Box p={2} textAlign="center">
           <div
             style={{
               maxHeight: "20%",
@@ -68,7 +68,7 @@ export const LoginPage: React.FC = () => {
           >
             {t("learnMore")}
           </Button>
-        </div>
+        </Box>
       </Box>
     </Box>
   );

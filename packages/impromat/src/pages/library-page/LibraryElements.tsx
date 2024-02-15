@@ -1,5 +1,6 @@
 import {
   Box,
+  Container,
   List,
   ListItem,
   ListItemButton,
@@ -105,7 +106,7 @@ export const MuiLibraryElements: React.FC<ContainerProps> = ({
     [elements],
   );
   return (
-    <Box height="100%">
+    <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
       <VirtualCardGrid
         headerElement={headerElement}
         scrollStoreKey="search-element-tab-component"
@@ -131,6 +132,6 @@ export const MuiLibraryElements: React.FC<ContainerProps> = ({
           ></ElementPreviewCard>
         )}
       ></VirtualCardGrid>
-    </Box>
+    </Container>
   );
 };

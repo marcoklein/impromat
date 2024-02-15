@@ -14,7 +14,7 @@ export class WorkshopDevPage extends DevPage {
 
   constructor(page: Page) {
     super(page);
-    this.optionsLocator = page.getByTestId("menu-button");
+    this.optionsLocator = page.getByLabel("Options");
     this.addFirstElementLocator = page.getByRole("link", {
       name: "Add First Element",
     });
@@ -93,11 +93,7 @@ export class WorkshopDevPage extends DevPage {
   async share() {
     const page = this.page;
     await page.getByRole("button", { name: "Share" }).click();
-    await page
-      .locator("ion-checkbox")
-      .filter({ hasText: "Anyone with the link can view" })
-      .getByRole("img")
-      .click();
+    await page.getByText("Anyone with the link can view").click();
     await page.getByRole("button", { name: "Copy workshop link" }).click();
   }
 
@@ -123,8 +119,15 @@ export class WorkshopDevPage extends DevPage {
     const page = this.page;
     await this.optionsLocator.click();
     await page.getByRole("button", { name: "Add Description" }).click();
-    await page.locator("textarea").fill(description);
+    await page.locator("textarea").first().fill(description);
     await page.getByRole("button", { name: "Save" }).click();
+  }
+
+  async duplicate() {
+    const page = this.page;
+    await this.optionsLocator.click();
+    await page.getByRole("button", { name: "Duplicate" }).click();
+    await page.waitForURL(/\/workshop\/.*/);
   }
 
   /**
@@ -134,10 +137,8 @@ export class WorkshopDevPage extends DevPage {
     const page = this.page;
     await this.optionsLocator.click();
     await page.getByRole("button", { name: "Delete" }).click();
-    await page
-      .locator("ion-alert")
-      .getByRole("button", { name: "Delete" })
-      .click();
+    await page.getByRole("button", { name: "Delete" }).click();
+
     await page.waitForURL("/nav/workshop");
   }
 

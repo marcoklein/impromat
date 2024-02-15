@@ -6,9 +6,8 @@ import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { graphql } from "../../graphql-client";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { MuiLibraryElements } from "./LibraryElements";
-import { MuiLibraryPageAppBar } from "./LibraryPageAppBar";
+import { LibraryPageAppBar } from "./LibraryPageAppBar";
 import { NewElementButton } from "./NewElementButton";
-import { NewFeatureInfo } from "./NewFeatureInfo";
 import { QueryErrorAlert } from "./QueryErrorAlert";
 
 const MuiLibraryPageQuery = graphql(`
@@ -26,8 +25,8 @@ const MuiLibraryPageQuery = graphql(`
   }
 `);
 
-export const MuiLibraryPage: React.FC = () => {
-  const { t, i18n } = useTranslation("MuiLibraryPage");
+export const LibraryPage: React.FC = () => {
+  const { i18n } = useTranslation("LibraryPage");
 
   const [selectedLanguage, setSelectedLanguage] = usePersistedState<string>(
     "lastSelectedLanguage",
@@ -75,7 +74,7 @@ export const MuiLibraryPage: React.FC = () => {
         position: "relative",
       }}
     >
-      <MuiLibraryPageAppBar
+      <LibraryPageAppBar
         searchText={searchText}
         setSearchText={setSearchText}
         queryIsFetching={searchElementsQueryResult.fetching}
@@ -84,8 +83,7 @@ export const MuiLibraryPage: React.FC = () => {
         reexecuteSearchElementsQuery={reexecuteSearchElementsQuery}
         menuDialogOpen={menuDialogOpen}
         setMenuDialogOpen={setMenuDialogOpen}
-      ></MuiLibraryPageAppBar>
-      <NewFeatureInfo featureId="newUx" message={t("different-page")} />
+      ></LibraryPageAppBar>
       <QueryErrorAlert
         error={searchElementsQueryResult.error}
         onRetry={() => reexecuteSearchElementsQuery()}

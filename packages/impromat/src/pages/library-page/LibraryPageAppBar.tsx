@@ -21,7 +21,7 @@ interface ComponentProps {
   setMenuDialogOpen: (open: boolean) => void;
 }
 
-export const MuiLibraryPageAppBar: React.FC<ComponentProps> = ({
+export const LibraryPageAppBar: React.FC<ComponentProps> = ({
   searchText,
   setSearchText,
   queryIsFetching,
@@ -31,7 +31,7 @@ export const MuiLibraryPageAppBar: React.FC<ComponentProps> = ({
   menuDialogOpen,
   setMenuDialogOpen,
 }) => {
-  const { t } = useTranslation("MuiLibraryPageAppBar");
+  const { t } = useTranslation("LibraryPageAppBar");
   return (
     <AppBar
       sx={{

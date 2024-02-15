@@ -1,18 +1,31 @@
 import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-} from "@ionic/react";
-import { PropsWithChildren } from "react";
-import { useHistory } from "react-router";
+  Box,
+  Divider,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
-interface ContainerProps extends PropsWithChildren {
+interface ContainerProps {
   menuButtonElement?: JSX.Element;
   infoListElement?: JSX.Element;
+  /**
+   * Title to display in the card.
+   */
   title: string;
+  /**
+   * Content to display below the title.
+   */
   content?: string;
+  /**
+   * Link to navigate to when clicking on the card.
+   */
   routerLink?: string;
+  /**
+   * Footer to display at the bottom of the card.
+   */
+  footer?: JSX.Element;
 }
 
 export const PreviewCard: React.FC<ContainerProps> = ({
@@ -21,73 +34,69 @@ export const PreviewCard: React.FC<ContainerProps> = ({
   title,
   content,
   routerLink,
-  children,
+  footer,
 }) => {
-  const history = useHistory();
   return (
-    <IonCard
-      style={{
-        display: "flex",
-        height: "100%",
-        flexDirection: "column",
-        alignContent: "stretch",
-      }}
-    >
-      <div
-        onClick={routerLink ? () => history.push(routerLink) : undefined}
-        style={{
-          cursor: { routerLink } ? "pointer" : undefined,
-          whiteSpace: "nowrap",
-          overflowX: "auto",
-          display: "flex",
-          alignItems: "center",
-          height: "2.5rem",
+    <>
+      <ListItem
+        disablePadding
+        secondaryAction={menuButtonElement}
+        sx={{
+          flexGrow: 1,
+          flexDirection: "row",
+          alignItems: "start",
+          overflow: "hidden",
+          height: "100%",
+          width: "100%",
         }}
       >
-        <div className="ion-margin-horizontal">{infoListElement}</div>
-      </div>
-
-      <div
-        onClick={routerLink ? () => history.push(routerLink) : undefined}
-        style={{ cursor: { routerLink } ? "pointer" : undefined, flexGrow: 1 }}
-      >
-        <IonCardHeader style={{ paddingTop: 0, paddingBottom: "0.2rem" }}>
-          <IonCardTitle
-            style={{
+        <ListItemButton
+          sx={{
+            height: "100%",
+            alignItems: "start",
+            flexDirection: "column",
+          }}
+          component={routerLink ? Link : "div"}
+          to={routerLink}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              cursor: { routerLink } ? "pointer" : undefined,
               whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
+              overflowX: "auto",
+              alignItems: "center",
+              height: "2.5rem",
             }}
           >
-            {title}
-          </IonCardTitle>
-        </IonCardHeader>
-        {content && (
-          <IonCardContent style={{ paddingBottom: "0.1rem" }}>
-            <span
-              style={{
-                display: "-webkit-box",
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                WebkitLineClamp: 3,
-              }}
-            >
-              {content}
-            </span>
-          </IonCardContent>
-        )}
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-        }}
-      >
-        {menuButtonElement}
-      </div>
-      {children}
-    </IonCard>
+            <Box>{infoListElement}</Box>
+          </Box>
+          <ListItemText
+            sx={{
+              pt: 0,
+              mt: 0,
+            }}
+            primary={title}
+            secondary={
+              <Box
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  "-webkit-line-clamp": 3 /* number of lines to show */,
+                  "-webkit-box-orient": "vertical",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 3,
+                }}
+              >
+                {content}
+              </Box>
+            }
+          />
+          {footer}
+        </ListItemButton>
+      </ListItem>
+      <Divider />
+    </>
   );
 };

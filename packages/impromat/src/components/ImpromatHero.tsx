@@ -1,26 +1,37 @@
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import React from "react";
 import { ImpromatLogoComponent } from "./ImpromatLogoComponent";
-import { MainTitleComponent } from "./MainTitleComponent";
 
 interface ComponentProps extends React.PropsWithChildren {
   title?: string;
+  subtitle?: string;
 }
 
-export const ImpromatHero: React.FC<ComponentProps> = ({ title, children }) => {
+export const ImpromatHero: React.FC<ComponentProps> = ({
+  title,
+  subtitle,
+  children,
+}) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
-    <div
-      style={{
-        minHeight: "50%",
+    <Box
+      sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <div
-        className="ion-text-center ion-margin-top"
-        style={{ maxWidth: "768px" }}
+      <Box
+        sx={{
+          textAlign: "center",
+          mt: 2,
+          p: 1,
+          maxWidth: "768px",
+        }}
       >
-        <div
+        <Box
           style={{
             maxHeight: "20%",
             maxWidth: "128px",
@@ -28,10 +39,17 @@ export const ImpromatHero: React.FC<ComponentProps> = ({ title, children }) => {
           }}
         >
           <ImpromatLogoComponent></ImpromatLogoComponent>
-        </div>
-        <MainTitleComponent>{title ?? "impromat.app"}</MainTitleComponent>
+        </Box>
+        <Typography
+          variant={isSmallScreen ? "h4" : "h2"}
+          component="h1"
+          sx={{ fontWeight: "bold" }}
+        >
+          {title ?? "impromat.app"}
+        </Typography>
+        {subtitle && <Typography>{subtitle}</Typography>}
         {children}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };

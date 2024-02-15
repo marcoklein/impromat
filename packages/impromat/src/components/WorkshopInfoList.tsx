@@ -1,8 +1,8 @@
-import { calendar, globe, heart, link, person } from "ionicons/icons";
+import { Event, Favorite, Link, Person, Public } from "@mui/icons-material";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
-import { COLOR_LIKE, COLOR_USER_CREATED } from "../theme/theme-colors";
 import { InfoListItem } from "./InfoListItem";
+
 const WorkshopInfoList_Workshop = graphql(`
   fragment WorkshopInfoList_Workshop on Workshop {
     id
@@ -41,15 +41,19 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
     <>
       {workshop.isLiked && (
         <InfoListItem
-          ionicIcon={heart}
-          color={COLOR_LIKE}
+          icon={<Favorite color="like" />}
           displayText="liked"
         ></InfoListItem>
       )}
       {workshop.isPublic && (
         <InfoListItem
-          ionicIcon={workshop.isListed ? globe : link}
-          color="success"
+          icon={
+            workshop.isListed ? (
+              <Public color="success" />
+            ) : (
+              <Link color="success" />
+            )
+          }
           displayText={
             workshop.isListed ? "publicly shared" : "shared via link"
           }
@@ -57,20 +61,19 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
       )}
       {workshop.isOwnerMe && (
         <InfoListItem
-          ionicIcon={person}
-          color={COLOR_USER_CREATED}
+          icon={<Person color="primary" />}
           displayText="my workshop"
         ></InfoListItem>
       )}
       {!workshop.isOwnerMe && (
         <InfoListItem
-          ionicIcon={person}
+          icon={<Person />}
           displayText={workshop.owner.name ?? "impromat"}
         ></InfoListItem>
       )}
       {dateOfWorkshopText && (
         <InfoListItem
-          ionicIcon={calendar}
+          icon={<Event />}
           displayText={dateOfWorkshopText}
         ></InfoListItem>
       )}

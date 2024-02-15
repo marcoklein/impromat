@@ -29,7 +29,7 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeLibrary } from "../../routes/shared-routes";
-import { ShareWorkshopModal } from "./components/LegacyShareWorkshopModal";
+import { ShareWorkshopModal } from "./components/ShareWorkshopModal";
 import { TextFieldDialog } from "./components/TextFieldDialog";
 import { WorkshopContent } from "./components/WorkshopContent";
 import { WorkshopLikeIconButton } from "./components/WorkshopLikeButton";
@@ -86,7 +86,7 @@ export const WorkshopPage: React.FC = () => {
     window.localStorage.setItem(STORAGE_LAST_WORKSHOP_ID, workshopId);
   }, [logger, workshopId]);
 
-  const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
+  const [workshopQueryResult] = useQuery({
     query: WorkshopByIdQuery,
     variables: {
       id: workshopId,
