@@ -86,10 +86,7 @@ export default {
   QueryErrorAlert: {
     Retry: "Erneut versuchen",
   },
-  MuiLibraryPage: {
-    Retry: "Erneut versuchen",
-  },
-  MuiLibraryPageAppBar: {
+  LibraryPageAppBar: {
     searchPlaceholder: "Wonach suchst du?",
     searchAriaLabel: "suche nach Elementen",
   },
@@ -104,10 +101,7 @@ export default {
     createdBy: "Erstellt von einem Impromat-Nutzenden",
   },
   LibraryPage: {
-    "Keep filter expanded": "Filter ausgeklappt lassen",
-    "No matching elements found.": "Keine passenden Elemente gefunden.",
-    "Use the search bar to find elements from various sources.":
-      "Nutze die Suchleiste, um Improelemente aus verschiedenen Quellen zu finden.",
+    Retry: "Erneut versuchen",
   },
   FilterInspirations: {
     tagsInspiration0: "<Tag>{{tagA}}</Tag> mit <Tag>{{tagB}}</Tag> Fokus",
@@ -215,7 +209,6 @@ export default {
     AddToWorkshop: "Zum Workshop hinzufügen",
     SelectWorkshop: "Wähle einen Workshop aus",
   },
-  WorkshopElementPage: {},
   WorkshopElementNote: {
     note: "Notiz",
     notePlaceholder: "Notiz hinzufügen",
@@ -224,6 +217,9 @@ export default {
     NewWorkshop: "Neuer Workshop",
     FilterNoWorkshops: "Die momentane Filterauswahl enthält keine Workshops.",
     ClearFilters: "Filter zurücksetzen",
+    notLoggedIn:
+      "Melde dich an, um Workshops zu sehen. Wir arbeiten daran Workshops auch ohne Anmeldung sichtbar zu machen.",
+    gotoLogin: "Zur Anmeldung",
   },
   WorkshopPreviewCard: {
     OpenWorkshop: "Öffne den Workshop, um Elemente hinzuzufügen.",

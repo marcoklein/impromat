@@ -39,7 +39,7 @@ export const LibraryElementPage: React.FC = () => {
     libraryPartId: string;
   }>();
 
-  const [elementPageQueryResult, reexecuteElementPageQuery] = useQuery({
+  const [elementPageQueryResult] = useQuery({
     query: LibraryElementPageQuery,
     variables: {
       elementId: libraryPartId,

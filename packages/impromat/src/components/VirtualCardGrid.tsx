@@ -188,7 +188,6 @@ export const VirtualCardGrid = <ItemData, Context>({
             style={{
               height: props.height,
               width: props.width,
-              padding: "4px",
             }}
           >
             <LoadingCard></LoadingCard>

@@ -1,7 +1,8 @@
 import { Filter } from "@mui/icons-material";
-import { Box, Button, Fab } from "@mui/material";
+import { Box, Button, Fab, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { NavLink } from "react-router-dom";
 import { useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
@@ -12,6 +13,7 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
+import { routeLogin } from "../../routes/shared-routes";
 import { CreateWorkshopDialog } from "../library/CreateWorkshopDialog";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
@@ -107,17 +109,23 @@ export const WorkshopsPage: React.FC = () => {
         </Fab>
       )}
       {!isLoggedIn && (
-        <div
-          style={{
+        <Box
+          sx={{
+            p: 3,
+            textAlign: "center",
             minHeight: "100%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          {/* TODO Provide a nicer message */}
-          Not Logged In
-        </div>
+          <Box>
+            <Typography width={350}>{t("notLoggedIn")}</Typography>
+            <Button component={NavLink} to={routeLogin()} variant="text">
+              {t("gotoLogin")}
+            </Button>
+          </Box>
+        </Box>
       )}
       <PageContentLoaderComponent
         noRefresher={!gridIsOnTop}

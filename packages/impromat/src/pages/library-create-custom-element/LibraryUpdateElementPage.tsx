@@ -66,7 +66,7 @@ export const LibraryUpdateElementPage: React.FC = () => {
     setTags([]);
   }, [languageCode]);
 
-  const [queryResult, reexecuteQuery] = useQuery({
+  const [queryResult] = useQuery({
     query: LibraryUpdateElementPage_Query,
     variables: {
       id: elementId,

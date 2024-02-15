@@ -42,7 +42,7 @@ const MySpacePage_Query = graphql(`
 export const MySpacePage: React.FC = () => {
   const { t } = useTranslation("MySpacePage");
 
-  const [queryResult, reexecuteQuery] = useQuery({
+  const [queryResult] = useQuery({
     query: MySpacePage_Query,
     variables: {},
   });

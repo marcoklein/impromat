@@ -62,7 +62,7 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
     }
   }, [reexecuteQuery]);
 
-  const { allHaveData, fetching, stale, networkError, nonNetworkError, error } =
+  const { allHaveData, fetching, networkError, nonNetworkError, error } =
     useMemo(() => {
       const allHaveData = queryResult.every((result) => result.data);
       const fetching = queryResult.some((result) => result.fetching);
@@ -83,11 +83,6 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
         error,
       };
     }, [queryResult]);
-
-  const isRefreshing = useMemo(
-    () => fetching || (!error && (!allHaveData || stale)),
-    [allHaveData, fetching, stale, error],
-  );
 
   return (
     <>

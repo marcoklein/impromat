@@ -25,7 +25,7 @@ import { AboutPage } from "../AboutPage";
 import { HomePage } from "../home/HomePage";
 import { LegalPage } from "../LegalPage";
 import { PrivacyPolicyPage } from "../PrivacyPolicyPage";
-import { MuiLibraryPage } from "../library-page/LibraryPage";
+import { LibraryPage } from "../library-page/LibraryPage";
 import { LibraryElementPage } from "../library/LibraryElementPage";
 import { LoginPage } from "../login/LoginPage";
 import { MySpacePage } from "../myspace/MySpacePage";
@@ -53,7 +53,7 @@ export const ROOT_TABS: Record<RootTabs, TabConfig> = {
     name: "Exercises & Games",
     icon: <ElementsIcon />,
     route: routeLibrary(),
-    element: <MuiLibraryPage />,
+    element: <LibraryPage />,
     exact: true,
     showForUser: "all",
   },

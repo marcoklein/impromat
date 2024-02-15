@@ -86,7 +86,7 @@ export const WorkshopPage: React.FC = () => {
     window.localStorage.setItem(STORAGE_LAST_WORKSHOP_ID, workshopId);
   }, [logger, workshopId]);
 
-  const [workshopQueryResult, reexecuteWorkshopQuery] = useQuery({
+  const [workshopQueryResult] = useQuery({
     query: WorkshopByIdQuery,
     variables: {
       id: workshopId,

@@ -14,6 +14,7 @@ export const GoogleSignInButton: React.FC<
   React.ComponentPropsWithoutRef<typeof Button>
 > = (props) => (
   <Button
+    variant="contained"
     {...props}
     startIcon={
       <Box

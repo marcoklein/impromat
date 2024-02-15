@@ -92,10 +92,7 @@ export default {
   QueryErrorAlert: {
     Retry: "Retry",
   },
-  MuiLibraryPage: {
-    Retry: "Retry",
-  },
-  MuiLibraryPageAppBar: {
+  LibraryPageAppBar: {
     searchPlaceholder: "What are you looking for?",
     searchAriaLabel: "search impromat elements",
   },
@@ -110,10 +107,7 @@ export default {
     createdBy: "Created by a user in impromat",
   },
   LibraryPage: {
-    "Keep filter expanded": "Keep filters expanded",
-    "No matching elements found.": "No matching elements found.",
-    "Use the search bar to find elements from various sources.":
-      "Use the search bar to find elements from various sources.",
+    Retry: "Retry",
   },
   FilterInspirations: {
     tagsInspiration0: "<Tag>{{tagA}}</Tag> with <Tag>{{tagB}}</Tag> focus",
@@ -216,7 +210,6 @@ export default {
     AddToWorkshop: "Add to Workshop",
     SelectWorkshop: "Select Workshop",
   },
-  WorkshopElementPage: {},
   WorkshopElementNote: {
     note: "Notiz",
     notePlaceholder: "Add note",
@@ -225,6 +218,9 @@ export default {
     NewWorkshop: "New Workshop",
     FilterNoWorkshops: "The current filter selection returns no workshops",
     ClearFilters: "Clear Filters",
+    notLoggedIn:
+      "Login to see workshops. We are working on making workshops visible without logging in.",
+    gotoLogin: "Go to Login",
   },
   WorkshopPreviewCard: {
     OpenWorkshop: "Open the workshop to add elements.",
