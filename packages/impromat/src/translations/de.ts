@@ -231,7 +231,6 @@ export default {
     DatePlaceholder: "Datum...",
     Set: "Speichern",
     duplicatePostfix: " (Kopie)",
-    EnterWorkshopName: "Bitte wähle einen Namen für deinen Workshop.",
     Duplicated: '"{{workshopName}}" dupliziert',
     WorkshopDescription: "Beschreibung",
     TypeName: "Please type a workshop name.",

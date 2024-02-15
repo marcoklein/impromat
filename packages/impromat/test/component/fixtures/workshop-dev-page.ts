@@ -119,7 +119,7 @@ export class WorkshopDevPage extends DevPage {
     const page = this.page;
     await this.optionsLocator.click();
     await page.getByRole("button", { name: "Add Description" }).click();
-    await page.locator("textarea").fill(description);
+    await page.locator("textarea").first().fill(description);
     await page.getByRole("button", { name: "Save" }).click();
   }
 

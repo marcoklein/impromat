@@ -94,6 +94,27 @@ export const WorkshopsPage: React.FC = () => {
 
   const { t } = useTranslation("WorkshopsPage");
 
+  if (!isLoggedIn) {
+    return (
+      <Box
+        sx={{
+          p: 3,
+          textAlign: "center",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography width={350}>{t("notLoggedIn")}</Typography>
+          <Button component={NavLink} to={routeLogin()} variant="text">
+            {t("gotoLogin")}
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
   return (
     <Box sx={{ height: "100%", position: "relative" }}>
       {isLoggedIn && (
@@ -107,25 +128,6 @@ export const WorkshopsPage: React.FC = () => {
         >
           <AddNewWorkshopIcon />
         </Fab>
-      )}
-      {!isLoggedIn && (
-        <Box
-          sx={{
-            p: 3,
-            textAlign: "center",
-            minHeight: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Box>
-            <Typography width={350}>{t("notLoggedIn")}</Typography>
-            <Button component={NavLink} to={routeLogin()} variant="text">
-              {t("gotoLogin")}
-            </Button>
-          </Box>
-        </Box>
       )}
       <PageContentLoaderComponent
         noRefresher={!gridIsOnTop}
