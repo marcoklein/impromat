@@ -45,7 +45,6 @@ const ElementPreviewItem_ElementFragment = graphql(`
     }
     isOwnerMe
     ...CustomElement_Element
-    ...ElementFavoriteIcon_Element
     ...ElementInfoList_Element
   }
 `);
