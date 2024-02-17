@@ -54,7 +54,6 @@ export const CreateWorkshopDialog: React.FC<ContainerProps> = ({
       handleSave={handleCreateWorkshop}
       saveText={t("create")}
       TextFieldProps={{
-        label: t("nameMessage"),
         placeholder: t("namePlaceholder"),
       }}
     />

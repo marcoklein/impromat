@@ -180,8 +180,7 @@ export default {
   },
   CreateWorkshopDialog: {
     workshopDialogTitle: "Create Workshop",
-    namePlaceholder: "Workshop name...",
-    nameMessage: "Enter a name for your workshop (You can change it later):",
+    namePlaceholder: "Enter a name for your workshop",
     emptyNameMessage: "Please enter a name for your workshop.",
     create: "Create",
   },

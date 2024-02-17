@@ -148,7 +148,7 @@ export const WorkshopsPage: React.FC = () => {
                 workshopFragment={workshop}
               ></WorkshopPreviewCard>
             )}
-          ></VirtualCardGrid>
+          />
         ) : !userWorkshopsFilterInput.liked ||
           !userWorkshopsFilterInput.owned ? (
           <div
