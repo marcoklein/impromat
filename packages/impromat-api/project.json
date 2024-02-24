@@ -1,0 +1,79 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/packages/nx/schemas/project-schema.json",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["codegen", "lint", "test:unit"],
+      "options": {
+        "cwd": "{projectRoot}",
+        "commands": ["nx prisma:reset --force", "yarn jest test/**/*.test.ts"],
+        "parallel": false
+      }
+    },
+    "dev": {
+      "dependsOn": ["codegen", "copy-improbib"],
+      "command": "yarn nest start --watch"
+    },
+    "build": {
+      "cache": true,
+      "dependsOn": ["codegen", "copy-improbib"],
+      "command": "yarn nest build"
+    },
+    "test:unit": {
+      "cache": true,
+      "inputs": ["{projectRoot}/src/**/*.ts"]
+    },
+    "lint:depcruise": {
+      "cache": true,
+      "command": "yarn depcruise .",
+      "inputs": ["{projectRoot}/src/**/*.ts"],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "dependsOn": ["format"],
+      "cache": true,
+      "inputs": ["{projectRoot}/{src,test}/**/*.ts"],
+      "command": "yarn eslint \"{src,test}/**/*.ts\" --fix",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "copy-improbib": {
+      "cache": true,
+      "command": "mkdir -p assets && cp ../improbib/output/improbib.json ./assets/improbib.json",
+      "inputs": ["{projectRoot}/../improbib/output/improbib.json"],
+      "outputs": ["{projectRoot}/assets/improbib.json"],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format": {
+      "cache": true,
+      "command": "yarn prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+      "inputs": ["{projectRoot}/src/**/*.ts", "{projectRoot}/test/**/*.ts"],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "codegen": {
+      "cache": true,
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["yarn graphql-codegen", "yarn prisma generate"],
+        "parallel": false,
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        "{projectRoot}/prisma/schema.prisma",
+        "{projectRoot}/prisma/.env",
+        "{projectRoot}/schema/schema.graphql"
+      ],
+      "outputs": [
+        "{workspaceRoot}/node_modules/prisma/client",
+        "{projectRoot}/test/graphql-client/"
+      ]
+    }
+  }
+}
