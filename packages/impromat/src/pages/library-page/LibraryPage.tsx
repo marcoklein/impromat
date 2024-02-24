@@ -77,6 +77,9 @@ export const LibraryPage: React.FC = () => {
       <LibraryPageAppBar
         searchText={searchText}
         setSearchText={setSearchText}
+        onSearch={(text) => {
+          setSearchText(text);
+        }}
         queryIsFetching={searchElementsQueryResult.fetching}
         selectedLanguage={selectedLanguage}
         setSelectedLanguage={setSelectedLanguage}

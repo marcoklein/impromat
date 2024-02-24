@@ -6,12 +6,15 @@
   },
   "dependencies": {
     "graphql-client": "^2.0.1",
+    "natural": "^6.10.4",
     "retext": "^9.0.0",
     "retext-keywords": "^8.0.1",
     "retext-pos": "^5.0.0",
+    "stopword": "^2.0.8",
     "to-vfile": "^8.0.0"
   },
   "devDependencies": {
+    "@types/stopword": "^2.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },

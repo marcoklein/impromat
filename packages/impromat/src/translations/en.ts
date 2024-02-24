@@ -135,6 +135,9 @@ export default {
     nameRequired: "Name is required",
   },
   LibraryElementEditForm: {
+    category: "Category",
+    tagsInfo:
+      "Choose tags that fit your element. They provide more context and help others to find your element.",
     "Select language": "Select language",
     "Edit Custom Element": "Edit my Element",
     "Name (required)": "Name",
