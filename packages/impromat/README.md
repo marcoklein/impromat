@@ -14,6 +14,12 @@ Run with
 yarn start
 ```
 
+Run storybook with
+
+```
+yarn run-storybook
+```
+
 Run tests in watch mode for development:
 
 ```sh

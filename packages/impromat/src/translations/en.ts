@@ -262,8 +262,8 @@ export default {
     About: "About this project",
   },
   MySpacePage: {
-    title: "Mein Impromat",
-    Creations: "Kreationen",
+    title: "My Impromat",
+    Creations: "Creations",
     "My Elements": "My Elements",
     "My Workshops": "My Workshops",
     profile: "Profile",

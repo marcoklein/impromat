@@ -75,7 +75,8 @@
     "deps:visualize": "yarn depcruise src --include-only \"^src\" --config --output-type dot | dot -T svg > dependency-graph.svg",
     "deps:check": "depcheck",
     "deps:check:oneline": "yarn deps:check --oneline",
-    "deps:upgrade": "yarn upgrade-interactive"
+    "deps:upgrade": "yarn upgrade-interactive",
+    "run-storybook": "yarn run --top-level run-storybook"
   },
   "browserslist": {
     "production": [

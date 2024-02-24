@@ -44,7 +44,8 @@
     "infra:config": "./packages/infrastructure/configure.sh",
     "foreach": "yarn workspaces foreach --parallel --verbose --interlaced --exclude root",
     "codegen": "yarn nx run-many --target=codegen",
-    "changeset:add": "yarn changeset"
+    "changeset:add": "yarn changeset",
+    "run-storybook": "yarn nx storybook impromat"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",
