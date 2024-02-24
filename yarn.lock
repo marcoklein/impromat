@@ -8750,7 +8750,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-vite@npm:7.6.17":
+"@storybook/react-vite@npm:^7.6.17":
   version: 7.6.17
   resolution: "@storybook/react-vite@npm:7.6.17"
   dependencies:
@@ -8769,7 +8769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:7.6.17":
+"@storybook/react@npm:7.6.17, @storybook/react@npm:^7.6.17":
   version: 7.6.17
   resolution: "@storybook/react@npm:7.6.17"
   dependencies:
@@ -18031,6 +18031,10 @@ __metadata:
     "@mui/x-date-pickers": ^6.19.3
     "@playwright/experimental-ct-react": ^1.40.1
     "@playwright/test": ^1.40.1
+    "@storybook/jest": ^0.2.3
+    "@storybook/react": ^7.6.17
+    "@storybook/react-vite": ^7.6.17
+    "@storybook/testing-library": ^0.2.2
     "@types/debug": ^4.1.7
     "@types/node": ^17.0.0
     "@types/react": ^18.0.18
@@ -18069,6 +18073,7 @@ __metadata:
     vite: ^4.3.9
     vite-plugin-pwa: ^0.14.7
     web-vitals: ^0.2.4
+    wonka: ^6.3.4
   languageName: unknown
   linkType: soft
 
@@ -24996,7 +25001,7 @@ __metadata:
     "@storybook/addon-interactions": ^7.5.3
     "@storybook/core-server": 7.6.17
     "@storybook/jest": ^0.2.3
-    "@storybook/react-vite": 7.6.17
+    "@storybook/react-vite": ^7.6.17
     "@storybook/test-runner": ^0.13.0
     "@storybook/testing-library": ^0.2.2
     "@swc-node/register": ~1.8.0
@@ -28278,7 +28283,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wonka@npm:>= 4.0.9, wonka@npm:^6.3.2":
+"wonka@npm:>= 4.0.9, wonka@npm:^6.3.2, wonka@npm:^6.3.4":
   version: 6.3.4
   resolution: "wonka@npm:6.3.4"
   checksum: 6bb57955cb2982fb469a7824484e6854b436f89a7f10b6a981348789d88fbc944665771adc4cc404f62416417eb47ab2b8657d898e5301ccd4a53eaac6a10508

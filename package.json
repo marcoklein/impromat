@@ -18,7 +18,7 @@
     "@storybook/addon-interactions": "^7.5.3",
     "@storybook/core-server": "7.6.17",
     "@storybook/jest": "^0.2.3",
-    "@storybook/react-vite": "7.6.17",
+    "@storybook/react-vite": "^7.6.17",
     "@storybook/test-runner": "^0.13.0",
     "@storybook/testing-library": "^0.2.2",
     "@swc-node/register": "~1.8.0",
