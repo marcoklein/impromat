@@ -55,6 +55,8 @@ export const PreviewCard: React.FC<ContainerProps> = ({
             height: "100%",
             alignItems: "start",
             flexDirection: "column",
+            overflow: "hidden",
+            width: "100%",
           }}
           component={routerLink ? Link : "div"}
           to={routerLink}
@@ -64,9 +66,10 @@ export const PreviewCard: React.FC<ContainerProps> = ({
               display: "flex",
               cursor: { routerLink } ? "pointer" : undefined,
               whiteSpace: "nowrap",
-              overflowX: "auto",
+              overflowX: "scroll",
               alignItems: "center",
               height: "2.5rem",
+              width: "100%",
             }}
           >
             <Box>{infoListElement}</Box>

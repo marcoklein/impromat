@@ -135,6 +135,9 @@ export default {
     nameRequired: "Name is required",
   },
   LibraryElementEditForm: {
+    category: "Category",
+    tagsInfo:
+      "Choose tags that fit your element. They provide more context and help others to find your element.",
     "Select language": "Select language",
     "Edit Custom Element": "Edit my Element",
     "Name (required)": "Name",
@@ -180,8 +183,7 @@ export default {
   },
   CreateWorkshopDialog: {
     workshopDialogTitle: "Create Workshop",
-    namePlaceholder: "Workshop name...",
-    nameMessage: "Enter a name for your workshop (You can change it later):",
+    namePlaceholder: "Enter a name for your workshop",
     emptyNameMessage: "Please enter a name for your workshop.",
     create: "Create",
   },
@@ -260,8 +262,8 @@ export default {
     About: "About this project",
   },
   MySpacePage: {
-    title: "Mein Impromat",
-    Creations: "Kreationen",
+    title: "My Impromat",
+    Creations: "Creations",
     "My Elements": "My Elements",
     "My Workshops": "My Workshops",
     profile: "Profile",

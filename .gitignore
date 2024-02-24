@@ -32,3 +32,5 @@ junit-results.xml
 *-backups
 
 .nx/cache
+
+storybook-static

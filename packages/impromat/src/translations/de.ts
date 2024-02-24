@@ -131,6 +131,9 @@ export default {
     nameRequired: "Name ist erforderlich",
   },
   LibraryElementEditForm: {
+    category: "Kategorie",
+    tagsInfo:
+      "Wähle Kategorien, die zu deinem Element passen. Sie bieten mehr Kontext und helfen anderen, dein Element zu finden.",
     "Select language": "Sprache auswählen",
     "Edit Custom Element": "Mein Element bearbeiten",
     "Name (required)": "Name",
@@ -178,9 +181,7 @@ export default {
   },
   CreateWorkshopDialog: {
     workshopDialogTitle: "Workshop erstellen",
-    namePlaceholder: "Workshop-Name...",
-    nameMessage:
-      "Gib einen Namen für deinen Workshop ein (Du kannst ihn später noch ändern):",
+    namePlaceholder: "Gib einen Workshopnamen ein",
     emptyNameMessage: "Bitte gib einen Namen für deinen Workshop ein.",
     create: "Erstellen",
   },

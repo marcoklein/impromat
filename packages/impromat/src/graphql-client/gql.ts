@@ -29,9 +29,10 @@ const documents = {
     "\n  mutation UpdateUserLikedWorkshopMutation(\n    $input: UpdateUserLikedWorkshopInput!\n  ) {\n    updateUserLikedWorkshop(input: $input) {\n      id\n      isLiked\n    }\n  }\n": types.UpdateUserLikedWorkshopMutationDocument,
     "\n      mutation UpdateUserMutation($input: UpdateUserInput!) {\n        updateUser(input: $input) {\n          id\n          name\n          languageCodes\n\n          createdAt\n          updatedAt\n          version\n          deleted\n        }\n      }\n    ": types.UpdateUserMutationDocument,
     "\n      mutation UpdateWorkshopMutation($input: UpdateWorkshopInput!) {\n        updateWorkshop(input: $input) {\n          id\n        }\n      }\n    ": types.UpdateWorkshopMutationDocument,
-    "\n  query LibraryCreateElementPage_Query($tagsInput: ElementTagsFilterInput!) {\n    tags(filter: $tagsInput, take: 3) {\n      id\n      name\n    }\n  }\n": types.LibraryCreateElementPage_QueryDocument,
+    "\n  query LibraryCreateElementPage_Query(\n    $tagsInput: ElementTagsFilterInput!\n    $tagsTake: Int\n  ) {\n    tags(filter: $tagsInput, take: $tagsTake) {\n      id\n      name\n    }\n  }\n": types.LibraryCreateElementPage_QueryDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      id\n    }\n  }\n": types.CreateElementMutationDocument,
-    "\n  query LibraryUpdateElementPage_Query(\n    $id: ID!\n    $tagsInput: ElementTagsFilterInput!\n  ) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n    tags(filter: $tagsInput, take: 3) {\n      id\n      name\n    }\n  }\n": types.LibraryUpdateElementPage_QueryDocument,
+    "\n  query LibraryUpdateElementPage_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n  }\n": types.LibraryUpdateElementPage_QueryDocument,
+    "\n  query LibraryUpdateElementPageTags_Query(\n    $tagsInput: ElementTagsFilterInput!\n    $tagsTake: Int\n  ) {\n    tags(filter: $tagsInput, take: $tagsTake) {\n      id\n      name\n    }\n  }\n": types.LibraryUpdateElementPageTags_QueryDocument,
     "\n  mutation UpdateElementMutation($input: UpdateElementInput!) {\n    updateElement(input: $input) {\n      id\n    }\n  }\n": types.UpdateElementMutationDocument,
     "\n  fragment MuiLibraryElement_Element on Element {\n    id\n    createdAt\n    updatedAt\n    version\n    deleted\n    name\n    summary\n    markdownShort\n    tags {\n      id\n      name\n    }\n    usedBy {\n      id\n    }\n    languageCode\n    sourceUrl\n    sourceName\n    sourceBaseUrl\n    licenseName\n    licenseUrl\n    visibility\n    isFavorite\n    owner {\n      id\n    }\n    isOwnerMe\n    ...ElementItem_Element\n    ...ElementPreviewItem_Element\n  }\n": types.MuiLibraryElement_ElementFragmentDoc,
     "\n  query MuiLibraryPageQuery(\n    $input: ElementSearchV2Input!\n    $skip: Int!\n    $take: Int!\n  ) {\n    searchElementsV2(input: $input, skip: $skip, take: $take) {\n      id\n      name\n      ...ElementItem_Element\n      ...MuiLibraryElement_Element\n    }\n  }\n": types.MuiLibraryPageQueryDocument,
@@ -140,7 +141,7 @@ export function graphql(source: "\n      mutation UpdateWorkshopMutation($input:
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query LibraryCreateElementPage_Query($tagsInput: ElementTagsFilterInput!) {\n    tags(filter: $tagsInput, take: 3) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query LibraryCreateElementPage_Query($tagsInput: ElementTagsFilterInput!) {\n    tags(filter: $tagsInput, take: 3) {\n      id\n      name\n    }\n  }\n"];
+export function graphql(source: "\n  query LibraryCreateElementPage_Query(\n    $tagsInput: ElementTagsFilterInput!\n    $tagsTake: Int\n  ) {\n    tags(filter: $tagsInput, take: $tagsTake) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query LibraryCreateElementPage_Query(\n    $tagsInput: ElementTagsFilterInput!\n    $tagsTake: Int\n  ) {\n    tags(filter: $tagsInput, take: $tagsTake) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -148,7 +149,11 @@ export function graphql(source: "\n  mutation CreateElementMutation($input: Crea
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query LibraryUpdateElementPage_Query(\n    $id: ID!\n    $tagsInput: ElementTagsFilterInput!\n  ) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n    tags(filter: $tagsInput, take: 3) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query LibraryUpdateElementPage_Query(\n    $id: ID!\n    $tagsInput: ElementTagsFilterInput!\n  ) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n    tags(filter: $tagsInput, take: 3) {\n      id\n      name\n    }\n  }\n"];
+export function graphql(source: "\n  query LibraryUpdateElementPage_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query LibraryUpdateElementPage_Query($id: ID!) {\n    element(id: $id) {\n      id\n      name\n      visibility\n      markdown\n      languageCode\n      tags {\n        id\n        name\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query LibraryUpdateElementPageTags_Query(\n    $tagsInput: ElementTagsFilterInput!\n    $tagsTake: Int\n  ) {\n    tags(filter: $tagsInput, take: $tagsTake) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query LibraryUpdateElementPageTags_Query(\n    $tagsInput: ElementTagsFilterInput!\n    $tagsTake: Int\n  ) {\n    tags(filter: $tagsInput, take: $tagsTake) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

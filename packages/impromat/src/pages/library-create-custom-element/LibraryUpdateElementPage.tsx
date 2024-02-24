@@ -10,12 +10,10 @@ import { ElementVisibility } from "../../graphql-client/graphql";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { routeLibraryElement } from "../../routes/shared-routes";
 import { LibraryElementEditForm } from "./LibraryElementEditForm";
+import { NUMBER_OF_TAGS_TO_TAKE } from "./take-tags";
 
 const LibraryUpdateElementPage_Query = graphql(`
-  query LibraryUpdateElementPage_Query(
-    $id: ID!
-    $tagsInput: ElementTagsFilterInput!
-  ) {
+  query LibraryUpdateElementPage_Query($id: ID!) {
     element(id: $id) {
       id
       name
@@ -27,7 +25,15 @@ const LibraryUpdateElementPage_Query = graphql(`
         name
       }
     }
-    tags(filter: $tagsInput, take: 3) {
+  }
+`);
+
+const LibraryUpdateElementPageTags_Query = graphql(`
+  query LibraryUpdateElementPageTags_Query(
+    $tagsInput: ElementTagsFilterInput!
+    $tagsTake: Int
+  ) {
+    tags(filter: $tagsInput, take: $tagsTake) {
       id
       name
     }
@@ -70,14 +76,8 @@ export const LibraryUpdateElementPage: React.FC = () => {
     query: LibraryUpdateElementPage_Query,
     variables: {
       id: elementId,
-      tagsInput: {
-        languageCode,
-      },
     },
   });
-  const availableTags = useMemo(() => {
-    return queryResult.data?.tags.map((tag) => tag.name).sort() ?? [];
-  }, [queryResult.data?.tags]);
 
   useEffect(() => {
     const element = queryResult.data?.element;
@@ -90,6 +90,20 @@ export const LibraryUpdateElementPage: React.FC = () => {
     setIsAddToPublicElements(element.visibility === ElementVisibility.Public);
     setTags(element.tags.map((tag) => tag.name));
   }, [queryResult.data?.element]);
+
+  const [tagsQueryResult] = useQuery({
+    query: LibraryUpdateElementPageTags_Query,
+    variables: {
+      tagsInput: {
+        languageCode,
+      },
+      tagsTake: NUMBER_OF_TAGS_TO_TAKE,
+    },
+  });
+
+  const availableTags = useMemo(() => {
+    return tagsQueryResult.data?.tags.map((tag) => tag.name).sort() ?? [];
+  }, [tagsQueryResult.data?.tags]);
 
   const [, updateElementMutation] = useMutation(UpdateElementMutation);
   const updateElement = useCallback(async () => {

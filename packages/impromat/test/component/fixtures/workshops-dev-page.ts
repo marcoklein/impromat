@@ -8,7 +8,9 @@ export class WorkshopsDevPage extends DevPage {
 
   constructor(page: any) {
     super(page);
-    this.workshopNameInputLocator = page.getByPlaceholder("Workshop name...");
+    this.workshopNameInputLocator = page.getByPlaceholder(
+      /name for your workshop/i,
+    );
     this.workshopCreateButtonLocator = page.getByRole("button", {
       name: "Create",
     });
