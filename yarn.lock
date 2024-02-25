@@ -17071,15 +17071,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"impromat-ai@file:../impromat-ai::locator=impromat-api%40workspace%3Apackages%2Fimpromat-api":
-  version: 0.1.0
-  resolution: "impromat-ai@file:../impromat-ai#../impromat-ai::hash=e627ff&locator=impromat-api%40workspace%3Apackages%2Fimpromat-api"
-  dependencies:
-    openai: ^4.0.0
-  checksum: 0de3ed53c4c971fc97fcd34a14231445025f4508f201a29dd2ae0b00cd6f1671fe162b81218debbe2886c131bbf67faf5e5607576b5b3071ca3c324d7b778cde
-  languageName: node
-  linkType: hard
-
 "impromat-ai@workspace:packages/impromat-ai":
   version: 0.0.0-use.local
   resolution: "impromat-ai@workspace:packages/impromat-ai"
@@ -17142,7 +17133,6 @@ __metadata:
     google-auth-library: ^8.7.0
     graphql: ^16.6.0
     improbib: 0.5.0
-    impromat-ai: ../impromat-ai
     jest: 29.3.1
     jest-junit: ^16.0.0
     jest-mock-extended: ^3.0.4
