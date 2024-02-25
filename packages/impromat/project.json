@@ -60,7 +60,6 @@
         "{projectRoot}/test/**/*.ts"
       ],
       "options": {
-        "parallel": false,
         "cwd": "{projectRoot}",
         "envFile": ".env.test-integration-app",
         "readyWhen": "TESTS DONE"
