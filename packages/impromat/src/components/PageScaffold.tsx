@@ -41,7 +41,7 @@ export const PageScaffold: React.FC<ContainerProps> = ({
             display: "flex",
             alignItems: "center",
             px: {
-              xs: 0.5,
+              xs: 1,
               sm: 2,
             },
           }}

@@ -40,7 +40,7 @@ export default {
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
       "App für die Planung, Durchführung und das Teilen von Improtheater-Workshops.",
-    "Access Impromat": "Gehe zum Impromat",
+    accessImpromat: "Öffne Übungen & Spiele",
     Profile: "Profil",
     "Legal Notice": "Impressum",
   },
@@ -86,12 +86,7 @@ export default {
   QueryErrorAlert: {
     Retry: "Erneut versuchen",
   },
-  MuiLibraryPage: {
-    "different-page":
-      "Diese Seite sieht anders aus, weil wir gerade unser App-Design überarbeiten.",
-    Retry: "Erneut versuchen",
-  },
-  MuiLibraryPageAppBar: {
+  LibraryPageAppBar: {
     searchPlaceholder: "Wonach suchst du?",
     searchAriaLabel: "suche nach Elementen",
   },
@@ -101,11 +96,12 @@ export default {
     searchOptionsTitle: "Sucheinstellungen",
     languageOfResults: "Sprache der Ergebnisse",
   },
+  ElementDetails: {
+    createdByWithName: "Erstellt von {{name}}",
+    createdBy: "Erstellt von einem Impromat-Nutzenden",
+  },
   LibraryPage: {
-    "Keep filter expanded": "Filter ausgeklappt lassen",
-    "No matching elements found.": "Keine passenden Elemente gefunden.",
-    "Use the search bar to find elements from various sources.":
-      "Nutze die Suchleiste, um Improelemente aus verschiedenen Quellen zu finden.",
+    Retry: "Erneut versuchen",
   },
   FilterInspirations: {
     tagsInspiration0: "<Tag>{{tagA}}</Tag> mit <Tag>{{tagB}}</Tag> Fokus",
@@ -135,6 +131,9 @@ export default {
     nameRequired: "Name ist erforderlich",
   },
   LibraryElementEditForm: {
+    category: "Kategorie",
+    tagsInfo:
+      "Wähle Kategorien, die zu deinem Element passen. Sie bieten mehr Kontext und helfen anderen, dein Element zu finden.",
     "Select language": "Sprache auswählen",
     "Edit Custom Element": "Mein Element bearbeiten",
     "Name (required)": "Name",
@@ -182,9 +181,7 @@ export default {
   },
   CreateWorkshopDialog: {
     workshopDialogTitle: "Workshop erstellen",
-    namePlaceholder: "Workshop-Name...",
-    nameMessage:
-      "Gib einen Namen für deinen Workshop ein (Du kannst ihn später noch ändern):",
+    namePlaceholder: "Gib einen Workshopnamen ein",
     emptyNameMessage: "Bitte gib einen Namen für deinen Workshop ein.",
     create: "Erstellen",
   },
@@ -213,7 +210,6 @@ export default {
     AddToWorkshop: "Zum Workshop hinzufügen",
     SelectWorkshop: "Wähle einen Workshop aus",
   },
-  WorkshopElementPage: {},
   WorkshopElementNote: {
     note: "Notiz",
     notePlaceholder: "Notiz hinzufügen",
@@ -222,6 +218,9 @@ export default {
     NewWorkshop: "Neuer Workshop",
     FilterNoWorkshops: "Die momentane Filterauswahl enthält keine Workshops.",
     ClearFilters: "Filter zurücksetzen",
+    notLoggedIn:
+      "Melde dich an, um Workshops zu sehen. Wir arbeiten daran Workshops auch ohne Anmeldung sichtbar zu machen.",
+    gotoLogin: "Zur Anmeldung",
   },
   WorkshopPreviewCard: {
     OpenWorkshop: "Öffne den Workshop, um Elemente hinzuzufügen.",
@@ -232,10 +231,7 @@ export default {
     EnterDate: "Gebe ein Datum für deinen Workshop ein:",
     DatePlaceholder: "Datum...",
     Set: "Speichern",
-    DuplicateWorkshopName: "Neuer Workshop-Name",
-    EnterNameMessage: "Gebe einen Namen für den duplizierten Workshop ein:",
-    NamePlaceholder: "Workshop-Namen...",
-    EnterWorkshopName: "Bitte wähle einen Namen für deinen Workshop.",
+    duplicatePostfix: " (Kopie)",
     Duplicated: '"{{workshopName}}" dupliziert',
     WorkshopDescription: "Beschreibung",
     TypeName: "Please type a workshop name.",
@@ -267,6 +263,7 @@ export default {
     Creations: "Kreationen",
     "My Elements": "Meine Elemente",
     "My Workshops": "Meine Workshops",
+    profile: "Profil",
 
     Logout: "Abmelden",
     LogoutMessage:

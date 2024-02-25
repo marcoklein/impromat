@@ -1,7 +1,7 @@
 import { Logout } from "@mui/icons-material";
 import {
-  AppBar,
   Button,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
@@ -12,7 +12,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -21,6 +20,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useQuery } from "urql";
+import { PageScaffold } from "../../components/PageScaffold";
 import { ElementsIcon } from "../../components/icons/ElementsIcon";
 import { WorkshopsIcon } from "../../components/icons/WorkshopsIcon";
 import { graphql } from "../../graphql-client";
@@ -42,7 +42,7 @@ const MySpacePage_Query = graphql(`
 export const MySpacePage: React.FC = () => {
   const { t } = useTranslation("MySpacePage");
 
-  const [queryResult, reexecuteQuery] = useQuery({
+  const [queryResult] = useQuery({
     query: MySpacePage_Query,
     variables: {},
   });
@@ -70,27 +70,10 @@ export const MySpacePage: React.FC = () => {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        overflow: "auto",
-        position: "relative",
-      }}
-    >
-      <AppBar
-        sx={{
-          zIndex: 100,
-          display: "flex",
-          flexDirection: "column",
-          position: "sticky",
-        }}
-        position="static"
-      >
-        <Toolbar sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {t("title")}
-          </Typography>
+    <PageScaffold
+      title={t("title")}
+      buttons={
+        <>
           <IconButton
             color="inherit"
             onClick={() => setIsLogoutDialogOpen(true)}
@@ -104,7 +87,9 @@ export const MySpacePage: React.FC = () => {
             aria-labelledby="alert-dialog-title"
           >
             <DialogTitle id="alert-dialog-title">{t("Logout")}</DialogTitle>
-            <DialogContent>{t("LogoutMessage")}</DialogContent>
+            <DialogContent>
+              <Typography>{t("LogoutMessage")}</Typography>
+            </DialogContent>
             <DialogActions>
               <Button onClick={onLogoutDialogClose} autoFocus>
                 {t("Cancel", { ns: "common" })}
@@ -112,55 +97,57 @@ export const MySpacePage: React.FC = () => {
               <Button onClick={onLogout}>{t("Logout")}</Button>
             </DialogActions>
           </Dialog>
-        </Toolbar>
-      </AppBar>
+        </>
+      }
+    >
       <Box sx={{ overflow: "auto" }}>
-        <Typography variant="h6" component="div" sx={{ p: 1 }}>
-          Profil
-        </Typography>
-
-        <List>
-          <ListItem>
-            <ListItemIcon>
-              {/* eslint-disable-next-line react/style-prop-object */}
-              <Avvvatars value={queryUserName} size={40} style="shape" />
-            </ListItemIcon>
-            <UserNameTextField
-              queryUserName={queryUserName}
-              readonly={
-                !queryResult.data?.me?.id ||
-                queryResult.fetching ||
-                queryResult.stale
-              }
+        <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
+          <Typography variant="h6" component="div" sx={{ pt: 1, pl: 1 }}>
+            {t("profile")}
+          </Typography>
+          <List sx={{ pt: 0 }}>
+            <ListItem sx={{ pt: 0 }}>
+              <ListItemIcon>
+                {/* eslint-disable-next-line react/style-prop-object */}
+                <Avvvatars value={queryUserName} size={40} style="shape" />
+              </ListItemIcon>
+              <UserNameTextField
+                queryUserName={queryUserName}
+                readonly={
+                  !queryResult.data?.me?.id ||
+                  queryResult.fetching ||
+                  queryResult.stale
+                }
+                userId={userId}
+              />
+            </ListItem>
+            <LanguageSelect
               userId={userId}
+              selectedLanguageCode={queryResult.data?.me?.languageCodes?.at(0)}
+              languageCodes={queryResult.data?.me?.languageCodes ?? []}
+              availableLanguageCodes={["en", "de"]}
             />
-          </ListItem>
-          <LanguageSelect
-            userId={userId}
-            selectedLanguageCode={queryResult.data?.me?.languageCodes?.at(0)}
-            languageCodes={queryResult.data?.me?.languageCodes ?? []}
-            availableLanguageCodes={["en", "de"]}
-          />
-        </List>
+          </List>
 
-        <Typography variant="h6" component="div" sx={{ px: 1, pt: 1 }}>
-          {t("Creations")}
-        </Typography>
-        <List>
-          <ListItemButton component={Link} to={routeLibrary()}>
-            <ListItemIcon>
-              <ElementsIcon />
-            </ListItemIcon>
-            <ListItemText color="inherit">{t("My Elements")}</ListItemText>
-          </ListItemButton>
-          <ListItemButton component={Link} to={routeWorkshops()}>
-            <ListItemIcon>
-              <WorkshopsIcon />
-            </ListItemIcon>
-            <ListItemText color="inherit">{t("My Workshops")}</ListItemText>
-          </ListItemButton>
-        </List>
+          <Typography variant="h6" component="div" sx={{ px: 1, pt: 1 }}>
+            {t("Creations")}
+          </Typography>
+          <List>
+            <ListItemButton component={Link} to={routeLibrary()}>
+              <ListItemIcon>
+                <ElementsIcon />
+              </ListItemIcon>
+              <ListItemText color="inherit">{t("My Elements")}</ListItemText>
+            </ListItemButton>
+            <ListItemButton component={Link} to={routeWorkshops()}>
+              <ListItemIcon>
+                <WorkshopsIcon />
+              </ListItemIcon>
+              <ListItemText color="inherit">{t("My Workshops")}</ListItemText>
+            </ListItemButton>
+          </List>
+        </Container>
       </Box>
-    </Box>
+    </PageScaffold>
   );
 };

@@ -1,7 +1,19 @@
-import { IonIcon, IonItem, IonLabel, IonNote } from "@ionic/react";
-import { AutoAwesome, ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Box, Divider, IconButton, Paper, Typography } from "@mui/material";
-import { globe } from "ionicons/icons";
+import {
+  AutoAwesome,
+  ExpandLess,
+  ExpandMore,
+  Public,
+} from "@mui/icons-material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
@@ -12,7 +24,6 @@ import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { LicenseItemComponent } from "../../components/LicenseItemComponent";
 import { FragmentType, getFragmentData, graphql } from "../../graphql-client";
 import { routeLibraryEditCustomElement } from "../../routes/library-routes";
-import { COLOR_SHARED } from "../../theme/theme-colors";
 
 const ElementDetails_Element = graphql(`
   fragment ElementDetails_Element on Element {
@@ -27,6 +38,10 @@ const ElementDetails_Element = graphql(`
       name
     }
     visibility
+    tags {
+      id
+      name
+    }
 
     sourceUrl
     sourceName
@@ -55,6 +70,9 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
     <Box>
       <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
         {element.name}
+      </Typography>
+      <Typography variant="caption">
+        {element.tags.map((tag) => `#${tag.name}`).join(" ")}
       </Typography>
       {element.summary && element.summary !== element.markdown && (
         <>
@@ -114,11 +132,10 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
       )}
       {element.markdown && (
         <>
-          <Box>
+          <Typography>
             <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
-          </Box>
+          </Typography>
           <Divider />
-          {/* TODO show edit button if there is no markdown */}
         </>
       )}
 
@@ -131,10 +148,15 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
         element.owner?.name !== "improbib" ? (
         <>
           <InfoItemComponent
-            message={`Created by ${
-              element.owner?.name ?? "a user"
-            } in impromat`}
-          ></InfoItemComponent>
+            primary={
+              element.owner?.name
+                ? t("createdByWithName", {
+                    name: element.owner?.name,
+                    ns: "ElementDetails",
+                  })
+                : t("createdBy", { ns: "ElementDetails" })
+            }
+          />
         </>
       ) : (
         <LicenseItemComponent
@@ -149,28 +171,26 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
 
       {!element.isOwnerMe && element.visibility === "PUBLIC" && (
         <IsLoggedIn>
-          <IonItem>
-            <IonIcon slot="start" icon={globe} color={COLOR_SHARED}></IonIcon>
-            <IonLabel className="ion-text-wrap">
-              {t("CommunityElement", { ns: "ElementComponent" })}
-              <div>
-                <IonNote>
-                  <Trans
-                    t={t}
-                    ns={"ElementComponent"}
-                    i18nKey="ImproveElement"
-                    components={{
-                      EditingLink: (
-                        <NavLink
-                          to={routeLibraryEditCustomElement(element.id)}
-                        />
-                      ),
-                    }}
-                  ></Trans>
-                </IonNote>
-              </div>
-            </IonLabel>
-          </IonItem>
+          <ListItem>
+            <ListItemIcon>
+              <Public color="success" />
+            </ListItemIcon>
+            <ListItemText
+              primary={t("CommunityElement", { ns: "ElementComponent" })}
+              secondary={
+                <Trans
+                  t={t}
+                  ns={"ElementComponent"}
+                  i18nKey="ImproveElement"
+                  components={{
+                    EditingLink: (
+                      <NavLink to={routeLibraryEditCustomElement(element.id)} />
+                    ),
+                  }}
+                />
+              }
+            />
+          </ListItem>
         </IsLoggedIn>
       )}
     </Box>

@@ -41,7 +41,7 @@ export default {
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
       "App for planning, giving and sharing improvisational theatre workshops.",
-    "Access Impromat": "Access Impromat",
+    accessImpromat: "Browse exercises and games",
     Profile: "Profile",
     "Legal Notice": "Legal Notice",
   },
@@ -92,12 +92,7 @@ export default {
   QueryErrorAlert: {
     Retry: "Retry",
   },
-  MuiLibraryPage: {
-    "different-page":
-      "This page looks different because we are currently reworking our app design.",
-    Retry: "Retry",
-  },
-  MuiLibraryPageAppBar: {
+  LibraryPageAppBar: {
     searchPlaceholder: "What are you looking for?",
     searchAriaLabel: "search impromat elements",
   },
@@ -107,11 +102,12 @@ export default {
     searchOptionsTitle: "Search Options",
     languageOfResults: "Language of Results",
   },
+  ElementDetails: {
+    createdByWithName: "Created by {{name}}",
+    createdBy: "Created by a user in impromat",
+  },
   LibraryPage: {
-    "Keep filter expanded": "Keep filters expanded",
-    "No matching elements found.": "No matching elements found.",
-    "Use the search bar to find elements from various sources.":
-      "Use the search bar to find elements from various sources.",
+    Retry: "Retry",
   },
   FilterInspirations: {
     tagsInspiration0: "<Tag>{{tagA}}</Tag> with <Tag>{{tagB}}</Tag> focus",
@@ -139,6 +135,9 @@ export default {
     nameRequired: "Name is required",
   },
   LibraryElementEditForm: {
+    category: "Category",
+    tagsInfo:
+      "Choose tags that fit your element. They provide more context and help others to find your element.",
     "Select language": "Select language",
     "Edit Custom Element": "Edit my Element",
     "Name (required)": "Name",
@@ -184,8 +183,7 @@ export default {
   },
   CreateWorkshopDialog: {
     workshopDialogTitle: "Create Workshop",
-    namePlaceholder: "Workshop name...",
-    nameMessage: "Enter a name for your workshop (You can change it later):",
+    namePlaceholder: "Enter a name for your workshop",
     emptyNameMessage: "Please enter a name for your workshop.",
     create: "Create",
   },
@@ -214,7 +212,6 @@ export default {
     AddToWorkshop: "Add to Workshop",
     SelectWorkshop: "Select Workshop",
   },
-  WorkshopElementPage: {},
   WorkshopElementNote: {
     note: "Notiz",
     notePlaceholder: "Add note",
@@ -223,6 +220,9 @@ export default {
     NewWorkshop: "New Workshop",
     FilterNoWorkshops: "The current filter selection returns no workshops",
     ClearFilters: "Clear Filters",
+    notLoggedIn:
+      "Login to see workshops. We are working on making workshops visible without logging in.",
+    gotoLogin: "Go to Login",
   },
   WorkshopPreviewCard: {
     OpenWorkshop: "Open the workshop to add elements.",
@@ -233,10 +233,7 @@ export default {
     EnterDate: "Enter the date of your workshop:",
     DatePlaceholder: "Date...",
     Set: "Set",
-    DuplicateWorkshopName: "New Workshop Name",
-    EnterNameMessage: "Enter a name for your duplicated workshop:",
-    NamePlaceholder: "Workshop name...",
-    EnterWorkshopName: "Please enter a name for your workshop.",
+    duplicatePostfix: " (copy)",
     Duplicated: 'Duplicated "{{workshopName}}"',
     WorkshopDescription: "Description",
     TypeName: "Please type a workshop name.",
@@ -265,10 +262,11 @@ export default {
     About: "About this project",
   },
   MySpacePage: {
-    title: "Mein Impromat",
-    Creations: "Kreationen",
+    title: "My Impromat",
+    Creations: "Creations",
     "My Elements": "My Elements",
     "My Workshops": "My Workshops",
+    profile: "Profile",
 
     Logout: "Logout",
     LogoutMessage:

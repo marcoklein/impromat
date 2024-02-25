@@ -1,10 +1,21 @@
-import { IonToast } from "@ionic/react";
-import { calendar, close, copy, create, pencil, trash } from "ionicons/icons";
+import {
+  ContentCopy,
+  Delete,
+  Description,
+  Edit,
+  Event,
+} from "@mui/icons-material";
+import {
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
-import { ConfirmationAlert } from "../../../components/ConfirmationAlert";
-import { LegacyOptionsMenu } from "../../../components/LegacyOptionsMenu";
+import { DatePickerDialog } from "../../../components/DatePickerDialog";
+import { ResponsiveOptions } from "../../../components/ResponsiveOptions";
 import {
   FragmentType,
   getFragmentData,
@@ -13,9 +24,10 @@ import {
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useDeleteWorkshopMutation } from "../../../hooks/use-delete-workshop-mutation";
 import { useDuplicateWorkshopMutation } from "../../../hooks/use-duplicate-workshop-mutation";
-import { useInputDialog } from "../../../hooks/use-input-dialog";
 import { useUpdateWorkshopMutation } from "../../../hooks/use-update-workshop-mutation";
 import { routeWorkshop, routeWorkshops } from "../../../routes/shared-routes";
+import { ConfirmDialog } from "./ConfirmationDialog";
+import { TextFieldDialog } from "./TextFieldDialog";
 
 const WorkshopOptionsMenu_Workshop = graphql(`
   fragment WorkshopOptionsMenu_Workshop on Workshop {
@@ -30,8 +42,6 @@ interface ContainerProps {
   workshopFragment: FragmentType<typeof WorkshopOptionsMenu_Workshop>;
   goBackAfterDeletion?: boolean;
 }
-
-export interface Option {}
 
 /**
  * Options menu for manipulating a Workshop.
@@ -50,18 +60,12 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
 
   const history = useHistory();
 
-  const [presentInputDialog] = useInputDialog();
   const [, deleteWorkshopMutation] = useDeleteWorkshopMutation();
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const [, duplicateWorkshopMutation] = useDuplicateWorkshopMutation();
 
   const [isWorkshopDeleteAlertOpen, setIsWorkshopDeleteAlertOpen] =
     useState(false);
-
-  const [duplicatedWorkshop, setDuplicatedWorkshop] = useState<{
-    id: string;
-    name: string;
-  }>();
 
   const changeWorkshopName = (newName: string) => {
     if (!workshop) return;
@@ -75,163 +79,162 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   };
   const { t } = useTranslation("WorkshopOptionsMenu");
 
-  const onSetWorkshopDate = async () => {
+  const onDuplicateAndGotoWorkshop = async () => {
     if (!workshop) return;
-    presentInputDialog({
-      header: t("SetDate"),
-      initialText: workshop.dateOfWorkshop
-        ? new Date(workshop.dateOfWorkshop).toISOString().slice(0, 10)
-        : // ? new Date(workshop.dateOfWorkshop).toLocaleDateString()
-          "",
-      message: t("EnterDate"),
-      placeholder: t("DatePlaceholder"),
-      // emptyInputMessage: "Please enter a date for your workshop.",
-      buttonText: t("Set"),
-      inputType: "date",
-      onAccept: async (date) => {
-        logger("Setting date of workshop to %s", date);
-        const { error } = await updateWorkshopMutation({
-          input: { id: workshop.id, dateOfWorkshop: date.length ? date : null },
-        });
-        if (error) {
-          logger("Error setting date of workshop: %s", error.message);
-          return;
-        }
+
+    const { error, data } = await duplicateWorkshopMutation({
+      input: {
+        workshopId: workshop.id,
+        name: `${workshop.name} ${t("duplicatePostfix")}`,
       },
     });
+    const id = data?.duplicateWorkshop.id;
+    if (error || !id) {
+      return;
+    }
+    logger("Added new workshop with id %s", id);
+    const navigateTo = routeWorkshop(id);
+    logger("Navigating to %s", navigateTo);
+    history.push(navigateTo);
   };
-  const onDuplicateWorkshop = async () => {
-    if (!workshop) return;
-    presentInputDialog({
-      header: t("DuplicateWorkshopName"),
-      initialText: workshop.name,
-      message: t("EnterNameMessage"),
-      placeholder: t("NamePlaceholder"),
-      emptyInputMessage: t("EnterWorkshopName"),
-      buttonText: t("Duplicate", { ns: "common" }),
-      onAccept: async (newWorkshopName) => {
-        const { error, data } = await duplicateWorkshopMutation({
-          input: { workshopId: workshop.id, name: newWorkshopName },
-        });
-        const id = data?.duplicateWorkshop.id;
-        if (error || !id) {
-          return;
-        }
-        setDuplicatedWorkshop({ id: workshop.id, name: workshop.name });
-        logger("Adding new workshop with id %s", id);
-        const navigateTo = routeWorkshop(id);
-        history.replace(navigateTo);
-        logger("Navigating to %s", navigateTo);
-      },
+
+  const onDeleteWorkshop = async () => {
+    logger("Deletion confirmed");
+    deleteWorkshopMutation({ id: workshop.id }).then(() => {
+      logger("Deleted workshop");
+      if (goBackAfterDeletion) {
+        history.push(routeWorkshops(), { direction: "back" });
+      }
     });
   };
 
-  const onChangeDescription = () => {
-    if (!workshop) return;
-    presentInputDialog({
-      initialText: workshop.description ?? "",
-      isMultiline: true,
-      header: t("WorkshopDescription"),
-      onAccept: (text) => changeWorkshopDescription(text),
+  const onSaveWorkshopDate = async (date: string) => {
+    logger("Setting date of workshop to %s", date);
+    const { error } = await updateWorkshopMutation({
+      input: {
+        id: workshop.id,
+        dateOfWorkshop: date.length ? date : null,
+      },
     });
-    logger("Showing change description dialog");
+    if (error) {
+      logger("Error setting date of workshop: %s", error.message);
+      return;
+    }
   };
 
-  const onRenameWorkshop = () => {
-    if (!workshop) return;
-    presentInputDialog({
-      header: t("Rename", { ns: "common" }),
-      initialText: workshop.name,
-      emptyInputMessage: t("TypeName"),
-      onAccept: (text) => changeWorkshopName(text),
-    });
-    logger("Showing rename Workshop dialog");
-  };
+  const [isChangeDescriptionDialogOpen, setIsChangeDescriptionDialogOpen] =
+    useState(false);
+  const [isRenameWorkshopDialogOpen, setIsRenameWorkshopDialogOpen] =
+    useState(false);
+  const [isSetWorkshopDateDialogOpen, setIsSetWorkshopDateDialogOpen] =
+    useState(false);
 
   return (
     <>
-      <LegacyOptionsMenu
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        header={t("Options", { ns: "common" })}
-        options={[
-          {
-            icon: calendar,
-            text: t("SetDate"),
-            handler: () => {
-              onSetWorkshopDate();
-            },
-          },
-          {
-            icon: copy,
-            text: t("Duplicate", { ns: "common" }),
-            handler: () => {
-              onDuplicateWorkshop();
-            },
-          },
-          {
-            icon: pencil,
-            text: t("Rename", { ns: "common" }),
-            handler: () => {
-              onRenameWorkshop();
-            },
-          },
-          {
-            icon: create,
-            text: workshop.description?.length
-              ? t("ChangeDescription")
-              : t("AddDescription"),
-            handler: () => {
-              onChangeDescription();
-            },
-          },
-          {
-            text: t("Delete", { ns: "common" }),
-            role: "destructive",
-            icon: trash,
-            handler: () => {
+      <ResponsiveOptions
+        title={t("Options", { ns: "common" })}
+        open={isOpen}
+        onOpenChange={setIsOpen}
+      >
+        <List disablePadding>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
+              setIsSetWorkshopDateDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <Event />
+            </ListItemIcon>
+            <ListItemText primary={t("SetDate")} />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
+              onDuplicateAndGotoWorkshop();
+            }}
+          >
+            <ListItemIcon>
+              <ContentCopy />
+            </ListItemIcon>
+            <ListItemText primary={t("Duplicate", { ns: "common" })} />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
+              setIsRenameWorkshopDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <Edit />
+            </ListItemIcon>
+            <ListItemText primary={t("Rename", { ns: "common" })} />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
+              setIsChangeDescriptionDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <Description />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                workshop.description?.length
+                  ? t("ChangeDescription")
+                  : t("AddDescription")
+              }
+            />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
               setIsWorkshopDeleteAlertOpen(true);
-            },
-          },
-          {
-            text: t("Cancel", { ns: "common" }),
-            role: "cancel",
-            handler: () => {},
-            icon: close,
-          },
-        ]}
-      ></LegacyOptionsMenu>
-      <ConfirmationAlert
-        header={t("DeleteWorkshop")}
+            }}
+          >
+            <ListItemIcon>
+              <Delete />
+            </ListItemIcon>
+            <ListItemText primary={t("Delete", { ns: "common" })} />
+          </ListItemButton>
+        </List>
+      </ResponsiveOptions>
+
+      <ConfirmDialog
+        title={t("DeleteWorkshop")}
         confirmText={t("Delete", { ns: "common" })}
-        isOpen={isWorkshopDeleteAlertOpen}
+        open={isWorkshopDeleteAlertOpen}
         onConfirm={() => {
-          logger("Deletion confirmed");
-          deleteWorkshopMutation({ id: workshop.id }).then(() => {
-            logger("Deleted workshop");
-            if (goBackAfterDeletion) {
-              history.push(routeWorkshops(), { direction: "back" });
-            }
-          });
+          onDeleteWorkshop();
         }}
-        onOpenChange={setIsWorkshopDeleteAlertOpen}
-      ></ConfirmationAlert>
-      <IonToast
-        isOpen={!!duplicatedWorkshop}
-        message={t("Duplicated", { workshopName: workshop.name })}
-        onDidDismiss={() => setDuplicatedWorkshop(undefined)}
-        buttons={[
-          {
-            text: t("Open", { ns: "common" }),
-            handler: () => history.push(routeWorkshop(duplicatedWorkshop!.id)),
-          },
-          {
-            role: "cancel",
-            icon: close,
-          },
-        ]}
-        duration={10000}
-      ></IonToast>
+        onClose={() => setIsWorkshopDeleteAlertOpen(false)}
+      />
+      <DatePickerDialog
+        title={t("SetDate")}
+        isOpen={isSetWorkshopDateDialogOpen}
+        onClose={() => setIsSetWorkshopDateDialogOpen(false)}
+        initialValue={workshop.dateOfWorkshop ?? ""}
+        onSave={onSaveWorkshopDate}
+      />
+      <TextFieldDialog
+        title={t("Rename", { ns: "common" })}
+        handleClose={() => setIsRenameWorkshopDialogOpen(false)}
+        open={isRenameWorkshopDialogOpen}
+        handleSave={changeWorkshopName}
+        initialValue={workshop.name}
+      />
+      <TextFieldDialog
+        title={t("ChangeDescription")}
+        handleClose={() => setIsChangeDescriptionDialogOpen(false)}
+        open={isChangeDescriptionDialogOpen}
+        handleSave={changeWorkshopDescription}
+        initialValue={workshop.description ?? ""}
+        TextFieldProps={{
+          multiline: true,
+          rows: 3,
+        }}
+      />
     </>
   );
 };

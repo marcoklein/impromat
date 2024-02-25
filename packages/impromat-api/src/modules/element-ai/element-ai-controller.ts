@@ -95,6 +95,9 @@ export class ElementAiController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
+    if (!process.env.OLLAMA_ENDPOINT) {
+      return undefined;
+    }
     return this.elementSummaryService.getElementSummary(
       userSessionId,
       element.id,

@@ -7,6 +7,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        # https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+        image: postgres:16.2
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,9 +51,6 @@ jobs:
       - run: yarn workspace:build
       - name: Run tests for all packages
         run: yarn workspace:test --parallel 1
-      - name: Print backend infrastructure logs if tests failed
-        if: failure()
-        run: yarn docker-compose:logs
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
         if: always()

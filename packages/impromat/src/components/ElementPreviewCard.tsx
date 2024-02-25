@@ -1,10 +1,9 @@
-import { IonBadge, IonText } from "@ionic/react";
+import { Typography } from "@mui/material";
 import { useMemo } from "react";
-import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
+import { routeLibraryElement } from "../routes/shared-routes";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
-import { routeLibraryElement } from "../routes/shared-routes";
 
 const ElementPreviewItem_ElementSearchResultFragment = graphql(`
   fragment ElementPreviewItem_ElementSearchResult on ElementSearchResult {
@@ -46,7 +45,6 @@ const ElementPreviewItem_ElementFragment = graphql(`
     }
     isOwnerMe
     ...CustomElement_Element
-    ...ElementFavoriteIcon_Element
     ...ElementInfoList_Element
   }
 `);
@@ -93,8 +91,6 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
     [element, searchResult],
   );
 
-  const history = useHistory();
-
   return (
     <PreviewCard
       routerLink={routerLink}
@@ -106,34 +102,17 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
       }
       title={element.name}
       content={element.summary ?? element.markdownShort ?? undefined}
-    >
-      {tags.length > 0 && (
-        <div
-          onClick={() => history.push(routerLink)}
-          style={{
-            cursor: "pointer",
-            whiteSpace: "nowrap",
-            overflowX: "auto",
-            flexGrow: 1,
-            display: "flex",
-            alignItems: "center",
+      footer={
+        <Typography
+          variant="caption"
+          sx={{
+            p: 0,
+            m: 0,
           }}
         >
-          <div className="ion-margin-horizontal">
-            {tags.map(({ id, name, isMatch }) => (
-              // TODO use IonChip and allow filtering by clicking on it
-              <IonBadge
-                key={id}
-                color={isMatch ? "primary" : "light"}
-                // outline={!isMatch}
-                style={{ marginRight: "4px" }}
-              >
-                <IonText color={isMatch ? "light" : "medium"}>{name}</IonText>
-              </IonBadge>
-            ))}
-          </div>
-        </div>
-      )}
-    </PreviewCard>
+          {tags.map((tag) => `#${tag.name}`).join(" ")}
+        </Typography>
+      }
+    ></PreviewCard>
   );
 };

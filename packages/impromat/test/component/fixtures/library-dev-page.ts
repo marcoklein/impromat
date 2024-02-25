@@ -23,6 +23,7 @@ export class LibraryDevPage extends DevPage {
   async searchForElement(searchText: string) {
     const page = this.page;
     await page.locator("input").fill(searchText);
+    await page.keyboard.press("Enter");
     await page.getByText(new RegExp(searchText, "i")).first().waitFor();
   }
 
@@ -48,14 +49,14 @@ export class LibraryDevPage extends DevPage {
     const page = this.page;
     if (name) {
       await page
-        .locator("ion-card", {
+        .locator("a", {
           hasText: name,
         })
         .first()
         .click();
     } else {
       await page.waitForTimeout(500);
-      await page.locator("ion-card").first().click();
+      await page.locator("a").first().click();
     }
   }
 

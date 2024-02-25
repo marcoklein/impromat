@@ -49,9 +49,7 @@ pageTest.describe("Library", () => {
       await libraryElementPage.backButtonLocator.click();
       await page.waitForTimeout(500);
       // then
-      await expect(
-        page.getByRole("heading", { name: "Freeze Tag-Exercise" }),
-      ).toBeVisible();
+      await expect(page.getByText("Freeze Tag-Exercise")).toBeVisible();
       await expect(page).toHaveScreenshot({
         animations: "disabled",
         fullPage: true,

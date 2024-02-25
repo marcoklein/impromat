@@ -10,10 +10,14 @@ import { ElementVisibility } from "../../graphql-client/graphql";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { routeLibraryElement } from "../../routes/shared-routes";
 import { LibraryElementEditForm } from "./LibraryElementEditForm";
+import { NUMBER_OF_TAGS_TO_TAKE } from "./take-tags";
 
 const LibraryCreateElementPage_Query = graphql(`
-  query LibraryCreateElementPage_Query($tagsInput: ElementTagsFilterInput!) {
-    tags(filter: $tagsInput, take: 3) {
+  query LibraryCreateElementPage_Query(
+    $tagsInput: ElementTagsFilterInput!
+    $tagsTake: Int
+  ) {
+    tags(filter: $tagsInput, take: $tagsTake) {
       id
       name
     }
@@ -49,12 +53,13 @@ export const LibraryCreateElementPage: React.FC = () => {
     setTags([]);
   }, [languageCode]);
 
-  const [queryResult, reexecuteQuery] = useQuery({
+  const [queryResult] = useQuery({
     query: LibraryCreateElementPage_Query,
     variables: {
       tagsInput: {
         languageCode,
       },
+      tagsTake: NUMBER_OF_TAGS_TO_TAKE,
     },
   });
   const availableTags = useMemo(() => {

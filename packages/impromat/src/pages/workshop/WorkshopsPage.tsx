@@ -1,8 +1,8 @@
-import { IonButton, IonIcon } from "@ionic/react";
-import { Box, Fab } from "@mui/material";
-import { filter } from "ionicons/icons";
+import { Filter } from "@mui/icons-material";
+import { Box, Button, Fab, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { NavLink } from "react-router-dom";
 import { useQuery } from "urql";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
@@ -13,9 +13,10 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
+import { routeLogin } from "../../routes/shared-routes";
 import { CreateWorkshopDialog } from "../library/CreateWorkshopDialog";
-import { LegacyWorkshopCreateFirstComponent } from "./components/LegacyWorkshopCreateFirstComponent";
-import { WorkshopPreviewCard } from "./components/LegacyWorkshopPreviewCard";
+import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
+import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 
 const WorkshopFields_WorkshopFragment = graphql(`
   fragment WorkshopFields_Workshop on Workshop {
@@ -41,7 +42,7 @@ const WorkshopsQuery = graphql(`
 export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
 
-  const { myUserId } = useIsLoggedIn();
+  const { myUserId, isLoggedIn } = useIsLoggedIn();
 
   const defaultFilterInput: Required<UserWorkshopsFilterInput> = useMemo(
     () => ({
@@ -93,19 +94,41 @@ export const WorkshopsPage: React.FC = () => {
 
   const { t } = useTranslation("WorkshopsPage");
 
+  if (!isLoggedIn) {
+    return (
+      <Box
+        sx={{
+          p: 3,
+          textAlign: "center",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography width={350}>{t("notLoggedIn")}</Typography>
+          <Button component={NavLink} to={routeLogin()} variant="text">
+            {t("gotoLogin")}
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
   return (
     <Box sx={{ height: "100%", position: "relative" }}>
-      <Fab
-        color="primary"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        onClick={() => {
-          setIsCreateWorkshopDialogOpen(true);
-        }}
-        aria-label={t("NewWorkshop")}
-      >
-        <AddNewWorkshopIcon />
-      </Fab>
-
+      {isLoggedIn && (
+        <Fab
+          color="primary"
+          sx={{ position: "absolute", bottom: 16, right: 16 }}
+          onClick={() => {
+            setIsCreateWorkshopDialogOpen(true);
+          }}
+          aria-label={t("NewWorkshop")}
+        >
+          <AddNewWorkshopIcon />
+        </Fab>
+      )}
       <PageContentLoaderComponent
         noRefresher={!gridIsOnTop}
         queryResult={workshopsQueryResult}
@@ -125,7 +148,7 @@ export const WorkshopsPage: React.FC = () => {
                 workshopFragment={workshop}
               ></WorkshopPreviewCard>
             )}
-          ></VirtualCardGrid>
+          />
         ) : !userWorkshopsFilterInput.liked ||
           !userWorkshopsFilterInput.owned ? (
           <div
@@ -139,8 +162,7 @@ export const WorkshopsPage: React.FC = () => {
           >
             <div>
               <p>{t("FilterNoWorkshops")}</p>
-              <IonButton
-                expand="full"
+              <Button
                 onClick={() => {
                   setUserWorkshopsFilterInput({
                     liked: true,
@@ -148,16 +170,16 @@ export const WorkshopsPage: React.FC = () => {
                     isPublic: true,
                   });
                 }}
+                startIcon={<Filter />}
               >
-                <IonIcon slot="start" icon={filter}></IonIcon>
                 {t("ClearFilters")}
-              </IonButton>
+              </Button>
             </div>
           </div>
         ) : (
-          <LegacyWorkshopCreateFirstComponent
+          <WorkshopCreateFirstComponent
             onCreateWorkshopClick={() => setIsCreateWorkshopDialogOpen(true)}
-          ></LegacyWorkshopCreateFirstComponent>
+          ></WorkshopCreateFirstComponent>
         )}
         <CreateWorkshopDialog
           open={isCreateWorkshopDialogOpen}

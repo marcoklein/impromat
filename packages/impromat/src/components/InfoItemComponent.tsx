@@ -1,21 +1,20 @@
-import { IonIcon, IonItem, IonLabel } from "@ionic/react";
-import { information } from "ionicons/icons";
+import { Info } from "@mui/icons-material";
+import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { ReactNode } from "react";
 
 interface ContainerProps {
-  message?: string;
-  icon?: string;
-  color?: string;
-  children?: JSX.Element;
+  primary?: ReactNode;
+  secondary?: ReactNode;
 }
 
 export const InfoItemComponent: React.FC<ContainerProps> = ({
-  message,
-  icon,
-  color,
-  children,
+  primary,
+  secondary,
 }) => (
-  <IonItem lines="none" color={color}>
-    <IonIcon icon={icon ?? information} slot="start"></IonIcon>{" "}
-    <IonLabel className="ion-text-wrap">{message ?? children}</IonLabel>
-  </IonItem>
+  <ListItem>
+    <ListItemIcon>
+      <Info color="info" />
+    </ListItemIcon>
+    <ListItemText primary={primary} secondary={secondary} />
+  </ListItem>
 );

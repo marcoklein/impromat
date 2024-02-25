@@ -79,12 +79,16 @@ export const LibraryElementEditForm: React.FC<ContainerProps> = ({
             setName(event.target.value);
           }}
         />
-        <TagsSelect
-          availableTags={availableTags}
-          selectedTags={tags}
-          onSelectedTagsChange={setTags}
-          label={t("Tags")}
-        ></TagsSelect>
+        <Box display="flex">
+          <TagsSelect
+            availableTags={availableTags}
+            selectedTags={tags}
+            onSelectedTagsChange={setTags}
+            label={t("Tags")}
+          ></TagsSelect>
+          <InfoPopper message={t("tagsInfo")} />
+        </Box>
+
         <TextField
           fullWidth
           multiline

@@ -1,6 +1,6 @@
-import { IonItem, IonLabel } from "@ionic/react";
+import { Attribution } from "@mui/icons-material";
+import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { Icon } from "./Icon";
 
 interface ContainerProps {
   name?: string | null;
@@ -34,9 +34,11 @@ export const LicenseItemComponent: React.FC<ContainerProps> = ({
   const { t } = useTranslation("LicenseItemComponent");
 
   return (
-    <IonItem color="" lines="none">
-      <Icon tablerIcon="license" slot="start"></Icon>
-      <IonLabel className="ion-text-wrap">
+    <ListItem>
+      <ListItemIcon>
+        <Attribution />
+      </ListItemIcon>
+      <ListItemText primaryTypographyProps={{ noWrap: false }}>
         {t("Based on")} "{OptionalLink(name, sourceUrl)}"
         {authorName && (
           <>
@@ -49,7 +51,7 @@ export const LicenseItemComponent: React.FC<ContainerProps> = ({
             )}
           </>
         )}
-      </IonLabel>
-    </IonItem>
+      </ListItemText>
+    </ListItem>
   );
 };
