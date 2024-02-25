@@ -8,9 +8,11 @@
     "start": "prisma migrate deploy && node dist/src/main.js",
     "dev": "yarn nx dev",
     "test": "yarn nx test",
+    "build": "yarn nx build",
     "nx": "nx",
     "prisma:migrate": "prisma migrate dev",
-    "deps:visualize": "yarn depcruise \"./src/**/*.module.ts\" --include-only \"$*.module.ts\" --output-type dot | dot -T svg > modules-graph.svg"
+    "deps:visualize": "yarn depcruise \"./src/**/*.module.ts\" --include-only \"$*.module.ts\" --output-type dot | dot -T svg > modules-graph.svg",
+    "print-database-url": "node -e \"console.log(process.env.DATABASE_URL)\""
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",

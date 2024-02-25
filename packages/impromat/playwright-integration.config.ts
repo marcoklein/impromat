@@ -2,10 +2,7 @@ import type { PlaywrightTestConfig } from "@playwright/test";
 import dotenv from "dotenv";
 declare const process: any;
 
-dotenv.config({ path: ".env.test.local" });
-dotenv.config({ path: ".env.test" });
-dotenv.config({ path: ".env.local" });
-dotenv.config({ path: ".env" });
+dotenv.config({ path: ".env.test-integration-app" });
 
 const PORT = Number(process.env.PORT);
 if (!PORT) throw new Error("PORT environment variable undefined.");
