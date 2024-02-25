@@ -11,6 +11,8 @@ RUN yarn install --immutable
 
 RUN yarn nx build impromat-api
 
+WORKDIR /app/packages/impromat-api
+
 HEALTHCHECK --interval=5s --timeout=1s --start-period=5s --retries=10 \
   CMD node healthcheck.js
 
