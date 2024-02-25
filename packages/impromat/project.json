@@ -47,7 +47,7 @@
       "command": "yarn prisma migrate reset --force && yarn nest start",
       "options": {
         "cwd": "packages/impromat-api",
-        "envFile": ".env.test-integration-api"
+        "envFile": "{projectRoot}/.env.test-integration-api"
       }
     },
     "test:integration": {
@@ -61,7 +61,7 @@
       ],
       "options": {
         "cwd": "{projectRoot}",
-        "envFile": ".env.test-integration-app",
+        "envFile": "{projectRoot}/.env.test-integration-app",
         "readyWhen": "TESTS DONE"
       }
     },
