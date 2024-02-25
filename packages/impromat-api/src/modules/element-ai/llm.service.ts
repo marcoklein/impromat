@@ -19,6 +19,10 @@ export class LLMService {
   ) {}
 
   async runRequest(request: LLMRequest): Promise<LLMResponse | undefined> {
+    if (!process.env.OLLAMA_ENDPOINT) {
+      this.logger.error('OLLAMA_ENDPOINT environment variable is not set.');
+      return undefined;
+    }
     const promise = () =>
       new Promise<LLMResponse | undefined>(async (resolve, reject) => {
         try {
@@ -42,7 +46,10 @@ export class LLMService {
     request: LLMRequest,
   ): Promise<LLMResponse | undefined> {
     const { model, system, prompt, template, temperature } = request;
-    const url = process.env.OLLAMA_ENDPOINT ?? 'http://0.0.0.0:11434';
+    const url = process.env.OLLAMA_ENDPOINT;
+    if (!url || !url.length) {
+      return undefined;
+    }
     const generateEndpoint = '/api/generate';
     this.logger.debug('Using ollama endpoint: ' + url);
     try {

@@ -11,7 +11,7 @@ yarn install
 Run with
 
 ```
-yarn start
+yarn dev
 ```
 
 Run storybook with
@@ -69,7 +69,7 @@ For all other tests you have to start the backend infrastructure.
 Start test infrastructure via
 
 ```sh
-yarn test:backend-up
+yarn nx test:integration-api-up --watch
 ```
 
 Alternatively, run the backend and database locally and change `.env.test` to point to the local API endpoint:
@@ -91,13 +91,7 @@ Playwright executes frontend tests.
 To run tests start the application and run
 
 ```sh
-yarn test:headed
-```
-
-To create a new test use the code generation with
-
-```sh
-yarn playwright:codegen
+yarn test
 ```
 
 Debug tests by using
