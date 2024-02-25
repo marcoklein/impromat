@@ -6,15 +6,11 @@
   "private": true,
   "scripts": {
     "start": "prisma migrate deploy && node dist/src/main.js",
-    "dev:debug": "nest start --debug --watch",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "dev": "yarn nx dev",
+    "test": "yarn nx test",
+    "nx": "nx",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:reset": "prisma migrate reset",
-    "docs": "yarn deps:visualize",
-    "lint:depcruise": "yarn depcruise .",
-    "deps:visualize": "yarn depcruise \"./src/**/*.module.ts\" --include-only \"$*.module.ts\" --output-type dot | dot -T svg > modules-graph.svg",
-    "test:unit": "yarn jest src/**/*.test.ts",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "deps:visualize": "yarn depcruise \"./src/**/*.module.ts\" --include-only \"$*.module.ts\" --output-type dot | dot -T svg > modules-graph.svg"
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",

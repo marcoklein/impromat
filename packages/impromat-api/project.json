@@ -2,26 +2,42 @@
   "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/packages/nx/schemas/project-schema.json",
   "targets": {
     "test": {
-      "executor": "nx:run-commands",
-      "dependsOn": ["codegen", "lint", "test:unit"],
+      "dependsOn": ["codegen", "lint", "test:unit", "test:integration"],
+      "command": "echo 'Tests passed' && exit 0",
       "options": {
-        "cwd": "{projectRoot}",
-        "commands": ["nx prisma:reset --force", "yarn jest test/**/*.test.ts"],
-        "parallel": false
+        "cwd": "{projectRoot}"
       }
     },
     "dev": {
       "dependsOn": ["codegen", "copy-improbib"],
-      "command": "yarn nest start --watch"
+      "command": "yarn nest start --watch",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
     },
     "build": {
       "cache": true,
       "dependsOn": ["codegen", "copy-improbib"],
-      "command": "yarn nest build"
+      "command": "yarn nest build",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test:integration": {
+      "cache": true,
+      "inputs": ["{projectRoot}/src/**/*.ts", "{projectRoot}/test/**/*.ts"],
+      "command": "yarn prisma migrate reset --force && yarn jest --roots=test",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
     },
     "test:unit": {
       "cache": true,
-      "inputs": ["{projectRoot}/src/**/*.ts"]
+      "inputs": ["{projectRoot}/src/**/*.ts"],
+      "command": "yarn jest src/**/*.test.ts",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
     },
     "lint:depcruise": {
       "cache": true,
