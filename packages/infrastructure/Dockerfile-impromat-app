@@ -24,8 +24,7 @@ ENV VITE_API_URL ${VITE_API_URL}
 ARG VITE_VERSION
 ENV VITE_VERSION ${VITE_VERSION}
 
-WORKDIR /app/packages/impromat
-RUN yarn build
+RUN yarn nx build impromat
 
 # Host with app renderer
 WORKDIR /app/packages/impromat-app-renderer
