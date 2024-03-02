@@ -116,6 +116,9 @@ export class ElementSearchService {
     });
 
     function findMatches(e: (typeof elementsByName)[0]) {
+      if (!preparedTextSearch.length) {
+        return [];
+      }
       const postgresQueryToRegex = (query: string) =>
         query.replaceAll(OR_SEPARATOR, '|');
 
