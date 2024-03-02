@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.60.0
+
+### Minor Changes
+
+- 9c2e4ac: Create postgres native search (which delivers worse results for now but avoids loading everything into memory)
+- 22e7e5a: New element search based on tfidf scores
+- 22e7e5a: Add material design to transition away from Ionic
+- f2a15b8: Add storybook support to render individual components
+
+### Patch Changes
+
+- 58b23a6: Typography for workshop start text
+- f2a15b8: Allow the updating of elements
+- f2a15b8: Allow selection of all available element tags
+- f2a15b8: Debounce element search
+- Updated dependencies [393f871]
+- Updated dependencies [9c2e4ac]
+- Updated dependencies [6dda1d1]
+- Updated dependencies [22e7e5a]
+- Updated dependencies [58b23a6]
+  - impromat-api@0.25.0
+
 ## 0.59.4
 
 ### Patch Changes
