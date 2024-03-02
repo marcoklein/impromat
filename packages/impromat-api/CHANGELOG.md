@@ -1,5 +1,18 @@
 # impromat-api
 
+## 0.25.0
+
+### Minor Changes
+
+- 9c2e4ac: Create postgres native search (which delivers worse results for now but avoids loading everything into memory)
+- 22e7e5a: New element search based on tfidf scores
+
+### Patch Changes
+
+- 393f871: Close database connections in tests to avoid too many connections
+- 6dda1d1: Switch to deployments via nx and remove the docker-compose dependency
+- 58b23a6: Do not return empty matches for element searches without length
+
 ## 0.24.4
 
 ### Patch Changes

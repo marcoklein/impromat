@@ -1,5 +1,12 @@
 # infrastructure
 
+## 0.7.1
+
+### Patch Changes
+
+- 393f871: Refactor Dockerfiles with new nx build
+- 1bebdff: Fix infrastructure configuration by starting ollama instance
+
 ## 0.7.0
 
 ### Minor Changes
