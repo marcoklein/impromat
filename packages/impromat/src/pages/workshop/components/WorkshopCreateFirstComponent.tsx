@@ -1,5 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 interface ContainerProps {
@@ -21,7 +21,7 @@ export const WorkshopCreateFirstComponent: React.FC<ContainerProps> = ({
         flexDirection: "column",
       }}
     >
-      <p>{t("StartWorkshop")}</p>
+      <Typography>{t("StartWorkshop")}</Typography>
       <Button onClick={() => onCreateWorkshopClick()} startIcon={<Add />}>
         {t("AddWorkshop")}
       </Button>
