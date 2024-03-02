@@ -245,15 +245,14 @@ type Variation {
   description: String
 }
 
+"""
+Contains information about the exact match of a search term in an element.
+"""
 type ElementSearchMatch {
-  """Key of field where searched text was found."""
-  key: String
-  indices: [[Int!]!]!
+  """Identifier of the matched field. E.g. "name", "markdown", or "tags"."""
+  key: String!
 
-  """
-  If the matching field is an array this field points to the index of the matching element in the source array.
-  """
-  refIndex: Int
+  """The matched text in of the field. Could be used for highlighting."""
   value: String!
 }
 
@@ -301,17 +300,9 @@ type Query {
 
   """Get information about the current user. Returns null if not logged in."""
   me: User
-  searchElementsV2(skip: Int! = 0, take: Int! = 20, input: ElementSearchV2Input!): [Element!]!
-  searchElementsV2Keywords(input: ElementSearchV2Input!): ElementSearchKeywords!
-  searchElements(
-    input: ElementSearchInput!
-
-    """Helper field to pass skip argument into input field."""
-    skip: Int
-
-    """Helper field to pass take argument into input field."""
-    take: Int
-  ): [ElementSearchResult!]! @deprecated(reason: "Use searchElementsV2 instead")
+  searchElements(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElementsTfidf(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElementsKeywords(input: ElementSearchInput!): ElementSearchKeywords!
   workshop(id: ID!): Workshop
 
   """Find workshops."""
@@ -345,27 +336,17 @@ input ElementsOrderByInput {
   notImplemented: Boolean!
 }
 
-input ElementSearchV2Input {
-  text: String
-
-  """Language code (e.g. en, de) for results."""
-  languageCode: String
-}
-
 input ElementSearchInput {
+  """
+  Search text. See https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search#postgresql for search usage information.
+  """
   text: String
-  tagNames: [String!]
 
   """Language code (e.g. en, de) for results."""
   languageCode: String
 
-  """Filter for liked elements of the user."""
-  isLiked: Boolean
-
-  """Filter for elements of the user."""
-  isOwned: Boolean
-  take: Int! = 20
-  skip: Int! = 0
+  """Language codes (e.g. en, de) to filter results by."""
+  languageCodes: [String!]
 }
 
 input WorkshopsWhereInput {

@@ -38,7 +38,7 @@ export function createCachedGraphqlClient(
               limitArgument: "take",
               offsetArgument: "skip",
             }),
-            searchElementsV2: simplePagination({
+            searchElementsTfidf: simplePagination({
               limitArgument: "take",
               offsetArgument: "skip",
             }),

@@ -3,24 +3,11 @@ import {
   Brush,
   Favorite,
   Public,
-  Search,
   Translate,
 } from "@mui/icons-material";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
 import { InfoListItem } from "./InfoListItem";
-
-const ElementInfoList_ElementSearchResult = graphql(`
-  fragment ElementInfoList_ElementSearchResult on ElementSearchResult {
-    score
-    matches {
-      key
-      indices
-      refIndex
-      value
-    }
-  }
-`);
 
 const ElementInfoList_Element = graphql(`
   fragment ElementInfoList_Element on Element {
@@ -35,12 +22,6 @@ const ElementInfoList_Element = graphql(`
 
 interface ContainerProps {
   elementFragment: FragmentType<typeof ElementInfoList_Element>;
-  /**
-   * Set if context is a search result to mark search result matches.
-   */
-  elementSearchResultFragment?: FragmentType<
-    typeof ElementInfoList_ElementSearchResult
-  > | null;
 }
 
 /**
@@ -48,22 +29,11 @@ interface ContainerProps {
  */
 export const ElementInfoList: React.FC<ContainerProps> = ({
   elementFragment,
-  elementSearchResultFragment,
 }) => {
   const element = getFragmentData(ElementInfoList_Element, elementFragment);
-  const searchResult = getFragmentData(
-    ElementInfoList_ElementSearchResult,
-    elementSearchResultFragment,
-  );
 
   return (
     <>
-      {searchResult && searchResult.score < 0.05 && (
-        <InfoListItem
-          displayText="high match"
-          icon={<Search color="primary" />}
-        ></InfoListItem>
-      )}
       {element.isFavorite && (
         <InfoListItem
           displayText="liked"

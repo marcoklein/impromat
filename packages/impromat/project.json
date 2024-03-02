@@ -17,7 +17,7 @@
     },
     "dev": {
       "dependsOn": ["codegen"],
-      "command": "concurrently \"yarn start\" \"yarn codegen --watch\"",
+      "command": "concurrently \"yarn start\" \"yarn nx codegen:graphql --watch\"",
       "options": {
         "cwd": "{projectRoot}"
       }

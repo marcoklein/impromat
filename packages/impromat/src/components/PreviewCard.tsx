@@ -13,7 +13,7 @@ interface ContainerProps {
   /**
    * Title to display in the card.
    */
-  title: string;
+  title: React.ReactNode;
   /**
    * Content to display below the title.
    */

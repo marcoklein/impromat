@@ -84,7 +84,8 @@
       "inputs": [
         "{projectRoot}/prisma/schema.prisma",
         "{projectRoot}/prisma/.env",
-        "{projectRoot}/schema/schema.graphql"
+        "{projectRoot}/schema/schema.graphql",
+        "{projectRoot}/test/**/*.ts"
       ],
       "outputs": [
         "{workspaceRoot}/node_modules/prisma/client",

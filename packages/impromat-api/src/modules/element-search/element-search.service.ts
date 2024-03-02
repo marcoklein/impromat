@@ -1,152 +1,178 @@
 import { accessibleBy } from '@casl/prisma';
-import { Injectable } from '@nestjs/common';
-import { Prisma, Element as PrismaElement } from '@prisma/client';
-import Fuse from 'fuse.js';
-import { ElementSearchInput } from 'src/dtos/inputs/element-search-input';
-import { ElementSearchMatch } from 'src/dtos/types/element-search-result.dto';
+import { Injectable, Logger } from '@nestjs/common';
+import { Prisma } from 'prisma/prisma-client';
+import { PaginationArgs } from 'src/dtos/args/pagination-args';
+import { Element } from 'src/dtos/types/element.dto';
 import {
   ABILITY_ACTION_LIST,
   defineAbilityForUser,
-} from '../../graphql/abilities';
+} from 'src/graphql/abilities';
+import { ElementSearchInput } from 'test/graphql-client/graphql';
 import { PrismaService } from '../database/prisma.service';
 import {
   elementLanguageFilterQuery,
   noSnapshotElementFilterQuery,
 } from '../element/shared-prisma-queries';
 import { UserService } from '../user/user.service';
+import {
+  ElementSearchMatch,
+  ElementSearchResult,
+} from './element-search-result.dto';
 
 @Injectable()
 export class ElementSearchService {
+  private readonly logger = new Logger(ElementSearchService.name);
+
   constructor(
     private prismaService: PrismaService,
     private userService: UserService,
   ) {}
 
+  /**
+   * Input arguments provide a single search text that is used to search in the
+   * element name, markdown, and tags. The search is performed using a logical OR
+   * between the fields and a logical OR between the search terms. The search
+   * is case-insensitive.
+   *
+   * If returnMatches is set to true, this function will also return information about
+   * the exact matches of the search term in the element. This information can be used
+   * to highlight the search term in the search results.
+   *
+   * @param userRequestId User ID of the requesting user.
+   * @param elementSearchInput Search input.
+   * @param paginationArgs Pagination arguments.
+   * @returns Search results.
+   */
   async searchElements(
     userRequestId: string | undefined,
-    searchElementsInput: ElementSearchInput,
-  ): Promise<
-    {
-      element: PrismaElement;
-      score: number;
-      matches: ElementSearchMatch[];
-    }[]
-  > {
+    elementSearchInput: ElementSearchInput,
+    paginationArgs: PaginationArgs,
+  ): Promise<ElementSearchResult[]> {
+    const searchElementsQueryWhereInput =
+      await this.getElementsForSearchWhereInput(
+        userRequestId,
+        elementSearchInput,
+      );
+
+    const OR_SEPARATOR = '|'; // TODO make this configurable?
+    const preparedTextSearch = (elementSearchInput.text?.trim() ?? '')
+      .replaceAll(
+        // replace all spaces with a single space
+        / +/g,
+        ' ',
+      )
+      .replaceAll(' ', OR_SEPARATOR);
+
+    const elementsByName = await this.prismaService.element.findMany({
+      where: {
+        ...searchElementsQueryWhereInput,
+        OR: [
+          {
+            name: {
+              search: preparedTextSearch,
+            },
+          },
+          {
+            markdown: {
+              // search: preparedTextSearch,
+              contains: preparedTextSearch,
+              mode: 'insensitive',
+            },
+          },
+          {
+            tags: {
+              some: {
+                tag: {
+                  name: {
+                    search: preparedTextSearch,
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+      orderBy: [
+        {
+          _relevance: {
+            fields: 'name',
+            search: preparedTextSearch,
+            sort: 'desc',
+          },
+        },
+        {
+          updatedAt: 'desc',
+        },
+      ],
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+      take: paginationArgs.take,
+      skip: paginationArgs.skip,
+    });
+
+    function findMatches(e: (typeof elementsByName)[0]) {
+      const postgresQueryToRegex = (query: string) =>
+        query.replaceAll(OR_SEPARATOR, '|');
+
+      const regex = new RegExp(postgresQueryToRegex(preparedTextSearch), 'gi');
+
+      const matches: ElementSearchMatch[] = [
+        ...(e.name.match(regex)?.map((m) => ({
+          key: 'name',
+          value: m,
+        })) ?? []),
+        ...(e.markdown?.match(regex)?.map((m) => ({
+          key: 'markdown',
+          value: m,
+        })) ?? []),
+        ...(e.tags
+          .map((t) => t.tag.name)
+          .join(' ')
+          .match(regex)
+          ?.map((m) => ({
+            key: 'tags',
+            value: m,
+          })) ?? []),
+      ];
+
+      return matches;
+    }
+
+    return elementsByName.map((e) => ({
+      matches: findMatches(e),
+      element: e as unknown as Element,
+      score: -1,
+    }));
+  }
+
+  private async getElementsForSearchWhereInput(
+    userRequestId: string | undefined,
+    input: ElementSearchInput,
+  ) {
     const user = await this.userService.findUserById(
       userRequestId,
       userRequestId,
     );
-
     const ability = defineAbilityForUser(userRequestId);
 
-    function createFilterTagNamesQuery(
-      tagNames: string[] | undefined,
-    ): Prisma.ElementWhereInput {
-      if (!tagNames || tagNames.length === 0) return {};
-      return {
-        AND: tagNames.map((tagName) => ({
-          tags: {
-            some: {
-              tag: {
-                name: tagName,
-              },
-            },
-          },
-        })),
-      };
-    }
-
     const FALLBACK_LANGUAGE_CODE = 'en';
-    const languageCodes = searchElementsInput.languageCode
-      ? [searchElementsInput.languageCode]
-      : user?.languageCodes ?? [FALLBACK_LANGUAGE_CODE];
+    const languageCodes = input.languageCode
+      ? [input.languageCode]
+      : input.languageCodes ?? user?.languageCodes ?? [FALLBACK_LANGUAGE_CODE];
 
-    const userSpecificElementFilterQueries: Prisma.ElementWhereInput[] = [
-      {
-        OR: [
-          {
-            ownerId: userRequestId,
-          },
-          {
-            visibility: 'PUBLIC',
-          },
-        ],
-      },
-      searchElementsInput.isLiked
-        ? {
-            userFavoriteElement: {
-              some: {
-                userId: userRequestId,
-              },
-            },
-          }
-        : {},
-      searchElementsInput.isOwned
-        ? {
-            ownerId: userRequestId,
-          }
-        : {},
-    ];
-
-    const elementsToSearch = await this.prismaService.element.findMany({
-      where: {
-        AND: [
-          accessibleBy(ability, ABILITY_ACTION_LIST).Element,
-          noSnapshotElementFilterQuery,
-          elementLanguageFilterQuery(userRequestId, languageCodes),
-          createFilterTagNamesQuery(searchElementsInput.tagNames),
-          ...(user ? userSpecificElementFilterQueries : []),
-        ],
-      },
-      include: { tags: true },
-    });
-
-    if (!searchElementsInput.text) {
-      return elementsToSearch
-        .map((element) => ({
-          element,
-          score: 1,
-          matches: [],
-        }))
-        .slice(
-          searchElementsInput.skip,
-          searchElementsInput.skip + searchElementsInput.take,
-        );
-    }
-    const fuse = new Fuse(elementsToSearch, {
-      keys: [
-        { name: 'name', weight: 2 },
-        { name: 'tags.name', weight: 1 },
+    const accessibleElementsQuery: Prisma.ElementWhereInput = {
+      AND: [
+        accessibleBy(ability, ABILITY_ACTION_LIST).Element,
+        noSnapshotElementFilterQuery,
+        elementLanguageFilterQuery(userRequestId, languageCodes),
       ],
-      isCaseSensitive: false,
-      includeScore: true,
-      includeMatches: true,
-      shouldSort: true,
-      threshold: 0.6,
-    });
+    };
 
-    // TODO optimize by reusing fuse instance for public elements and potentially cache search index for users
-    const result = fuse
-      .search(searchElementsInput.text.trim(), {
-        limit: searchElementsInput.skip + searchElementsInput.take,
-      })
-      .slice(
-        searchElementsInput.skip,
-        searchElementsInput.skip + searchElementsInput.take,
-      )
-      .map((fuseResult) => ({
-        element: fuseResult.item,
-        score: fuseResult.score ?? 1,
-        matches:
-          fuseResult.matches?.map(
-            (match): ElementSearchMatch => ({
-              indices: match.indices as [number, number][],
-              key: match.key,
-              refIndex: match.refIndex,
-              value: match.value ?? '',
-            }),
-          ) ?? [],
-      }));
-    return result;
+    return accessibleElementsQuery;
   }
 }

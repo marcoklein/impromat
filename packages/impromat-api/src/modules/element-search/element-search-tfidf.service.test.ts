@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { Element } from '@prisma/client';
+import { Element, User } from '@prisma/client';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import {
   PrismaServiceMock,
