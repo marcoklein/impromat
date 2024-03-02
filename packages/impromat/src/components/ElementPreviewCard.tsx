@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { routeLibraryElement } from "../routes/shared-routes";
@@ -11,7 +11,6 @@ const ElementPreviewItem_ElementSearchResultFragment = graphql(`
       key
       value
     }
-    ...ElementInfoList_ElementSearchResult
   }
 `);
 
@@ -85,22 +84,31 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
       element.tags.map((tag) => ({
         ...tag,
         isMatch: searchResult?.matches.find(
-          (match) => match.key === "tags.name" && match.value === tag.name,
+          (match) =>
+            match.key === "tags" &&
+            tag.name.toLowerCase().includes(match.value.toLowerCase()),
         ),
       })),
     [element, searchResult],
+  );
+  const isNameMatch = searchResult?.matches.find(
+    (match) => match.key === "name",
   );
 
   return (
     <PreviewCard
       routerLink={routerLink}
       infoListElement={
-        <ElementInfoList
-          elementFragment={element}
-          elementSearchResultFragment={searchResult}
-        ></ElementInfoList>
+        <ElementInfoList elementFragment={element}></ElementInfoList>
       }
-      title={element.name}
+      title={
+        <Typography
+          component="span"
+          sx={{ fontWeight: isNameMatch ? "bold" : undefined }}
+        >
+          {element.name}
+        </Typography>
+      }
       content={element.summary ?? element.markdownShort ?? undefined}
       footer={
         <Typography
@@ -110,7 +118,14 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
             m: 0,
           }}
         >
-          {tags.map((tag) => `#${tag.name}`).join(" ")}
+          {tags.map((tag) => (
+            <Box
+              component="span"
+              sx={{ ml: 0.5, fontWeight: tag.isMatch ? "bold" : "normal" }}
+            >
+              #{tag.name}
+            </Box>
+          ))}
         </Typography>
       }
     ></PreviewCard>

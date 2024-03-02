@@ -16,11 +16,12 @@ import {
   noSnapshotElementFilterQuery,
 } from '../element/shared-prisma-queries';
 import { UserService } from '../user/user.service';
-import { ElementSearchKeywords } from './search-element-v2.dto';
+import { ElementSearchResult } from './element-search-result.dto';
+import { ElementSearchKeywords } from './search-element.dto';
 
 @Injectable()
-export class ElementSearchV2Service {
-  private readonly logger = new Logger(ElementSearchV2Service.name);
+export class ElementSearchTfidfService {
+  private readonly logger = new Logger(ElementSearchTfidfService.name);
   private tokenizerDe = new natural.AggressiveTokenizerDe();
   private stemmerDe = natural.PorterStemmerDe;
 
@@ -80,7 +81,7 @@ export class ElementSearchV2Service {
     userRequestId: string | undefined,
     elementSearchInput: ElementSearchInput,
     paginationArgs: PaginationArgs,
-  ): Promise<Omit<Element, ElementOmittedFields>[]> {
+  ): Promise<ElementSearchResult[]> {
     // TODO use https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search
     // TODO have to switch to database only query to filter everything at once or filter in client in the searchElementsContent function
     const elementsFromContent = await this.searchElementsContent(
@@ -88,7 +89,12 @@ export class ElementSearchV2Service {
       elementSearchInput,
       paginationArgs,
     );
-    return elementsFromContent;
+    // TODO return information about the search result (e.g. matching keywords, number of documents, etc.)
+    return elementsFromContent.map((e) => ({
+      matches: [],
+      element: e as Element,
+      score: -1,
+    }));
   }
 
   private async searchElementsContent(
@@ -148,7 +154,7 @@ export class ElementSearchV2Service {
 
   private createTfidf(
     elements: Awaited<
-      ReturnType<ElementSearchV2Service['collectElementsForSearch']>
+      ReturnType<ElementSearchTfidfService['collectElementsForSearch']>
     >,
     calculateStemmedWordsMap = false,
   ) {
@@ -238,6 +244,7 @@ export class ElementSearchV2Service {
     const ability = defineAbilityForUser(userRequestId);
 
     const FALLBACK_LANGUAGE_CODE = 'en';
+    // TODO allow multiple language codes
     const languageCodes = input.languageCode
       ? [input.languageCode]
       : user?.languageCodes ?? [FALLBACK_LANGUAGE_CODE];

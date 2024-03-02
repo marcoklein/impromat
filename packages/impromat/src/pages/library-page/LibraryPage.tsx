@@ -5,22 +5,24 @@ import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { graphql } from "../../graphql-client";
 import { usePersistedState } from "../../hooks/use-persisted-state";
-import { MuiLibraryElements } from "./LibraryElements";
+import { LibraryElements } from "./LibraryElements";
 import { LibraryPageAppBar } from "./LibraryPageAppBar";
 import { NewElementButton } from "./NewElementButton";
 import { QueryErrorAlert } from "./QueryErrorAlert";
 
 const MuiLibraryPageQuery = graphql(`
   query MuiLibraryPageQuery(
-    $input: ElementSearchV2Input!
+    $input: ElementSearchInput!
     $skip: Int!
     $take: Int!
   ) {
-    searchElementsV2(input: $input, skip: $skip, take: $take) {
-      id
-      name
-      ...ElementItem_Element
-      ...MuiLibraryElement_Element
+    searchElements(input: $input, skip: $skip, take: $take) {
+      element {
+        id
+        name
+        ...ElementItem_Element
+      }
+      ...LibraryElements_ElementSearchResult
     }
   }
 `);
@@ -46,7 +48,7 @@ export const LibraryPage: React.FC = () => {
     variables: {
       input: {
         text: searchText,
-        languageCode: selectedLanguage,
+        languageCodes: [selectedLanguage],
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
@@ -94,14 +96,16 @@ export const LibraryPage: React.FC = () => {
       <IsLoggedIn>
         <NewElementButton />
       </IsLoggedIn>
-      <MuiLibraryElements
+      <LibraryElements
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
         scrollToTop={scrollToTop}
-        elementFragments={searchElementsQueryResult.data?.searchElementsV2}
+        elementSearchResultFragments={
+          searchElementsQueryResult.data?.searchElements
+        }
         isQueryStale={searchElementsQueryResult.stale}
         isQueryFetching={searchElementsQueryResult.fetching}
-      ></MuiLibraryElements>
+      ></LibraryElements>
     </Box>
   );
 };

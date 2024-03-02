@@ -50,8 +50,8 @@ export const elementsQuery = graphql(`
 `);
 
 export const searchElementsQuery = graphql(`
-  query SearchElementsQuery($input: ElementSearchInput!) {
-    searchElements(input: $input) {
+  query SearchElementsQuery($input: ElementSearchInput!, $take: Int) {
+    searchElements(input: $input, take: $take) {
       element {
         ...ElementFields
       }

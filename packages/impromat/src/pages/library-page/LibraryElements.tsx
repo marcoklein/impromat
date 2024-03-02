@@ -1,3 +1,4 @@
+import { Person4, ReceiptLong } from "@mui/icons-material";
 import {
   Box,
   Container,
@@ -7,50 +8,54 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { useMemo } from "react";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { FragmentType, getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { Person4, ReceiptLong } from "@mui/icons-material";
-import { useMemo } from "react";
 import { routeLibraryElement } from "../../routes/shared-routes";
 
-const MuiLibraryElement_Element = graphql(`
-  fragment MuiLibraryElement_Element on Element {
-    id
-    createdAt
-    updatedAt
-    version
-    deleted
-    name
-    summary
-    markdownShort
-    tags {
+const LibraryElements_ElementSearchResult = graphql(`
+  fragment LibraryElements_ElementSearchResult on ElementSearchResult {
+    element {
       id
+      createdAt
+      updatedAt
+      version
+      deleted
       name
+      summary
+      markdownShort
+      tags {
+        id
+        name
+      }
+      usedBy {
+        id
+      }
+      languageCode
+      sourceUrl
+      sourceName
+      sourceBaseUrl
+      licenseName
+      licenseUrl
+      visibility
+      isFavorite
+      owner {
+        id
+      }
+      isOwnerMe
+      ...ElementItem_Element
+      ...ElementPreviewItem_Element
     }
-    usedBy {
-      id
-    }
-    languageCode
-    sourceUrl
-    sourceName
-    sourceBaseUrl
-    licenseName
-    licenseUrl
-    visibility
-    isFavorite
-    owner {
-      id
-    }
-    isOwnerMe
-    ...ElementItem_Element
-    ...ElementPreviewItem_Element
+    ...ElementPreviewItem_ElementSearchResult
   }
 `);
 
 interface ContainerProps {
-  elementFragments?: FragmentType<typeof MuiLibraryElement_Element>[];
+  elementSearchResultFragments?: FragmentType<
+    typeof LibraryElements_ElementSearchResult
+  >[];
   isQueryStale: boolean;
   isQueryFetching: boolean;
   scrollToTop: number;
@@ -64,8 +69,8 @@ interface ContainerProps {
  * @param param0
  * @returns
  */
-export const MuiLibraryElements: React.FC<ContainerProps> = ({
-  elementFragments,
+export const LibraryElements: React.FC<ContainerProps> = ({
+  elementSearchResultFragments: elementFragments,
   isQueryStale,
   isQueryFetching,
   scrollToTop,
@@ -73,7 +78,10 @@ export const MuiLibraryElements: React.FC<ContainerProps> = ({
   setPageNumber,
 }) => {
   const logger = useComponentLogger("MuiLibraryElements");
-  const elements = getFragmentData(MuiLibraryElement_Element, elementFragments);
+  const elements = getFragmentData(
+    LibraryElements_ElementSearchResult,
+    elementFragments,
+  );
 
   const headerElement = useMemo(
     () => (
@@ -121,14 +129,10 @@ export const MuiLibraryElements: React.FC<ContainerProps> = ({
         }}
         items={elements ?? []}
         itemContent={(_index, searchResult) => (
-          // TODO switch to ElementItem (in MUI design)
-          // <ElementItem
-          //   elementFragment={searchResult}
-          //   onClick={() => router.push(routeLibraryElement(searchResult.id))}
-          // ></ElementItem>
           <ElementPreviewCard
-            routerLink={routeLibraryElement(searchResult.id)}
-            elementFragment={searchResult}
+            routerLink={routeLibraryElement(searchResult.element.id)}
+            elementFragment={searchResult.element}
+            elementSearchResultFragment={searchResult}
           ></ElementPreviewCard>
         )}
       ></VirtualCardGrid>

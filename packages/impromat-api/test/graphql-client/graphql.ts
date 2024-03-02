@@ -166,15 +166,11 @@ export type ElementQueryResult = {
 };
 
 export type ElementSearchInput = {
-  /** Filter for liked elements of the user. */
-  isLiked?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Filter for elements of the user. */
-  isOwned?: InputMaybe<Scalars['Boolean']['input']>;
   /** Language code (e.g. en, de) for results. */
   languageCode?: InputMaybe<Scalars['String']['input']>;
-  skip?: Scalars['Int']['input'];
-  tagNames?: InputMaybe<Array<Scalars['String']['input']>>;
-  take?: Scalars['Int']['input'];
+  /** Language codes (e.g. en, de) to filter results by. */
+  languageCodes?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** Search text. See https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search#postgresql for search usage information. */
   text?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -196,13 +192,12 @@ export type ElementSearchKeywords = {
   uniqueKeywordsCount: Scalars['Int']['output'];
 };
 
+/** Contains information about the exact match of a search term in an element. */
 export type ElementSearchMatch = {
   __typename?: 'ElementSearchMatch';
-  indices: Array<Array<Scalars['Int']['output']>>;
-  /** Key of field where searched text was found. */
-  key?: Maybe<Scalars['String']['output']>;
-  /** If the matching field is an array this field points to the index of the matching element in the source array. */
-  refIndex?: Maybe<Scalars['Int']['output']>;
+  /** Identifier of the matched field. E.g. "name", "markdown", or "tags". */
+  key: Scalars['String']['output'];
+  /** The matched text in of the field. Could be used for highlighting. */
   value: Scalars['String']['output'];
 };
 
@@ -211,12 +206,6 @@ export type ElementSearchResult = {
   element: Element;
   matches: Array<ElementSearchMatch>;
   score: Scalars['Float']['output'];
-};
-
-export type ElementSearchV2Input = {
-  /** Language code (e.g. en, de) for results. */
-  languageCode?: InputMaybe<Scalars['String']['input']>;
-  text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ElementSnapshot = {
@@ -366,10 +355,9 @@ export type Query = {
   googleAuthUrl: Scalars['String']['output'];
   /** Get information about the current user. Returns null if not logged in. */
   me?: Maybe<User>;
-  /** @deprecated Use searchElementsV2 instead */
   searchElements: Array<ElementSearchResult>;
-  searchElementsV2: Array<Element>;
-  searchElementsV2Keywords: ElementSearchKeywords;
+  searchElementsKeywords: ElementSearchKeywords;
+  searchElementsTfidf: Array<ElementSearchResult>;
   tags: Array<ElementTag>;
   /** Get information about a user. Returns null if not found or not logged in. */
   user?: Maybe<User>;
@@ -392,18 +380,18 @@ export type QueryElementsArgs = {
 
 export type QuerySearchElementsArgs = {
   input: ElementSearchInput;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  take?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type QuerySearchElementsV2Args = {
-  input: ElementSearchV2Input;
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
 };
 
-export type QuerySearchElementsV2KeywordsArgs = {
-  input: ElementSearchV2Input;
+export type QuerySearchElementsKeywordsArgs = {
+  input: ElementSearchInput;
+};
+
+export type QuerySearchElementsTfidfArgs = {
+  input: ElementSearchInput;
+  skip?: Scalars['Int']['input'];
+  take?: Scalars['Int']['input'];
 };
 
 export type QueryTagsArgs = {
@@ -753,6 +741,7 @@ export type ElementsQueryQuery = {
 
 export type SearchElementsQueryQueryVariables = Exact<{
   input: ElementSearchInput;
+  take?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type SearchElementsQueryQuery = {
@@ -1700,6 +1689,11 @@ export const SearchElementsQueryDocument = {
             },
           },
         },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'take' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
       ],
       selectionSet: {
         kind: 'SelectionSet',
@@ -1714,6 +1708,14 @@ export const SearchElementsQueryDocument = {
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'input' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'take' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'take' },
                 },
               },
             ],

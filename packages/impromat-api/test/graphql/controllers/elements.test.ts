@@ -22,14 +22,11 @@ describe('Elements', () => {
     const result = await api.graphqlRequest(searchElementsQuery, {
       input: { text: 'freeze' },
     });
+    const searchElements = result.data!.searchElements;
     // then
-    expect(result.data?.searchElements[0].element.name).toBe('Freeze');
-    expect(
-      result.data?.searchElements[0].element.markdown?.length,
-    ).toBeGreaterThan(2000);
-    expect(
-      result.data?.searchElements[0].element.markdownShort?.length,
-    ).toEqual(300);
+    expect(searchElements[0].element.name).toBe('Freeze');
+    expect(searchElements[0].element.markdown?.length).toBeGreaterThan(2000);
+    expect(searchElements[0].element.markdownShort?.length).toEqual(300);
   });
 
   it('should allow public user to query public element', async () => {
