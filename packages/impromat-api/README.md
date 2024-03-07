@@ -3,7 +3,8 @@
 ## Prerequisites
 
 - NodeJs
-- PostgresSQL for running tests
+- PostgresSQL
+- [pg_vector](https://github.com/pgvector/pgvector) for PostgresSQL
 
 ## Getting started
 

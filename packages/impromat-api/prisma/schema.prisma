@@ -1,11 +1,12 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
 }
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearch", "postgresqlExtensions"]
 }
 
 model Element {
@@ -38,6 +39,9 @@ model Element {
   snapshotParent   Element?  @relation("SnapshotRelation", fields: [snapshotParentId], references: [id])
   snapshots        Element[] @relation("SnapshotRelation")
   snapshotParentId String?
+
+  // 1536 for OpenAI, 1024 for mistral
+  embedding Unsupported("vector(4096)")?
 
   metadata ElementMetadata[]
   tags     ElementToElementTag[]

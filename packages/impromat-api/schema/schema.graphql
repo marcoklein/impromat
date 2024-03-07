@@ -206,6 +206,7 @@ type Element {
     """
     forceRefresh: Boolean! = false
   ): String
+  embedding: [Float!]
 }
 
 enum ElementVisibility {

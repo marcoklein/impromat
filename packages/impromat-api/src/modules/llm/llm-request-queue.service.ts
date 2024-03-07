@@ -18,6 +18,38 @@ export class LLMRequestQueueService {
     @Inject(PromiseQueue) private queue: PromiseQueue<LLMResponse | undefined>,
   ) {}
 
+  async generateEmbeddings(
+    model: string,
+    text: string,
+  ): Promise<number[] | undefined> {
+    const generateEndpoint = '/api/embeddings';
+
+    this.logger.debug('Sending request to ollama');
+
+    const response = await fetch(
+      `${process.env.OLLAMA_ENDPOINT}${generateEndpoint}`,
+      {
+        body: JSON.stringify({
+          model: model,
+          prompt: text,
+        }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+    if (!response.ok) {
+      this.logger.error('Error during generateEmbeddings:');
+      this.logger.error(response.statusText);
+      return undefined;
+    }
+    this.logger.debug('Response is ok');
+    const json = await response.json();
+    const embeddings = json.embedding;
+    this.logger.debug('Received embeddings from ollama: (first 5)');
+    this.logger.debug(embeddings.slice(0, 5));
+    return embeddings;
+  }
+
   async runRequest(request: LLMRequest): Promise<LLMResponse | undefined> {
     if (!process.env.OLLAMA_ENDPOINT) {
       this.logger.error('OLLAMA_ENDPOINT environment variable is not set.');

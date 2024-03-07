@@ -18,7 +18,8 @@ export class LLMService {
   private readonly logger = new Logger(LLMService.name);
 
   constructor(
-    @Inject(LLMRequestQueueService) private llmService: LLMRequestQueueService,
+    @Inject(LLMRequestQueueService)
+    private llmRequestQueueService: LLMRequestQueueService,
   ) {}
 
   async run({
@@ -31,15 +32,7 @@ export class LLMService {
   }: ElementLLMInput): Promise<string | undefined> {
     const preprocessedMarkdown = cleanText
       ? markdown
-      : markdown
-          .replace(/\n/g, ' ')
-          .replace(/#/g, ' ')
-          .replace(/-/g, ' ')
-          .replace(/\//g, ' ')
-          .replace(/\d+/g, ' ')
-          .replace(/_/g, ' ')
-          .replace(/\*/g, ' ')
-          .replace(/\s+/g, ' ');
+      : this.cleanMarkdown(markdown);
 
     const paramsEn: LLMRequest = {
       model: 'mistral',
@@ -58,7 +51,9 @@ export class LLMService {
     };
 
     const params = languageCode === 'de' ? paramsDe : paramsEn;
-    const summaryResponse = await this.llmService.runRequest(params);
+    const summaryResponse = await this.llmRequestQueueService.runRequest(
+      params,
+    );
 
     if (
       !summaryResponse ||
@@ -77,12 +72,28 @@ export class LLMService {
     return summaryResponse.response.trim();
   }
 
-  parseJSON(json: string): any {
-    try {
-      return JSON.parse(json);
-    } catch (e) {
-      this.logger.warn(`Could not parse JSON: ${json}`);
-      return undefined;
+  generateEmbeddings(
+    text: string,
+    options?: { cleanMarkdown?: boolean },
+  ): Promise<number[] | undefined> {
+    const model = 'mistral';
+
+    if (options?.cleanMarkdown) {
+      text = this.cleanMarkdown(text);
     }
+
+    return this.llmRequestQueueService.generateEmbeddings(model, text);
+  }
+
+  private cleanMarkdown(markdown: string): string {
+    return markdown
+      .replace(/\n/g, ' ')
+      .replace(/#/g, ' ')
+      .replace(/-/g, ' ')
+      .replace(/\//g, ' ')
+      .replace(/\d+/g, ' ')
+      .replace(/_/g, ' ')
+      .replace(/\*/g, ' ')
+      .replace(/\s+/g, ' ');
   }
 }

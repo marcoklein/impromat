@@ -85,6 +85,7 @@ export type Element = {
   __typename?: 'Element';
   createdAt: Scalars['DateTime']['output'];
   deleted?: Maybe<Scalars['Boolean']['output']>;
+  embedding: Array<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
   /** Set if the element was imported from improbib, a project that collects existing improv resources. */
   improbibIdentifier?: Maybe<Scalars['String']['output']>;
