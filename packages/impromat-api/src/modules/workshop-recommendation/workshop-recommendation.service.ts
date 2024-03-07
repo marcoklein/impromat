@@ -5,7 +5,7 @@ import {
   defineAbilityForUser,
 } from '../../graphql/abilities';
 import { PrismaService } from '../database/prisma.service';
-import { ElementRecommendationService } from '../element/element-recommendation.service';
+import { ElementRecommendationService } from '../element-recommendation/element-recommendation.service';
 
 export class WorkshopRecommendationService {
   constructor(

@@ -1,5 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { LLMRequest, LLMService } from './llm.service';
+import {
+  LLMRequest,
+  LLMRequestQueueService,
+} from './llm-request-queue.service';
 
 export interface ElementLLMInput {
   systemPromptEn: string;
@@ -11,10 +14,12 @@ export interface ElementLLMInput {
 }
 
 @Injectable()
-export class ElementLLMService {
-  private readonly logger = new Logger(ElementLLMService.name);
+export class LLMService {
+  private readonly logger = new Logger(LLMService.name);
 
-  constructor(@Inject(LLMService) private llmService: LLMService) {}
+  constructor(
+    @Inject(LLMRequestQueueService) private llmService: LLMRequestQueueService,
+  ) {}
 
   async run({
     systemPromptDe,

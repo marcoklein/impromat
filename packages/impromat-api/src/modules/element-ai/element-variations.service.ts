@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ElementLLMService } from './element-llm.service';
+import { LLMService } from '../llm/llm.service';
 
 export interface ElementVariationsInput {
   elementId: string;
@@ -16,9 +16,7 @@ export interface ElementVariationsOutput {
 export class ElementVariationsService {
   private logger = new Logger(ElementVariationsService.name);
 
-  constructor(
-    @Inject(ElementLLMService) private elementLLMService: ElementLLMService,
-  ) {}
+  constructor(@Inject(LLMService) private elementLLMService: LLMService) {}
 
   async detectVariations(
     input: ElementVariationsInput,

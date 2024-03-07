@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
 import { UserModule } from '../user/user.module';
-import { ElementRecommendationService } from './element-recommendation.service';
+import { ElementRecommendationService } from '../element-recommendation/element-recommendation.service';
 import { ElementSnapshotController } from './element-snapshot.controller';
 import { ElementSnapshotService } from './element-snapshot.service';
 import { ElementTagService } from './element-tag.service';

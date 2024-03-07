@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { LLMResponse } from './llm-response';
+import { LLMResponse } from './llm-request-queue-response';
 import { PromiseQueue } from './promise-queue';
 
 export type LLMRequest = {
@@ -11,8 +11,8 @@ export type LLMRequest = {
 };
 
 @Injectable()
-export class LLMService {
-  private readonly logger = new Logger(LLMService.name);
+export class LLMRequestQueueService {
+  private readonly logger = new Logger(LLMRequestQueueService.name);
 
   constructor(
     @Inject(PromiseQueue) private queue: PromiseQueue<LLMResponse | undefined>,

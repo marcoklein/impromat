@@ -27,6 +27,14 @@ export class ElementRecommendationService {
       },
     });
 
+    const notInTags = [
+      'game',
+      'exercise',
+      'warmup',
+      'Spiel',
+      'Übung',
+      'Aufwärmspiel',
+    ];
     const recommendations = await this.prismaService.element.findMany({
       where: {
         AND: [
@@ -41,14 +49,7 @@ export class ElementRecommendationService {
                 tag: {
                   name: {
                     in: element.tags.map((relation) => relation.tag.name),
-                    notIn: [
-                      'game',
-                      'exercise',
-                      'warmup',
-                      'Spiel',
-                      'Übung',
-                      'Aufwärmspiel',
-                    ],
+                    notIn: notInTags,
                   },
                 },
               },

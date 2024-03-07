@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ElementLLMService } from './element-llm.service';
+import { LLMService } from '../llm/llm.service';
 
 export interface ElementKeywordsInput {
   elementId: string;
@@ -16,9 +16,7 @@ export interface ElementKeywordsOutput {
 export class ElementKeywordsService {
   private logger = new Logger(ElementKeywordsService.name);
 
-  constructor(
-    @Inject(ElementLLMService) private elementLLMService: ElementLLMService,
-  ) {}
+  constructor(@Inject(LLMService) private elementLLMService: LLMService) {}
 
   async detectKeywords(
     input: ElementKeywordsInput,

@@ -23,28 +23,18 @@ import {
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
-import { ElementRecommendationService } from './element-recommendation.service';
 import { ElementSnapshotService } from './element-snapshot.service';
 import { ElementService } from './element.service';
 
+/**
+ * CRUD operations for elements.
+ */
 @Resolver(Element)
 export class ElementController {
   constructor(
     private elementService: ElementService,
-    private elementRecommendationService: ElementRecommendationService,
     private elementSnapshotService: ElementSnapshotService,
   ) {}
-
-  @ResolveField(() => [Element])
-  async recommendations(
-    @Parent() element: Element,
-    @SessionUserId() userSessionId: string,
-  ) {
-    return this.elementRecommendationService.findRecommendations(
-      userSessionId,
-      element.id,
-    );
-  }
 
   @ResolveField(() => Boolean)
   async isFavorite(

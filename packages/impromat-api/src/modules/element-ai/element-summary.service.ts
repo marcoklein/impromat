@@ -6,7 +6,7 @@ import {
 } from 'src/graphql/abilities';
 import { ElementService } from 'src/modules/element/element.service';
 import { PrismaService } from 'src/modules/database/prisma.service';
-import { ElementLLMService } from './element-llm.service';
+import { LLMService } from '../llm/llm.service';
 
 export interface ElementSummaryInput {
   elementId: string;
@@ -24,7 +24,7 @@ export class ElementSummaryService {
   private readonly MIN_SUMMARY_LENGTH = 300;
 
   constructor(
-    @Inject(ElementLLMService) private llmService: ElementLLMService,
+    @Inject(LLMService) private llmService: LLMService,
     @Inject(PrismaService) private prismaService: PrismaService,
     @Inject(ElementService) private elementService: ElementService,
   ) {}

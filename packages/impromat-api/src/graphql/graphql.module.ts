@@ -5,10 +5,12 @@ import { environment } from 'src/environment';
 import { AdminModule } from 'src/modules/admin/admin.module';
 import { DatabaseModule } from 'src/modules/database/database.module';
 import { ElementAIModule } from 'src/modules/element-ai/element-summary.module';
+import { ElementRecommendationModule } from 'src/modules/element-recommendation/element-recommendation.module';
 import { ElementSearchModule } from 'src/modules/element-search/element-search.module';
 import { ElementModule } from 'src/modules/element/element.module';
 import { UserLikedModule } from 'src/modules/user-liked/user-liked.module';
 import { UserModule } from 'src/modules/user/user.module';
+import { WorkshopGenerationModule } from 'src/modules/workshop-generation/workshop-generation.module';
 import { WorkshopRecommendationModule } from 'src/modules/workshop-recommendation/workshop-recommendation.module';
 import { WorkshopModule } from 'src/modules/workshop/workshop.module';
 import { UserSessionService } from './services/user-session.service';
@@ -33,12 +35,14 @@ import { UserSessionService } from './services/user-session.service';
     AdminModule,
     DatabaseModule,
     ElementModule,
+    ElementRecommendationModule,
     ElementSearchModule,
     ElementAIModule,
     UserModule,
     UserLikedModule,
     WorkshopModule,
     WorkshopRecommendationModule,
+    WorkshopGenerationModule,
   ],
   controllers: [],
   providers: [UserSessionService],

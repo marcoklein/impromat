@@ -1,8 +1,12 @@
-# Context & Background
+# Element Tags
+
+Tags are a fundamental feature for sorting elements into meaningful categories. This entry describes where tags ar coming from and the overall goal.
+
+## Taxonomy
 
 ## Tags Sources
 
-Currently, they are very unstructured and base mostly on already existing tags from the sources (e.g. improwiki, improvencyclopedia and improvresourcecenter). They provide _context_ for a certain element type.
+Read from there raw sources, tags are very unstructured and base mostly on already existing tags from the sources (e.g. improwiki, improvencyclopedia and improvresourcecenter). They provide _context_ for a certain element type.
 
 Tags are used to cluster and categorize elements of a similar kind. Those clusters are varying and have to be defined by people that know improv and the planning of workshops.
 

@@ -1,10 +1,13 @@
 import { Test } from '@nestjs/testing';
-import { LLMResponse } from './llm-response';
-import { LLMRequest, LLMService } from './llm.service';
+import { LLMResponse } from './llm-request-queue-response';
+import {
+  LLMRequest,
+  LLMRequestQueueService,
+} from './llm-request-queue.service';
 import { PromiseQueue } from './promise-queue';
 
 describe('LLMService', () => {
-  let service: LLMService;
+  let service: LLMRequestQueueService;
   let mockRequest: LLMRequest;
   let mockResponse: LLMResponse;
 
@@ -31,9 +34,9 @@ describe('LLMService', () => {
     };
 
     const moduleRef = await Test.createTestingModule({
-      providers: [LLMService, PromiseQueue],
+      providers: [LLMRequestQueueService, PromiseQueue],
     }).compile();
-    service = moduleRef.get(LLMService);
+    service = moduleRef.get(LLMRequestQueueService);
 
     (global as any).fetch = jest.fn(() => ({
       json: () => Promise.resolve(mockResponse),

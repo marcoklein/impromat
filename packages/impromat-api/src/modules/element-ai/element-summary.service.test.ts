@@ -2,25 +2,25 @@ import { Test } from '@nestjs/testing';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { PrismaServiceMockProvider } from 'test/prisma-service-mock';
 import { ElementService } from '../element/element.service';
-import { ElementLLMService } from './element-llm.service';
+import { LLMService } from '../llm/llm.service';
 import { ElementSummaryService } from './element-summary.service';
 
 describe('ElementSummaryService', () => {
   let service: ElementSummaryService;
-  let llmService: DeepMockProxy<ElementLLMService>;
+  let llmService: DeepMockProxy<LLMService>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         ElementSummaryService,
         PrismaServiceMockProvider,
-        { provide: ElementLLMService, useValue: mockDeep(ElementLLMService) },
+        { provide: LLMService, useValue: mockDeep(LLMService) },
         { provide: ElementService, useValue: mockDeep(ElementService) },
       ],
     }).compile();
 
     service = moduleRef.get(ElementSummaryService);
-    llmService = moduleRef.get(ElementLLMService);
+    llmService = moduleRef.get(LLMService);
   });
 
   it('should return the input markdown if it is shorter than 300 characters', async () => {
