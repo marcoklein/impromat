@@ -23,3 +23,14 @@ Process:
 Result:
 
 Workshop with a random topic and a set of elements that fit the topic.
+
+## Topics for Generation
+
+- Yes, And
+- Impulse & Spontaneity
+- Being present in the moment
+- Listening
+- Taking Risks
+- Making & Accepting Offers
+- Failing Joyfully
+- Trusting Yourself

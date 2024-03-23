@@ -1,5 +1,4 @@
-import { Args, Context, Info, Query, Resolver } from '@nestjs/graphql';
-import { GraphQLResolveInfo } from 'graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { PaginationArgs } from 'src/dtos/args/pagination-args';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { ElementSearchResult } from './element-search-result.dto';

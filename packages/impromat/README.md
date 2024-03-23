@@ -66,16 +66,10 @@ For all other tests you have to start the backend infrastructure.
 
 ### Start backend infrastructure
 
-Start test infrastructure via
+Run the backend and database locally and change `.env.test` to point to the local API endpoint:
 
 ```sh
-yarn nx test:integration-api-up --watch
-```
-
-Alternatively, run the backend and database locally and change `.env.test` to point to the local API endpoint:
-
-```sh
-yarn workspace impromat-api dev
+yarn nx dev impromat-api
 ```
 
 And `.env.test.local`:

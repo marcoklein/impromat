@@ -300,14 +300,14 @@ type Query {
 
   """Get information about the current user. Returns null if not logged in."""
   me: User
-  searchElements(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
-  searchElementsTfidf(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
-  searchElementsKeywords(input: ElementSearchInput!): ElementSearchKeywords!
   workshop(id: ID!): Workshop
 
   """Find workshops."""
   workshops(skip: Int! = 0, take: Int! = 20, where: WorkshopsWhereInput, orderBy: [WorkshopsOrderByInput!]): [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
+  searchElements(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElementsTfidf(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElementsKeywords(input: ElementSearchInput!): ElementSearchKeywords!
 }
 
 """Filter tags of elements."""
@@ -334,19 +334,6 @@ input ElementsFilterInput {
 
 input ElementsOrderByInput {
   notImplemented: Boolean!
-}
-
-input ElementSearchInput {
-  """
-  Search text. See https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search#postgresql for search usage information.
-  """
-  text: String
-
-  """Language code (e.g. en, de) for results."""
-  languageCode: String
-
-  """Language codes (e.g. en, de) to filter results by."""
-  languageCodes: [String!]
 }
 
 input WorkshopsWhereInput {
@@ -416,6 +403,19 @@ enum SortOrder {
   desc
 }
 
+input ElementSearchInput {
+  """
+  Search text. See https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search#postgresql for search usage information.
+  """
+  text: String
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
+
+  """Language codes (e.g. en, de) to filter results by."""
+  languageCodes: [String!]
+}
+
 type Mutation {
   logout: Boolean!
 
@@ -427,17 +427,20 @@ type Mutation {
   createElement(input: CreateElementInput!): Element!
   updateElement(input: UpdateElementInput!): Element!
   updateUser(input: UpdateUserInput!): User!
+  createWorkshop(input: CreateWorkshopInput!): Workshop!
+  updateWorkshop(input: UpdateWorkshopInput!): Workshop!
+  deleteWorkshop(id: ID!): Workshop
+  updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
+  duplicateWorkshop(input: DuplicateWorkshopInput!): Workshop!
 
   """Change the liked state for workshop of the logged in user."""
   updateUserLikedWorkshop(input: UpdateUserLikedWorkshopInput!): Workshop
 
   """Change the favorite state for element of the logged in user."""
   updateUserFavoriteElement(input: UpdateUserFavoriteElementInput!): Element
-  createWorkshop(input: CreateWorkshopInput!): Workshop!
-  updateWorkshop(input: UpdateWorkshopInput!): Workshop!
-  deleteWorkshop(id: ID!): Workshop
-  updateWorkshopItemOrder(input: UpdateWorkshopItemOrder!): Workshop!
-  duplicateWorkshop(input: DuplicateWorkshopInput!): Workshop!
+
+  """Generates and creates a new workshop for the currently logged in user."""
+  generateWorkshop: Workshop!
 }
 
 input CreateElementInput {
@@ -500,16 +503,6 @@ input UpdateUserInput {
 
   """Preferred languages of the user. E.g. de or en."""
   languageCodes: [String!]
-}
-
-input UpdateUserLikedWorkshopInput {
-  workshopId: ID!
-  isLiked: Boolean!
-}
-
-input UpdateUserFavoriteElementInput {
-  elementId: ID!
-  isFavorite: Boolean!
 }
 
 input CreateWorkshopInput {
@@ -619,4 +612,14 @@ input UpdateWorkshopItemOrder {
 input DuplicateWorkshopInput {
   workshopId: ID!
   name: String!
+}
+
+input UpdateUserLikedWorkshopInput {
+  workshopId: ID!
+  isLiked: Boolean!
+}
+
+input UpdateUserFavoriteElementInput {
+  elementId: ID!
+  isFavorite: Boolean!
 }

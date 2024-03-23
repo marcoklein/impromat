@@ -127,11 +127,6 @@ export type ElementKeywordsArgs = {
 };
 
 
-export type ElementRecommendationsArgs = {
-  input: ElementRecommendationInput;
-};
-
-
 export type ElementSnapshotsArgs = {
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
@@ -159,11 +154,6 @@ export type ElementPredictedTag = {
 export type ElementQueryResult = {
   __typename?: 'ElementQueryResult';
   element: Element;
-};
-
-export type ElementRecommendationInput = {
-  /** Tags that are required for the recommendation. Useful to filter recommendations by specific tags. */
-  requiredTags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type ElementSearchInput = {

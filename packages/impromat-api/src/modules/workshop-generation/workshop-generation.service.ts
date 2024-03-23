@@ -32,7 +32,7 @@ export class WorkshopGenerationService {
     const countGame = 3;
 
     // const searchTerms = ['character'];
-    const searchTerms = ['pattern', 'game'];
+    const searchTerms = ['Yes', 'And'];
 
     const warmupTags = ['warmup', 'Aufwärmspiel'];
     const exerciseTags = ['exercise', 'Übung'];

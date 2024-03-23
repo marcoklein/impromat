@@ -274,6 +274,8 @@ export type Mutation = {
   createWorkshop: Workshop;
   deleteWorkshop?: Maybe<Workshop>;
   duplicateWorkshop: Workshop;
+  /** Generates and creates a new workshop for the currently logged in user. */
+  generateWorkshop: Workshop;
   logout: Scalars['Boolean']['output'];
   updateElement: Element;
   updateUser: User;
