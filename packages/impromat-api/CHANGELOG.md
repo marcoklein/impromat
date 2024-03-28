@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.25.1
+
+### Patch Changes
+
+- 92c86ad: Return is favorite attribute of element correctly
+
 ## 0.25.0
 
 ### Minor Changes
