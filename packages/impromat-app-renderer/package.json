@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "impromat": "0.60.1",
     "impromat-api": "0.25.1",
     "puppeteer": "^19.4.0",
