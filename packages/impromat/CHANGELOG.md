@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.60.1
+
+### Patch Changes
+
+- 92c86ad: Return is favorite attribute of element correctly
+- Updated dependencies [92c86ad]
+  - impromat-api@0.25.1
+
 ## 0.60.0
 
 ### Minor Changes
