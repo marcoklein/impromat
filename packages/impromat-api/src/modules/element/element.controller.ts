@@ -51,6 +51,7 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
+    if (!userSessionId) return false;
     const elementFavoriteRelations = await this.elementService
       .findElementById(userSessionId, element.id)
       .userFavoriteElement({
