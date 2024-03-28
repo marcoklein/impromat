@@ -34,7 +34,7 @@ dokku enter ollama-$environmentName web ollama pull mistral
 dokku enter ollama-$environmentName web ollama pull marco/em_german_mistral_v01
 dokku enter ollama-$environmentName web ollama cp marco/em_german_mistral_v01 mistral-de
 
-dokku resource:limit --cpu 25 --memory 25 ollama-$environmentName
+dokku resource:limit --cpu 1.5 ollama-$environmentName
 
 dokku ps:restart ollama-$environmentName
 
