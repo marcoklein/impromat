@@ -4,6 +4,12 @@
     "default": ["{projectRoot}/**/*"]
   },
   "targetDefaults": {
+    "deps-update": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn ncu --target minor -u"
+      }
+    },
     "build": {
       "cache": true,
       "dependsOn": ["^build"],
