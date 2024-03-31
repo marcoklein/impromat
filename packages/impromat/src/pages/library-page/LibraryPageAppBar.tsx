@@ -9,9 +9,13 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDebounce } from "../../hooks/use-debounce";
 import { LibraryMenuDialog } from "./LibraryMenuDialog";
 
 interface ComponentProps {
+  /**
+   * The current search text.
+   */
   searchText: string;
   setSearchText: (text: string) => void;
   /**
@@ -38,6 +42,11 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
 }) => {
   const { t } = useTranslation("LibraryPageAppBar");
   const [newSearchText, setNewSearchText] = useState(searchText);
+  const debouncedSearchText = useDebounce(newSearchText, 500);
+
+  useEffect(() => {
+    onSearch(debouncedSearchText);
+  }, [debouncedSearchText, onSearch]);
 
   useEffect(() => {
     setNewSearchText(searchText);
