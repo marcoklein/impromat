@@ -2,34 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""Predicted tag for an element."""
-type ElementPredictedTag {
-  """Name of the predicted tag."""
-  name: String!
-
-  """Reason for the predicted tag."""
-  reason: String!
-}
-
-type ElementTag {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  version: Int!
-  deleted: Boolean
-  name: String!
-
-  """
-  Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter.
-  """
-  count: Float!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type WorkshopElement {
   id: ID!
   createdAt: DateTime!
@@ -40,6 +12,11 @@ type WorkshopElement {
   basedOn: Element!
   section: WorkshopSection!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type WorkshopSection {
   id: ID!
@@ -139,13 +116,6 @@ type Element {
   deleted: Boolean
   name: String!
   markdown: String
-
-  """
-  Shortened markdown text for preview purposes to avoid loading the whole content in a request.
-  """
-  markdownShort: String
-  tags: [ElementTag!]!
-  usedBy: [WorkshopElement!]!
   languageCode: String
   sourceUrl: String
   sourceName: String
@@ -157,25 +127,27 @@ type Element {
   Set if the element was imported from improbib, a project that collects existing improv resources.
   """
   improbibIdentifier: String
-  owner: User
+  visibility: ElementVisibility!
+  recommendations: [Element!]!
+
+  """Set if the element is called from a user context."""
+  isFavorite: Boolean
+
+  """
+  Shortened markdown text for preview purposes to avoid loading the whole content in a request.
+  """
+  markdownShort: String
+  owner: [User!]
 
   """
   Convenience field to determine if the owner of the element is the logged in user.
   """
   isOwnerMe: Boolean
-  visibility: ElementVisibility!
-
-  """Set if the element is called from a user context."""
-  isFavorite: Boolean
+  tags: [ElementTag!]!
+  usedBy: [WorkshopElement!]!
 
   """Changes of the element."""
   snapshots(skip: Int! = 0, take: Int! = 20): [ElementSnapshot!]!
-  recommendations: [Element!]!
-
-  """
-  Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.
-  """
-  predictedLevelTags: [ElementPredictedTag!]
 
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
@@ -234,6 +206,20 @@ type UserFavoriteElement {
   createdAt: DateTime!
   updatedAt: DateTime!
   element: Element!
+}
+
+type ElementTag {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  name: String!
+
+  """
+  Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter.
+  """
+  count: Float!
 }
 
 type ElementQueryResult {
