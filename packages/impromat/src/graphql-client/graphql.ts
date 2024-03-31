@@ -102,8 +102,6 @@ export type Element = {
   markdownShort?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   owner?: Maybe<User>;
-  /** Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed. */
-  predictedLevelTags?: Maybe<Array<ElementPredictedTag>>;
   recommendations: Array<Element>;
   /** Changes of the element. */
   snapshots: Array<ElementSnapshot>;
@@ -140,15 +138,6 @@ export type ElementSummaryArgs = {
 
 export type ElementVariationsArgs = {
   forceRefresh?: Scalars['Boolean']['input'];
-};
-
-/** Predicted tag for an element. */
-export type ElementPredictedTag = {
-  __typename?: 'ElementPredictedTag';
-  /** Name of the predicted tag. */
-  name: Scalars['String']['output'];
-  /** Reason for the predicted tag. */
-  reason: Scalars['String']['output'];
 };
 
 export type ElementQueryResult = {

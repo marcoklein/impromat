@@ -69,7 +69,7 @@ For all other tests you have to start the backend infrastructure.
 Start test infrastructure via
 
 ```sh
-yarn nx test:integration-api-up --watch
+yarn nx test-integration-api-up --watch
 ```
 
 Alternatively, run the backend and database locally and change `.env.test` to point to the local API endpoint:

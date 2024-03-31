@@ -137,7 +137,7 @@ type Element {
   Shortened markdown text for preview purposes to avoid loading the whole content in a request.
   """
   markdownShort: String
-  owner: [User!]
+  owner: User
 
   """
   Convenience field to determine if the owner of the element is the logged in user.
