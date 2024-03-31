@@ -25,10 +25,6 @@ import { UserSessionService } from './services/user-session.service';
           'request.credentials': 'include',
         },
       },
-      cors: {
-        credentials: true,
-        origin: true,
-      },
     }),
     AdminModule,
     DatabaseModule,

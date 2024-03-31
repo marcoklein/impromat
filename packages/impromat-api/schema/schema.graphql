@@ -152,22 +152,12 @@ type Element {
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
   """
-  variations(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): [Variation]
+  variations: [Variation]
 
   """
   The keywords of the element. This is generated asynchronously and might not be available immediately.
   """
-  keywords(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): [String]
+  keywords: [String]
 
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.

@@ -79,7 +79,7 @@ describe('User Workshops', () => {
       // then
       expect(response.errors).toHaveLength(1);
       const error = response.errors![0];
-      expect(error.extensions.code).toBe('BAD_USER_INPUT');
+      expect(error.extensions.code).toBe('BAD_REQUEST');
     });
   });
 });

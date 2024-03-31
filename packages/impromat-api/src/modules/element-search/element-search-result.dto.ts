@@ -1,5 +1,4 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
-import { Nullable } from 'src/utils/nullish';
 import { Element } from '../../dtos/types/element.dto';
 
 @ObjectType({
