@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.61.0
+
+### Minor Changes
+
+- c00807b: Automatically search for elements in the element search
+
+### Patch Changes
+
+- c00807b: Easier integration testing for impromat by using auto-loading environment files from nx
+- Updated dependencies [c00807b]
+- Updated dependencies [4658721]
+- Updated dependencies [c00807b]
+  - impromat-api@0.26.0
+
 ## 0.60.1
 
 ### Patch Changes
