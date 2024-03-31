@@ -7,9 +7,14 @@ dotenv.config({ path: ".env.test-integration-app" });
 const PORT = Number(process.env.PORT);
 if (!PORT) throw new Error("PORT environment variable undefined.");
 
+const VITE_API_URL = process.env.VITE_API_URL;
+if (!VITE_API_URL) {
+  throw new Error("VITE_API_URL environment variable undefined.");
+}
+
 const config: PlaywrightTestConfig = {
   webServer: {
-    command: "yarn start",
+    command: "yarn vite",
     port: PORT,
     timeout: 4 * 60 * 1000,
     reuseExistingServer: !process.env.CI,

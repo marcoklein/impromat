@@ -13,9 +13,14 @@ import { useEffect, useRef, useState } from "react";
  *
  * @param value
  * @param delay
+ * @param triggerNow If set or changed, the debounced value will be triggered immediately.
  * @returns
  */
-export function useDebounce<T>(value: T, delay: number): T {
+export function useDebounce<T>(
+  value: T,
+  delay: number,
+  triggerNow?: number,
+): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -24,6 +29,12 @@ export function useDebounce<T>(value: T, delay: number): T {
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
+
+    if (triggerNow) {
+      setDebouncedValue(value);
+      return;
+    }
+
     debounceTimeoutRef.current = setTimeout(() => {
       setDebouncedValue(value);
     }, delay);
@@ -33,7 +44,7 @@ export function useDebounce<T>(value: T, delay: number): T {
         clearTimeout(debounceTimeoutRef.current);
       }
     };
-  }, [value, delay]);
+  }, [value, delay, triggerNow]);
 
   return debouncedValue;
 }

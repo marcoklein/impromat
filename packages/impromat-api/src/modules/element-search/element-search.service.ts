@@ -63,7 +63,7 @@ export class ElementSearchService {
       .replaceAll('#', '')
       .replaceAll(/' +'/g, '')
       .split(' ');
-    this.logger.log(`Splitted text search: `, splittedTextSearch);
+    this.logger.debug(`Splitted text search: `, splittedTextSearch);
 
     if (
       !splittedTextSearch ||
@@ -87,7 +87,7 @@ export class ElementSearchService {
     }
 
     const startTime = Date.now();
-    this.logger.debug(
+    this.logger.log(
       `Searching for elements with text: ${elementSearchInput.text}`,
     );
 

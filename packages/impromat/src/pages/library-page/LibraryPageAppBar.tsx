@@ -42,7 +42,8 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
 }) => {
   const { t } = useTranslation("LibraryPageAppBar");
   const [newSearchText, setNewSearchText] = useState(searchText);
-  const debouncedSearchText = useDebounce(newSearchText, 500);
+  const [triggerNow, setTriggerNow] = useState<number>(0);
+  const debouncedSearchText = useDebounce(newSearchText, 500, triggerNow);
 
   useEffect(() => {
     onSearch(debouncedSearchText);
@@ -50,7 +51,7 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
 
   useEffect(() => {
     setNewSearchText(searchText);
-  }, [searchText, setNewSearchText]);
+  }, [searchText]);
 
   return (
     <AppBar
@@ -69,7 +70,7 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
           aria-label="search-input"
           onKeyDown={(event) => {
             if (event.key === "Enter") {
-              onSearch(newSearchText);
+              setTriggerNow((current) => current + 1);
             }
           }}
           sx={{ ml: 1, flex: 1, color: "inherit" }}
@@ -90,7 +91,7 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
                 newSearchText !== searchText && (
                   <IconButton
                     color="inherit"
-                    onClick={() => onSearch(newSearchText)}
+                    onClick={() => setTriggerNow((current) => current + 1)}
                   >
                     <Search color="inherit" />
                   </IconButton>

@@ -6,7 +6,15 @@ import { environment } from './environment';
 import { getExpressSessionRequestHandler } from './get-express-session-request-handler';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: [
+      // 'debug',
+      'verbose',
+      'log',
+      'warn',
+      'error',
+    ],
+  });
   app.enableCors({ credentials: true, origin: true });
   app.enableShutdownHooks();
   app.use(getExpressSessionRequestHandler());
