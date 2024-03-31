@@ -1,0 +1,6 @@
+{
+  "upgrade": false,
+  "reject": "improbib",
+  "format": ["group", "repo"],
+  "interactive": true
+}
