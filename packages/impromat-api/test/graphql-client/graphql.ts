@@ -101,9 +101,7 @@ export type Element = {
   /** Shortened markdown text for preview purposes to avoid loading the whole content in a request. */
   markdownShort?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
-  owner?: Maybe<User>;
-  /** Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed. */
-  predictedLevelTags?: Maybe<Array<ElementPredictedTag>>;
+  owner?: Maybe<Array<User>>;
   recommendations: Array<Element>;
   /** Changes of the element. */
   snapshots: Array<ElementSnapshot>;
@@ -140,15 +138,6 @@ export type ElementSummaryArgs = {
 
 export type ElementVariationsArgs = {
   forceRefresh?: Scalars['Boolean']['input'];
-};
-
-/** Predicted tag for an element. */
-export type ElementPredictedTag = {
-  __typename?: 'ElementPredictedTag';
-  /** Name of the predicted tag. */
-  name: Scalars['String']['output'];
-  /** Reason for the predicted tag. */
-  reason: Scalars['String']['output'];
 };
 
 export type ElementQueryResult = {
@@ -680,14 +669,14 @@ export type WorkshopsWhereInput = {
   userLikedWorkshops?: InputMaybe<UserLikedWorkshopListRelationFilter>;
 };
 
-export type ElementFieldsFragment = { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null };
+export type ElementFieldsFragment = { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: Array<{ __typename?: 'User', id: string }> | null };
 
 export type ElementByIdQueryQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type ElementByIdQueryQuery = { __typename?: 'Query', element?: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } | null };
+export type ElementByIdQueryQuery = { __typename?: 'Query', element?: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: Array<{ __typename?: 'User', id: string }> | null } | null };
 
 export type ElementsQueryQueryVariables = Exact<{
   filter?: InputMaybe<ElementsFilterInput>;
@@ -697,7 +686,7 @@ export type ElementsQueryQueryVariables = Exact<{
 }>;
 
 
-export type ElementsQueryQuery = { __typename?: 'Query', elements: Array<{ __typename?: 'ElementQueryResult', element: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } }> };
+export type ElementsQueryQuery = { __typename?: 'Query', elements: Array<{ __typename?: 'ElementQueryResult', element: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: Array<{ __typename?: 'User', id: string }> | null } }> };
 
 export type SearchElementsQueryQueryVariables = Exact<{
   input: ElementSearchInput;
@@ -705,14 +694,14 @@ export type SearchElementsQueryQueryVariables = Exact<{
 }>;
 
 
-export type SearchElementsQueryQuery = { __typename?: 'Query', searchElements: Array<{ __typename?: 'ElementSearchResult', element: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } }> };
+export type SearchElementsQueryQuery = { __typename?: 'Query', searchElements: Array<{ __typename?: 'ElementSearchResult', element: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: Array<{ __typename?: 'User', id: string }> | null } }> };
 
 export type CreateElementMutationMutationVariables = Exact<{
   input: CreateElementInput;
 }>;
 
 
-export type CreateElementMutationMutation = { __typename?: 'Mutation', createElement: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: { __typename?: 'User', id: string } | null } };
+export type CreateElementMutationMutation = { __typename?: 'Mutation', createElement: { __typename?: 'Element', id: string, version: number, createdAt: any, updatedAt: any, deleted?: boolean | null, name: string, markdown?: string | null, markdownShort?: string | null, visibility: ElementVisibility, isOwnerMe?: boolean | null, tags: Array<{ __typename?: 'ElementTag', id: string }>, usedBy: Array<{ __typename?: 'WorkshopElement', id: string }>, owner?: Array<{ __typename?: 'User', id: string }> | null } };
 
 export type UpdateElementMutationMutationVariables = Exact<{
   input: UpdateElementInput;

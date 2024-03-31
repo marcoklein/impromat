@@ -9,7 +9,7 @@
       }
     },
     "test": {
-      "dependsOn": ["codegen", "lint", "test:unit", "test:integration"],
+      "dependsOn": ["codegen", "lint", "test:unit", "test-integration-app"],
       "command": "echo 'Tests passed' && exit 0",
       "options": {
         "cwd": "{projectRoot}"
@@ -42,18 +42,17 @@
         "cwd": "{projectRoot}"
       }
     },
-    "test:integration-api-up": {
+    "test-integration-api-up": {
       "cache": true,
       "command": "yarn prisma migrate reset --force && yarn nest start",
       "options": {
-        "cwd": "packages/impromat-api",
-        "envFile": ".env.test-integration-api"
+        "cwd": "packages/impromat-api"
       }
     },
-    "test:integration": {
+    "test-integration-app": {
       "cache": true,
       "dependsOn": ["test:playwright-install"],
-      "command": "concurrently -n API,Playwright -c yellow,green \"PORT=8083 yarn nx test:integration-api-up\" \"bash -c 'while ! curl -s http://localhost:8083 > /dev/null; do sleep 1; done; playwright test -c playwright-integration.config.ts' && echo 'TESTS DONE'\"",
+      "command": "concurrently -n API,Playwright -c yellow,green \"PORT=8083 yarn nx test-integration-api-up\" \"bash -c 'while ! curl -s http://localhost:8083 > /dev/null; do sleep 1; done; playwright test -c playwright-integration.config.ts' && echo 'TESTS DONE'\"",
       "inputs": [
         "{projectRoot}/playwright-integration.config.ts",
         "{projectRoot}/src/**/*.ts",
@@ -61,7 +60,6 @@
       ],
       "options": {
         "cwd": "{projectRoot}",
-        "envFile": "{projectRoot}/.env.test-integration-app",
         "readyWhen": "TESTS DONE"
       }
     },

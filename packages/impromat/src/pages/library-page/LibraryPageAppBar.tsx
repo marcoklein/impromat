@@ -9,9 +9,13 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDebounce } from "../../hooks/use-debounce";
 import { LibraryMenuDialog } from "./LibraryMenuDialog";
 
 interface ComponentProps {
+  /**
+   * The current search text.
+   */
   searchText: string;
   setSearchText: (text: string) => void;
   /**
@@ -38,10 +42,16 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
 }) => {
   const { t } = useTranslation("LibraryPageAppBar");
   const [newSearchText, setNewSearchText] = useState(searchText);
+  const [triggerNow, setTriggerNow] = useState<number>(0);
+  const debouncedSearchText = useDebounce(newSearchText, 500, triggerNow);
+
+  useEffect(() => {
+    onSearch(debouncedSearchText);
+  }, [debouncedSearchText, onSearch]);
 
   useEffect(() => {
     setNewSearchText(searchText);
-  }, [searchText, setNewSearchText]);
+  }, [searchText]);
 
   return (
     <AppBar
@@ -60,7 +70,7 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
           aria-label="search-input"
           onKeyDown={(event) => {
             if (event.key === "Enter") {
-              onSearch(newSearchText);
+              setTriggerNow((current) => current + 1);
             }
           }}
           sx={{ ml: 1, flex: 1, color: "inherit" }}
@@ -81,7 +91,7 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
                 newSearchText !== searchText && (
                   <IconButton
                     color="inherit"
-                    onClick={() => onSearch(newSearchText)}
+                    onClick={() => setTriggerNow((current) => current + 1)}
                   >
                     <Search color="inherit" />
                   </IconButton>
