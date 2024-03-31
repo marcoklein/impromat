@@ -25268,7 +25268,6 @@ __metadata:
     "@swc-node/register": ~1.8.0
     "@swc/core": ~1.3.85
     "@swc/helpers": ~0.5.2
-    npm-check-updates: ^16.14.18
     nx: ^18.0.0
     prettier: ^2.6.2
     react: ^18.2.0
