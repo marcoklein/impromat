@@ -60,6 +60,9 @@
       ],
       "options": {
         "cwd": "{projectRoot}",
+        "env": {
+          "PW_TEST_HTML_REPORT_OPEN": "never"
+        },
         "readyWhen": "TESTS DONE"
       }
     },

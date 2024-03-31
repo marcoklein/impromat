@@ -1,0 +1,6 @@
+{
+  "format": ["group", "repo"],
+  "workspaces": true,
+  "target": "minor",
+  "peer": true
+}
