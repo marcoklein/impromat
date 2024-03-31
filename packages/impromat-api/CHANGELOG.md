@@ -1,5 +1,16 @@
 # impromat-api
 
+## 0.26.0
+
+### Minor Changes
+
+- c00807b: Faster search of elements through database indexes
+- 4658721: Upgrade dependencies
+
+### Patch Changes
+
+- c00807b: Enabled query logging on database level
+
 ## 0.25.1
 
 ### Patch Changes

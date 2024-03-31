@@ -15629,7 +15629,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.17.1, express@npm:^4.17.3, express@npm:^4.19.2":
+"express@npm:^4.17.1, express@npm:^4.17.3, express@npm:^4.18.2, express@npm:^4.19.2":
   version: 4.19.2
   resolution: "express@npm:4.19.2"
   dependencies:
@@ -17167,7 +17167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.8.1":
+"graphql@npm:^16.6.0, graphql@npm:^16.8.1":
   version: 16.8.1
   resolution: "graphql@npm:16.8.1"
   checksum: 8d304b7b6f708c8c5cc164b06e92467dfe36aff6d4f2cf31dd19c4c2905a0e7b89edac4b7e225871131fd24e21460836b369de0c06532644d15b461d55b1ccc0
@@ -17791,7 +17791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^7.2.1":
+"i18next-browser-languagedetector@npm:^7.2.0":
   version: 7.2.1
   resolution: "i18next-browser-languagedetector@npm:7.2.1"
   dependencies:
@@ -17800,7 +17800,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^23.10.1":
+"i18next@npm:^23.5.1":
   version: 23.10.1
   resolution: "i18next@npm:23.10.1"
   dependencies:
@@ -18005,7 +18005,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"impromat-api@0.25.1, impromat-api@workspace:packages/impromat-api":
+"impromat-api@0.26.0, impromat-api@workspace:packages/impromat-api":
   version: 0.0.0-use.local
   resolution: "impromat-api@workspace:packages/impromat-api"
   dependencies:
@@ -18065,9 +18065,9 @@ __metadata:
   dependencies:
     "@types/express": ^4.17.21
     cheerio: ^1.0.0-rc.12
-    express: ^4.19.2
-    impromat: 0.60.1
-    impromat-api: 0.25.1
+    express: ^4.18.2
+    impromat: 0.61.0
+    impromat-api: 0.26.0
     puppeteer: ^19.4.0
     ts-node: ^10.9.2
   languageName: unknown
@@ -18091,7 +18091,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"impromat@0.60.1, impromat@workspace:packages/impromat":
+"impromat@0.61.0, impromat@workspace:packages/impromat":
   version: 0.0.0-use.local
   resolution: "impromat@workspace:packages/impromat"
   dependencies:
@@ -18137,10 +18137,10 @@ __metadata:
     eslint: ^8.57.0
     eslint-config-react-app: ^7.0.1
     genversion: ^3.2.0
-    graphql: ^16.8.1
-    i18next: ^23.10.1
-    i18next-browser-languagedetector: ^7.2.1
-    impromat-api: 0.25.1
+    graphql: ^16.6.0
+    i18next: ^23.5.1
+    i18next-browser-languagedetector: ^7.2.0
+    impromat-api: 0.26.0
     react: ^18.2.0
     react-dom: ^18.2.0
     react-error-boundary: ^3.1.4
