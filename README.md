@@ -107,3 +107,17 @@ yarn changeset:add
 ```
 
 Impromat adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Update all dependencies
+
+We use [ncu](https://www.npmjs.com/package/npm-check-updates) for updating all dependencies across the monorepo.
+
+```sh
+yarn ncu
+```
+
+Upgrade a workspace to latest dependencies:
+
+```sh
+yarn ncu --configFileName .ncurc-latest.json --workspace impromat-api -u
+```
