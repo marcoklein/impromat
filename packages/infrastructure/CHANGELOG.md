@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.8.0
+
+### Minor Changes
+
+- 61ae57a: Update all dependencies to minor version
+
 ## 0.7.1
 
 ### Patch Changes
