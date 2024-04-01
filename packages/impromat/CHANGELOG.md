@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.62.0
+
+### Minor Changes
+
+- 61ae57a: Update all dependencies to minor version
+
+### Patch Changes
+
+- Updated dependencies [61ae57a]
+- Updated dependencies [61ae57a]
+  - impromat-api@0.27.0
+
 ## 0.61.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0
+
+### Minor Changes
+
+- 61ae57a: Update all dependencies to minor version
+
 ## 0.5.0
 
 ### Minor Changes

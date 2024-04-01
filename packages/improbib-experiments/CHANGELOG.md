@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- 61ae57a: Update all dependencies to minor version
+
+### Patch Changes
+
+- Updated dependencies [61ae57a]
+  - improbib@0.6.0
+
 ## 0.1.4
 
 ### Patch Changes

@@ -4,6 +4,13 @@
 
 ### Patch Changes
 
+- Updated dependencies [61ae57a]
+  - improbib@0.6.0
+
+## null
+
+### Patch Changes
+
 - Updated dependencies [71d1723]
   - improbib@0.5.0
 
