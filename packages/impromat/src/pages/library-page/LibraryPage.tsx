@@ -41,7 +41,7 @@ export const LibraryPage: React.FC = () => {
   );
 
   const [pageNumber, setPageNumber] = useState(0);
-  const itemsPerPage = 20;
+  const itemsPerPage = 7;
 
   const [searchElementsQueryResult, reexecuteSearchElementsQuery] = useQuery({
     query: MuiLibraryPageQuery,
