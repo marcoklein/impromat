@@ -100,7 +100,7 @@ export default {
     en: "English",
     de: "German",
     searchOptionsTitle: "Search Options",
-    languageOfResults: "Language of Results",
+    languageOfResults: "Languages of Results",
   },
   ElementDetails: {
     createdByWithName: "Created by {{name}}",

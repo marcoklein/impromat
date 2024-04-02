@@ -23,8 +23,8 @@ interface ComponentProps {
    */
   onSearch: (text: string) => void;
   queryIsFetching: boolean;
-  selectedLanguage: string;
-  setSelectedLanguage: (language: string) => void;
+  selectedLanguages: string[];
+  setSelectedLanguages: (languages: string[]) => void;
   reexecuteSearchElementsQuery: () => void;
   menuDialogOpen: boolean;
   setMenuDialogOpen: (open: boolean) => void;
@@ -34,8 +34,8 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
   searchText,
   onSearch,
   queryIsFetching,
-  selectedLanguage,
-  setSelectedLanguage,
+  selectedLanguages,
+  setSelectedLanguages,
   reexecuteSearchElementsQuery,
   menuDialogOpen,
   setMenuDialogOpen,
@@ -101,9 +101,9 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
           }
         />
         <LibraryMenuDialog
-          selectedLanguage={selectedLanguage}
-          onSelectedLanguage={(language) => {
-            setSelectedLanguage(language);
+          selectedLanguages={selectedLanguages}
+          onSelectedLanguages={(languages) => {
+            setSelectedLanguages(languages);
             reexecuteSearchElementsQuery();
           }}
           open={menuDialogOpen}
