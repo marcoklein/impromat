@@ -94,7 +94,7 @@ export default {
     en: "Englisch",
     de: "Deutsch",
     searchOptionsTitle: "Sucheinstellungen",
-    languageOfResults: "Sprache der Ergebnisse",
+    languageOfResults: "Sprachen der Ergebnisse",
   },
   ElementDetails: {
     createdByWithName: "Erstellt von {{name}}",

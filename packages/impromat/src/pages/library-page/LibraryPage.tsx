@@ -30,9 +30,9 @@ const MuiLibraryPageQuery = graphql(`
 export const LibraryPage: React.FC = () => {
   const { i18n } = useTranslation("LibraryPage");
 
-  const [selectedLanguage, setSelectedLanguage] = usePersistedState<string>(
-    "lastSelectedLanguage",
-    i18n.language.split("-")[0],
+  const [selectedLanguages, setSelectedLanguages] = usePersistedState<string[]>(
+    "lastSelectedLanguages",
+    [i18n.language.split("-")[0]],
   );
 
   const [searchText, setSearchText] = usePersistedState<string>(
@@ -48,7 +48,7 @@ export const LibraryPage: React.FC = () => {
     variables: {
       input: {
         text: searchText,
-        languageCodes: [selectedLanguage],
+        languageCodes: selectedLanguages,
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
@@ -65,7 +65,7 @@ export const LibraryPage: React.FC = () => {
 
   useEffect(() => {
     resetScroll();
-  }, [searchText, selectedLanguage, resetScroll]);
+  }, [searchText, selectedLanguages, resetScroll]);
 
   return (
     <Box
@@ -83,8 +83,8 @@ export const LibraryPage: React.FC = () => {
           setSearchText(text);
         }}
         queryIsFetching={searchElementsQueryResult.fetching}
-        selectedLanguage={selectedLanguage}
-        setSelectedLanguage={setSelectedLanguage}
+        selectedLanguages={selectedLanguages}
+        setSelectedLanguages={setSelectedLanguages}
         reexecuteSearchElementsQuery={reexecuteSearchElementsQuery}
         menuDialogOpen={menuDialogOpen}
         setMenuDialogOpen={setMenuDialogOpen}
