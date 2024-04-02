@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.63.0
+
+### Minor Changes
+
+- 3d0b6d0: Show English and German element results
+
 ## 0.62.0
 
 ### Minor Changes
