@@ -30,6 +30,9 @@ interface ComponentProps {
   setMenuDialogOpen: (open: boolean) => void;
 }
 
+/**
+ * Search functionality for elements in the library.
+ */
 export const LibraryPageAppBar: React.FC<ComponentProps> = ({
   searchText,
   onSearch,

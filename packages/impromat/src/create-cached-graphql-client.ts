@@ -52,6 +52,12 @@ export function createCachedGraphqlClient(
             },
             createElement(_result, _args, cache, _info) {
               cache.invalidate("Query", "elements");
+              cache
+                .inspectFields("Query")
+                .filter((field) => field.fieldName === "searchElements")
+                .forEach((field) => {
+                  cache.invalidate("Query", field.fieldKey);
+                });
               invalidateMeUser(cache, "elements");
             },
             updateUser(_result, _args, cache, _info) {

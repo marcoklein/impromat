@@ -9,6 +9,7 @@ import { LibraryElements } from "./LibraryElements";
 import { LibraryPageAppBar } from "./LibraryPageAppBar";
 import { NewElementButton } from "./NewElementButton";
 import { QueryErrorAlert } from "./QueryErrorAlert";
+import { parseSearchInput } from "./parse-search-input";
 
 const MuiLibraryPageQuery = graphql(`
   query MuiLibraryPageQuery(
@@ -47,8 +48,8 @@ export const LibraryPage: React.FC = () => {
     query: MuiLibraryPageQuery,
     variables: {
       input: {
-        text: searchText,
         languageCodes: selectedLanguages,
+        ...parseSearchInput(searchText),
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
