@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.28.0
+
+### Minor Changes
+
+- cf86cb2: Add search for own element attribute
+
 ## 0.27.0
 
 ### Minor Changes
