@@ -8,7 +8,7 @@ import { getExpressSessionRequestHandler } from './get-express-session-request-h
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: [
-      // 'debug',
+      //'debug',
       'verbose',
       'log',
       'warn',

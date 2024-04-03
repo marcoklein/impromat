@@ -10,7 +10,7 @@ import { UserLikedWorkshop as PrismaUserLikedWorkshop } from '@prisma/client';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { UpdateUserLikedWorkshopInput } from 'src/dtos/inputs/update-liked-workshop-input';
 import { UserLikedWorkshopDto } from 'src/dtos/types/user-liked-workshop.dto';
-import { Workshop, WorkshopOmittedFields } from 'src/dtos/types/workshop.dto';
+import { Workshop } from 'src/dtos/types/workshop.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { PrismaService } from '../database/prisma.service';
 import { UserLikedWorkshopsService } from './user-liked-workshops.service';
@@ -48,7 +48,7 @@ export class UserLikedWorkshopController {
     @Args('input')
     updateUserLikedWorkshopInput: UpdateUserLikedWorkshopInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<Workshop, WorkshopOmittedFields> | null> {
+  ): Promise<Workshop | null> {
     const result =
       await this.userLikedWorkshopsService.updateLikedWorkshopOfUser(
         sessionUserId,

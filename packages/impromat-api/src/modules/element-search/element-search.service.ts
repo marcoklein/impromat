@@ -244,7 +244,7 @@ export class ElementSearchService {
    * @param input Search input.
    * @returns Prisma query object.
    */
-  public async getElementsForSearchWhereInput(
+  async getElementsForSearchWhereInput(
     user: User | undefined,
     input: ElementSearchInput,
   ) {
