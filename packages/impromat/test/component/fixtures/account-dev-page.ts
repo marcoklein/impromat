@@ -6,6 +6,7 @@ export class AccountDevPage extends DevPage {
   readonly logoutButtonLocator: Locator;
   readonly loginTabLocator: Locator;
   readonly mySpaceTabLocator: Locator;
+  readonly myElementsButtonLocator: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -13,6 +14,9 @@ export class AccountDevPage extends DevPage {
     this.logoutButtonLocator = page.getByRole("button", { name: "Logout" });
     this.loginTabLocator = page.getByRole("link", { name: "Login" });
     this.mySpaceTabLocator = page.getByRole("link", { name: "My Space" });
+    this.myElementsButtonLocator = page.getByRole("link", {
+      name: "My Elements",
+    });
   }
 
   async expectToBeSignedOut() {

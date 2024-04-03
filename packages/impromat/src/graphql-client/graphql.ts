@@ -120,11 +120,6 @@ export type Element = {
 };
 
 
-export type ElementKeywordsArgs = {
-  forceRefresh?: Scalars['Boolean']['input'];
-};
-
-
 export type ElementSnapshotsArgs = {
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
@@ -132,11 +127,6 @@ export type ElementSnapshotsArgs = {
 
 
 export type ElementSummaryArgs = {
-  forceRefresh?: Scalars['Boolean']['input'];
-};
-
-
-export type ElementVariationsArgs = {
   forceRefresh?: Scalars['Boolean']['input'];
 };
 
@@ -150,6 +140,8 @@ export type ElementSearchInput = {
   languageCode?: InputMaybe<Scalars['String']['input']>;
   /** Language codes (e.g. en, de) to filter results by. */
   languageCodes?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** If true, only elements created by the requesting user are returned. If false, only elements not created by the requesting user are returned. If not set, all elements are returned. */
+  ownElement?: InputMaybe<Scalars['Boolean']['input']>;
   /** Search text. See https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search#postgresql for search usage information. */
   text?: InputMaybe<Scalars['String']['input']>;
 };

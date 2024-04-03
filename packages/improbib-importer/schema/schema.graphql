@@ -2,34 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""Predicted tag for an element."""
-type ElementPredictedTag {
-  """Name of the predicted tag."""
-  name: String!
-
-  """Reason for the predicted tag."""
-  reason: String!
-}
-
-type ElementTag {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  version: Int!
-  deleted: Boolean
-  name: String!
-
-  """
-  Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter.
-  """
-  count: Float!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type WorkshopElement {
   id: ID!
   createdAt: DateTime!
@@ -40,6 +12,11 @@ type WorkshopElement {
   basedOn: Element!
   section: WorkshopSection!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type WorkshopSection {
   id: ID!
@@ -139,13 +116,6 @@ type Element {
   deleted: Boolean
   name: String!
   markdown: String
-
-  """
-  Shortened markdown text for preview purposes to avoid loading the whole content in a request.
-  """
-  markdownShort: String
-  tags: [ElementTag!]!
-  usedBy: [WorkshopElement!]!
   languageCode: String
   sourceUrl: String
   sourceName: String
@@ -157,45 +127,37 @@ type Element {
   Set if the element was imported from improbib, a project that collects existing improv resources.
   """
   improbibIdentifier: String
+  visibility: ElementVisibility!
+  recommendations: [Element!]!
+
+  """Set if the element is called from a user context."""
+  isFavorite: Boolean
+
+  """
+  Shortened markdown text for preview purposes to avoid loading the whole content in a request.
+  """
+  markdownShort: String
   owner: User
 
   """
   Convenience field to determine if the owner of the element is the logged in user.
   """
   isOwnerMe: Boolean
-  visibility: ElementVisibility!
-
-  """Set if the element is called from a user context."""
-  isFavorite: Boolean
+  tags: [ElementTag!]!
+  usedBy: [WorkshopElement!]!
 
   """Changes of the element."""
   snapshots(skip: Int! = 0, take: Int! = 20): [ElementSnapshot!]!
-  recommendations: [Element!]!
-
-  """
-  Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.
-  """
-  predictedLevelTags: [ElementPredictedTag!]
 
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
   """
-  variations(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): [Variation]
+  variations: [Variation]
 
   """
   The keywords of the element. This is generated asynchronously and might not be available immediately.
   """
-  keywords(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): [String]
+  keywords: [String]
 
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
@@ -236,6 +198,20 @@ type UserFavoriteElement {
   element: Element!
 }
 
+type ElementTag {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  name: String!
+
+  """
+  Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter.
+  """
+  count: Float!
+}
+
 type ElementQueryResult {
   element: Element!
 }
@@ -245,15 +221,14 @@ type Variation {
   description: String
 }
 
+"""
+Contains information about the exact match of a search term in an element.
+"""
 type ElementSearchMatch {
-  """Key of field where searched text was found."""
-  key: String
-  indices: [[Int!]!]!
+  """Identifier of the matched field. E.g. "name", "markdown", or "tags"."""
+  key: String!
 
-  """
-  If the matching field is an array this field points to the index of the matching element in the source array.
-  """
-  refIndex: Int
+  """The matched text in of the field. Could be used for highlighting."""
   value: String!
 }
 
@@ -301,17 +276,9 @@ type Query {
 
   """Get information about the current user. Returns null if not logged in."""
   me: User
-  searchElementsV2(skip: Int! = 0, take: Int! = 20, input: ElementSearchV2Input!): [Element!]!
-  searchElementsV2Keywords(input: ElementSearchV2Input!): ElementSearchKeywords!
-  searchElements(
-    input: ElementSearchInput!
-
-    """Helper field to pass skip argument into input field."""
-    skip: Int
-
-    """Helper field to pass take argument into input field."""
-    take: Int
-  ): [ElementSearchResult!]! @deprecated(reason: "Use searchElementsV2 instead")
+  searchElements(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElementsTfidf(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElementsKeywords(input: ElementSearchInput!): ElementSearchKeywords!
   workshop(id: ID!): Workshop
 
   """Find workshops."""
@@ -345,27 +312,22 @@ input ElementsOrderByInput {
   notImplemented: Boolean!
 }
 
-input ElementSearchV2Input {
-  text: String
-
-  """Language code (e.g. en, de) for results."""
-  languageCode: String
-}
-
 input ElementSearchInput {
+  """
+  Search text. See https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search#postgresql for search usage information.
+  """
   text: String
-  tagNames: [String!]
+
+  """
+  If true, only elements created by the requesting user are returned. If false, only elements not created by the requesting user are returned. If not set, all elements are returned.
+  """
+  ownElement: Boolean
 
   """Language code (e.g. en, de) for results."""
   languageCode: String
 
-  """Filter for liked elements of the user."""
-  isLiked: Boolean
-
-  """Filter for elements of the user."""
-  isOwned: Boolean
-  take: Int! = 20
-  skip: Int! = 0
+  """Language codes (e.g. en, de) to filter results by."""
+  languageCodes: [String!]
 }
 
 input WorkshopsWhereInput {

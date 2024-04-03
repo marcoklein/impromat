@@ -11,6 +11,13 @@ export class ElementSearchInput {
   @MaxLength(500)
   text?: string;
 
+  @Field(() => Boolean, {
+    nullable: true,
+    description:
+      'If true, only elements created by the requesting user are returned. If false, only elements not created by the requesting user are returned. If not set, all elements are returned.',
+  })
+  ownElement?: boolean;
+
   @Field(() => String, {
     description: 'Language code (e.g. en, de) for results.',
     nullable: true,

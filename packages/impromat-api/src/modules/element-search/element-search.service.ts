@@ -1,6 +1,6 @@
 import { accessibleBy } from '@casl/prisma';
 import { Injectable, Logger } from '@nestjs/common';
-import { Element, Prisma } from 'prisma/prisma-client';
+import { Element, Prisma, User } from 'prisma/prisma-client';
 import { PaginationArgs } from 'src/dtos/args/pagination-args';
 import { ElementOmittedFields } from 'src/dtos/types/element.dto';
 import {
@@ -56,6 +56,10 @@ export class ElementSearchService {
     elementSearchInput: ElementSearchInput,
     paginationArgs: PaginationArgs,
   ): Promise<Omit<ElementSearchResult, ElementOmittedFields>[]> {
+    const user =
+      (await this.userService.findUserById(userRequestId, userRequestId)) ??
+      undefined;
+
     const MAX_SEARCH_TERMS = 10;
 
     const splittedTextSearch = elementSearchInput.text
@@ -75,7 +79,7 @@ export class ElementSearchService {
         `Empty search or too many search terms. Returning all elements.`,
       );
       const dbElements = await this.fetchElementsForEmptySearch(
-        userRequestId,
+        user,
         elementSearchInput,
         paginationArgs,
       );
@@ -92,7 +96,7 @@ export class ElementSearchService {
     );
 
     const dbElements = await this.searchElementsWithText(
-      userRequestId,
+      user,
       elementSearchInput,
       paginationArgs,
       splittedTextSearch,
@@ -156,16 +160,13 @@ export class ElementSearchService {
    * @returns Elements that match the search terms.
    */
   private async searchElementsWithText(
-    userRequestId: string | undefined,
+    user: User | undefined,
     elementSearchInput: ElementSearchInput,
     paginationArgs: PaginationArgs,
     splittedTextSearch: string[],
   ) {
     const searchElementsQueryWhereInput =
-      await this.getElementsForSearchWhereInput(
-        userRequestId,
-        elementSearchInput,
-      );
+      await this.getElementsForSearchWhereInput(user, elementSearchInput);
 
     const sharedProperties = {
       orderBy: {
@@ -243,26 +244,30 @@ export class ElementSearchService {
    * @param input Search input.
    * @returns Prisma query object.
    */
-  private async getElementsForSearchWhereInput(
-    userRequestId: string | undefined,
+  public async getElementsForSearchWhereInput(
+    user: User | undefined,
     input: ElementSearchInput,
   ) {
-    const user = await this.userService.findUserById(
-      userRequestId,
-      userRequestId,
-    );
-    const ability = defineAbilityForUser(userRequestId);
+    const ability = defineAbilityForUser(user?.id);
 
     const FALLBACK_LANGUAGE_CODE = 'en';
     const languageCodes = input.languageCode
       ? [input.languageCode]
       : input.languageCodes ?? user?.languageCodes ?? [FALLBACK_LANGUAGE_CODE];
 
+    let ownElementFilter: Prisma.ElementWhereInput = {};
+    if (user && input.ownElement === true) {
+      ownElementFilter = {
+        ownerId: user.id,
+      };
+    }
+
     const accessibleElementsQuery: Prisma.ElementWhereInput = {
       AND: [
         accessibleBy(ability, ABILITY_ACTION_LIST).Element,
         noSnapshotElementFilterQuery,
-        elementLanguageFilterQuery(userRequestId, languageCodes),
+        elementLanguageFilterQuery(user?.id, languageCodes),
+        ownElementFilter,
       ],
     };
 
@@ -278,15 +283,12 @@ export class ElementSearchService {
    * @param userRequestId Id of the requesting user.
    */
   private async fetchElementsForEmptySearch(
-    userRequestId: string | undefined,
+    user: User | undefined,
     elementSearchInput: ElementSearchInput,
     paginationArgs: PaginationArgs,
   ) {
     const searchElementsQueryWhereInput =
-      await this.getElementsForSearchWhereInput(
-        userRequestId,
-        elementSearchInput,
-      );
+      await this.getElementsForSearchWhereInput(user, elementSearchInput);
 
     const result = this.prismaService.element.findMany({
       where: {

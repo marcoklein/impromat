@@ -152,22 +152,12 @@ type Element {
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
   """
-  variations(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): [Variation]
+  variations: [Variation]
 
   """
   The keywords of the element. This is generated asynchronously and might not be available immediately.
   """
-  keywords(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): [String]
+  keywords: [String]
 
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
@@ -327,6 +317,11 @@ input ElementSearchInput {
   Search text. See https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search#postgresql for search usage information.
   """
   text: String
+
+  """
+  If true, only elements created by the requesting user are returned. If false, only elements not created by the requesting user are returned. If not set, all elements are returned.
+  """
+  ownElement: Boolean
 
   """Language code (e.g. en, de) for results."""
   languageCode: String

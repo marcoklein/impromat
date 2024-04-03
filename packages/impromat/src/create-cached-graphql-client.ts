@@ -48,10 +48,16 @@ export function createCachedGraphqlClient(
           Mutation: {
             logout(_result, _args, cache, _info) {
               clearLocalStorageWithPrefix(APP_LOCAL_STORAGE_PREFIX);
-              cache.invalidate("Query");
+              cache.invalidate({ __typename: "Query" });
             },
             createElement(_result, _args, cache, _info) {
               cache.invalidate("Query", "elements");
+              cache
+                .inspectFields("Query")
+                .filter((field) => field.fieldName === "searchElements")
+                .forEach((field) => {
+                  cache.invalidate("Query", field.fieldKey);
+                });
               invalidateMeUser(cache, "elements");
             },
             updateUser(_result, _args, cache, _info) {

@@ -7,23 +7,23 @@ import {
 } from 'test/prisma-service-mock';
 import { PrismaService } from '../database/prisma.service';
 import { UserService } from '../user/user.service';
-import { ElementSearchTfidfService } from './element-search-tfidf.service';
+import { ElementSearchService } from './element-search.service';
 
 describe('ElementSearchService', () => {
-  let service: ElementSearchTfidfService;
+  let service: ElementSearchService;
   let prismaService: PrismaServiceMock;
   let userService: DeepMockProxy<UserService>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
-        ElementSearchTfidfService,
+        ElementSearchService,
         PrismaServiceMockProvider,
         { provide: UserService, useValue: mockDeep(UserService) },
       ],
     }).compile();
 
-    service = moduleRef.get(ElementSearchTfidfService);
+    service = moduleRef.get(ElementSearchService);
     prismaService = moduleRef.get(PrismaService);
     userService = moduleRef.get(UserService);
   });
