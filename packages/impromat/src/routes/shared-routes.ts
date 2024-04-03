@@ -1,6 +1,7 @@
 export const ROUTE_WORKHOP_ID = ":id";
 export const ROUTE_WORKHOP_ELEMENT_ID = ":partId";
 export const ROUTE_IMPROBIB_ELEMENT_ID = ":libraryPartId";
+export const ROUTE_LIBRARY_SEARCH_PARAM = "s";
 
 export const routeRootNavigation = () => "/nav";
 
@@ -26,7 +27,15 @@ export const routeWorkshopElement = (
 ) => `/workshop/${workshopId}/part/${elementId}`;
 
 // routes for elements tab
-export const routeLibrary = () => `${routeRootNavigation()}/elements`;
+export const routeLibrary = (searchText?: string) => {
+  const url = `${routeRootNavigation()}/elements`;
+  if (searchText) {
+    const params = new URLSearchParams();
+    params.append(ROUTE_LIBRARY_SEARCH_PARAM, searchText);
+    return `${url}?${params.toString()}`;
+  }
+  return url;
+};
 export const routeLibraryElement = (
   libraryElementId = ROUTE_IMPROBIB_ELEMENT_ID,
 ) => `${routeLibrary()}/${libraryElementId}`;

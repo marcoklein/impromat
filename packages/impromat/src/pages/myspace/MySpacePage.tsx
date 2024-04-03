@@ -133,7 +133,7 @@ export const MySpacePage: React.FC = () => {
             {t("Creations")}
           </Typography>
           <List>
-            <ListItemButton component={Link} to={routeLibrary()}>
+            <ListItemButton component={Link} to={routeLibrary("@me")}>
               <ListItemIcon>
                 <ElementsIcon />
               </ListItemIcon>
