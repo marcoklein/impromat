@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.64.0
+
+### Minor Changes
+
+- cf86cb2: Add a navigation to the library page that queries own elements only.
+- cf86cb2: Extend the search for elements by a special @me filter that returns all elements of the currently active user.
+
+### Patch Changes
+
+- Updated dependencies [cf86cb2]
+  - impromat-api@0.28.0
+
 ## 0.63.0
 
 ### Minor Changes

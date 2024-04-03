@@ -1,5 +1,15 @@
 # impromat-app-renderer
 
+## 0.4.2
+
+### Patch Changes
+
+- Updated dependencies [cf86cb2]
+- Updated dependencies [cf86cb2]
+- Updated dependencies [cf86cb2]
+  - impromat@0.64.0
+  - impromat-api@0.28.0
+
 ## 0.4.1
 
 ### Patch Changes

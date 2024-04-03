@@ -1,6 +1,6 @@
 {
   "name": "impromat",
-  "version": "0.63.0",
+  "version": "0.64.0",
   "private": true,
   "homepage": "https://impromat.app",
   "description": "Application code for Impromat.",
@@ -32,7 +32,7 @@
     "graphql": "^16.6.0",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.2.0",
-    "impromat-api": "0.27.0",
+    "impromat-api": "0.28.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
