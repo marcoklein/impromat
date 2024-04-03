@@ -10,6 +10,7 @@ import { ElementModule } from 'src/modules/element/element.module';
 import { UserLikedModule } from 'src/modules/user-liked/user-liked.module';
 import { UserModule } from 'src/modules/user/user.module';
 import { WorkshopRecommendationModule } from 'src/modules/workshop-recommendation/workshop-recommendation.module';
+import { WorkshopSearchModule } from 'src/modules/workshop-search/workshop-search.module';
 import { WorkshopModule } from 'src/modules/workshop/workshop.module';
 import { UserSessionService } from './services/user-session.service';
 
@@ -34,6 +35,7 @@ import { UserSessionService } from './services/user-session.service';
     UserModule,
     UserLikedModule,
     WorkshopModule,
+    WorkshopSearchModule,
     WorkshopRecommendationModule,
   ],
   controllers: [],
