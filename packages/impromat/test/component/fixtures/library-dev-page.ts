@@ -7,6 +7,7 @@ const NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX =
 export class LibraryDevPage extends DevPage {
   readonly createElementButtonLocator: Locator;
   readonly createCustomElementButtonLocator: Locator;
+  readonly searchInputLocator: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -14,6 +15,7 @@ export class LibraryDevPage extends DevPage {
     this.createCustomElementButtonLocator = page.getByLabel("add", {
       exact: true,
     });
+    this.searchInputLocator = page.locator("input");
   }
 
   async goto() {
@@ -22,7 +24,7 @@ export class LibraryDevPage extends DevPage {
 
   async searchForElement(searchText: string) {
     const page = this.page;
-    await page.locator("input").fill(searchText);
+    await this.searchInputLocator.fill(searchText);
     await page.keyboard.press("Enter");
     await page.getByText(new RegExp(searchText, "i")).first().waitFor();
   }

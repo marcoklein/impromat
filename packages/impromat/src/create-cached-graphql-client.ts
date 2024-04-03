@@ -48,7 +48,7 @@ export function createCachedGraphqlClient(
           Mutation: {
             logout(_result, _args, cache, _info) {
               clearLocalStorageWithPrefix(APP_LOCAL_STORAGE_PREFIX);
-              cache.invalidate("Query");
+              cache.invalidate({ __typename: "Query" });
             },
             createElement(_result, _args, cache, _info) {
               cache.invalidate("Query", "elements");

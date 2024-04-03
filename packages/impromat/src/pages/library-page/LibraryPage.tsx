@@ -36,14 +36,10 @@ export const LibraryPage: React.FC = () => {
 
   const searchParameterFromUrl = useSearchParam(ROUTE_LIBRARY_SEARCH_PARAM);
 
-  const [selectedLanguages, setSelectedLanguages] = usePersistedState<string[]>(
-    "lastSelectedLanguages",
-    [i18n.language.split("-")[0]],
-  );
-
   const [searchText, setSearchText] = usePersistedState<string>(
     "lastSearch",
     "",
+    { forceValue: searchParameterFromUrl },
   );
 
   const history = useHistory();
@@ -64,6 +60,10 @@ export const LibraryPage: React.FC = () => {
     }
   }, [loadedSearchTextFromParam, searchParameterFromUrl, setSearchText]);
 
+  const [selectedLanguages, setSelectedLanguages] = usePersistedState<string[]>(
+    "lastSelectedLanguages",
+    [i18n.language.split("-")[0]],
+  );
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = 7;
 

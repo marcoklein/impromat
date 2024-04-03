@@ -1,4 +1,4 @@
-import { expect } from "@playwright/test";
+import { Page, expect } from "@playwright/test";
 import { pageTest } from "./fixtures/page-fixtures.js";
 
 pageTest.describe("Logout Flow", () => {
@@ -29,5 +29,19 @@ pageTest.describe("Logout Flow", () => {
     await accountPage.logout();
     // then
     await expect(page).toHaveURL("/nav/my-space");
+    for (const storageKey in await getAllLocalStorageKeys(page)) {
+      expect(storageKey).not.toContain("impromat");
+    }
   });
 });
+
+async function getAllLocalStorageKeys(page: Page) {
+  const keys = await page.evaluate(() => {
+    const keys: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      keys.push(localStorage.key(i) as string);
+    }
+    return keys;
+  });
+  return keys;
+}
