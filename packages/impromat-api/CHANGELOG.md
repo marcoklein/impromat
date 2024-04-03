@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.29.0
+
+### Minor Changes
+
+- 4a642f2: Add a new searchWorkshops API route that acts as a universal search for workshops within Impromat. It allows to be used by public and authenticated users.
+
 ## 0.28.0
 
 ### Minor Changes
