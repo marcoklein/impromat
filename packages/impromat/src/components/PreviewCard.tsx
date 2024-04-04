@@ -66,7 +66,7 @@ export const PreviewCard: React.FC<ContainerProps> = ({
               display: "flex",
               cursor: { routerLink } ? "pointer" : undefined,
               whiteSpace: "nowrap",
-              overflowX: "scroll",
+              overflowX: "auto",
               alignItems: "center",
               height: "2.5rem",
               width: "100%",
