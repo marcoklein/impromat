@@ -71,8 +71,12 @@ export function createCachedGraphqlClient(
               });
             },
             createWorkshop(_result, _args, cache, _info) {
-              cache.invalidate("Query", "workshops");
-              invalidateMeUser(cache, "workshops");
+              cache
+                .inspectFields("Query")
+                .filter((field) => field.fieldName === "searchWorkshops")
+                .forEach((field) => {
+                  cache.invalidate("Query", field.fieldKey);
+                });
             },
             updateWorkshop(_result, _args, cache, _info) {
               const id = (_result.updateWorkshop as any)?.id;
@@ -82,7 +86,12 @@ export function createCachedGraphqlClient(
               });
             },
             duplicateWorkshop(_result, _args, cache, _info) {
-              invalidateMeUser(cache, "workshops");
+              cache
+                .inspectFields("Query")
+                .filter((field) => field.fieldName === "searchWorkshops")
+                .forEach((field) => {
+                  cache.invalidate("Query", field.fieldKey);
+                });
             },
             deleteWorkshop(_result, _args, cache, _info) {
               const id = (_result.deleteWorkshop as any)?.id;
