@@ -2,6 +2,7 @@ import { Box, Fab } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
+import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { AddNewWorkshopIcon } from "../../components/icons/AddNewWorkshopIcon";
@@ -96,9 +97,11 @@ export const WorkshopsPage: React.FC = () => {
             )}
           />
         ) : (
-          <WorkshopCreateFirstComponent
-            onCreateWorkshopClick={() => setIsCreateWorkshopDialogOpen(true)}
-          ></WorkshopCreateFirstComponent>
+          <IsLoggedIn>
+            <WorkshopCreateFirstComponent
+              onCreateWorkshopClick={() => setIsCreateWorkshopDialogOpen(true)}
+            ></WorkshopCreateFirstComponent>
+          </IsLoggedIn>
         )}
         <CreateWorkshopDialog
           open={isCreateWorkshopDialogOpen}

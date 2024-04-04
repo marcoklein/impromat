@@ -6,14 +6,14 @@ pageTest.describe.configure({ mode: "parallel" });
 
 pageTest.describe("Workshop Sharing", () => {
   pageTest(
-    "with shared workshop and other user",
+    "given shared workshop and other user",
     async ({ auth, workshopPage, workshopsPage, page, accountPage }) => {
       // given
       let uniqueWorkshopName = `shared workshop ${randomUUID()}`;
       await auth.loginAsRandomUser();
       await workshopsPage.goto();
       await workshopPage.createAndGoto(uniqueWorkshopName);
-      await workshopPage.share();
+      await workshopPage.shareViaLink();
       const workshopUrl = page.url();
       await accountPage.goto();
       await accountPage.logout();
@@ -47,7 +47,7 @@ pageTest.describe("Workshop Sharing", () => {
   );
 
   pageTest(
-    "with shared workshop and public user",
+    "given shared workshop and public user",
     async ({
       auth,
       workshopPage,
@@ -61,17 +61,28 @@ pageTest.describe("Workshop Sharing", () => {
       // given
       await auth.loginAsRandomUser();
       await workshopsPage.goto();
-      await workshopPage.createAndGoto("shared workshop");
+      const workshopName = `${randomUUID()}`;
+      await workshopPage.createAndGoto(workshopName);
       await workshopPage.addSection("first-section");
       await workshopPage.openLibraryToAddNewElement();
       await libraryPage.searchForElement("Freeze");
       await libraryPage.openElementCard("Freeze");
-      await libraryElementPage.addToWorkshop("shared workshop");
+      await libraryElementPage.addToWorkshop(workshopName);
       await workshopPage.closeSection("first-section");
-      await workshopPage.share();
+      await workshopPage.shareWithCommunity();
       const workshopUrl = page.url();
       await accountPage.goto();
       await accountPage.logout();
+
+      await pageTest.step(
+        "should show workshop in workshop section to public user",
+        async () => {
+          // when
+          await workshopsPage.goto();
+          // then
+          await expect(page.getByText(workshopName)).toBeVisible();
+        },
+      );
 
       await pageTest.step(
         "should allow public access on shared workshop",

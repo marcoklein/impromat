@@ -90,11 +90,17 @@ export class WorkshopDevPage extends DevPage {
     return workshopId;
   }
 
-  async share() {
+  async shareViaLink() {
     const page = this.page;
     await page.getByRole("button", { name: "Share" }).click();
     await page.getByText("Anyone with the link can view").click();
     await page.getByRole("button", { name: "Copy workshop link" }).click();
+  }
+
+  async shareWithCommunity() {
+    const page = this.page;
+    await this.shareViaLink();
+    await page.getByRole("button", { name: "Share with community" }).click();
   }
 
   async closeSection(name: string = "[Default Section]") {
