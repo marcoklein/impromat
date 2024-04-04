@@ -19,6 +19,7 @@ export default {
   },
   ShareButton: {
     share: "Teilen",
+    copiedUrl: "URL in Zwichenablage kopiert",
   },
   BackButton: {
     back: "Zurück",

@@ -20,6 +20,7 @@ export default {
   },
   ShareButton: {
     share: "Share",
+    copiedUrl: "Copied URL to clipboard",
   },
   BackButton: {
     back: "Back",

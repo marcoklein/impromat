@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 /**
  * Custom hook that provides a progress functionality.
@@ -17,9 +17,7 @@ export function useProgress(delay: number) {
   const [isCompleted, setIsCompleted] = useState(false);
   const [timeoutRef, setTimeoutRef] = useState<NodeJS.Timeout | null>(null);
   const [progressMs, setProgressMs] = useState(0);
-  const intervalSteps = useMemo(() => delay / 100 - 1, [delay]);
-  console.log("intervalSteps: ", intervalSteps);
-  console.log("delay/intervalSteps: ", delay / intervalSteps);
+  const intervalSteps = useMemo(() => delay / 100, [delay]);
 
   useEffect(() => {
     return () => {

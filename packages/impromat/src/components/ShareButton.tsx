@@ -1,15 +1,15 @@
 import { CheckCircleOutline, Share } from "@mui/icons-material";
 import {
-  Box,
+  Fade,
   IconButton,
-  LinearProgress,
+  ListItem,
+  ListItemText,
   Paper,
   Popper,
-  Typography,
 } from "@mui/material";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useProgress } from "../hooks/use-progress";
+import { useTimeout } from "../hooks/use-timeout";
 
 interface ContainerProps {}
 
@@ -17,10 +17,10 @@ export const ShareButton: React.FC<ContainerProps> = () => {
   const { t } = useTranslation("ShareButton");
 
   const [isOpen, setIsOpen] = useState(false);
-  const autoCloseTimeout = 5000;
+  const autoCloseTimeout = 8000;
 
-  const [triggerCloseTimeout, isAutoCloseCompleted, closingProgress] =
-    useProgress(autoCloseTimeout);
+  const [triggerCloseTimeout, isAutoCloseCompleted, resetTimeout] =
+    useTimeout(autoCloseTimeout);
 
   useEffect(() => {
     if (isAutoCloseCompleted) {
@@ -28,10 +28,11 @@ export const ShareButton: React.FC<ContainerProps> = () => {
     }
   }, [isAutoCloseCompleted]);
 
-  const progressBar = useMemo(
-    () => (closingProgress / autoCloseTimeout) * 100,
-    [closingProgress, autoCloseTimeout],
-  );
+  useEffect(() => {
+    if (!isOpen) {
+      resetTimeout();
+    }
+  }, [isOpen, resetTimeout]);
 
   const copyCurrentUrlToClipboard = useCallback(() => {
     navigator.clipboard.writeText(window.location.href);
@@ -54,23 +55,24 @@ export const ShareButton: React.FC<ContainerProps> = () => {
         color="inherit"
         aria-label={t("share")}
       >
-        {!isOpen ? <Share /> : <CheckCircleOutline color="inherit" />}
+        <Share />
       </IconButton>
-      <Popper open={isOpen} anchorEl={ref.current}>
-        <Paper>
-          <Box sx={{ p: 1 }}>
-            <Typography>
-              Copied URL to clipboard.
-              <br />
-              Go ahead and share Impromat.app!
-            </Typography>
-          </Box>
-          <LinearProgress
-            variant="determinate"
-            color="success"
-            value={progressBar}
-          />
-        </Paper>
+      <Popper open={isOpen} anchorEl={ref.current} transition>
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={200}>
+            <Paper
+              sx={{ m: 1 }}
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              <ListItem>
+                <ListItemText>{t("copiedUrl")}</ListItemText>
+                <CheckCircleOutline sx={{ ml: 1 }} color="success" />
+              </ListItem>
+            </Paper>
+          </Fade>
+        )}
       </Popper>
     </>
   );
