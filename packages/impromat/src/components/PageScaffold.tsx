@@ -3,9 +3,10 @@ import React, { PropsWithChildren, ReactNode } from "react";
 import { BackButton } from "./BackButton";
 
 interface ContainerProps extends PropsWithChildren {
-  title: ReactNode;
+  title?: ReactNode;
   buttons?: JSX.Element | null;
   backButton?: boolean;
+  noHeader?: boolean;
 }
 
 /**
@@ -13,6 +14,7 @@ interface ContainerProps extends PropsWithChildren {
  */
 export const PageScaffold: React.FC<ContainerProps> = ({
   title,
+  noHeader,
   children,
   buttons,
   backButton,
@@ -27,41 +29,44 @@ export const PageScaffold: React.FC<ContainerProps> = ({
         height: "100%",
       }}
     >
-      <AppBar
-        sx={{
-          zIndex: 100,
-          display: "flex",
-          flexDirection: "column",
-          position: "sticky",
-        }}
-        position="static"
-      >
-        <Toolbar
+      {!noHeader && (
+        <AppBar
           sx={{
+            zIndex: 100,
             display: "flex",
-            alignItems: "center",
-            px: {
-              xs: 1,
-              sm: 2,
-            },
+            flexDirection: "column",
+            position: "sticky",
           }}
+          position="static"
+          color="transparent"
         >
-          {backButton && <BackButton></BackButton>}
-          <Typography
-            variant="h6"
-            component="h1"
+          <Toolbar
             sx={{
-              flexGrow: 1,
-              overflowX: "auto",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              display: "flex",
+              alignItems: "center",
+              // px: {
+              //   xs: 1,
+              //   sm: 2,
+              // },
             }}
           >
-            {title}
-          </Typography>
-          {buttons}
-        </Toolbar>
-      </AppBar>
+            {backButton && <BackButton></BackButton>}
+            <Typography
+              variant="h6"
+              component="h1"
+              sx={{
+                flexGrow: 1,
+                overflowX: "auto",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {title}
+            </Typography>
+            {buttons}
+          </Toolbar>
+        </AppBar>
+      )}
       {children}
     </Box>
   );

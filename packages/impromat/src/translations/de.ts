@@ -219,6 +219,11 @@ export default {
     notePlaceholder: "Notiz hinzufügen",
   },
   WorkshopsPage: {
+    communityWorkshopsTitle: "Gemeinschafts-Workshops",
+    communityWorkshopsDescription:
+      "Entdecke Workshops, die von der Impromat-Gemeinschaft erstellt wurden. Nutze sie für deine nächste Impro-Session oder lass dich einfach von der Struktur und den Elementen inspirieren.",
+    communityWorkshopsDescriptionSecondary:
+      "Teile deine eigenen Workshop Ideen, um anderen zu helfen und die Impro-Gemeinschaft zu stärken.",
     NewWorkshop: "Neuer Workshop",
     FilterNoWorkshops: "Die momentane Filterauswahl enthält keine Workshops.",
     ClearFilters: "Filter zurücksetzen",
