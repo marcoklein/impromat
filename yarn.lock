@@ -9980,7 +9980,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/unist@npm:*":
+"@types/unist@npm:*, @types/unist@npm:^3.0.0":
   version: 3.0.2
   resolution: "@types/unist@npm:3.0.2"
   checksum: 3d04d0be69316e5f14599a0d993a208606c12818cf631fd399243d1dc7a9bd8a3917d6066baa6abc290814afbd744621484756803c80cba892c39cd4b4a85616
@@ -11151,15 +11151,6 @@ __metadata:
   version: 1.0.2
   resolution: "app-root-dir@npm:1.0.2"
   checksum: d4b1653fc60b6465b982bf5a88b12051ed2d807d70609386a809306e1c636496f53522d61fa30f9f98c71aaae34f34e1651889cf17d81a44e3dafd2859d495ad
-  languageName: node
-  linkType: hard
-
-"apparatus@npm:^0.0.10":
-  version: 0.0.10
-  resolution: "apparatus@npm:0.0.10"
-  dependencies:
-    sylvester: ">= 0.0.8"
-  checksum: ab0bf678890a4840dff47b5133f9c04beec618627ec7783ad8a7f379ecfed84676049b6e6aac567ecb660d5f27db06e420e5637ceed2325542b2f2e5ffe9dc90
   languageName: node
   linkType: hard
 
@@ -14516,7 +14507,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"encoding@npm:^0.1.13":
+"encoding@npm:^0.1.11, encoding@npm:^0.1.13":
   version: 0.1.13
   resolution: "encoding@npm:0.1.13"
   dependencies:
@@ -18816,6 +18807,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-stream@npm:^1.0.1":
+  version: 1.1.0
+  resolution: "is-stream@npm:1.1.0"
+  checksum: 063c6bec9d5647aa6d42108d4c59723d2bd4ae42135a2d4db6eadbd49b7ea05b750fd69d279e5c7c45cf9da753ad2c00d8978be354d65aa9f6bb434969c6a2ae
+  languageName: node
+  linkType: hard
+
 "is-stream@npm:^2.0.0":
   version: 2.0.1
   resolution: "is-stream@npm:2.0.1"
@@ -22402,6 +22400,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nlcst-to-string@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "nlcst-to-string@npm:4.0.0"
+  dependencies:
+    "@types/nlcst": ^2.0.0
+  checksum: a780ca517548582016b6a92216962500de1179ace37cc7a9afbddd219e6893f253eab564f4c2292a13cf2ade27a669c6222b3eb27671cf647e15b6abf2eb1827
+  languageName: node
+  linkType: hard
+
 "no-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "no-case@npm:3.0.4"
@@ -23583,6 +23590,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"parse-latin@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "parse-latin@npm:7.0.0"
+  dependencies:
+    "@types/nlcst": ^2.0.0
+    "@types/unist": ^3.0.0
+    nlcst-to-string: ^4.0.0
+    unist-util-modify-children: ^4.0.0
+    unist-util-visit-children: ^3.0.0
+    vfile: ^6.0.0
+  checksum: 71b5af8857750aeaa240c1688331ba37e5320de3f5c4225bf2b816554cbf5a987ce999e180074553acab7868a9c43deff1adb6cebd01ac6f258dcbdce4803824
+  languageName: node
+  linkType: hard
+
 "parse-passwd@npm:^1.0.0":
   version: 1.0.0
   resolution: "parse-passwd@npm:1.0.0"
@@ -23983,21 +24004,6 @@ __metadata:
   bin:
     playwright: cli.js
   checksum: 06c16bcd07d03993126ee6c168bde28c59d3cab7f7d4721eaf57bd5c51e9c929e10a286758de062b5fc02874413ceae2684d14cbb7865c0a51fc8df6d9001ad1
-  languageName: node
-  linkType: hard
-
-"playwright@npm:1.40.1":
-  version: 1.40.1
-  resolution: "playwright@npm:1.40.1"
-  dependencies:
-    fsevents: 2.3.2
-    playwright-core: 1.40.1
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    playwright: cli.js
-  checksum: 9e36791c1b4a649c104aa365fdd9d049924eeb518c5967c0e921aa38b9b00994aa6ee54784d6c2af194b3b494b6f69772673081ef53c6c4a4b2065af9955c4ba
   languageName: node
   linkType: hard
 
@@ -25531,6 +25537,66 @@ __metadata:
   languageName: node
   linkType: hard
 
+"retext-keywords@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "retext-keywords@npm:8.0.1"
+  dependencies:
+    "@types/nlcst": ^2.0.0
+    "@ungap/structured-clone": ^1.0.0
+    nlcst-to-string: ^4.0.0
+    stemmer: ^2.0.0
+    unist-util-visit: ^5.0.0
+    vfile: ^6.0.0
+  checksum: c776a00c1b776cbe8ab5d723d650cf94aec933755f9ee6dcdcaa4201514d2afd6bcd3a24b13bc2fd73517756cbf6695e1edac5aa4b02ec106b9394addb72a0a5
+  languageName: node
+  linkType: hard
+
+"retext-latin@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "retext-latin@npm:4.0.0"
+  dependencies:
+    "@types/nlcst": ^2.0.0
+    parse-latin: ^7.0.0
+    unified: ^11.0.0
+  checksum: 924e2e4b588e75f2884d6fd81bdd647e1848b47bcf0e2b503873752e8fa80b2d2c9bcc1ae76141334145cbaacb383df26b637ed76d07b8c8b251d4cd340dec41
+  languageName: node
+  linkType: hard
+
+"retext-pos@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "retext-pos@npm:5.0.0"
+  dependencies:
+    "@types/nlcst": ^2.0.0
+    nlcst-to-string: ^4.0.0
+    pos: ^0.4.0
+    unist-util-visit: ^5.0.0
+  checksum: 82ebc148e59fc84931919be16dcfd9260f4bdc3dbc654e0b6341dbcd5b81d27fdda4cb1cb234fcde3b5d5e03c12ce622cfac73dd6acb5fc5d419da83959ee5bc
+  languageName: node
+  linkType: hard
+
+"retext-stringify@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "retext-stringify@npm:4.0.0"
+  dependencies:
+    "@types/nlcst": ^2.0.0
+    nlcst-to-string: ^4.0.0
+    unified: ^11.0.0
+  checksum: a98ede08708a3d859a07798cab5653ae312526a1e439f7066d5403c5ea0d23a53348565b3971433670cfc7d0ce95a58a535e4b68dc10834c45a74b4de37e72b1
+  languageName: node
+  linkType: hard
+
+"retext@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "retext@npm:9.0.0"
+  dependencies:
+    "@types/nlcst": ^2.0.0
+    retext-latin: ^4.0.0
+    retext-stringify: ^4.0.0
+    unified: ^11.0.0
+  checksum: 191b5e5434cb5aeb5dd8947ceaebcd07637a73bae4170540941d256257898e0e65e411a839f1060888794daa575bf22e5cb4a6d3fd0bb3cc325e21b8b5423008
+  languageName: node
+  linkType: hard
+
 "retry@npm:0.13.1":
   version: 0.13.1
   resolution: "retry@npm:0.13.1"
@@ -26621,6 +26687,15 @@ __metadata:
   version: 2.0.1
   resolution: "statuses@npm:2.0.1"
   checksum: 18c7623fdb8f646fb213ca4051be4df7efb3484d4ab662937ca6fbef7ced9b9e12842709872eb3020cc3504b93bde88935c9f6417489627a7786f24f8031cbcb
+  languageName: node
+  linkType: hard
+
+"stemmer@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "stemmer@npm:2.0.1"
+  bin:
+    stemmer: cli.js
+  checksum: 63d1f5328de05c6136119d1342fd7e64abac5b073ece5ed8a0c105aff8a78967778cdb05730d0db8242c24bbf9c9a4ed7024f5793ee2a716879acbf33cf9e09a
   languageName: node
   linkType: hard
 
@@ -28266,6 +28341,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unist-util-is@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "unist-util-is@npm:6.0.0"
+  dependencies:
+    "@types/unist": ^3.0.0
+  checksum: f630a925126594af9993b091cf807b86811371e465b5049a6283e08537d3e6ba0f7e248e1e7dab52cfe33f9002606acef093441137181b327f6fe504884b20e2
+  languageName: node
+  linkType: hard
+
+"unist-util-modify-children@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "unist-util-modify-children@npm:4.0.0"
+  dependencies:
+    "@types/unist": ^3.0.0
+    array-iterate: ^2.0.0
+  checksum: 4cb8a7d9365e6726df82a444d556177e99f582c32c1f5223b96f31b477502b53365ec5231fdab355d77ba21cd90822e594ba030b3ba06ea0786842d409d28fd3
+  languageName: node
+  linkType: hard
+
 "unist-util-position@npm:^4.0.0":
   version: 4.0.4
   resolution: "unist-util-position@npm:4.0.4"
@@ -28351,6 +28445,17 @@ __metadata:
     unist-util-is: ^5.0.0
     unist-util-visit-parents: ^5.1.1
   checksum: 95a34e3f7b5b2d4b68fd722b6229972099eb97b6df18913eda44a5c11df8b1e27efe7206dd7b88c4ed244a48c474a5b2e2629ab79558ff9eb936840295549cee
+  languageName: node
+  linkType: hard
+
+"unist-util-visit@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "unist-util-visit@npm:5.0.0"
+  dependencies:
+    "@types/unist": ^3.0.0
+    unist-util-is: ^6.0.0
+    unist-util-visit-parents: ^6.0.0
+  checksum: 9ec42e618e7e5d0202f3c191cd30791b51641285732767ee2e6bcd035931032e3c1b29093f4d7fd0c79175bbc1f26f24f26ee49770d32be76f8730a652a857e6
   languageName: node
   linkType: hard
 
@@ -28733,6 +28838,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vfile-message@npm:^4.0.0":
+  version: 4.0.2
+  resolution: "vfile-message@npm:4.0.2"
+  dependencies:
+    "@types/unist": ^3.0.0
+    unist-util-stringify-position: ^4.0.0
+  checksum: 964e7e119f4c0e0270fc269119c41c96da20afa01acb7c9809a88365c8e0c64aa692fafbd952669382b978002ecd7ad31ef4446d85e8a22cdb62f6df20186c2d
+  languageName: node
+  linkType: hard
+
 "vfile@npm:^5.0.0":
   version: 5.3.7
   resolution: "vfile@npm:5.3.7"
@@ -29107,7 +29222,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"whatwg-fetch@npm:^3.4.1":
+"whatwg-fetch@npm:>=0.10.0, whatwg-fetch@npm:^3.4.1":
   version: 3.6.20
   resolution: "whatwg-fetch@npm:3.6.20"
   checksum: c58851ea2c4efe5c2235f13450f426824cf0253c1d45da28f45900290ae602a20aff2ab43346f16ec58917d5562e159cd691efa368354b2e82918c2146a519c5
@@ -29293,13 +29408,6 @@ __metadata:
   version: 6.3.4
   resolution: "wonka@npm:6.3.4"
   checksum: 6bb57955cb2982fb469a7824484e6854b436f89a7f10b6a981348789d88fbc944665771adc4cc404f62416417eb47ab2b8657d898e5301ccd4a53eaac6a10508
-  languageName: node
-  linkType: hard
-
-"wordnet-db@npm:^3.1.11":
-  version: 3.1.14
-  resolution: "wordnet-db@npm:3.1.14"
-  checksum: 7203027afb210ec372010c2dded87b6f73a4cfb54dfcdd4e5acdabc64bec88eab57ffd65b06e02f4c506feb3adbe40351a43e25bf62a95adf9fb02fa479c1534
   languageName: node
   linkType: hard
 
