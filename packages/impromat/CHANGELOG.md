@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.65.0
+
+### Minor Changes
+
+- 43a7b77: Public users are now able to see community shared workshops
+
 ## 0.64.1
 
 ### Patch Changes
