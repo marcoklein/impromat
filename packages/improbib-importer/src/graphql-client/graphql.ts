@@ -340,6 +340,8 @@ export type Query = {
   searchElements: Array<ElementSearchResult>;
   searchElementsKeywords: ElementSearchKeywords;
   searchElementsTfidf: Array<ElementSearchResult>;
+  /** Universal search for workshops. Works for all users. */
+  searchWorkshops: Array<WorkshopSearchResult>;
   tags: Array<ElementTag>;
   /** Get information about a user. Returns null if not found or not logged in. */
   user?: Maybe<User>;
@@ -377,6 +379,13 @@ export type QuerySearchElementsKeywordsArgs = {
 
 export type QuerySearchElementsTfidfArgs = {
   input: ElementSearchInput;
+  skip?: Scalars['Int']['input'];
+  take?: Scalars['Int']['input'];
+};
+
+
+export type QuerySearchWorkshopsArgs = {
+  input: WorkshopSearchInput;
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
 };
@@ -584,6 +593,7 @@ export type Workshop = {
   dateOfWorkshop?: Maybe<Scalars['DateTime']['output']>;
   deleted?: Maybe<Scalars['Boolean']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  /** Find recommended elements. */
   elementRecommendations: Array<Element>;
   id: Scalars['ID']['output'];
   /** True, if liked by the logged in user. Undefined, if there is no user logged in. */
@@ -617,6 +627,18 @@ export type WorkshopElementListInput = {
   create?: InputMaybe<Array<CreateWorkshopElementInput>>;
   delete?: InputMaybe<Array<DeleteWorkshopElementInput>>;
   update?: InputMaybe<Array<UpdateWorkshopElementInput>>;
+};
+
+export type WorkshopSearchInput = {
+  /** Language codes (e.g. en, de) to filter results by. */
+  languageCodes?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** If true, only workshop created by the requesting user are returned. If false, only workshops not created by the requesting user are returned. If not set, all workshops are returned. */
+  ownWorkshop?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type WorkshopSearchResult = {
+  __typename?: 'WorkshopSearchResult';
+  workshop: Workshop;
 };
 
 export type WorkshopSection = {

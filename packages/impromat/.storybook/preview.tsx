@@ -1,7 +1,8 @@
 import i18n from "i18next";
-import React, { Suspense } from "react";
-import { I18nextProvider, initReactI18next } from "react-i18next";
+import { initReactI18next } from "react-i18next";
 import { TRANSLATIONS } from "../src/translations";
+
+localStorage.setItem("debug", "impromat:*");
 
 i18n.use(initReactI18next).init({
   resources: TRANSLATIONS,

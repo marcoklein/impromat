@@ -5,8 +5,8 @@ import { graphql } from "../graphql-client";
 import { useLogger } from "./use-logger";
 import { usePersistedState } from "./use-persisted-state";
 
-const IsLoggedInQuery = graphql(`
-  query IsLoggedIn {
+const IsLoggedIn_Query = graphql(`
+  query IsLoggedIn_Query {
     me {
       id
     }
@@ -15,12 +15,11 @@ const IsLoggedInQuery = graphql(`
 
 export function useIsLoggedIn() {
   const [meQueryResult, retriggerLogInQuery] = useQuery({
-    query: IsLoggedInQuery,
+    query: IsLoggedIn_Query,
   });
   const [cachedIsLoggedIn, setCachedIsLoggedIn] = usePersistedState(
     "isLoggedIn",
     false,
-    APP_LOCAL_STORAGE_PREFIX,
   );
   const logger = useLogger("useIsLoggedIn");
 

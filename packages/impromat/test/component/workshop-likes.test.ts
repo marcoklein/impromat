@@ -11,7 +11,7 @@ pageTest.describe("Workshop Likes", () => {
       await auth.loginAsRandomUser();
       await workshopsPage.goto();
       await workshopPage.createAndGoto(uniqueWorkshopName);
-      await workshopPage.share();
+      await workshopPage.shareViaLink();
       const workshopUrl = page.url();
       await accountPage.goto();
       await accountPage.logout();
