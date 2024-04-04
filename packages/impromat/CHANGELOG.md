@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.66.0
+
+### Minor Changes
+
+- 721b7cf: Show header and description in the workshops page to describe what the purpose of it
+- c8aa6dd: Added an sharing button at the element page which allows copying the url of the displayed element
+
+### Patch Changes
+
+- c36feaa: Hide scrollbar on desktop for preview pages to fix misplacement of card UI.
+
 ## 0.65.0
 
 ### Minor Changes
