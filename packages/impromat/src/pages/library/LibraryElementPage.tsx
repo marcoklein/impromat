@@ -14,6 +14,7 @@ import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/components/local-storage-w
 import { AddToWorkshopSelectDialog } from "./AddToWorkshopSelectDialog";
 import { ElementDetails } from "./ElementDetails";
 import { ElementLikeIconButton } from "./ElementLikeIconButton";
+import { ShareButton } from "../../components/ShareButton";
 
 const LibraryElementPageQuery = graphql(`
   query MuiLibraryElementQuery($elementId: ID!) {
@@ -83,13 +84,16 @@ export const LibraryElementPage: React.FC = () => {
       backButton
       title={t("Element")}
       buttons={
-        <IsLoggedIn>
-          {element && (
-            <ElementLikeIconButton
-              elementFragment={element}
-            ></ElementLikeIconButton>
-          )}
-        </IsLoggedIn>
+        <>
+          <IsLoggedIn>
+            {element && (
+              <ElementLikeIconButton
+                elementFragment={element}
+              ></ElementLikeIconButton>
+            )}
+          </IsLoggedIn>
+          <ShareButton />
+        </>
       }
     >
       <Box sx={{ overflow: "auto" }}>

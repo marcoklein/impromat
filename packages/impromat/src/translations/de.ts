@@ -17,6 +17,9 @@ export default {
     Elements: "Elemente",
     save: "Speichern",
   },
+  ShareButton: {
+    share: "Teilen",
+  },
   BackButton: {
     back: "Zurück",
   },
