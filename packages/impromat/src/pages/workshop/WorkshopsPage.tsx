@@ -1,9 +1,18 @@
-import { Box, Fab } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Fab,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
+import { IsNotLoggedIn } from "../../components/IsNotLoggedIn";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
+import { PageScaffold } from "../../components/PageScaffold";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { AddNewWorkshopIcon } from "../../components/icons/AddNewWorkshopIcon";
 import { getFragmentData, graphql } from "../../graphql-client";
@@ -63,7 +72,7 @@ export const WorkshopsPage: React.FC = () => {
   const { t } = useTranslation("WorkshopsPage");
 
   return (
-    <Box sx={{ height: "100%", position: "relative" }}>
+    <PageScaffold noHeader>
       {isLoggedIn && (
         <Fab
           color="primary"
@@ -90,10 +99,39 @@ export const WorkshopsPage: React.FC = () => {
             }
             onTopStateChange={(atTop) => setGridIsOnTop(atTop)}
             items={availableWorkshops}
+            headerElement={
+              <IsNotLoggedIn>
+                <Container maxWidth="sm" sx={{ height: "100%" }}>
+                  <Card
+                    sx={{
+                      m: 1,
+                      border: "solid 1px",
+                      borderColor: "primary.main",
+                    }}
+                  >
+                    <CardContent>
+                      <Typography variant="h6">
+                        {t("communityWorkshopsTitle")}
+                      </Typography>
+                      <Typography variant="body2">
+                        {t("communityWorkshopsDescription")}
+                      </Typography>
+                      <Box mt={1}>
+                        <Typography variant="body2">
+                          {t("communityWorkshopsDescriptionSecondary")}
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Container>
+              </IsNotLoggedIn>
+            }
             itemContent={(_index, workshop) => (
-              <WorkshopPreviewCard
-                workshopFragment={workshop}
-              ></WorkshopPreviewCard>
+              <Container maxWidth="sm" sx={{ height: "100%" }}>
+                <WorkshopPreviewCard
+                  workshopFragment={workshop}
+                ></WorkshopPreviewCard>
+              </Container>
             )}
           />
         ) : (
@@ -108,6 +146,6 @@ export const WorkshopsPage: React.FC = () => {
           handleClose={() => setIsCreateWorkshopDialogOpen(false)}
         />
       </PageContentLoaderComponent>
-    </Box>
+    </PageScaffold>
   );
 };
