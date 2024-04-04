@@ -1,17 +1,21 @@
-import { close, trash } from "ionicons/icons";
+import { Remove } from "@mui/icons-material";
+import {
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useState } from "react";
-import { ConfirmationAlert } from "../../../components/ConfirmationAlert";
-import { OptionsMenu } from "../../../components/OptionsMenu";
-import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useTranslation } from "react-i18next";
+import { ResponsiveOptions } from "../../../components/ResponsiveOptions";
+import { useComponentLogger } from "../../../hooks/use-component-logger";
+import { ConfirmDialog } from "./ConfirmationDialog";
 
 interface ContainerProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  /**
-   * Callback when the remove option is clicked.
-   */
   onRemoveClick: () => void;
+  disabled?: boolean;
 }
 
 /**
@@ -21,6 +25,7 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
   setIsOpen,
   isOpen,
   onRemoveClick,
+  disabled,
 }) => {
   const logger = useComponentLogger("WorkshopElementOptionsMenu");
   const [isRemoveAlertOpen, setIsRemoveAlertOpen] = useState(false);
@@ -28,37 +33,37 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
 
   return (
     <>
-      <OptionsMenu
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        header={t("Options", { ns: "common" })}
-        options={[
-          {
-            text: t("Remove", { ns: "common" }),
-            role: "destructive",
-            icon: trash,
-            handler: () => {
+      <ResponsiveOptions
+        title={t("Options", { ns: "common" })}
+        open={isOpen}
+        onOpenChange={setIsOpen}
+      >
+        <List disablePadding>
+          <ListItemButton
+            onClick={() => {
+              setIsOpen(false);
               setIsRemoveAlertOpen(true);
-            },
-          },
-          {
-            text: t("Cancel", { ns: "common" }),
-            role: "cancel",
-            handler: () => {},
-            icon: close,
-          },
-        ]}
-      ></OptionsMenu>
-      <ConfirmationAlert
-        header={t("RemoveElement")}
+            }}
+          >
+            <ListItemIcon>
+              <Remove />
+            </ListItemIcon>
+            <ListItemText>{t("Remove", { ns: "common" })}</ListItemText>
+          </ListItemButton>
+        </List>
+      </ResponsiveOptions>
+
+      <ConfirmDialog
+        title={t("RemoveElement")}
         confirmText={t("Remove", { ns: "common" })}
-        isOpen={isRemoveAlertOpen}
+        open={isRemoveAlertOpen}
         onConfirm={() => {
           logger("Removal confirmed");
           onRemoveClick();
+          setIsRemoveAlertOpen(false);
         }}
-        onOpenChange={setIsRemoveAlertOpen}
-      ></ConfirmationAlert>
+        onClose={() => setIsRemoveAlertOpen(false)}
+      ></ConfirmDialog>
     </>
   );
 };

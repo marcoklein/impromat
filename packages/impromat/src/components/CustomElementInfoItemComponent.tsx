@@ -1,20 +1,12 @@
-import {
-  IonButton,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonRouterLink,
-} from "@ionic/react";
-import { brush, globe, pencil } from "ionicons/icons";
+import { Brush, Edit, Public } from "@mui/icons-material";
+import { Button, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Link, NavLink } from "react-router-dom";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
-import {
-  routeLibraryEditCustomElement,
-  routeLibraryElement,
-} from "../routes/library-routes";
-import { COLOR_SHARED } from "../theme/theme-colors";
+import { routeLibraryEditCustomElement } from "../routes/library-routes";
+import { routeLibraryElement } from "../routes/shared-routes";
 
-const CustomElement_ElementFragment = graphql(`
+const CustomElement_Element = graphql(`
   fragment CustomElement_Element on Element {
     id
     name
@@ -23,7 +15,7 @@ const CustomElement_ElementFragment = graphql(`
 `);
 
 interface ContainerProps {
-  elementFragment: FragmentType<typeof CustomElement_ElementFragment>;
+  elementFragment: FragmentType<typeof CustomElement_Element>;
   workshopId?: string;
   showElementLink?: boolean;
 }
@@ -33,45 +25,43 @@ export const CustomElementInfoItemComponent: React.FC<ContainerProps> = ({
   workshopId,
   showElementLink,
 }) => {
-  const element = getFragmentData(
-    CustomElement_ElementFragment,
-    elementFragment,
-  );
+  const element = getFragmentData(CustomElement_Element, elementFragment);
   return (
     <>
-      <IonItem lines="none">
-        <IonIcon icon={brush} slot="start"></IonIcon>
-        <IonLabel className="ion-text-wrap">
+      <ListItem>
+        <ListItemIcon>
+          <Brush />
+        </ListItemIcon>
+        <ListItemText>
           This is your custom element
           {showElementLink && (
             <>
               {" "}
-              <IonRouterLink routerLink={routeLibraryElement(element.id)}>
+              <Link component={NavLink} to={routeLibraryElement(element.id)}>
                 {element.name}
-              </IonRouterLink>
+              </Link>
             </>
           )}{" "}
           that you can{" "}
-          <IonButton
-            fill="outline"
+          <Button
+            variant="outlined"
             size="small"
-            className="ion-no-padding-vertical ion-no-margin"
-            routerLink={routeLibraryEditCustomElement({
-              elementId: element.id,
-              workshopId,
-            })}
+            component={NavLink}
+            to={routeLibraryEditCustomElement(element.id)}
+            startIcon={<Edit />}
           >
-            <IonIcon icon={pencil} slot="start"></IonIcon>
             edit here
-          </IonButton>
-        </IonLabel>
-      </IonItem>
+          </Button>
+        </ListItemText>
+      </ListItem>
 
       {element.visibility === ElementVisibility.Public && (
-        <IonItem lines="none">
-          <IonIcon icon={globe} slot="start" color={COLOR_SHARED}></IonIcon>
-          <IonLabel className="ion-text-wrap">Community Element</IonLabel>
-        </IonItem>
+        <ListItem>
+          <ListItemIcon>
+            <Public color="primary" />
+          </ListItemIcon>
+          <ListItemText>Community Element</ListItemText>
+        </ListItem>
       )}
     </>
   );

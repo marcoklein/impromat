@@ -14,9 +14,8 @@ export class AdminController {
   async applyAllTagMappings(
     @SessionUserId() sessionUserId: string,
   ): Promise<number> {
-    const totalCount = await this.adminService.applyAllTagMappings(
-      sessionUserId,
-    );
+    const totalCount =
+      await this.adminService.applyAllTagMappings(sessionUserId);
     return totalCount;
   }
 
@@ -26,9 +25,8 @@ export class AdminController {
   async createAllSummaries(
     @SessionUserId() sessionUserId: string,
   ): Promise<number> {
-    const totalCount = await this.adminService.createAllSummaries(
-      sessionUserId,
-    );
+    const totalCount =
+      await this.adminService.createAllSummaries(sessionUserId);
     return totalCount;
   }
 }

@@ -8,7 +8,7 @@ import {
   graphql,
 } from "../../../graphql-client";
 import { routeWorkshop } from "../../../routes/shared-routes";
-import { WorkshopOptionsMenu } from "../WorkshopOptionsMenu";
+import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
 
 const WorkshopPreviewItem_WorkshopFragment = graphql(`
   fragment WorkshopPreviewItem_Workshop on Workshop {

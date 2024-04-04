@@ -16,21 +16,33 @@ export default {
     Section: "Section",
     Element: "Element",
     Elements: "Elements",
+    save: "Save",
+  },
+  BackButton: {
+    back: "Back",
   },
   RootNavigation: {
     Home: "Home",
-    "Exercises & Games": "Exercises & Games",
+    "Exercises & Games": "Elements",
     Workshops: "Workshops",
+    "My Space": "My Space",
+    Login: "Login",
   },
   PrivacyPolicyPage: {
     switchToEnglishVersion: "Switch to English version",
   },
+  LoginPage: {
+    "sign in to access impromat":
+      "Sign in to create and share your own workshops and elements.",
+    "agree to privacy policy":
+      "By signing in you agree to the <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>. Your improv data is not shared with Google and safely hosted on a server based in Germany.",
+    learnMore: "Learn more",
+  },
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
       "App for planning, giving and sharing improvisational theatre workshops.",
-    "Access Impromat": "Access Impromat",
+    accessImpromat: "Browse exercises and games",
     Profile: "Profile",
-    "About the Project": "About the Project",
     "Legal Notice": "Legal Notice",
   },
   HomeContent: {
@@ -77,11 +89,25 @@ export default {
       "Impromat and the improv community thrive from your workshop and element <b>contributions</b>. Everyone can take part in sharing their improv knowledge! <br></br>If you have <b>feedback or new ideas</b>, what the Impromat could do, please let us know via email at <MailadressLink>impromat@marcoklein.dev</MailadressLink> or head over to the <b>About page</b> to find out more.",
     AboutProject: "About the Project",
   },
+  QueryErrorAlert: {
+    Retry: "Retry",
+  },
+  LibraryPageAppBar: {
+    searchPlaceholder: "What are you looking for?",
+    searchAriaLabel: "search impromat elements",
+  },
+  LibraryMenuDialog: {
+    en: "English",
+    de: "German",
+    searchOptionsTitle: "Search Options",
+    languageOfResults: "Languages of Results",
+  },
+  ElementDetails: {
+    createdByWithName: "Created by {{name}}",
+    createdBy: "Created by a user in impromat",
+  },
   LibraryPage: {
-    "Keep filter expanded": "Keep filters expanded",
-    "No matching elements found.": "No matching elements found.",
-    "Use the search bar to find elements from various sources.":
-      "Use the search bar to find elements from various sources.",
+    Retry: "Retry",
   },
   FilterInspirations: {
     tagsInspiration0: "<Tag>{{tagA}}</Tag> with <Tag>{{tagB}}</Tag> focus",
@@ -100,14 +126,27 @@ export default {
     Like: "Like",
     MyElement: "My Element",
   },
-  LibraryCreateCustomElementPage: {
+  LibraryCreateElementPage: {
+    "Create Custom Element": "Create own Element",
+    nameRequired: "Name is required",
+  },
+  LibraryUpdateElementPage: {
+    "Edit Custom Element": "Edit own element",
+    nameRequired: "Name is required",
+  },
+  LibraryElementEditForm: {
+    category: "Category",
+    tagsInfo:
+      "Choose tags that fit your element. They provide more context and help others to find your element.",
     "Select language": "Select language",
     "Edit Custom Element": "Edit my Element",
-    "Create Custom Element": "Create my Element",
-    "Name (required)": "Name (required)",
-    "Please enter a name": "Please enter a name for your element",
+    "Name (required)": "Name",
+    Tags: "Tags",
+    "Please enter a name": "Enter name of element",
     Content: "Content",
-    "Language (required)": "Language",
+    "Language (required)": "Language of element",
+    en: "English",
+    de: "German",
     CommunityElement: "Community Element",
     CommunityElementNote:
       "This is a public community element of Impromat. It is shared with everyone and editable by Impromat users.",
@@ -115,7 +154,7 @@ export default {
     AddtoPublicElementsNote:
       "Contribute your element to the public Impromat community. Community elements are visible, searchable, and editable by Impromat users.",
     "Sharing cannot be undone.": "Sharing cannot be undone.",
-    CustomElementsAreUnique: "Custom Elements Are Unique",
+    elementsAreUnique: "Elements are unique",
     CustomElementNote:
       "Saving will update name and content changes for all workshops that use this element. If you want to change name or content for an individual workshop you should create a new element or add a note in the workshop.",
     SaveElement: "Save Element",
@@ -131,7 +170,7 @@ export default {
     ImproveElement:
       "Want to improve this element? You can <EditingLink>edit it here</EditingLink>.",
     SimilarElements: "Similar Elements",
-    "AI generated": "Automatically generated summary",
+    "AI generated": "Generated summary",
   },
   LicenseItemComponent: {
     "Based on": "Based on",
@@ -142,31 +181,48 @@ export default {
     AddWorkshop: "Add Workshop",
     StartWorkshop: "Start by creating your very first workshop:",
   },
-  "use-add-workshop-input-dialog": {
-    WorkshopName: "Workshop Name",
-    NamePlaceholder: "Workshop name...",
-    NameMessage: "Enter a name for your workshop (You can change it later):",
-    EmptyNameMessage: "Please enter a name for your workshop.",
-    Create: "Create",
+  CreateWorkshopDialog: {
+    workshopDialogTitle: "Create Workshop",
+    namePlaceholder: "Enter a name for your workshop",
+    emptyNameMessage: "Please enter a name for your workshop.",
+    create: "Create",
+  },
+  LikeIconButton: {
+    removeLike: "Remove from likes.",
+    addLike: "Add to likes.",
   },
   WorkshopPage: {
     Add: "Add",
-    RemoveLike: "Remove from likes.",
-    AddLike: "Add to likes.",
-    UpdatingLike: "Updating Like",
     AddElement: "Add First Element",
     AddElementMessage:
       "Use the bottom right button to add elements. Enjoy designing your workshop!",
+  },
+  LibraryElementPage: {
+    Element: "Element",
+  },
+  AddToWorkshopSelectDialog: {
+    "Add to Workshop": "Add to Workshop",
+    "Select a workshop to add this element to.":
+      "Select a workshop to add this element to:",
+    "No workshops found.":
+      "You have no workshops yet. Create a new workshop first.",
+    "Create new workshop": "Create new workshop",
   },
   AddToWorkshopDropdown: {
     AddToWorkshop: "Add to Workshop",
     SelectWorkshop: "Select Workshop",
   },
-  WorkshopElementPage: { AddNote: "Add Note" },
+  WorkshopElementNote: {
+    note: "Notiz",
+    notePlaceholder: "Add note",
+  },
   WorkshopsPage: {
     NewWorkshop: "New Workshop",
     FilterNoWorkshops: "The current filter selection returns no workshops",
     ClearFilters: "Clear Filters",
+    notLoggedIn:
+      "Login to see workshops. We are working on making workshops visible without logging in.",
+    gotoLogin: "Go to Login",
   },
   WorkshopPreviewCard: {
     OpenWorkshop: "Open the workshop to add elements.",
@@ -177,10 +233,7 @@ export default {
     EnterDate: "Enter the date of your workshop:",
     DatePlaceholder: "Date...",
     Set: "Set",
-    DuplicateWorkshopName: "New Workshop Name",
-    EnterNameMessage: "Enter a name for your duplicated workshop:",
-    NamePlaceholder: "Workshop name...",
-    EnterWorkshopName: "Please enter a name for your workshop.",
+    duplicatePostfix: " (copy)",
     Duplicated: 'Duplicated "{{workshopName}}"',
     WorkshopDescription: "Description",
     TypeName: "Please type a workshop name.",
@@ -190,11 +243,6 @@ export default {
   },
   WorkshopElementOptionsMenu: {
     RemoveElement: "Remove Element from Workshop?",
-  },
-  WorkshopElementsHeaderComponent: {
-    Reorder: "Reorder",
-    ChangeOrder: "Change order with right handle",
-    SaveOrder: "Save Order",
   },
   ShareWorkshopModal: {
     ShareWorkshop: "Share Workshop",
@@ -213,37 +261,40 @@ export default {
   AboutPage: {
     About: "About this project",
   },
+  MySpacePage: {
+    title: "My Impromat",
+    Creations: "Creations",
+    "My Elements": "My Elements",
+    "My Workshops": "My Workshops",
+    profile: "Profile",
+
+    Logout: "Logout",
+    LogoutMessage:
+      "Are you sure you want to log out? All Impromat data on this device will be deleted.",
+    "You have been logged out": "You have been logged out.",
+  },
+  LanguageSelect: {
+    "Display Language": "Display Language",
+    en: "English",
+    de: "German",
+    showAdditionalLanguageContent: "Show German content",
+    showAdditionalLanguageNote:
+      "Since there are also German exercises and games, you can choose whether you want to see the German content as well.",
+  },
+  UserNameTextField: {
+    userNameOnlyLetters: "Please use only letters, numbers, -, or _.",
+    userNameIsPublic: "Your username is publicly visible.",
+    userNameTooShort: "Please use at least 3 characters.",
+    userNameTooLong: "Please use a maximum of 20 characters.",
+    userNameChanged: "Save to change your username.",
+    userName: "Username",
+    endpointError: "Error while saving. Please try again.",
+  },
   AccountSignedIn: {
     "Display Name": "Display Name",
     "Change via menu on top right": "Change via menu on top right",
     Logout: "Logout",
     Profile: "Profile",
-  },
-  AccountOptionsMenu: {
-    InputMessage: "Please type a user name.",
-    LetterUseMessage: "Please only use letters, numbers, -, or _.",
-    FailMessage:
-      "User name change failed. Please verify your internet connection and retry.",
-    ChangeUsername: "Change Username",
-  },
-  AccountLanguageSection: {
-    "Display Language": "Display Language",
-    "Select Language": "Select Language",
-    English: "English",
-    German: "German",
-    Save: "Save",
-    Cancel: "Cancel",
-    //To DO: refactor cancel to common for all pages
-    Language: "Language",
-    showAdditionalLanguageContent: "Show German content",
-    showAdditionalLanguageNote:
-      "As there is also German exercises and games available you can choose to show the German content as well.",
-  },
-  "use-logout": {
-    Logout: "Logout",
-    LogoutMessage:
-      "Are you sure you want to log out? All Impromat data on this device will be deleted.",
-    "You have been logged out": "You have been logged out.",
   },
   NotFoundPage: {
     "Page does not exist": "Ups, this page does not exist.",

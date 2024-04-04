@@ -1,5 +1,86 @@
 # Changelog
 
+## 0.64.1
+
+### Patch Changes
+
+- Updated dependencies [4a642f2]
+  - impromat-api@0.29.0
+
+## 0.64.0
+
+### Minor Changes
+
+- cf86cb2: Add a navigation to the library page that queries own elements only.
+- cf86cb2: Extend the search for elements by a special @me filter that returns all elements of the currently active user.
+
+### Patch Changes
+
+- Updated dependencies [cf86cb2]
+  - impromat-api@0.28.0
+
+## 0.63.0
+
+### Minor Changes
+
+- 3d0b6d0: Show English and German element results
+
+## 0.62.0
+
+### Minor Changes
+
+- 61ae57a: Update all dependencies to minor version
+
+### Patch Changes
+
+- Updated dependencies [61ae57a]
+- Updated dependencies [61ae57a]
+  - impromat-api@0.27.0
+
+## 0.61.0
+
+### Minor Changes
+
+- c00807b: Automatically search for elements in the element search
+
+### Patch Changes
+
+- c00807b: Easier integration testing for impromat by using auto-loading environment files from nx
+- Updated dependencies [c00807b]
+- Updated dependencies [4658721]
+- Updated dependencies [c00807b]
+  - impromat-api@0.26.0
+
+## 0.60.1
+
+### Patch Changes
+
+- 92c86ad: Return is favorite attribute of element correctly
+- Updated dependencies [92c86ad]
+  - impromat-api@0.25.1
+
+## 0.60.0
+
+### Minor Changes
+
+- 9c2e4ac: Create postgres native search (which delivers worse results for now but avoids loading everything into memory)
+- 22e7e5a: New element search based on tfidf scores
+- 22e7e5a: Add material design to transition away from Ionic
+- f2a15b8: Add storybook support to render individual components
+
+### Patch Changes
+
+- 58b23a6: Typography for workshop start text
+- f2a15b8: Allow the updating of elements
+- f2a15b8: Allow selection of all available element tags
+- f2a15b8: Debounce element search
+- Updated dependencies [393f871]
+- Updated dependencies [9c2e4ac]
+- Updated dependencies [6dda1d1]
+- Updated dependencies [22e7e5a]
+- Updated dependencies [58b23a6]
+  - impromat-api@0.25.0
+
 ## 0.59.4
 
 ### Patch Changes

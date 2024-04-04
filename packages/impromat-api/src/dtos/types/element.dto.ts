@@ -1,23 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Nullable } from 'src/utils/nullish';
 import { BaseDto } from './base.dto';
-import { ElementPredictedTag } from './element-predicted-tag.dto';
-import { ElementTag } from './element-tag.dto';
 import { ElementVisibility } from './element-visibility.dto';
 import { User } from './user.dto';
-import { WorkshopElement } from './workshop-element.dto';
 
-export type ElementOmittedFields =
-  | 'tags'
-  | 'usedBy'
-  | 'owner'
-  | 'visibility'
-  | 'isFavorite'
-  | 'markdownShort'
-  | 'snapshots'
-  | 'isOwnerMe'
-  | 'predictedLevelTags'
-  | 'recommendations';
+export type ElementOmittedFields = 'visibility';
 
 @ObjectType()
 export class Element extends BaseDto {
@@ -26,19 +13,6 @@ export class Element extends BaseDto {
 
   @Field(() => String, { nullable: true })
   markdown: Nullable<string>;
-
-  @Field(() => String, {
-    nullable: true,
-    description:
-      'Shortened markdown text for preview purposes to avoid loading the whole content in a request.',
-  })
-  markdownShort: Nullable<string>;
-
-  @Field(() => [ElementTag])
-  tags: ElementTag[];
-
-  @Field(() => [WorkshopElement])
-  usedBy: WorkshopElement[];
 
   @Field(() => String, { nullable: true })
   languageCode: Nullable<string>;
@@ -65,38 +39,8 @@ export class Element extends BaseDto {
   })
   improbibIdentifier: Nullable<string>;
 
-  @Field(() => User, { nullable: true })
-  owner: Nullable<User>;
-
-  @Field(() => Boolean, {
-    nullable: true,
-    description:
-      'Convenience field to determine if the owner of the element is the logged in user.',
-  })
-  isOwnerMe: Nullable<boolean>;
-
   @Field(() => ElementVisibility)
   visibility: ElementVisibility;
-
-  // TODO separate types to add an element with me context fields?
-  @Field(() => Boolean, {
-    nullable: true,
-    description: 'Set if the element is called from a user context.',
-  })
-  isFavorite: Nullable<boolean>;
-
-  @Field(() => [ElementSnapshot], { description: 'Changes of the element.' })
-  snapshots: ElementSnapshot[];
-
-  @Field(() => [Element])
-  recommendations: Element[];
-
-  @Field(() => [ElementPredictedTag], {
-    description:
-      'Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.',
-    nullable: true,
-  })
-  predictedLevelTags: Nullable<ElementPredictedTag[]>;
 }
 
 @ObjectType()

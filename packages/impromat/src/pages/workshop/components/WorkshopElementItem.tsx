@@ -1,110 +1,125 @@
-import { IonItem, IonLabel, IonReorder, useIonRouter } from "@ionic/react";
-import React, { useMemo, useState } from "react";
-import Markdown from "react-markdown";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import {
+  Box,
+  Divider,
+  ListItemButton,
+  ListItemText,
+  Stack,
+} from "@mui/material";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   FragmentType,
   getFragmentData,
   graphql,
 } from "../../../graphql-client";
-import "./WorkshopElementItem.css";
+import { useUpdateWorkshopMutation } from "../../../hooks/use-update-workshop-mutation";
+import { routeWorkshopElement } from "../../../routes/shared-routes";
 import { WorkshopElementOptionsMenu } from "./WorkshopElementOptionsMenu";
 
-export const WorkshopElementItemComponent_WorkshopElement = graphql(`
-  fragment WorkshopElementItemComponent_WorkshopElement on WorkshopElement {
+const WorkshopElementItem_WorkshopElement = graphql(`
+  fragment WorkshopElementItem_WorkshopElement on WorkshopElement {
     id
     note
     basedOn {
       id
       name
-      markdown
-    }
-    section {
-      id
-      workshop {
-        id
-        canEdit
-      }
     }
   }
 `);
 
 interface ContainerProps {
+  workshopId: string;
+  sectionId: string;
   workshopElementFragment: FragmentType<
-    typeof WorkshopElementItemComponent_WorkshopElement
+    typeof WorkshopElementItem_WorkshopElement
   >;
-  routerLink: string;
-  isReordering?: boolean;
-  onRemoveClick: () => void;
 }
 
 export const WorkshopElementItem: React.FC<ContainerProps> = ({
+  workshopId,
+  sectionId,
   workshopElementFragment,
-  routerLink,
-  isReordering,
-  onRemoveClick,
 }) => {
   const workshopElement = getFragmentData(
-    WorkshopElementItemComponent_WorkshopElement,
+    WorkshopElementItem_WorkshopElement,
     workshopElementFragment,
   );
-  const [maxHeight] = useState(4);
-  const basedOnElementFromDatabase = workshopElement.basedOn;
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: workshopElement.id });
 
-  const basedOnElement = useMemo(() => {
-    return basedOnElementFromDatabase ?? workshopElement;
-  }, [basedOnElementFromDatabase, workshopElement]);
-
-  const router = useIonRouter();
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
+  const elementOnRemoveClick = () => {
+    updateWorkshopMutation({
+      input: {
+        id: workshopId,
+        sections: {
+          update: [
+            {
+              id: sectionId,
+              elements: { delete: [{ id: workshopElement.id }] },
+            },
+          ],
+        },
+      },
+    });
+  };
+
   return (
-    <IonItem
-      button
-      onContextMenu={(e) => {
-        e.preventDefault();
-        setIsMenuOpen(true);
-      }}
-    >
-      <div
-        style={{ display: "flex", flexDirection: "column", width: "100%" }}
-        onClick={() => router.push(routerLink)}
+    <>
+      <Stack
+        component="li"
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        sx={{
+          bgcolor: isDragging ? "grey.400" : "transparent",
+        }}
+        spacing={0}
       >
-        <IonLabel className="ion-text-wrap ion-padding-vertical">
-          <h2>{basedOnElement?.name}</h2>
-          <div
-            style={{
-              maxHeight: `${maxHeight}rem`,
-              position: "relative",
-              marginTop: "4px",
-            }}
+        <Box display="flex" justifyItems="stretch" alignItems="start">
+          <ListItemButton
+            key={workshopElement.id}
+            component={Link}
+            disabled={isDragging}
+            to={routeWorkshopElement(workshopId, workshopElement.id)}
           >
-            <div style={{ paddingLeft: "4px" }}>
-              {workshopElement.note && (
-                <div style={{ display: "flex" }}>
-                  <div
-                    className="lightLeftBorder"
-                    style={{
-                      flexGrow: 1,
-                      paddingLeft: "4px",
-                    }}
-                  >
-                    <Markdown>{workshopElement.note ?? ""}</Markdown>
-                  </div>
-                </div>
-              )}
-              <Markdown>{basedOnElement.markdown ?? ""}</Markdown>
-            </div>
-          </div>
-        </IonLabel>
-        <div style={{ height: "0.5rem" }}></div>
-      </div>
-      <WorkshopElementOptionsMenu
-        isOpen={isMenuOpen}
-        setIsOpen={setIsMenuOpen}
-        onRemoveClick={onRemoveClick}
-      ></WorkshopElementOptionsMenu>
-      {isReordering && <IonReorder slot="end"></IonReorder>}
-    </IonItem>
+            <ListItemText
+              primary={workshopElement.basedOn.name}
+              secondary={workshopElement.note}
+              primaryTypographyProps={{
+                sx: {
+                  overflowX: "auto",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                },
+              }}
+            />
+          </ListItemButton>
+          <WorkshopElementOptionsMenu
+            disabled={isDragging}
+            isOpen={isMenuOpen}
+            setIsOpen={setIsMenuOpen}
+            onRemoveClick={elementOnRemoveClick}
+          ></WorkshopElementOptionsMenu>
+        </Box>
+        <Divider variant="fullWidth" />
+      </Stack>
+    </>
   );
 };

@@ -1,10 +1,9 @@
-import { IonButton, IonIcon, IonSpinner, IonText } from "@ionic/react";
-import { reload } from "ionicons/icons";
+import { Refresh } from "@mui/icons-material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { PropsWithChildren, useCallback, useMemo } from "react";
 import { OperationContext, UseQueryState } from "urql";
 import { useComponentLogger } from "../hooks/use-component-logger";
 import { useStateChangeLogger } from "../hooks/use-state-change-logger";
-import { Refresher } from "./Refresher";
 
 interface ContainerProps extends PropsWithChildren {
   /**
@@ -63,7 +62,7 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
     }
   }, [reexecuteQuery]);
 
-  const { allHaveData, fetching, stale, networkError, nonNetworkError, error } =
+  const { allHaveData, fetching, networkError, nonNetworkError, error } =
     useMemo(() => {
       const allHaveData = queryResult.every((result) => result.data);
       const fetching = queryResult.some((result) => result.fetching);
@@ -85,18 +84,8 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
       };
     }, [queryResult]);
 
-  const isRefreshing = useMemo(
-    () => fetching || (!error && (!allHaveData || stale)),
-    [allHaveData, fetching, stale, error],
-  );
-
   return (
     <>
-      <Refresher
-        disabled={noRefresher}
-        onRefresh={reexecuteQueries}
-        isRefreshing={isRefreshing}
-      />
       {allHaveData ? (
         children
       ) : (
@@ -108,22 +97,28 @@ export const PageContentLoaderComponent: React.FC<ContainerProps> = ({
             alignItems: "center",
           }}
         >
-          {fetching && <IonSpinner></IonSpinner>}
+          {fetching && <CircularProgress />}
           {!fetching && error && (
             <>
               <div>
+                {/* TODO refactor loading */}
                 <div>
                   {networkError ? (
-                    <IonText>Network is not reachable.</IonText>
+                    <Typography>Network is not reachable.</Typography>
                   ) : (
-                    <IonText>
+                    <Typography>
                       Unknown error: {nonNetworkError?.error?.message}
-                    </IonText>
+                    </Typography>
                   )}
                 </div>
-                <IonButton expand="full" onClick={() => reexecuteQueries()}>
-                  <IonIcon icon={reload} slot="start"></IonIcon> Retry
-                </IonButton>
+                <Button
+                  fullWidth
+                  onClick={() => reexecuteQueries()}
+                  startIcon={<Refresh />}
+                >
+                  {/* TODO translate */}
+                  Retry
+                </Button>
               </div>
             </>
           )}

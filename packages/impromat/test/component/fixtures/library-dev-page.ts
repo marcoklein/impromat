@@ -6,10 +6,16 @@ const NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX =
 
 export class LibraryDevPage extends DevPage {
   readonly createElementButtonLocator: Locator;
+  readonly createCustomElementButtonLocator: Locator;
+  readonly searchInputLocator: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.createElementButtonLocator = page.getByText("New Element");
+    this.createElementButtonLocator = page.getByLabel("New Element");
+    this.createCustomElementButtonLocator = page.getByLabel("add", {
+      exact: true,
+    });
+    this.searchInputLocator = page.locator("input");
   }
 
   async goto() {
@@ -18,7 +24,8 @@ export class LibraryDevPage extends DevPage {
 
   async searchForElement(searchText: string) {
     const page = this.page;
-    await page.locator("ion-input").getByPlaceholder("Search").fill(searchText);
+    await this.searchInputLocator.fill(searchText);
+    await page.keyboard.press("Enter");
     await page.getByText(new RegExp(searchText, "i")).first().waitFor();
   }
 
@@ -44,14 +51,14 @@ export class LibraryDevPage extends DevPage {
     const page = this.page;
     if (name) {
       await page
-        .locator("ion-card", {
+        .locator("a", {
           hasText: name,
         })
         .first()
         .click();
     } else {
       await page.waitForTimeout(500);
-      await page.locator("ion-card").first().click();
+      await page.locator("a").first().click();
     }
   }
 
@@ -84,23 +91,8 @@ export class LibraryDevPage extends DevPage {
       isPublic: options?.isPublic ?? false,
     });
 
-    await page.getByRole("button", { name: "Create Element" }).click();
+    await this.createCustomElementButtonLocator.click();
     await page.waitForURL(NOT_LIBRARY_CUSTOM_ELEMENT_URL_REGEX);
-  }
-
-  // TODO refactor when https://github.com/marcoklein/impromat/issues/254 is resolved
-  async createCustomElementAndAddToWorkshop(
-    name: string,
-    options?: { isPublic?: boolean },
-  ) {
-    await this.fillCustomElementPage({
-      name,
-      isPublic: options?.isPublic ?? false,
-    });
-
-    await this.page
-      .getByRole("button", { name: "Create and Add to Workshop" })
-      .click();
   }
 
   private async fillCustomElementPage(options: {

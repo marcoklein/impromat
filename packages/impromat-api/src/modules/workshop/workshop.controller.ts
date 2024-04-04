@@ -14,7 +14,7 @@ import { DuplicateWorkshopInput } from 'src/dtos/inputs/duplicate-workshop-input
 import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
-import { Workshop, WorkshopOmittedFields } from 'src/dtos/types/workshop.dto';
+import { Workshop } from 'src/dtos/types/workshop.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import {
   CreateWorkshopInput,
@@ -26,7 +26,11 @@ import { WorkshopService } from './workshop.service';
 export class WorkshopController {
   constructor(private workshopService: WorkshopService) {}
 
-  @ResolveField(() => Boolean)
+  @ResolveField(() => Boolean, {
+    nullable: true,
+    description:
+      'True, if liked by the logged in user. Undefined, if there is no user logged in.',
+  })
   async isLiked(
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string,
@@ -62,7 +66,11 @@ export class WorkshopController {
   }
 
   @UseGuards(GraphqlAuthGuard)
-  @ResolveField(() => Boolean)
+  @ResolveField(() => Boolean, {
+    nullable: true,
+    description:
+      'Convenience field to determine if the owner of the workshop is the logged in user.',
+  })
   async isOwnerMe(
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string,
@@ -80,7 +88,10 @@ export class WorkshopController {
     return null;
   }
 
-  @ResolveField(() => Boolean)
+  @ResolveField(() => Boolean, {
+    nullable: true,
+    description: 'If true, the client is authorized to edit the workshop.',
+  })
   async canEdit(
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string | undefined,
@@ -99,7 +110,7 @@ export class WorkshopController {
   async workshop(
     @SessionUserId() userId: string | undefined,
     @Args('id', { type: () => ID }) id: string,
-  ): Promise<Omit<Workshop, WorkshopOmittedFields> | null> {
+  ): Promise<Workshop | null> {
     return this.workshopService.findWorkshopById(userId, id);
   }
 
@@ -110,7 +121,7 @@ export class WorkshopController {
   async workshops(
     @SessionUserId() userId: string,
     @Args() args: FindManyWorkshopsArgs,
-  ): Promise<Omit<Workshop, WorkshopOmittedFields>[] | null> {
+  ): Promise<Workshop[] | null> {
     return this.workshopService.findWorkshops(userId, args);
   }
 
@@ -120,7 +131,7 @@ export class WorkshopController {
     @Args('input')
     createWorkshopInput: CreateWorkshopInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<Workshop, WorkshopOmittedFields>> {
+  ): Promise<Workshop> {
     return this.workshopService.createWorkshop(
       sessionUserId,
       createWorkshopInput,
@@ -132,7 +143,7 @@ export class WorkshopController {
   async updateWorkshop(
     @Args('input') updateWorkshopInput: UpdateWorkshopInput,
     @SessionUserId() sessionUserId: string,
-  ): Promise<Omit<Workshop, WorkshopOmittedFields>> {
+  ): Promise<Workshop> {
     return await this.workshopService.updateWorkshop(
       sessionUserId,
       updateWorkshopInput,

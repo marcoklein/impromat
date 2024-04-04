@@ -36,15 +36,10 @@ export class ElementAiController {
       'The summary of the element. This is generated asynchronously and might not be available immediately.',
   })
   async variations(
-    @Args('forceRefresh', {
-      type: () => Boolean,
-      defaultValue: false,
-      description:
-        'Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.',
-    })
-    forceRefresh: boolean,
-    @Parent() element: Element,
-    @SessionUserId() userSessionId: string,
+    @Parent()
+    element: Element,
+    // TODO test if user is allowed to generate variations
+    // @SessionUserId() userSessionId: string,
   ) {
     // TODO store variations in database
     return await this.elementVariationsService.detectVariations({
@@ -60,17 +55,7 @@ export class ElementAiController {
     description:
       'The keywords of the element. This is generated asynchronously and might not be available immediately.',
   })
-  async keywords(
-    @Args('forceRefresh', {
-      type: () => Boolean,
-      defaultValue: false,
-      description:
-        'Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.',
-    })
-    forceRefresh: boolean,
-    @Parent() element: Element,
-    @SessionUserId() userSessionId: string,
-  ) {
+  async keywords(@Parent() element: Element) {
     return await this.elementKeywordsService.detectKeywords({
       elementId: element.id,
       name: element.name,
@@ -95,6 +80,9 @@ export class ElementAiController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
+    if (!process.env.OLLAMA_ENDPOINT) {
+      return undefined;
+    }
     return this.elementSummaryService.getElementSummary(
       userSessionId,
       element.id,

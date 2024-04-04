@@ -46,11 +46,15 @@ export class ElementController {
     );
   }
 
-  @ResolveField(() => Boolean)
+  @ResolveField(() => Boolean, {
+    nullable: true,
+    description: 'Set if the element is called from a user context.',
+  })
   async isFavorite(
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
+    if (!userSessionId) return false;
     const elementFavoriteRelations = await this.elementService
       .findElementById(userSessionId, element.id)
       .userFavoriteElement({
@@ -61,12 +65,16 @@ export class ElementController {
     return elementFavoriteRelations.length > 0;
   }
 
-  @ResolveField(() => String)
+  @ResolveField(() => String, {
+    nullable: true,
+    description:
+      'Shortened markdown text for preview purposes to avoid loading the whole content in a request.',
+  })
   async markdownShort(@Parent() element: Element) {
     return element.markdown?.substring(0, 300);
   }
 
-  @ResolveField(() => [User])
+  @ResolveField(() => User, { nullable: true })
   async owner(
     @Parent() element: Element,
     @SessionUserId() userSessionId: string | undefined,
@@ -74,7 +82,11 @@ export class ElementController {
     return this.elementService.findElementOwner(userSessionId, element.id);
   }
 
-  @ResolveField(() => Boolean)
+  @ResolveField(() => Boolean, {
+    nullable: true,
+    description:
+      'Convenience field to determine if the owner of the element is the logged in user.',
+  })
   async isOwnerMe(
     @Parent() element: Element,
     @SessionUserId() userSessionId: string | undefined,
@@ -110,7 +122,9 @@ export class ElementController {
       .workshopElements();
   }
 
-  @ResolveField(() => [ElementSnapshot])
+  @ResolveField(() => [ElementSnapshot], {
+    description: 'Changes of the element.',
+  })
   async snapshots(
     @Args() args: PaginationArgs,
     @Parent() element: Element,

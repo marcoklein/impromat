@@ -25,8 +25,8 @@ export async function provideComplexTestWorkshopFixture(
   const freezeSearchResponse = await api.graphqlRequest(searchElementsQuery, {
     input: {
       text: 'freeze',
-      take: 1,
     },
+    take: 1,
   });
   const givenPublicFreezeElementId =
     freezeSearchResponse.data!.searchElements[0].element.id;

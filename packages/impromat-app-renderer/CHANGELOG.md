@@ -1,5 +1,81 @@
 # impromat-app-renderer
 
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies [4a642f2]
+  - impromat-api@0.29.0
+  - impromat@0.64.1
+
+## 0.4.2
+
+### Patch Changes
+
+- Updated dependencies [cf86cb2]
+- Updated dependencies [cf86cb2]
+- Updated dependencies [cf86cb2]
+  - impromat@0.64.0
+  - impromat-api@0.28.0
+
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [3d0b6d0]
+  - impromat@0.63.0
+
+## 0.4.0
+
+### Minor Changes
+
+- 61ae57a: Update all dependencies to minor version
+
+### Patch Changes
+
+- Updated dependencies [61ae57a]
+- Updated dependencies [61ae57a]
+  - impromat-api@0.27.0
+  - impromat@0.62.0
+
+## 0.3.3
+
+### Patch Changes
+
+- Updated dependencies [c00807b]
+- Updated dependencies [c00807b]
+- Updated dependencies [4658721]
+- Updated dependencies [c00807b]
+- Updated dependencies [c00807b]
+  - impromat@0.61.0
+  - impromat-api@0.26.0
+
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [92c86ad]
+  - impromat-api@0.25.1
+  - impromat@0.60.1
+
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [58b23a6]
+- Updated dependencies [f2a15b8]
+- Updated dependencies [393f871]
+- Updated dependencies [f2a15b8]
+- Updated dependencies [9c2e4ac]
+- Updated dependencies [f2a15b8]
+- Updated dependencies [6dda1d1]
+- Updated dependencies [22e7e5a]
+- Updated dependencies [22e7e5a]
+- Updated dependencies [58b23a6]
+- Updated dependencies [f2a15b8]
+  - impromat@0.60.0
+  - impromat-api@0.25.0
+
 ## 0.3.0
 
 ### Minor Changes

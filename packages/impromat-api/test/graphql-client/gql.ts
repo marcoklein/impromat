@@ -16,7 +16,7 @@ const documents = {
     "\n  fragment ElementFields on Element {\n    id\n    version\n    createdAt\n    updatedAt\n    deleted\n\n    name\n    markdown\n    markdownShort\n    visibility\n\n    tags {\n      id\n    }\n    usedBy {\n      id\n    }\n    owner {\n      id\n    }\n    isOwnerMe\n  }\n": types.ElementFieldsFragmentDoc,
     "\n  query ElementByIdQuery($id: ID!) {\n    element(id: $id) {\n      ...ElementFields\n    }\n  }\n": types.ElementByIdQueryDocument,
     "\n  query ElementsQuery(\n    $filter: ElementsFilterInput\n    $orderBy: ElementsOrderByInput\n    $skip: Int! = 0\n    $take: Int! = 20\n  ) {\n    elements(filter: $filter, orderBy: $orderBy, skip: $skip, take: $take) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n": types.ElementsQueryDocument,
-    "\n  query SearchElementsQuery($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n": types.SearchElementsQueryDocument,
+    "\n  query SearchElementsQuery($input: ElementSearchInput!, $take: Int) {\n    searchElements(input: $input, take: $take) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n": types.SearchElementsQueryDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      ...ElementFields\n    }\n  }\n": types.CreateElementMutationDocument,
     "\n  mutation UpdateElementMutation($input: UpdateElementInput!) {\n    updateElement(input: $input) {\n      id\n      # ...ElementFields\n    }\n  }\n": types.UpdateElementMutationDocument,
     "\n    query MeQuery {\n      me {\n        id\n        workshops {\n          id\n        }\n        favoriteElements {\n          element {\n            id\n          }\n        }\n      }\n    }\n  ": types.MeQueryDocument,
@@ -70,7 +70,7 @@ export function graphql(source: "\n  query ElementsQuery(\n    $filter: Elements
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query SearchElementsQuery($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n"): (typeof documents)["\n  query SearchElementsQuery($input: ElementSearchInput!) {\n    searchElements(input: $input) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query SearchElementsQuery($input: ElementSearchInput!, $take: Int) {\n    searchElements(input: $input, take: $take) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n"): (typeof documents)["\n  query SearchElementsQuery($input: ElementSearchInput!, $take: Int) {\n    searchElements(input: $input, take: $take) {\n      element {\n        ...ElementFields\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,5 +1,5 @@
-import { IonButton, IonIcon } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { Add } from "@mui/icons-material";
+import { Button, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 interface ContainerProps {
@@ -21,11 +21,10 @@ export const WorkshopCreateFirstComponent: React.FC<ContainerProps> = ({
         flexDirection: "column",
       }}
     >
-      <p>{t("StartWorkshop")}</p>
-      <IonButton expand="full" onClick={() => onCreateWorkshopClick()}>
-        <IonIcon slot="start" icon={add}></IonIcon>
+      <Typography>{t("StartWorkshop")}</Typography>
+      <Button onClick={() => onCreateWorkshopClick()} startIcon={<Add />}>
         {t("AddWorkshop")}
-      </IonButton>
+      </Button>
     </div>
   );
 };

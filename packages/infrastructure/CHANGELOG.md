@@ -1,5 +1,18 @@
 # infrastructure
 
+## 0.8.0
+
+### Minor Changes
+
+- 61ae57a: Update all dependencies to minor version
+
+## 0.7.1
+
+### Patch Changes
+
+- 393f871: Refactor Dockerfiles with new nx build
+- 1bebdff: Fix infrastructure configuration by starting ollama instance
+
 ## 0.7.0
 
 ### Minor Changes

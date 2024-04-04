@@ -93,11 +93,9 @@ export class ElementService {
   ) {
     const { filter, take, skip } = input;
 
-    const user = await this.userService.findUserById(
-      userRequestId,
-      userRequestId,
-    );
-    if (!user) throw new Error('User not found');
+    const user = userRequestId
+      ? await this.userService.findUserById(userRequestId, userRequestId)
+      : undefined;
 
     const whereInput: Prisma.ElementWhereInput[] = [];
 
@@ -117,7 +115,7 @@ export class ElementService {
           {
             snapshotParentId: null,
           },
-          user.languageCodes && user.languageCodes.length > 0
+          user && user.languageCodes && user.languageCodes.length > 0
             ? {
                 OR: [
                   {

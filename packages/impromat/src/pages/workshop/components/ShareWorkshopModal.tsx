@@ -1,19 +1,15 @@
+import { Check, LinkOutlined } from "@mui/icons-material";
 import {
-  IonButton,
-  IonButtons,
-  IonCheckbox,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonModal,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
-import { checkmark, globe, link } from "ionicons/icons";
+  Checkbox,
+  DialogContent,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { Icon } from "../../../components/Icon";
+import { useTranslation } from "react-i18next";
+import { DialogScaffold } from "../../../components/DialogScaffold";
 import {
   FragmentType,
   getFragmentData,
@@ -21,7 +17,6 @@ import {
 } from "../../../graphql-client";
 import { useComponentLogger } from "../../../hooks/use-component-logger";
 import { useUpdateWorkshopMutation } from "../../../hooks/use-update-workshop-mutation";
-import { useTranslation } from "react-i18next";
 
 export const ShareWorkshopModal_Workshop = graphql(`
   fragment ShareWorkshopModal_Workshop on Workshop {
@@ -76,77 +71,62 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
   const { t } = useTranslation("ShareWorkshopModal");
 
   return (
-    <IonModal
-      isOpen={isSharingModalOpen}
-      onDidDismiss={() => setIsSharingModalOpen(false)}
+    <DialogScaffold
+      open={isSharingModalOpen}
+      handleClose={() => setIsSharingModalOpen(false)}
+      title={t("ShareWorkshop")}
     >
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>{t("ShareWorkshop")}</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={() => setIsSharingModalOpen(false)}>
-              {t("Close", { ns: "common" })}
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding" scrollY={true}>
-        <IonItem
-          lines="none"
-          color={workshop.isPublic ? "success" : undefined}
-          disabled={workshop.isListed}
-        >
-          <Icon icon={link} slot="start"></Icon>
-          <IonCheckbox
-            checked={workshop.isPublic ?? false}
-            labelPlacement="start"
-            onIonChange={(event) => onPublicClick(event.detail.checked)}
-          >
-            <IonLabel className="ion-text-wrap">{t("AnyoneCanView")}</IonLabel>
-          </IonCheckbox>
-        </IonItem>
+      <DialogContent>
+        <ListItemButton onClick={() => onPublicClick(!workshop.isPublic)}>
+          <ListItemIcon>
+            <Checkbox
+              checked={workshop.isPublic ?? false}
+              inputProps={{ "aria-labelledby": "linkShared" }}
+            />
+          </ListItemIcon>
+          <ListItemText id="linkShared" primary={t("AnyoneCanView")} />
+        </ListItemButton>
         {!workshop.isPublic && !workshop.isListed && (
-          <p>{t("CheckboxMessage")}</p>
+          <Typography color="inherit" component="p">
+            {t("CheckboxMessage")}
+          </Typography>
         )}
         {(workshop.isPublic || workshop.isListed) && (
           <>
-            <IonItem
-              lines="none"
-              color={workshop.isListed ? "success" : undefined}
-            >
-              <Icon icon={globe} slot="start"></Icon>
-              <IonCheckbox
-                checked={workshop.isListed ?? false}
-                labelPlacement="start"
-                onIonChange={(event) => onListClick(event.detail.checked)}
-              >
-                <IonLabel className="ion-text-wrap">
-                  {t("ShareWithCommunity")}
-                </IonLabel>
-              </IonCheckbox>
-            </IonItem>
-            {!workshop.isListed && <p>{t("ShareInfo")}</p>}
-            {workshop.isListed && <p>{t("ThankyouInfo")}</p>}
-            <IonButton
-              expand="full"
-              color={!isCopied ? "primary" : "medium"}
+            <ListItemButton onClick={() => onListClick(!workshop.isListed)}>
+              <ListItemIcon>
+                <Checkbox
+                  checked={workshop.isListed ?? false}
+                  inputProps={{ "aria-labelledby": "isPublic" }}
+                />
+              </ListItemIcon>
+              <ListItemText id="isPublic" primary={t("ShareWithCommunity")} />
+            </ListItemButton>
+
+            {workshop.isListed ? (
+              <Typography component="p">{t("ThankyouInfo")}</Typography>
+            ) : (
+              <Typography component="p">{t("ShareInfo")}</Typography>
+            )}
+
+            <ListItemButton
               onClick={() => {
-                setIsCopied(true);
                 navigator.clipboard.writeText(window.location.href);
+                setIsCopied(true);
               }}
             >
-              {isCopied ? (
-                <>
-                  <IonIcon slot="start" icon={checkmark}></IonIcon>
-                  {t("CopiedWorkshopLink")}
-                </>
-              ) : (
-                t("CopyWorkshopLink")
-              )}
-            </IonButton>
+              <ListItemIcon>
+                {isCopied ? <Check /> : <LinkOutlined />}
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  isCopied ? t("CopiedWorkshopLink") : t("CopyWorkshopLink")
+                }
+              />
+            </ListItemButton>
           </>
         )}
-      </IonContent>
-    </IonModal>
+      </DialogContent>
+    </DialogScaffold>
   );
 };

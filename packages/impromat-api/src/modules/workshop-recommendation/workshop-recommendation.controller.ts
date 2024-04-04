@@ -1,5 +1,6 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { SessionUserId } from 'src/decorators/session-user-id.decorator';
+import { Element } from 'src/dtos/types/element.dto';
 import { Workshop } from 'src/dtos/types/workshop.dto';
 import { WorkshopRecommendationService } from './workshop-recommendation.service';
 

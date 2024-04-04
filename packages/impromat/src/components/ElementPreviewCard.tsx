@@ -1,8 +1,7 @@
-import { IonBadge, IonText } from "@ionic/react";
+import { Box, Typography } from "@mui/material";
 import { useMemo } from "react";
-import { useHistory } from "react-router";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
-import { routeLibraryElement } from "../routes/library-routes";
+import { routeLibraryElement } from "../routes/shared-routes";
 import { ElementInfoList } from "./ElementInfoList";
 import { PreviewCard } from "./PreviewCard";
 
@@ -12,7 +11,6 @@ const ElementPreviewItem_ElementSearchResultFragment = graphql(`
       key
       value
     }
-    ...ElementInfoList_ElementSearchResult
   }
 `);
 
@@ -46,7 +44,6 @@ const ElementPreviewItem_ElementFragment = graphql(`
     }
     isOwnerMe
     ...CustomElement_Element
-    ...ElementFavoriteIcon_Element
     ...ElementInfoList_Element
   }
 `);
@@ -87,53 +84,50 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
       element.tags.map((tag) => ({
         ...tag,
         isMatch: searchResult?.matches.find(
-          (match) => match.key === "tags.name" && match.value === tag.name,
+          (match) =>
+            match.key === "tags" &&
+            tag.name.toLowerCase().includes(match.value.toLowerCase()),
         ),
       })),
     [element, searchResult],
   );
-
-  const history = useHistory();
+  const isNameMatch = searchResult?.matches.find(
+    (match) => match.key === "name",
+  );
 
   return (
     <PreviewCard
       routerLink={routerLink}
       infoListElement={
-        <ElementInfoList
-          elementFragment={element}
-          elementSearchResultFragment={searchResult}
-        ></ElementInfoList>
+        <ElementInfoList elementFragment={element}></ElementInfoList>
       }
-      title={element.name}
+      title={
+        <Typography
+          component="span"
+          sx={{ fontWeight: isNameMatch ? "bold" : undefined }}
+        >
+          {element.name}
+        </Typography>
+      }
       content={element.summary ?? element.markdownShort ?? undefined}
-    >
-      {tags.length > 0 && (
-        <div
-          onClick={() => history.push(routerLink)}
-          style={{
-            cursor: "pointer",
-            whiteSpace: "nowrap",
-            overflowX: "auto",
-            flexGrow: 1,
-            display: "flex",
-            alignItems: "center",
+      footer={
+        <Typography
+          variant="caption"
+          sx={{
+            p: 0,
+            m: 0,
           }}
         >
-          <div className="ion-margin-horizontal">
-            {tags.map(({ id, name, isMatch }) => (
-              // TODO use IonChip and allow filtering by clicking on it
-              <IonBadge
-                key={id}
-                color={isMatch ? "primary" : "light"}
-                // outline={!isMatch}
-                style={{ marginRight: "4px" }}
-              >
-                <IonText color={isMatch ? "light" : "medium"}>{name}</IonText>
-              </IonBadge>
-            ))}
-          </div>
-        </div>
-      )}
-    </PreviewCard>
+          {tags.map((tag) => (
+            <Box
+              component="span"
+              sx={{ ml: 0.5, fontWeight: tag.isMatch ? "bold" : "normal" }}
+            >
+              #{tag.name}
+            </Box>
+          ))}
+        </Typography>
+      }
+    ></PreviewCard>
   );
 };

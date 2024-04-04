@@ -1,18 +1,10 @@
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonIcon,
-  IonRouterLink,
-  IonText,
-} from "@ionic/react";
-import { arrowForwardOutline, information } from "ionicons/icons";
+import { ArrowForward, Info } from "@mui/icons-material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { Trans, useTranslation } from "react-i18next";
-import { routeLibrary } from "../../routes/library-routes";
+import { NavLink } from "react-router-dom";
 import {
   routeAbout,
+  routeLibrary,
   routePrivacyPolicy,
   routeWorkshops,
 } from "../../routes/shared-routes";
@@ -21,27 +13,27 @@ export const HomeContent: React.FC = () => {
   const { t } = useTranslation("HomeContent");
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div style={{ maxWidth: "900px" }} className="ion-margin-top">
-          <IonText color="dark">
-            <h1>{t("Improving Improv")}</h1>
-          </IonText>
-          <IonText color="dark" className="ion-margin-bottom">
+      <Box style={{ display: "flex", justifyContent: "center" }}>
+        <Box style={{ maxWidth: "900px" }} className="ion-margin-top">
+          <Typography variant="h4" component="h2">
+            {t("Improving Improv")}
+          </Typography>
+          <Typography sx={{ mb: 1 }} component="p">
             <Trans
               t={t}
               i18nKey="madeForImprovisers"
               components={{ b: <b></b> }}
             ></Trans>
-          </IonText>
-          <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
-            <IonCardHeader>
-              <IonCardTitle>
-                <h3 style={{ margin: 0 }}>{t("Exercises-Games")}</h3>
-              </IonCardTitle>
-            </IonCardHeader>
-
-            <IonCardContent>
-              <p>
+          </Typography>
+          <Stack spacing={2}>
+            <Paper
+              sx={{ p: 2, borderColor: "secondary.main" }}
+              variant="outlined"
+            >
+              <Typography component="h3" variant="h5">
+                {t("Exercises-Games")}
+              </Typography>
+              <Typography component="p">
                 <Trans
                   t={t}
                   i18nKey="ImprovBibDescription"
@@ -76,190 +68,190 @@ export const HomeContent: React.FC = () => {
                     ),
                   }}
                 ></Trans>
-              </p>
+              </Typography>
 
-              <IonButton
+              <Button
+                sx={{ mt: 1 }}
                 className="ion-margin-top"
-                fill="solid"
+                variant="contained"
                 color="secondary"
-                routerLink={routeLibrary()}
+                component={NavLink}
+                to={routeLibrary()}
+                startIcon={<ArrowForward />}
               >
-                <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
                 {t("GoToElements")}
-              </IonButton>
-            </IonCardContent>
-          </IonCard>
-          <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
-            <IonCardHeader>
-              <IonCardTitle>
-                <h3 style={{ margin: 0 }}>{t("Improv Workshops")}</h3>
-              </IonCardTitle>
-            </IonCardHeader>
-
-            <IonCardContent>
-              <p>
+              </Button>
+            </Paper>
+            <Paper
+              sx={{ p: 2, borderColor: "primary.main" }}
+              variant="outlined"
+            >
+              <Typography component="h3" variant="h5">
+                {t("Improv Workshops")}
+              </Typography>
+              <Typography component="p">
                 <Trans
                   t={t}
                   i18nKey="ImprovWorkshops_1"
                   components={{ b: <b></b> }}
                 ></Trans>
-              </p>
-              <IonButton
-                fill="solid"
-                routerLink={routeWorkshops()}
+              </Typography>
+              <Button
+                sx={{ my: 1 }}
+                variant="contained"
+                component={NavLink}
+                to={routeWorkshops()}
                 className="ion-margin-vertical"
+                startIcon={<ArrowForward />}
               >
-                <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
                 {t("CreateWorkshop")}
-              </IonButton>
-              <p>
+              </Button>
+              <Typography component="p">
                 <Trans
                   t={t}
                   i18nKey="ImprovWorkshops_2"
                   components={{ b: <b></b> }}
                 ></Trans>
-              </p>
-              {/* <p>
-                  
-                </p> */}
-            </IonCardContent>
-          </IonCard>
+              </Typography>
+            </Paper>
 
-          <IonCard style={{ marginLeft: 0, marginRight: 0 }}>
-            <IonCardHeader>
-              <IonCardTitle>
-                <h3 style={{ margin: 0 }}>{t("Customize Your Improv")}</h3>
-              </IonCardTitle>
-            </IonCardHeader>
-
-            <IonCardContent>
-              <p>
+            <Paper sx={{ p: 2, borderColor: "like.main" }} variant="outlined">
+              <Typography component="h3" variant="h5">
+                {t("Customize Your Improv")}
+              </Typography>
+              <Typography component="p">
                 <Trans
                   t={t}
                   i18nKey={"CustomizeImprov_1"}
                   components={{ b: <b></b> }}
                 ></Trans>
-              </p>
-              <IonButton
+              </Typography>
+              <Button
+                sx={{ my: 1 }}
                 className="ion-margin-vertical"
-                fill="solid"
-                color="tertiary"
-                routerLink={routeLibrary()}
+                variant="contained"
+                color="like"
+                component={NavLink}
+                to={routeLibrary()}
+                startIcon={<ArrowForward />}
               >
-                <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
                 {t("Open Liked Elements")}
-              </IonButton>
-              <p>
+              </Button>
+              <Typography component="p">
                 <Trans
                   t={t}
                   i18nKey="CustomizeImprov_2"
                   components={{
                     b: <b></b>,
-                    privacyPolicyLink: (
-                      <IonRouterLink
-                        routerLink={routePrivacyPolicy()}
-                      ></IonRouterLink>
-                    ),
+                    privacyPolicyLink: <NavLink to={routePrivacyPolicy()} />,
                   }}
                 ></Trans>
-              </p>
-            </IonCardContent>
-          </IonCard>
-        </div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div style={{ maxWidth: "900px" }} className="ion-margin-top">
-          <IonText>
-            <h1>{t("MadeForImprovisers")}</h1>
-          </IonText>
-          <p>
-            <IonText color="dark">
+              </Typography>
+            </Paper>
+          </Stack>
+        </Box>
+      </Box>
+      <Box style={{ display: "flex", justifyContent: "center" }}>
+        <Box style={{ maxWidth: "900px" }} className="ion-margin-top">
+          <Typography component="h2" variant="h3" mt={2}>
+            {t("MadeForImprovisers")}
+          </Typography>
+          <Typography component="p" my={1}>
+            <Typography color="textPrimary">
               <Trans
                 t={t}
                 i18nKey={"ImproviserText"}
                 components={{ b: <b></b> }}
               ></Trans>
-            </IonText>
-          </p>
-          <IonButton routerLink={routeWorkshops()}>
-            <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+            </Typography>
+          </Typography>
+          <Button
+            variant="contained"
+            component={NavLink}
+            to={routeWorkshops()}
+            startIcon={<ArrowForward />}
+          >
             {t("TryItOut")}
-          </IonButton>
-          <IonText color="dark">
-            <h3>{t("ImprovBeginners")}</h3>
-          </IonText>
-          <IonText color="dark">
-            <p>
-              <Trans
-                t={t}
-                i18nKey={"BeginnerText"}
-                components={{ b: <b></b> }}
-              ></Trans>
-            </p>
-          </IonText>
-          <IonText color="dark">
-            <h3>{t("EstablishedGroups")}</h3>
-          </IonText>
-          <IonText color="dark">
-            <p>
-              <Trans
-                t={t}
-                i18nKey={"GroupText"}
-                components={{ b: <b></b>, br: <br></br> }}
-              ></Trans>
-            </p>
-          </IonText>
-          <IonText color="dark">
-            <h3>{t("WorkshopLeaders")}</h3>
-          </IonText>
-          <IonText color="dark">
-            <p>
-              <Trans
-                t={t}
-                i18nKey={"LeaderText"}
-                components={{ b: <b></b> }}
-              ></Trans>
-            </p>
-            <p>
-              <b>{t("ImprovTool")}</b>
-            </p>
-          </IonText>
-          <IonButton fill="solid" routerLink={routeWorkshops()}>
-            <IonIcon slot="start" icon={arrowForwardOutline}></IonIcon>
+          </Button>
+          <Typography color="textPrimary" component="h3" variant="h4" mt={2}>
+            {t("ImprovBeginners")}
+          </Typography>
+          <Typography color="textPrimary" component="p" my={1}>
+            <Trans
+              t={t}
+              i18nKey={"BeginnerText"}
+              components={{ b: <b></b> }}
+            ></Trans>
+          </Typography>
+          <Typography color="textPrimary" component="h3" variant="h4" mt={2}>
+            {t("EstablishedGroups")}
+          </Typography>
+          <Typography color="textPrimary" component="p" my={1}>
+            <Trans
+              t={t}
+              i18nKey={"GroupText"}
+              components={{ b: <b></b>, br: <br></br> }}
+            ></Trans>
+          </Typography>
+          <Typography color="textPrimary" component="h3" variant="h4" mt={2}>
+            {t("WorkshopLeaders")}
+          </Typography>
+          <Typography color="textPrimary" component="p" my={1}>
+            <Trans
+              t={t}
+              i18nKey={"LeaderText"}
+              components={{ b: <b></b> }}
+            ></Trans>
+          </Typography>
+          <Typography
+            color="textPrimary"
+            component="p"
+            fontWeight="bold"
+            my={1}
+          >
+            {t("ImprovTool")}
+          </Typography>
+          <Button
+            variant="contained"
+            component={NavLink}
+            to={routeWorkshops()}
+            startIcon={<ArrowForward />}
+          >
             {t("OpenWorkshops")}
-          </IonButton>
+          </Button>
 
-          <IonText color="dark">
-            <h1>{t("YouWantMore")}</h1>
-          </IonText>
-          <IonText color="dark">
-            <p>
-              <Trans
-                t={t}
-                i18nKey={"MoreText"}
-                components={{
-                  b: <b></b>,
-                  br: <br></br>,
-                  MailadressLink: (
-                    <a
-                      href="mailto:impromat@marcoklein.dev"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      placeholder
-                    </a>
-                  ),
-                }}
-              ></Trans>
-            </p>
-            <p></p>
-          </IonText>
-          <IonButton fill="outline" routerLink={routeAbout()}>
-            <IonIcon slot="start" icon={information}></IonIcon>
+          <Typography color="textPrimary" component="h2" variant="h3" mt={2}>
+            {t("YouWantMore")}
+          </Typography>
+          <Typography color="textPrimary" component="p" my={1}>
+            <Trans
+              t={t}
+              i18nKey={"MoreText"}
+              components={{
+                b: <b></b>,
+                br: <br></br>,
+                MailadressLink: (
+                  <a
+                    href="mailto:impromat@marcoklein.dev"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    placeholder
+                  </a>
+                ),
+              }}
+            ></Trans>
+          </Typography>
+          <Button
+            variant="outlined"
+            component={NavLink}
+            to={routeAbout()}
+            startIcon={<Info />}
+          >
             {t("AboutProject")}
-          </IonButton>
-        </div>
-      </div>
+          </Button>
+        </Box>
+      </Box>
     </>
   );
 };

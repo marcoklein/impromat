@@ -1,68 +1,86 @@
-import { IonApp, IonRouterOutlet, IonSplitPane } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
+import { Box } from "@mui/material";
 import React from "react";
 import { Redirect, Route } from "react-router";
-import { ProtectedRouteComponent } from "./components/ProtectedRoute";
-import { ANIMATE_PAGE_TRANSITIONS } from "./feature-toggles";
+import { BrowserRouter, Switch } from "react-router-dom";
+import { ProtectedPage } from "./components/ProtectedPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { LibraryCreateCustomElementPage } from "./pages/library/LibraryCreateCustomElementPage";
-import { LibraryElementPage } from "./pages/library/LibraryElementPage";
-import { ResponsiveMenu } from "./pages/navigation/ResponsiveMenu";
+import { LibraryCreateElementPage } from "./pages/library-create-custom-element/LibraryCreateElementPage";
+import { LibraryUpdateElementPage } from "./pages/library-create-custom-element/LibraryUpdateElementPage";
 import { RootNavigation } from "./pages/navigation/RootNavigation";
-import { HIDE_MENU_SIZE } from "./pages/navigation/responsive-navigation";
 import { WorkshopElementPage } from "./pages/workshop/WorkshopElementPage";
 import { WorkshopPage } from "./pages/workshop/WorkshopPage";
 import {
-  routeLibrary,
   routeLibraryCreateCustomElement,
-  routeLibraryElement,
+  routeLibraryEditCustomElement,
 } from "./routes/library-routes";
 import {
+  routeHome,
+  routeLibrary,
   routeRootNavigation,
   routeWorkshop,
   routeWorkshopElement,
 } from "./routes/shared-routes";
+import { useLanguageUpdateEffect } from "./use-language-update-effect";
 
 export const App: React.FC = () => {
+  useLanguageUpdateEffect();
+
   return (
-    <IonApp>
-      <IonSplitPane
-        when={HIDE_MENU_SIZE}
-        contentId="main"
-        style={{ "--side-width": "20rem", "--side-max-width": "20rem" }}
-      >
-        <IonReactRouter>
-          <ResponsiveMenu></ResponsiveMenu>
-          <IonRouterOutlet id="main" animated={ANIMATE_PAGE_TRANSITIONS}>
+    <Box
+      sx={{
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        display: "flex",
+        position: "absolute",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        contain: "layout size style",
+        overflow: "hidden",
+        zIndex: 0,
+      }}
+    >
+      <BrowserRouter>
+        <Box id="main" height="100%" display="flex" flexDirection="column">
+          <Switch>
             <Redirect path={"/"} exact to={routeLibrary()}></Redirect>
             <Route
               path={routeWorkshopElement()}
               exact
               component={WorkshopElementPage}
             ></Route>
-            <Route
-              path={routeLibraryElement()}
-              exact
-              component={LibraryElementPage}
-            ></Route>
-            <ProtectedRouteComponent
-              path={routeLibraryCreateCustomElement()}
-              exact
-              component={LibraryCreateCustomElementPage}
-            ></ProtectedRouteComponent>
+            <Route path={routeLibraryCreateCustomElement()} exact>
+              <ProtectedPage>
+                <LibraryCreateElementPage />
+              </ProtectedPage>
+            </Route>
+            <Route path={routeLibraryEditCustomElement()} exact>
+              <ProtectedPage>
+                <LibraryUpdateElementPage />
+              </ProtectedPage>
+            </Route>
             <Route
               path={routeWorkshop()}
               exact
               component={WorkshopPage}
             ></Route>
             <Route
-              path={routeRootNavigation()}
+              path={routeRootNavigation() + "/:tabName"}
               component={RootNavigation}
             ></Route>
-            <Route component={NotFoundPage}></Route>
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonSplitPane>
-    </IonApp>
+            <Redirect
+              path={routeRootNavigation()}
+              to={routeHome()}
+              exact
+            ></Redirect>
+            <Route>
+              <NotFoundPage />
+            </Route>
+            {/* <Route component={NotFoundPage}></Route> */}
+          </Switch>
+        </Box>
+      </BrowserRouter>
+    </Box>
   );
 };

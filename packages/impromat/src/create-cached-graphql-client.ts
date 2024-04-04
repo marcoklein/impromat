@@ -7,10 +7,13 @@ import {
 } from "urql";
 import { environment } from "./environment";
 
-import { cacheExchange, Cache } from "@urql/exchange-graphcache";
+import { devtoolsExchange } from "@urql/devtools";
+import { Cache, cacheExchange } from "@urql/exchange-graphcache";
 import { simplePagination } from "@urql/exchange-graphcache/extras";
 import { retryExchange } from "@urql/exchange-retry";
 import { createClient as createUrqlClient } from "urql";
+import { APP_LOCAL_STORAGE_PREFIX } from "./app-local-storage-prefix";
+import { clearLocalStorageWithPrefix } from "./functions/clear-local-storage";
 
 export function createCachedGraphqlClient(
   onError: (
@@ -22,7 +25,7 @@ export function createCachedGraphqlClient(
     url: `${environment.API_URL}/graphql`,
     fetchOptions: { credentials: "include" },
     exchanges: [
-      // devtoolsExchange,
+      devtoolsExchange,
       cacheExchange({
         keys: {
           ElementSearchMatch: () => null,
@@ -35,16 +38,30 @@ export function createCachedGraphqlClient(
               limitArgument: "take",
               offsetArgument: "skip",
             }),
+            searchElementsTfidf: simplePagination({
+              limitArgument: "take",
+              offsetArgument: "skip",
+            }),
           },
         },
         updates: {
           Mutation: {
             logout(_result, _args, cache, _info) {
-              cache.invalidate("Query");
+              clearLocalStorageWithPrefix(APP_LOCAL_STORAGE_PREFIX);
+              cache.invalidate({ __typename: "Query" });
             },
             createElement(_result, _args, cache, _info) {
               cache.invalidate("Query", "elements");
+              cache
+                .inspectFields("Query")
+                .filter((field) => field.fieldName === "searchElements")
+                .forEach((field) => {
+                  cache.invalidate("Query", field.fieldKey);
+                });
               invalidateMeUser(cache, "elements");
+            },
+            updateUser(_result, _args, cache, _info) {
+              invalidateMeUser(cache);
             },
             updateElement(result, _args, cache, _info) {
               const id = (result.updateElement as any)?.id;

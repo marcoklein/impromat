@@ -76,6 +76,7 @@ export async function initApiTestSession(): Promise<ApiTestSession> {
     graphqlRequest: sendGraphqlQuery,
     destroy: async () => {
       // TODO destroy api session in individual tests
+      await prismaService.$disconnect();
       await app.close();
     },
   };

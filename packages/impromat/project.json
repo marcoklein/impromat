@@ -1,0 +1,154 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/packages/nx/schemas/project-schema.json",
+  "targets": {
+    "start": {
+      "dependsOn": ["codegen"],
+      "command": "yarn vite",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "dependsOn": ["codegen", "lint", "test:unit", "test-integration-app"],
+      "command": "echo 'Tests passed' && exit 0",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "dev": {
+      "dependsOn": ["codegen"],
+      "command": "concurrently \"yarn start\" \"yarn nx codegen:graphql\"",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "cache": true,
+      "dependsOn": ["codegen"],
+      "command": "yarn vite build",
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test:playwright-install": {
+      "cache": true,
+      "command": "yarn playwright install",
+      "inputs": [
+        "{projectRoot}/playwright.config.ts",
+        "{projectRoot}/package.json",
+        "{projectRoot}/yarn.lock"
+      ],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test-integration-api-up": {
+      "cache": true,
+      "command": "yarn prisma migrate reset --force && yarn nest start",
+      "options": {
+        "cwd": "packages/impromat-api"
+      }
+    },
+    "test-integration-app": {
+      "cache": true,
+      "dependsOn": ["test:playwright-install"],
+      "command": "concurrently -n API,Playwright -c yellow,green \"PORT=8083 yarn nx test-integration-api-up\" \"bash -c 'while ! curl -s http://localhost:8083 > /dev/null; do sleep 1; done; playwright test -c playwright-integration.config.ts' && echo 'TESTS DONE'\"",
+      "inputs": [
+        "{projectRoot}/playwright-integration.config.ts",
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/test/**/*.ts"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "env": {
+          "PW_TEST_HTML_REPORT_OPEN": "never"
+        },
+        "readyWhen": "TESTS DONE"
+      }
+    },
+    "test:unit": {
+      "cache": true,
+      "dependsOn": ["test:playwright-install"],
+      "command": "playwright test -c playwright-unit.config.ts",
+      "inputs": [
+        "{projectRoot}/playwright-unit.config.ts",
+        "{projectRoot}/src/**/*.{ts,tsx}",
+        "{projectRoot}/test/**/*.{ts,tsx}"
+      ],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "cache": true,
+      "dependsOn": ["lint:eslint", "lint:depcruise", "lint:depcheck"],
+      "command": "echo 'Lint passed' && exit 0"
+    },
+    "lint:eslint": {
+      "cache": true,
+      "command": "yarn eslint \"{src,test}/**/*.ts\" --fix",
+      "inputs": ["{projectRoot}/{src,test}/**/*.ts"],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint:depcruise": {
+      "cache": true,
+      "command": "yarn depcruise src",
+      "inputs": ["{projectRoot}/src/**/*.ts"],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint:depcheck": {
+      "cache": true,
+      "command": "yarn depcheck",
+      "inputs": ["{projectRoot}/src/**/*.ts", "{projectRoot}/package.json"],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "codegen": {
+      "dependsOn": ["codegen:graphql", "codegen:markdown", "codegen:version"],
+      "command": "echo 'Codegen done'"
+    },
+    "codegen:markdown": {
+      "cache": true,
+      "command": "bash ./scripts/generate-markdown.sh",
+      "inputs": ["{projectRoot}/src/markdown/**/*.md"],
+      "outputs": ["{projectRoot}/src/markdown/**/*.gen.ts"],
+
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "codegen:version": {
+      "cache": true,
+      "command": "yarn genversion src/version.gen.ts --es6",
+      "inputs": ["{projectRoot}/package.json"],
+      "outputs": ["{projectRoot}/src/version.gen.ts"],
+      "options": {
+        "cwd": "{projectRoot}"
+      }
+    },
+    "codegen:graphql": {
+      "cache": true,
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "mkdir -p schema",
+          "cp ../impromat-api/schema/schema.graphql schema/schema.graphql",
+          "yarn graphql-codegen"
+        ],
+        "parallel": false,
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        "{projectRoot}/../impromat-api/schema/schema.graphql",
+        "{projectRoot}/src/**/*.ts",
+        "{projectRoot}/src/**/*.tsx"
+      ],
+      "outputs": ["{projectRoot}/src/graphql-client"]
+    }
+  }
+}

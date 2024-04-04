@@ -5,13 +5,16 @@ import { pageTest } from "./fixtures/page-fixtures.js";
 pageTest.describe("Workshop Likes", () => {
   pageTest(
     "should like shared workshop of other user",
-    async ({ page, auth, workshopPage, workshopsPage }) => {
+    async ({ page, auth, workshopPage, workshopsPage, accountPage }) => {
       // given
       const uniqueWorkshopName = `workshop-${randomUUID()}`;
       await auth.loginAsRandomUser();
+      await workshopsPage.goto();
       await workshopPage.createAndGoto(uniqueWorkshopName);
       await workshopPage.share();
       const workshopUrl = page.url();
+      await accountPage.goto();
+      await accountPage.logout();
       await auth.loginAsRandomUser();
       // when
       await page.goto(workshopUrl);
@@ -19,9 +22,7 @@ pageTest.describe("Workshop Likes", () => {
       await workshopsPage.goto();
       // then
       await expect(page.getByText(uniqueWorkshopName)).toBeVisible();
-      await expect(
-        page.locator("ion-badge").filter({ hasText: "liked" }).locator("svg"),
-      ).toBeVisible();
+      await expect(page.getByText("liked")).toBeVisible();
     },
   );
 });

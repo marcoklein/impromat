@@ -1,5 +1,59 @@
 # impromat-api
 
+## 0.29.0
+
+### Minor Changes
+
+- 4a642f2: Add a new searchWorkshops API route that acts as a universal search for workshops within Impromat. It allows to be used by public and authenticated users.
+
+## 0.28.0
+
+### Minor Changes
+
+- cf86cb2: Add search for own element attribute
+
+## 0.27.0
+
+### Minor Changes
+
+- 61ae57a: Major upgrade of nestjs graphql
+- 61ae57a: Update all dependencies to minor version
+
+### Patch Changes
+
+- Updated dependencies [61ae57a]
+  - improbib@0.6.0
+
+## 0.26.0
+
+### Minor Changes
+
+- c00807b: Faster search of elements through database indexes
+- 4658721: Upgrade dependencies
+
+### Patch Changes
+
+- c00807b: Enabled query logging on database level
+
+## 0.25.1
+
+### Patch Changes
+
+- 92c86ad: Return is favorite attribute of element correctly
+
+## 0.25.0
+
+### Minor Changes
+
+- 9c2e4ac: Create postgres native search (which delivers worse results for now but avoids loading everything into memory)
+- 22e7e5a: New element search based on tfidf scores
+
+### Patch Changes
+
+- 393f871: Close database connections in tests to avoid too many connections
+- 6dda1d1: Switch to deployments via nx and remove the docker-compose dependency
+- 58b23a6: Do not return empty matches for element searches without length
+
 ## 0.24.4
 
 ### Patch Changes

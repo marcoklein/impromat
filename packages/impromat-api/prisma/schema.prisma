@@ -1,10 +1,12 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pg_trgm]
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 model Element {
@@ -40,6 +42,11 @@ model Element {
 
   metadata ElementMetadata[]
   tags     ElementToElementTag[]
+
+  @@index([languageCode], type: BTree)
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin, name: "name_idx")
+  @@index([markdown(ops: raw("gin_trgm_ops"))], type: Gin, name: "markdown_idx")
+  @@index([summary(ops: raw("gin_trgm_ops"))], type: Gin, name: "summary_idx")
 }
 
 model ElementMetadata {

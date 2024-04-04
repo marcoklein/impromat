@@ -1,11 +1,22 @@
 {
   "ignorePatterns": ["**/*.gen.ts"],
   "extends": ["react-app"],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["@ionic/react", "ionicons", "**/Legacy*"]
+      }
+    ]
+  },
   "overrides": [
     {
       "files": ["test/**/*.ts", "src/**/*.test.ts", "src/**/*.test.tsx"],
       "parserOptions": {
-        "project": "./tsconfig.test.json"
+        "project": [
+          "./tsconfig.test.json",
+          "packages/impromat/tsconfig.storybook.json"
+        ]
       },
       "rules": {
         "@typescript-eslint/no-floating-promises": "error"

@@ -2,59 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""Predicted tag for an element."""
-type ElementPredictedTag {
-  """Name of the predicted tag."""
-  name: String!
-
-  """Reason for the predicted tag."""
-  reason: String!
-}
-
-type ElementTag {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  version: Int!
-  deleted: Boolean
-  name: String!
-
-  """
-  Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter.
-  """
-  count: Float!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type WorkshopElement {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  version: Int!
-  deleted: Boolean
-  note: String
-  basedOn: Element!
-  section: WorkshopSection!
-}
-
-type WorkshopSection {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  version: Int!
-  deleted: Boolean
-  name: String
-  color: String
-  isCollapsed: Boolean!
-  elements: [WorkshopElement!]!
-  workshop: Workshop!
-  orderIndex: Float!
-}
-
 type Workshop {
   id: ID!
   createdAt: DateTime!
@@ -63,11 +10,6 @@ type Workshop {
   deleted: Boolean
   name: String!
   description: String
-  sections: [WorkshopSection!]!
-  owner: User!
-
-  """If true, the client is authorized to edit the workshop."""
-  canEdit: Boolean
 
   """
   Public users can view the workshop but they require the direct link to the workshop. The url of the workshop does not change.
@@ -77,20 +19,32 @@ type Workshop {
   """True, if the workshop is listed publicly in the improv community."""
   isListed: Boolean!
 
+  """Optional metadata date when this workshop was planned (or held)."""
+  dateOfWorkshop: DateTime
+
   """
   True, if liked by the logged in user. Undefined, if there is no user logged in.
   """
   isLiked: Boolean
+  sections: [WorkshopSection!]!
+  owner: User!
 
   """
   Convenience field to determine if the owner of the workshop is the logged in user.
   """
   isOwnerMe: Boolean
-  elementRecommendations: [Element!]!
 
-  """Optional metadata date when this workshop was planned (or held)."""
-  dateOfWorkshop: DateTime
+  """If true, the client is authorized to edit the workshop."""
+  canEdit: Boolean
+
+  """Find recommended elements."""
+  elementRecommendations: [Element!]!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type UserLikedWorkshop {
   createdAt: DateTime!
@@ -107,9 +61,6 @@ type User {
 
   """All workshops that this user has access to."""
   workshops(input: UserWorkshopsFilterInput, skip: Int! = 0, take: Int! = 20): [Workshop!]!
-
-  """Elements owned by this user."""
-  elements: [Element!]!
   favoriteElements: [UserFavoriteElement!]!
   likedWorkshops: [UserLikedWorkshop!]!
 
@@ -142,13 +93,6 @@ type Element {
   deleted: Boolean
   name: String!
   markdown: String
-
-  """
-  Shortened markdown text for preview purposes to avoid loading the whole content in a request.
-  """
-  markdownShort: String
-  tags: [ElementTag!]!
-  usedBy: [WorkshopElement!]!
   languageCode: String
   sourceUrl: String
   sourceName: String
@@ -160,45 +104,37 @@ type Element {
   Set if the element was imported from improbib, a project that collects existing improv resources.
   """
   improbibIdentifier: String
+  visibility: ElementVisibility!
+  recommendations: [Element!]!
+
+  """Set if the element is called from a user context."""
+  isFavorite: Boolean
+
+  """
+  Shortened markdown text for preview purposes to avoid loading the whole content in a request.
+  """
+  markdownShort: String
   owner: User
 
   """
   Convenience field to determine if the owner of the element is the logged in user.
   """
   isOwnerMe: Boolean
-  visibility: ElementVisibility!
-
-  """Set if the element is called from a user context."""
-  isFavorite: Boolean
+  tags: [ElementTag!]!
+  usedBy: [WorkshopElement!]!
 
   """Changes of the element."""
   snapshots(skip: Int! = 0, take: Int! = 20): [ElementSnapshot!]!
-  recommendations: [Element!]!
-
-  """
-  Predicted level tags for the element. E.g. "beginner", "advanced", "expert". Is null, if the element cannot be processed.
-  """
-  predictedLevelTags: [ElementPredictedTag!]
 
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
   """
-  variations(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): [Variation]
+  variations: [Variation]
 
   """
   The keywords of the element. This is generated asynchronously and might not be available immediately.
   """
-  keywords(
-    """
-    Force a refresh of the summary. The result will not return immediately as the summary is generated asynchronously.
-    """
-    forceRefresh: Boolean! = false
-  ): [String]
+  keywords: [String]
 
   """
   The summary of the element. This is generated asynchronously and might not be available immediately.
@@ -239,15 +175,62 @@ type UserFavoriteElement {
   element: Element!
 }
 
-type ElementSearchMatch {
-  """Key of field where searched text was found."""
-  key: String
-  indices: [[Int!]!]!
+type ElementTag {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  name: String!
 
   """
-  If the matching field is an array this field points to the index of the matching element in the source array.
+  Number of elements that have this tag. If used as part of a filter query the number of elements that would match the filter.
   """
-  refIndex: Int
+  count: Float!
+}
+
+type ElementQueryResult {
+  element: Element!
+}
+
+type WorkshopSection {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  name: String
+  color: String
+  isCollapsed: Boolean!
+  elements: [WorkshopElement!]!
+  workshop: Workshop!
+  orderIndex: Float!
+}
+
+type WorkshopElement {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  version: Int!
+  deleted: Boolean
+  note: String
+  basedOn: Element!
+  section: WorkshopSection!
+}
+
+type Variation {
+  name: String!
+  description: String
+}
+
+"""
+Contains information about the exact match of a search term in an element.
+"""
+type ElementSearchMatch {
+  """Identifier of the matched field. E.g. "name", "markdown", or "tags"."""
+  key: String!
+
+  """The matched text in of the field. Could be used for highlighting."""
   value: String!
 }
 
@@ -257,26 +240,37 @@ type ElementSearchResult {
   matches: [ElementSearchMatch!]!
 }
 
-type ElementQueryResult {
-  element: Element!
+type SimilarKeyword {
+  keyword: String!
+  score: Float!
 }
 
-type Variation {
-  name: String!
-  description: String
+type ElementSearchKeywords {
+  keywords: [ElementSearchKeyword!]!
+  uniqueKeywordsCount: Int!
+  documentsCount: Int!
+  similarKeywords: [SimilarKeyword!]
+}
+
+type ElementSearchKeyword {
+  """The keyword in its stemmed form."""
+  keyword: String!
+
+  """
+  Inverse document frequency. Describes how important a word is to a document in a collection or corpus. The more common a word is in a document, the lower its idf.
+  """
+  idf: Float!
+
+  """The keyword in its original form(s) before stemming."""
+  originalKeywords: [String!]
+}
+
+type WorkshopSearchResult {
+  workshop: Workshop!
 }
 
 type Query {
   googleAuthUrl: String!
-  searchElements(
-    input: ElementSearchInput!
-
-    """Helper field to pass skip argument into input field."""
-    skip: Int
-
-    """Helper field to pass take argument into input field."""
-    take: Int
-  ): [ElementSearchResult!]!
   tags(filter: ElementTagsFilterInput, skip: Int! = 0, take: Int! = 20): [ElementTag!]!
   element(id: ID!): Element
   elements(skip: Int! = 0, take: Int! = 20, filter: ElementsFilterInput, orderBy: ElementsOrderByInput): [ElementQueryResult!]!
@@ -288,27 +282,17 @@ type Query {
 
   """Get information about the current user. Returns null if not logged in."""
   me: User
+  searchElements(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElementsTfidf(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElementsKeywords(input: ElementSearchInput!): ElementSearchKeywords!
   workshop(id: ID!): Workshop
 
   """Find workshops."""
   workshops(skip: Int! = 0, take: Int! = 20, where: WorkshopsWhereInput, orderBy: [WorkshopsOrderByInput!]): [Workshop!]!
   workshopElement(id: ID!): WorkshopElement!
-}
 
-input ElementSearchInput {
-  text: String
-  tagNames: [String!]
-
-  """Language code (e.g. en, de) for results."""
-  languageCode: String
-
-  """Filter for liked elements of the user."""
-  isLiked: Boolean
-
-  """Filter for elements of the user."""
-  isOwned: Boolean
-  take: Int! = 20
-  skip: Int! = 0
+  """Universal search for workshops. Works for all users."""
+  searchWorkshops(skip: Int! = 0, take: Int! = 20, input: WorkshopSearchInput!): [WorkshopSearchResult!]!
 }
 
 """Filter tags of elements."""
@@ -335,6 +319,24 @@ input ElementsFilterInput {
 
 input ElementsOrderByInput {
   notImplemented: Boolean!
+}
+
+input ElementSearchInput {
+  """
+  Search text. See https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search#postgresql for search usage information.
+  """
+  text: String
+
+  """
+  If true, only elements created by the requesting user are returned. If false, only elements not created by the requesting user are returned. If not set, all elements are returned.
+  """
+  ownElement: Boolean
+
+  """Language code (e.g. en, de) for results."""
+  languageCode: String
+
+  """Language codes (e.g. en, de) to filter results by."""
+  languageCodes: [String!]
 }
 
 input WorkshopsWhereInput {
@@ -402,6 +404,16 @@ enum SortOrder {
 
   """Descending sort order."""
   desc
+}
+
+input WorkshopSearchInput {
+  """
+  If true, only workshop created by the requesting user are returned. If false, only workshops not created by the requesting user are returned. If not set, all workshops are returned.
+  """
+  ownWorkshop: Boolean
+
+  """Language codes (e.g. en, de) to filter results by."""
+  languageCodes: [String!]
 }
 
 type Mutation {
