@@ -18,6 +18,10 @@ export default {
     Elements: "Elements",
     save: "Save",
   },
+  ShareButton: {
+    share: "Share",
+    copiedUrl: "Copied URL to clipboard",
+  },
   BackButton: {
     back: "Back",
   },

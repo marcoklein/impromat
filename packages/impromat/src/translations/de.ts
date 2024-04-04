@@ -17,6 +17,10 @@ export default {
     Elements: "Elemente",
     save: "Speichern",
   },
+  ShareButton: {
+    share: "Teilen",
+    copiedUrl: "URL in Zwichenablage kopiert",
+  },
   BackButton: {
     back: "Zurück",
   },

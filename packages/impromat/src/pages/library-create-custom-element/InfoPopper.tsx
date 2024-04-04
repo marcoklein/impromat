@@ -1,6 +1,6 @@
 import { Close, Info } from "@mui/icons-material";
 import { IconButton, Paper, Popper, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useId, useRef, useState } from "react";
 
 interface ComponentProps {
   /**
@@ -22,20 +22,25 @@ export const InfoPopper: React.FC<ComponentProps> = ({
   message,
   iconElement,
 }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
+  const [isOpen, setIsOpen] = useState(false);
+  const anchorElementRef = useRef<HTMLButtonElement>(null);
+  const id = useId();
 
   return (
     <>
-      <IconButton aria-describedby={id} onClick={handleClick} aria-label="info">
+      <IconButton
+        aria-describedby={id}
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-label="info"
+        ref={anchorElementRef}
+      >
         {iconElement ? iconElement : <Info color="info" />}
-        <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-end">
+        <Popper
+          id={id}
+          open={isOpen}
+          anchorEl={anchorElementRef.current}
+          placement="bottom-end"
+        >
           <Paper
             elevation={3}
             sx={{ p: 1, mx: 1, border: 1, maxWidth: "400px" }}
@@ -44,7 +49,7 @@ export const InfoPopper: React.FC<ComponentProps> = ({
               sx={{ float: "right" }}
               aria-label="close"
               size="small"
-              onClick={() => setAnchorEl(null)}
+              onClick={() => setIsOpen(false)}
             >
               <Close />
             </IconButton>
