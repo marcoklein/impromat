@@ -192,6 +192,7 @@ export const RootNavigation: React.FC<ContainerProps> = () => {
               sx={{ textAlign: "center" }}
               component={Link}
               key={key}
+              id={`RootNavigation${key}`}
               value={value.route.match(/\/([^/]+)\/([^/]+)/)?.at(2) ?? ""}
               to={value.route}
               label={t(value.name)}

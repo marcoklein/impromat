@@ -68,6 +68,7 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
     >
       <Toolbar sx={{ display: "flex", alignItems: "center" }}>
         <InputBase
+          id="ElementSearchInput"
           value={newSearchText}
           onChange={(event) => setNewSearchText(event.target.value)}
           aria-label="search-input"
