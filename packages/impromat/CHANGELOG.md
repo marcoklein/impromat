@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.67.0
+
+### Minor Changes
+
+- 3807985: Add search suggestions to the element search
+
 ## 0.66.0
 
 ### Minor Changes
