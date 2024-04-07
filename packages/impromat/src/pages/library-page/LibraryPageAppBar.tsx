@@ -1,15 +1,12 @@
-import { FilterList, Search } from "@mui/icons-material";
-import {
-  AppBar,
-  CircularProgress,
-  IconButton,
-  InputAdornment,
-  InputBase,
-  Toolbar,
-} from "@mui/material";
-import { useEffect, useState } from "react";
+import FilterList from "@mui/icons-material/FilterList";
+import Search from "@mui/icons-material/Search";
+import AppBar from "@mui/material/AppBar";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputBase from "@mui/material/InputBase";
+import Toolbar from "@mui/material/Toolbar";
 import { useTranslation } from "react-i18next";
-import { useDebounce } from "../../hooks/use-debounce";
 import { LibraryMenuDialog } from "./LibraryMenuDialog";
 
 interface ComponentProps {
@@ -35,6 +32,7 @@ interface ComponentProps {
  */
 export const LibraryPageAppBar: React.FC<ComponentProps> = ({
   searchText,
+  setSearchText,
   onSearch,
   queryIsFetching,
   selectedLanguages,
@@ -44,17 +42,6 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
   setMenuDialogOpen,
 }) => {
   const { t } = useTranslation("LibraryPageAppBar");
-  const [newSearchText, setNewSearchText] = useState(searchText);
-  const [triggerNow, setTriggerNow] = useState<number>(0);
-  const debouncedSearchText = useDebounce(newSearchText, 500, triggerNow);
-
-  useEffect(() => {
-    onSearch(debouncedSearchText);
-  }, [debouncedSearchText, onSearch]);
-
-  useEffect(() => {
-    setNewSearchText(searchText);
-  }, [searchText]);
 
   return (
     <AppBar
@@ -68,12 +55,12 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
     >
       <Toolbar sx={{ display: "flex", alignItems: "center" }}>
         <InputBase
-          value={newSearchText}
-          onChange={(event) => setNewSearchText(event.target.value)}
+          value={searchText}
+          onChange={(event) => setSearchText(event.target.value)}
           aria-label="search-input"
           onKeyDown={(event) => {
             if (event.key === "Enter") {
-              setTriggerNow((current) => current + 1);
+              onSearch(searchText);
             }
           }}
           sx={{ ml: 1, flex: 1, color: "inherit" }}
@@ -91,10 +78,10 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
                   ></CircularProgress>
                 </IconButton>
               ) : (
-                newSearchText !== searchText && (
+                searchText && (
                   <IconButton
                     color="inherit"
-                    onClick={() => setTriggerNow((current) => current + 1)}
+                    onClick={() => onSearch(searchText)}
                   >
                     <Search color="inherit" />
                   </IconButton>

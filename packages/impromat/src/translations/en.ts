@@ -113,6 +113,19 @@ export default {
   LibraryPage: {
     Retry: "Retry",
   },
+  SearchSuggestions: {
+    warmupTitle: "Warm-up",
+    warmupDescription:
+      "Warm-ups, ice breakers and get-to-knows for starting your improv session.",
+    warmupSearch: "#warmup",
+    exerciseTitle: "Exercise",
+    exerciseDescription:
+      "Deliberate practice to focus on specific skills and techniques.",
+    exerciseSearch: "#exercise",
+    gameTitle: "Game",
+    gameDescription: "Fun and engaging games to play with your improv group.",
+    gameSearch: "#game",
+  },
   FilterInspirations: {
     tagsInspiration0: "<Tag>{{tagA}}</Tag> with <Tag>{{tagB}}</Tag> focus",
     tagsInspiration1: "<Tag>{{tagA}}</Tag> to improve <Tag>{{tagB}}</Tag>",

@@ -88,7 +88,7 @@ export function usePersistedState<
 
     localStorage.setItem(key, JSON.stringify(valueToPersist));
     setState(valueToPersist);
-    logger("key=%s: persisted new state", key);
+    logger('key=%s persisted new state with value "%s"', key, valueToPersist);
   };
 
   return [state, persistValueFn];

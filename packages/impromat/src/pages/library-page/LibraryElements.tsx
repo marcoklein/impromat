@@ -1,19 +1,10 @@
-import { Person4, ReceiptLong } from "@mui/icons-material";
-import {
-  Box,
-  Container,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-import { useMemo } from "react";
+import Container from "@mui/material/Container";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { FragmentType, getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { routeLibraryElement } from "../../routes/shared-routes";
+import { SearchSuggestions } from "./SearchSuggestions";
 
 const LibraryElements_ElementSearchResult = graphql(`
   fragment LibraryElements_ElementSearchResult on ElementSearchResult {
@@ -61,13 +52,16 @@ interface ContainerProps {
   scrollToTop: number;
   pageNumber: number;
   setPageNumber: (setFn: (currentNumber: number) => number) => void;
+  /**
+   * Called when the search text changes when the user clicks on search suggestions for example.
+   *
+   * @param searchText New search text.
+   */
+  onSearchTextChange: (searchText: string) => void;
 }
 
 /**
  * Renders a list of elements with virtual scroll.
- *
- * @param param0
- * @returns
  */
 export const LibraryElements: React.FC<ContainerProps> = ({
   elementSearchResultFragments: elementFragments,
@@ -76,6 +70,7 @@ export const LibraryElements: React.FC<ContainerProps> = ({
   scrollToTop,
   pageNumber,
   setPageNumber,
+  onSearchTextChange,
 }) => {
   const logger = useComponentLogger("MuiLibraryElements");
   const elements = getFragmentData(
@@ -83,40 +78,14 @@ export const LibraryElements: React.FC<ContainerProps> = ({
     elementFragments,
   );
 
-  const headerElement = useMemo(
-    () => (
-      <>
-        {/* TODO this is disabled for now to test the design */}
-        {elements && elements.length > 0 && false && (
-          <Box>
-            <List>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <Person4></Person4>
-                  </ListItemIcon>
-                  <ListItemText primary="Charakterentwicklung" />
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <ReceiptLong></ReceiptLong>
-                  </ListItemIcon>
-                  <ListItemText primary="Langformen" />
-                </ListItemButton>
-              </ListItem>
-            </List>
-          </Box>
-        )}
-      </>
-    ),
-    [elements],
-  );
   return (
     <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
       <VirtualCardGrid
-        headerElement={headerElement}
+        headerElement={
+          elements?.length ? undefined : (
+            <SearchSuggestions onSuggestionClick={onSearchTextChange} />
+          )
+        }
         scrollStoreKey="search-element-tab-component"
         isFetching={isQueryFetching || isQueryStale}
         scrollToTop={scrollToTop}

@@ -3,9 +3,18 @@
   "extends": ["react-app"],
   "rules": {
     "no-restricted-imports": [
-      "error",
+      "warn",
       {
-        "patterns": ["@ionic/react", "ionicons", "**/Legacy*"]
+        "paths": [
+          {
+            "name": "@mui/material",
+            "message": "Please import directly from the component module, like @mui/material/Box."
+          },
+          {
+            "name": "@mui/icons-material",
+            "message": "Please import directly from the component module, like @mui/icons-material/Check."
+          }
+        ]
       }
     ]
   },
