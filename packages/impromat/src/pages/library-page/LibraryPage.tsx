@@ -1,10 +1,11 @@
 import Box from "@mui/material/Box";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { graphql } from "../../graphql-client";
+import { useDebounce } from "../../hooks/use-debounce";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { ROUTE_LIBRARY_SEARCH_PARAM } from "../../routes/shared-routes";
@@ -41,6 +42,8 @@ export const LibraryPage: React.FC = () => {
     "",
     { forceValue: searchParameterFromUrl },
   );
+  const [triggerNow, setTriggerNow] = useState<number>(0);
+  const debouncedSearchText = useDebounce(searchText, 500, triggerNow);
 
   const history = useHistory();
 
@@ -69,15 +72,21 @@ export const LibraryPage: React.FC = () => {
 
   const [searchElementsQueryResult, reexecuteSearchElementsQuery] = useQuery({
     query: MuiLibraryPageQuery,
+    pause: useMemo(() => !debouncedSearchText.length, [debouncedSearchText]),
     variables: {
       input: {
         languageCodes: selectedLanguages,
-        ...parseSearchInput(searchText),
+        ...parseSearchInput(debouncedSearchText),
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
     },
   });
+  const elementsResult = useMemo(
+    () =>
+      !searchText.length ? [] : searchElementsQueryResult.data?.searchElements,
+    [searchElementsQueryResult.data?.searchElements, searchText],
+  );
 
   const [menuDialogOpen, setMenuDialogOpen] = useState(false);
   const [scrollToTop, setScrollToTop] = useState(0);
@@ -103,9 +112,7 @@ export const LibraryPage: React.FC = () => {
       <LibraryPageAppBar
         searchText={searchText}
         setSearchText={setSearchText}
-        onSearch={(text) => {
-          setSearchText(text);
-        }}
+        onSearch={() => setTriggerNow((current) => current + 1)}
         queryIsFetching={searchElementsQueryResult.fetching}
         selectedLanguages={selectedLanguages}
         setSelectedLanguages={setSelectedLanguages}
@@ -122,11 +129,10 @@ export const LibraryPage: React.FC = () => {
       </IsLoggedIn>
       <LibraryElements
         pageNumber={pageNumber}
+        onSearchTextChange={setSearchText}
         setPageNumber={setPageNumber}
         scrollToTop={scrollToTop}
-        elementSearchResultFragments={
-          searchElementsQueryResult.data?.searchElements
-        }
+        elementSearchResultFragments={elementsResult}
         isQueryStale={searchElementsQueryResult.stale}
         isQueryFetching={searchElementsQueryResult.fetching}
       ></LibraryElements>

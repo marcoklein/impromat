@@ -101,7 +101,7 @@ export const WorkshopsPage: React.FC = () => {
             items={availableWorkshops}
             headerElement={
               <IsNotLoggedIn>
-                <Container maxWidth="sm" sx={{ height: "100%" }}>
+                <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
                   <Card
                     sx={{
                       m: 1,
@@ -127,7 +127,7 @@ export const WorkshopsPage: React.FC = () => {
               </IsNotLoggedIn>
             }
             itemContent={(_index, workshop) => (
-              <Container maxWidth="sm" sx={{ height: "100%" }}>
+              <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
                 <WorkshopPreviewCard
                   workshopFragment={workshop}
                 ></WorkshopPreviewCard>
