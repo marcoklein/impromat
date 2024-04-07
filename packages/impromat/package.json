@@ -33,6 +33,8 @@
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.2.0",
     "impromat-api": "0.29.0",
+    "intro.js": "^7.2.0",
+    "intro.js-react": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",

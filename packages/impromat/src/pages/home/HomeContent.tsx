@@ -1,5 +1,5 @@
 import { ArrowForward, Info } from "@mui/icons-material";
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Paper, Stack, Typography } from "@mui/material";
 import { Trans, useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import {
@@ -15,6 +15,7 @@ export const HomeContent: React.FC = () => {
     <>
       <Box style={{ display: "flex", justifyContent: "center" }}>
         <Box style={{ maxWidth: "900px" }} className="ion-margin-top">
+          {/* TODO adjust style to match other application style. */}
           <Typography variant="h4" component="h2">
             {t("Improving Improv")}
           </Typography>
