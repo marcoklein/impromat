@@ -92,7 +92,6 @@ export const WorkshopsPage: React.FC = () => {
       >
         {availableWorkshops?.length ? (
           <VirtualCardGrid
-            size="small"
             scrollStoreKey="workshops-page"
             isFetching={
               workshopsQueryResult.fetching || workshopsQueryResult.stale
