@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.67.1
+
+### Patch Changes
+
+- fe0992e: Exchange workshops and elements tabs
+- Updated dependencies [fe0992e]
+  - impromat-api@0.29.1
+
 ## 0.67.0
 
 ### Minor Changes

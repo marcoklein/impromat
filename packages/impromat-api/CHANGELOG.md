@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.29.1
+
+### Patch Changes
+
+- fe0992e: Fix public workshops returning wrong isLiked status
+
 ## 0.29.0
 
 ### Minor Changes
