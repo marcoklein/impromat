@@ -1,5 +1,16 @@
 # impromat-app-renderer
 
+## 0.4.8
+
+### Patch Changes
+
+- Updated dependencies [38f370a]
+- Updated dependencies [38f370a]
+- Updated dependencies [38f370a]
+- Updated dependencies [38f370a]
+  - impromat@0.68.0
+  - impromat-api@0.29.2
+
 ## 0.4.7
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "name": "improbib-experiments",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Experiments for improbib.",
   "repository": "git@github.com:marcoklein/improbib.git",
   "author": "Marco Klein <hello@marcoklein.dev>",
@@ -21,7 +21,7 @@
     "nodemon": "^2.0.22"
   },
   "dependencies": {
-    "improbib": "0.6.0",
+    "improbib": "0.6.1",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
   }
