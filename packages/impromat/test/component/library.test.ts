@@ -23,7 +23,6 @@ pageTest.describe("Library", () => {
         // when
         await libraryPage.goto();
         await libraryPage.createCustomElement(name);
-        await page.waitForTimeout(1000);
         // then
         await expect(page.getByText(new RegExp(name))).toBeVisible();
       });
@@ -43,17 +42,30 @@ pageTest.describe("Library", () => {
     async ({ page, auth, libraryPage, libraryElementPage }) => {
       // given
       await auth.loginAsRandomUser();
-      // when
-      await libraryPage.searchForElement("freeze");
-      await libraryPage.scrollDownInElementsList();
-      await libraryPage.openElementCard("Freeze Tag-Exercise");
-      await libraryElementPage.backButtonLocator.click();
-      // then
-      await expect(page).toHaveScreenshot({
-        animations: "disabled",
-        maxDiffPixelRatio: 0.01,
+      const bottomLocator = page.locator('.virtuoso-list div[data-index="5"]');
+      await pageTest.step("should search for games", async () => {
+        // when
+        await libraryPage.searchForElement("#game");
+        // then
+        await expect(bottomLocator).not.toBeInViewport();
       });
-      await expect(page.getByText("Freeze Tag-Exercise")).toBeVisible();
+      await pageTest.step("should scroll to the bottom", async () => {
+        // when
+        await bottomLocator.scrollIntoViewIfNeeded();
+        await page.waitForTimeout(300);
+        // then
+        await expect(bottomLocator).toBeInViewport();
+      });
+      await pageTest.step(
+        "should navigate back and restore scroll position",
+        async () => {
+          // when
+          await bottomLocator.click();
+          await libraryElementPage.backButtonLocator.click();
+          // then
+          await expect(bottomLocator).toBeInViewport();
+        },
+      );
     },
   );
 });

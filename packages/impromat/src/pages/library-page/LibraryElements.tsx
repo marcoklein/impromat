@@ -47,6 +47,8 @@ interface ContainerProps {
   elementSearchResultFragments?: FragmentType<
     typeof LibraryElements_ElementSearchResult
   >[];
+  searchText: string;
+  latestSearches: string[];
   isQueryStale: boolean;
   isQueryFetching: boolean;
   scrollToTop: number;
@@ -58,6 +60,7 @@ interface ContainerProps {
    * @param searchText New search text.
    */
   onSearchTextChange: (searchText: string) => void;
+  onClearHistory: () => void;
 }
 
 /**
@@ -65,12 +68,15 @@ interface ContainerProps {
  */
 export const LibraryElements: React.FC<ContainerProps> = ({
   elementSearchResultFragments: elementFragments,
+  searchText,
+  latestSearches,
   isQueryStale,
   isQueryFetching,
   scrollToTop,
   pageNumber,
   setPageNumber,
   onSearchTextChange,
+  onClearHistory,
 }) => {
   const logger = useComponentLogger("MuiLibraryElements");
   const elements = getFragmentData(
@@ -78,13 +84,19 @@ export const LibraryElements: React.FC<ContainerProps> = ({
     elementFragments,
   );
 
+  const showSearchSuggestions = !elements?.length || !searchText.length;
+
   return (
     <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
       <VirtualCardGrid
         headerElement={
-          elements?.length ? undefined : (
-            <SearchSuggestions onSuggestionClick={onSearchTextChange} />
-          )
+          showSearchSuggestions ? (
+            <SearchSuggestions
+              onSuggestionClick={onSearchTextChange}
+              latestSearches={latestSearches}
+              onClearHistory={onClearHistory}
+            />
+          ) : undefined
         }
         scrollStoreKey="search-element-tab-component"
         isFetching={isQueryFetching || isQueryStale}

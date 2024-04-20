@@ -6,19 +6,14 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputBase from "@mui/material/InputBase";
 import Toolbar from "@mui/material/Toolbar";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
+import { useSearchParam } from "../../hooks/use-search-params";
+import { ROUTE_LIBRARY_SEARCH_PARAM } from "../../routes/shared-routes";
 import { LibraryMenuDialog } from "./LibraryMenuDialog";
 
 interface ComponentProps {
-  /**
-   * The current search text.
-   */
-  searchText: string;
-  setSearchText: (text: string) => void;
-  /**
-   * Called when the user presses the search button.
-   */
-  onSearch: (text: string) => void;
   queryIsFetching: boolean;
   selectedLanguages: string[];
   setSelectedLanguages: (languages: string[]) => void;
@@ -31,9 +26,6 @@ interface ComponentProps {
  * Search functionality for elements in the library.
  */
 export const LibraryPageAppBar: React.FC<ComponentProps> = ({
-  searchText,
-  setSearchText,
-  onSearch,
   queryIsFetching,
   selectedLanguages,
   setSelectedLanguages,
@@ -42,6 +34,22 @@ export const LibraryPageAppBar: React.FC<ComponentProps> = ({
   setMenuDialogOpen,
 }) => {
   const { t } = useTranslation("LibraryPageAppBar");
+
+  const searchParameterFromUrl = useSearchParam(ROUTE_LIBRARY_SEARCH_PARAM);
+
+  const [searchText, setSearchText] = useState(searchParameterFromUrl ?? "");
+
+  useEffect(() => {
+    setSearchText(searchParameterFromUrl ?? "");
+  }, [searchParameterFromUrl]);
+
+  const history = useHistory();
+
+  const onSearch = (searchText: string) => {
+    const params = new URLSearchParams();
+    params.append(ROUTE_LIBRARY_SEARCH_PARAM, searchText);
+    history.push({ search: params.toString() });
+  };
 
   return (
     <AppBar

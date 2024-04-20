@@ -39,14 +39,6 @@ export class LibraryDevPage extends DevPage {
     await this.page.getByLabel("reset").click();
   }
 
-  async scrollDownInElementsList() {
-    const lastListItem = this.page.locator(
-      '.virtuoso-list div[data-index="5"]',
-    );
-    await lastListItem.scrollIntoViewIfNeeded();
-    await this.page.waitForTimeout(300);
-  }
-
   async openElementCard(name?: string) {
     const page = this.page;
     if (name) {
