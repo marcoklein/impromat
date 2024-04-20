@@ -11,6 +11,7 @@
 ### Minor Changes
 
 - 71d1723: Fetch card meta data from Improwiki
+- Fetch translation link from Improwiki
 
 ## 0.4.4
 

@@ -131,7 +131,7 @@ export class ImprowikiEntryPagePipeline implements WikiPipeline {
           lastUpdate,
           translationLinkEn,
           translationLinkDe,
-          cardData: fields,
+          ...fields,
         },
       },
     ];
