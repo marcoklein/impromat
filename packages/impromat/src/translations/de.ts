@@ -108,17 +108,10 @@ export default {
     Retry: "Erneut versuchen",
   },
   SearchSuggestions: {
-    warmupTitle: "Aufwärmspiel",
-    warmupDescription:
-      "Warm-ups, Eisbrecher und Kennenlernspiele, um deine Impro-Session zu beginnen.",
+    history: "Suchverlauf",
+    suggestions: "Such-Inspirationen",
     warmupSearch: "#Aufwärmspiel",
-    exerciseTitle: "Übung",
-    exerciseDescription:
-      "Gezieltes Training, um spezifische Fähigkeiten und Techniken zu verbessern.",
     exerciseSearch: "#Übung",
-    gameTitle: "Spiel",
-    gameDescription:
-      "Spaßige und unterhaltsame Spiele, die du mit deiner Impro-Gruppe spielen kannst.",
     gameSearch: "#Spiel",
   },
   FilterInspirations: {

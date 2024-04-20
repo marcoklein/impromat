@@ -114,16 +114,10 @@ export default {
     Retry: "Retry",
   },
   SearchSuggestions: {
-    warmupTitle: "Warm-up",
-    warmupDescription:
-      "Warm-ups, ice breakers and get-to-knows for starting your improv session.",
+    history: "Search History",
+    suggestions: "Search Inspiration",
     warmupSearch: "#warmup",
-    exerciseTitle: "Exercise",
-    exerciseDescription:
-      "Deliberate practice to focus on specific skills and techniques.",
     exerciseSearch: "#exercise",
-    gameTitle: "Game",
-    gameDescription: "Fun and engaging games to play with your improv group.",
     gameSearch: "#game",
   },
   FilterInspirations: {

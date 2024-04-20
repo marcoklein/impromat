@@ -1,10 +1,8 @@
-import {
-  Attribution,
-  Brush,
-  Favorite,
-  Public,
-  Translate,
-} from "@mui/icons-material";
+import Attribution from "@mui/icons-material/Attribution";
+import Brush from "@mui/icons-material/Brush";
+import Favorite from "@mui/icons-material/Favorite";
+import Public from "@mui/icons-material/Public";
+import Translate from "@mui/icons-material/Translate";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";
 import { InfoListItem } from "./InfoListItem";
@@ -23,6 +21,9 @@ const ElementInfoList_Element = graphql(`
 interface ContainerProps {
   elementFragment: FragmentType<typeof ElementInfoList_Element>;
 }
+
+const SHOW_SOURCE = false;
+const SHOW_LANGUAGE = false;
 
 /**
  * Previews content of an element in a card. Use within a grid or list.
@@ -53,13 +54,13 @@ export const ElementInfoList: React.FC<ContainerProps> = ({
           displayText="my element"
         ></InfoListItem>
       )}
-      {!!element.sourceName && !element.isOwnerMe && (
+      {SHOW_SOURCE && !!element.sourceName && !element.isOwnerMe && (
         <InfoListItem
           icon={<Attribution />}
           displayText={element.sourceName}
         ></InfoListItem>
       )}
-      {!!element.languageCode && (
+      {SHOW_LANGUAGE && !!element.languageCode && (
         <InfoListItem
           icon={<Translate />}
           displayText={element.languageCode.toUpperCase()}

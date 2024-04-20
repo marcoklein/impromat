@@ -1,10 +1,8 @@
-import {
-  Box,
-  Divider,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
 
 interface ContainerProps {
@@ -68,7 +66,6 @@ export const PreviewCard: React.FC<ContainerProps> = ({
               whiteSpace: "nowrap",
               overflowX: "auto",
               alignItems: "center",
-              height: "2.5rem",
               width: "100%",
             }}
           >

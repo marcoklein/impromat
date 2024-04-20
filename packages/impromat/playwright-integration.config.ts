@@ -12,6 +12,8 @@ if (!VITE_API_URL) {
   throw new Error("VITE_API_URL environment variable undefined.");
 }
 
+const UPDATE_SNAPSHOTS = process.env.UPDATE_SNAPSHOTS === "1" ? "all" : "none";
+
 const config: PlaywrightTestConfig = {
   webServer: {
     command: "yarn vite",
@@ -47,6 +49,7 @@ const config: PlaywrightTestConfig = {
   fullyParallel: false,
   retries: 2,
   timeout: 30 * 1000,
+  updateSnapshots: UPDATE_SNAPSHOTS,
 };
 
 export default config;

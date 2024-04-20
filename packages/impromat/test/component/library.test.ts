@@ -42,18 +42,30 @@ pageTest.describe("Library", () => {
     async ({ page, auth, libraryPage, libraryElementPage }) => {
       // given
       await auth.loginAsRandomUser();
-      // when
-      await libraryPage.searchForElement("freeze");
-      await libraryPage.scrollDownInElementsList();
-      await libraryPage.openElementCard("Freeze Tag-Exercise");
-      await libraryElementPage.backButtonLocator.click();
-      await page.waitForTimeout(500);
-      // then
-      await expect(page.getByText("Freeze Tag-Exercise")).toBeVisible();
-      await expect(page).toHaveScreenshot({
-        animations: "disabled",
-        fullPage: true,
+      const bottomLocator = page.locator('.virtuoso-list div[data-index="5"]');
+      await pageTest.step("should search for games", async () => {
+        // when
+        await libraryPage.searchForElement("#game");
+        // then
+        await expect(bottomLocator).not.toBeInViewport();
       });
+      await pageTest.step("should scroll to the bottom", async () => {
+        // when
+        await bottomLocator.scrollIntoViewIfNeeded();
+        await page.waitForTimeout(300);
+        // then
+        await expect(bottomLocator).toBeInViewport();
+      });
+      await pageTest.step(
+        "should navigate back and restore scroll position",
+        async () => {
+          // when
+          await bottomLocator.click();
+          await libraryElementPage.backButtonLocator.click();
+          // then
+          await expect(bottomLocator).toBeInViewport();
+        },
+      );
     },
   );
 });

@@ -1,12 +1,12 @@
-import Games from "@mui/icons-material/Games";
-import Sports from "@mui/icons-material/Sports";
-import Whatshot from "@mui/icons-material/Whatshot";
+import Delete from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
 import { useTranslation } from "react-i18next";
 
 interface ContainerProps {
@@ -16,6 +16,8 @@ interface ContainerProps {
    * @param searchText The search text that the user clicked on.
    */
   onSuggestionClick: (searchText: string) => void;
+  latestSearches: string[];
+  onClearHistory: () => void;
 }
 
 /**
@@ -23,48 +25,56 @@ interface ContainerProps {
  */
 export const SearchSuggestions: React.FC<ContainerProps> = ({
   onSuggestionClick,
+  latestSearches,
+  onClearHistory,
 }) => {
   const { t } = useTranslation("SearchSuggestions");
   return (
     <Box>
       <List>
-        {/* <ListSubheader disableSticky>Structure</ListSubheader> */}
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => onSuggestionClick(t("warmupSearch"))}>
-            <ListItemIcon>
-              <Whatshot sx={{ color: "orange" }} />
-            </ListItemIcon>
-            <ListItemText
-              primary={t("warmupTitle")}
-              secondary={t("warmupDescription")}
-            />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => onSuggestionClick(t("exerciseSearch"))}
-          >
-            <ListItemIcon>
-              <Sports sx={{ color: "blue" }} />
-            </ListItemIcon>
-            <ListItemText
-              primary={t("exerciseTitle")}
-              secondary={t("exerciseDescription")}
-            />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => onSuggestionClick(t("gameSearch"))}>
-            <ListItemIcon>
-              <Games sx={{ color: "green" }} />
-            </ListItemIcon>
-            <ListItemText
-              primary={t("gameTitle")}
-              secondary={t("gameDescription")}
-            />
-          </ListItemButton>
-        </ListItem>
+        {latestSearches.length > 0 && (
+          <ListSubheader sx={{ display: "flex" }}>
+            {t("history")}
+            <IconButton sx={{ marginLeft: "auto" }} onClick={onClearHistory}>
+              <Delete />
+            </IconButton>
+          </ListSubheader>
+        )}
+        {latestSearches.map((searchText) => (
+          <ListItem key={searchText} disablePadding>
+            <ListItemButton onClick={() => onSuggestionClick(searchText)}>
+              <ListItemText primary={searchText} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+        {latestSearches.length === 0 && (
+          <>
+            <ListSubheader>{t("suggestions")}</ListSubheader>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => onSuggestionClick(t("warmupSearch"))}
+              >
+                <ListItemText primary={t("warmupSearch")} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => onSuggestionClick(t("exerciseSearch"))}
+              >
+                <ListItemText primary={t("exerciseSearch")} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => onSuggestionClick(t("gameSearch"))}
+              >
+                <ListItemText primary={t("gameSearch")} />
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
       </List>
+      <Divider />
     </Box>
   );
 };

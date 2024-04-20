@@ -5,7 +5,6 @@ import { useHistory } from "react-router";
 import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { graphql } from "../../graphql-client";
-import { useDebounce } from "../../hooks/use-debounce";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useSearchParam } from "../../hooks/use-search-params";
 import { ROUTE_LIBRARY_SEARCH_PARAM } from "../../routes/shared-routes";
@@ -35,33 +34,20 @@ const MuiLibraryPageQuery = graphql(`
 export const LibraryPage: React.FC = () => {
   const { i18n } = useTranslation("LibraryPage");
 
-  const searchParameterFromUrl = useSearchParam(ROUTE_LIBRARY_SEARCH_PARAM);
-
-  const [searchText, setSearchText] = usePersistedState<string>(
-    "lastSearch",
-    "",
-    { forceValue: searchParameterFromUrl },
+  const searchTextFromUrlParam = useSearchParam(ROUTE_LIBRARY_SEARCH_PARAM);
+  const searchText = useMemo(
+    () => searchTextFromUrlParam ?? "",
+    [searchTextFromUrlParam],
   );
-  const [triggerNow, setTriggerNow] = useState<number>(0);
-  const debouncedSearchText = useDebounce(searchText, 500, triggerNow);
-
-  const history = useHistory();
-
+  const [latestSearches, setLatestSearches] = usePersistedState<string[]>(
+    "latestSearches",
+    [],
+  );
   useEffect(() => {
-    const params = new URLSearchParams();
-    params.append(ROUTE_LIBRARY_SEARCH_PARAM, searchText);
-    history.push({ search: params.toString() });
-  }, [history, searchText]);
-
-  const [loadedSearchTextFromParam, setLoadedSearchTextFromParam] =
-    useState<boolean>();
-
-  useEffect(() => {
-    if (searchParameterFromUrl && !loadedSearchTextFromParam) {
-      setSearchText(searchParameterFromUrl);
-      setLoadedSearchTextFromParam(true);
+    if (searchText && !latestSearches.includes(searchText)) {
+      setLatestSearches([searchText, ...latestSearches].slice(0, 5));
     }
-  }, [loadedSearchTextFromParam, searchParameterFromUrl, setSearchText]);
+  }, [latestSearches, setLatestSearches, searchText]);
 
   const [selectedLanguages, setSelectedLanguages] = usePersistedState<string[]>(
     "lastSelectedLanguages",
@@ -72,22 +58,16 @@ export const LibraryPage: React.FC = () => {
 
   const [searchElementsQueryResult, reexecuteSearchElementsQuery] = useQuery({
     query: MuiLibraryPageQuery,
-    pause: useMemo(() => !debouncedSearchText.length, [debouncedSearchText]),
     variables: {
       input: {
         languageCodes: selectedLanguages,
-        ...parseSearchInput(debouncedSearchText),
+        ...parseSearchInput(searchText ?? ""),
       },
       skip: pageNumber * itemsPerPage,
       take: itemsPerPage,
     },
   });
-  const elementsResult = useMemo(
-    () =>
-      !searchText.length ? [] : searchElementsQueryResult.data?.searchElements,
-    [searchElementsQueryResult.data?.searchElements, searchText],
-  );
-
+  const elementsResult = searchElementsQueryResult.data?.searchElements;
   const [menuDialogOpen, setMenuDialogOpen] = useState(false);
   const [scrollToTop, setScrollToTop] = useState(0);
 
@@ -98,7 +78,15 @@ export const LibraryPage: React.FC = () => {
 
   useEffect(() => {
     resetScroll();
-  }, [searchText, selectedLanguages, resetScroll]);
+  }, [selectedLanguages, resetScroll, searchText]);
+
+  const history = useHistory();
+
+  const onSearchTextChange = (searchText: string) => {
+    const params = new URLSearchParams();
+    params.append(ROUTE_LIBRARY_SEARCH_PARAM, searchText);
+    history.push({ search: params.toString() });
+  };
 
   return (
     <Box
@@ -110,9 +98,6 @@ export const LibraryPage: React.FC = () => {
       }}
     >
       <LibraryPageAppBar
-        searchText={searchText}
-        setSearchText={setSearchText}
-        onSearch={() => setTriggerNow((current) => current + 1)}
         queryIsFetching={searchElementsQueryResult.fetching}
         selectedLanguages={selectedLanguages}
         setSelectedLanguages={setSelectedLanguages}
@@ -128,13 +113,16 @@ export const LibraryPage: React.FC = () => {
         <NewElementButton />
       </IsLoggedIn>
       <LibraryElements
+        searchText={searchText}
+        latestSearches={latestSearches}
         pageNumber={pageNumber}
-        onSearchTextChange={setSearchText}
         setPageNumber={setPageNumber}
         scrollToTop={scrollToTop}
         elementSearchResultFragments={elementsResult}
         isQueryStale={searchElementsQueryResult.stale}
         isQueryFetching={searchElementsQueryResult.fetching}
+        onSearchTextChange={onSearchTextChange}
+        onClearHistory={() => setLatestSearches([])}
       ></LibraryElements>
     </Box>
   );
