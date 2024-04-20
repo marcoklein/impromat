@@ -1,5 +1,10 @@
-import { Brush, Edit, Public } from "@mui/icons-material";
-import { Button, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import Brush from "@mui/icons-material/Brush";
+import Edit from "@mui/icons-material/Edit";
+import Public from "@mui/icons-material/Public";
+import Button from "@mui/material/Button";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import { Link, NavLink } from "react-router-dom";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { ElementVisibility } from "../graphql-client/graphql";

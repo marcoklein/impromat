@@ -97,6 +97,7 @@ export default {
     Retry: "Retry",
   },
   LibraryPageAppBar: {
+    search: "Search",
     searchPlaceholder: "What are you looking for?",
     searchAriaLabel: "search impromat elements",
   },

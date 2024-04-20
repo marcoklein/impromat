@@ -1,5 +1,5 @@
-import Container from "@mui/material/Container";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
+import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { FragmentType, getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
@@ -87,36 +87,38 @@ export const LibraryElements: React.FC<ContainerProps> = ({
   const showSearchSuggestions = !elements?.length || !searchText.length;
 
   return (
-    <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
-      <VirtualCardGrid
-        headerElement={
-          showSearchSuggestions ? (
+    <VirtualCardGrid
+      headerElement={
+        showSearchSuggestions ? (
+          <ResponsiveContainer>
             <SearchSuggestions
               onSuggestionClick={onSearchTextChange}
               latestSearches={latestSearches}
               onClearHistory={onClearHistory}
             />
-          ) : undefined
+          </ResponsiveContainer>
+        ) : undefined
+      }
+      scrollStoreKey="search-element-tab-component"
+      isFetching={isQueryFetching || isQueryStale}
+      scrollToTop={scrollToTop}
+      endReached={() => {
+        logger("end reached, queryResult.stale=%s", isQueryStale);
+        if (!isQueryStale) {
+          setPageNumber((currentPageNumber) => currentPageNumber + 1);
+          logger("setting page number to %s", pageNumber + 1);
         }
-        scrollStoreKey="search-element-tab-component"
-        isFetching={isQueryFetching || isQueryStale}
-        scrollToTop={scrollToTop}
-        endReached={() => {
-          logger("end reached, queryResult.stale=%s", isQueryStale);
-          if (!isQueryStale) {
-            setPageNumber((currentPageNumber) => currentPageNumber + 1);
-            logger("setting page number to %s", pageNumber + 1);
-          }
-        }}
-        items={elements ?? []}
-        itemContent={(_index, searchResult) => (
+      }}
+      items={elements ?? []}
+      itemContent={(_index, searchResult) => (
+        <ResponsiveContainer>
           <ElementPreviewCard
             routerLink={routeLibraryElement(searchResult.element.id)}
             elementFragment={searchResult.element}
             elementSearchResultFragment={searchResult}
           ></ElementPreviewCard>
-        )}
-      ></VirtualCardGrid>
-    </Container>
+        </ResponsiveContainer>
+      )}
+    ></VirtualCardGrid>
   );
 };
