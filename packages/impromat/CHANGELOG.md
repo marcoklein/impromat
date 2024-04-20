@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.68.0
+
+### Minor Changes
+
+- 38f370a: Replace virtual grid to render workshops and elements with a list to introduce an easier layout for rendering larger element and workshop cards
+- 38f370a: Search on active user input to make experience consistent
+- 38f370a: Update search parameter in url to allow sharable searches
+- 38f370a: Show latest searches in library page
+
+### Patch Changes
+
+- impromat-api@0.29.2
+
 ## 0.67.1
 
 ### Patch Changes

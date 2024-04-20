@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.1
+
+### Patch Changes
+
+- 22ae4b3: Extend typings with loaded translations and card data
+
 ## 0.6.0
 
 ### Minor Changes
