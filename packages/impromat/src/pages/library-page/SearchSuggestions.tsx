@@ -35,7 +35,13 @@ export const SearchSuggestions: React.FC<ContainerProps> = ({
         {latestSearches.length > 0 && (
           <ListSubheader sx={{ display: "flex" }}>
             {t("history")}
-            <IconButton sx={{ marginLeft: "auto" }} onClick={onClearHistory}>
+            <IconButton
+              sx={{ marginLeft: "auto" }}
+              onClick={() => {
+                onSuggestionClick("");
+                onClearHistory();
+              }}
+            >
               <Delete />
             </IconButton>
           </ListSubheader>

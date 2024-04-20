@@ -91,6 +91,7 @@ export default {
     Retry: "Erneut versuchen",
   },
   LibraryPageAppBar: {
+    search: "Suchen",
     searchPlaceholder: "Wonach suchst du?",
     searchAriaLabel: "suche nach Elementen",
   },
