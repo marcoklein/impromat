@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.69.0
+
+### Minor Changes
+
+- 3a9b78b: Switch UI of search bar to be responsive
+
 ## 0.68.0
 
 ### Minor Changes
