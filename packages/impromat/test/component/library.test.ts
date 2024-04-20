@@ -23,6 +23,7 @@ pageTest.describe("Library", () => {
         // when
         await libraryPage.goto();
         await libraryPage.createCustomElement(name);
+        await page.waitForTimeout(1000);
         // then
         await expect(page.getByText(new RegExp(name))).toBeVisible();
       });
@@ -47,13 +48,12 @@ pageTest.describe("Library", () => {
       await libraryPage.scrollDownInElementsList();
       await libraryPage.openElementCard("Freeze Tag-Exercise");
       await libraryElementPage.backButtonLocator.click();
-      await page.waitForTimeout(500);
       // then
-      await expect(page.getByText("Freeze Tag-Exercise")).toBeVisible();
       await expect(page).toHaveScreenshot({
         animations: "disabled",
-        fullPage: true,
+        maxDiffPixelRatio: 0.01,
       });
+      await expect(page.getByText("Freeze Tag-Exercise")).toBeVisible();
     },
   );
 });

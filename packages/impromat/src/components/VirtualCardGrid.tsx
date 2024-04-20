@@ -157,6 +157,7 @@ export const VirtualCardGrid = <ItemData, Context>({
       endReached={() => endReached && endReached()}
       overscan={200}
       data={items}
+      className="virtuoso-list"
       components={{
         Footer: () =>
           isFetching ? (

@@ -40,9 +40,9 @@ export class LibraryDevPage extends DevPage {
   }
 
   async scrollDownInElementsList() {
-    const lastListItem = this.page
-      .locator(".list-class-name>div") // .item-class-name
-      .nth(-1);
+    const lastListItem = this.page.locator(
+      '.virtuoso-list div[data-index="5"]',
+    );
     await lastListItem.scrollIntoViewIfNeeded();
     await this.page.waitForTimeout(300);
   }
