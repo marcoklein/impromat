@@ -87,38 +87,36 @@ export const LibraryElements: React.FC<ContainerProps> = ({
   const showSearchSuggestions = !elements?.length || !searchText.length;
 
   return (
-    <VirtualCardGrid
-      headerElement={
-        showSearchSuggestions ? (
-          <ResponsiveContainer>
+    <ResponsiveContainer>
+      <VirtualCardGrid
+        headerElement={
+          showSearchSuggestions ? (
             <SearchSuggestions
               onSuggestionClick={onSearchTextChange}
               latestSearches={latestSearches}
               onClearHistory={onClearHistory}
             />
-          </ResponsiveContainer>
-        ) : undefined
-      }
-      scrollStoreKey="search-element-tab-component"
-      isFetching={isQueryFetching || isQueryStale}
-      scrollToTop={scrollToTop}
-      endReached={() => {
-        logger("end reached, queryResult.stale=%s", isQueryStale);
-        if (!isQueryStale) {
-          setPageNumber((currentPageNumber) => currentPageNumber + 1);
-          logger("setting page number to %s", pageNumber + 1);
+          ) : undefined
         }
-      }}
-      items={elements ?? []}
-      itemContent={(_index, searchResult) => (
-        <ResponsiveContainer>
+        scrollStoreKey="search-element-tab-component"
+        isFetching={isQueryFetching || isQueryStale}
+        scrollToTop={scrollToTop}
+        endReached={() => {
+          logger("end reached, queryResult.stale=%s", isQueryStale);
+          if (!isQueryStale) {
+            setPageNumber((currentPageNumber) => currentPageNumber + 1);
+            logger("setting page number to %s", pageNumber + 1);
+          }
+        }}
+        items={elements ?? []}
+        itemContent={(_index, searchResult) => (
           <ElementPreviewCard
             routerLink={routeLibraryElement(searchResult.element.id)}
             elementFragment={searchResult.element}
             elementSearchResultFragment={searchResult}
           ></ElementPreviewCard>
-        </ResponsiveContainer>
-      )}
-    ></VirtualCardGrid>
+        )}
+      ></VirtualCardGrid>
+    </ResponsiveContainer>
   );
 };
