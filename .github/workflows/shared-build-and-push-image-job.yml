@@ -50,6 +50,15 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
           labels: |
             ${{ github.ref != 'refs/heads/main' && 'development=1' }}
+      
+      - name: Construct app version
+        id: app-version
+        run: |
+          if [[ "${{ github.ref }}" != "refs/heads/main" ]]; then
+            echo "APP_VERSION=${{ steps.version.outputs.version }}-$RANDOM" >> $GITHUB_ENV
+          else
+            echo "APP_VERSION=${{ steps.version.outputs.version }}" >> $GITHUB_ENV
+          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -59,3 +68,10 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: ${{ inputs.dockerfilePath }}
+          # required by frontend
+          build-args: |
+            VITE_VERSION=${{ steps.app-version.outputs.app-version }}
+            VERSION=${{ steps.app-version.outputs.app-version }}
+
+    outputs:
+      image: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ inputs.packageName }}:${{ steps.version.outputs.version }}
