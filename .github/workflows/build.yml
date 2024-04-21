@@ -1,0 +1,19 @@
+name: Shared Test Job
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build impromat-api
+        run: docker build -t impromat-api${{github.sha}} -f packages/infrastructure/Dockerfile-impromat-api .
