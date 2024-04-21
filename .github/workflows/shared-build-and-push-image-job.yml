@@ -43,15 +43,13 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ inputs.packageName }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
+            type=ref,event=branch,prefix=branch-
+            type=ref,event=pr,prefix=pr-
             type=semver,pattern={{version}},value=$version,enable={{is_default_branch}}
             # set latest tag for main
             type=raw,value=latest,enable={{is_default_branch}}
           labels: |
-            development={{ github.is_default_branch }}
-
-
+            ${{ github.ref != 'refs/heads/main' && 'development=1' }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
