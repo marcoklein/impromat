@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.69.1
+
+### Patch Changes
+
+- 08c51c5: Move responsive container to outer component
+
 ## 0.69.0
 
 ### Minor Changes
