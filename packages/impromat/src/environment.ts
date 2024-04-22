@@ -7,8 +7,15 @@ function defaultIfEmpty(value: string | undefined, defaultValue: string) {
   return value;
 }
 
+function getApiUrl() {
+  const envApiUrl = import.meta.env.VITE_API_URL;
+  if (envApiUrl) return envApiUrl;
+
+  return `${window.location.protocol}//api.${window.location.hostname}`;
+}
+
 export const environment = {
-  API_URL: import.meta.env.VITE_API_URL ?? "https://api.impromat.app",
+  API_URL: getApiUrl(),
   VERSION: defaultIfEmpty(import.meta.env.VITE_VERSION, version),
 };
 console.log("Loaded environment", environment);
