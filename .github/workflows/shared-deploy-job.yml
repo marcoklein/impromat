@@ -8,7 +8,38 @@ on:
         type: string
 
 jobs:
+  build-impromat-app:
+    if: github.event.inputs.environment == 'development'
+    uses: ./.github/workflows/shared-build-and-push-image-job.yml
+    with:
+      packageName: impromat
+      dockerfilePath: packages/infrastructure/Dockerfile-impromat-app
+
+  build-impromat-api:
+    if: inputs.environment == 'development'
+    uses: ./.github/workflows/shared-build-and-push-image-job.yml
+    with:
+      packageName: impromat-api
+      dockerfilePath: packages/infrastructure/Dockerfile-impromat-api
+  
+  deploy-impromat-app:
+    if: inputs.environment == 'development'
+    runs-on: ubuntu-latest
+    needs:
+      - build-impromat-app
+    steps:
+      - run: ssh dokku@impromat.app git:from-image impromat-app-${{inputs.environment}} ${{ needs.build-impromat-app.outputs.image }}
+
+  deploy-impromat-api:
+    if: inputs.environment == 'development'
+    runs-on: ubuntu-latest
+    needs:
+      - build-impromat-api
+    steps:
+      - run: ssh dokku@impromat.app git:from-image impromat-api-${{inputs.environment}} ${{ needs.build-impromat-api.outputs.image }}
+
   deploy:
+    if: github.event.inputs.environment != 'development'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
