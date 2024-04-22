@@ -39,7 +39,7 @@ jobs:
       - run: ssh dokku@impromat.app git:from-image impromat-api-${{inputs.environment}} ${{ needs.build-impromat-api.outputs.image }}
 
   deploy:
-    if: github.event.inputs.environment != 'development'
+    if: inputs.environment != 'development'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
