@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-impromat-app:
-    if: github.event.inputs.environment == 'development'
+    if: inputs.environment == 'development'
     uses: ./.github/workflows/shared-build-and-push-image-job.yml
     with:
       packageName: impromat
