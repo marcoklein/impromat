@@ -33,6 +33,7 @@ jobs:
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - run: echo ${{ needs.build-impromat-app.outputs.image }}
       - run: ssh dokku@impromat.app git:from-image impromat-app-${{inputs.environment}} ${{ needs.build-impromat-app.outputs.image }}
 
   deploy-impromat-api:
