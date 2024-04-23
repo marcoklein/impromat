@@ -21,7 +21,7 @@ jobs:
         run: bash -e ./packages/infrastructure/configure-${{ inputs.environment }}.sh
         env:
           DEBUG: 1
-  
+
   get-affected-projects:
     runs-on: ubuntu-latest
     outputs:
@@ -38,10 +38,12 @@ jobs:
 
       - name: Should deploy impromat-app
         id: deploy_impromat_app
-        run: "echo deploy_impromat_app=$(nx show projects --affected | grep -E '^impromat$|^impromat-app-renderer$') >> $GITHUB_OUTPUT"
+        # run: "echo deploy_impromat_app=$(nx show projects --affected | grep -E '^impromat$|^impromat-app-renderer$') >> $GITHUB_OUTPUT"
+        run: 'echo deploy_impromat_app=yes >> $GITHUB_OUTPUT'
       - name: Should deploy impromat-api
         id: deploy_impromat_api
-        run: "echo deploy_impromat_api=$(nx show projects --affected | grep -E '^impromat-api$') >> $GITHUB_OUTPUT"
+        # run: "echo deploy_impromat_api=$(nx show projects --affected | grep -E '^impromat-api$') >> $GITHUB_OUTPUT"
+        run: 'echo deploy_impromat_app=yes >> $GITHUB_OUTPUT'
 
   build-impromat-app:
     if: needs.get-affected-projects.outputs.deploy_impromat_app != ''
@@ -62,7 +64,7 @@ jobs:
     with:
       packageName: impromat-api
       dockerfilePath: packages/infrastructure/Dockerfile-impromat-api
-  
+
   deploy-impromat-app:
     runs-on: ubuntu-latest
     needs:
