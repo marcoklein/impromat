@@ -20,6 +20,8 @@ jobs:
       contents: read
       packages: write
     timeout-minutes: 20
+    outputs:
+      image: ${{ steps.image_output.outputs.image }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,14 +39,17 @@ jobs:
         id: version
         run: echo "version=$(node -p 'require("./packages/${{ inputs.packageName }}/package.json").version')" >> $GITHUB_ENV
 
+      - id: image_prefix
+        run: echo "image_prefix=${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ inputs.packageName }}" >> $GITHUB_ENV
+
       - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ inputs.packageName }}
+          images: $image_prefix
           tags: |
-            type=ref,event=branch,prefix=branch-,postfix=-${{github.run_number}}
-            type=ref,event=pr,prefix=pr-,postfix=-${{github.run_number}}
+            type=ref,event=branch,prefix=$version-,suffix=-${{github.run_number}}
+            type=ref,event=pr,prefix=$version-pr-,suffix=-${{github.run_number}}
             type=semver,pattern={{version}},value=$version,enable={{is_default_branch}}
             # set latest tag for main
             type=raw,value=latest,enable={{is_default_branch}}
@@ -72,5 +77,6 @@ jobs:
             VITE_VERSION=$APP_VERSION
             VERSION=$APP_VERSION
 
-    outputs:
-      image: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ inputs.packageName }}:$version
+      - name: Set image output
+        id: image_output
+        run: echo "image=$image_prefix:$DOCKER_METADATA_OUTPUT_VERSION" >> $GITHUB_OUTPUT
