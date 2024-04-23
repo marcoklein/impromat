@@ -8,22 +8,35 @@ on:
         type: string
 
 jobs:
+  configure-environment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Write SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - name: Configure Enviroment
+        run: bash -e ./packages/infrastructure/configure-${{ inputs.environment }}.sh
+        env:
+          DEBUG: 1
+
   build-impromat-app:
-    if: inputs.environment == 'development'
+    needs: configure-environment
     uses: ./.github/workflows/shared-build-and-push-image-job.yml
     with:
       packageName: impromat
       dockerfilePath: packages/infrastructure/Dockerfile-impromat-app
 
   build-impromat-api:
-    if: inputs.environment == 'development'
+    needs: configure-environment
     uses: ./.github/workflows/shared-build-and-push-image-job.yml
     with:
       packageName: impromat-api
       dockerfilePath: packages/infrastructure/Dockerfile-impromat-api
   
   deploy-impromat-app:
-    if: inputs.environment == 'development'
     runs-on: ubuntu-latest
     needs:
       - build-impromat-app
@@ -36,7 +49,6 @@ jobs:
       - run: ssh dokku@impromat.app git:from-image impromat-app-${{inputs.environment}} ${{ needs.build-impromat-app.outputs.image }}
 
   deploy-impromat-api:
-    if: inputs.environment == 'development'
     runs-on: ubuntu-latest
     needs:
       - build-impromat-api
@@ -47,35 +59,3 @@ jobs:
           echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - run: ssh dokku@impromat.app git:from-image impromat-api-${{inputs.environment}} ${{ needs.build-impromat-api.outputs.image }}
-
-  configure-environment:
-    if: inputs.environment != 'development'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.sha }}
-      - name: Write SSH keys
-        run: |
-          install -m 600 -D /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
-          echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - name: Configure Enviroment
-        run: bash -e ./packages/infrastructure/configure-${{ inputs.environment }}.sh
-        env:
-          DEBUG: 1
-          # DEBUG_TRACE: 1
-      # - run: git remote add impromat-app-${{ inputs.environment }} dokku@impromat.app:impromat-app-${{ inputs.environment }}
-      # - run: git remote add impromat-api-${{ inputs.environment }} dokku@impromat.app:impromat-api-${{ inputs.environment }}
-      # - run: git push impromat-app-${{ inputs.environment }} ${{ github.sha }}:main --force
-      # - uses: EndBug/latest-tag@latest
-      #   with:
-      #     ref: impromat-app-${{ inputs.environment }}
-      # - run: git push impromat-api-${{ inputs.environment }} ${{ github.sha }}:refs/heads/main --force
-      # - uses: EndBug/latest-tag@latest
-      #   with:
-      #     ref: impromat-api-${{ inputs.environment }}
-      # - uses: EndBug/latest-tag@latest
-      #   with:
-      #     ref: ${{ inputs.environment }}-latest
