@@ -37,6 +37,5 @@ dokku enter ollama-$environmentName web ollama cp marco/em_german_mistral_v01 mi
 dokku resource:limit --cpu 1.5 ollama-$environmentName
 
 dokku ps:restart ollama-$environmentName
-dokku ps:stop ollama-$environmentName
 
 log "Ollama finished"
