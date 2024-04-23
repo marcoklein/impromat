@@ -16,6 +16,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  image_prefix: "<set in workflow>"
+  version: "<set in workflow>"
 
 jobs:
   build-and-push-image:
@@ -69,17 +71,17 @@ jobs:
             echo "APP_VERSION=$version" >> $GITHUB_ENV
           fi
 
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     push: true
-      #     tags: ${{ steps.meta.outputs.tags }}
-      #     labels: ${{ steps.meta.outputs.labels }}
-      #     file: ${{ inputs.dockerfilePath }}
-      #     build-args: |
-      #       VITE_VERSION=$APP_VERSION
-      #       VERSION=$APP_VERSION
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: ${{ inputs.dockerfilePath }}
+          build-args: |
+            VITE_VERSION=$APP_VERSION
+            VERSION=$APP_VERSION
 
       - name: Set image output
         id: image_output
