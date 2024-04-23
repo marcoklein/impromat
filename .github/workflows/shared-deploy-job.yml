@@ -43,7 +43,7 @@ jobs:
       - name: Should deploy impromat-api
         id: deploy_impromat_api
         # run: "echo deploy_impromat_api=$(nx show projects --affected | grep -E '^impromat-api$') >> $GITHUB_OUTPUT"
-        run: 'echo deploy_impromat_api="" >> $GITHUB_OUTPUT'
+        run: 'echo deploy_impromat_api=yes >> $GITHUB_OUTPUT'
 
   build-impromat-app:
     if: needs.get-affected-projects.outputs.deploy_impromat_app != ''

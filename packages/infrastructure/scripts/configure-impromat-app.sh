@@ -9,7 +9,6 @@ apiUrl=$3
 
 appPrefix=impromat-app
 appName=$appPrefix-$environmentName
-dockerfilePath="packages/infrastructure/Dockerfile-impromat-app"
 echo "environmentName=$environmentName"
 echo "appPrefix=$appPrefix"
 echo "appName=$appName"
