@@ -48,8 +48,8 @@ jobs:
         with:
           images: ${{ env.image_prefix }}
           tags: |
-            type=ref,event=branch,prefix=$version-,suffix=-${{github.run_number}}
-            type=ref,event=pr,prefix=$version-pr-,suffix=-${{github.run_number}}
+            type=ref,event=branch,prefix=${{ env.version }}-,suffix=-${{ github.run_number }}
+            type=ref,event=pr,prefix=${{ env.version }}-pr-,suffix=-${{ github.run_number }}
             type=semver,pattern={{version}},value=$version,enable={{is_default_branch}}
             # set latest tag for main
             type=raw,value=latest,enable={{is_default_branch}}
