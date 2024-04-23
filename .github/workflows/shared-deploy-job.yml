@@ -21,16 +21,43 @@ jobs:
         run: bash -e ./packages/infrastructure/configure-${{ inputs.environment }}.sh
         env:
           DEBUG: 1
+  
+  get-affected-projects:
+    runs-on: ubuntu-latest
+    outputs:
+      deploy_impromat_app: ${{ steps.deploy_impromat_app.outputs.deploy_impromat_app }}
+      deploy_impromat_api: ${{ steps.deploy_impromat_api.outputs.deploy_impromat_api }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.12.1
+          cache: yarn
+      - run: yarn install
+
+      - name: Should deploy impromat-app
+        id: deploy_impromat_app
+        run: "echo deploy_impromat_app=$(nx show projects --affected | grep -E '^impromat$|^impromat-app-renderer$') >> $GITHUB_OUTPUT"
+      - name: Should deploy impromat-api
+        id: deploy_impromat_api
+        run: "echo deploy_impromat_api=$(nx show projects --affected | grep -E '^impromat-api$') >> $GITHUB_OUTPUT"
 
   build-impromat-app:
-    needs: configure-environment
+    if: needs.get-affected-projects.outputs.deploy_impromat_app != ''
+    needs:
+      - configure-environment
+      - get-affected-projects
     uses: ./.github/workflows/shared-build-and-push-image-job.yml
     with:
       packageName: impromat
       dockerfilePath: packages/infrastructure/Dockerfile-impromat-app
 
   build-impromat-api:
-    needs: configure-environment
+    if: needs.get-affected-projects.outputs.deploy_impromat_api != ''
+    needs:
+      - configure-environment
+      - get-affected-projects
     uses: ./.github/workflows/shared-build-and-push-image-job.yml
     with:
       packageName: impromat-api
