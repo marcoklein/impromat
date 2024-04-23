@@ -46,7 +46,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: $image_prefix
+          images: ${{ env.image_prefix }}
           tags: |
             type=ref,event=branch,prefix=$version-,suffix=-${{github.run_number}}
             type=ref,event=pr,prefix=$version-pr-,suffix=-${{github.run_number}}
