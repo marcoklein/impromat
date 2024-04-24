@@ -25,25 +25,28 @@ jobs:
   get-affected-projects:
     runs-on: ubuntu-latest
     outputs:
-      deploy_impromat_app: ${{ steps.deploy_impromat_app.outputs.deploy_impromat_app }}
-      deploy_impromat_api: ${{ steps.deploy_impromat_api.outputs.deploy_impromat_api }}
+      # TODO activate conditional deployment if verified that it works
+      deploy_impromat_app: "yes" # ${{ steps.deploy_impromat_app.outputs.deploy_impromat_app }}
+      deploy_impromat_api: "yes" # ${{ steps.deploy_impromat_api.outputs.deploy_impromat_api }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.12.1
+          node-version: 21
           cache: yarn
       - run: yarn install
 
       - name: Should deploy impromat-app
         id: deploy_impromat_app
-        # run: "echo deploy_impromat_app=$(nx show projects --affected | grep -E '^impromat$|^impromat-app-renderer$') >> $GITHUB_OUTPUT"
-        run: 'echo deploy_impromat_app=yes >> $GITHUB_OUTPUT'
+        run: "echo deploy_impromat_app=$(nx show projects --affected | grep -E '^impromat$|^impromat-app-renderer$') >> $GITHUB_OUTPUT"
       - name: Should deploy impromat-api
         id: deploy_impromat_api
-        # run: "echo deploy_impromat_api=$(nx show projects --affected | grep -E '^impromat-api$') >> $GITHUB_OUTPUT"
-        run: 'echo deploy_impromat_api=yes >> $GITHUB_OUTPUT'
+        run: "echo deploy_impromat_api=$(nx show projects --affected | grep -E '^impromat-api$') >> $GITHUB_OUTPUT"
+      - name: Print results
+        run: |
+          echo "deploy_impromat_app=${{ steps.deploy_impromat_app.outputs.deploy_impromat_app }}"
+          echo "deploy_impromat_api=${{ steps.deploy_impromat_api.outputs.deploy_impromat_api }}"
 
   build-impromat-app:
     if: needs.get-affected-projects.outputs.deploy_impromat_app != ''
@@ -75,7 +78,15 @@ jobs:
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - run: ssh dokku@impromat.app git:from-image impromat-app-${{inputs.environment}} ${{ needs.build-impromat-app.outputs.image }}
+      - name: Deploy impromat.app
+        uses: nick-fields/retry@v2
+        with:
+          max_attempts: 2
+          retry_on: error
+          timeout_minutes: 15
+          command: |
+            ssh dokku@impromat.app git:from-image impromat-app-${{inputs.environment}} ${{ needs.build-impromat-app.outputs.image }}
+          
 
   deploy-impromat-api:
     runs-on: ubuntu-latest
