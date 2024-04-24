@@ -9,6 +9,10 @@ on:
       dockerfilePath:
         required: true
         type: string
+      isDevelopment:
+        required: false
+        type: boolean
+        default: false
     outputs:
       image:
         description: The image name with tag
@@ -18,6 +22,8 @@ env:
   REGISTRY: ghcr.io
   image_prefix: "<set in workflow>"
   version: "<set in workflow>"
+  DEVELOPMENT_SUFFIX: -${{github.run_number}}
+  IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' }}
 
 jobs:
   build-and-push-image:
@@ -56,11 +62,11 @@ jobs:
           tags: |
             type=ref,event=branch,prefix=${{ env.version }}-,suffix=-${{ github.run_number }}
             type=ref,event=pr,prefix=${{ env.version }}-pr-,suffix=-${{ github.run_number }}
-            type=semver,pattern={{version}},value=$version,enable={{is_default_branch}}
+            type=semver,pattern={{version}},value=$version,enable=${{ github.ref == 'refs/heads/main' }},suffix=${{ inputs.isDevelopment && env.DEVELOPMENT_SUFFIX }}
             # set latest tag for main
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest,enable=${{ env.IS_MAIN_BRANCH && !inputs.isDevelopment }}
           labels: |
-            ${{ github.ref != 'refs/heads/main' && 'development=1' }}
+            ${{ env.IS_MAIN_BRANCH && !inputs.isDevelopment && 'development=1' }}
 
       - name: Construct app version
         id: app-version
