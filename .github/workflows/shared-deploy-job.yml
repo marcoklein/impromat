@@ -26,8 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       # TODO activate conditional deployment if verified that it works
-      deploy_impromat_app: "yes" # ${{ steps.deploy_impromat_app.outputs.deploy_impromat_app }}
-      deploy_impromat_api: "yes" # ${{ steps.deploy_impromat_api.outputs.deploy_impromat_api }}
+      deploy_impromat_app: 'yes' # ${{ steps.deploy_impromat_app.outputs.deploy_impromat_app }}
+      deploy_impromat_api: 'yes' # ${{ steps.deploy_impromat_api.outputs.deploy_impromat_api }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
@@ -88,11 +88,10 @@ jobs:
           timeout_minutes: 15
           command: |
             ssh dokku@impromat.app git:from-image impromat-app-${{inputs.environment}} ${{ needs.build-impromat-app.outputs.image }}
-          
+
   deploy-impromat-api:
     runs-on: ubuntu-latest
     needs:
-      - build-impromat-api
       - deploy-impromat-app
     steps:
       - name: Setup Dokku SSH

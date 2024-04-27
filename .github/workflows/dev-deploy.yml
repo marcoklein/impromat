@@ -2,6 +2,7 @@ name: Development Deployment
 
 on:
   workflow_dispatch:
+  push:
 
 concurrency: development-environment
 
