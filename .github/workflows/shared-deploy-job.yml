@@ -80,7 +80,7 @@ jobs:
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - name: Deploy impromat.app
+      - name: Deploy impromat-app
         uses: nick-fields/retry@v2
         with:
           max_attempts: 2
@@ -92,11 +92,18 @@ jobs:
   deploy-impromat-api:
     runs-on: ubuntu-latest
     needs:
-      - deploy-impromat-app
+      - build-impromat-api
     steps:
       - name: Setup Dokku SSH
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.DOKKU_PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.IMPROMAT_SERVER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - run: ssh dokku@impromat.app git:from-image impromat-api-${{inputs.environment}} ${{ needs.build-impromat-api.outputs.image }}
+      - name: Deploy impromat-api
+        uses: nick-fields/retry@v2
+        with:
+          max_attempts: 2
+          retry_on: error
+          timeout_minutes: 15
+          command: |
+            ssh dokku@impromat.app git:from-image impromat-api-${{inputs.environment}} ${{ needs.build-impromat-api.outputs.image }}
