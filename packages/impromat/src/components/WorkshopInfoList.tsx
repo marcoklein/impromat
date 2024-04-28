@@ -1,4 +1,8 @@
-import { Event, Favorite, Link, Person, Public } from "@mui/icons-material";
+import Event from "@mui/icons-material/Event";
+import Favorite from "@mui/icons-material/Favorite";
+import Link from "@mui/icons-material/Link";
+import Person from "@mui/icons-material/Person";
+import Public from "@mui/icons-material/Public";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { InfoListItem } from "./InfoListItem";
@@ -37,6 +41,8 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
     [workshop],
   );
 
+  const showOwner = false;
+
   return (
     <>
       {workshop.isLiked && (
@@ -54,9 +60,7 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
               <Link color="success" />
             )
           }
-          displayText={
-            workshop.isListed ? "publicly shared" : "shared via link"
-          }
+          displayText={workshop.isListed ? "community" : "shared via link"}
         ></InfoListItem>
       )}
       {workshop.isOwnerMe && (
@@ -65,7 +69,7 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
           displayText="my workshop"
         ></InfoListItem>
       )}
-      {!workshop.isOwnerMe && (
+      {showOwner && !workshop.isOwnerMe && (
         <InfoListItem
           icon={<Person />}
           displayText={workshop.owner.name ?? "impromat"}

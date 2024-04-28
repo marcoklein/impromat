@@ -231,7 +231,7 @@ export default {
   WorkshopsPage: {
     communityWorkshopsTitle: "Community Workshops",
     communityWorkshopsDescription:
-      "Explore workshops created by the Impromat community. Use them for your next improv session or just get inspired by the structure and elements.",
+      "Explore workshops created by the Impromat community. Use them for your next improv session or get inspired by the structure and elements.",
     communityWorkshopsDescriptionSecondary:
       "Contribute your own workshop by logging in and sharing them in Impromat.",
     NewWorkshop: "New Workshop",
