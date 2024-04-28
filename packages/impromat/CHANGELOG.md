@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.70.0
+
+### Minor Changes
+
+- 15b591e: Switch starting page to workshops tab
+- 15b591e: Hide user name in workshop preview card
+
 ## 0.69.2
 
 ### Patch Changes
