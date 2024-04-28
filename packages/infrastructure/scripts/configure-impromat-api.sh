@@ -8,13 +8,11 @@ domain="$2"
 
 appPrefix=impromat-api
 appName=$appPrefix-$environmentName
-dockerfilePath="packages/infrastructure/Dockerfile-impromat-api"
 echo "appPrefix=$appPrefix"
 echo "appName=$appName"
 echo "domain=$domain"
 
 ensureAppExists $appName
-setCommonDockerOptions $appName $dockerfilePath
 configureDomain $appName $domain
 
 dbName="impromat-db-$environmentName"
