@@ -1,5 +1,12 @@
 # infrastructure
 
+## 0.9.0
+
+### Minor Changes
+
+- f1923be: Build and push Docker images from GitHub Actions to GitHub Artifactory
+- f1923be: Deploy via Docker images to server
+
 ## 0.8.0
 
 ### Minor Changes

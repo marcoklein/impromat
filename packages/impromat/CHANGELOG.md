@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.69.2
+
+### Patch Changes
+
+- f1923be: Construct API url from window location if environment variable VITE_API_URL is not set
+
 ## 0.69.1
 
 ### Patch Changes
