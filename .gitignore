@@ -18,6 +18,7 @@ junit-results.xml
 !.yarn/versions
 
 *.ignore.*
+*.bak
 
 
 # for zero-installs cache folder is commited
