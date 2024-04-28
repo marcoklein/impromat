@@ -98,7 +98,7 @@ export const RootNavigation: React.FC<ContainerProps> = () => {
   const logger = useComponentLogger("RootNavigation");
   const { t } = useTranslation("RootNavigation");
   const params = useParams<{ tabName: string }>();
-  const defaultTab = useMemo(() => ROOT_TABS.ELEMENTS, []);
+  const defaultTab = useMemo(() => ROOT_TABS.WORKSHOPS, []);
 
   const currentTab = params.tabName ?? defaultTab.route;
   useStateChangeLogger(params.tabName, "tabName", logger);
