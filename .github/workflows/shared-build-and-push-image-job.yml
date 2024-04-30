@@ -72,9 +72,9 @@ jobs:
         id: app-version
         run: |
           if [[ "${{ github.ref }}" != "refs/heads/main" ]]; then
-            echo "APP_VERSION=$version-$RANDOM" >> $GITHUB_ENV
+            echo "APP_VERSION=$version-$RANDOM" >> $GITHUB_OUTPUT
           else
-            echo "APP_VERSION=$version" >> $GITHUB_ENV
+            echo "APP_VERSION=$version" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and push Docker image
@@ -86,8 +86,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: ${{ inputs.dockerfilePath }}
           build-args: |
-            VITE_VERSION=$APP_VERSION
-            VERSION=$APP_VERSION
+            VITE_VERSION= ${{ steps.app-version.outputs.APP_VERSION }}
+            VERSION= ${{ steps.app-version.outputs.APP_VERSION }}
 
       - name: Set image output
         id: image_output
