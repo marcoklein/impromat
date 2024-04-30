@@ -86,8 +86,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: ${{ inputs.dockerfilePath }}
           build-args: |
-            VITE_VERSION= ${{ steps.app-version.outputs.APP_VERSION }}
-            VERSION= ${{ steps.app-version.outputs.APP_VERSION }}
+            VERSION=${{ steps.app-version.outputs.APP_VERSION }}
 
       - name: Set image output
         id: image_output
