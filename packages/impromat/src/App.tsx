@@ -15,10 +15,10 @@ import {
 } from "./routes/library-routes";
 import {
   routeHome,
-  routeLibrary,
   routeRootNavigation,
   routeWorkshop,
   routeWorkshopElement,
+  routeWorkshops,
 } from "./routes/shared-routes";
 import { useLanguageUpdateEffect } from "./use-language-update-effect";
 
@@ -44,7 +44,7 @@ export const App: React.FC = () => {
       <BrowserRouter>
         <Box id="main" height="100%" display="flex" flexDirection="column">
           <Switch>
-            <Redirect path={"/"} exact to={routeLibrary()}></Redirect>
+            <Redirect path={"/"} exact to={routeWorkshops()}></Redirect>
             <Route
               path={routeWorkshopElement()}
               exact
