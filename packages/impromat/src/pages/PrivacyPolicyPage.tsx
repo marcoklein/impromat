@@ -1,4 +1,4 @@
-import { Button, Container } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
@@ -15,13 +15,15 @@ export const PrivacyPolicyPage: React.FC = () => {
 
   return (
     <PageScaffold title={t("Privacy Policy", { ns: "common" })} backButton>
-      <Container maxWidth="md" sx={{ overflow: "auto" }}>
+      <Container maxWidth="md" sx={{ overflow: "auto", py: 2 }}>
         {language === "en" && (
           <>
             <Button onClick={() => setLanguage("de")} variant="outlined">
               Switch to German Version
             </Button>
-            <ReactMarkdown>{privacyPolicyMarkdownEn}</ReactMarkdown>
+            <Typography>
+              <ReactMarkdown>{privacyPolicyMarkdownEn}</ReactMarkdown>
+            </Typography>
           </>
         )}
         {language === "de" && (
@@ -29,7 +31,9 @@ export const PrivacyPolicyPage: React.FC = () => {
             <Button onClick={() => setLanguage("en")} variant="outlined">
               {t("switchToEnglishVersion")}
             </Button>
-            <ReactMarkdown>{privacyPolicyMarkdownDe}</ReactMarkdown>
+            <Typography>
+              <ReactMarkdown>{privacyPolicyMarkdownDe}</ReactMarkdown>
+            </Typography>
           </>
         )}
       </Container>
