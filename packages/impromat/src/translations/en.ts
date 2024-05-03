@@ -38,9 +38,11 @@ export default {
   LoginPage: {
     "sign in to access impromat":
       "Sign in to create and share your own workshops and elements.",
-    "agree to privacy policy":
-      "By signing in you agree to the <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>. Your improv data is not shared with Google and safely hosted on a server based in Germany.",
     learnMore: "Learn more",
+  },
+  LoginSection: {
+    agreeToPrivacyPolicy:
+      "By signing in you agree to the <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>. Your improv data is not shared with Google and safely hosted on a server based in Germany.",
   },
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
@@ -239,6 +241,11 @@ export default {
     notLoggedIn:
       "Login to see workshops. We are working on making workshops visible without logging in.",
     gotoLogin: "Go to Login",
+  },
+  LoginCard: {
+    title: "Login to join the impromat.app community.",
+    subtitle:
+      "We are just starting impromat.app! Login to create your own workshops, share them with the improv community and be part of the improv movement.",
   },
   WorkshopOptionsMenu: {
     SetDate: "Set Date",

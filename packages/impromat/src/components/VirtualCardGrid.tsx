@@ -6,7 +6,6 @@ import { APP_LOCAL_STORAGE_PREFIX } from "../app-local-storage-prefix";
 import { useComponentLogger } from "../hooks/use-component-logger";
 import { usePersistedState } from "../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../hooks/use-state-change-logger";
-import { LoadingCard } from "./LoadingCard";
 
 const MAX_SCROLL_RESTORE_TIME_MS = 200;
 
@@ -41,11 +40,20 @@ interface ContainerProps<ItemData, Context> {
    * Grid scrolls to top if this value changes.
    */
   scrollToTop?: number;
+  /**
+   * The header element to render.
+   */
   headerElement?: JSX.Element;
+  /**
+   * The footer element to render.
+   */
+  footerElement?: JSX.Element;
 }
 
 /**
- * Grid helper for rendering `PreviewCard`s with virtual scrolling support.
+ * Virtualized list of items.
+ *
+ * Automatically saves and restores the scroll position.
  */
 export const VirtualCardGrid = <ItemData, Context>({
   scrollStoreKey,
@@ -56,6 +64,7 @@ export const VirtualCardGrid = <ItemData, Context>({
   isFetching,
   scrollToTop,
   headerElement,
+  footerElement,
 }: ContainerProps<ItemData, Context>) => {
   const logger = useComponentLogger("VirtualCardGrid");
   const virtuosoRef = useRef<VirtuosoHandle>(null);
@@ -172,20 +181,11 @@ export const VirtualCardGrid = <ItemData, Context>({
               <CircularProgress />
             </Box>
           ) : (
-            <></>
+            footerElement || null
           ),
-        ScrollSeekPlaceholder: (props) => (
-          <Box sx={{ height: props.height }}>
-            <LoadingCard></LoadingCard>
-          </Box>
-        ),
         Header: () => headerElement || null,
       }}
       itemContent={itemContent}
-      scrollSeekConfiguration={{
-        enter: (velocity) => Math.abs(velocity) > 500,
-        exit: (velocity) => Math.abs(velocity) < 30,
-      }}
     />
   );
 };

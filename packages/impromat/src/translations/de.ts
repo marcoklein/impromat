@@ -1,5 +1,3 @@
-import { ImpromatHero } from "../components/ImpromatHero";
-
 /* eslint-disable import/no-anonymous-default-export */
 export default {
   common: {
@@ -39,9 +37,11 @@ export default {
   LoginPage: {
     "sign in to access impromat":
       "Melde dich an, um eigene Workshops und Elemente zu erstellen und zu teilen.",
-    "agree to privacy policy":
-      "Durch die Anmeldung stimmst du der <PrivacyPolicyLink>Datenschutzerklärung</PrivacyPolicyLink> zu. Deine Impro-Daten werden nicht mit Google geteilt und sicher auf einem Server in Deutschland gespeichert.",
     learnMore: "Mehr erfahren",
+  },
+  LoginSection: {
+    agreeToPrivacyPolicy:
+      "Durch die Anmeldung stimmst du der <PrivacyPolicyLink>Datenschutzerklärung</PrivacyPolicyLink> zu. Deine Impro-Daten werden nicht mit Google geteilt und sicher auf einem Server in Deutschland gespeichert.",
   },
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
@@ -239,6 +239,11 @@ export default {
     notLoggedIn:
       "Melde dich an, um Workshops zu sehen. Wir arbeiten daran Workshops auch ohne Anmeldung sichtbar zu machen.",
     gotoLogin: "Zur Anmeldung",
+  },
+  LoginCard: {
+    title: "Melde dich an, um der impromat.app Gemeinschaft beizutreten.",
+    subtitle:
+      "Wir starten gerade impromat.app! Melde dich an, um deine eigenen Workshops zu erstellen, sie mit der Impro-Gemeinschaft zu teilen und Teil der Impro-Bewegung zu sein.",
   },
   WorkshopOptionsMenu: {
     SetDate: "Datum des Workshops",

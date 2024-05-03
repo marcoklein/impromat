@@ -16,6 +16,7 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { CreateWorkshopDialog } from "../library/CreateWorkshopDialog";
+import { LoginCard } from "./components/LoginCard";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 
@@ -108,6 +109,13 @@ export const WorkshopsPage: React.FC = () => {
                 ></WorkshopPreviewCard>
               </Container>
             )}
+            footerElement={
+              <IsNotLoggedIn>
+                <Container maxWidth="sm" sx={{ p: 0 }}>
+                  <LoginCard />
+                </Container>
+              </IsNotLoggedIn>
+            }
           />
         ) : (
           <IsLoggedIn>
