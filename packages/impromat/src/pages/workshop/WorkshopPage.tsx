@@ -8,13 +8,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import {
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -99,16 +93,6 @@ export const WorkshopPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const CanEdit: React.FC<PropsWithChildren> = useCallback(
-    ({ children }) => {
-      if (!workshop?.canEdit) {
-        return null;
-      }
-      return <>{children}</>;
-    },
-    [workshop],
-  );
-
   return (
     <PageScaffold
       backButton
@@ -122,20 +106,22 @@ export const WorkshopPage: React.FC = () => {
                 <WorkshopLikeIconButton workshopFragment={workshop} />
               </IsLoggedIn>
               <ShareButton />
-              <CanEdit>
-                <WorkshopSharingButton workshopFragment={workshop} />
-                <OptionsButton
-                  ref={menuButtonRef}
-                  onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
-                />
-                <WorkshopOptionsMenu
-                  goBackAfterDeletion
-                  workshopFragment={workshop}
-                  isMenuOpen={isMenuOpen}
-                  onIsMenuOpenChange={setIsMenuOpen}
-                  menuButtonRef={menuButtonRef}
-                ></WorkshopOptionsMenu>
-              </CanEdit>
+              {workshop.canEdit && (
+                <>
+                  <WorkshopSharingButton workshopFragment={workshop} />
+                  <OptionsButton
+                    ref={menuButtonRef}
+                    onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+                  />
+                  <WorkshopOptionsMenu
+                    goBackAfterDeletion
+                    workshopFragment={workshop}
+                    isMenuOpen={isMenuOpen}
+                    onIsMenuOpenChange={setIsMenuOpen}
+                    menuButtonRef={menuButtonRef}
+                  ></WorkshopOptionsMenu>
+                </>
+              )}
             </>
           )}
         </>
@@ -151,8 +137,8 @@ export const WorkshopPage: React.FC = () => {
             alignItems: "end",
           }}
         >
-          {workshop && (
-            <CanEdit>
+          {workshop && workshop.canEdit && (
+            <>
               <Fab
                 color="secondary"
                 onClick={() => setIsCreateSectionDialogOpen(true)}
@@ -183,7 +169,7 @@ export const WorkshopPage: React.FC = () => {
               >
                 <ElementsIcon />
               </Fab>
-            </CanEdit>
+            </>
           )}
         </Box>
         {workshop && (

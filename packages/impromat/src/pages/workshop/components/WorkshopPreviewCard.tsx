@@ -26,6 +26,7 @@ import {
 import { routeWorkshop } from "../../../routes/shared-routes";
 import { WorkshopLikeIconButton } from "./WorkshopLikeButton";
 import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
+import { IsLoggedIn } from "../../../components/IsLoggedIn";
 
 const WorkshopPreviewItem_WorkshopFragment = graphql(`
   fragment WorkshopPreviewItem_Workshop on Workshop {
@@ -105,9 +106,9 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
       </CardActionArea>
       <CardActions>
         <Box sx={{ marginLeft: "auto" }}>
-          <CanEdit>
+          <IsLoggedIn>
             <WorkshopLikeIconButton workshopFragment={workshop} />
-          </CanEdit>
+          </IsLoggedIn>
           <ShareButton urlToShare={routeWorkshop(workshop.id)} />
           <CanEdit>
             <WorkshopOptionsMenu

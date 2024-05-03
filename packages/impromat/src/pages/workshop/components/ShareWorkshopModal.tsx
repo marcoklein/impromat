@@ -76,7 +76,10 @@ export const ShareWorkshopModal: React.FC<ComponentProps> = ({
       title={t("ShareWorkshop")}
     >
       <DialogContent>
-        <ListItemButton onClick={() => onPublicClick(!workshop.isPublic)}>
+        <ListItemButton
+          onClick={() => onPublicClick(!workshop.isPublic)}
+          disabled={workshop.isListed}
+        >
           <ListItemIcon>
             <Checkbox
               checked={workshop.isPublic ?? false}
