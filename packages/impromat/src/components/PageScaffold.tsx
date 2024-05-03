@@ -9,7 +9,9 @@ interface ContainerProps extends PropsWithChildren {
   title?: ReactNode;
   buttons?: JSX.Element | null;
   backButton?: boolean;
+  backUrl?: string;
   noHeader?: boolean;
+  prominent?: boolean;
 }
 
 /**
@@ -21,6 +23,8 @@ export const PageScaffold: React.FC<ContainerProps> = ({
   children,
   buttons,
   backButton,
+  backUrl,
+  prominent,
 }) => {
   return (
     <Box
@@ -38,22 +42,18 @@ export const PageScaffold: React.FC<ContainerProps> = ({
             zIndex: 100,
             display: "flex",
             flexDirection: "column",
-            position: "sticky",
           }}
           position="static"
           color="transparent"
+          elevation={prominent ? 0 : undefined}
         >
           <Toolbar
             sx={{
               display: "flex",
               alignItems: "center",
-              // px: {
-              //   xs: 1,
-              //   sm: 2,
-              // },
             }}
           >
-            {backButton && <BackButton></BackButton>}
+            {backButton && <BackButton url={backUrl}></BackButton>}
             <Typography
               variant="h6"
               component="h1"

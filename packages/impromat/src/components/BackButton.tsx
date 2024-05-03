@@ -4,14 +4,21 @@ import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 
-interface ContainerProps {}
+interface ContainerProps {
+  url?: string;
+}
 
-export const BackButton: React.FC<ContainerProps> = () => {
+export const BackButton: React.FC<ContainerProps> = ({ url }) => {
   const history = useHistory();
-  const goBack = useCallback(() => {
-    history.goBack();
-  }, [history]);
   const { t } = useTranslation("BackButton");
+
+  const goBack = useCallback(() => {
+    if (url) {
+      history.push(url);
+    } else {
+      history.goBack();
+    }
+  }, [history, url]);
 
   return (
     <IconButton

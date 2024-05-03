@@ -8,7 +8,13 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import { useEffect, useRef, useState } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -16,12 +22,13 @@ import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { OptionsButton } from "../../components/OptionsButton";
 import { PageScaffold } from "../../components/PageScaffold";
+import { ShareButton } from "../../components/ShareButton";
 import { ElementsIcon } from "../../components/icons/ElementsIcon";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
-import { routeLibrary } from "../../routes/shared-routes";
+import { routeLibrary, routeWorkshops } from "../../routes/shared-routes";
 import { TextFieldDialog } from "./components/TextFieldDialog";
 import { WorkshopContent } from "./components/WorkshopContent";
 import { WorkshopLikeIconButton } from "./components/WorkshopLikeButton";
@@ -92,37 +99,49 @@ export const WorkshopPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
+  const CanEdit: React.FC<PropsWithChildren> = useCallback(
+    ({ children }) => {
+      if (!workshop?.canEdit) {
+        return null;
+      }
+      return <>{children}</>;
+    },
+    [workshop],
+  );
+
   return (
     <PageScaffold
-      title={`Workshop ${workshop && !workshop.canEdit ? "(View)" : ""}`}
       backButton
+      backUrl={routeWorkshops()}
+      prominent
       buttons={
         <>
-          {workshop && isLoggedIn && (
-            <IsLoggedIn>
-              <WorkshopLikeIconButton workshopFragment={workshop} />
-            </IsLoggedIn>
-          )}
-          {workshop && workshop.canEdit && (
+          {workshop && (
             <>
-              <WorkshopSharingButton workshopFragment={workshop} />
-              <OptionsButton
-                ref={menuButtonRef}
-                onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
-              />
-              <WorkshopOptionsMenu
-                goBackAfterDeletion
-                workshopFragment={workshop}
-                isMenuOpen={isMenuOpen}
-                onIsMenuOpenChange={setIsMenuOpen}
-                menuButtonRef={menuButtonRef}
-              ></WorkshopOptionsMenu>
+              <IsLoggedIn>
+                <WorkshopLikeIconButton workshopFragment={workshop} />
+              </IsLoggedIn>
+              <ShareButton />
+              <CanEdit>
+                <WorkshopSharingButton workshopFragment={workshop} />
+                <OptionsButton
+                  ref={menuButtonRef}
+                  onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+                />
+                <WorkshopOptionsMenu
+                  goBackAfterDeletion
+                  workshopFragment={workshop}
+                  isMenuOpen={isMenuOpen}
+                  onIsMenuOpenChange={setIsMenuOpen}
+                  menuButtonRef={menuButtonRef}
+                ></WorkshopOptionsMenu>
+              </CanEdit>
             </>
           )}
         </>
       }
     >
-      <Box sx={{ overflowY: "auto", height: "100%" }}>
+      <Box sx={{ height: "100%" }}>
         <Box
           sx={{
             position: "absolute",
@@ -132,8 +151,8 @@ export const WorkshopPage: React.FC = () => {
             alignItems: "end",
           }}
         >
-          {workshop && workshop.canEdit && (
-            <>
+          {workshop && (
+            <CanEdit>
               <Fab
                 color="secondary"
                 onClick={() => setIsCreateSectionDialogOpen(true)}
@@ -164,7 +183,7 @@ export const WorkshopPage: React.FC = () => {
               >
                 <ElementsIcon />
               </Fab>
-            </>
+            </CanEdit>
           )}
         </Box>
         {workshop && (

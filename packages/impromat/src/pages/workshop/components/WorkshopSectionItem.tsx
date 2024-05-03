@@ -34,12 +34,14 @@ interface ContainerProps {
   workshopId: string;
   sectionFragment: FragmentType<typeof WorkshopSectionItem_WorkshopSection>;
   onCollapseClick: () => void;
+  canEdit: boolean;
 }
 
 export const WorkshopSectionItem: React.FC<ContainerProps> = ({
   workshopId,
   sectionFragment,
   onCollapseClick,
+  canEdit,
 }) => {
   const section = getFragmentData(
     WorkshopSectionItem_WorkshopSection,
@@ -103,19 +105,21 @@ export const WorkshopSectionItem: React.FC<ContainerProps> = ({
             }}
           />
         </ListItemButton>
-        <Box>
-          <OptionsButton
-            onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
-            ref={menuButtonRef}
-          />
-          <WorkshopSectionOptions
-            isMenuOpen={isMenuOpen}
-            onIsMenuOpenChange={setIsMenuOpen}
-            workshopId={workshopId}
-            workshopSectionFragment={section}
-            menuButtonRef={menuButtonRef}
-          />
-        </Box>
+        {canEdit && (
+          <Box>
+            <OptionsButton
+              onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+              ref={menuButtonRef}
+            />
+            <WorkshopSectionOptions
+              isMenuOpen={isMenuOpen}
+              onIsMenuOpenChange={setIsMenuOpen}
+              workshopId={workshopId}
+              workshopSectionFragment={section}
+              menuButtonRef={menuButtonRef}
+            />
+          </Box>
+        )}
       </Box>
       <Divider variant="fullWidth" />
     </Stack>

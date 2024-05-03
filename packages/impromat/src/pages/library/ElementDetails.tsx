@@ -62,7 +62,7 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
+  const [isSummaryExpanded, setIsSummaryExpanded] = useState(true);
 
   const element = getFragmentData(ElementDetails_Element, elementFragment);
 
@@ -135,7 +135,7 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
           <Typography>
             <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
           </Typography>
-          <Divider />
+          <Divider variant="middle" />
         </>
       )}
 

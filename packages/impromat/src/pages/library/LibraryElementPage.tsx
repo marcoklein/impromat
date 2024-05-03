@@ -1,10 +1,11 @@
-import { Box, Container, Fab, useTheme } from "@mui/material";
+import { Container, Fab, useTheme } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router";
 import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { PageScaffold } from "../../components/PageScaffold";
+import { ShareButton } from "../../components/ShareButton";
 import { AddToWorkshopIcon } from "../../components/icons/AddToWorkshopIcon";
 import { graphql } from "../../graphql-client";
 import { useAddNewElementToWorkshopSection } from "../../hooks/use-add-new-element-to-workshop";
@@ -14,7 +15,6 @@ import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/components/local-storage-w
 import { AddToWorkshopSelectDialog } from "./AddToWorkshopSelectDialog";
 import { ElementDetails } from "./ElementDetails";
 import { ElementLikeIconButton } from "./ElementLikeIconButton";
-import { ShareButton } from "../../components/ShareButton";
 
 const LibraryElementPageQuery = graphql(`
   query MuiLibraryElementQuery($elementId: ID!) {
@@ -81,8 +81,8 @@ export const LibraryElementPage: React.FC = () => {
 
   return (
     <PageScaffold
+      prominent
       backButton
-      title={t("Element")}
       buttons={
         <>
           <IsLoggedIn>
@@ -96,35 +96,33 @@ export const LibraryElementPage: React.FC = () => {
         </>
       }
     >
-      <Box sx={{ overflow: "auto" }}>
-        <IsLoggedIn>
-          <Fab
-            sx={{
-              position: "absolute",
-              bottom: theme.spacing(2),
-              right: theme.spacing(2),
-            }}
-            color="primary"
-            aria-label="add"
-            onClick={() => setIsAddToWorkshopDialogOpen(true)}
-          >
-            <AddToWorkshopIcon />
-          </Fab>
-          <AddToWorkshopSelectDialog
-            onWorkshopSelect={(workshop) => {
-              handleAddToWorkshop(workshop);
-            }}
-            workshopsFragment={elementPageQueryResult.data?.me?.workshops ?? []}
-            open={isAddToWorkshopDialogOpen}
-            handleClose={() => setIsAddToWorkshopDialogOpen(false)}
-          ></AddToWorkshopSelectDialog>
-        </IsLoggedIn>
-        {element && (
-          <Container maxWidth="sm" sx={{ py: 1 }}>
-            <ElementDetails elementFragment={element}></ElementDetails>
-          </Container>
-        )}
-      </Box>
+      <IsLoggedIn>
+        <Fab
+          sx={{
+            position: "absolute",
+            bottom: theme.spacing(2),
+            right: theme.spacing(2),
+          }}
+          color="primary"
+          aria-label="add"
+          onClick={() => setIsAddToWorkshopDialogOpen(true)}
+        >
+          <AddToWorkshopIcon />
+        </Fab>
+        <AddToWorkshopSelectDialog
+          onWorkshopSelect={(workshop) => {
+            handleAddToWorkshop(workshop);
+          }}
+          workshopsFragment={elementPageQueryResult.data?.me?.workshops ?? []}
+          open={isAddToWorkshopDialogOpen}
+          handleClose={() => setIsAddToWorkshopDialogOpen(false)}
+        ></AddToWorkshopSelectDialog>
+      </IsLoggedIn>
+      {element && (
+        <Container maxWidth="sm" sx={{ py: 1 }}>
+          <ElementDetails elementFragment={element}></ElementDetails>
+        </Container>
+      )}
     </PageScaffold>
   );
 };
