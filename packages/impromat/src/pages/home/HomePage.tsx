@@ -35,11 +35,7 @@ export const HomePage: React.FC = () => {
         pt: 5,
       }}
     >
-      <ImpromatHero
-        subtitle={t(
-          "App for planning, giving and sharing improvisational theatre workshops.",
-        )}
-      >
+      <ImpromatHero>
         {!isLoggedIn && (
           <Button
             variant="contained"

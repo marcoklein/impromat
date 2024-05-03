@@ -5,6 +5,7 @@ import Public from "@mui/icons-material/Public";
 import { useMemo } from "react";
 import { FragmentType, getFragmentData, graphql } from "../graphql-client";
 import { InfoListItem } from "./InfoListItem";
+import { IsLoggedIn } from "./IsLoggedIn";
 
 const WorkshopInfoList_Workshop = graphql(`
   fragment WorkshopInfoList_Workshop on Workshop {
@@ -51,16 +52,18 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
         ></InfoListItem>
       )} */}
       {workshop.isPublic && (
-        <InfoListItem
-          icon={
-            workshop.isListed ? (
-              <Public color="success" />
-            ) : (
-              <Link color="success" />
-            )
-          }
-          displayText={workshop.isListed ? "community" : "shared via link"}
-        ></InfoListItem>
+        <IsLoggedIn>
+          <InfoListItem
+            icon={
+              workshop.isListed ? (
+                <Public color="success" />
+              ) : (
+                <Link color="success" />
+              )
+            }
+            displayText={workshop.isListed ? "community" : "shared via link"}
+          ></InfoListItem>
+        </IsLoggedIn>
       )}
       {workshop.isOwnerMe && (
         <InfoListItem

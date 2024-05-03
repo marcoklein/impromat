@@ -1,19 +1,13 @@
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ImpromatLogoComponent } from "./ImpromatLogoComponent";
 
-interface ComponentProps extends React.PropsWithChildren {
-  title?: string;
-  subtitle?: string;
-}
+interface ComponentProps extends React.PropsWithChildren {}
 
-export const ImpromatHero: React.FC<ComponentProps> = ({
-  title,
-  subtitle,
-  children,
-}) => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+export const ImpromatHero: React.FC<ComponentProps> = ({ children }) => {
+  const { t } = useTranslation("ImpromatHero");
 
   return (
     <Box
@@ -26,28 +20,30 @@ export const ImpromatHero: React.FC<ComponentProps> = ({
       <Box
         sx={{
           textAlign: "center",
-          mt: 2,
+          my: 2,
           p: 1,
-          maxWidth: "768px",
+          maxWidth: "412px",
         }}
       >
         <Box
-          style={{
-            maxHeight: "20%",
-            maxWidth: "128px",
+          sx={{
+            maxWidth: {
+              xs: 72,
+              sm: 92,
+            },
             margin: "0 auto",
           }}
         >
           <ImpromatLogoComponent></ImpromatLogoComponent>
         </Box>
         <Typography
-          variant={isSmallScreen ? "h4" : "h2"}
           component="h1"
-          sx={{ fontWeight: "bold" }}
+          variant="h1"
+          sx={{ fontWeight: "bold", fontSize: { xs: "2rem", sm: "3rem" } }}
         >
-          {title ?? "impromat.app"}
+          {t("title")}
         </Typography>
-        {subtitle && <Typography>{subtitle}</Typography>}
+        <Typography>{t("subtitle")}</Typography>
         {children}
       </Box>
     </Box>

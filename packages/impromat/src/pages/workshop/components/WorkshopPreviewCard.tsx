@@ -7,9 +7,16 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/system/Box";
-import React, { PropsWithChildren, useMemo, useRef, useState } from "react";
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { NavLink } from "react-router-dom";
 import { OptionsButton } from "../../../components/OptionsButton";
+import { ShareButton } from "../../../components/ShareButton";
 import { WorkshopInfoList } from "../../../components/WorkshopInfoList";
 import {
   FragmentType,
@@ -19,7 +26,6 @@ import {
 import { routeWorkshop } from "../../../routes/shared-routes";
 import { WorkshopLikeIconButton } from "./WorkshopLikeButton";
 import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
-import { ShareButton } from "../../../components/ShareButton";
 
 const WorkshopPreviewItem_WorkshopFragment = graphql(`
   fragment WorkshopPreviewItem_Workshop on Workshop {
@@ -45,7 +51,6 @@ const WorkshopPreviewItem_WorkshopFragment = graphql(`
     ...WorkshopInfoList_Workshop
     ...WorkshopOptionsMenu_Workshop
     ...WorkshopLikeIconButton_Workshop
-    ...WorkshopSharingButton_Workshop
   }
 `);
 
@@ -72,11 +77,13 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const CanEdit: React.FC<PropsWithChildren> = ({ children }) =>
-    workshop.canEdit ? children : null;
+  const CanEdit: React.FC<PropsWithChildren> = useCallback(
+    ({ children }) => (workshop.canEdit ? children : null),
+    [workshop.canEdit],
+  );
 
   return (
-    <Card sx={{ m: 1 }}>
+    <Card sx={{ m: 1, position: "relative" }}>
       <CardActionArea component={NavLink} to={routeWorkshop(workshop.id)}>
         <CardContent>
           <CardHeader
@@ -109,6 +116,7 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
               onIsMenuOpenChange={setIsMenuOpen}
               menuButtonRef={menuButtonRef}
             />
+
             <OptionsButton
               ref={menuButtonRef}
               onClick={() => setIsMenuOpen((isOpen) => !isOpen)}

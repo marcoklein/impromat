@@ -105,6 +105,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
       if (goBackAfterDeletion) {
         history.push(routeWorkshops(), { direction: "back" });
       }
+      setIsWorkshopDeleteAlertOpen(false);
     });
   };
 

@@ -1,3 +1,5 @@
+import { ImpromatHero } from "../components/ImpromatHero";
+
 /* eslint-disable import/no-anonymous-default-export */
 export default {
   common: {
@@ -47,6 +49,10 @@ export default {
     accessImpromat: "Öffne Übungen & Spiele",
     Profile: "Profil",
     "Legal Notice": "Impressum",
+  },
+  ImpromatHero: {
+    title: "impromat.app",
+    subtitle: "Plane, leite und teile Improvisationstheater-Workshops.",
   },
   HomeContent: {
     "Improving Improv": "Dein Helfer fürs Improvisationstheater",
@@ -227,11 +233,6 @@ export default {
     notePlaceholder: "Notiz hinzufügen",
   },
   WorkshopsPage: {
-    communityWorkshopsTitle: "Gemeinschafts-Workshops",
-    communityWorkshopsDescription:
-      "Entdecke Workshops, die von der Impromat-Gemeinschaft erstellt wurden. Nutze sie für deine nächste Impro-Session oder lass dich von der Struktur und den Elementen inspirieren.",
-    communityWorkshopsDescriptionSecondary:
-      "Teile deine eigenen Workshop Ideen, um anderen zu helfen und die Impro-Gemeinschaft zu stärken.",
     NewWorkshop: "Neuer Workshop",
     FilterNoWorkshops: "Die momentane Filterauswahl enthält keine Workshops.",
     ClearFilters: "Filter zurücksetzen",

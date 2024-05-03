@@ -1,14 +1,10 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Container,
-  Fab,
-  Typography,
-} from "@mui/material";
+import Container from "@mui/material/Container";
+import Fab from "@mui/material/Fab";
+import { Box } from "@mui/system";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
+import { ImpromatHero } from "../../components/ImpromatHero";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { IsNotLoggedIn } from "../../components/IsNotLoggedIn";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
@@ -100,29 +96,9 @@ export const WorkshopsPage: React.FC = () => {
             items={availableWorkshops}
             headerElement={
               <IsNotLoggedIn>
-                <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
-                  <Card
-                    sx={{
-                      m: 1,
-                      border: "solid 1px",
-                      borderColor: "primary.main",
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="h6">
-                        {t("communityWorkshopsTitle")}
-                      </Typography>
-                      <Typography variant="body2">
-                        {t("communityWorkshopsDescription")}
-                      </Typography>
-                      <Box mt={1}>
-                        <Typography variant="body2">
-                          {t("communityWorkshopsDescriptionSecondary")}
-                        </Typography>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Container>
+                <Box my={2}>
+                  <ImpromatHero />
+                </Box>
               </IsNotLoggedIn>
             }
             itemContent={(_index, workshop) => (

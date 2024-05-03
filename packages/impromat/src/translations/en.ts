@@ -49,6 +49,10 @@ export default {
     Profile: "Profile",
     "Legal Notice": "Legal Notice",
   },
+  ImpromatHero: {
+    title: "impromat.app",
+    subtitle: "Plan, give and share improvisational theatre workshops.",
+  },
   HomeContent: {
     "Improving Improv": "Improving Improv",
     madeForImprovisers: `<b>Developed by improvisers — made for improvisers.</b> Impromat
@@ -229,11 +233,6 @@ export default {
     notePlaceholder: "Add note",
   },
   WorkshopsPage: {
-    communityWorkshopsTitle: "Community Workshops",
-    communityWorkshopsDescription:
-      "Explore workshops created by the Impromat community. Use them for your next improv session or get inspired by the structure and elements.",
-    communityWorkshopsDescriptionSecondary:
-      "Contribute your own workshop by logging in and sharing them in Impromat.",
     NewWorkshop: "New Workshop",
     FilterNoWorkshops: "The current filter selection returns no workshops",
     ClearFilters: "Clear Filters",
