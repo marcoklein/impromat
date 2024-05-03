@@ -92,7 +92,7 @@ export class WorkshopDevPage extends DevPage {
 
   async shareViaLink() {
     const page = this.page;
-    await page.getByRole("button", { name: "Share" }).click();
+    await page.getByRole("button", { name: "Share", exact: true }).click();
     await page.getByText("Anyone with the link can view").click();
     await page.getByRole("button", { name: "Copy workshop link" }).click();
   }
