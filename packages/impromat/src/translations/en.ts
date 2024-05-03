@@ -241,10 +241,6 @@ export default {
       "Login to see workshops. We are working on making workshops visible without logging in.",
     gotoLogin: "Go to Login",
   },
-  WorkshopPreviewCard: {
-    OpenWorkshop: "Open the workshop to add elements.",
-    Games: "Elements: ",
-  },
   WorkshopOptionsMenu: {
     SetDate: "Set Date",
     EnterDate: "Enter the date of your workshop:",

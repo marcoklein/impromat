@@ -1,5 +1,4 @@
 import Event from "@mui/icons-material/Event";
-import Favorite from "@mui/icons-material/Favorite";
 import Link from "@mui/icons-material/Link";
 import Person from "@mui/icons-material/Person";
 import Public from "@mui/icons-material/Public";
@@ -45,12 +44,12 @@ export const WorkshopInfoList: React.FC<ContainerProps> = ({
 
   return (
     <>
-      {workshop.isLiked && (
+      {/* {workshop.isLiked && (
         <InfoListItem
           icon={<Favorite color="like" />}
           displayText="liked"
         ></InfoListItem>
-      )}
+      )} */}
       {workshop.isPublic && (
         <InfoListItem
           icon={

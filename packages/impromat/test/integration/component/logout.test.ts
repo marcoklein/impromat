@@ -1,5 +1,5 @@
 import { Page, expect } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures.js";
+import { pageTest } from "../fixtures/page-fixtures.js";
 
 pageTest.describe("Logout Flow", () => {
   pageTest(

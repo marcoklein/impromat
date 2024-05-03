@@ -239,10 +239,6 @@ export default {
       "Melde dich an, um Workshops zu sehen. Wir arbeiten daran Workshops auch ohne Anmeldung sichtbar zu machen.",
     gotoLogin: "Zur Anmeldung",
   },
-  WorkshopPreviewCard: {
-    OpenWorkshop: "Öffne den Workshop, um Elemente hinzuzufügen.",
-    Games: "Elemente: ",
-  },
   WorkshopOptionsMenu: {
     SetDate: "Datum des Workshops",
     EnterDate: "Gebe ein Datum für deinen Workshop ein:",

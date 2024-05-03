@@ -27,6 +27,7 @@
     "@urql/exchange-graphcache": "^6.5.1",
     "@urql/exchange-retry": "^1.2.1",
     "avvvatars-react": "^0.4.2",
+    "boring-avatars": "^1.10.2",
     "dayjs": "^1.11.10",
     "debug": "^4.3.4",
     "graphql": "^16.6.0",

@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { pageTest } from "./fixtures/page-fixtures.js";
+import { pageTest } from "../fixtures/page-fixtures.js";
 
 pageTest.describe("Library", () => {
   pageTest(
@@ -42,6 +42,7 @@ pageTest.describe("Library", () => {
     async ({ page, auth, libraryPage, libraryElementPage }) => {
       // given
       await auth.loginAsRandomUser();
+      await libraryPage.goto();
       const bottomLocator = page.locator('.virtuoso-list div[data-index="5"]');
       await pageTest.step("should search for games", async () => {
         // when

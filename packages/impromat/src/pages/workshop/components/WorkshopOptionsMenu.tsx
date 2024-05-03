@@ -1,16 +1,12 @@
-import {
-  ContentCopy,
-  Delete,
-  Description,
-  Edit,
-  Event,
-} from "@mui/icons-material";
-import {
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import ContentCopy from "@mui/icons-material/ContentCopy";
+import Delete from "@mui/icons-material/Delete";
+import Description from "@mui/icons-material/Description";
+import Edit from "@mui/icons-material/Edit";
+import Event from "@mui/icons-material/Event";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
@@ -41,6 +37,9 @@ const WorkshopOptionsMenu_Workshop = graphql(`
 interface ContainerProps {
   workshopFragment: FragmentType<typeof WorkshopOptionsMenu_Workshop>;
   goBackAfterDeletion?: boolean;
+  isMenuOpen: boolean;
+  onIsMenuOpenChange: (isOpen: boolean) => void;
+  menuButtonRef: React.RefObject<HTMLElement>;
 }
 
 /**
@@ -49,14 +48,15 @@ interface ContainerProps {
 export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
   workshopFragment,
   goBackAfterDeletion,
+  isMenuOpen,
+  onIsMenuOpenChange,
+  menuButtonRef,
 }) => {
   const logger = useComponentLogger("WorkshopOptionsMenu");
   const workshop = getFragmentData(
     WorkshopOptionsMenu_Workshop,
     workshopFragment,
   );
-
-  const [isOpen, setIsOpen] = useState(false);
 
   const history = useHistory();
 
@@ -133,13 +133,14 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
     <>
       <ResponsiveOptions
         title={t("Options", { ns: "common" })}
-        open={isOpen}
-        onOpenChange={setIsOpen}
+        open={isMenuOpen}
+        onOpenChange={onIsMenuOpenChange}
+        menuButtonRef={menuButtonRef}
       >
         <List disablePadding>
           <ListItemButton
             onClick={() => {
-              setIsOpen(false);
+              onIsMenuOpenChange(false);
               setIsSetWorkshopDateDialogOpen(true);
             }}
           >
@@ -150,7 +151,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           </ListItemButton>
           <ListItemButton
             onClick={() => {
-              setIsOpen(false);
+              onIsMenuOpenChange(false);
               onDuplicateAndGotoWorkshop();
             }}
           >
@@ -161,7 +162,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           </ListItemButton>
           <ListItemButton
             onClick={() => {
-              setIsOpen(false);
+              onIsMenuOpenChange(false);
               setIsRenameWorkshopDialogOpen(true);
             }}
           >
@@ -172,7 +173,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           </ListItemButton>
           <ListItemButton
             onClick={() => {
-              setIsOpen(false);
+              onIsMenuOpenChange(false);
               setIsChangeDescriptionDialogOpen(true);
             }}
           >
@@ -189,7 +190,7 @@ export const WorkshopOptionsMenu: React.FC<ContainerProps> = ({
           </ListItemButton>
           <ListItemButton
             onClick={() => {
-              setIsOpen(false);
+              onIsMenuOpenChange(false);
               setIsWorkshopDeleteAlertOpen(true);
             }}
           >

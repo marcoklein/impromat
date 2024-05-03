@@ -2,8 +2,8 @@ import { expect } from "@playwright/test";
 import {
   blockImpromatApiRequests,
   unblockImpromatApiRequests,
-} from "./fixtures/block-api-requests.js";
-import { pageTest } from "./fixtures/page-fixtures.js";
+} from "../fixtures/block-api-requests.js";
+import { pageTest } from "../fixtures/page-fixtures.js";
 
 pageTest.describe("Workshops Errors Page", () => {
   // TODO disabled because of Refresher not working properly with grid

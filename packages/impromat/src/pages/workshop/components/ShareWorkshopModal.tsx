@@ -1,12 +1,11 @@
-import { Check, LinkOutlined } from "@mui/icons-material";
-import {
-  Checkbox,
-  DialogContent,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import Check from "@mui/icons-material/Check";
+import LinkOutlined from "@mui/icons-material/LinkOutlined";
+import Checkbox from "@mui/material/Checkbox";
+import DialogContent from "@mui/material/DialogContent";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DialogScaffold } from "../../../components/DialogScaffold";

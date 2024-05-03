@@ -1,21 +1,19 @@
-import { Logout } from "@mui/icons-material";
-import {
-  Button,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import Logout from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
-import Avvvatars from "avvvatars-react";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import Avatar from "boring-avatars";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -108,8 +106,9 @@ export const MySpacePage: React.FC = () => {
           <List sx={{ pt: 0 }}>
             <ListItem sx={{ pt: 0 }}>
               <ListItemIcon>
-                {/* eslint-disable-next-line react/style-prop-object */}
-                <Avvvatars value={queryUserName} size={40} style="shape" />
+                {queryUserName.length > 0 && (
+                  <Avatar name={queryUserName} size={40} variant={"beam"} />
+                )}
               </ListItemIcon>
               <UserNameTextField
                 queryUserName={queryUserName}

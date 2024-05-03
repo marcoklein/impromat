@@ -12039,6 +12039,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"boring-avatars@npm:^1.10.2":
+  version: 1.10.2
+  resolution: "boring-avatars@npm:1.10.2"
+  checksum: 887ac33237feb79f53681749439a5c3182727cc8953ff5a77d8301afcc4dc20e8f6fdd0b8bc631e55c5f5f623b2984a5c02002b44b65fa276131075a25531c6b
+  languageName: node
+  linkType: hard
+
 "boxen@npm:^7.0.0":
   version: 7.1.1
   resolution: "boxen@npm:7.1.1"
@@ -18128,6 +18135,7 @@ __metadata:
     "@vitejs/plugin-legacy": ^4.1.1
     "@vitejs/plugin-react": ^3.1.0
     avvvatars-react: ^0.4.2
+    boring-avatars: ^1.10.2
     concurrently: ^7.6.0
     dayjs: ^1.11.10
     debug: ^4.3.4

@@ -1,6 +1,15 @@
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { PreviewCard } from "../../../components/PreviewCard";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Box from "@mui/system/Box";
+import React, { PropsWithChildren, useMemo, useRef, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { OptionsButton } from "../../../components/OptionsButton";
 import { WorkshopInfoList } from "../../../components/WorkshopInfoList";
 import {
   FragmentType,
@@ -8,7 +17,9 @@ import {
   graphql,
 } from "../../../graphql-client";
 import { routeWorkshop } from "../../../routes/shared-routes";
+import { WorkshopLikeIconButton } from "./WorkshopLikeButton";
 import { WorkshopOptionsMenu } from "./WorkshopOptionsMenu";
+import { ShareButton } from "../../../components/ShareButton";
 
 const WorkshopPreviewItem_WorkshopFragment = graphql(`
   fragment WorkshopPreviewItem_Workshop on Workshop {
@@ -33,6 +44,8 @@ const WorkshopPreviewItem_WorkshopFragment = graphql(`
     }
     ...WorkshopInfoList_Workshop
     ...WorkshopOptionsMenu_Workshop
+    ...WorkshopLikeIconButton_Workshop
+    ...WorkshopSharingButton_Workshop
   }
 `);
 
@@ -55,36 +68,54 @@ export const WorkshopPreviewCard: React.FC<ContainerProps> = ({
       ),
     [workshop],
   );
-  const { t } = useTranslation("WorkshopPreviewCard");
 
-  const workshopContent = useMemo(() => {
-    const elementsText =
-      elementNames.length > 0
-        ? `${t("Games")}${elementNames.join(", ")}`
-        : t("OpenWorkshop");
-    if (workshop.description) {
-      return workshop.description + " " + elementsText;
-    }
-    return elementsText;
-  }, [workshop, elementNames, t]);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const CanEdit: React.FC<PropsWithChildren> = ({ children }) =>
+    workshop.canEdit ? children : null;
 
   return (
-    <PreviewCard
-      routerLink={routeWorkshop(workshop.id)}
-      infoListElement={
-        <WorkshopInfoList workshopFragment={workshop}></WorkshopInfoList>
-      }
-      title={workshop.name}
-      menuButtonElement={
-        <>
-          {workshop.canEdit && (
+    <Card sx={{ m: 1 }}>
+      <CardActionArea component={NavLink} to={routeWorkshop(workshop.id)}>
+        <CardContent>
+          <CardHeader
+            sx={{ pt: 0 }}
+            title={workshop.name}
+            subheader={workshop.description ?? undefined}
+          />
+          <List disablePadding dense>
+            {elementNames.map((elementName) => (
+              <ListItem key={elementName} sx={{ py: 0 }}>
+                <ListItemText primary={elementName} />
+              </ListItem>
+            ))}
+          </List>
+          <Box sx={{ px: 2, pb: 1, pt: 2 }}>
+            <WorkshopInfoList workshopFragment={workshop} />
+          </Box>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Box sx={{ marginLeft: "auto" }}>
+          <CanEdit>
+            <WorkshopLikeIconButton workshopFragment={workshop} />
+          </CanEdit>
+          <ShareButton urlToShare={routeWorkshop(workshop.id)} />
+          <CanEdit>
             <WorkshopOptionsMenu
               workshopFragment={workshop}
-            ></WorkshopOptionsMenu>
-          )}
-        </>
-      }
-      content={workshopContent}
-    ></PreviewCard>
+              isMenuOpen={isMenuOpen}
+              onIsMenuOpenChange={setIsMenuOpen}
+              menuButtonRef={menuButtonRef}
+            />
+            <OptionsButton
+              ref={menuButtonRef}
+              onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+            />
+          </CanEdit>
+        </Box>
+      </CardActions>
+    </Card>
   );
 };

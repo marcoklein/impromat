@@ -5,6 +5,7 @@ export class WorkshopsDevPage extends DevPage {
   readonly workshopNameInputLocator: Locator;
   readonly workshopCreateButtonLocator: Locator;
   readonly newWorkshopButtonLocator: Locator;
+  readonly url = "/nav/workshop";
 
   constructor(page: any) {
     super(page);
@@ -18,7 +19,7 @@ export class WorkshopsDevPage extends DevPage {
   }
 
   async goto() {
-    await this.page.goto(`/nav/workshop`);
+    await this.page.goto(this.url);
   }
 
   async addWorkshop(name: string = "Test Workshop") {

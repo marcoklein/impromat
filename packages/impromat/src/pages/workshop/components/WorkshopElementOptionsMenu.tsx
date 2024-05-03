@@ -1,10 +1,8 @@
-import { Remove } from "@mui/icons-material";
-import {
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import Remove from "@mui/icons-material/Remove";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ResponsiveOptions } from "../../../components/ResponsiveOptions";
@@ -16,6 +14,7 @@ interface ContainerProps {
   setIsOpen: (isOpen: boolean) => void;
   onRemoveClick: () => void;
   disabled?: boolean;
+  menuButtonRef: React.RefObject<HTMLElement>;
 }
 
 /**
@@ -25,7 +24,7 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
   setIsOpen,
   isOpen,
   onRemoveClick,
-  disabled,
+  menuButtonRef,
 }) => {
   const logger = useComponentLogger("WorkshopElementOptionsMenu");
   const [isRemoveAlertOpen, setIsRemoveAlertOpen] = useState(false);
@@ -37,6 +36,7 @@ export const WorkshopElementOptionsMenu: React.FC<ContainerProps> = ({
         title={t("Options", { ns: "common" })}
         open={isOpen}
         onOpenChange={setIsOpen}
+        menuButtonRef={menuButtonRef}
       >
         <List disablePadding>
           <ListItemButton

@@ -1,15 +1,16 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import {
-  Badge,
-  Box,
-  Divider,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-} from "@mui/material";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import Badge from "@mui/material/Badge";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import { useRef, useState } from "react";
+import { OptionsButton } from "../../../components/OptionsButton";
 import {
   FragmentType,
   getFragmentData,
@@ -58,6 +59,9 @@ export const WorkshopSectionItem: React.FC<ContainerProps> = ({
     transition,
   };
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
   return (
     <Stack
       component="li"
@@ -100,9 +104,16 @@ export const WorkshopSectionItem: React.FC<ContainerProps> = ({
           />
         </ListItemButton>
         <Box>
+          <OptionsButton
+            onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+            ref={menuButtonRef}
+          />
           <WorkshopSectionOptions
+            isMenuOpen={isMenuOpen}
+            onIsMenuOpenChange={setIsMenuOpen}
             workshopId={workshopId}
             workshopSectionFragment={section}
+            menuButtonRef={menuButtonRef}
           />
         </Box>
       </Box>

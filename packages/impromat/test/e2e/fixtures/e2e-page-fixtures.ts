@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { pageTest } from "../../component/fixtures/page-fixtures.js";
+import { pageTest } from "../../integration/fixtures/page-fixtures.js";
 import { changePageAuthenticationCookie } from "./change-page-authentication-cookie.js";
 
 declare const process: { env: Record<string, string | undefined> };

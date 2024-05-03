@@ -1,14 +1,13 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  Box,
-  Divider,
-  ListItemButton,
-  ListItemText,
-  Stack,
-} from "@mui/material";
-import { useState } from "react";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { OptionsButton } from "../../../components/OptionsButton";
 import {
   FragmentType,
   getFragmentData,
@@ -61,6 +60,7 @@ export const WorkshopElementItem: React.FC<ContainerProps> = ({
   };
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const elementOnRemoveClick = () => {
@@ -111,11 +111,16 @@ export const WorkshopElementItem: React.FC<ContainerProps> = ({
               }}
             />
           </ListItemButton>
+          <OptionsButton
+            ref={menuButtonRef}
+            onClick={() => setIsMenuOpen(true)}
+          />
           <WorkshopElementOptionsMenu
             disabled={isDragging}
             isOpen={isMenuOpen}
             setIsOpen={setIsMenuOpen}
             onRemoveClick={elementOnRemoveClick}
+            menuButtonRef={menuButtonRef}
           ></WorkshopElementOptionsMenu>
         </Box>
         <Divider variant="fullWidth" />
