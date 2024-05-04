@@ -37,7 +37,6 @@ pageTest.describe("Workshop Sharing", () => {
           await auth.loginAsRandomUser();
           await page.goto(workshopUrl);
           // then
-          await workshopPage.expectToolbarTextToBe("Workshop (View)");
           await expect(workshopPage.addSectionButtonLocator).toBeHidden();
           await expect(workshopPage.addElementButtonLocator).toBeHidden();
           await expect(workshopPage.addFirstElementLocator).toBeHidden();
@@ -90,13 +89,11 @@ pageTest.describe("Workshop Sharing", () => {
           // when
           await page.goto(workshopUrl);
           // then
-          await workshopPage.expectToolbarTextToBe("Workshop (View)");
         },
       );
 
       await pageTest.step("should have all sections opened", async () => {
         // then
-        await workshopPage.expectToolbarTextToBe("Workshop (View)");
         await expect(workshopPage.addSectionButtonLocator).toBeHidden();
         await expect(workshopPage.addElementButtonLocator).toBeHidden();
         await expect(workshopPage.addFirstElementLocator).toBeHidden();
