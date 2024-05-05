@@ -30,10 +30,6 @@ export const DialogScaffold: React.FC<ComponentProps> = ({
           component="h3"
           sx={{
             pb: 1,
-            flexShrink: 1,
-            overflowX: "auto",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
           }}
         >
           {title}

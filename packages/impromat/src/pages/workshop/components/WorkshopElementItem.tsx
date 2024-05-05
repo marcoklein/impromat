@@ -104,13 +104,6 @@ export const WorkshopElementItem: React.FC<ContainerProps> = ({
             <ListItemText
               primary={workshopElement.basedOn.name}
               secondary={workshopElement.note}
-              primaryTypographyProps={{
-                sx: {
-                  overflowX: "auto",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                },
-              }}
             />
           </ListItemButton>
           {canEdit && (

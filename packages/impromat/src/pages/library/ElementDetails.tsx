@@ -68,9 +68,6 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
 
   return (
     <Box>
-      <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-        {element.name}
-      </Typography>
       <Typography variant="caption">
         {element.tags.map((tag) => `#${tag.name}`).join(" ")}
       </Typography>
