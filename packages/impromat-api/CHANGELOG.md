@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.30.0
+
+### Minor Changes
+
+- 0425290: Redirect to specified url in state on login callback
+
 ## 0.29.2
 
 ### Patch Changes

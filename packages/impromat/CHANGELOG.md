@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.71.0
+
+### Minor Changes
+
+- 0425290: Open login dialog on like in workshop page for visitor
+- 0425290: Switch to boring avatars for the profile picture of user names
+- 0425290: Add prominent app bars for a more consistent visual experience
+- 0425290: Show Impromat hero in workshops page
+- 0425290: Switched to card layout for workshops to differentiate them visually from elements
+- 0425290: Show login button on bottom of Workshops for new users to easily get access
+
+### Patch Changes
+
+- 0425290: Fix typography in privacy policy, about and legal page
+- 0425290: Fix back navigation by providing the hierarchy of pages to back buttons
+- 0425290: Fixed sharing dialog of workshops
+- 46b572a: Hide expand button in section item of workshops for public users
+- 46b572a: Do show edit note dialog for users without editing rights on workshop
+- 0425290: Hide options for sections and elements for users that cannot edit the open workshop
+- 0425290: Disable scroll seek in virtual scroll to avoid loading card glitches
+- Updated dependencies [0425290]
+  - impromat-api@0.30.0
+
 ## 0.70.0
 
 ### Minor Changes
