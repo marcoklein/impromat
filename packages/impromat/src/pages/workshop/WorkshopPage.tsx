@@ -97,7 +97,8 @@ export const WorkshopPage: React.FC = () => {
     <PageScaffold
       backButton
       backUrl={routeWorkshops()}
-      prominent
+      title={workshop?.name}
+      activateOnScroll
       buttons={
         <>
           {workshop && (

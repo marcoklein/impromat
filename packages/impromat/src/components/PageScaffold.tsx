@@ -1,8 +1,9 @@
+import { useScrollTrigger } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import React, { PropsWithChildren, ReactNode } from "react";
+import React, { PropsWithChildren, ReactNode, useMemo } from "react";
 import { BackButton } from "./BackButton";
 
 interface ContainerProps extends PropsWithChildren {
@@ -11,7 +12,7 @@ interface ContainerProps extends PropsWithChildren {
   backButton?: boolean;
   backUrl?: string;
   noHeader?: boolean;
-  prominent?: boolean;
+  activateOnScroll?: boolean;
 }
 
 /**
@@ -24,10 +25,31 @@ export const PageScaffold: React.FC<ContainerProps> = ({
   buttons,
   backButton,
   backUrl,
-  prominent,
+  activateOnScroll,
 }) => {
+  const scrollTarget = React.useRef<HTMLElement>(null);
+
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 26,
+    target: scrollTarget.current ?? window,
+  });
+
+  const isProminent = useMemo(
+    () => !trigger && activateOnScroll,
+    [trigger, activateOnScroll],
+  );
+
+  const showTitle = activateOnScroll ? trigger : true;
+  const appBarColor = activateOnScroll
+    ? trigger
+      ? "inherit"
+      : "transparent"
+    : "transparent";
+
   return (
     <Box
+      ref={scrollTarget}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -43,9 +65,9 @@ export const PageScaffold: React.FC<ContainerProps> = ({
             display: "flex",
             flexDirection: "column",
           }}
-          position="static"
-          color="transparent"
-          elevation={prominent ? 0 : undefined}
+          position="sticky"
+          color={appBarColor}
+          elevation={!isProminent ? 4 : 0}
         >
           <Toolbar
             sx={{
@@ -64,8 +86,9 @@ export const PageScaffold: React.FC<ContainerProps> = ({
                 whiteSpace: "nowrap",
               }}
             >
-              {title}
+              {showTitle && title}
             </Typography>
+
             {buttons}
           </Toolbar>
         </AppBar>

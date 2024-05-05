@@ -24,6 +24,9 @@ export const GoogleSignInButton: React.FC<
           height: "30px",
           marginRight: "16px",
           backgroundColor: "#fff",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <img

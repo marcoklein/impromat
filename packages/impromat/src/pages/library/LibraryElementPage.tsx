@@ -20,6 +20,7 @@ const LibraryElementPageQuery = graphql(`
   query MuiLibraryElementQuery($elementId: ID!) {
     element(id: $elementId) {
       id
+      name
 
       ...ElementDetails_Element
       ...ElementLikeIconButton_Element
@@ -81,7 +82,8 @@ export const LibraryElementPage: React.FC = () => {
 
   return (
     <PageScaffold
-      prominent
+      activateOnScroll
+      title={element?.name}
       backButton
       buttons={
         <>
