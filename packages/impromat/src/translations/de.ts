@@ -37,9 +37,11 @@ export default {
   LoginPage: {
     "sign in to access impromat":
       "Melde dich an, um eigene Workshops und Elemente zu erstellen und zu teilen.",
-    "agree to privacy policy":
-      "Durch die Anmeldung stimmst du der <PrivacyPolicyLink>Datenschutzerklärung</PrivacyPolicyLink> zu. Deine Impro-Daten werden nicht mit Google geteilt und sicher auf einem Server in Deutschland gespeichert.",
     learnMore: "Mehr erfahren",
+  },
+  LoginSection: {
+    agreeToPrivacyPolicy:
+      "Durch die Anmeldung stimmst du der <PrivacyPolicyLink>Datenschutzerklärung</PrivacyPolicyLink> zu. Deine Impro-Daten werden nicht mit Google geteilt und sicher auf einem Server in Deutschland gespeichert.",
   },
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
@@ -47,6 +49,10 @@ export default {
     accessImpromat: "Öffne Übungen & Spiele",
     Profile: "Profil",
     "Legal Notice": "Impressum",
+  },
+  ImpromatHero: {
+    title: "impromat.app",
+    subtitle: "Plane, leite und teile Improvisationstheater-Workshops.",
   },
   HomeContent: {
     "Improving Improv": "Dein Helfer fürs Improvisationstheater",
@@ -197,7 +203,7 @@ export default {
     emptyNameMessage: "Bitte gib einen Namen für deinen Workshop ein.",
     create: "Erstellen",
   },
-  LikeIconButton: {
+  LikeIcon: {
     removeLike: "Aus Favoriten entfernen",
     addLike: "Zu Favoriten hinzufügen",
   },
@@ -206,9 +212,11 @@ export default {
     AddElement: "Füge Elemente hinzu",
     AddElementMessage:
       "Nutze das Feld unten rechts, um Elemente hinzuzufügen. Viel Spaß beim Workshop-Konzipieren!",
+    loginTitle: "Melde dich an, um Workshop zu favorisieren",
   },
   LibraryElementPage: {
     Element: "Element",
+    loginTitle: "Melde dich an, um Element zu favorisieren",
   },
   AddToWorkshopSelectDialog: {
     "Add to Workshop": "Zum Workshop hinzufügen",
@@ -227,11 +235,6 @@ export default {
     notePlaceholder: "Notiz hinzufügen",
   },
   WorkshopsPage: {
-    communityWorkshopsTitle: "Gemeinschafts-Workshops",
-    communityWorkshopsDescription:
-      "Entdecke Workshops, die von der Impromat-Gemeinschaft erstellt wurden. Nutze sie für deine nächste Impro-Session oder lass dich von der Struktur und den Elementen inspirieren.",
-    communityWorkshopsDescriptionSecondary:
-      "Teile deine eigenen Workshop Ideen, um anderen zu helfen und die Impro-Gemeinschaft zu stärken.",
     NewWorkshop: "Neuer Workshop",
     FilterNoWorkshops: "Die momentane Filterauswahl enthält keine Workshops.",
     ClearFilters: "Filter zurücksetzen",
@@ -239,9 +242,14 @@ export default {
       "Melde dich an, um Workshops zu sehen. Wir arbeiten daran Workshops auch ohne Anmeldung sichtbar zu machen.",
     gotoLogin: "Zur Anmeldung",
   },
-  WorkshopPreviewCard: {
-    OpenWorkshop: "Öffne den Workshop, um Elemente hinzuzufügen.",
-    Games: "Elemente: ",
+  LoginCard: {
+    title: "Melde dich an, um der impromat.app Gemeinschaft beizutreten.",
+    subtitle:
+      "Wir starten gerade impromat.app! Melde dich an, um deine eigenen Workshops zu erstellen, sie mit der Impro-Gemeinschaft zu teilen und Teil der Impro-Bewegung zu sein.",
+  },
+  LoginDialog: {
+    message:
+      "Melde dich an, um Workshops und Elemente zu favorisieren, eigene Elemente zu erstellen und Workshops zu teilen.",
   },
   WorkshopOptionsMenu: {
     SetDate: "Datum des Workshops",

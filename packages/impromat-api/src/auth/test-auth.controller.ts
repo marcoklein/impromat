@@ -12,6 +12,7 @@ import { Session } from 'express-session';
 import { environment } from 'src/environment';
 import { PrismaService } from 'src/modules/database/prisma.service';
 import { UserSessionData } from './user-session-data';
+import { parseLoginState } from './parse-login-state';
 
 /**
  * Injected for mocking the login procedure. Used for testing and local development purposes.
@@ -23,7 +24,11 @@ export class TestAuthController {
   @Get('testlogin')
   async testLogin(
     @Query()
-    { redirectUrl, userId }: { userId; redirectUrl: string | undefined },
+    {
+      redirectUrl,
+      userId,
+      state,
+    }: { userId; redirectUrl: string | undefined; state: string | undefined },
     @Req() req: Request & { session: Session & { data: UserSessionData } },
     @Res() res: Response,
   ) {
@@ -47,7 +52,11 @@ export class TestAuthController {
 
     req.session.data = { userId: user.id };
     if (redirectUrl) {
-      res.redirect(redirectUrl);
+      const parsedState = parseLoginState(state);
+      const redirectUrlWithState = new URL(redirectUrl);
+      redirectUrlWithState.pathname = parsedState?.pathAfterLogin ?? '';
+      if (state) redirectUrlWithState.searchParams.set('state', state);
+      res.redirect(redirectUrlWithState.toString());
     } else {
       req.session.save(() => {
         const signedSession = sign(req.session.id, environment.SESSION_SECRET);

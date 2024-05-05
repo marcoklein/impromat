@@ -1,18 +1,18 @@
 import { Info } from "@mui/icons-material";
-import { Button, Typography, useTheme } from "@mui/material";
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import useTheme from "@mui/material/styles/useTheme";
 import React from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { GoogleSignInButton } from "../../components/GoogleSignInButton";
 import { ImpromatLogoComponent } from "../../components/ImpromatLogoComponent";
-import { useGoogleLogin } from "../../hooks/use-google-login";
-import { routeHome, routePrivacyPolicy } from "../../routes/shared-routes";
+import { routeHome, routeWorkshops } from "../../routes/shared-routes";
+import { LoginSection } from "./LoginSection";
 
 export const LoginPage: React.FC = () => {
   const { t } = useTranslation("LoginPage");
 
-  const googleLogin = useGoogleLogin();
   const theme = useTheme();
 
   return (
@@ -42,23 +42,8 @@ export const LoginPage: React.FC = () => {
             {t("sign in to access impromat")}
           </Typography>
 
-          <Box m={1}>
-            <GoogleSignInButton
-              onClick={() => googleLogin()}
-            ></GoogleSignInButton>
-          </Box>
+          <LoginSection pathAfterLogin={routeWorkshops()} />
 
-          <Typography variant="body2" component="div" sx={{ flexGrow: 1 }}>
-            <Trans
-              t={t}
-              i18nKey="agree to privacy policy"
-              components={{
-                PrivacyPolicyLink: (
-                  <Link to={routePrivacyPolicy()}>placeholder</Link>
-                ),
-              }}
-            />
-          </Typography>
           <Button
             sx={{ mt: 1 }}
             component={Link}

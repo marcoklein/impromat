@@ -1,6 +1,3 @@
-import "../src/theme/colors.css";
-import "../src/theme/variables.css";
-
 import { beforeMount } from "@playwright/experimental-ct-react/hooks";
 
 import React from "react";

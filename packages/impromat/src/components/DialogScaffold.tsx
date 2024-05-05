@@ -1,5 +1,8 @@
-import { Close } from "@mui/icons-material";
-import { Box, Dialog, DialogTitle, IconButton } from "@mui/material";
+import Close from "@mui/icons-material/Close";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 

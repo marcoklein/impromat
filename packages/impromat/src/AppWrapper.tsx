@@ -4,8 +4,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { createCachedGraphqlClient } from "./create-cached-graphql-client";
 import { useComponentLogger } from "./hooks/use-component-logger";
 import { ErrorFallbackPage } from "./pages/ErrorFallbackPage";
-import "./theme/colors.css";
-import "./theme/variables.css";
 
 // for MUI
 import "@fontsource/roboto/300.css";

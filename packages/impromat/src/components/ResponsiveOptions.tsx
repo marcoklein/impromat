@@ -1,15 +1,10 @@
-import { MoreVert } from "@mui/icons-material";
-import {
-  Backdrop,
-  Drawer,
-  IconButton,
-  ListItemText,
-  Paper,
-  Popper,
-  Typography,
-} from "@mui/material";
-import { ReactNode, useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import Backdrop from "@mui/material/Backdrop";
+import Drawer from "@mui/material/Drawer";
+import ListItemText from "@mui/material/ListItemText";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import Typography from "@mui/material/Typography";
+import { ReactNode, useCallback } from "react";
 import { useBreakpoints } from "../hooks/use-breakpoints";
 
 interface ComponentProps {
@@ -17,6 +12,7 @@ interface ComponentProps {
   children: ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  menuButtonRef: React.RefObject<HTMLElement>;
 }
 
 /**
@@ -27,30 +23,16 @@ export const ResponsiveOptions: React.FC<ComponentProps> = ({
   children,
   open,
   onOpenChange,
+  menuButtonRef,
 }) => {
-  const { t } = useTranslation("ResponsiveOptions");
   const { sm } = useBreakpoints();
-
-  const [internalAnchorElement, setInternalAnchorElement] =
-    useState<null | HTMLElement>(null);
 
   const handleClose = useCallback(() => {
     onOpenChange(false);
-    setInternalAnchorElement(null);
   }, [onOpenChange]);
 
   return (
     <>
-      <IconButton
-        aria-label={t("Options", { ns: "common" })}
-        onClick={(event) => {
-          setInternalAnchorElement(event.currentTarget);
-          onOpenChange(!open);
-        }}
-        color="inherit"
-      >
-        <MoreVert />
-      </IconButton>
       {sm ? (
         <Drawer
           anchor="bottom"
@@ -85,7 +67,7 @@ export const ResponsiveOptions: React.FC<ComponentProps> = ({
         >
           <Popper
             open={open}
-            anchorEl={internalAnchorElement}
+            anchorEl={menuButtonRef.current}
             placement="right-start"
           >
             <Paper>{children}</Paper>

@@ -1,19 +1,20 @@
-import { CheckCircleOutline, Share } from "@mui/icons-material";
-import {
-  Fade,
-  IconButton,
-  ListItem,
-  ListItemText,
-  Paper,
-  Popper,
-} from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import CheckCircleOutline from "@mui/icons-material/CheckCircleOutline";
+import Share from "@mui/icons-material/Share";
+import Fade from "@mui/material/Fade";
+import IconButton from "@mui/material/IconButton";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTimeout } from "../hooks/use-timeout";
 
-interface ContainerProps {}
+interface ContainerProps {
+  urlToShare?: string;
+}
 
-export const ShareButton: React.FC<ContainerProps> = () => {
+export const ShareButton: React.FC<ContainerProps> = ({ urlToShare }) => {
   const { t } = useTranslation("ShareButton");
 
   const [isOpen, setIsOpen] = useState(false);
@@ -34,15 +35,20 @@ export const ShareButton: React.FC<ContainerProps> = () => {
     }
   }, [isOpen, resetTimeout]);
 
-  const copyCurrentUrlToClipboard = useCallback(() => {
-    navigator.clipboard.writeText(window.location.href);
+  const copyUrlToClipboard = useCallback(() => {
+    let pageUrl = urlToShare || window.location.href;
+    if (!pageUrl.startsWith("http")) {
+      pageUrl = window.location.origin + pageUrl;
+    }
+
+    navigator.clipboard.writeText(pageUrl);
     if (isOpen) {
       setIsOpen(false);
       return;
     }
     setIsOpen(true);
     triggerCloseTimeout();
-  }, [triggerCloseTimeout, isOpen]);
+  }, [urlToShare, isOpen, triggerCloseTimeout]);
 
   const ref = useRef<HTMLButtonElement>(null);
 
@@ -50,8 +56,7 @@ export const ShareButton: React.FC<ContainerProps> = () => {
     <>
       <IconButton
         ref={ref}
-        onClick={copyCurrentUrlToClipboard}
-        sx={{ mr: 2 }}
+        onClick={copyUrlToClipboard}
         color="inherit"
         aria-label={t("share")}
       >

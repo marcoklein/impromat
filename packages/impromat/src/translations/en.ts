@@ -19,7 +19,7 @@ export default {
     save: "Save",
   },
   ShareButton: {
-    share: "Share",
+    share: "Share URL",
     copiedUrl: "Copied URL to clipboard",
   },
   BackButton: {
@@ -38,9 +38,11 @@ export default {
   LoginPage: {
     "sign in to access impromat":
       "Sign in to create and share your own workshops and elements.",
-    "agree to privacy policy":
-      "By signing in you agree to the <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>. Your improv data is not shared with Google and safely hosted on a server based in Germany.",
     learnMore: "Learn more",
+  },
+  LoginSection: {
+    agreeToPrivacyPolicy:
+      "By signing in you agree to the <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>. Your improv data is not shared with Google and safely hosted on a server based in Germany.",
   },
   HomePage: {
     "App for planning, giving and sharing improvisational theatre workshops.":
@@ -48,6 +50,10 @@ export default {
     accessImpromat: "Browse exercises and games",
     Profile: "Profile",
     "Legal Notice": "Legal Notice",
+  },
+  ImpromatHero: {
+    title: "impromat.app",
+    subtitle: "Plan, give and share improvisational theatre workshops.",
   },
   HomeContent: {
     "Improving Improv": "Improving Improv",
@@ -199,7 +205,7 @@ export default {
     emptyNameMessage: "Please enter a name for your workshop.",
     create: "Create",
   },
-  LikeIconButton: {
+  LikeIcon: {
     removeLike: "Remove from likes.",
     addLike: "Add to likes.",
   },
@@ -208,9 +214,11 @@ export default {
     AddElement: "Add First Element",
     AddElementMessage:
       "Use the bottom right button to add elements. Enjoy designing your workshop!",
+    loginTitle: "Login to Like Workshop",
   },
   LibraryElementPage: {
     Element: "Element",
+    loginTitle: "Login to Like Element",
   },
   AddToWorkshopSelectDialog: {
     "Add to Workshop": "Add to Workshop",
@@ -229,11 +237,6 @@ export default {
     notePlaceholder: "Add note",
   },
   WorkshopsPage: {
-    communityWorkshopsTitle: "Community Workshops",
-    communityWorkshopsDescription:
-      "Explore workshops created by the Impromat community. Use them for your next improv session or get inspired by the structure and elements.",
-    communityWorkshopsDescriptionSecondary:
-      "Contribute your own workshop by logging in and sharing them in Impromat.",
     NewWorkshop: "New Workshop",
     FilterNoWorkshops: "The current filter selection returns no workshops",
     ClearFilters: "Clear Filters",
@@ -241,9 +244,13 @@ export default {
       "Login to see workshops. We are working on making workshops visible without logging in.",
     gotoLogin: "Go to Login",
   },
-  WorkshopPreviewCard: {
-    OpenWorkshop: "Open the workshop to add elements.",
-    Games: "Elements: ",
+  LoginCard: {
+    title: "Login to join the impromat.app community.",
+    subtitle:
+      "We are just starting impromat.app! Login to create your own workshops, share them with the improv community and be part of the improv movement.",
+  },
+  LoginDialog: {
+    message: "Login to like, create, share improv workshops and elements.",
   },
   WorkshopOptionsMenu: {
     SetDate: "Set Date",

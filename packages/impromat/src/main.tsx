@@ -9,6 +9,7 @@ import { AppWrapper } from "./AppWrapper";
 import { rootLogger } from "./logger";
 import reportWebVitals from "./reportWebVitals";
 import { TRANSLATIONS } from "./translations";
+import { CssBaseline } from "@mui/material";
 
 if (process.env.NODE_ENV === "development") {
   localStorage.setItem("debug", "impromat:*");
@@ -69,6 +70,7 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <AppWrapper>
+      <CssBaseline />
       <App />
     </AppWrapper>
   </React.StrictMode>,

@@ -38,7 +38,7 @@ const config: PlaywrightTestConfig = {
       maxDiffPixelRatio: 0.1,
     },
   },
-  testDir: "test/component",
+  testDir: "test/integration",
   snapshotDir: "./__snapshots__",
   snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}{ext}",
   reporter: [

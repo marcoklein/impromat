@@ -1,39 +1,35 @@
-import {
-  Event,
-  Link as LinkIcon,
-  Lock,
-  Public,
-  ViewDay,
-} from "@mui/icons-material";
-import {
-  Box,
-  Container,
-  Divider,
-  Fab,
-  IconButton,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
+import Event from "@mui/icons-material/Event";
+import ViewDay from "@mui/icons-material/ViewDay";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
+import Fab from "@mui/material/Fab";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
+import { IsNotLoggedIn } from "../../components/IsNotLoggedIn";
+import { LoginDialog } from "../../components/LoginDialog";
+import { OptionsButton } from "../../components/OptionsButton";
 import { PageScaffold } from "../../components/PageScaffold";
+import { ShareButton } from "../../components/ShareButton";
 import { ElementsIcon } from "../../components/icons/ElementsIcon";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
-import { routeLibrary } from "../../routes/shared-routes";
-import { ShareWorkshopModal } from "./components/ShareWorkshopModal";
+import { routeLibrary, routeWorkshops } from "../../routes/shared-routes";
+import { LikeIconButton } from "../library/LikeIconButton";
 import { TextFieldDialog } from "./components/TextFieldDialog";
 import { WorkshopContent } from "./components/WorkshopContent";
 import { WorkshopLikeIconButton } from "./components/WorkshopLikeButton";
 import { WorkshopOptionsMenu } from "./components/WorkshopOptionsMenu";
+import { WorkshopSharingButton } from "./components/WorkshopSharingButton";
 import { STORAGE_LAST_WORKSHOP_ID } from "./components/local-storage-workshop-id";
 
 const WorkshopPage_Workshop = graphql(`
@@ -58,7 +54,7 @@ const WorkshopPage_Workshop = graphql(`
     ...WorkshopLikeIconButton_Workshop
 
     ...WorkshopOptionsMenu_Workshop
-    ...ShareWorkshopModal_Workshop
+    ...WorkshopSharingButton_Workshop
   }
 `);
 
@@ -73,11 +69,9 @@ const WorkshopByIdQuery = graphql(`
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
   const { t } = useTranslation("WorkshopPage");
-  const { isLoggedIn } = useIsLoggedIn();
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const logger = useComponentLogger("WorkshopPage");
 
-  const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
   const [isCreateSectionDialogOpen, setIsCreateSectionDialogOpen] =
     useState(false);
 
@@ -97,49 +91,57 @@ export const WorkshopPage: React.FC = () => {
     workshopQueryResult.data?.workshop,
   );
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+
   return (
     <PageScaffold
-      title={`Workshop ${workshop && !workshop.canEdit ? "(View)" : ""}`}
       backButton
+      backUrl={routeWorkshops()}
+      title={workshop?.name}
+      activateOnScroll
       buttons={
         <>
-          {workshop && isLoggedIn && (
-            <IsLoggedIn>
-              <WorkshopLikeIconButton workshopFragment={workshop} />
-            </IsLoggedIn>
-          )}
-          {workshop && workshop.canEdit && (
+          {workshop && (
             <>
-              <IconButton
-                onClick={() => setIsSharingModalOpen(true)}
-                aria-label={t("Share", { ns: "common" })}
-                color="inherit"
-              >
-                {workshop.isPublic ? (
-                  workshop.isListed ? (
-                    <Public />
-                  ) : (
-                    <LinkIcon />
-                  )
-                ) : (
-                  <Lock />
-                )}
-              </IconButton>
-              <ShareWorkshopModal
-                isSharingModalOpen={isSharingModalOpen}
-                setIsSharingModalOpen={setIsSharingModalOpen}
-                workshopFragment={workshop}
-              ></ShareWorkshopModal>
-              <WorkshopOptionsMenu
-                goBackAfterDeletion
-                workshopFragment={workshop}
-              ></WorkshopOptionsMenu>
+              <IsNotLoggedIn>
+                <LikeIconButton
+                  onClick={() => setIsLoginDialogOpen(true)}
+                  isLiked={false}
+                />
+                <LoginDialog
+                  title={t("loginTitle")}
+                  open={isLoginDialogOpen}
+                  handleClose={() => setIsLoginDialogOpen(false)}
+                />
+              </IsNotLoggedIn>
+              <IsLoggedIn>
+                <WorkshopLikeIconButton workshopFragment={workshop} />
+              </IsLoggedIn>
+              <ShareButton />
+              {workshop.canEdit && (
+                <>
+                  <WorkshopSharingButton workshopFragment={workshop} />
+                  <OptionsButton
+                    ref={menuButtonRef}
+                    onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+                  />
+                  <WorkshopOptionsMenu
+                    goBackAfterDeletion
+                    workshopFragment={workshop}
+                    isMenuOpen={isMenuOpen}
+                    onIsMenuOpenChange={setIsMenuOpen}
+                    menuButtonRef={menuButtonRef}
+                  ></WorkshopOptionsMenu>
+                </>
+              )}
             </>
           )}
         </>
       }
     >
-      <Box sx={{ overflowY: "auto", height: "100%" }}>
+      <Box sx={{ height: "100%" }}>
         <Box
           sx={{
             position: "absolute",

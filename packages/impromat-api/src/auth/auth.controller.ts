@@ -14,6 +14,7 @@ import { Session } from 'express-session';
 import { environment } from 'src/environment';
 import { PrismaService } from 'src/modules/database/prisma.service';
 import { GoogleOAuth2ClientService } from './google-oauth2-client-provider';
+import { parseLoginState } from './parse-login-state';
 import { UserSessionData } from './user-session-data';
 
 @Controller('auth')
@@ -54,6 +55,8 @@ export class AuthController {
     @Res() res: Response,
   ) {
     const code = req.query.code as string;
+    const state = req.query.state as string;
+
     const oAuth2Client = this.googleOAuth2ClientService.getOAuth2Client();
     const javascriptOrigin =
       this.googleOAuth2ClientService.getRedirectUrlAfterAuthentication();
@@ -95,8 +98,12 @@ export class AuthController {
         console.error('No javascript origin found.');
         res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
       }
-      console.log(`Redirecting to ${javascriptOrigin}`);
-      res.redirect(javascriptOrigin);
+      const parsedState = parseLoginState(state);
+      const redirectUrlWithState = new URL(javascriptOrigin);
+      redirectUrlWithState.pathname = parsedState?.pathAfterLogin ?? '';
+      if (state) redirectUrlWithState.searchParams.set('state', state);
+      console.log(`Redirecting to ${redirectUrlWithState}`);
+      res.redirect(redirectUrlWithState.toString());
     } else {
       res.sendStatus(HttpStatus.BAD_REQUEST);
     }

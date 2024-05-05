@@ -111,6 +111,7 @@ export const LibraryElements: React.FC<ContainerProps> = ({
         items={elements ?? []}
         itemContent={(_index, searchResult) => (
           <ElementPreviewCard
+            key={_index}
             routerLink={routeLibraryElement(searchResult.element.id)}
             elementFragment={searchResult.element}
             elementSearchResultFragment={searchResult}

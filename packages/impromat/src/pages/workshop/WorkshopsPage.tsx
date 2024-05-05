@@ -1,14 +1,10 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Container,
-  Fab,
-  Typography,
-} from "@mui/material";
+import Container from "@mui/material/Container";
+import Fab from "@mui/material/Fab";
+import { Box } from "@mui/system";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
+import { ImpromatHero } from "../../components/ImpromatHero";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { IsNotLoggedIn } from "../../components/IsNotLoggedIn";
 import { PageContentLoaderComponent } from "../../components/PageContentLoaderComponent";
@@ -20,6 +16,7 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { CreateWorkshopDialog } from "../library/CreateWorkshopDialog";
+import { LoginCard } from "./components/LoginCard";
 import { WorkshopCreateFirstComponent } from "./components/WorkshopCreateFirstComponent";
 import { WorkshopPreviewCard } from "./components/WorkshopPreviewCard";
 
@@ -90,39 +87,19 @@ export const WorkshopsPage: React.FC = () => {
         queryResult={workshopsQueryResult}
         reexecuteQuery={reexecuteWorkshopsQuery}
       >
-        {availableWorkshops?.length ? (
+        {IsNotLoggedIn || availableWorkshops?.length ? (
           <VirtualCardGrid
             scrollStoreKey="workshops-page"
             isFetching={
               workshopsQueryResult.fetching || workshopsQueryResult.stale
             }
             onTopStateChange={(atTop) => setGridIsOnTop(atTop)}
-            items={availableWorkshops}
+            items={availableWorkshops ?? []}
             headerElement={
               <IsNotLoggedIn>
-                <Container maxWidth="sm" sx={{ height: "100%", p: 0 }}>
-                  <Card
-                    sx={{
-                      m: 1,
-                      border: "solid 1px",
-                      borderColor: "primary.main",
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="h6">
-                        {t("communityWorkshopsTitle")}
-                      </Typography>
-                      <Typography variant="body2">
-                        {t("communityWorkshopsDescription")}
-                      </Typography>
-                      <Box mt={1}>
-                        <Typography variant="body2">
-                          {t("communityWorkshopsDescriptionSecondary")}
-                        </Typography>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Container>
+                <Box my={2}>
+                  <ImpromatHero />
+                </Box>
               </IsNotLoggedIn>
             }
             itemContent={(_index, workshop) => (
@@ -132,6 +109,13 @@ export const WorkshopsPage: React.FC = () => {
                 ></WorkshopPreviewCard>
               </Container>
             )}
+            footerElement={
+              <IsNotLoggedIn>
+                <Container maxWidth="sm" sx={{ p: 0 }}>
+                  <LoginCard />
+                </Container>
+              </IsNotLoggedIn>
+            }
           />
         ) : (
           <IsLoggedIn>

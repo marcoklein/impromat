@@ -1,12 +1,18 @@
-import { AppBar, Box, Toolbar, Typography } from "@mui/material";
-import React, { PropsWithChildren, ReactNode } from "react";
+import { useScrollTrigger } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import React, { PropsWithChildren, ReactNode, useMemo } from "react";
 import { BackButton } from "./BackButton";
 
 interface ContainerProps extends PropsWithChildren {
   title?: ReactNode;
   buttons?: JSX.Element | null;
   backButton?: boolean;
+  backUrl?: string;
   noHeader?: boolean;
+  activateOnScroll?: boolean;
 }
 
 /**
@@ -18,9 +24,32 @@ export const PageScaffold: React.FC<ContainerProps> = ({
   children,
   buttons,
   backButton,
+  backUrl,
+  activateOnScroll,
 }) => {
+  const scrollTarget = React.useRef<HTMLElement>(null);
+
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 26,
+    target: scrollTarget.current ?? window,
+  });
+
+  const isProminent = useMemo(
+    () => !trigger && activateOnScroll,
+    [trigger, activateOnScroll],
+  );
+
+  const showTitle = activateOnScroll ? trigger : true;
+  const appBarColor = activateOnScroll
+    ? trigger
+      ? "inherit"
+      : "transparent"
+    : "transparent";
+
   return (
     <Box
+      ref={scrollTarget}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -35,22 +64,18 @@ export const PageScaffold: React.FC<ContainerProps> = ({
             zIndex: 100,
             display: "flex",
             flexDirection: "column",
-            position: "sticky",
           }}
-          position="static"
-          color="transparent"
+          position="sticky"
+          color={appBarColor}
+          elevation={!isProminent ? 4 : 0}
         >
           <Toolbar
             sx={{
               display: "flex",
               alignItems: "center",
-              // px: {
-              //   xs: 1,
-              //   sm: 2,
-              // },
             }}
           >
-            {backButton && <BackButton></BackButton>}
+            {backButton && <BackButton url={backUrl}></BackButton>}
             <Typography
               variant="h6"
               component="h1"
@@ -61,8 +86,9 @@ export const PageScaffold: React.FC<ContainerProps> = ({
                 whiteSpace: "nowrap",
               }}
             >
-              {title}
+              {showTitle && title}
             </Typography>
+
             {buttons}
           </Toolbar>
         </AppBar>

@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { useMutation, useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { PageScaffold } from "../../components/PageScaffold";
+import { ShareButton } from "../../components/ShareButton";
 import { graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
@@ -104,21 +105,24 @@ export const WorkshopElementPage: React.FC = () => {
 
   return (
     <PageScaffold
-      title={`Workshop Element ${
-        workshopElement && !workshopElement.section.workshop.canEdit
-          ? "(View)"
-          : ""
-      }`}
+      activateOnScroll
+      title={basedOnElement?.name}
       backButton
+      backUrl={`/workshop/${workshopId}`}
       buttons={
-        <IsLoggedIn>
-          {workshopElement && workshopElement.section.workshop.canEdit && (
-            <ElementLikeIconButton elementFragment={workshopElement.basedOn} />
-          )}
-        </IsLoggedIn>
+        <>
+          <IsLoggedIn>
+            {workshopElement && workshopElement.section.workshop.canEdit && (
+              <ElementLikeIconButton
+                elementFragment={workshopElement.basedOn}
+              />
+            )}
+          </IsLoggedIn>
+          <ShareButton />
+        </>
       }
     >
-      <Box sx={{ overflowY: "auto", height: "100%" }}>
+      <Box sx={{ height: "100%" }}>
         {workshopElement && (
           <Container maxWidth="sm" sx={{ p: 0 }}>
             {(workshopElement.section.workshop.canEdit ||

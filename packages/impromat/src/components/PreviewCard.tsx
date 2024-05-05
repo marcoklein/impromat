@@ -15,7 +15,7 @@ interface ContainerProps {
   /**
    * Content to display below the title.
    */
-  content?: string;
+  content?: React.ReactNode;
   /**
    * Link to navigate to when clicking on the card.
    */
@@ -79,6 +79,7 @@ export const PreviewCard: React.FC<ContainerProps> = ({
             primary={title}
             secondary={
               <Box
+                component={"span"}
                 sx={{
                   overflow: "hidden",
                   textOverflow: "ellipsis",
