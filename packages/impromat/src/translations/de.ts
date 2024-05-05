@@ -203,7 +203,7 @@ export default {
     emptyNameMessage: "Bitte gib einen Namen für deinen Workshop ein.",
     create: "Erstellen",
   },
-  LikeIconButton: {
+  LikeIcon: {
     removeLike: "Aus Favoriten entfernen",
     addLike: "Zu Favoriten hinzufügen",
   },
@@ -212,6 +212,7 @@ export default {
     AddElement: "Füge Elemente hinzu",
     AddElementMessage:
       "Nutze das Feld unten rechts, um Elemente hinzuzufügen. Viel Spaß beim Workshop-Konzipieren!",
+    loginTitle: "Login to Like Workshop",
   },
   LibraryElementPage: {
     Element: "Element",

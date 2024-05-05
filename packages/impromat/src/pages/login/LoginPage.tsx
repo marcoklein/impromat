@@ -7,7 +7,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { ImpromatLogoComponent } from "../../components/ImpromatLogoComponent";
-import { routeHome } from "../../routes/shared-routes";
+import { routeHome, routeWorkshops } from "../../routes/shared-routes";
 import { LoginSection } from "./LoginSection";
 
 export const LoginPage: React.FC = () => {
@@ -42,7 +42,7 @@ export const LoginPage: React.FC = () => {
             {t("sign in to access impromat")}
           </Typography>
 
-          <LoginSection />
+          <LoginSection pathAfterLogin={routeWorkshops()} />
 
           <Button
             sx={{ mt: 1 }}

@@ -205,7 +205,7 @@ export default {
     emptyNameMessage: "Please enter a name for your workshop.",
     create: "Create",
   },
-  LikeIconButton: {
+  LikeIcon: {
     removeLike: "Remove from likes.",
     addLike: "Add to likes.",
   },
@@ -214,6 +214,7 @@ export default {
     AddElement: "Add First Element",
     AddElementMessage:
       "Use the bottom right button to add elements. Enjoy designing your workshop!",
+    loginTitle: "Login to Like Workshop",
   },
   LibraryElementPage: {
     Element: "Element",
@@ -246,6 +247,10 @@ export default {
     title: "Login to join the impromat.app community.",
     subtitle:
       "We are just starting impromat.app! Login to create your own workshops, share them with the improv community and be part of the improv movement.",
+  },
+  LoginDialog: {
+    message:
+      "Login to like, create, share improv workshops and browse over 1000 improv exercises and games.",
   },
   WorkshopOptionsMenu: {
     SetDate: "Set Date",

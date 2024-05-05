@@ -7,9 +7,13 @@ import { GoogleSignInButton } from "../../components/GoogleSignInButton";
 import { useGoogleLogin } from "../../hooks/use-google-login";
 import { routePrivacyPolicy } from "../../routes/shared-routes";
 
-export const LoginSection: React.FC = () => {
+interface ComponentProps {
+  pathAfterLogin?: string;
+}
+
+export const LoginSection: React.FC<ComponentProps> = ({ pathAfterLogin }) => {
   const { t } = useTranslation("LoginSection");
-  const googleLogin = useGoogleLogin();
+  const googleLogin = useGoogleLogin(pathAfterLogin);
 
   return (
     <>
@@ -23,6 +27,7 @@ export const LoginSection: React.FC = () => {
           i18nKey="agreeToPrivacyPolicy"
           components={{
             PrivacyPolicyLink: (
+              // TODO show privacy policy as dialog
               <Link to={routePrivacyPolicy()}>placeholder</Link>
             ),
           }}

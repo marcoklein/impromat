@@ -20,7 +20,7 @@ export const LoginCard: React.FC = () => {
       elevation={8}
     >
       <CardContent>
-        <Typography variant="h4">{t("title")}</Typography>
+        <Typography variant="h5">{t("title")}</Typography>
         <Typography variant="body1" color="text.secondary">
           {t("subtitle")}
         </Typography>

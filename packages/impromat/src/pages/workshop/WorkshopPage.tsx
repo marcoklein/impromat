@@ -14,6 +14,8 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
+import { IsNotLoggedIn } from "../../components/IsNotLoggedIn";
+import { LoginDialog } from "../../components/LoginDialog";
 import { OptionsButton } from "../../components/OptionsButton";
 import { PageScaffold } from "../../components/PageScaffold";
 import { ShareButton } from "../../components/ShareButton";
@@ -23,6 +25,7 @@ import { useComponentLogger } from "../../hooks/use-component-logger";
 import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeLibrary, routeWorkshops } from "../../routes/shared-routes";
+import { LikeIconButton } from "../library/LikeIconButton";
 import { TextFieldDialog } from "./components/TextFieldDialog";
 import { WorkshopContent } from "./components/WorkshopContent";
 import { WorkshopLikeIconButton } from "./components/WorkshopLikeButton";
@@ -92,6 +95,7 @@ export const WorkshopPage: React.FC = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
 
   return (
     <PageScaffold
@@ -103,6 +107,17 @@ export const WorkshopPage: React.FC = () => {
         <>
           {workshop && (
             <>
+              <IsNotLoggedIn>
+                <LikeIconButton
+                  onClick={() => setIsLoginDialogOpen(true)}
+                  isLiked={false}
+                />
+                <LoginDialog
+                  title={t("loginTitle")}
+                  open={isLoginDialogOpen}
+                  handleClose={() => setIsLoginDialogOpen(false)}
+                />
+              </IsNotLoggedIn>
               <IsLoggedIn>
                 <WorkshopLikeIconButton workshopFragment={workshop} />
               </IsLoggedIn>

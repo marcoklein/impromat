@@ -87,14 +87,14 @@ export const WorkshopsPage: React.FC = () => {
         queryResult={workshopsQueryResult}
         reexecuteQuery={reexecuteWorkshopsQuery}
       >
-        {availableWorkshops?.length ? (
+        {IsNotLoggedIn || availableWorkshops?.length ? (
           <VirtualCardGrid
             scrollStoreKey="workshops-page"
             isFetching={
               workshopsQueryResult.fetching || workshopsQueryResult.stale
             }
             onTopStateChange={(atTop) => setGridIsOnTop(atTop)}
-            items={availableWorkshops}
+            items={availableWorkshops ?? []}
             headerElement={
               <IsNotLoggedIn>
                 <Box my={2}>
