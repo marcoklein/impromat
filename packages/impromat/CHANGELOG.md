@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.72.0
+
+### Minor Changes
+
+- 244b540: Introduce prominent app bar that keeps big titles on top
+
+### Patch Changes
+
+- 079485f: Consider language code of visitor for workshop search
+- 244b540: Wrap text in sections, dialog, and element items properly
+
 ## 0.71.0
 
 ### Minor Changes
