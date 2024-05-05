@@ -2,14 +2,13 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { ListItem, ListItemText } from "@mui/material";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { OptionsButton } from "../../../components/OptionsButton";
 import {
   FragmentType,
@@ -64,6 +63,22 @@ export const WorkshopSectionItem: React.FC<ContainerProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
+  const textElement = useMemo(
+    () => (
+      <ListItemText
+        primary={section.name}
+        primaryTypographyProps={{
+          sx: {
+            overflowX: "auto",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          },
+        }}
+      />
+    ),
+    [section.name],
+  );
+
   return (
     <Stack
       component="li"
@@ -76,35 +91,35 @@ export const WorkshopSectionItem: React.FC<ContainerProps> = ({
       }}
     >
       <Box display="flex">
-        <ListItemButton
-          key={section.name}
-          onClick={onCollapseClick}
-          disabled={isDragging}
-          dense
-          sx={{ pr: 0 }}
-        >
-          <ListItemIcon>
-            <Badge
-              badgeContent={section.isCollapsed && section.elements.length}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-            >
-              {section.isCollapsed ? <ExpandLess /> : <ExpandMore />}
-            </Badge>
-          </ListItemIcon>
-          <ListItemText
-            primary={section.name}
-            primaryTypographyProps={{
-              sx: {
-                overflowX: "auto",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              },
-            }}
-          />
-        </ListItemButton>
+        {canEdit ? (
+          <ListItemButton
+            onClick={onCollapseClick}
+            disabled={isDragging}
+            dense
+            sx={{ pr: 0 }}
+          >
+            {canEdit && (
+              <>
+                <ListItemIcon>
+                  <Badge
+                    badgeContent={
+                      section.isCollapsed && section.elements.length
+                    }
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                  >
+                    {section.isCollapsed ? <ExpandLess /> : <ExpandMore />}
+                  </Badge>
+                </ListItemIcon>
+                {textElement}
+              </>
+            )}
+          </ListItemButton>
+        ) : (
+          <ListItem dense>{textElement}</ListItem>
+        )}
         {canEdit && (
           <Box>
             <OptionsButton
@@ -121,7 +136,6 @@ export const WorkshopSectionItem: React.FC<ContainerProps> = ({
           </Box>
         )}
       </Box>
-      <Divider variant="fullWidth" />
     </Stack>
   );
 };
