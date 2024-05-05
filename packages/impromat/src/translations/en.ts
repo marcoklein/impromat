@@ -218,6 +218,7 @@ export default {
   },
   LibraryElementPage: {
     Element: "Element",
+    loginTitle: "Login to Like Element",
   },
   AddToWorkshopSelectDialog: {
     "Add to Workshop": "Add to Workshop",
@@ -249,8 +250,7 @@ export default {
       "We are just starting impromat.app! Login to create your own workshops, share them with the improv community and be part of the improv movement.",
   },
   LoginDialog: {
-    message:
-      "Login to like, create, share improv workshops and browse over 1000 improv exercises and games.",
+    message: "Login to like, create, share improv workshops and elements.",
   },
   WorkshopOptionsMenu: {
     SetDate: "Set Date",

@@ -30,12 +30,8 @@ export class WorkshopDevPage extends DevPage {
       exact: true,
     });
 
-    this.addToLikesButtonLocator = page.getByRole("button", {
-      name: "Add to likes.",
-    });
-    this.removeFromLikesButtonLocator = page.getByRole("button", {
-      name: "Remove from likes.",
-    });
+    this.addToLikesButtonLocator = page.getByLabel("Add to likes");
+    this.removeFromLikesButtonLocator = page.getByLabel("Remove from likes");
   }
 
   getWorkshopNameLocator(workshopName: string) {

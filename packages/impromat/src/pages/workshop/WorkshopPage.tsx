@@ -22,7 +22,6 @@ import { ShareButton } from "../../components/ShareButton";
 import { ElementsIcon } from "../../components/icons/ElementsIcon";
 import { getFragmentData, graphql } from "../../graphql-client";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { useIsLoggedIn } from "../../hooks/use-is-logged-in";
 import { useUpdateWorkshopMutation } from "../../hooks/use-update-workshop-mutation";
 import { routeLibrary, routeWorkshops } from "../../routes/shared-routes";
 import { LikeIconButton } from "../library/LikeIconButton";
@@ -70,7 +69,6 @@ const WorkshopByIdQuery = graphql(`
 export const WorkshopPage: React.FC = () => {
   const { id: workshopId } = useParams<{ id: string }>();
   const { t } = useTranslation("WorkshopPage");
-  const { isLoggedIn } = useIsLoggedIn();
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const logger = useComponentLogger("WorkshopPage");
 

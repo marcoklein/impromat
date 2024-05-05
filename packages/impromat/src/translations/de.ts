@@ -212,10 +212,11 @@ export default {
     AddElement: "Füge Elemente hinzu",
     AddElementMessage:
       "Nutze das Feld unten rechts, um Elemente hinzuzufügen. Viel Spaß beim Workshop-Konzipieren!",
-    loginTitle: "Login to Like Workshop",
+    loginTitle: "Melde dich an, um Workshop zu favorisieren",
   },
   LibraryElementPage: {
     Element: "Element",
+    loginTitle: "Melde dich an, um Element zu favorisieren",
   },
   AddToWorkshopSelectDialog: {
     "Add to Workshop": "Zum Workshop hinzufügen",
@@ -245,6 +246,10 @@ export default {
     title: "Melde dich an, um der impromat.app Gemeinschaft beizutreten.",
     subtitle:
       "Wir starten gerade impromat.app! Melde dich an, um deine eigenen Workshops zu erstellen, sie mit der Impro-Gemeinschaft zu teilen und Teil der Impro-Bewegung zu sein.",
+  },
+  LoginDialog: {
+    message:
+      "Melde dich an, um Workshops und Elemente zu favorisieren, eigene Elemente zu erstellen und Workshops zu teilen.",
   },
   WorkshopOptionsMenu: {
     SetDate: "Datum des Workshops",
