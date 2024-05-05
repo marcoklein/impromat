@@ -97,10 +97,11 @@ export const WorkshopPage: React.FC = () => {
 
   return (
     <PageScaffold
+      prominent
+      activateOnScroll
       backButton
       backUrl={routeWorkshops()}
       title={workshop?.name}
-      activateOnScroll
       buttons={
         <>
           {workshop && (
@@ -144,7 +145,8 @@ export const WorkshopPage: React.FC = () => {
       <Box sx={{ height: "100%" }}>
         <Box
           sx={{
-            position: "absolute",
+            position: "fixed",
+            zIndex: 100,
             bottom: 16,
             right: 16,
             display: "flex",
@@ -189,10 +191,7 @@ export const WorkshopPage: React.FC = () => {
         {workshop && (
           <Container sx={{ p: 0 }} maxWidth="sm">
             <ListItem>
-              <ListItemText
-                primary={<Typography variant="h5">{workshop.name}</Typography>}
-                secondary={workshop.description}
-              ></ListItemText>
+              <ListItemText secondary={workshop.description}></ListItemText>
             </ListItem>
             {workshop.dateOfWorkshop && (
               // TODO set with date picker directly https://mui.com/x/react-date-pickers/date-picker/

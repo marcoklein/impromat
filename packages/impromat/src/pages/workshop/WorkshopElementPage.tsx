@@ -106,6 +106,7 @@ export const WorkshopElementPage: React.FC = () => {
 
   return (
     <PageScaffold
+      prominent
       activateOnScroll
       title={basedOnElement?.name}
       backButton
