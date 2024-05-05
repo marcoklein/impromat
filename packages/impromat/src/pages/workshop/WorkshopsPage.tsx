@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
 import Fab from "@mui/material/Fab";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "urql";
 import { ImpromatHero } from "../../components/ImpromatHero";
@@ -39,13 +39,20 @@ const WorkshopsPage_Query = graphql(`
 
 export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
+  const { t, i18n } = useTranslation("WorkshopsPage");
 
   const { myUserId, isLoggedIn } = useIsLoggedIn();
 
+  const languageCodes = useMemo(
+    () => (isLoggedIn ? undefined : [i18n.language]),
+    [i18n.language, isLoggedIn],
+  );
   const [workshopsQueryResult, reexecuteWorkshopsQuery] = useQuery({
     query: WorkshopsPage_Query,
     variables: {
-      workshopSearchInput: {},
+      workshopSearchInput: {
+        languageCodes,
+      },
     },
   });
   useStateChangeLogger(myUserId, "myUserId", logger);
@@ -65,8 +72,6 @@ export const WorkshopsPage: React.FC = () => {
 
   const [isCreateWorkshopDialogOpen, setIsCreateWorkshopDialogOpen] =
     useState(false);
-
-  const { t } = useTranslation("WorkshopsPage");
 
   return (
     <PageScaffold noHeader>
