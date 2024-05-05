@@ -7,11 +7,13 @@ import { TextFieldDialog } from "./TextFieldDialog";
 interface NoteFieldProps {
   note: string;
   saveNotesChanges: (value: string) => void;
+  canEdit?: boolean;
 }
 
 export const WorkshopElementNote: React.FC<NoteFieldProps> = ({
   note,
   saveNotesChanges,
+  canEdit,
 }) => {
   const { t } = useTranslation("WorkshopElementNote");
   const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
@@ -24,10 +26,10 @@ export const WorkshopElementNote: React.FC<NoteFieldProps> = ({
           m: 1,
           px: 2,
           py: 0.5,
-          cursor: "pointer",
+          cursor: canEdit ? "pointer" : "default",
           borderColor: "info.main",
         }}
-        onClick={() => setIsNoteDialogOpen(true)}
+        onClick={canEdit ? () => setIsNoteDialogOpen(true) : undefined}
       >
         {note?.trim() ? (
           <ReactMarkdown>{note}</ReactMarkdown>
