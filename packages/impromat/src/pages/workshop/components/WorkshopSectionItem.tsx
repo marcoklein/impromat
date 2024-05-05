@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Stack from "@mui/material/Stack";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { OptionsButton } from "../../../components/OptionsButton";
 import {
   FragmentType,
@@ -63,22 +63,6 @@ export const WorkshopSectionItem: React.FC<ContainerProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const textElement = useMemo(
-    () => (
-      <ListItemText
-        primary={section.name}
-        primaryTypographyProps={{
-          sx: {
-            overflowX: "auto",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          },
-        }}
-      />
-    ),
-    [section.name],
-  );
-
   return (
     <Stack
       component="li"
@@ -113,12 +97,14 @@ export const WorkshopSectionItem: React.FC<ContainerProps> = ({
                     {section.isCollapsed ? <ExpandLess /> : <ExpandMore />}
                   </Badge>
                 </ListItemIcon>
-                {textElement}
+                <ListItemText primary={section.name} />
               </>
             )}
           </ListItemButton>
         ) : (
-          <ListItem dense>{textElement}</ListItem>
+          <ListItem dense>
+            <ListItemText primary={section.name} />
+          </ListItem>
         )}
         {canEdit && (
           <Box>

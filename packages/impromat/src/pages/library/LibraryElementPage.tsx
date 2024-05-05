@@ -87,6 +87,7 @@ export const LibraryElementPage: React.FC = () => {
   return (
     <PageScaffold
       activateOnScroll
+      prominent
       title={element?.name}
       backButton
       buttons={

@@ -1,4 +1,4 @@
-import { useScrollTrigger } from "@mui/material";
+import { Container, useScrollTrigger } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,6 +13,7 @@ interface ContainerProps extends PropsWithChildren {
   backUrl?: string;
   noHeader?: boolean;
   activateOnScroll?: boolean;
+  prominent?: boolean;
 }
 
 /**
@@ -26,12 +27,13 @@ export const PageScaffold: React.FC<ContainerProps> = ({
   backButton,
   backUrl,
   activateOnScroll,
+  prominent,
 }) => {
   const scrollTarget = React.useRef<HTMLElement>(null);
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 26,
+    threshold: 0,
     target: scrollTarget.current ?? window,
   });
 
@@ -40,12 +42,12 @@ export const PageScaffold: React.FC<ContainerProps> = ({
     [trigger, activateOnScroll],
   );
 
-  const showTitle = activateOnScroll ? trigger : true;
+  const showTitle = !prominent && (activateOnScroll ? trigger : true);
   const appBarColor = activateOnScroll
     ? trigger
       ? "inherit"
       : "transparent"
-    : "transparent";
+    : "inherit";
 
   return (
     <Box
@@ -82,7 +84,6 @@ export const PageScaffold: React.FC<ContainerProps> = ({
               sx={{
                 flexGrow: 1,
                 overflowX: "auto",
-                textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
               }}
             >
@@ -91,6 +92,15 @@ export const PageScaffold: React.FC<ContainerProps> = ({
 
             {buttons}
           </Toolbar>
+          {prominent && (
+            <Toolbar>
+              <Container maxWidth="sm" sx={{ p: 0 }}>
+                <Typography variant={"h5"} component="h1" sx={{ pb: 0.5 }}>
+                  {title}
+                </Typography>
+              </Container>
+            </Toolbar>
+          )}
         </AppBar>
       )}
       {children}
