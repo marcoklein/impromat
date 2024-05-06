@@ -68,8 +68,8 @@ export class CreateElementInput {
   @Field(() => String, { nullable: true })
   sourceUrl?: string | undefined;
 
-  @Field(() => String, { defaultValue: 'impromat' })
-  sourceName: string;
+  @Field(() => String, { nullable: true })
+  sourceName?: string;
 
   @Field(() => String, { nullable: true })
   sourceBaseUrl?: string | undefined;

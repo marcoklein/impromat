@@ -447,7 +447,7 @@ input CreateElementInput {
   """Language code (e.g. en, de) of the element."""
   languageCode: String!
   sourceUrl: String
-  sourceName: String! = "impromat"
+  sourceName: String
   sourceBaseUrl: String
   licenseName: String
   licenseUrl: String
@@ -478,7 +478,7 @@ input UpdateElementInput {
   """Language code (e.g. en, de) of the element."""
   languageCode: String
   sourceUrl: String
-  sourceName: String = "impromat"
+  sourceName: String
   sourceBaseUrl: String
   licenseName: String
   licenseUrl: String

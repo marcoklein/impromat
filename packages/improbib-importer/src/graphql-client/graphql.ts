@@ -38,7 +38,7 @@ export type CreateElementInput = {
   orderIndex?: InputMaybe<Scalars['Int']['input']>;
   setPredictedLevelTags?: InputMaybe<Scalars['Boolean']['input']>;
   sourceBaseUrl?: InputMaybe<Scalars['String']['input']>;
-  sourceName?: Scalars['String']['input'];
+  sourceName?: InputMaybe<Scalars['String']['input']>;
   sourceUrl?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<ElementTagsInput>;
   visibility: ElementVisibility;
