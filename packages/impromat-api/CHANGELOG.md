@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.30.2
+
+### Patch Changes
+
+- 63673ca: Accept dash (-) in path after login for authentication state
+
 ## 0.30.1
 
 ### Patch Changes
