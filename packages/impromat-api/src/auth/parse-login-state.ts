@@ -10,7 +10,7 @@ export function parseLoginState(
     ) as LoginState;
 
     // validate state object
-    const validPathRegex = /^[a-zA-Z0-9/]*$/;
+    const validPathRegex = /^[a-zA-Z0-9-/]*$/;
     if (
       stateObject.pathAfterLogin &&
       (typeof stateObject.pathAfterLogin !== 'string' ||
