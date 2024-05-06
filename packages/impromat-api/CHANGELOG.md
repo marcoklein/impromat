@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.30.1
+
+### Patch Changes
+
+- 86504d3: Remove default source name "impromat" to fix unexpected source update when editing elements from different sources
+
 ## 0.30.0
 
 ### Minor Changes
