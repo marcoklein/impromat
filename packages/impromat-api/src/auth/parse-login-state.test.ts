@@ -26,7 +26,7 @@ describe('parseLoginState', () => {
   it('should return parsed login state for valid input', () => {
     // given
     const urlEncodedStateString = encodeURIComponent(
-      JSON.stringify({ pathAfterLogin: '/dashboard' }),
+      JSON.stringify({ pathAfterLogin: '/dashboard/d123-123123tufu' }),
     );
 
     // when
