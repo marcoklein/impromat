@@ -33,6 +33,6 @@ describe('parseLoginState', () => {
     const result = parseLoginState(urlEncodedStateString);
 
     // then
-    expect(result).toEqual({ pathAfterLogin: '/dashboard' });
+    expect(result).toEqual({ pathAfterLogin: '/dashboard/d123-123123tufu' });
   });
 });
