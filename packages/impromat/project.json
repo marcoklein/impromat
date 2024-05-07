@@ -52,7 +52,7 @@
     "test-integration-app": {
       "cache": true,
       "dependsOn": ["test:playwright-install"],
-      "command": "concurrently -n API,Playwright -c yellow,green \"PORT=8083 yarn nx test-integration-api-up\" \"bash -c 'while ! curl -s http://localhost:8083 > /dev/null; do sleep 1; done; playwright test -c playwright-integration.config.ts' && echo 'TESTS DONE'\"",
+      "command": "concurrently -n API,Playwright -c yellow,green --success command-Playwright --kill-others \"PORT=8083 yarn nx test-integration-api-up\" \"bash -c 'while ! curl -s http://localhost:8083 > /dev/null; do sleep 1; done; playwright test -c playwright-integration.config.ts'\"",
       "inputs": [
         "{projectRoot}/playwright-integration.config.ts",
         "{projectRoot}/src/**/*.ts",
@@ -62,8 +62,7 @@
         "cwd": "{projectRoot}",
         "env": {
           "PW_TEST_HTML_REPORT_OPEN": "never"
-        },
-        "readyWhen": "TESTS DONE"
+        }
       }
     },
     "test:unit": {
