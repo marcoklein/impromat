@@ -43,7 +43,7 @@ pageTest.describe("Library", () => {
       // given
       await auth.loginAsRandomUser();
       await libraryPage.goto();
-      const bottomLocator = page.locator('.virtuoso-list div[data-index="5"]');
+      const bottomLocator = page.locator('.virtuoso-list div[data-index="4"]');
       await pageTest.step("should search for games", async () => {
         // when
         await libraryPage.searchForElement("#game");
