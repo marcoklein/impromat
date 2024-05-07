@@ -1,5 +1,6 @@
+import { styled } from "@mui/material";
 import Container from "@mui/material/Container";
-import Fab from "@mui/material/Fab";
+import Fab, { FabProps } from "@mui/material/Fab";
 import { Box } from "@mui/system";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,11 +38,19 @@ const WorkshopsPage_Query = graphql(`
   }
 `);
 
+const StyledFab = styled(Fab)<FabProps>(({ theme }) => ({
+  position: "absolute",
+  bottom: 16,
+  right: 16,
+}));
+
 export const WorkshopsPage: React.FC = () => {
   const logger = useComponentLogger("WorkshopsPage");
   const { t, i18n } = useTranslation("WorkshopsPage");
 
   const { myUserId, isLoggedIn } = useIsLoggedIn();
+
+  useStateChangeLogger(i18n.languages, "i18n.languages", logger);
 
   const languageCodes = useMemo(
     () => (isLoggedIn ? undefined : [i18n.language]),
@@ -75,8 +84,8 @@ export const WorkshopsPage: React.FC = () => {
 
   return (
     <PageScaffold noHeader>
-      {isLoggedIn && (
-        <Fab
+      <IsLoggedIn>
+        <StyledFab
           color="primary"
           sx={{ position: "absolute", bottom: 16, right: 16 }}
           onClick={() => {
@@ -85,14 +94,14 @@ export const WorkshopsPage: React.FC = () => {
           aria-label={t("NewWorkshop")}
         >
           <AddNewWorkshopIcon />
-        </Fab>
-      )}
+        </StyledFab>
+      </IsLoggedIn>
       <PageContentLoaderComponent
         noRefresher={!gridIsOnTop}
         queryResult={workshopsQueryResult}
         reexecuteQuery={reexecuteWorkshopsQuery}
       >
-        {IsNotLoggedIn || availableWorkshops?.length ? (
+        {!isLoggedIn || availableWorkshops?.length ? (
           <VirtualCardGrid
             scrollStoreKey="workshops-page"
             isFetching={
