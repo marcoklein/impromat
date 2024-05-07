@@ -1,3 +1,4 @@
+import { CssBaseline } from "@mui/material";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import React from "react";
@@ -9,7 +10,6 @@ import { AppWrapper } from "./AppWrapper";
 import { rootLogger } from "./logger";
 import reportWebVitals from "./reportWebVitals";
 import { TRANSLATIONS } from "./translations";
-import { CssBaseline } from "@mui/material";
 
 if (process.env.NODE_ENV === "development") {
   localStorage.setItem("debug", "impromat:*");
@@ -47,6 +47,7 @@ i18n
   .init({
     resources: TRANSLATIONS,
     fallbackLng: "en",
+    supportedLngs: ["en", "de"],
     interpolation: {
       escapeValue: false,
     },
