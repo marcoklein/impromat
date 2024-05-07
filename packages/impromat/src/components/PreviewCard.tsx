@@ -84,8 +84,6 @@ export const PreviewCard: React.FC<ContainerProps> = ({
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
-                  "-webkit-line-clamp": 3 /* number of lines to show */,
-                  "-webkit-box-orient": "vertical",
                   WebkitBoxOrient: "vertical",
                   WebkitLineClamp: 3,
                 }}

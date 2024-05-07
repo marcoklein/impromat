@@ -121,6 +121,7 @@ export const ElementPreviewCard: React.FC<ContainerProps> = ({
         >
           {tags.map((tag) => (
             <Box
+              key={tag.id}
               component="span"
               sx={{ ml: 0.5, fontWeight: tag.isMatch ? "bold" : "normal" }}
             >
