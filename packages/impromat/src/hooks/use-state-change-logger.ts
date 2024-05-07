@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 export function useStateChangeLogger(
   state: unknown,
-  varName: string | number | undefined | null,
+  varName: string,
   logger: Debugger,
 ) {
   useEffect(() => {

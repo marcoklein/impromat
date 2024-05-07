@@ -25,6 +25,7 @@ export class LibraryDevPage extends DevPage {
   async searchForElement(searchText: string) {
     const page = this.page;
     await this.searchInputLocator.fill(searchText);
+    await page.waitForTimeout(500);
     await page.keyboard.press("Enter");
     await page.getByText(new RegExp(searchText, "i")).first().waitFor();
   }

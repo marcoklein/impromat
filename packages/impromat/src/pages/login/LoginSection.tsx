@@ -17,7 +17,7 @@ export const LoginSection: React.FC<ComponentProps> = ({ pathAfterLogin }) => {
 
   return (
     <>
-      <Box my={1}>
+      <Box m={1}>
         <GoogleSignInButton onClick={() => googleLogin()}></GoogleSignInButton>
       </Box>
 

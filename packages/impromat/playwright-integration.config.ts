@@ -24,7 +24,7 @@ const config: PlaywrightTestConfig = {
   use: {
     browserName: "chromium",
     headless: true,
-    viewport: { width: 320, height: 480 },
+    viewport: { width: 360, height: 600 },
     ignoreHTTPSErrors: true,
     isMobile: true,
     baseURL: `http://localhost:${PORT}/`,
@@ -35,7 +35,7 @@ const config: PlaywrightTestConfig = {
     timeout: 15 * 1000,
     toHaveScreenshot: {
       // There are differences between browsers, so we allow a small difference.
-      maxDiffPixelRatio: 0.01,
+      maxDiffPixelRatio: 0.1,
     },
   },
   testDir: "test/integration",

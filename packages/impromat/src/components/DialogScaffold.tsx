@@ -25,21 +25,18 @@ export const DialogScaffold: React.FC<ComponentProps> = ({
 
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
-      <Box display="flex" alignItems="start">
+      <Box display="flex" justifyContent="space-between">
         <DialogTitle
           component="h3"
           sx={{
-            pb: 0,
-            pr: 0,
-            pt: 2,
-            flex: "1 1 auto",
+            pb: 1,
           }}
         >
           {title}
         </DialogTitle>
         {!hideCloseButton && (
           <IconButton
-            sx={{ p: 1.5, mt: 0.5, mr: 0.5, pb: 0 }}
+            sx={{ p: 1.5, mt: 0.5, mr: 0.5 }}
             aria-label={t("Close", { ns: "common" })}
             onClick={handleClose}
           >

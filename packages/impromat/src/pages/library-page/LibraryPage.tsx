@@ -5,10 +5,8 @@ import { useHistory } from "react-router";
 import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
 import { graphql } from "../../graphql-client";
-import { useComponentLogger } from "../../hooks/use-component-logger";
 import { usePersistedState } from "../../hooks/use-persisted-state";
 import { useSearchParam } from "../../hooks/use-search-params";
-import { useStateChangeLogger } from "../../hooks/use-state-change-logger";
 import { ROUTE_LIBRARY_SEARCH_PARAM } from "../../routes/shared-routes";
 import { LibraryElements } from "./LibraryElements";
 import { LibraryPageAppBar } from "./LibraryPageAppBar";
@@ -35,14 +33,8 @@ const MuiLibraryPageQuery = graphql(`
 
 export const LibraryPage: React.FC = () => {
   const { i18n } = useTranslation("LibraryPage");
-  const logger = useComponentLogger("LibraryPage");
 
   const searchTextFromUrlParam = useSearchParam(ROUTE_LIBRARY_SEARCH_PARAM);
-  useStateChangeLogger(
-    searchTextFromUrlParam,
-    "searchTextFromUrlParam",
-    logger,
-  );
   const searchText = useMemo(
     () => searchTextFromUrlParam ?? "",
     [searchTextFromUrlParam],
@@ -64,8 +56,6 @@ export const LibraryPage: React.FC = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const itemsPerPage = 7;
 
-  useStateChangeLogger(pageNumber, "pageNumber", logger);
-
   const [searchElementsQueryResult, reexecuteSearchElementsQuery] = useQuery({
     query: MuiLibraryPageQuery,
     variables: {
@@ -84,8 +74,7 @@ export const LibraryPage: React.FC = () => {
   const resetScroll = useCallback(() => {
     setPageNumber(0);
     setScrollToTop((current) => current + 1);
-    logger("Scroll reset");
-  }, [logger]);
+  }, []);
 
   useEffect(() => {
     resetScroll();
@@ -97,28 +86,7 @@ export const LibraryPage: React.FC = () => {
     const params = new URLSearchParams();
     params.append(ROUTE_LIBRARY_SEARCH_PARAM, searchText);
     history.push({ search: params.toString() });
-    logger("Search text changed to %s", searchText);
   };
-
-  const onClearHistory = useCallback(() => {
-    setLatestSearches([]);
-  }, [setLatestSearches]);
-
-  const onEndReached = useCallback(() => {
-    const isQueryStale = searchElementsQueryResult.stale;
-    const isQueryCurrent =
-      pageNumber * itemsPerPage === elementsResult?.length && !isQueryStale;
-    logger("end reached, queryResult.stale=%s", isQueryStale);
-    if (isQueryCurrent) {
-      setPageNumber((current) => current + 1);
-      logger("setting page number to %s", pageNumber + 1);
-    }
-  }, [
-    searchElementsQueryResult.stale,
-    pageNumber,
-    elementsResult?.length,
-    logger,
-  ]);
 
   return (
     <Box
@@ -139,7 +107,7 @@ export const LibraryPage: React.FC = () => {
       ></LibraryPageAppBar>
       <QueryErrorAlert
         error={searchElementsQueryResult.error}
-        onRetry={reexecuteSearchElementsQuery}
+        onRetry={() => reexecuteSearchElementsQuery()}
       />
       <IsLoggedIn>
         <NewElementButton />
@@ -147,13 +115,14 @@ export const LibraryPage: React.FC = () => {
       <LibraryElements
         searchText={searchText}
         latestSearches={latestSearches}
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
         scrollToTop={scrollToTop}
         elementSearchResultFragments={elementsResult}
         isQueryStale={searchElementsQueryResult.stale}
         isQueryFetching={searchElementsQueryResult.fetching}
         onSearchTextChange={onSearchTextChange}
-        onClearHistory={onClearHistory}
-        onEndReached={onEndReached}
+        onClearHistory={() => setLatestSearches([])}
       ></LibraryElements>
     </Box>
   );

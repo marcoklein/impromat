@@ -41,6 +41,6 @@ export class WorkshopsDevPage extends DevPage {
   }
 
   getWorkshopWithNameLocator(name: string) {
-    return this.page.getByRole("link", { name: new RegExp(`${name}`) });
+    return this.page.getByRole("heading", { name });
   }
 }

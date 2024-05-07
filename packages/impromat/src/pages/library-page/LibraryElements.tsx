@@ -1,8 +1,8 @@
-import { useMemo } from "react";
 import { ElementPreviewCard } from "../../components/ElementPreviewCard";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { VirtualCardGrid } from "../../components/VirtualCardGrid";
 import { FragmentType, getFragmentData, graphql } from "../../graphql-client";
+import { useComponentLogger } from "../../hooks/use-component-logger";
 import { routeLibraryElement } from "../../routes/shared-routes";
 import { SearchSuggestions } from "./SearchSuggestions";
 
@@ -49,15 +49,11 @@ interface ContainerProps {
   >[];
   searchText: string;
   latestSearches: string[];
-  /**
-   * True if the query is stale and needs to be refetched.
-   */
   isQueryStale: boolean;
-  /**
-   * True if the query is currently fetching.
-   */
   isQueryFetching: boolean;
   scrollToTop: number;
+  pageNumber: number;
+  setPageNumber: (setFn: (currentNumber: number) => number) => void;
   /**
    * Called when the search text changes when the user clicks on search suggestions for example.
    *
@@ -65,7 +61,6 @@ interface ContainerProps {
    */
   onSearchTextChange: (searchText: string) => void;
   onClearHistory: () => void;
-  onEndReached: () => void;
 }
 
 /**
@@ -78,19 +73,18 @@ export const LibraryElements: React.FC<ContainerProps> = ({
   isQueryStale,
   isQueryFetching,
   scrollToTop,
+  pageNumber,
+  setPageNumber,
   onSearchTextChange,
   onClearHistory,
-  onEndReached,
 }) => {
+  const logger = useComponentLogger("MuiLibraryElements");
   const elements = getFragmentData(
     LibraryElements_ElementSearchResult,
     elementFragments,
   );
 
-  const showSearchSuggestions = useMemo(
-    () => !elements?.length || !searchText.length,
-    [elements, searchText],
-  );
+  const showSearchSuggestions = !elements?.length || !searchText.length;
 
   return (
     <ResponsiveContainer>
@@ -107,7 +101,13 @@ export const LibraryElements: React.FC<ContainerProps> = ({
         scrollStoreKey="search-element-tab-component"
         isFetching={isQueryFetching || isQueryStale}
         scrollToTop={scrollToTop}
-        endReached={onEndReached}
+        endReached={() => {
+          logger("end reached, queryResult.stale=%s", isQueryStale);
+          if (!isQueryStale) {
+            setPageNumber((currentPageNumber) => currentPageNumber + 1);
+            logger("setting page number to %s", pageNumber + 1);
+          }
+        }}
         items={elements ?? []}
         itemContent={(_index, searchResult) => (
           <ElementPreviewCard

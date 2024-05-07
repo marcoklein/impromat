@@ -1,5 +1,4 @@
 import { CssBaseline } from "@mui/material";
-import debug from "debug";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import React from "react";
@@ -14,8 +13,6 @@ import { TRANSLATIONS } from "./translations";
 
 if (process.env.NODE_ENV === "development") {
   localStorage.setItem("debug", "impromat:*");
-  debug.enable("impromat:*");
-  console.log("Debug enabled in main.tsx due to development mode.");
 }
 const intervalMS = 60 * 1000;
 
