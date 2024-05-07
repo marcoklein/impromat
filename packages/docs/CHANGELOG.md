@@ -1,5 +1,11 @@
 # docs
 
+## 0.1.6
+
+### Patch Changes
+
+- eb0e1f6: Add first iteration of language detection documentation
+
 ## 0.1.5
 
 ### Patch Changes
