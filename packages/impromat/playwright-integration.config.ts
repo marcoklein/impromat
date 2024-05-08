@@ -35,7 +35,7 @@ const config: PlaywrightTestConfig = {
     timeout: 15 * 1000,
     toHaveScreenshot: {
       // There are differences between browsers, so we allow a small difference.
-      maxDiffPixelRatio: 0.025,
+      maxDiffPixelRatio: 0.02,
     },
   },
   testDir: "test/integration",

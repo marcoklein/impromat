@@ -12,7 +12,7 @@ import { AddToWorkshopIcon } from "../../components/icons/AddToWorkshopIcon";
 import { graphql } from "../../graphql-client";
 import { useAddNewElementToWorkshopSection } from "../../hooks/use-add-new-element-to-workshop";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { routeWorkshop } from "../../routes/shared-routes";
+import { routeLibrary, routeWorkshop } from "../../routes/shared-routes";
 import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/components/local-storage-workshop-id";
 import { AddToWorkshopSelectDialog } from "./AddToWorkshopSelectDialog";
 import { ElementDetails } from "./ElementDetails";
@@ -90,6 +90,7 @@ export const LibraryElementPage: React.FC = () => {
       prominent
       title={element?.name}
       backButton
+      backUrl={routeLibrary()}
       buttons={
         element && (
           <>

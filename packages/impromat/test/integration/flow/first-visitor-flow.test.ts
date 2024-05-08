@@ -1,5 +1,4 @@
 import { expect } from "@playwright/test";
-import { randomUUID } from "crypto";
 import { pageTest } from "../fixtures/page-fixtures.js";
 
 pageTest.describe(
@@ -23,8 +22,8 @@ pageTest.describe(
         accountPage,
         libraryElementPage,
       }) => {
-        const communityWorkshopName = randomUUID().substring(0, 8);
-        const communityElementName = randomUUID().substring(0, 8);
+        const communityWorkshopName = "community workshop";
+        const communityElementName = "community element";
 
         await pageTest.step(
           "Background: Community workshop is existing",
@@ -57,6 +56,7 @@ pageTest.describe(
             // when
             await workshopsPage
               .getWorkshopWithNameLocator(communityWorkshopName)
+              .first()
               .click();
             // then
             await expect(page).toHaveScreenshot();
