@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.72.4
+
+### Patch Changes
+
+- bc17026: On library element page navigate up to library page
+- bc17026: Increase accuracy of screenshot tests
+
 ## 0.72.3
 
 ### Patch Changes
