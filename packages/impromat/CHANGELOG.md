@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.72.3
+
+### Patch Changes
+
+- bc125c2: Fix dialog title wrapping
+- bc125c2: Fix element search fetching second page too fast even though the first page has not finished loading
+- eb0e1f6: Fix content language send to API by only supporting English and German explicitly
+
 ## 0.72.2
 
 ### Patch Changes
