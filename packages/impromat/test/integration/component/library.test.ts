@@ -47,13 +47,11 @@ pageTest.describe("Library", () => {
       await pageTest.step("should search for games", async () => {
         // when
         await libraryPage.searchForElement("#game");
-        // then
-        await expect(bottomLocator).not.toBeInViewport();
       });
       await pageTest.step("should scroll to the bottom", async () => {
         // when
-        await bottomLocator.scrollIntoViewIfNeeded();
-        await page.waitForTimeout(300);
+        await page.mouse.move(150, 150);
+        await page.mouse.wheel(0, 400);
         // then
         await expect(bottomLocator).toBeInViewport();
       });
@@ -62,11 +60,33 @@ pageTest.describe("Library", () => {
         async () => {
           // when
           await bottomLocator.click();
+          await page.waitForTimeout(300);
+          await libraryElementPage.backButtonLocator.waitFor();
+          await page.waitForTimeout(500);
           await libraryElementPage.backButtonLocator.click();
+          await page.waitForTimeout(500);
           // then
           await expect(bottomLocator).toBeInViewport();
         },
       );
+    },
+  );
+
+  pageTest(
+    "should load more elements when scrolling to the bottom",
+    async ({ page, auth, libraryPage }) => {
+      // given
+      await auth.loginAsRandomUser();
+      await libraryPage.goto();
+      await libraryPage.searchForElement("#game");
+      // when
+      await page.mouse.move(150, 150);
+      await page.mouse.wheel(0, 1000);
+      await page.waitForTimeout(300);
+      await page.mouse.wheel(0, 200);
+      await expect(
+        page.locator('.virtuoso-list div[data-index="7"]'),
+      ).toBeInViewport();
     },
   );
 });
