@@ -90,7 +90,6 @@ export const LibraryElementPage: React.FC = () => {
       prominent
       title={element?.name}
       backButton
-      backUrl={routeLibrary()}
       buttons={
         element && (
           <>

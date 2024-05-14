@@ -33,6 +33,8 @@ const MuiLibraryPageQuery = graphql(`
   }
 `);
 
+export const LIBRARY_ITEMS_PER_PAGE = 20;
+
 export const LibraryPage: React.FC = () => {
   const { i18n } = useTranslation("LibraryPage");
   const logger = useComponentLogger("LibraryPage");
@@ -62,7 +64,7 @@ export const LibraryPage: React.FC = () => {
     [i18n.language.split("-")[0]],
   );
   const [pageNumber, setPageNumber] = useState(0);
-  const itemsPerPage = 7;
+  const itemsPerPage = LIBRARY_ITEMS_PER_PAGE;
 
   useStateChangeLogger(pageNumber, "pageNumber", logger);
 
@@ -106,16 +108,28 @@ export const LibraryPage: React.FC = () => {
 
   const onEndReached = useCallback(() => {
     const isQueryStale = searchElementsQueryResult.stale;
-    const isQueryCurrent =
-      pageNumber * itemsPerPage === elementsResult?.length && !isQueryStale;
     logger("end reached, queryResult.stale=%s", isQueryStale);
+    const isQueryCurrent =
+      (pageNumber + 1) * itemsPerPage === elementsResult?.length &&
+      !isQueryStale;
+    logger("end reached, isQueryCurrent=%s", isQueryCurrent);
+    logger("end reached, loaded elements=%s", (pageNumber + 1) * itemsPerPage);
+    logger(
+      "end reached, pageNumber=%s, itemsPerPage=%s, elementsResult=%s",
+      pageNumber,
+      itemsPerPage,
+      elementsResult?.length,
+    );
+
     if (isQueryCurrent) {
       setPageNumber((current) => current + 1);
+      setPageNumber(pageNumber + 1);
       logger("setting page number to %s", pageNumber + 1);
     }
   }, [
     searchElementsQueryResult.stale,
     pageNumber,
+    itemsPerPage,
     elementsResult?.length,
     logger,
   ]);
