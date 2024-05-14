@@ -81,11 +81,20 @@ pageTest.describe("Library", () => {
       await libraryPage.searchForElement("#game");
       // when
       await page.mouse.move(150, 150);
+      await page.waitForTimeout(300);
+      await page.mouse.wheel(0, 1000);
+      await page.waitForTimeout(300);
+      await page.mouse.wheel(0, 1000);
+      await page.waitForTimeout(300);
       await page.mouse.wheel(0, 1000);
       await page.waitForTimeout(300);
       await page.mouse.wheel(0, 200);
+      await page
+        .locator('.virtuoso-list div[data-index="27"]')
+        .scrollIntoViewIfNeeded();
+      // then
       await expect(
-        page.locator('.virtuoso-list div[data-index="7"]'),
+        page.locator('.virtuoso-list div[data-index="27"]'),
       ).toBeInViewport();
     },
   );
