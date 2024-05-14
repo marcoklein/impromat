@@ -33,7 +33,7 @@ const MuiLibraryPageQuery = graphql(`
   }
 `);
 
-export const LIBRARY_ITEMS_PER_PAGE = 7;
+export const LIBRARY_ITEMS_PER_PAGE = 20;
 
 export const LibraryPage: React.FC = () => {
   const { i18n } = useTranslation("LibraryPage");
@@ -113,9 +113,17 @@ export const LibraryPage: React.FC = () => {
       (pageNumber + 1) * itemsPerPage === elementsResult?.length &&
       !isQueryStale;
     logger("end reached, isQueryCurrent=%s", isQueryCurrent);
+    logger("end reached, loaded elements=%s", (pageNumber + 1) * itemsPerPage);
+    logger(
+      "end reached, pageNumber=%s, itemsPerPage=%s, elementsResult=%s",
+      pageNumber,
+      itemsPerPage,
+      elementsResult?.length,
+    );
 
     if (isQueryCurrent) {
       setPageNumber((current) => current + 1);
+      setPageNumber(pageNumber + 1);
       logger("setting page number to %s", pageNumber + 1);
     }
   }, [
