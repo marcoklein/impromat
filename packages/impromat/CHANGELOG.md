@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.72.5
+
+### Patch Changes
+
+- edb212d: Fix scrolling of elements and back navigation of library element page
+
 ## 0.72.4
 
 ### Patch Changes

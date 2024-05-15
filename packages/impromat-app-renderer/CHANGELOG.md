@@ -1,5 +1,13 @@
 # impromat-app-renderer
 
+## 0.4.19
+
+### Patch Changes
+
+- 13e2744: Fix folder location of build artifacts for impromat app
+- Updated dependencies [edb212d]
+  - impromat@0.72.5
+
 ## 0.4.18
 
 ### Patch Changes
