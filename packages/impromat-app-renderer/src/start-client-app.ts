@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 
 /**
  * Starts the client app server on the specified port.
@@ -10,11 +10,11 @@ import express from "express";
  */
 export async function startClientApp(clientPort: number) {
   const impromatApp = express();
-  impromatApp.use(express.static("../impromat/build", { cacheControl: false }));
-  impromatApp.get("*", (req, res) => {
-    console.log("App Server Request: ", req.url);
-    res.setHeader("Cache-Control", "max-age=0");
-    res.sendFile("index.html", { root: "../impromat/build" });
+  impromatApp.use(express.static('../impromat/dist', { cacheControl: false }));
+  impromatApp.get('*', (req, res) => {
+    console.log('App Server Request: ', req.url);
+    res.setHeader('Cache-Control', 'max-age=0');
+    res.sendFile('index.html', { root: '../impromat/dist' });
   });
   const listenPromise = new Promise<void>((resolve) => {
     impromatApp.listen(clientPort, () => {
