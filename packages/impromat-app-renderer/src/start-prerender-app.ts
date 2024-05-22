@@ -49,11 +49,15 @@ export function startPrerenderApp(
   async function handlePageRequest(url: string) {
     console.log('cache size: ', cache.size);
     if (cache.has(url)) {
+      console.log('Cache hit: ', url);
       return cache.get(url);
     }
     const pageHtml = await webBrowser.getPageHtml(
       `http://localhost:${clientPort}${url}`
     );
+    if (!pageHtml) {
+      return '<html><body>Page not found</body></html';
+    }
     const $ = load(pageHtml);
     $('head style').remove();
     const html = $.html();
