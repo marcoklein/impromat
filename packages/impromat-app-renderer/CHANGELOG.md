@@ -1,5 +1,11 @@
 # impromat-app-renderer
 
+## 0.4.20
+
+### Patch Changes
+
+- 550ec42: Change build to dist folder for prerender app
+
 ## 0.4.19
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "impromat-app-renderer",
-  "version": "0.4.19",
+  "version": "0.4.20",
   "description": "Render Impromat application.",
   "author": "Marco Klein <hello@marcoklein.dev>",
   "private": true,
