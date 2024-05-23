@@ -1,5 +1,12 @@
 # impromat-api
 
+## 0.30.3
+
+### Patch Changes
+
+- 98f2b3b: Fix database query performance by leveraging data loader of Prisma
+- 1121b3b: Enable debug logging
+
 ## 0.30.2
 
 ### Patch Changes
