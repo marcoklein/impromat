@@ -35,6 +35,7 @@ export class WorkshopController {
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string,
   ) {
+    if (!userSessionId) return false;
     const elementFavoriteRelations = await this.workshopService
       .findWorkshopById(userSessionId, workshop.id)
       .userLikedWorkshops({ where: { userId: userSessionId } });

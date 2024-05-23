@@ -1,5 +1,143 @@
 # Changelog
 
+## 0.72.5
+
+### Patch Changes
+
+- edb212d: Fix scrolling of elements and back navigation of library element page
+
+## 0.72.4
+
+### Patch Changes
+
+- bc17026: On library element page navigate up to library page
+- bc17026: Increase accuracy of screenshot tests
+
+## 0.72.3
+
+### Patch Changes
+
+- bc125c2: Fix dialog title wrapping
+- bc125c2: Fix element search fetching second page too fast even though the first page has not finished loading
+- eb0e1f6: Fix content language send to API by only supporting English and German explicitly
+
+## 0.72.2
+
+### Patch Changes
+
+- Updated dependencies [63673ca]
+  - impromat-api@0.30.2
+
+## 0.72.1
+
+### Patch Changes
+
+- Updated dependencies [86504d3]
+  - impromat-api@0.30.1
+
+## 0.72.0
+
+### Minor Changes
+
+- 244b540: Introduce prominent app bar that keeps big titles on top
+
+### Patch Changes
+
+- 079485f: Consider language code of visitor for workshop search
+- 244b540: Wrap text in sections, dialog, and element items properly
+
+## 0.71.0
+
+### Minor Changes
+
+- 0425290: Open login dialog on like in workshop page for visitor
+- 0425290: Switch to boring avatars for the profile picture of user names
+- 0425290: Add prominent app bars for a more consistent visual experience
+- 0425290: Show Impromat hero in workshops page
+- 0425290: Switched to card layout for workshops to differentiate them visually from elements
+- 0425290: Show login button on bottom of Workshops for new users to easily get access
+
+### Patch Changes
+
+- 0425290: Fix typography in privacy policy, about and legal page
+- 0425290: Fix back navigation by providing the hierarchy of pages to back buttons
+- 0425290: Fixed sharing dialog of workshops
+- 46b572a: Hide expand button in section item of workshops for public users
+- 46b572a: Do show edit note dialog for users without editing rights on workshop
+- 0425290: Hide options for sections and elements for users that cannot edit the open workshop
+- 0425290: Disable scroll seek in virtual scroll to avoid loading card glitches
+- Updated dependencies [0425290]
+  - impromat-api@0.30.0
+
+## 0.70.0
+
+### Minor Changes
+
+- 15b591e: Switch starting page to workshops tab
+- 15b591e: Hide user name in workshop preview card
+
+## 0.69.2
+
+### Patch Changes
+
+- f1923be: Construct API url from window location if environment variable VITE_API_URL is not set
+
+## 0.69.1
+
+### Patch Changes
+
+- 08c51c5: Move responsive container to outer component
+
+## 0.69.0
+
+### Minor Changes
+
+- 3a9b78b: Switch UI of search bar to be responsive
+
+## 0.68.0
+
+### Minor Changes
+
+- 38f370a: Replace virtual grid to render workshops and elements with a list to introduce an easier layout for rendering larger element and workshop cards
+- 38f370a: Search on active user input to make experience consistent
+- 38f370a: Update search parameter in url to allow sharable searches
+- 38f370a: Show latest searches in library page
+
+### Patch Changes
+
+- impromat-api@0.29.2
+
+## 0.67.1
+
+### Patch Changes
+
+- fe0992e: Exchange workshops and elements tabs
+- Updated dependencies [fe0992e]
+  - impromat-api@0.29.1
+
+## 0.67.0
+
+### Minor Changes
+
+- 3807985: Add search suggestions to the element search
+
+## 0.66.0
+
+### Minor Changes
+
+- 721b7cf: Show header and description in the workshops page to describe what the purpose of it
+- c8aa6dd: Added an sharing button at the element page which allows copying the url of the displayed element
+
+### Patch Changes
+
+- c36feaa: Hide scrollbar on desktop for preview pages to fix misplacement of card UI.
+
+## 0.65.0
+
+### Minor Changes
+
+- 43a7b77: Public users are now able to see community shared workshops
+
 ## 0.64.1
 
 ### Patch Changes

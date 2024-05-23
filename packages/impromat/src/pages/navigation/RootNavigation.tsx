@@ -1,5 +1,8 @@
-import { Login, Person } from "@mui/icons-material";
-import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
+import Login from "@mui/icons-material/Login";
+import Person from "@mui/icons-material/Person";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import Box from "@mui/material/Box";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Redirect, Route, useParams } from "react-router";
@@ -22,9 +25,9 @@ import {
   routeWorkshops,
 } from "../../routes/shared-routes";
 import { AboutPage } from "../AboutPage";
-import { HomePage } from "../home/HomePage";
 import { LegalPage } from "../LegalPage";
 import { PrivacyPolicyPage } from "../PrivacyPolicyPage";
+import { HomePage } from "../home/HomePage";
 import { LibraryPage } from "../library-page/LibraryPage";
 import { LibraryElementPage } from "../library/LibraryElementPage";
 import { LoginPage } from "../login/LoginPage";
@@ -49,19 +52,19 @@ export enum RootTabs {
 }
 
 export const ROOT_TABS: Record<RootTabs, TabConfig> = {
-  ELEMENTS: {
-    name: "Exercises & Games",
-    icon: <ElementsIcon />,
-    route: routeLibrary(),
-    element: <LibraryPage />,
-    exact: true,
-    showForUser: "all",
-  },
   WORKSHOPS: {
     name: "Workshops",
     icon: <WorkshopsIcon />,
     route: routeWorkshops(),
     element: <WorkshopsPage />,
+    exact: true,
+    showForUser: "all",
+  },
+  ELEMENTS: {
+    name: "Exercises & Games",
+    icon: <ElementsIcon />,
+    route: routeLibrary(),
+    element: <LibraryPage />,
     exact: true,
     showForUser: "all",
   },
@@ -95,7 +98,7 @@ export const RootNavigation: React.FC<ContainerProps> = () => {
   const logger = useComponentLogger("RootNavigation");
   const { t } = useTranslation("RootNavigation");
   const params = useParams<{ tabName: string }>();
-  const defaultTab = useMemo(() => ROOT_TABS.ELEMENTS, []);
+  const defaultTab = useMemo(() => ROOT_TABS.WORKSHOPS, []);
 
   const currentTab = params.tabName ?? defaultTab.route;
   useStateChangeLogger(params.tabName, "tabName", logger);

@@ -16,16 +16,19 @@ import {
   Prisma,
 } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
-import { ElementsOrderByInput } from 'src/dtos/inputs/elements-query-input';
-import { ElementsFilterInput } from 'test/graphql-client/graphql';
+import {
+  ElementsFilterInput,
+  ElementsOrderByInput,
+} from 'src/dtos/inputs/elements-query-input';
+import { Element as ElementDto } from 'src/dtos/types/element.dto';
 import {
   ABILITY_ACTION_LIST,
   ABILITY_ACTION_READ,
   ABILITY_ACTION_WRITE,
   defineAbilityForUser,
 } from '../../graphql/abilities';
-import { transformTagNames } from './element-tag-mappings';
 import { UserService } from '../user/user.service';
+import { transformTagNames } from './element-tag-mappings';
 
 const IMPROMAT_SOURCE_NAME = 'impromat';
 
@@ -45,7 +48,7 @@ export class ElementService {
    * @param id Element id to find.
    * @returns Element with given id or throws if the element is not existing.
    */
-  findElementById(userRequestId: string | undefined, id: string) {
+  async findElementById(userRequestId: string | undefined, id: string) {
     const ability = defineAbilityForUser(userRequestId);
     return this.prismaService.element.findFirstOrThrow({
       where: {
@@ -54,38 +57,69 @@ export class ElementService {
     });
   }
 
-  async findElementTags(userRequestId: string | undefined, id: string) {
+  async findElementTags(element: ElementDto, userRequestId?: string) {
     const ability = defineAbilityForUser(userRequestId);
-    const result = await this.prismaService.element.findFirstOrThrow({
-      where: {
-        AND: [accessibleBy(ability).Element, { id }],
-      },
-      select: {
-        tags: { include: { tag: true } },
-      },
-    });
-    return result.tags.map((relation) => relation.tag);
+    const tags = await this.prismaService.element
+      .findUnique({
+        where: { id: element.id },
+      })
+      .tags({
+        where: accessibleBy(ability).ElementToElementTag,
+        include: { tag: true },
+      });
+    return tags?.map((tag) => tag.tag);
   }
 
-  async findElementOwner(userRequestId: string | undefined, id: string) {
+  async findElementOwner(userRequestId: string | undefined, elementId: string) {
     if (!userRequestId) return null;
+    const owner = await this.prismaService.element
+      .findUnique({ where: { id: elementId } })
+      .owner();
+
+    if (!owner) return null;
     const ability = defineAbilityForUser(userRequestId);
-    const result = await this.prismaService.element.findFirstOrThrow({
-      where: {
-        AND: [accessibleBy(ability).Element, { id }],
-      },
-      select: {
-        owner: true,
-      },
-    });
-    return result.owner;
+    if (ability.can('read', subject('User', owner))) {
+      return owner;
+    }
+  }
+
+  async findIsFavorite(element: ElementDto, userRequestId?: string) {
+    if (!userRequestId) return false;
+    const elementFavoriteRelations = await this.prismaService.element
+      .findUnique({
+        where: { id: element.id },
+      })
+      .userFavoriteElement({
+        where: {
+          userId: userRequestId,
+        },
+      });
+    if (!elementFavoriteRelations) return false;
+    return elementFavoriteRelations?.length > 0;
+  }
+
+  async findUsedByWorkshopElements(
+    element: ElementDto,
+    userRequestId?: string,
+  ) {
+    const ability = defineAbilityForUser(userRequestId);
+    return this.prismaService.element
+      .findUnique({ where: { id: element.id } })
+      .workshopElements({
+        where: accessibleBy(ability).WorkshopElement,
+      });
+  }
+
+  async findIsOwnerMe(userRequestId: string | undefined, elementId: string) {
+    const owner = await this.findElementOwner(userRequestId, elementId);
+    return owner?.id === userRequestId;
   }
 
   async findElements(
     userRequestId: string | undefined,
     input: {
       // TODO Query elements is not called anywhere, thus refactor to a function that takes in the `where` statement
-      filter: ElementsFilterInput;
+      filter?: ElementsFilterInput;
       orderBy: ElementsOrderByInput;
       skip: number;
       take: number;

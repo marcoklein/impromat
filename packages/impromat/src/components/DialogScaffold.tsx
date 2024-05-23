@@ -1,5 +1,8 @@
-import { Close } from "@mui/icons-material";
-import { Box, Dialog, DialogTitle, IconButton } from "@mui/material";
+import Close from "@mui/icons-material/Close";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -22,22 +25,21 @@ export const DialogScaffold: React.FC<ComponentProps> = ({
 
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
-      <Box display="flex" justifyContent="space-between">
+      <Box display="flex" alignItems="start">
         <DialogTitle
           component="h3"
           sx={{
-            pb: 1,
-            flexShrink: 1,
-            overflowX: "auto",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            pb: 0,
+            pr: 0,
+            pt: 2,
+            flex: "1 1 auto",
           }}
         >
           {title}
         </DialogTitle>
         {!hideCloseButton && (
           <IconButton
-            sx={{ p: 1.5, mt: 0.5, mr: 0.5 }}
+            sx={{ p: 1.5, mt: 0.5, mr: 0.5, pb: 0 }}
             aria-label={t("Close", { ns: "common" })}
             onClick={handleClose}
           >

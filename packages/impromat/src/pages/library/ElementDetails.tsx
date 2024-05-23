@@ -62,15 +62,12 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
+  const [isSummaryExpanded, setIsSummaryExpanded] = useState(true);
 
   const element = getFragmentData(ElementDetails_Element, elementFragment);
 
   return (
     <Box>
-      <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-        {element.name}
-      </Typography>
       <Typography variant="caption">
         {element.tags.map((tag) => `#${tag.name}`).join(" ")}
       </Typography>
@@ -135,7 +132,7 @@ export const ElementDetails: React.FC<ElementDetailsProps> = ({
           <Typography>
             <ReactMarkdown>{element.markdown ?? ""}</ReactMarkdown>
           </Typography>
-          <Divider />
+          <Divider variant="middle" />
         </>
       )}
 

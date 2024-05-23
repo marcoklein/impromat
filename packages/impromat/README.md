@@ -59,7 +59,7 @@ yarn test:unit
 Update snapshots via
 
 ```sh
-yarn test:unit:update-snapshots
+UPDATE_SNAPSHOTS=1 yarn nx test-integration-app
 ```
 
 For all other tests you have to start the backend infrastructure.

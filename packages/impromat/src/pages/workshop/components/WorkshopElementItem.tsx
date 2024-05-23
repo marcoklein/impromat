@@ -1,14 +1,13 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  Box,
-  Divider,
-  ListItemButton,
-  ListItemText,
-  Stack,
-} from "@mui/material";
-import { useState } from "react";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { OptionsButton } from "../../../components/OptionsButton";
 import {
   FragmentType,
   getFragmentData,
@@ -35,12 +34,14 @@ interface ContainerProps {
   workshopElementFragment: FragmentType<
     typeof WorkshopElementItem_WorkshopElement
   >;
+  canEdit: boolean;
 }
 
 export const WorkshopElementItem: React.FC<ContainerProps> = ({
   workshopId,
   sectionId,
   workshopElementFragment,
+  canEdit,
 }) => {
   const workshopElement = getFragmentData(
     WorkshopElementItem_WorkshopElement,
@@ -61,6 +62,7 @@ export const WorkshopElementItem: React.FC<ContainerProps> = ({
   };
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const [, updateWorkshopMutation] = useUpdateWorkshopMutation();
   const elementOnRemoveClick = () => {
@@ -102,21 +104,23 @@ export const WorkshopElementItem: React.FC<ContainerProps> = ({
             <ListItemText
               primary={workshopElement.basedOn.name}
               secondary={workshopElement.note}
-              primaryTypographyProps={{
-                sx: {
-                  overflowX: "auto",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                },
-              }}
             />
           </ListItemButton>
-          <WorkshopElementOptionsMenu
-            disabled={isDragging}
-            isOpen={isMenuOpen}
-            setIsOpen={setIsMenuOpen}
-            onRemoveClick={elementOnRemoveClick}
-          ></WorkshopElementOptionsMenu>
+          {canEdit && (
+            <>
+              <OptionsButton
+                ref={menuButtonRef}
+                onClick={() => setIsMenuOpen(true)}
+              />
+              <WorkshopElementOptionsMenu
+                disabled={isDragging}
+                isOpen={isMenuOpen}
+                setIsOpen={setIsMenuOpen}
+                onRemoveClick={elementOnRemoveClick}
+                menuButtonRef={menuButtonRef}
+              ></WorkshopElementOptionsMenu>
+            </>
+          )}
         </Box>
         <Divider variant="fullWidth" />
       </Stack>

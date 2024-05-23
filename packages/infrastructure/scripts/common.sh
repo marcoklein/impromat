@@ -114,12 +114,3 @@ function configureDomain {
   fi
 }
 
-function setCommonDockerOptions {
-  local appName=$1
-  local dockerfilePath=$2
-
-  log "Set Common Docker Options"
-  dokku builder:set $appName selected dockerfile
-  dokku builder-dockerfile:set $appName dockerfile-path $dockerfilePath
-}
-

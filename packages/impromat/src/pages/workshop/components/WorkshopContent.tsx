@@ -153,6 +153,7 @@ export const WorkshopContent: React.FC<ContainerProps> = ({
             if ("section" in item) {
               return (
                 <WorkshopSectionItem
+                  canEdit={!!workshop.canEdit}
                   workshopId={workshop.id}
                   key={item.id}
                   onCollapseClick={() =>
@@ -165,6 +166,7 @@ export const WorkshopContent: React.FC<ContainerProps> = ({
               return (
                 <Box pl={item.isSectionHidden ? 0 : 2} key={item.id}>
                   <WorkshopElementItem
+                    canEdit={!!workshop.canEdit}
                     workshopElementFragment={item.element}
                     sectionId={item.elementSection.id}
                     workshopId={workshop.id}

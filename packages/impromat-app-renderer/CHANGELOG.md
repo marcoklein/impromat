@@ -1,5 +1,154 @@
 # impromat-app-renderer
 
+## 0.4.20
+
+### Patch Changes
+
+- 550ec42: Change build to dist folder for prerender app
+
+## 0.4.19
+
+### Patch Changes
+
+- 13e2744: Fix folder location of build artifacts for impromat app
+- Updated dependencies [edb212d]
+  - impromat@0.72.5
+
+## 0.4.18
+
+### Patch Changes
+
+- Updated dependencies [bc17026]
+- Updated dependencies [bc17026]
+  - impromat@0.72.4
+
+## 0.4.17
+
+### Patch Changes
+
+- Updated dependencies [bc125c2]
+- Updated dependencies [bc125c2]
+- Updated dependencies [eb0e1f6]
+  - impromat@0.72.3
+
+## 0.4.16
+
+### Patch Changes
+
+- Updated dependencies [63673ca]
+  - impromat-api@0.30.2
+  - impromat@0.72.2
+
+## 0.4.15
+
+### Patch Changes
+
+- Updated dependencies [86504d3]
+  - impromat-api@0.30.1
+  - impromat@0.72.1
+
+## 0.4.14
+
+### Patch Changes
+
+- Updated dependencies [079485f]
+- Updated dependencies [244b540]
+- Updated dependencies [244b540]
+  - impromat@0.72.0
+
+## 0.4.13
+
+### Patch Changes
+
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+- Updated dependencies [46b572a]
+- Updated dependencies [0425290]
+- Updated dependencies [46b572a]
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+- Updated dependencies [0425290]
+  - impromat@0.71.0
+  - impromat-api@0.30.0
+
+## 0.4.12
+
+### Patch Changes
+
+- Updated dependencies [15b591e]
+- Updated dependencies [15b591e]
+  - impromat@0.70.0
+
+## 0.4.11
+
+### Patch Changes
+
+- Updated dependencies [f1923be]
+  - impromat@0.69.2
+
+## 0.4.10
+
+### Patch Changes
+
+- Updated dependencies [08c51c5]
+  - impromat@0.69.1
+
+## 0.4.9
+
+### Patch Changes
+
+- Updated dependencies [3a9b78b]
+  - impromat@0.69.0
+
+## 0.4.8
+
+### Patch Changes
+
+- Updated dependencies [38f370a]
+- Updated dependencies [38f370a]
+- Updated dependencies [38f370a]
+- Updated dependencies [38f370a]
+  - impromat@0.68.0
+  - impromat-api@0.29.2
+
+## 0.4.7
+
+### Patch Changes
+
+- Updated dependencies [fe0992e]
+- Updated dependencies [fe0992e]
+  - impromat-api@0.29.1
+  - impromat@0.67.1
+
+## 0.4.6
+
+### Patch Changes
+
+- Updated dependencies [3807985]
+  - impromat@0.67.0
+
+## 0.4.5
+
+### Patch Changes
+
+- Updated dependencies [721b7cf]
+- Updated dependencies [c8aa6dd]
+- Updated dependencies [c36feaa]
+  - impromat@0.66.0
+
+## 0.4.4
+
+### Patch Changes
+
+- Updated dependencies [43a7b77]
+  - impromat@0.65.0
+
 ## 0.4.3
 
 ### Patch Changes

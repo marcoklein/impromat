@@ -48,4 +48,17 @@ export interface ImprobibElement extends BaseImprovEntry {
   changes: string[];
   identifier: string;
   outgoingLinks: { title: string | undefined; url: string }[];
+  /**
+   * Additional metadata loaded from individual sources.
+   */
+  customData: {
+    lastUpdate?: string;
+    translationLinkEn?: string;
+    translationLinkDe?: string;
+    Spieltyp?: string;
+    "Anzahl Spieler"?: string;
+    Erfahrung?: string;
+    Dynamik?: string;
+    [key: string]: string | undefined;
+  };
 }

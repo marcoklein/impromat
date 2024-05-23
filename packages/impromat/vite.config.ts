@@ -29,7 +29,7 @@ export default defineConfig({
             purpose: "maskable any",
           },
         ],
-        lang: "en",
+        lang: "en", // TODO add de
         scope: "/",
         start_url: "/",
         display: "standalone",
@@ -46,8 +46,8 @@ export default defineConfig({
     port: Number(process.env.PORT ?? 3000),
   },
   build: {
-    outDir: "build",
     chunkSizeWarningLimit: 1_5000,
+    sourcemap: true,
   },
   preview: { host: "localhost", port: Number(process.env.PORT ?? 3000) },
 });

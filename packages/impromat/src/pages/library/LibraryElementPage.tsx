@@ -1,24 +1,29 @@
-import { Box, Container, Fab, useTheme } from "@mui/material";
+import { Container, Fab, useTheme } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router";
 import { useQuery } from "urql";
 import { IsLoggedIn } from "../../components/IsLoggedIn";
+import { IsNotLoggedIn } from "../../components/IsNotLoggedIn";
+import { LoginDialog } from "../../components/LoginDialog";
 import { PageScaffold } from "../../components/PageScaffold";
+import { ShareButton } from "../../components/ShareButton";
 import { AddToWorkshopIcon } from "../../components/icons/AddToWorkshopIcon";
 import { graphql } from "../../graphql-client";
 import { useAddNewElementToWorkshopSection } from "../../hooks/use-add-new-element-to-workshop";
 import { useComponentLogger } from "../../hooks/use-component-logger";
-import { routeWorkshop } from "../../routes/shared-routes";
+import { routeLibrary, routeWorkshop } from "../../routes/shared-routes";
 import { STORAGE_LAST_WORKSHOP_ID } from "../workshop/components/local-storage-workshop-id";
 import { AddToWorkshopSelectDialog } from "./AddToWorkshopSelectDialog";
 import { ElementDetails } from "./ElementDetails";
 import { ElementLikeIconButton } from "./ElementLikeIconButton";
+import { LikeIconButton } from "./LikeIconButton";
 
 const LibraryElementPageQuery = graphql(`
   query MuiLibraryElementQuery($elementId: ID!) {
     element(id: $elementId) {
       id
+      name
 
       ...ElementDetails_Element
       ...ElementLikeIconButton_Element
@@ -35,6 +40,7 @@ const LibraryElementPageQuery = graphql(`
 export const LibraryElementPage: React.FC = () => {
   const logger = useComponentLogger("LibraryElementPage");
   const { t } = useTranslation("LibraryElementPage");
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const { libraryPartId } = useParams<{
     libraryPartId: string;
   }>();
@@ -80,47 +86,61 @@ export const LibraryElementPage: React.FC = () => {
 
   return (
     <PageScaffold
+      activateOnScroll
+      prominent
+      title={element?.name}
       backButton
-      title={t("Element")}
       buttons={
-        <IsLoggedIn>
-          {element && (
-            <ElementLikeIconButton
-              elementFragment={element}
-            ></ElementLikeIconButton>
-          )}
-        </IsLoggedIn>
+        element && (
+          <>
+            <IsNotLoggedIn>
+              <LikeIconButton
+                onClick={() => setIsLoginDialogOpen(true)}
+                isLiked={false}
+              />
+              <LoginDialog
+                title={t("loginTitle")}
+                open={isLoginDialogOpen}
+                handleClose={() => setIsLoginDialogOpen(false)}
+              />
+            </IsNotLoggedIn>
+            <IsLoggedIn>
+              <ElementLikeIconButton
+                elementFragment={element}
+              ></ElementLikeIconButton>
+            </IsLoggedIn>
+            <ShareButton />
+          </>
+        )
       }
     >
-      <Box sx={{ overflow: "auto" }}>
-        <IsLoggedIn>
-          <Fab
-            sx={{
-              position: "absolute",
-              bottom: theme.spacing(2),
-              right: theme.spacing(2),
-            }}
-            color="primary"
-            aria-label="add"
-            onClick={() => setIsAddToWorkshopDialogOpen(true)}
-          >
-            <AddToWorkshopIcon />
-          </Fab>
-          <AddToWorkshopSelectDialog
-            onWorkshopSelect={(workshop) => {
-              handleAddToWorkshop(workshop);
-            }}
-            workshopsFragment={elementPageQueryResult.data?.me?.workshops ?? []}
-            open={isAddToWorkshopDialogOpen}
-            handleClose={() => setIsAddToWorkshopDialogOpen(false)}
-          ></AddToWorkshopSelectDialog>
-        </IsLoggedIn>
-        {element && (
-          <Container maxWidth="sm" sx={{ py: 1 }}>
-            <ElementDetails elementFragment={element}></ElementDetails>
-          </Container>
-        )}
-      </Box>
+      <IsLoggedIn>
+        <Fab
+          sx={{
+            position: "absolute",
+            bottom: theme.spacing(2),
+            right: theme.spacing(2),
+          }}
+          color="primary"
+          aria-label="add"
+          onClick={() => setIsAddToWorkshopDialogOpen(true)}
+        >
+          <AddToWorkshopIcon />
+        </Fab>
+        <AddToWorkshopSelectDialog
+          onWorkshopSelect={(workshop) => {
+            handleAddToWorkshop(workshop);
+          }}
+          workshopsFragment={elementPageQueryResult.data?.me?.workshops ?? []}
+          open={isAddToWorkshopDialogOpen}
+          handleClose={() => setIsAddToWorkshopDialogOpen(false)}
+        ></AddToWorkshopSelectDialog>
+      </IsLoggedIn>
+      {element && (
+        <Container maxWidth="sm" sx={{ py: 1 }}>
+          <ElementDetails elementFragment={element}></ElementDetails>
+        </Container>
+      )}
     </PageScaffold>
   );
 };

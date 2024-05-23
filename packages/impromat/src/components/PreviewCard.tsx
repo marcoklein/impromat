@@ -1,10 +1,8 @@
-import {
-  Box,
-  Divider,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
 
 interface ContainerProps {
@@ -17,7 +15,7 @@ interface ContainerProps {
   /**
    * Content to display below the title.
    */
-  content?: string;
+  content?: React.ReactNode;
   /**
    * Link to navigate to when clicking on the card.
    */
@@ -66,9 +64,8 @@ export const PreviewCard: React.FC<ContainerProps> = ({
               display: "flex",
               cursor: { routerLink } ? "pointer" : undefined,
               whiteSpace: "nowrap",
-              overflowX: "scroll",
+              overflowX: "auto",
               alignItems: "center",
-              height: "2.5rem",
               width: "100%",
             }}
           >
@@ -82,12 +79,11 @@ export const PreviewCard: React.FC<ContainerProps> = ({
             primary={title}
             secondary={
               <Box
+                component={"span"}
                 sx={{
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
-                  "-webkit-line-clamp": 3 /* number of lines to show */,
-                  "-webkit-box-orient": "vertical",
                   WebkitBoxOrient: "vertical",
                   WebkitLineClamp: 3,
                 }}

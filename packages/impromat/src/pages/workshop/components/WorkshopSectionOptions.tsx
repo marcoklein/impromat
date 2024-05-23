@@ -1,10 +1,9 @@
-import { Delete, Edit } from "@mui/icons-material";
-import {
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import Delete from "@mui/icons-material/Delete";
+import Edit from "@mui/icons-material/Edit";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ResponsiveOptions } from "../../../components/ResponsiveOptions";
@@ -29,11 +28,17 @@ interface ComponentProps {
   workshopSectionFragment: FragmentType<
     typeof WorkshopSectionOptions_WorkshopSection
   >;
+  onIsMenuOpenChange: (isOpen: boolean) => void;
+  isMenuOpen: boolean;
+  menuButtonRef: React.RefObject<HTMLElement>;
 }
 
 export const WorkshopSectionOptions: React.FC<ComponentProps> = ({
   workshopId,
   workshopSectionFragment,
+  onIsMenuOpenChange,
+  isMenuOpen,
+  menuButtonRef,
 }) => {
   const { t } = useTranslation("WorkshopSectionOptions");
 
@@ -74,19 +79,19 @@ export const WorkshopSectionOptions: React.FC<ComponentProps> = ({
       },
     });
   };
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <>
       <ResponsiveOptions
         open={isMenuOpen}
-        onOpenChange={setIsMenuOpen}
+        onOpenChange={onIsMenuOpenChange}
         title={t("Options", { ns: "common" })}
+        menuButtonRef={menuButtonRef}
       >
         <List disablePadding>
           <ListItemButton
             onClick={() => {
-              setIsMenuOpen(false);
+              onIsMenuOpenChange(false);
               setIsSectionNameDialogOpen(true);
             }}
           >
@@ -97,7 +102,7 @@ export const WorkshopSectionOptions: React.FC<ComponentProps> = ({
           </ListItemButton>
           <ListItemButton
             onClick={() => {
-              setIsMenuOpen(false);
+              onIsMenuOpenChange(false);
               setIsSectionDeleteDialogOpen(true);
             }}
           >

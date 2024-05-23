@@ -9,7 +9,7 @@ environmentName=$1
 
 appPrefix=ollama
 appName=$appPrefix-$environmentName
-imageName=ollama/ollama:0.1.14
+imageName=ollama/ollama:0.1.32
 echo "appPrefix=$appPrefix"
 echo "appName=$appName"
 

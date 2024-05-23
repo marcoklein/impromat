@@ -1,16 +1,11 @@
-import { CircularProgress } from "@mui/material";
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  GridItemContent,
-  VirtuosoGrid,
-  VirtuosoGridHandle,
-} from "react-virtuoso";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useEffect, useRef, useState } from "react";
+import { GridItemContent, Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import { APP_LOCAL_STORAGE_PREFIX } from "../app-local-storage-prefix";
 import { useComponentLogger } from "../hooks/use-component-logger";
 import { usePersistedState } from "../hooks/use-persisted-state";
 import { useStateChangeLogger } from "../hooks/use-state-change-logger";
-import { LoadingCard } from "./LoadingCard";
-import "./VirtualCardGrid.css";
 
 const MAX_SCROLL_RESTORE_TIME_MS = 200;
 
@@ -45,12 +40,20 @@ interface ContainerProps<ItemData, Context> {
    * Grid scrolls to top if this value changes.
    */
   scrollToTop?: number;
-  size?: "small" | "default";
+  /**
+   * The header element to render.
+   */
   headerElement?: JSX.Element;
+  /**
+   * The footer element to render.
+   */
+  footerElement?: JSX.Element;
 }
 
 /**
- * Grid helper for rendering `PreviewCard`s with virtual scrolling support.
+ * Virtualized list of items.
+ *
+ * Automatically saves and restores the scroll position.
  */
 export const VirtualCardGrid = <ItemData, Context>({
   scrollStoreKey,
@@ -60,11 +63,11 @@ export const VirtualCardGrid = <ItemData, Context>({
   onTopStateChange,
   isFetching,
   scrollToTop,
-  size,
   headerElement,
+  footerElement,
 }: ContainerProps<ItemData, Context>) => {
   const logger = useComponentLogger("VirtualCardGrid");
-  const virtuosoRef = useRef<VirtuosoGridHandle>(null);
+  const virtuosoRef = useRef<VirtuosoHandle>(null);
   const NOT_EXISTING_TOP = -1;
   const [scrollRestoreOptions] = usePersistedState<{
     top: number;
@@ -75,11 +78,6 @@ export const VirtualCardGrid = <ItemData, Context>({
   );
 
   const [scrollerRef, setScrollerRef] = useState<HTMLElement | null>(null);
-
-  const additionalItemClassName = useMemo(
-    () => (size === "small" ? "small" : ""),
-    [size],
-  );
 
   useStateChangeLogger(
     isRestoringScrollPosition,
@@ -98,64 +96,67 @@ export const VirtualCardGrid = <ItemData, Context>({
     }
   }, [scrollToTop, logger]);
 
+  const onRangeChanged = () => {
+    if (isRestoringScrollPosition) {
+      if (scrollRestoreOptions.top <= 0) {
+        logger("Scroll position to top <= 0");
+        setIsRestoringScrollPosition(false);
+        return;
+      }
+      logger("Retrieved scroll options %o", scrollRestoreOptions);
+      if (scrollRestoreOptions.totalCount === items.length) {
+        logger("Restore scroll position");
+        function restoreScroll() {
+          virtuosoRef.current?.scrollTo({
+            behavior: "instant",
+            top: scrollRestoreOptions.top,
+          });
+        }
+        [30, 100, 150].forEach((delay) => {
+          setTimeout(() => {
+            restoreScroll();
+          }, delay);
+        });
+        setTimeout(() => {
+          setIsRestoringScrollPosition(false);
+        }, MAX_SCROLL_RESTORE_TIME_MS);
+      } else {
+        setIsRestoringScrollPosition(false);
+      }
+    }
+  };
+
+  const onIsScrolling = (isScrolling: boolean) => {
+    if (isRestoringScrollPosition && !isScrolling && scrollerRef) {
+      if (scrollerRef.scrollTop === scrollRestoreOptions.top) {
+        logger("Restored scroll position at %o", scrollerRef.scrollTop);
+        setIsRestoringScrollPosition(false);
+      }
+    } else if (
+      scrollStoreKey &&
+      !isScrolling &&
+      scrollerRef &&
+      !isRestoringScrollPosition
+    ) {
+      const scrollOptions = {
+        totalCount: items.length,
+        top: scrollerRef.scrollTop,
+      };
+      logger("Save scroll position %o", scrollOptions);
+      logger("isRestoringScrollPosition %o", isRestoringScrollPosition);
+      localStorage.setItem(
+        `${APP_LOCAL_STORAGE_PREFIX}${scrollStoreKey}`,
+        JSON.stringify(scrollOptions),
+      );
+    }
+  };
+
   return (
-    <VirtuosoGrid
-      scrollerRef={(ref) => setScrollerRef(ref)}
+    <Virtuoso
+      scrollerRef={(ref) => setScrollerRef(ref as any)}
       ref={virtuosoRef}
-      className="ion-content-scroll-host"
-      rangeChanged={() => {
-        if (isRestoringScrollPosition) {
-          if (scrollRestoreOptions.top <= 0) {
-            logger("Scroll position to top <= 0");
-            setIsRestoringScrollPosition(false);
-            return;
-          }
-          logger("Retrieved scroll options %o", scrollRestoreOptions);
-          if (scrollRestoreOptions.totalCount === items.length) {
-            logger("Restore scroll position");
-            function restoreScroll() {
-              virtuosoRef.current?.scrollTo({
-                behavior: "instant",
-                top: scrollRestoreOptions.top,
-              });
-            }
-            [30, 100, 150].forEach((delay) => {
-              setTimeout(() => {
-                restoreScroll();
-              }, delay);
-            });
-            setTimeout(() => {
-              setIsRestoringScrollPosition(false);
-            }, MAX_SCROLL_RESTORE_TIME_MS);
-          } else {
-            setIsRestoringScrollPosition(false);
-          }
-        }
-      }}
-      isScrolling={(isScrolling) => {
-        if (isRestoringScrollPosition && !isScrolling && scrollerRef) {
-          if (scrollerRef.scrollTop === scrollRestoreOptions.top) {
-            logger("Restored scroll position at %o", scrollerRef.scrollTop);
-            setIsRestoringScrollPosition(false);
-          }
-        } else if (
-          scrollStoreKey &&
-          !isScrolling &&
-          scrollerRef &&
-          !isRestoringScrollPosition
-        ) {
-          const scrollOptions = {
-            totalCount: items.length,
-            top: scrollerRef.scrollTop,
-          };
-          logger("Save scroll position %o", scrollOptions);
-          logger("isRestoringScrollPosition %o", isRestoringScrollPosition);
-          localStorage.setItem(
-            `${APP_LOCAL_STORAGE_PREFIX}${scrollStoreKey}`,
-            JSON.stringify(scrollOptions),
-          );
-        }
-      }}
+      rangeChanged={onRangeChanged}
+      isScrolling={onIsScrolling}
       style={{
         height: "100%",
         visibility: isRestoringScrollPosition ? "hidden" : "visible",
@@ -165,41 +166,26 @@ export const VirtualCardGrid = <ItemData, Context>({
       endReached={() => endReached && endReached()}
       overscan={200}
       data={items}
-      itemClassName={`item-class-name ${additionalItemClassName}`}
-      listClassName="list-class-name"
+      className="virtuoso-list"
       components={{
         Footer: () =>
           isFetching ? (
-            <div
-              className="ion-margin"
-              style={{
+            <Box
+              sx={{
+                p: 1,
                 display: "flex",
-                alignItems: "center",
                 justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <CircularProgress />
-            </div>
+            </Box>
           ) : (
-            <></>
+            footerElement || null
           ),
-        ScrollSeekPlaceholder: (props) => (
-          <div
-            style={{
-              height: props.height,
-              width: props.width,
-            }}
-          >
-            <LoadingCard></LoadingCard>
-          </div>
-        ),
         Header: () => headerElement || null,
       }}
       itemContent={itemContent}
-      scrollSeekConfiguration={{
-        enter: (velocity) => Math.abs(velocity) > 500,
-        exit: (velocity) => Math.abs(velocity) < 30,
-      }}
-    ></VirtuosoGrid>
+    />
   );
 };

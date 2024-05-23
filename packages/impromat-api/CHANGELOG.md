@@ -1,5 +1,36 @@
 # impromat-api
 
+## 0.30.2
+
+### Patch Changes
+
+- 63673ca: Accept dash (-) in path after login for authentication state
+
+## 0.30.1
+
+### Patch Changes
+
+- 86504d3: Remove default source name "impromat" to fix unexpected source update when editing elements from different sources
+
+## 0.30.0
+
+### Minor Changes
+
+- 0425290: Redirect to specified url in state on login callback
+
+## 0.29.2
+
+### Patch Changes
+
+- Updated dependencies [22ae4b3]
+  - improbib@0.6.1
+
+## 0.29.1
+
+### Patch Changes
+
+- fe0992e: Fix public workshops returning wrong isLiked status
+
 ## 0.29.0
 
 ### Minor Changes
