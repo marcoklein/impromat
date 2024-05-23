@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.72.6
+
+### Patch Changes
+
+- Updated dependencies [98f2b3b]
+- Updated dependencies [1121b3b]
+  - impromat-api@0.30.3
+
 ## 0.72.5
 
 ### Patch Changes
