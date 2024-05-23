@@ -1,6 +1,6 @@
 {
   "name": "improbib-importer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "start": "ts-node --transpile-only src/main.ts",
