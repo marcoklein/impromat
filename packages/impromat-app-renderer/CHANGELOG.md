@@ -1,5 +1,15 @@
 # impromat-app-renderer
 
+## 0.4.21
+
+### Patch Changes
+
+- 1121b3b: Added more logging for browser handling
+- Updated dependencies [98f2b3b]
+- Updated dependencies [1121b3b]
+  - impromat-api@0.30.3
+  - impromat@0.72.6
+
 ## 0.4.20
 
 ### Patch Changes
