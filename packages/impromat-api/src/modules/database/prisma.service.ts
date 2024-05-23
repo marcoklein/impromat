@@ -56,10 +56,14 @@ export class PrismaService
   }
 
   async onModuleInit() {
+    let queryCount = 0;
     this.$on('query', (e) => {
+      queryCount++;
+      this.logger.debug('Target: ' + e.target);
       this.logger.debug('Query: ' + e.query);
       this.logger.debug('Params: ' + e.params);
       this.logger.debug('Duration: ' + e.duration + 'ms');
+      this.logger.debug('Query Count: ' + queryCount);
     });
     this.$on('error', (e) => {
       this.logger.error('Error: ' + e.message);

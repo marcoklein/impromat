@@ -54,6 +54,7 @@ export type AppAbility = PureAbility<
  */
 export const defineAbilityForUser = (userId: string | undefined) => {
   const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
+
   if (userId) {
     can(ABILITY_ACTION_WRITE, 'User', { id: userId }).because(REASON_OWNER);
     can(ABILITY_ACTION_READ, 'User', { id: userId }).because(REASON_OWNER);
@@ -124,8 +125,17 @@ export const defineAbilityForUser = (userId: string | undefined) => {
 
     can(ABILITY_ACTION_READ, 'Element', {
       workshopElements: {
-        some: { workshopSection: { workshop: { isPublic: true } } },
+        some: {
+          workshopSection: { is: { workshop: { is: { isPublic: true } } } },
+        },
       },
+    }).because(REASON_PART_OF_PUBLIC_WORKSHOP);
+
+    can(ABILITY_ACTION_READ, 'WorkshopElement', {
+      workshopSection: { is: { workshop: { is: { ownerId: userId } } } },
+    }).because(REASON_OWNER);
+    can(ABILITY_ACTION_READ, 'WorkshopElement', {
+      workshopSection: { is: { workshop: { is: { isPublic: true } } } },
     }).because(REASON_PART_OF_PUBLIC_WORKSHOP);
   } else {
     can(
@@ -150,8 +160,14 @@ export const defineAbilityForUser = (userId: string | undefined) => {
     }).because(REASON_PUBLICLY_LISTED);
     can(ABILITY_ACTION_READ, 'Element', {
       workshopElements: {
-        some: { workshopSection: { workshop: { isPublic: true } } },
+        some: {
+          workshopSection: { is: { workshop: { is: { isPublic: true } } } },
+        },
       },
+    }).because(REASON_PART_OF_PUBLIC_WORKSHOP);
+
+    can(ABILITY_ACTION_READ, 'WorkshopElement', {
+      workshopSection: { is: { workshop: { is: { isPublic: true } } } },
     }).because(REASON_PART_OF_PUBLIC_WORKSHOP);
   }
   return build();

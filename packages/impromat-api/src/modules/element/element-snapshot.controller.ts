@@ -11,11 +11,12 @@ export class ElementSnapshotController {
   @ResolveField(() => User)
   async user(
     @Parent() elementSnapshot: ElementSnapshot,
-    @SessionUserId() userId: string,
+    @SessionUserId() userId: string | undefined,
   ) {
-    return this.elementSnapshotService
-      .findElementSnapshotById(userId, elementSnapshot.id)
-      .snapshotUser();
+    return this.elementSnapshotService.findElementSnapshotUser(
+      elementSnapshot,
+      userId,
+    );
   }
 
   @ResolveField(() => Element)
@@ -34,8 +35,9 @@ export class ElementSnapshotController {
     @Parent() elementSnapshot: ElementSnapshot,
     @SessionUserId() userId: string,
   ) {
-    return this.elementSnapshotService
-      .findElementSnapshotById(userId, elementSnapshot.id)
-      .snapshotParent();
+    return this.elementSnapshotService.findElementSnapshotParent(
+      elementSnapshot,
+      userId,
+    );
   }
 }

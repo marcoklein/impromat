@@ -7,13 +7,11 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { ElementsQueryArgs } from 'src/dtos/args/elements-query-args';
 import { PaginationArgs } from 'src/dtos/args/pagination-args';
 import {
   CreateElementInput,
   UpdateElementInput,
 } from 'src/dtos/inputs/element-input';
-import { ElementQueryResult } from 'src/dtos/types/element-query-result.dto';
 import { ElementTag } from 'src/dtos/types/element-tag.dto';
 import {
   Element,
@@ -54,15 +52,7 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    if (!userSessionId) return false;
-    const elementFavoriteRelations = await this.elementService
-      .findElementById(userSessionId, element.id)
-      .userFavoriteElement({
-        where: {
-          userId: userSessionId,
-        },
-      });
-    return elementFavoriteRelations.length > 0;
+    return this.elementService.findIsFavorite(element, userSessionId);
   }
 
   @ResolveField(() => String, {
@@ -91,25 +81,12 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string | undefined,
   ) {
-    if (userSessionId) {
-      const owner = await this.elementService
-        .findElementById(userSessionId, element.id)
-        .owner();
-      if (owner) {
-        return owner.id === userSessionId;
-      } else {
-        return false;
-      }
-    }
-    return null;
+    return this.elementService.findIsOwnerMe(userSessionId, element.id);
   }
 
-  @ResolveField(() => [ElementTag])
-  async tags(
-    @Parent() element: Element,
-    @SessionUserId() userSessionId: string,
-  ) {
-    return this.elementService.findElementTags(userSessionId, element.id);
+  @ResolveField(() => [ElementTag], { complexity: 5 })
+  async tags(@Parent() element: Element) {
+    return this.elementService.findElementTags(element);
   }
 
   @ResolveField(() => [WorkshopElement])
@@ -117,9 +94,10 @@ export class ElementController {
     @Parent() element: Element,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.elementService
-      .findElementById(userSessionId, element.id)
-      .workshopElements();
+    return this.elementService.findUsedByWorkshopElements(
+      element,
+      userSessionId,
+    );
   }
 
   @ResolveField(() => [ElementSnapshot], {
@@ -139,26 +117,10 @@ export class ElementController {
 
   @Query(() => Element, { nullable: true })
   async element(
-    @SessionUserId() userId: string,
     @Args('id', { type: () => ID }) id: string,
+    @SessionUserId() userId: string,
   ) {
     return this.elementService.findElementById(userId, id);
-  }
-
-  @Query(() => [ElementQueryResult])
-  async elements(
-    @Args() { filter, orderBy, skip, take }: ElementsQueryArgs,
-    @SessionUserId() userId: string,
-  ) {
-    const elements = await this.elementService.findElements(userId, {
-      filter: filter ?? { isOwnerMe: true, isPublic: true },
-      orderBy: orderBy ?? { notImplemented: true },
-      skip,
-      take,
-    });
-    return elements.map((element) => ({
-      element,
-    }));
   }
 
   @Mutation(() => Element)

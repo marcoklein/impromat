@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  query Me {\n    me {\n      id\n    }\n  }\n": types.MeDocument,
     "\n  fragment ElementFields on Element {\n    id\n    name\n    improbibIdentifier\n    markdown\n    tags {\n      id\n      name\n    }\n  }\n": types.ElementFieldsFragmentDoc,
-    "\n  query Elements($skip: Int!, $take: Int!) {\n    elements(skip: $skip, take: $take) {\n      element {\n        ...ElementFields\n        snapshots {\n          id\n          user {\n            id\n          }\n          element {\n            ...ElementFields\n          }\n        }\n      }\n    }\n  }\n": types.ElementsDocument,
+    "\n  query Elements($skip: Int!, $take: Int!) {\n    searchElements(skip: $skip, take: $take) {\n      element {\n        ...ElementFields\n        snapshots {\n          id\n          user {\n            id\n          }\n          element {\n            ...ElementFields\n          }\n        }\n      }\n    }\n  }\n": types.ElementsDocument,
     "\n  mutation CreateElementMutation($input: CreateElementInput!) {\n    createElement(input: $input) {\n      id\n    }\n  }\n": types.CreateElementMutationDocument,
 };
 
@@ -44,7 +44,7 @@ export function graphql(source: "\n  fragment ElementFields on Element {\n    id
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Elements($skip: Int!, $take: Int!) {\n    elements(skip: $skip, take: $take) {\n      element {\n        ...ElementFields\n        snapshots {\n          id\n          user {\n            id\n          }\n          element {\n            ...ElementFields\n          }\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query Elements($skip: Int!, $take: Int!) {\n    elements(skip: $skip, take: $take) {\n      element {\n        ...ElementFields\n        snapshots {\n          id\n          user {\n            id\n          }\n          element {\n            ...ElementFields\n          }\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query Elements($skip: Int!, $take: Int!) {\n    searchElements(skip: $skip, take: $take) {\n      element {\n        ...ElementFields\n        snapshots {\n          id\n          user {\n            id\n          }\n          element {\n            ...ElementFields\n          }\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query Elements($skip: Int!, $take: Int!) {\n    searchElements(skip: $skip, take: $take) {\n      element {\n        ...ElementFields\n        snapshots {\n          id\n          user {\n            id\n          }\n          element {\n            ...ElementFields\n          }\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

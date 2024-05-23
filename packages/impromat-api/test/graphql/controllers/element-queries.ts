@@ -34,21 +34,6 @@ export const elementByIdQuery = graphql(`
   }
 `);
 
-export const elementsQuery = graphql(`
-  query ElementsQuery(
-    $filter: ElementsFilterInput
-    $orderBy: ElementsOrderByInput
-    $skip: Int! = 0
-    $take: Int! = 20
-  ) {
-    elements(filter: $filter, orderBy: $orderBy, skip: $skip, take: $take) {
-      element {
-        ...ElementFields
-      }
-    }
-  }
-`);
-
 export const searchElementsQuery = graphql(`
   query SearchElementsQuery($input: ElementSearchInput!, $take: Int) {
     searchElements(input: $input, take: $take) {

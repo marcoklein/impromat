@@ -7,7 +7,7 @@ import {
 import {
   createElementMutation,
   elementByIdQuery,
-  elementsQuery,
+  searchElementsQuery,
   updateElementMutation,
 } from './element-queries';
 
@@ -25,11 +25,11 @@ describe('Sharing Elements', () => {
   it('should have 0 owning elements per default', async () => {
     // given
     // when
-    const elements = await api.graphqlRequest(elementsQuery, {
-      filter: { isOwnerMe: true },
+    const elements = await api.graphqlRequest(searchElementsQuery, {
+      input: { ownElement: true },
     });
     // then
-    expect(elements.data?.elements?.length).toBe(0);
+    expect(elements.data?.searchElements?.length).toBe(0);
   });
 
   it('should not allow fetching of unshared element', async () => {
@@ -120,13 +120,13 @@ describe('Sharing Elements', () => {
       },
     );
     expect(updatedElementResponse.errors).toBeUndefined();
-    const elements = await api.graphqlRequest(elementsQuery, {
-      filter: { isPublic: true },
+    const elements = await api.graphqlRequest(searchElementsQuery, {
+      input: { text: uniqueElementName },
       take: 10,
     });
     // then
     expect(elements.errors).toBeUndefined();
-    const elementsWithName = elements.data!.elements.filter(
+    const elementsWithName = elements.data!.searchElements.filter(
       (element) => element.element.name === uniqueElementName,
     );
     expect(elementsWithName).toHaveLength(1);

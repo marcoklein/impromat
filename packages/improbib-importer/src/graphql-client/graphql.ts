@@ -130,11 +130,6 @@ export type ElementSummaryArgs = {
   forceRefresh?: Scalars['Boolean']['input'];
 };
 
-export type ElementQueryResult = {
-  __typename?: 'ElementQueryResult';
-  element: Element;
-};
-
 export type ElementSearchInput = {
   /** Language code (e.g. en, de) for results. */
   languageCode?: InputMaybe<Scalars['String']['input']>;
@@ -228,19 +223,6 @@ export enum ElementVisibility {
   Public = 'PUBLIC'
 }
 
-/** Filter for elements */
-export type ElementsFilterInput = {
-  /** Include all elements of the currently active user. */
-  isOwnerMe?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Include all elements that are publicly available to the logged-in user. */
-  isPublic?: InputMaybe<Scalars['Boolean']['input']>;
-  nameSearch?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type ElementsOrderByInput = {
-  notImplemented: Scalars['Boolean']['input'];
-};
-
 export type IdInput = {
   id: Scalars['ID']['input'];
 };
@@ -333,7 +315,6 @@ export type NestedStringFilter = {
 export type Query = {
   __typename?: 'Query';
   element?: Maybe<Element>;
-  elements: Array<ElementQueryResult>;
   googleAuthUrl: Scalars['String']['output'];
   /** Get information about the current user. Returns null if not logged in. */
   me?: Maybe<User>;
@@ -357,16 +338,8 @@ export type QueryElementArgs = {
 };
 
 
-export type QueryElementsArgs = {
-  filter?: InputMaybe<ElementsFilterInput>;
-  orderBy?: InputMaybe<ElementsOrderByInput>;
-  skip?: Scalars['Int']['input'];
-  take?: Scalars['Int']['input'];
-};
-
-
 export type QuerySearchElementsArgs = {
-  input: ElementSearchInput;
+  input?: InputMaybe<ElementSearchInput>;
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
 };
@@ -696,7 +669,7 @@ export type ElementsQueryVariables = Exact<{
 }>;
 
 
-export type ElementsQuery = { __typename?: 'Query', elements: Array<{ __typename?: 'ElementQueryResult', element: { __typename?: 'Element', id: string, name: string, improbibIdentifier?: string | null, markdown?: string | null, snapshots: Array<{ __typename?: 'ElementSnapshot', id: string, user?: { __typename?: 'User', id: string } | null, element: { __typename?: 'Element', id: string, name: string, improbibIdentifier?: string | null, markdown?: string | null, tags: Array<{ __typename?: 'ElementTag', id: string, name: string }> } }>, tags: Array<{ __typename?: 'ElementTag', id: string, name: string }> } }> };
+export type ElementsQuery = { __typename?: 'Query', searchElements: Array<{ __typename?: 'ElementSearchResult', element: { __typename?: 'Element', id: string, name: string, improbibIdentifier?: string | null, markdown?: string | null, snapshots: Array<{ __typename?: 'ElementSnapshot', id: string, user?: { __typename?: 'User', id: string } | null, element: { __typename?: 'Element', id: string, name: string, improbibIdentifier?: string | null, markdown?: string | null, tags: Array<{ __typename?: 'ElementTag', id: string, name: string }> } }>, tags: Array<{ __typename?: 'ElementTag', id: string, name: string }> } }> };
 
 export type CreateElementMutationMutationVariables = Exact<{
   input: CreateElementInput;
@@ -707,5 +680,5 @@ export type CreateElementMutationMutation = { __typename?: 'Mutation', createEle
 
 export const ElementFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ElementFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Element"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"improbibIdentifier"}},{"kind":"Field","name":{"kind":"Name","value":"markdown"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<ElementFieldsFragment, unknown>;
 export const MeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
-export const ElementsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Elements"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"elements"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ElementFields"}},{"kind":"Field","name":{"kind":"Name","value":"snapshots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ElementFields"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ElementFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Element"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"improbibIdentifier"}},{"kind":"Field","name":{"kind":"Name","value":"markdown"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<ElementsQuery, ElementsQueryVariables>;
+export const ElementsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Elements"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchElements"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ElementFields"}},{"kind":"Field","name":{"kind":"Name","value":"snapshots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ElementFields"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ElementFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Element"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"improbibIdentifier"}},{"kind":"Field","name":{"kind":"Name","value":"markdown"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<ElementsQuery, ElementsQueryVariables>;
 export const CreateElementMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateElementMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateElementInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createElement"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateElementMutationMutation, CreateElementMutationMutationVariables>;
