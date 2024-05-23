@@ -17,12 +17,13 @@ export class ElementSearchController {
   @Query(() => [ElementSearchResult])
   async searchElements(
     @Args() paginationArgs: PaginationArgs,
-    @Args('input') input: ElementSearchInput,
     @SessionUserId() userId: string | undefined,
+    @Args('input', { nullable: true })
+    input?: ElementSearchInput,
   ): Promise<ElementSearchResult[]> {
     return this.elementSearchService.searchElements(
       userId,
-      input,
+      input ?? {},
       paginationArgs,
     );
   }

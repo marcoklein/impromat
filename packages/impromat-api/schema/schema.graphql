@@ -277,7 +277,7 @@ type Query {
 
   """Get information about the current user. Returns null if not logged in."""
   me: User
-  searchElements(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
+  searchElements(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput): [ElementSearchResult!]!
   searchElementsTfidf(skip: Int! = 0, take: Int! = 20, input: ElementSearchInput!): [ElementSearchResult!]!
   searchElementsKeywords(input: ElementSearchInput!): ElementSearchKeywords!
   workshop(id: ID!): Workshop
