@@ -13,9 +13,9 @@
   },
   "devDependencies": {
     "@tidyjs/tidy": "^2.5.2",
-    "@types/chai": "^4.3.14",
+    "@types/chai": "^4.3.16",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.19.28",
+    "@types/node": "^18.19.33",
     "chai": "^4.4.1",
     "mocha": "^10.4.0",
     "nodemon": "^2.0.22"

@@ -121,3 +121,15 @@ Upgrade a workspace to latest dependencies:
 ```sh
 yarn ncu --configFileName .ncurc-latest.json --workspace impromat-api -u
 ```
+
+Fix vulnerabilities:
+
+```sh
+yarn fix-vulnerabilities
+```
+
+Upgrade deps and fix vulnerabilities:
+
+```sh
+yarn health
+```
