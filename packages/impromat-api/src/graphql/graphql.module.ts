@@ -26,6 +26,10 @@ import { UserSessionService } from './services/user-session.service';
           'request.credentials': 'include',
         },
       },
+      formatError: (error) => {
+        console.error('error', error);
+        return error;
+      },
     }),
     AdminModule,
     DatabaseModule,

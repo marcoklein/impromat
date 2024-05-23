@@ -189,10 +189,6 @@ type ElementTag {
   count: Float!
 }
 
-type ElementQueryResult {
-  element: Element!
-}
-
 type WorkshopSection {
   id: ID!
   createdAt: DateTime!
@@ -273,7 +269,6 @@ type Query {
   googleAuthUrl: String!
   tags(filter: ElementTagsFilterInput, skip: Int! = 0, take: Int! = 20): [ElementTag!]!
   element(id: ID!): Element
-  elements(skip: Int! = 0, take: Int! = 20, filter: ElementsFilterInput, orderBy: ElementsOrderByInput): [ElementQueryResult!]!
 
   """
   Get information about a user. Returns null if not found or not logged in.
@@ -302,23 +297,6 @@ input ElementTagsFilterInput {
 
   """Language code (e.g. en, de) for results."""
   languageCode: String
-}
-
-"""Filter for elements"""
-input ElementsFilterInput {
-  nameSearch: String
-
-  """Include all elements of the currently active user."""
-  isOwnerMe: Boolean
-
-  """
-  Include all elements that are publicly available to the logged-in user.
-  """
-  isPublic: Boolean
-}
-
-input ElementsOrderByInput {
-  notImplemented: Boolean!
 }
 
 input ElementSearchInput {

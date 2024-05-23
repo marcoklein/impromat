@@ -35,6 +35,11 @@ describe('Abilities', () => {
       ['Element', 'write', [REASON_OWNER, REASON_PUBLICLY_LISTED]],
       ['Element', 'list', [REASON_OWNER, REASON_PUBLICLY_LISTED]],
       [
+        'WorkshopElement',
+        'read',
+        [REASON_OWNER, REASON_PART_OF_PUBLIC_WORKSHOP],
+      ],
+      [
         'Workshop',
         'read',
         [REASON_OWNER, REASON_PUBLIC, REASON_PUBLICLY_LISTED],
@@ -82,6 +87,7 @@ describe('Abilities', () => {
       ],
       ['Element', 'write', []],
       ['Element', 'list', [REASON_PUBLICLY_LISTED]],
+      ['WorkshopElement', 'read', [REASON_PART_OF_PUBLIC_WORKSHOP]],
       ['ElementToElementTag', 'read', [REASON_PUBLIC]],
       ['Workshop', 'read', [REASON_PUBLIC, REASON_PUBLICLY_LISTED]],
       ['Workshop', 'write', []],

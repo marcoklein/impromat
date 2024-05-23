@@ -4,8 +4,8 @@ import {
   ABILITY_ACTION_LIST,
   defineAbilityForUser,
 } from 'src/graphql/abilities';
-import { ElementService } from 'src/modules/element/element.service';
 import { PrismaService } from 'src/modules/database/prisma.service';
+import { ElementService } from 'src/modules/element/element.service';
 import { ElementLLMService } from './element-llm.service';
 
 export interface ElementSummaryInput {
@@ -46,8 +46,6 @@ export class ElementSummaryService {
       select: {
         id: true,
         name: true,
-        markdown: true,
-        languageCode: true,
       },
     });
     this.logger.log(
@@ -67,10 +65,20 @@ export class ElementSummaryService {
     elementId: string,
     forceRefresh = false,
   ) {
-    const dbElement = await this.elementService.findElementById(
-      userSessionId,
-      elementId,
-    );
+    const ability = defineAbilityForUser(userSessionId);
+    if (forceRefresh && !ability.can('write', 'Element')) {
+      this.logger.warn(
+        `User ${userSessionId} is not allowed to force refresh summaries.`,
+      );
+      return undefined;
+    }
+    const dbElement = await this.prismaService.element.findUnique({
+      where: { id: elementId },
+    });
+    if (!dbElement) {
+      this.logger.warn(`Element ${elementId} not found`);
+      return undefined;
+    }
     if (dbElement.summary && !forceRefresh) {
       return dbElement.summary;
     }

@@ -141,11 +141,6 @@ export type ElementSummaryArgs = {
   forceRefresh?: Scalars['Boolean']['input'];
 };
 
-export type ElementQueryResult = {
-  __typename?: 'ElementQueryResult';
-  element: Element;
-};
-
 export type ElementSearchInput = {
   /** Language code (e.g. en, de) for results. */
   languageCode?: InputMaybe<Scalars['String']['input']>;
@@ -239,19 +234,6 @@ export enum ElementVisibility {
   Public = 'PUBLIC',
 }
 
-/** Filter for elements */
-export type ElementsFilterInput = {
-  /** Include all elements of the currently active user. */
-  isOwnerMe?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Include all elements that are publicly available to the logged-in user. */
-  isPublic?: InputMaybe<Scalars['Boolean']['input']>;
-  nameSearch?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type ElementsOrderByInput = {
-  notImplemented: Scalars['Boolean']['input'];
-};
-
 export type IdInput = {
   id: Scalars['ID']['input'];
 };
@@ -334,7 +316,6 @@ export type NestedStringFilter = {
 export type Query = {
   __typename?: 'Query';
   element?: Maybe<Element>;
-  elements: Array<ElementQueryResult>;
   googleAuthUrl: Scalars['String']['output'];
   /** Get information about the current user. Returns null if not logged in. */
   me?: Maybe<User>;
@@ -354,13 +335,6 @@ export type Query = {
 
 export type QueryElementArgs = {
   id: Scalars['ID']['input'];
-};
-
-export type QueryElementsArgs = {
-  filter?: InputMaybe<ElementsFilterInput>;
-  orderBy?: InputMaybe<ElementsOrderByInput>;
-  skip?: Scalars['Int']['input'];
-  take?: Scalars['Int']['input'];
 };
 
 export type QuerySearchElementsArgs = {
@@ -711,36 +685,6 @@ export type ElementByIdQueryQuery = {
     usedBy: Array<{ __typename?: 'WorkshopElement'; id: string }>;
     owner?: { __typename?: 'User'; id: string } | null;
   } | null;
-};
-
-export type ElementsQueryQueryVariables = Exact<{
-  filter?: InputMaybe<ElementsFilterInput>;
-  orderBy?: InputMaybe<ElementsOrderByInput>;
-  skip?: Scalars['Int']['input'];
-  take?: Scalars['Int']['input'];
-}>;
-
-export type ElementsQueryQuery = {
-  __typename?: 'Query';
-  elements: Array<{
-    __typename?: 'ElementQueryResult';
-    element: {
-      __typename?: 'Element';
-      id: string;
-      version: number;
-      createdAt: any;
-      updatedAt: any;
-      deleted?: boolean | null;
-      name: string;
-      markdown?: string | null;
-      markdownShort?: string | null;
-      visibility: ElementVisibility;
-      isOwnerMe?: boolean | null;
-      tags: Array<{ __typename?: 'ElementTag'; id: string }>;
-      usedBy: Array<{ __typename?: 'WorkshopElement'; id: string }>;
-      owner?: { __typename?: 'User'; id: string } | null;
-    };
-  }>;
 };
 
 export type SearchElementsQueryQueryVariables = Exact<{
@@ -1505,172 +1449,6 @@ export const ElementByIdQueryDocument = {
   ElementByIdQueryQuery,
   ElementByIdQueryQueryVariables
 >;
-export const ElementsQueryDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'ElementsQuery' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'filter' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ElementsFilterInput' },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'orderBy' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ElementsOrderByInput' },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-          defaultValue: { kind: 'IntValue', value: '0' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'take' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-          defaultValue: { kind: 'IntValue', value: '20' },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'elements' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'filter' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'filter' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'orderBy' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'orderBy' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'skip' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'skip' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'take' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'take' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'element' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'FragmentSpread',
-                        name: { kind: 'Name', value: 'ElementFields' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'ElementFields' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'Element' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'version' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'deleted' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'markdown' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'markdownShort' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'visibility' } },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'tags' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'usedBy' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'owner' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-              ],
-            },
-          },
-          { kind: 'Field', name: { kind: 'Name', value: 'isOwnerMe' } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ElementsQueryQuery, ElementsQueryQueryVariables>;
 export const SearchElementsQueryDocument = {
   kind: 'Document',
   definitions: [
