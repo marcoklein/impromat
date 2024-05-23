@@ -5,7 +5,7 @@
     "start": "ts-node src/index.ts"
   },
   "dependencies": {
-    "@types/node": "^20.12.2",
+    "@types/node": "^20.12.12",
     "graphql-client": "^2.0.1",
     "natural": "^6.12.0",
     "retext": "^9.0.0",
@@ -17,7 +17,7 @@
   "devDependencies": {
     "@types/stopword": "^2.0.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   },
   "packageManager": "yarn@3.4.1"
 }

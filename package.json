@@ -1,11 +1,12 @@
 {
   "name": "root",
-  "version": "37",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "license": "GPL-3.0",
   "workspaces": {
     "packages": [
+      ".",
       "packages/*"
     ]
   },
@@ -47,7 +48,10 @@
     "foreach": "yarn workspaces foreach --parallel --verbose --interlaced --exclude root",
     "codegen": "yarn nx run-many --target=codegen",
     "changeset:add": "yarn changeset",
-    "run-storybook": "yarn nx storybook impromat"
+    "run-storybook": "yarn nx storybook impromat",
+    "fix-vulnerabilities": "npm_config_yes=true npx yarn-audit-fix",
+    "upgrade-minor-deps": "yarn ncu --configFileName .ncurc.json -u",
+    "health": "yarn upgrade-minor-deps && yarn fix-vulnerabilities"
   },
   "description": "Impromat Monorepo",
   "main": "index.js",

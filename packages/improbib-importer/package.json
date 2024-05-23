@@ -9,9 +9,9 @@
     "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql"
   },
   "devDependencies": {
-    "@types/diff": "^5.0.9",
+    "@types/diff": "^5.2.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@graphql-codegen/cli": "^4.0.1",
