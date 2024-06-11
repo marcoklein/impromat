@@ -29,8 +29,12 @@ const WorkshopFields_Workshop = graphql(`
 `);
 
 const WorkshopsPage_Query = graphql(`
-  query WorkshopsPage_Query($workshopSearchInput: WorkshopSearchInput!) {
-    searchWorkshops(input: $workshopSearchInput) {
+  query WorkshopsPage_Query(
+    $workshopSearchInput: WorkshopSearchInput!
+    $skip: Int!
+    $take: Int!
+  ) {
+    searchWorkshops(skip: $skip, take: $take, input: $workshopSearchInput) {
       workshop {
         ...WorkshopFields_Workshop
       }
@@ -62,6 +66,8 @@ export const WorkshopsPage: React.FC = () => {
       workshopSearchInput: {
         languageCodes,
       },
+      take: 100,
+      skip: 0,
     },
   });
   useStateChangeLogger(myUserId, "myUserId", logger);
