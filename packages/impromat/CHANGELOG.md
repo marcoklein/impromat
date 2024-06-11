@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.72.7
+
+### Patch Changes
+
+- 85babf1: Increase loaded workshops to 100 to fix lazy loading of workshops
+
 ## 0.72.6
 
 ### Patch Changes
