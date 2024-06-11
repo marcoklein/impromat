@@ -47,13 +47,7 @@ export class WorkshopController {
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.workshopService
-      .findWorkshopById(userSessionId, workshop.id)
-      .sections({
-        orderBy: {
-          orderIndex: 'asc',
-        },
-      });
+    return this.workshopService.findSections(workshop, userSessionId);
   }
 
   @ResolveField(() => User)

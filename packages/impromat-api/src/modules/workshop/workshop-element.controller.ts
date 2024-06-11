@@ -15,7 +15,6 @@ import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { WorkshopElementService } from './workshop-element.service';
 
 @Resolver(WorkshopElement)
-// @UseGuards(GraphqlAuthGuard)
 export class WorkshopElementController {
   constructor(private workshopElementService: WorkshopElementService) {}
 
@@ -24,9 +23,10 @@ export class WorkshopElementController {
     @Parent() element: WorkshopElement,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.workshopElementService
-      .findWorkshopElementById(userSessionId, element.id)
-      .workshopSection();
+    return this.workshopElementService.findWorkshopSection(
+      element,
+      userSessionId,
+    );
   }
 
   @ResolveField(() => WorkshopElement)
@@ -34,9 +34,7 @@ export class WorkshopElementController {
     @Parent() element: WorkshopElement,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.workshopElementService
-      .findWorkshopElementById(userSessionId, element.id)
-      .basedOn();
+    return this.workshopElementService.findBasedOn(element, userSessionId);
   }
 
   @Query(() => WorkshopElement)

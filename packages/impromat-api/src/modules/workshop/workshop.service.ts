@@ -6,6 +6,7 @@ import { FindManyWorkshopsArgs } from 'src/dtos/args/find-many-workshops-args';
 import { DuplicateWorkshopInput } from 'src/dtos/inputs/duplicate-workshop-input';
 import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-order';
 import { UpdateWorkshopSectionInput } from 'src/dtos/inputs/workshop-section-input';
+import { Workshop } from 'src/dtos/types/workshop.dto';
 import {
   CreateWorkshopInput,
   UpdateWorkshopInput,
@@ -15,17 +16,33 @@ import {
   ABILITY_ACTION_READ,
   defineAbilityForUser,
 } from '../../graphql/abilities';
-import { moveItemFromIndexToIndex } from './move-item-position';
 import { PrismaService } from '../database/prisma.service';
+import { moveItemFromIndexToIndex } from './move-item-position';
 
 @Injectable()
 export class WorkshopService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   findWorkshopById(userSessionId: string | undefined, workshopId: string) {
-    return this.prismaService.workshop.findFirst({
-      where: this.findWorkshopByIdWhereQuery(userSessionId, workshopId),
+    return this.prismaService.workshop.findUniqueOrThrow({
+      where: {
+        ...this.findWorkshopByIdWhereQuery(userSessionId, workshopId),
+        id: workshopId,
+      },
     });
+  }
+
+  async findSections(workshop: Workshop, userSessionId: string | undefined) {
+    const ability = defineAbilityForUser(userSessionId);
+    return this.prismaService.workshop
+      .findUnique({
+        where: { ...accessibleBy(ability).Workshop, id: workshop.id },
+      })
+      .sections({
+        orderBy: {
+          orderIndex: 'asc',
+        },
+      });
   }
 
   async findWorkshops(userSessionId: string, args: FindManyWorkshopsArgs) {
