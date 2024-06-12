@@ -18,9 +18,10 @@ export class UserService {
   ): Promise<Prisma.User | undefined | null> {
     if (!userRequestId || !userId) return undefined;
     const ability = defineAbilityForUser(userRequestId);
-    return await this.prismaService.user.findFirst({
+    return await this.prismaService.user.findUniqueOrThrow({
       where: {
-        AND: [accessibleBy(ability, ABILITY_ACTION_READ).User, { id: userId }],
+        AND: accessibleBy(ability, ABILITY_ACTION_READ).User,
+        id: userId,
       },
     });
   }
@@ -31,7 +32,7 @@ export class UserService {
   ) {
     const user = await this.findUserById(userRequestId, userRequestId);
     if (!user) {
-      throw new Error('User not found or insufficent permissions.');
+      throw new Error('User not found or insufficient permissions.');
     }
     const result = await this.prismaService.user.update({
       data: {
