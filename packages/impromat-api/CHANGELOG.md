@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.30.5
+
+### Patch Changes
+
+- 352d46c: Fix too many nested queries by using include on workshop search
+
 ## 0.30.4
 
 ### Patch Changes
