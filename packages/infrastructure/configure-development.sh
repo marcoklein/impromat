@@ -17,6 +17,14 @@ bash -e $WORKDIR/scripts/configure-impromat-app.sh development "dev.impromat.app
 log "Configuring impromat-api"
 bash -e $WORKDIR/scripts/configure-impromat-api.sh development api.dev.impromat.app
 
+##################################################
+### Resource Limits
+##################################################
+
+environmentName=development
+dokku resource:limit --cpu 0.5 ollama-$environmentName
+dokku resource:limit --cpu 0.5 impromat-api-$environmentName
+dokku resource:limit --cpu 0.5 impromat-app-$environmentName
 
 ##################################################
 ### Development environment specific configuration

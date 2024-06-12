@@ -1,10 +1,12 @@
+import { accessibleBy } from '@casl/prisma';
 import { UseGuards } from '@nestjs/common';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
+import { SessionUserId } from 'src/decorators/session-user-id.decorator';
 import { Element } from 'src/dtos/types/element.dto';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { Workshop } from 'src/dtos/types/workshop.dto';
-import { SessionUserId } from '../../decorators/session-user-id.decorator';
+import { defineAbilityForUser } from 'src/graphql/abilities';
 import { PrismaService } from '../database/prisma.service';
 
 @Resolver(WorkshopSection)
@@ -17,17 +19,15 @@ export class WorkshopSectionController {
     @Parent() sectionDto: WorkshopSection,
     @SessionUserId() userSessionId: string,
   ) {
+    const ability = defineAbilityForUser(userSessionId);
     return this.prismaService.workshopSection
-      .findFirstOrThrow({
-        where: {
-          id: sectionDto.id,
-          OR: [
-            { workshop: { ownerId: userSessionId } },
-            { workshop: { isPublic: true } },
-          ],
-        },
+      .findUnique({
+        where: { id: sectionDto.id },
       })
-      .elements({ orderBy: { orderIndex: 'asc' } });
+      .elements({
+        orderBy: { orderIndex: 'asc' },
+        where: accessibleBy(ability).WorkshopElement,
+      });
   }
 
   @ResolveField(() => [Workshop])
@@ -35,12 +35,10 @@ export class WorkshopSectionController {
     @Parent() sectionDto: WorkshopSection,
     @SessionUserId() userSessionId: string,
   ) {
+    const ability = defineAbilityForUser(userSessionId);
     return this.prismaService.workshopSection
-      .findFirstOrThrow({
-        where: {
-          id: sectionDto.id,
-          workshop: { OR: [{ ownerId: userSessionId }, { isPublic: true }] },
-        },
+      .findUnique({
+        where: { id: sectionDto.id, workshop: accessibleBy(ability).Workshop },
       })
       .workshop();
   }
