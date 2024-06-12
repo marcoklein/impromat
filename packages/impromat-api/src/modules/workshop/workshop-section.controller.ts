@@ -1,24 +1,22 @@
 import { accessibleBy } from '@casl/prisma';
-import { UseGuards } from '@nestjs/common';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
 import { SessionUserId } from 'src/decorators/session-user-id.decorator';
-import { Element } from 'src/dtos/types/element.dto';
+import { WorkshopElement } from 'src/dtos/types/workshop-element.dto';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { Workshop } from 'src/dtos/types/workshop.dto';
 import { defineAbilityForUser } from 'src/graphql/abilities';
 import { PrismaService } from '../database/prisma.service';
 
 @Resolver(WorkshopSection)
-@UseGuards(GraphqlAuthGuard)
 export class WorkshopSectionController {
   constructor(private prismaService: PrismaService) {}
 
-  @ResolveField(() => [Element])
+  @ResolveField(() => [WorkshopElement])
   async elements(
     @Parent() sectionDto: WorkshopSection,
     @SessionUserId() userSessionId: string,
   ) {
+    if ('elements' in sectionDto) return sectionDto.elements;
     const ability = defineAbilityForUser(userSessionId);
     return this.prismaService.workshopSection
       .findUnique({
@@ -30,11 +28,12 @@ export class WorkshopSectionController {
       });
   }
 
-  @ResolveField(() => [Workshop])
+  @ResolveField(() => Workshop)
   async workshop(
     @Parent() sectionDto: WorkshopSection,
     @SessionUserId() userSessionId: string,
   ) {
+    if ('workshop' in sectionDto) return sectionDto.workshop;
     const ability = defineAbilityForUser(userSessionId);
     return this.prismaService.workshopSection
       .findUnique({

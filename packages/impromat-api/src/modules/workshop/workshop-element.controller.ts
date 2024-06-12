@@ -13,6 +13,7 @@ import {
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { WorkshopElementService } from './workshop-element.service';
+import { Element } from 'src/dtos/types/element.dto';
 
 @Resolver(WorkshopElement)
 export class WorkshopElementController {
@@ -29,12 +30,16 @@ export class WorkshopElementController {
     );
   }
 
-  @ResolveField(() => WorkshopElement)
+  @ResolveField(() => Element)
   async basedOn(
-    @Parent() element: WorkshopElement,
+    @Parent() workshopElement: WorkshopElement,
     @SessionUserId() userSessionId: string,
   ) {
-    return this.workshopElementService.findBasedOn(element, userSessionId);
+    if ('basedOn' in workshopElement) return workshopElement.basedOn;
+    return this.workshopElementService.findBasedOn(
+      workshopElement,
+      userSessionId,
+    );
   }
 
   @Query(() => WorkshopElement)
