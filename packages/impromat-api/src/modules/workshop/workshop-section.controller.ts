@@ -16,7 +16,8 @@ export class WorkshopSectionController {
     @Parent() sectionDto: WorkshopSection,
     @SessionUserId() userSessionId: string,
   ) {
-    if ('elements' in sectionDto) return sectionDto.elements;
+    if ('elements' in sectionDto && !!sectionDto.elements)
+      return sectionDto.elements;
     const ability = defineAbilityForUser(userSessionId);
     return this.prismaService.workshopSection
       .findUnique({

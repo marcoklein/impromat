@@ -21,7 +21,7 @@ export class WorkshopSearchService {
     elementSearchInput: WorkshopSearchInput,
     paginationArgs: PaginationArgs,
   ): Promise<WorkshopSearchResult[]> {
-    const ability = defineAbilityForUser(userRequestId);
+    // const ability = defineAbilityForUser(userRequestId);
     const user = !userRequestId
       ? null
       : await this.prismaService.user.findUnique({
@@ -49,10 +49,11 @@ export class WorkshopSearchService {
       ...orderByQuery,
       include: {
         sections: {
-          where: accessibleBy(ability).WorkshopSection,
+          // access to workshop implicitly allows reading of sections and elements
+          // where: accessibleBy(ability).WorkshopSection,
           include: {
             elements: {
-              where: accessibleBy(ability).WorkshopElement,
+              // where: accessibleBy(ability).WorkshopElement,
               include: {
                 basedOn: true,
               },

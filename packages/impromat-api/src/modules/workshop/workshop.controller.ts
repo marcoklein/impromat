@@ -47,7 +47,7 @@ export class WorkshopController {
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string,
   ) {
-    if ('sections' in workshop) return workshop.sections;
+    if ('sections' in workshop && !!workshop.sections) return workshop.sections;
     return this.workshopService.findSections(workshop, userSessionId);
   }
 

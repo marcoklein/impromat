@@ -6,6 +6,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { Element } from 'src/dtos/types/element.dto';
 import {
   WorkshopElement,
   WorkshopElementRelations,
@@ -13,7 +14,6 @@ import {
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import { WorkshopElementService } from './workshop-element.service';
-import { Element } from 'src/dtos/types/element.dto';
 
 @Resolver(WorkshopElement)
 export class WorkshopElementController {
@@ -35,7 +35,8 @@ export class WorkshopElementController {
     @Parent() workshopElement: WorkshopElement,
     @SessionUserId() userSessionId: string,
   ) {
-    if ('basedOn' in workshopElement) return workshopElement.basedOn;
+    if ('basedOn' in workshopElement && workshopElement.basedOn)
+      return workshopElement.basedOn;
     return this.workshopElementService.findBasedOn(
       workshopElement,
       userSessionId,
