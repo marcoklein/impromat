@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.30.4
+
+### Patch Changes
+
+- 5e35912: Fix speed of workshops page loading by optimizing queries
+
 ## 0.30.3
 
 ### Patch Changes

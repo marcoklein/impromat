@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.72.8
+
+### Patch Changes
+
+- 5e35912: Increase loaded workshops to 100 to fix lazy loading of workshops
+- Updated dependencies [5e35912]
+  - impromat-api@0.30.4
+
 ## 0.72.7
 
 ### Patch Changes
