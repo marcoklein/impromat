@@ -1,5 +1,11 @@
 # impromat-api
 
+## 0.30.6
+
+### Patch Changes
+
+- 578e99c: Query optimizations with Prisma and element controller
+
 ## 0.30.5
 
 ### Patch Changes
