@@ -50,9 +50,10 @@ export class ElementService {
    */
   async findElementById(userRequestId: string | undefined, id: string) {
     const ability = defineAbilityForUser(userRequestId);
-    return this.prismaService.element.findFirstOrThrow({
+    return this.prismaService.element.findUniqueOrThrow({
       where: {
-        AND: [accessibleBy(ability).Element, { id }],
+        AND: accessibleBy(ability).Element,
+        id,
       },
     });
   }

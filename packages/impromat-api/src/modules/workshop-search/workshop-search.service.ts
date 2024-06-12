@@ -21,6 +21,7 @@ export class WorkshopSearchService {
     elementSearchInput: WorkshopSearchInput,
     paginationArgs: PaginationArgs,
   ): Promise<WorkshopSearchResult[]> {
+    // const ability = defineAbilityForUser(userRequestId);
     const user = !userRequestId
       ? null
       : await this.prismaService.user.findUnique({
@@ -43,9 +44,23 @@ export class WorkshopSearchService {
         },
       ],
     };
-    const prismaQuery = {
+    const prismaQuery: Prisma.WorkshopFindManyArgs = {
       where: baseWhereInput,
       ...orderByQuery,
+      include: {
+        sections: {
+          // access to workshop implicitly allows reading of sections and elements
+          // where: accessibleBy(ability).WorkshopSection,
+          include: {
+            elements: {
+              // where: accessibleBy(ability).WorkshopElement,
+              include: {
+                basedOn: true,
+              },
+            },
+          },
+        },
+      },
       take: paginationArgs.take,
       skip: paginationArgs.skip,
     };
