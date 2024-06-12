@@ -1,5 +1,11 @@
 # infrastructure
 
+## 0.9.1
+
+### Patch Changes
+
+- 5e35912: Specifiy resource limits for all services to control CPU usage
+
 ## 0.9.0
 
 ### Minor Changes
