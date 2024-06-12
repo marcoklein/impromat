@@ -16,3 +16,12 @@ bash -e $WORKDIR/scripts/configure-impromat-app.sh production "impromat.app" api
 
 log "Configuring impromat-api"
 bash -e $WORKDIR/scripts/configure-impromat-api.sh production api.impromat.app
+
+##################################################
+### Resource Limits
+##################################################
+
+environmentName=production
+dokku resource:limit --cpu 1 ollama-$environmentName
+dokku resource:limit --cpu 2 impromat-api-$environmentName
+dokku resource:limit --cpu 2 impromat-app-$environmentName
