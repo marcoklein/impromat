@@ -24,7 +24,7 @@ export class WorkshopService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   findWorkshopById(userSessionId: string | undefined, workshopId: string) {
-    return this.prismaService.workshop.findUniqueOrThrow({
+    return this.prismaService.workshop.findUnique({
       where: {
         ...this.findWorkshopByIdWhereQuery(userSessionId, workshopId),
         id: workshopId,

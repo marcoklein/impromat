@@ -9,7 +9,7 @@ export class WorkshopElementService {
   constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   async findWorkshopElementById(userRequestId: string, id: string) {
-    return this.prismaService.workshopElement.findFirstOrThrow({
+    return this.prismaService.workshopElement.findUniqueOrThrow({
       where: {
         workshopSection: {
           workshop: { OR: [{ ownerId: userRequestId }, { isPublic: true }] },
