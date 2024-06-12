@@ -45,6 +45,7 @@ export class WorkshopSearchService {
       ],
     };
     const prismaQuery: Prisma.WorkshopFindManyArgs = {
+      // relationLoadStrategy: 'join',
       where: baseWhereInput,
       ...orderByQuery,
       include: {
@@ -60,6 +61,7 @@ export class WorkshopSearchService {
             },
           },
         },
+        owner: true,
       },
       take: paginationArgs.take,
       skip: paginationArgs.skip,

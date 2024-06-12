@@ -47,7 +47,7 @@ export class WorkshopController {
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string,
   ) {
-    if ('sections' in workshop && !!workshop.sections) return workshop.sections;
+    if ('sections' in workshop) return workshop.sections;
     return this.workshopService.findSections(workshop, userSessionId);
   }
 
@@ -56,6 +56,9 @@ export class WorkshopController {
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string,
   ) {
+    if ('owner' in workshop) {
+      return workshop.owner;
+    }
     return this.workshopService
       .findWorkshopById(userSessionId, workshop.id)
       .owner();
@@ -72,6 +75,7 @@ export class WorkshopController {
     @SessionUserId() userSessionId: string,
   ) {
     if (userSessionId) {
+      // TODO get owner from cache
       const owner = await this.workshopService
         .findWorkshopById(userSessionId, workshop.id)
         .owner();
