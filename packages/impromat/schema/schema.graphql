@@ -198,9 +198,9 @@ type WorkshopSection {
   name: String
   color: String
   isCollapsed: Boolean!
+  orderIndex: Float!
   elements: [WorkshopElement!]!
   workshop: Workshop!
-  orderIndex: Float!
 }
 
 type WorkshopElement {
@@ -210,8 +210,8 @@ type WorkshopElement {
   version: Int!
   deleted: Boolean
   note: String
-  basedOn: Element!
   section: WorkshopSection!
+  basedOn: Element!
 }
 
 type Variation {

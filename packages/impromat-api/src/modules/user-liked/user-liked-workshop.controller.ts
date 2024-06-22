@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
+  Context,
   Mutation,
   Parent,
   ResolveField,
@@ -12,32 +13,23 @@ import { UpdateUserLikedWorkshopInput } from 'src/dtos/inputs/update-liked-works
 import { UserLikedWorkshopDto } from 'src/dtos/types/user-liked-workshop.dto';
 import { Workshop } from 'src/dtos/types/workshop.dto';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
-import { PrismaService } from '../database/prisma.service';
+import {
+  DATALOADER_CONTEXT,
+  DataLoaderContext,
+} from '../database/dataloader-context.interface';
 import { UserLikedWorkshopsService } from './user-liked-workshops.service';
 
 @Resolver(UserLikedWorkshopDto)
 @UseGuards(GraphqlAuthGuard)
 export class UserLikedWorkshopController {
-  constructor(
-    private prismaService: PrismaService,
-    private userLikedWorkshopsService: UserLikedWorkshopsService,
-  ) {}
+  constructor(private userLikedWorkshopsService: UserLikedWorkshopsService) {}
 
   @ResolveField(() => Workshop)
   async workshop(
     @Parent() userFavoriteElementDto: PrismaUserLikedWorkshop,
-    @SessionUserId() userSessionId: string,
+    @Context(DATALOADER_CONTEXT) context: DataLoaderContext,
   ) {
-    return this.prismaService.userLikedWorkshop
-      .findUniqueOrThrow({
-        where: {
-          userId_workshopId: {
-            userId: userSessionId,
-            workshopId: userFavoriteElementDto.workshopId,
-          },
-        },
-      })
-      .workshop();
+    return context.workshops.load(userFavoriteElementDto.workshopId);
   }
 
   @Mutation(() => Workshop, {

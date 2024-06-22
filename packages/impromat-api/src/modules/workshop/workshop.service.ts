@@ -1,5 +1,6 @@
+import { subject } from '@casl/ability';
 import { accessibleBy } from '@casl/prisma';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
 import { FindManyWorkshopsArgs } from 'src/dtos/args/find-many-workshops-args';
@@ -14,35 +15,97 @@ import {
 import {
   ABILITY_ACTION_LIST,
   ABILITY_ACTION_READ,
+  ABILITY_ACTION_WRITE,
   defineAbilityForUser,
 } from '../../graphql/abilities';
+import { DataLoaderContext } from '../database/dataloader-context.interface';
 import { PrismaService } from '../database/prisma.service';
+import { UserService } from '../user/user.service';
 import { moveItemFromIndexToIndex } from './move-item-position';
 
 @Injectable()
 export class WorkshopService {
-  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+  private readonly logger = new Logger(WorkshopService.name);
+
+  constructor(
+    @Inject(PrismaService) private prismaService: PrismaService,
+    @Inject(UserService) private userService: UserService,
+  ) {}
+
+  async queryWorkshopById(context: DataLoaderContext, workshopId: string) {
+    return context.workshops.load(workshopId);
+  }
 
   findWorkshopById(userSessionId: string | undefined, workshopId: string) {
+    // console.log(
+    //   JSON.stringify({
+    //     ...this.findWorkshopByIdWhereQuery(userSessionId, workshopId),
+    //   }),
+    //   null,
+    //   2,
+    // );
     return this.prismaService.workshop.findUnique({
       where: {
-        ...this.findWorkshopByIdWhereQuery(userSessionId, workshopId),
+        // ...this.findWorkshopByIdWhereQuery(userSessionId, workshopId),
         id: workshopId,
       },
     });
   }
 
-  async findSections(workshop: Workshop, userSessionId: string | undefined) {
+  async findIsLiked(workshopDto: Workshop, context: DataLoaderContext) {
+    if (!context.currentUser) return false;
+    const dbWorkshop = await this.queryWorkshopById(context, workshopDto.id);
+    if (!dbWorkshop) return false;
+    // TODO could make this more performant by using a specific select query
+    const userLikedWorkshops = await context.userLikedWorkshops.load(
+      context.currentUser.id,
+    );
+    return !!userLikedWorkshops?.find(
+      (likedWorkshopId) => likedWorkshopId.workshopId === dbWorkshop.id,
+    );
+  }
+
+  async findOwner(workshop: Workshop, context: DataLoaderContext) {
+    const dbWorkshop = await this.queryWorkshopById(context, workshop.id);
+    if (!dbWorkshop) return null;
+    return context.users.load(dbWorkshop.ownerId);
+  }
+
+  async getCanEdit(workshop: Workshop, userSessionId: string | undefined) {
+    this.logger.debug(`getCanEdit ${workshop.id} ${userSessionId}`);
+    if (!userSessionId) return false;
+    const dbWorkshop = await this.prismaService.workshop.findUnique({
+      where: { id: workshop.id },
+    });
+    this.logger.debug(`getCanEdit ${workshop.id} ${userSessionId}`);
     const ability = defineAbilityForUser(userSessionId);
-    return this.prismaService.workshop
-      .findUnique({
-        where: { ...accessibleBy(ability).Workshop, id: workshop.id },
-      })
-      .sections({
-        orderBy: {
-          orderIndex: 'asc',
-        },
-      });
+    return ability.can(ABILITY_ACTION_WRITE, subject('Workshop', dbWorkshop!));
+  }
+
+  async findIsOwnerMe(workshop: Workshop, context: DataLoaderContext) {
+    if (context.currentUser) {
+      const owner = await this.findOwner(workshop, context);
+      if (owner) {
+        return owner.id === context.currentUser.id;
+      } else {
+        return false;
+      }
+    }
+    return null;
+  }
+
+  async findSections(workshop: Workshop, context: DataLoaderContext) {
+    const workshop = await this.queryWorkshopById(context, workshop.id);
+    if (!workshop) return [];
+    // return this.prismaService.workshop
+    //   .findUnique({
+    //     where: { ...accessibleBy(ability).Workshop, id: workshop.id },
+    //   })
+    //   .sections({
+    //     orderBy: {
+    //       orderIndex: 'asc',
+    //     },
+    //   });
   }
 
   async findWorkshops(userSessionId: string, args: FindManyWorkshopsArgs) {

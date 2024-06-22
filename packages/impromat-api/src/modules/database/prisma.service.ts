@@ -58,6 +58,8 @@ export class PrismaService
   async onModuleInit() {
     let queryCount = 0;
     this.$on('query', (e) => {
+      const PRISMA_PING_QUERY = 'SELECT 1'; // https://github.com/prisma/prisma/discussions/5604
+      if (e.query === PRISMA_PING_QUERY) return;
       queryCount++;
       this.logger.debug('Target: ' + e.target);
       this.logger.debug('Query: ' + e.query);

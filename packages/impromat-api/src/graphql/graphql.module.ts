@@ -1,9 +1,10 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { environment } from 'src/environment';
 import { AdminModule } from 'src/modules/admin/admin.module';
 import { DatabaseModule } from 'src/modules/database/database.module';
+import { DataloaderService } from 'src/modules/database/dataloader.service';
 import { ElementAIModule } from 'src/modules/element-ai/element-summary.module';
 import { ElementSearchModule } from 'src/modules/element-search/element-search.module';
 import { ElementModule } from 'src/modules/element/element.module';
@@ -16,19 +17,32 @@ import { UserSessionService } from './services/user-session.service';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      context: ({ req, res }) => ({ req, res }),
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: environment.GRAPHQL_SCHEMA_GENERATION_PATH,
-      installSubscriptionHandlers: true,
-      playground: {
-        settings: {
-          'request.credentials': 'include',
-        },
-      },
-      formatError: (error) => {
-        console.error('error', error);
-        return error;
+      inject: [DataloaderService],
+      imports: [DatabaseModule],
+      useFactory: (dataloaderService: DataloaderService) => {
+        const logger = new Logger('GraphQLModule');
+        return {
+          autoSchemaFile: environment.GRAPHQL_SCHEMA_GENERATION_PATH,
+          context: ({ req, res }) => ({
+            req,
+            res,
+            loaders: dataloaderService.createLoadersWithUserId(
+              req.session?.data?.userId,
+            ),
+          }),
+          installSubscriptionHandlers: true,
+          playground: {
+            settings: {
+              'request.credentials': 'include',
+            },
+          },
+          formatError: (error) => {
+            logger.error(error);
+            return error;
+          },
+        };
       },
     }),
     AdminModule,
