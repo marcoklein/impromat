@@ -71,17 +71,14 @@ export class ElementService {
     return tags?.map((tag) => tag.tag);
   }
 
-  async findElementOwner(userRequestId: string | undefined, elementId: string) {
-    if (!userRequestId) return null;
-    const owner = await this.prismaService.element
-      .findUnique({ where: { id: elementId } })
-      .owner();
-
-    if (!owner) return null;
+  findElementOwner(userRequestId: string | undefined, elementId: string) {
     const ability = defineAbilityForUser(userRequestId);
-    if (ability.can('read', subject('User', owner))) {
-      return owner;
-    }
+    if (!userRequestId) return null;
+    return this.prismaService.element
+      .findUnique({
+        where: { AND: accessibleBy(ability).Element, id: elementId },
+      })
+      .owner();
   }
 
   async findIsFavorite(element: ElementDto, userRequestId?: string) {

@@ -67,6 +67,11 @@ export type CreateWorkshopSectionInput = {
   orderIndex?: InputMaybe<Scalars['Float']['input']>;
 };
 
+export type DataLoaderStats = {
+  __typename?: 'DataLoaderStats';
+  queryCount: Scalars['Int']['output'];
+};
+
 export type DeleteWorkshopElementInput = {
   id: Scalars['ID']['input'];
 };
@@ -314,6 +319,7 @@ export type NestedStringFilter = {
 
 export type Query = {
   __typename?: 'Query';
+  dataLoaderStatistics?: Maybe<DataLoaderStats>;
   element?: Maybe<Element>;
   googleAuthUrl: Scalars['String']['output'];
   /** Get information about the current user. Returns null if not logged in. */

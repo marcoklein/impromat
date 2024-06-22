@@ -2,7 +2,7 @@ import { Args, Info, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLResolveInfo } from 'graphql';
 import { PaginationArgs } from 'src/dtos/args/pagination-args';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
-import { getGraphqlFields } from './get-graphql-fields';
+import { getGraphqlFields } from '../../utils/get-graphql-fields';
 import { WorkshopSearchResult } from './workshop-search-result.dto';
 import { WorkshopSearchInput } from './workshop-search.input';
 import { WorkshopSearchService } from './workshop-search.service';
