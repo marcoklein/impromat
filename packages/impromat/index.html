@@ -10,6 +10,17 @@
     />
 
     <base href="/" />
+    <script>
+      console.log("listening for service worker registrations to unregister");
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          console.log(
+            "unregistering service worker for new impromat.app to load",
+          );
+          registration.unregister();
+        }
+      });
+    </script>
 
     <meta name="theme-color" content="#3880ff" />
     <meta name="color-scheme" content="light" />
