@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.72.11
+
+### Patch Changes
+
+- f26368e: Remove service worker registration
+
 ## 0.72.10
 
 ### Patch Changes
