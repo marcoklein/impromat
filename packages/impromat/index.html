@@ -17,7 +17,10 @@
           console.log(
             "unregistering service worker for new impromat.app to load",
           );
-          registration.unregister();
+          registration.unregister().then(() => {
+            console.log("Service worker unregistered, reloading the page");
+            window.location.reload();
+          });
         }
       });
     </script>
