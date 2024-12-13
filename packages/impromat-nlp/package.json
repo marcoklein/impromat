@@ -2,7 +2,9 @@
   "name": "impromat-nlp",
   "type": "module",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "codegen": "yarn codegen:get-schema-graphql && graphql-codegen",
+    "codegen:get-schema-graphql": "mkdir -p schema && cp ../impromat-api/schema/schema.graphql schema/schema.graphql"
   },
   "dependencies": {
     "@types/node": "^20.12.2",
