@@ -2,6 +2,7 @@ import { accessibleBy } from '@casl/prisma';
 import { Inject } from '@nestjs/common';
 import {
   Args,
+  Context,
   ID,
   Int,
   Mutation,
@@ -23,6 +24,10 @@ import {
   ABILITY_ACTION_LIST,
   defineAbilityForUser,
 } from '../../graphql/abilities';
+import {
+  DATALOADER_CONTEXT,
+  DataLoaderContext,
+} from '../database/dataloader-context.interface';
 import { UserService } from './user.service';
 
 @Resolver(User)
@@ -38,8 +43,11 @@ export class UserController {
   }
 
   @ResolveField(() => [UserLikedWorkshopDto])
-  async likedWorkshops(@Parent() user: User) {
-    return this.findUserById(user.id).likedWorkshops();
+  async likedWorkshops(
+    @Parent() user: User,
+    @Context(DATALOADER_CONTEXT) context: DataLoaderContext,
+  ) {
+    return this.userService.findLikedWorkshops(user, context);
   }
 
   @ResolveField()

@@ -1,16 +1,19 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './auth/auth.module';
 import { GraphqlModule } from './graphql/graphql.module';
-import { ScheduleModule } from '@nestjs/schedule';
+import { WorkshopSectionRepositoryService } from './repository/workshop-section-repository/workshop-section-repository.service';
+import { RepositoryModule } from './repository/repository/repository.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
     AuthModule,
     GraphqlModule,
-    ScheduleModule.forRoot(),
+    RepositoryModule,
   ],
   controllers: [],
   providers: [
@@ -22,6 +25,7 @@ import { ScheduleModule } from '@nestjs/schedule';
           skipUndefinedProperties: true,
         }),
     },
+    WorkshopSectionRepositoryService,
   ],
 })
 export class AppModule {}

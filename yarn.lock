@@ -18020,6 +18020,7 @@ __metadata:
     class-transformer: ^0.5.1
     class-validator: ^0.14.1
     cookie-signature: ^1.2.1
+    dataloader: ^2.2.2
     dependency-cruiser: ^16.2.4
     dotenv: ^16.4.5
     eslint: ^8.57.0

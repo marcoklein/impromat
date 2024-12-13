@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
+  Context,
   ID,
   Mutation,
   Parent,
@@ -15,11 +16,16 @@ import { UpdateWorkshopItemOrder } from 'src/dtos/inputs/update-workshop-item-or
 import { User } from 'src/dtos/types/user.dto';
 import { WorkshopSection } from 'src/dtos/types/workshop-section.dto';
 import { Workshop } from 'src/dtos/types/workshop.dto';
+import { Nullable } from 'src/utils/nullish';
 import { SessionUserId } from '../../decorators/session-user-id.decorator';
 import {
   CreateWorkshopInput,
   UpdateWorkshopInput,
 } from '../../dtos/inputs/workshop.inputs';
+import {
+  DATALOADER_CONTEXT,
+  DataLoaderContext,
+} from '../database/dataloader-context.interface';
 import { WorkshopService } from './workshop.service';
 
 @Resolver(Workshop)
@@ -33,35 +39,25 @@ export class WorkshopController {
   })
   async isLiked(
     @Parent() workshop: Workshop,
-    @SessionUserId() userSessionId: string,
+    @Context(DATALOADER_CONTEXT) context: DataLoaderContext,
   ) {
-    if (!userSessionId) return false;
-    const elementFavoriteRelations = await this.workshopService
-      .findWorkshopById(userSessionId, workshop.id)
-      .userLikedWorkshops({ where: { userId: userSessionId } });
-    return elementFavoriteRelations && elementFavoriteRelations.length > 0;
+    return this.workshopService.findIsLiked(workshop, context);
   }
 
   @ResolveField(() => [WorkshopSection])
   async sections(
     @Parent() workshop: Workshop,
-    @SessionUserId() userSessionId: string,
+    @Context(DATALOADER_CONTEXT) context: DataLoaderContext,
   ) {
-    if ('sections' in workshop) return workshop.sections;
-    return this.workshopService.findSections(workshop, userSessionId);
+    return this.workshopService.findSections(workshop, context);
   }
 
   @ResolveField(() => User)
   async owner(
     @Parent() workshop: Workshop,
-    @SessionUserId() userSessionId: string,
+    @Context(DATALOADER_CONTEXT) context: DataLoaderContext,
   ) {
-    if ('owner' in workshop) {
-      return workshop.owner;
-    }
-    return this.workshopService
-      .findWorkshopById(userSessionId, workshop.id)
-      .owner();
+    return this.workshopService.findOwner(workshop, context);
   }
 
   @UseGuards(GraphqlAuthGuard)
@@ -72,20 +68,9 @@ export class WorkshopController {
   })
   async isOwnerMe(
     @Parent() workshop: Workshop,
-    @SessionUserId() userSessionId: string,
+    @Context(DATALOADER_CONTEXT) context: DataLoaderContext,
   ) {
-    if (userSessionId) {
-      // TODO get owner from cache
-      const owner = await this.workshopService
-        .findWorkshopById(userSessionId, workshop.id)
-        .owner();
-      if (owner) {
-        return owner.id === userSessionId;
-      } else {
-        return false;
-      }
-    }
-    return null;
+    return this.workshopService.findIsOwnerMe(workshop, context);
   }
 
   @ResolveField(() => Boolean, {
@@ -96,22 +81,15 @@ export class WorkshopController {
     @Parent() workshop: Workshop,
     @SessionUserId() userSessionId: string | undefined,
   ) {
-    if (userSessionId) {
-      const owner = await this.workshopService
-        .findWorkshopById(userSessionId, workshop.id)
-        .owner();
-      if (!owner) return null;
-      return owner.id === userSessionId;
-    }
-    return null;
+    return this.workshopService.getCanEdit(workshop, userSessionId);
   }
 
   @Query(() => Workshop, { nullable: true })
   async workshop(
-    @SessionUserId() userId: string | undefined,
-    @Args('id', { type: () => ID }) id: string,
-  ): Promise<Workshop | null> {
-    return this.workshopService.findWorkshopById(userId, id);
+    @Context(DATALOADER_CONTEXT) context: DataLoaderContext,
+    @Args('id', { type: () => ID }) workshopId: string,
+  ): Promise<Nullable<Workshop>> {
+    return this.workshopService.queryWorkshopById(context, workshopId);
   }
 
   @UseGuards(GraphqlAuthGuard)
