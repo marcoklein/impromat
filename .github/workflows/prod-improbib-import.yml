@@ -2,9 +2,9 @@ name: Production Improbib Import
 
 on:
   workflow_dispatch:
-  schedule:
+  # schedule:
     # 2.22am on Sunday
-    - cron: "22 2 * * 0"
+    # - cron: "22 2 * * 0"
 
 jobs:
   improbib-import:
